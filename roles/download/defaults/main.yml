@@ -76,7 +76,7 @@ cloud_controller_manager_repo: "{{ ks_dev_image_ns }}/cloud-controller-manager"
 cloud_controller_manager_tag: v1.3.4
 ks_console_repo: "{{ ks_image_repo }}/kubesphere/ks-console"
 ks_console_tag: "advanced-2.0.2"
-ks_kubectl_repo: "{{ ks_image_repo }}/kubesphere/kubectl"
+ks_kubectl_repo: "kubesphere/kubectl"
 ks_kubectl_tag: advanced-1.0.0
 ks_docs_repo: "{{ ks_dev_image_ns }}/docs.kubesphere.io"
 ks_docs_tag: "{{ ks_dev_image_tag }}"
