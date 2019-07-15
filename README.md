@@ -16,12 +16,16 @@ Deploy
 2. 创建集群ca证书secret
    >注：按照当前集群ca.crt和ca.key证书路径创建（kubeadm创建集群的证书路径一般为/etc/kubernetes/pki）
    ```
-   kubectl -n kubesphere-system create secret generic kubesphere-ca --from-file=ca.crt=/etc/kubernetes/ssl/ca.crt  --from-file=ca.key=/etc/kubernetes/ssl/ca.key 
+   kubectl -n kubesphere-system create secret generic kubesphere-ca  \
+   --from-file=ca.crt=/etc/kubernetes/ssl/ca.crt  \
+   --from-file=ca.key=/etc/kubernetes/ssl/ca.key 
    ```
 3. 创建集群front-proxy-client证书secret
    >注：按照当前集群front-proxy-client.crt和front-proxy-client.key证书路径创建（kubeadm创建集群的证书路径一般为/etc/kubernetes/pki）
    ```
-   kubectl -n kubesphere-system create secret generic front-proxy-client   --from-file=front-proxy-client.crt=/etc/kubernetes/pki/front-proxy-client.crt  --from-file=front-proxy-client.key=/etc/kubernetes/pki/front-proxy-client.key
+   kubectl -n kubesphere-system create secret generic front-proxy-client  \
+   --from-file=front-proxy-client.crt=/etc/kubernetes/pki/front-proxy-client.crt  \
+   --from-file=front-proxy-client.key=/etc/kubernetes/pki/front-proxy-client.key
 4. 部署installer job
    ```
    cd deploy
@@ -30,10 +34,17 @@ Deploy
 
    kubectl apply -f kubesphere-installer.yaml
    ```
+   部署日志查看:
+   ```
+   kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
+   ```
 5. 创建etcd证书secret
    >注：以集群实际etcd证书位置创建；若etcd无证书，则创建空secret
    ```
-   kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  --from-file=etcd-client-ca.crt=/etc/ssl/etcd/ssl/ca.pem  --from-file=etcd-client.crt=/etc/ssl/etcd/ssl/admin-node1.pem  --from-file=etcd-client.key=/etc/ssl/etcd/ssl/admin-node1-key.pem
+   kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
+   --from-file=etcd-client-ca.crt=/etc/ssl/etcd/ssl/ca.pem  \
+   --from-file=etcd-client.crt=/etc/ssl/etcd/ssl/admin-node1.pem  \
+   --from-file=etcd-client.key=/etc/ssl/etcd/ssl/admin-node1-key.pem
    ```
    etcd无证书
    ```
