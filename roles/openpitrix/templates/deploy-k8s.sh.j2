@@ -243,6 +243,7 @@ if [ "${BASE}" == "1" ] || [ "${ALL}" == "1" ];then
   make
   cd ../..
 
+  kubectl delete secret iam-secret-key -n ${NAMESPACE}  ## delete iam-secret-key 
   kubectl create secret generic iam-secret-key --from-file=./kubernetes/iam-config/secret-key.txt -n ${NAMESPACE}
   kubectl create secret generic iam-client -n ${NAMESPACE} \
   	--from-file=./kubernetes/iam-config/client-id.txt \
@@ -271,4 +272,6 @@ if [ "${DASHBOARD}" == "1" ] || [ "${ALL}" == "1" ];then
   done
 fi
 
+kubectl -n ${NAMESPACE} scale deployment openpitrix-api-gateway-deployment --replicas=0 
+kubectl -n ${NAMESPACE} scale deployment openpitrix-api-gateway-deployment --replicas=1
 echo "Deployed successfully"

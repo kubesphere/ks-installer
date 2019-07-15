@@ -33,7 +33,7 @@
     - upgrade
 
 - name: KubeSphere | Getting OP Token
-  command: >
+  shell: >
     {{ kubesphere_dir }}/ks-init/jwt.sh  {{ op_secret_str }} '{"sub": "system","role": "global_admin","iat": 1516239022,"exp": 1816239022}'
   register: op_token
   tags:
