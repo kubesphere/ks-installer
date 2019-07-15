@@ -1,0 +1,94 @@
+---
+
+- name: ks-alerting | Getting ks-alerting installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - alerting
+  tags:
+    - upgrade
+
+- name: ks-alerting | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/alerting/{{ item.file }}"
+  with_items:
+#    - { type: job, file: alerting-db-init-job.yaml }
+    - { type: job, file: alerting-db-ctrl-job.yaml }
+    - { type: deploy, file: 1-executor.yaml }
+    - { type: deploy, file: 2-watcher.yaml }
+    - { type: deploy, file: 3-manager.yaml }
+    - { type: deploy, file: 4-client.yaml }
+  tags:
+    - upgrade
+
+- name: ks-alerting | Checking db-ctrl-job
+  shell: "{{ bin_dir }}/kubectl get job -n kubesphere-alerting-system"
+  register: result
+  tags:
+    - upgrade
+
+- name: ks-alerting | Delete db-ctrl-job
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch alerting-db-ctrl-job" 
+  when: result.stdout.find("alerting-db-ctrl-job") != -1
+  tags:
+    - upgrade
+
+# - name: ks-alerting | Delete db-init-job
+#   shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch alerting-db-init-job" 
+#   when: result.stdout.find("alerting-db-init-job") != -1
+#   tags:
+#     - upgrade
+
+- name: ks-alerting | Create ks-alerting rolebinding
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/0-defaultrolebinding.yaml" 
+  tags:
+    - upgrade
+
+# - name: ks-alerting | Init ks-alerting db
+#   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/alerting-db-init-job.yaml" 
+#   tags:
+#     - upgrade
+
+- name: ks-alerting | Waiting for alerting-db-init
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system get pod | grep alerting-db-init | awk '{print $3}'"
+  register: result
+  until: 
+    - result.stdout.find("Completed") != -1
+  retries: 30
+  delay: 2
+
+- name: ks-alerting | Create ks-alerting mysql ctrl
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/alerting-db-ctrl-job.yaml" 
+  tags:
+    - upgrade
+
+# - name: ks-alerting | Waiting for alerting-db-ctrl
+#  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system get pod | grep alerting-db-ctrl | awk '{print $3}'"
+#  register: result
+#  until: 
+#    - result.stdout.find("Completed") != -1
+#  retries: 15
+#  delay: 30
+  
+- name: ks-alerting | Create ks-alerting executor
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/1-executor.yaml" 
+  tags:
+    - upgrade
+
+- name: ks-alerting | Create ks-alerting watcher
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/2-watcher.yaml" 
+  tags:
+    - upgrade
+
+- name: ks-alerting | Create ks-alerting manager
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/3-manager.yaml" 
+  tags:
+    - upgrade
+
+- name: ks-alerting | Create ks-alerting apigateway
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/4-client.yaml" 
+  tags:
+    - upgrade
+

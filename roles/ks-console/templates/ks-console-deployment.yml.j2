@@ -1,0 +1,77 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: ks-console
+    tier: frontend
+    version: advanced-2.0.0
+  name: ks-console
+  namespace: kubesphere-system
+spec:
+  replicas: {{ ks_console_replicas }}
+  selector:
+    matchLabels:
+      app: ks-console
+      tier: frontend
+      version: advanced-2.0.0
+  template:
+    metadata:
+      labels:
+        app: ks-console
+        tier: frontend
+        version: advanced-2.0.0
+    spec:
+      imagePullSecrets:
+      - name: qingcloud     
+      containers:
+      - image: {{ ks_console_repo }}:{{ ks_console_tag }}
+        imagePullPolicy: {{ ks_image_pull_policy }}
+        name: ks-console
+        resources:
+          limits:
+            cpu: {{ ks_console_cpu_limit }}
+            memory: {{ ks_console_memory_limit }}
+          requests:
+            cpu: {{ ks_console_cpu_requests }}
+            memory: {{ ks_console_memory_requests }}
+        volumeMounts:
+        - mountPath: /etc/kubernetes/pki
+          name: ca-dir
+        - mountPath: /etc/kubesphere/ks-console
+          name: ks-console-ae-config
+        - mountPath: /root/KubeSphereUI/server/sample
+          name: sample-bookinfo
+      # - image: {{ redis_repo }}:{{ redis_tag }}
+      #   imagePullPolicy: IfNotPresent
+      #   name: redis
+      serviceAccount: kubesphere
+      serviceAccountName: kubesphere
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - "" 
+      volumes:
+      - name: ca-dir
+        secret:
+          defaultMode: 420
+          secretName: front-proxy-client
+      - configMap:
+          defaultMode: 420
+          name: ks-console-ae-config
+        name: ks-console-ae-config
+      - configMap:
+          defaultMode: 420
+          name: sample-bookinfo
+        name: sample-bookinfo
+        

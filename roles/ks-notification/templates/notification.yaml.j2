@@ -1,0 +1,116 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification
+  namespace: kubesphere-alerting-system
+  labels:
+    app: notification
+    component: notification
+    version: v0.1.0
+spec:
+  selector:
+    app: notification
+    component: notification
+  ports:
+  - name:  notification
+    protocol: TCP
+    port: 9201
+    targetPort: 9201
+  - name:  swagger
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: notification-deployment
+  namespace: kubesphere-alerting-system
+  labels:
+    app: notification
+    component: notification
+    version: v0.1.0
+spec:
+  selector:
+    matchLabels:
+      app: notification
+      component: notification
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: notification
+        component: notification
+        version: v0.1.0
+    spec:
+      initContainers:
+      - name: wait-mysql
+        image:  {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+      - name: wait-etcd
+        image:  {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-etcd.openpitrix-system.svc 2379; do echo "waiting for etcd"; sleep 2; done;']
+      containers:
+      - name: notification
+        image: {{ notification_repo }}:{{ notification_tag }}
+        imagePullPolicy: {{ ks_image_pull_policy }}
+        command:
+          - notification
+        ports:
+        - containerPort: 9201
+          name: notification
+        - containerPort: 9200
+          name: swagger
+        env:
+        - name: NOTIFICATION_GRPC_SHOW_ERROR_CAUSE
+          value: 'true'
+        - name: NOTIFICATION_APP_HOST
+          value: 'notification.kubesphere-alerting-system'
+        - name: NOTIFICATION_APP_API_HOST
+          value: 'notification.kubesphere-alerting-system'
+        - name: NOTIFICATION_MYSQL_HOST
+          value: 'openpitrix-db.openpitrix-system.svc'
+        - name: NOTIFICATION_MYSQL_PORT
+          value: '3306'
+        - name: NOTIFICATION_LOG_LEVEL
+          value: "error"
+        - name: NOTIFICATION_MYSQL_LOG_MODE
+          value: "false"
+        - name: NOTIFICATION_APP_MAX_WORKING_NOTIFICATIONS
+          value: "5"
+        - name: NOTIFICATION_APP_MAX_WORKING_TASKS
+          value: "5"
+        - name: NOTIFICATION_EMAIL_PROTOCOL
+          value: 'SMTP'
+        - name: NOTIFICATION_EMAIL_EMAIL_HOST
+          value: "{{ EMAIL_SMTP_HOST }}"
+        - name: NOTIFICATION_EMAIL_PORT
+          value: "{{ EMAIL_SMTP_PORT }}"
+        - name: NOTIFICATION_EMAIL_DISPLAY_SENDER
+          value: "{{ EMAIL_FROM_NAME }}"
+        - name: NOTIFICATION_EMAIL_EMAIL
+          value: "{{ EMAIL_FROM_ADDR }}"
+        - name: NOTIFICATION_EMAIL_PASSWORD
+          value: "{{ EMAIL_FROM_PASS }}"
+        - name: NOTIFICATION_EMAIL_SSL_ENABLE
+          value: "{{ EMAIL_USE_SSL }}"
+        - name: NOTIFICATION_QUEUE_TYPE
+          value: "redis"
+        - name: NOTIFICATION_QUEUE_ADDR
+          value: "redis://redis.kubesphere-system.svc:6379"
+        - name: NOTIFICATION_PUB_SUB_TYPE
+          value: "redis"
+        - name: NOTIFICATION_PUB_SUB_ADDR
+          value: "redis://redis.kubesphere-system.svc:6379"
+        - name: NOTIFICATION_WEBSOCKET_SERVICE_MESSAGE_TYPES
+          value: "none"
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1000Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi

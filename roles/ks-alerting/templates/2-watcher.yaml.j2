@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: alerting-watcher
+  name: alerting-watcher
+  namespace: kubesphere-alerting-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alerting-watcher
+  template:
+    metadata:
+      labels:
+        app: alerting-watcher
+    spec:
+      initContainers:
+      - name: wait-mysql
+        image: {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+      - name: wait-etcd
+        image: {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-etcd.openpitrix-system.svc 2379; do echo "waiting for etcd"; sleep 2; done;']
+      containers:
+      - command:
+        - /alerting/alert
+        image: {{ ks_alerting_repo }}:{{ ks_alerting_tag }}
+        imagePullPolicy: {{ ks_image_pull_policy }}
+        name: alerting-watcher
+        env:
+        - name: ALERT_APP_RUN_MODE
+          value: "watcher"
+        - name: ALERT_MYSQL_HOST
+          value: "openpitrix-db.openpitrix-system.svc"
+        - name: ALERT_ETCD_ENDPOINTS
+          value: "openpitrix-etcd.openpitrix-system.svc:2379"
+        - name: ALERT_QUEUE_TYPE
+          value: "redis"
+        - name: ALERT_QUEUE_ADDR
+          value: "redis://redis.kubesphere-system.svc:6379"
+        - name: ALERT_LOG_LEVEL
+          value: "info"
+        - name: ALERT_MYSQL_LOG_MODE
+          value: "false"
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi

@@ -1,0 +1,80 @@
+---
+
+- name: ks-notification | Getting notification ClusterIP
+  shell: >
+    {{ bin_dir }}/kubectl get svc -n kubesphere-alerting-system notification -o=jsonpath='{.spec.clusterIP}'
+  register: notification_clusterIP
+
+- name: ks-notification | Getting notification configs
+  shell: >
+    curl -X POST "http://{{ notification_clusterIP.stdout }}:9200/v1/notifications/get_service_config" 
+    -H  "accept: application/json" -H  "Content-Type: application/json" 
+    -d "{  \"service_type\": [    \"email\"  ]}" | jq .  > {{ kubesphere_dir }}/notification/notification-configs.json
+  register: notification_configs
+
+- name: ks-notification | Getting notification configs (EMAIL_SMTP_HOST)
+  shell:
+    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    jq '.email_service_config.email_host' |
+    sed 's/\"//g'
+  register: email_host
+
+- name: ks-notification | Setting notification configs (EMAIL_SMTP_HOST)
+  set_fact:
+    EMAIL_SMTP_HOST: "{{ email_host.stdout }}"
+
+- name: ks-notification | Getting notification configs (EMAIL_SMTP_PORT)
+  shell:
+    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    jq '.email_service_config.port' |
+    sed 's/\"//g'
+  register: port
+
+- name: ks-notification | Setting notification configs (EMAIL_SMTP_PORT)
+  set_fact:
+    EMAIL_SMTP_PORT: "{{ port.stdout }}"
+
+- name: ks-notification | Getting notification configs (EMAIL_FROM_NAME)
+  shell:
+    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    jq '.email_service_config.display_sender' |
+    sed 's/\"//g'
+  register: display_sender
+
+- name: ks-notification | Setting notification configs (EMAIL_FROM_NAME)
+  set_fact:
+    EMAIL_FROM_NAME: "{{ display_sender.stdout }}"
+
+- name: ks-notification | Getting notification configs (EMAIL_FROM_ADDR)
+  shell:
+    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    jq '.email_service_config.email' |
+    sed 's/\"//g'
+  register: email
+
+- name: ks-notification | Setting notification configs (EMAIL_FROM_ADDR)
+  set_fact:
+    EMAIL_FROM_ADDR: "{{ email.stdout }}"
+
+- name: ks-notification | Getting notification configs (EMAIL_FROM_PASS)
+  shell:
+    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    jq '.email_service_config.password' |
+    sed 's/\"//g'
+  register: password
+
+- name: ks-notification | Setting notification configs (EMAIL_FROM_PASS)
+  set_fact:
+    EMAIL_FROM_PASS: "{{ password.stdout }}"
+
+- name: ks-notification | Getting notification configs (EMAIL_USE_SSL)
+  shell:
+    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    jq '.email_service_config.ssl_enable' |
+    sed 's/\"//g'
+  register: ssl_enable
+
+- name: ks-notification | Setting notification configs (EMAIL_USE_SSL)
+  set_fact:
+    EMAIL_USE_SSL: "{{ ssl_enable.stdout }}"
+

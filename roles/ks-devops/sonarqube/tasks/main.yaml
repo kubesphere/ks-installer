@@ -1,0 +1,52 @@
+---
+
+- name: ks-devops | Creating ks-jenkins webhook(external)
+  uri:
+    url: "{{ sonar_server_url }}/api/webhooks/create"
+    method: POST
+    user: "{{ sonar_server_token }}"
+    password: ""
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      name: ks-jenkins
+      url: 'http://ks-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is defined
+    - sonar_server_token is defined
+
+- name: ks-devops | Getting sonarqube installation files
+  copy:
+    src: "sonarqube"
+    dest: "{{ kubesphere_dir }}/"
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
+- name: Sonarqube | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/sonarqube/{{ item.file }}"
+  with_items:
+    - { name: custom-values-sonarqube, file: custom-values-sonarqube.yaml }
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
+- name: Sonarqube | Deploy Sonarqube
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-sonarqube 
+    {{ kubesphere_dir }}/sonarqube/sonarqube-0.13.5.tgz
+    -f {{ kubesphere_dir }}/sonarqube/custom-values-sonarqube.yaml 
+    --namespace kubesphere-devops-system
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined

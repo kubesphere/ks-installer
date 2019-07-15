@@ -1,0 +1,158 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-casc-config
+data:
+  jenkins.yaml: |
+    jenkins:
+      mode: EXCLUSIVE
+      numExecutors: 5
+      scmCheckoutRetryCount: 2
+
+      clouds:
+        - kubernetes:
+            name: "kubernetes"
+            serverUrl: "https://kubernetes.default"
+            skipTlsVerify: true
+            namespace: "kubesphere-devops-system"
+            credentialsId: "k8s-service-account"
+            jenkinsUrl: "http://ks-jenkins.kubesphere-devops-system:80"
+            jenkinsTunnel: "ks-jenkins-agent.kubesphere-devops-system:50000"
+            containerCapStr: "100"
+            connectTimeout: "60"
+            readTimeout: "60"
+            maxRequestsPerHostStr: "32"
+            templates:
+              - name: "base"
+                namespace: "kubesphere-devops-system"
+                label: "base"
+                nodeUsageMode: "NORMAL"
+                idleMinutes: 0 # Do not reuse pod.
+                containers:
+                - name: "base"
+                  image: "{{ builder_base_repo }}:{{ builder_base_tag }}"
+                  command: "cat"
+                  ttyEnabled: true
+                - name: "jnlp"
+                  image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "100m"
+                  resourceRequestMemory: "32Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+              - name: "nodejs"
+                namespace: "kubesphere-devops-system"
+                label: "nodejs"
+                nodeUsageMode: "EXCLUSIVE"
+                idleMinutes: 0 # Do not reuse pod.
+                containers:
+                - name: "nodejs"
+                  image: "{{ builder_nodejs_repo }}:{{ builder_nodejs_tag }}"
+                  command: "cat"
+                  ttyEnabled: true
+                - name: "jnlp"
+                  image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "100m"
+                  resourceRequestMemory: "32Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+              - name: "maven"
+                namespace: "kubesphere-devops-system"
+                label: "maven"
+                nodeUsageMode: "EXCLUSIVE"
+                idleMinutes: 0 # Do not reuse pod.
+                containers:
+                - name: "maven"
+                  image: "{{ builder_maven_repo }}:{{ builder_maven_tag }}"
+                  command: "cat"
+                  ttyEnabled: true
+                - name: "jnlp"
+                  image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "100m"
+                  resourceRequestMemory: "32Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+              - name: "go"
+                namespace: "kubesphere-devops-system"
+                label: "go"
+                nodeUsageMode: "EXCLUSIVE"
+                idleMinutes: 0 # Do not reuse pod.
+                containers:
+                - name: "go"
+                  image: "{{ builder_go_repo }}:{{ builder_go_tag }}"
+                  command: "cat"
+                  ttyEnabled: true
+                - name: "jnlp"
+                  image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "100m"
+                  resourceRequestMemory: "32Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+      securityRealm:
+        ldap:
+          configurations:
+          - displayNameAttributeName: "uid"
+            mailAddressAttributeName: "mail"
+            inhibitInferRootDN: false
+            managerDN: "cn=admin,dc=kubesphere,dc=io"
+            managerPasswordSecret: "admin"
+            rootDN: "dc=kubesphere,dc=io"
+            userSearchBase: "ou=Users"
+            userSearch: "(&(objectClass=inetOrgPerson)(|(uid={0})(mail={0})))"
+            groupSearchBase: "ou=Groups"
+            groupSearchFilter: "(&(objectClass=posixGroup)(cn={0}))"
+            server: "ldap://openldap.kubesphere-system.svc:389"
+          disableMailAddressResolver: false
+          disableRolePrefixing: true
+
+    unclassified:
+      location:
+        url: "http://{{ JenkinsLocationUrl }}:30180/"
+      kubespheretokenauthglobalconfiguration:
+        cacheConfiguration:
+          size: 20
+          ttl: 300
+        enabled: true
+        server: "http://ks-apigateway.kubesphere-system.svc/"
+    jobs:
+      - script: >
+          pipelineJob('init-job') {
+            definition {
+              cps {
+                script("""\
+                  pipeline {
+                    agent any
+                    stages {
+                      stage ('hello') {
+                        steps {
+                          echo "hello"
+                        }
+                      }
+                    }
+                  }""".stripIndent())
+              }
+            }
+          }

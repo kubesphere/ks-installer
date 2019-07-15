@@ -1,0 +1,8 @@
+---
+
+EMAIL_SMTP_HOST: mail.example.com
+EMAIL_FROM_ADDR: admin@example.com
+EMAIL_FROM_NAME: KubeSphere
+EMAIL_USE_SSL: false
+EMAIL_SMTP_PORT: 25 
+EMAIL_FROM_PASS: P@ssw0rd

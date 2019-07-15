@@ -1,0 +1,91 @@
+---
+- name: ks-monitor | Checking old installation files
+  stat:
+    path: "{{ kubesphere_dir }}/prometheus/prometheus-prometheus.yaml"
+  ignore_errors: True
+  register: prometheus_old_check
+
+- name: ks-monitor | deleting old prometheus-operator files
+  file: 
+    path: "{{ kubesphere_dir }}/prometheus/00namespace-namespace.yaml"
+    state: absent
+  ignore_errors: True
+  when: prometheus_old_check.stat.exists
+
+- name: ks-monitor | deleting old prometheus-operator
+  shell: "{{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/prometheus/"
+  register: import
+  failed_when: "import.stderr and 'NotFound' not in import.stderr"
+  when: prometheus_old_check.stat.exists
+
+- name: ks-monitor | deleting old prometheus-operator files
+  file: 
+    path: "{{ kubesphere_dir }}/{{ item }}"
+    state: absent
+  ignore_errors: True
+  loop: 
+    - "prometheus"
+  when: prometheus_old_check.stat.exists
+
+- name: ks-monitor | Getting monitor installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop: 
+    - "prometheus"
+
+- name: ks-monitor | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: prometheus/init, file: 0prometheus-operator-deployment.yaml }
+    - { path: prometheus/sources, file: kube-state-metrics-deployment.yaml }
+    - { path: prometheus/sources, file: node-exporter-daemonset.yaml }
+    - { path: prometheus/sources, file: prometheus-prometheus.yaml }
+    - { path: prometheus/sources, file: prometheus-prometheusSystem.yaml }
+    - { path: prometheus/sources, file: prometheus-serviceMonitorEtcd.yaml }
+    - { path: prometheus/sources, file: prometheus-endpointsEtcd.yaml }
+
+
+# - name: ks-monitor | Creating kube-etcd-client-certs-secret
+#   command: >
+#     {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  
+#     --from-file=etcd-client-ca.crt={{ etcd_client_ca_crt }}
+#     --from-file=etcd-client.crt={{ etcd_client_crt }}
+#     --from-file=etcd-client.key={{ etcd_client_key }}
+#   register: import 
+#   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#   when:
+#     - etcd_tls_enable == true
+#   tags:
+#     - upgrade
+
+# - name: ks-monitor | Creating kube-etcd-client-certs
+#   command: >
+#     {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  
+#   register: import 
+#   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#   when:
+#     - etcd_tls_enable == false
+#   tags:
+#     - upgrade
+
+- name: ks-monitor | Init prometheus-operator
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/init"
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
+
+- name: ks-monitor | Installing prometheus-operator
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
+  loop: 
+    - "sources"
+    - "sources"
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3

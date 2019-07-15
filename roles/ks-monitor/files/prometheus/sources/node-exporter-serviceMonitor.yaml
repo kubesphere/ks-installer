@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: node-exporter
+  name: node-exporter
+  namespace: kubesphere-monitoring-system
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 1m
+    metricRelabelings:
+    - action: keep
+      regex: node_cpu_.+|node_memory_Mem.+_bytes|node_memory_Cached_bytes|node_memory_Buffers_bytes|node_network_.+_bytes_total|node_disk_.+_completed_total|node_disk_.+_bytes_total|node_filesystem_files|node_filesystem_files_free|node_filesystem_avail_bytes|node_filesystem_size_bytes|node_filesystem_free_bytes|node_load.+
+      sourceLabels:
+      - __name__
+    port: https
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
+  jobLabel: k8s-app
+  selector:
+    matchLabels:
+      k8s-app: node-exporter

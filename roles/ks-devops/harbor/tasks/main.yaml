@@ -1,0 +1,16 @@
+---
+
+- name: ks-devops | Getting harbor installation files
+  copy:
+    src: "harbor"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: Harbor | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/harbor/{{ item.file }}"
+  with_items:
+    - { name: custom-values-harbor, file: custom-values-harbor.yaml, type: values }
+
+- name: Harbor | Deploy Harbor
+  shell: "{{ bin_dir }}/helm upgrade --install ks-harbor {{ kubesphere_dir }}/harbor/harbor -f {{ kubesphere_dir }}/harbor/custom-values-harbor.yaml --namespace kubesphere-devops-system"

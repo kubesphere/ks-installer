@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alerting-manager-server
+  namespace: kubesphere-alerting-system
+spec:
+  selector:
+    app: alerting-manager
+  ports:
+  - name: alerting-manager-grpc
+    protocol: TCP
+    port: 9201
+    targetPort: 9201
+  - name: alerting-manager-http
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: alerting-manager
+  name: alerting-manager
+  namespace: kubesphere-alerting-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alerting-manager
+  template:
+    metadata:
+      labels:
+        app: alerting-manager
+    spec:
+      initContainers:
+      - name: wait-mysql
+        image: {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+      - name: wait-etcd
+        image: {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-etcd.openpitrix-system.svc 2379; do echo "waiting for etcd"; sleep 2; done;']
+      containers:
+      - command:
+        - /alerting/alert
+        image: {{ ks_alerting_repo }}:{{ ks_alerting_tag }}
+        imagePullPolicy: {{ ks_image_pull_policy }}
+        name: alerting-manager
+        env:
+        - name: ALERT_APP_RUN_MODE
+          value: "manager"
+        - name: ALERT_MYSQL_HOST
+          value: "openpitrix-db.openpitrix-system.svc"
+        - name: ALERT_ETCD_ENDPOINTS
+          value: "openpitrix-etcd.openpitrix-system.svc:2379"
+        - name: ALERT_QUEUE_TYPE
+          value: "redis"
+        - name: ALERT_QUEUE_ADDR
+          value: "redis://redis.kubesphere-system.svc:6379"
+        - name: ALERT_APP_NOTIFICATION_HOST
+          value: "notification.kubesphere-alerting-system.svc:9201"
+        - name: ALERT_LOG_LEVEL
+          value: "info"
+        - name: ALERT_MYSQL_LOG_MODE
+          value: "false"
+        ports:
+        - containerPort: 9201
+          protocol: TCP
+        - containerPort: 9200
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi

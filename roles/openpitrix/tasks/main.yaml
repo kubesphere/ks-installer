@@ -1,0 +1,21 @@
+---
+- name: OpenPitrix | Getting OpenPitrix installation files
+  copy:
+    src: "openpitrix"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: OpenPitrix | Getting OpenPitrix installation files
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/openpitrix/kubernetes/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: scripts, file: deploy-k8s.sh }
+    - { path: etcd, file: etcd.yaml }
+    - { path: db, file: mysql.yaml }
+    - { path: minio, file: minio.yaml }
+
+- name: OpenPitrix | Installing OpenPitrix(1)
+  shell: "cd {{ kubesphere_dir }}/openpitrix/kubernetes/scripts && chmod +x -R ./"
+
+- name: OpenPitrix | Installing OpenPitrix(2)
+  command: "{{ kubesphere_dir }}/openpitrix/kubernetes/scripts/deploy-k8s.sh -n openpitrix-system -v {{ openpitrix_version }} -b -s"

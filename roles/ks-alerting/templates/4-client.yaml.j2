@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alerting-client-server
+  namespace: kubesphere-alerting-system
+spec:
+  selector:
+    app: alerting-client
+  ports:
+  - name: alerting-client-http
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: alerting-client
+  name: alerting-client
+  namespace: kubesphere-alerting-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alerting-client
+  template:
+    metadata:
+      labels:
+        app: alerting-client
+    spec:
+      containers:
+      - command:
+        - /alerting/alert
+        image: {{ ks_alerting_repo }}:{{ ks_alerting_tag }}
+        imagePullPolicy: {{ ks_image_pull_policy }}
+        name: alerting-client
+        env:
+        - name: ALERT_APP_RUN_MODE
+          value: "client"
+        - name: ALERT_MYSQL_HOST
+          value: "openpitrix-db.openpitrix-system.svc"
+        - name: ALERT_ETCD_ENDPOINTS
+          value: "openpitrix-etcd.openpitrix-system.svc:2379"
+        - name: ALERT_APP_HOST
+          value: "alerting-manager-server.kubesphere-alerting-system"
+        ports:
+        - containerPort: 9200
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi

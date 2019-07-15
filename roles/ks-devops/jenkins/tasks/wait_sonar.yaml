@@ -1,0 +1,181 @@
+---
+
+- name: KubeSphere | Waiting for ks-account
+  shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-account | awk '{print $3}'"
+  register: result
+  until: result.stdout.find("Running") != -1
+  retries: 30
+  delay: 5
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+    
+- name: ks-devops | Getting ks-sonarqube svc clusterIP
+  shell: "{{ bin_dir }}/kubectl get --namespace kubesphere-devops-system -o jsonpath='{.spec.clusterIP}' services ks-sonarqube-sonarqube"
+  register:  ks_sonarqube_clusterIP
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
+- name: ks-devops | Waitting for ks-sonarqube port to become open
+  wait_for:
+    host: "{{ ks_sonarqube_clusterIP.stdout }}"
+    port: "9000"
+    delay: 3
+    timeout: 600
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
+- name: ks-devops | Setting ks-sonarqube url
+  set_fact: 
+    sonar_server_url: "http://{{ ks_sonarqube_clusterIP.stdout }}:9000"
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
+- name: ks-devops | Waiting for ks-sonarqube
+  shell: >
+    curl -I -s -u {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }} -X POST {{ sonar_server_url }}/api/user_tokens/generate|awk '{if(NR==1){print $2}}'
+  register: result
+  until: 
+    - result is succeeded
+    - result.stdout == "400"  
+  retries: 30
+  delay: 3
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined
+  tags:
+    - upgrade
+    
+- name: ks-devops | Checking ks-sonarqube token
+  uri:
+    url: "{{ sonar_server_url }}/api/user_tokens/search"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+    body_format: json
+  register: checkinfo
+  until: 
+    - checkinfo is succeeded
+  retries: 30
+  delay: 3
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined
+
+- name: ks-devops | Deleting ks-sonarqube old token 
+  uri:
+    url: "{{ sonar_server_url }}/api/user_tokens/revoke?name=jenkins"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+  register: result
+  failed_when: "result.msg and 'OK' not in result.msg"
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined
+    - checkinfo.json.userTokens|length != 0
+
+- name: ks-devops | Generating ks-sonarqube token 
+  uri:
+    url: "{{ sonar_server_url }}/api/user_tokens/generate?name=jenkins"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+    body_format: json
+  register: userinfo
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined
+
+- name: ks-devops | Setting user permission(admin)
+  uri:
+    url: "{{ sonar_server_url }}/api/permissions/add_user"
+    method: POST
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      login: "{{ sonarqube_user_name }}"
+      permission: admin
+    status_code: 204
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined
+
+- name: ks-devops | Setting user permission(gateadmin)
+  uri:
+    url: "{{ sonar_server_url }}/api/permissions/add_user"
+    method: POST
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      login: "{{ sonarqube_user_name }}"
+      permission: gateadmin
+    status_code: 204
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined  
+
+- name: ks-devops | Setting user permission(profileadmin)
+  uri:
+    url: "{{ sonar_server_url }}/api/permissions/add_user"
+    method: POST
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      login: "{{ sonarqube_user_name }}"
+      permission: profileadmin
+    status_code: 204
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined 
+
+- name: ks-devops | Creating ks-jenkins webhook(internal)
+  uri:
+    url: "{{ sonar_server_url }}/api/webhooks/create"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      name: ks-jenkins
+      url: 'http://ks-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined 
+  
+- name: ks-devops | Setting ks-sonarqube token
+  set_fact:
+    sonar_server_token: "{{ userinfo.json.token }}"
+  when:
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_token is not defined  

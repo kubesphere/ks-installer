@@ -1,0 +1,67 @@
+---
+# Use proxycommand if bastion host is in group all
+# This change obseletes editing ansible.cfg file depending on bastion existance
+ansible_ssh_common_args: "{% if 'bastion' in groups['all'] %} -o ProxyCommand='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -W %h:%p {{ hostvars['bastion']['ansible_user'] }}@{{ hostvars['bastion']['ansible_host'] }} {% if ansible_ssh_private_key_file is defined %}-i {{ ansible_ssh_private_key_file }}{% endif %} ' {% endif %}"
+
+logging_enable: true
+kubesphere_clock_enabled: false
+
+# Limits for kubesphere components
+ks_apiserver_memory_limit: 1024Mi
+ks_apiserver_cpu_limit: "1"
+ks_apiserver_memory_requests: 200Mi
+ks_apiserver_cpu_requests: 50m
+ks_account_memory_limit: 500Mi
+ks_account_cpu_limit: "1"
+ks_account_memory_requests: 200Mi
+ks_account_cpu_requests: 30m
+ks_apigateway_memory_limit: 500Mi
+ks_apigateway_cpu_limit: "1"
+ks_apigateway_memory_requests: 200Mi
+ks_apigateway_cpu_requests: 30m
+ks_console_memory_limit: 512Mi
+ks_console_cpu_limit: "1"
+ks_console_memory_requests: 100Mi
+ks_console_cpu_requests: 30m
+
+# Ip address of the kubernetes skydns service
+skydns_server: "{{ kube_service_addresses|ipaddr('net')|ipaddr(3)|ipaddr('address') }}"
+skydns_server_secondary: "{{ kube_service_addresses|ipaddr('net')|ipaddr(4)|ipaddr('address') }}"
+dnsmasq_dns_server: "{{ kube_service_addresses|ipaddr('net')|ipaddr(2)|ipaddr('address') }}"
+dns_domain: "{{ cluster_name }}"
+kube_dns_servers:
+  kubedns: ["{{skydns_server}}"]
+  coredns: ["{{skydns_server}}"]
+  coredns_dual: "{{[skydns_server] + [ skydns_server_secondary ]}}"
+  manual: ["{{manual_dns_server}}"]
+  dnsmasq_kubedns: ["{{dnsmasq_dns_server}}"]
+
+dns_servers: "{{kube_dns_servers[dns_mode]}}"
+
+kubesphere_dir: /etc/kubesphere
+kube_config_dir: /etc/kubernetes
+kube_cert_dir: "{{ kube_config_dir }}/ssl"
+# Directory where the binaries will be installed
+bin_dir: /usr/local/bin
+docker_bin_dir: /usr/bin
+etcd_data_dir: /var/lib/etcd
+
+# Random shifts for retrying failed ops like pushing/downloading
+retry_stagger: 5
+
+# Vars for pointing to kubernetes api endpoints
+first_kube_master: "{{ hostvars[groups['kube-master'][0]]['access_ip'] | default(hostvars[groups['kube-master'][0]]['ip'] | default(hostvars[groups['kube-master'][0]]['ansible_default_ipv4']['address'])) }}"
+loadbalancer_apiserver_localhost: "{{ loadbalancer_apiserver is not defined }}"
+# applied if only external loadbalancer_apiserver is defined, otherwise ignored
+apiserver_loadbalancer_domain_name: "lb.kubesphere.local"
+kube_apiserver_port: 6443
+kube_apiserver_host: |-
+  {% if loadbalancer_apiserver is defined and loadbalancer_apiserver.port is defined -%}
+       https://{{ loadbalancer_apiserver.address }}:{{ loadbalancer_apiserver.port|default(kube_apiserver_port) }}
+  {%- else -%}
+       https://{{ first_kube_master }}:{{ kube_apiserver_port }}
+  {%- endif %}
+
+elk_prefix: logstash
+
+vertical_pod_autoscaler_enable: false

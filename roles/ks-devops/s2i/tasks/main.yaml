@@ -1,0 +1,41 @@
+---
+
+- name: S2I | Getting s2i installation files
+  copy:
+    src: "s2i"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: S2I | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/s2i/{{ item.file }}"
+  with_items:
+    - { name: java, file: java.yaml }
+    - { name: nodejs, file: nodejs.yaml }
+    - { name: python, file: python.yaml }
+    - { name: s2ioperator, file: s2ioperator.yaml }
+
+- name: S2I | Creating S2I crds
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/s2i-crd.yaml"
+
+- name: S2I | Creating S2I secret(1)
+  file:
+    path: "{{ kubesphere_dir }}/s2i/certs.sh"
+    mode: 0755
+
+- name: S2I | Creating S2I secret(2)
+  shell: "{{ kubesphere_dir }}/s2i/certs.sh --service webhook-server-service --namespace kubesphere-devops-system --secret webhook-server-secret" 
+
+
+- name: S2I | Deploy S2I template&&operator
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/{{ item }}"
+  loop: 
+    - s2ioperator.yaml
+    - java.yaml
+    - nodejs.yaml
+    - python.yaml
+  register: import
+  until: import is succeeded
+  retries: 3
+  delay: 3
+  ignore_errors: True

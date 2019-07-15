@@ -1,0 +1,24 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - ks-devops/sonarqube
+    - openpitrix
+    - prepare/base
+    - metrics-server
+    - ingress
+    - ks-account
+    - ks-apigateway
+    - ks-controller-manager
+    - ks-devops/s2i
+    - ks-monitor
+    - ks-logging
+    - ks-console
+    - ks-devops/ks-devops
+    - ks-notification
+    - ks-alerting
+    - ks-devops/jenkins
+    - ks-apiserver
+    - ks-istio

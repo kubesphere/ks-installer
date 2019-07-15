@@ -1,0 +1,436 @@
+# https://kubernetes-charts.storage.googleapis.com/jenkins-0.19.0.tgz
+Master:
+  Image: "{{ jenkins_repo }}"
+  ImageTag: "{{ jenkins_tag }}"
+  ImagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: "{{ jenkins_memory_req }}"
+    limits:
+      cpu: "1"
+      memory: "{{ jenkins_memory_lim }}"
+  JavaOpts: "{{ JavaOpts }}"
+  ServicePort: 80
+  ServiceType: NodePort
+  NodePort: 30180
+  HealthProbes: false
+
+  InitContainerEnv:
+    - name: JENKINS_UC_DOWNLOAD
+      value: http://uc-jenkins-update-center
+
+  ContainerEnv:
+    - name: CASC_JENKINS_CONFIG
+      value: /var/jenkins_home/casc_configs/jenkins.yaml
+    - name: com.sun.jndi.ldap.connect.timeout
+      value: "15000"
+    - name: com.sun.jndi.ldap.read.timeout
+      value: "60000"
+    - name: kubernetes.connection.timeout
+      value: "60000"
+    - name: kubernetes.request.timeout
+      value: "60000"
+    - name: EMAIL_SMTP_HOST
+      value: "{{ EMAIL_SMTP_HOST }}"
+    - name: EMAIL_SMTP_PORT
+      value: "{{ EMAIL_SMTP_PORT }}"
+    - name: EMAIL_USE_SSL
+      value: "{{ EMAIL_USE_SSL }}"
+    - name: EMAIL_FROM_NAME
+      value: "{{ EMAIL_FROM_NAME }}"
+    - name: EMAIL_FROM_ADDR
+      value: "{{ EMAIL_FROM_ADDR }}"
+    - name: EMAIL_FROM_PASS
+      value: "{{ EMAIL_FROM_PASS }}"
+{% if  sonarqube_enable is defined and sonarqube_enable == true %}
+    - name: SONAR_ENABLED
+      value: "true"
+    - name: SONAR_RUNNER_VERSION
+      value: "3.3.0.1492"
+    - name: SONAR_SERVER_URL
+      value: "{{ sonar_server_url }}"
+    - name: SONAR_AUTH_TOKEN
+      value: "{{ sonar_server_token }}"
+{% endif %}
+
+  InstallPlugins:
+    - ace-editor:1.1
+    - apache-httpcomponents-client-4-api:4.5.5-3.0
+    - async-http-client:1.7.24.2
+    - authentication-tokens:1.3
+    - azure-commons:0.2.8
+    - blueocean:1.14.0
+    - blueocean-autofavorite:1.2.3
+    - blueocean-bitbucket-pipeline:1.14.0
+    - blueocean-commons:1.14.0
+    - blueocean-config:1.14.0
+    - blueocean-core-js:1.14.0
+    - blueocean-dashboard:1.14.0
+    - blueocean-display-url:2.2.0
+    - blueocean-events:1.14.0
+    - blueocean-executor-info:1.14.0
+    - blueocean-git-pipeline:1.14.0
+    - blueocean-github-pipeline:1.14.0
+    - blueocean-i18n:1.14.0
+    - blueocean-jira:1.14.0
+    - blueocean-jwt:1.14.0
+    - blueocean-personalization:1.14.0
+    - blueocean-pipeline-api-impl:1.14.0
+    - blueocean-pipeline-editor:1.14.0
+    - blueocean-pipeline-scm-api:1.14.0
+    - blueocean-rest-impl:1.14.0
+    - blueocean-rest:1.14.0
+    - blueocean-web:1.14.0
+    - bouncycastle-api:2.17
+    - branch-api:2.2.0
+    - build-monitor-plugin:1.12+build.201809061734
+    - build-timeout:1.19
+    - cloudbees-bitbucket-branch-source:2.4.2
+    - cloudbees-folder:6.7
+    - command-launcher:1.2
+    - conditional-buildstep:1.3.6
+    - configuration-as-code:1.8
+    - configuration-as-code-support:1.8
+    - config-file-provider:3.6
+    - credentials-binding:1.18
+    - credentials:2.1.18
+    - display-url-api:2.3.0
+    - docker-commons:1.13
+    - docker-workflow:1.17
+    - durable-task:1.29
+    - favorite:2.3.2
+    - generic-webhook-trigger:1.45
+    - git-client:2.7.6
+    - git-server:1.7
+    - git:3.9.3
+    - github-api:1.95
+    - github-branch-source:2.4.2
+    - github:1.29.4
+    - handlebars:1.1.1
+    - handy-uri-templates-2-api:2.1.7-1.0
+    - htmlpublisher:1.18
+    - jackson2-api:2.9.8
+    - javadoc:1.5
+    - jaxb:2.3.0
+    - jdk-tool:1.2
+    - jenkins-design-language:1.14.0
+    - jira:3.0.5
+    - job-dsl:1.72
+    - jquery:1.11.2-0
+    - jquery-detached:1.2.1
+    - jquery-ui:1.0.1
+    - jsch:0.1.55
+    - junit:1.27
+    - kubernetes-cd:0.2.3
+    - kubernetes-credentials:0.4.0
+    - kubernetes:1.14.9
+    - kubesphere-token-auth:0.2.0
+    - ldap:1.20
+    - lockable-resources:2.3
+    - mailer:1.23
+    - managed-scripts:1.4
+    - mapdb-api:1.0.9.0
+    - maven-plugin:3.2
+    - matrix-auth:2.3
+    - matrix-project:1.14
+    - mercurial:2.4
+    - momentjs:1.1.1
+    - node-iterator-api:1.5
+    - parameterized-trigger:2.35.2
+    - pipeline-build-step:2.8
+    - pipeline-graph-analysis:1.9
+    - pipeline-input-step:2.10
+    - pipeline-milestone-step:1.3.1
+    - pipeline-model-api:1.3.7
+    - pipeline-model-declarative-agent:1.1.1
+    - pipeline-model-definition:1.3.7
+    - pipeline-model-extensions:1.3.7
+    - pipeline-rest-api:2.10
+    - pipeline-stage-step:2.3
+    - pipeline-stage-tags-metadata:1.3.7
+    - pipeline-stage-view:2.10
+    - plain-credentials:1.5
+    - pubsub-light:1.12
+    - run-condition:1.2
+    - resource-disposer:0.12
+    - role-strategy:2.10
+    - ruby-runtime:0.12
+    - scm-api:2.4.0
+    - script-security:1.55
+    - sonar:2.8.1
+    - sse-gateway:1.17
+    - ssh-credentials:1.15
+    - ssh-slaves:1.29.4
+    - structs:1.17
+    - subversion:2.12.1
+    - token-macro:2.7
+    - variant:1.2
+    - workflow-aggregator:2.6
+    - workflow-api:2.33
+    - workflow-basic-steps:2.15
+    - workflow-cps-global-lib:2.13
+    - workflow-cps:2.64
+    - workflow-durable-task-step:2.28
+    - workflow-job:2.32
+    - workflow-multibranch:2.21
+    - workflow-scm-step:2.7
+    - workflow-step-api:2.19
+    - workflow-support:3.2
+    - ws-cleanup:0.37
+
+  InitScripts:
+    Mailer: |-
+      import jenkins.model.*
+
+      def env = System.getenv()
+
+      def emailFromName = env.EMAIL_FROM_NAME
+      def emailFromAddr = env.EMAIL_FROM_ADDR
+
+      def locationConfig = JenkinsLocationConfiguration.get()
+      locationConfig.adminAddress = "${emailFromName} <${emailFromAddr}>"
+      locationConfig.save()
+
+      def mailer = Jenkins.instance.getDescriptor("hudson.tasks.Mailer")
+      mailer.setSmtpAuth(emailFromAddr, env.EMAIL_FROM_PASS)
+      mailer.setReplyToAddress("no-reply@k8s.kubesphere.io")
+      mailer.setSmtpHost(env.EMAIL_SMTP_HOST)
+      mailer.setUseSsl(env.EMAIL_USE_SSL.toBoolean())
+      mailer.setSmtpPort(env.EMAIL_SMTP_PORT)
+      mailer.save()
+
+    K8sCredentials: |-
+      import com.cloudbees.plugins.credentials.CredentialsScope
+      import com.cloudbees.plugins.credentials.SystemCredentialsProvider
+      import com.cloudbees.plugins.credentials.domains.Domain
+      import org.csanchez.jenkins.plugins.kubernetes.ServiceAccountCredential
+
+      def addKubeCredential(String credentialId) {
+        def kubeCredential = new ServiceAccountCredential(CredentialsScope.GLOBAL, credentialId, 'Kubernetes service account')
+        SystemCredentialsProvider.getInstance().getStore().addCredentials(Domain.global(), kubeCredential)
+      }
+
+      addKubeCredential('k8s-service-account')
+    RBAC: |-
+      import hudson.*
+      import hudson.model.*
+      import hudson.security.*
+      import jenkins.*
+      import jenkins.model.*
+      import java.util.*
+      import com.michelin.cio.hudson.plugins.rolestrategy.*
+      import java.lang.reflect.*
+
+      def env = System.getenv()
+
+      // Roles
+      def globalRoleRead = "kubesphere-user"
+      def globalRoleAdmin = "admin"
+      def ldapUserNameAdmin = "admin"
+
+      def jenkinsInstance = Jenkins.getInstance()
+      def currentAuthenticationStrategy = Hudson.instance.getAuthorizationStrategy()
+      if (currentAuthenticationStrategy instanceof RoleBasedAuthorizationStrategy) {
+        println "Role based authorisation already enabled."
+        println "Exiting script..."
+        return
+      } else {
+          println "Enabling role based authorisation strategy..."
+      }
+
+      // Set new authentication strategy
+      RoleBasedAuthorizationStrategy roleBasedAuthenticationStrategy = new RoleBasedAuthorizationStrategy()
+      jenkinsInstance.setAuthorizationStrategy(roleBasedAuthenticationStrategy)
+
+      Constructor[] constrs = Role.class.getConstructors();
+      for (Constructor<?> c : constrs) {
+          c.setAccessible(true);
+      }
+
+      // Make the method assignRole accessible
+      Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", String.class, Role.class, String.class);
+      assignRoleMethod.setAccessible(true);
+
+      // Create admin set of permissions
+      Set<Permission> adminPermissions = new HashSet<Permission>();
+      adminPermissions.add(Permission.fromId("hudson.model.View.Delete"));
+      adminPermissions.add(Permission.fromId("hudson.model.Computer.Connect"));
+      adminPermissions.add(Permission.fromId("hudson.model.Run.Delete"));
+      adminPermissions.add(Permission.fromId("hudson.model.Hudson.UploadPlugins"));
+      adminPermissions.add(Permission.fromId("com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains"));
+      adminPermissions.add(Permission.fromId("hudson.model.Computer.Create"));
+      adminPermissions.add(Permission.fromId("hudson.model.View.Configure"));
+      adminPermissions.add(Permission.fromId("hudson.model.Hudson.ConfigureUpdateCenter"));
+      adminPermissions.add(Permission.fromId("hudson.model.Computer.Build"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Configure"));
+      adminPermissions.add(Permission.fromId("hudson.model.Hudson.Administer"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Cancel"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Read"));
+      adminPermissions.add(Permission.fromId("com.cloudbees.plugins.credentials.CredentialsProvider.View"));
+      adminPermissions.add(Permission.fromId("hudson.model.Computer.Delete"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Build"));
+      adminPermissions.add(Permission.fromId("hudson.scm.SCM.Tag"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Discover"));
+      adminPermissions.add(Permission.fromId("hudson.model.Hudson.Read"));
+      adminPermissions.add(Permission.fromId("com.cloudbees.plugins.credentials.CredentialsProvider.Update"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Create"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Move"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Workspace"));
+      adminPermissions.add(Permission.fromId("com.cloudbees.plugins.credentials.CredentialsProvider.Delete"));
+      adminPermissions.add(Permission.fromId("hudson.model.View.Read"));
+      adminPermissions.add(Permission.fromId("hudson.model.Hudson.RunScripts"));
+      adminPermissions.add(Permission.fromId("hudson.model.View.Create"));
+      adminPermissions.add(Permission.fromId("hudson.model.Item.Delete"));
+      adminPermissions.add(Permission.fromId("hudson.model.Computer.Configure"));
+      adminPermissions.add(Permission.fromId("com.cloudbees.plugins.credentials.CredentialsProvider.Create"));
+      adminPermissions.add(Permission.fromId("hudson.model.Computer.Disconnect"));
+      adminPermissions.add(Permission.fromId("hudson.model.Run.Update"));
+      adminPermissions.add(Permission.fromId("hudson.model.Run.Replay"));
+
+      // Create the admin Role
+      Role adminRole = new Role(globalRoleAdmin, adminPermissions);
+      roleBasedAuthenticationStrategy.addRole(RoleBasedAuthorizationStrategy.GLOBAL, adminRole);
+
+      // Assign the role
+      roleBasedAuthenticationStrategy.assignRole(RoleBasedAuthorizationStrategy.GLOBAL, adminRole, ldapUserNameAdmin);
+      println "Admin role created...OK"
+
+      /// Read access for authenticated users
+      // Create permissions
+      Set<Permission> authenticatedPermissions = new HashSet<Permission>();
+      authenticatedPermissions.add(Permission.fromId("hudson.model.Hudson.Read"));
+
+      Role authenticatedRole = new Role(globalRoleRead, authenticatedPermissions);
+      roleBasedAuthenticationStrategy.addRole(RoleBasedAuthorizationStrategy.GLOBAL, authenticatedRole);
+
+      // Assign the role
+      roleBasedAuthenticationStrategy.assignRole(RoleBasedAuthorizationStrategy.GLOBAL, authenticatedRole, 'authenticated');
+      println "Read role created...OK"
+
+      // Save the state
+      println "Saving changes."
+      jenkinsInstance.save()
+
+    Sonarqube: |-
+      import hudson.model.*
+      import jenkins.model.*
+      import hudson.plugins.sonar.*
+      import hudson.plugins.sonar.model.TriggersConfig
+      import hudson.tools.*
+
+
+      def env = System.getenv()
+      def instance = Jenkins.getInstance()
+      // Check sonarqube enable
+      if (env['SONAR_ENABLED'] == null || !env['SONAR_ENABLED'].toBoolean()) {
+          println "--> SonarQube Disabled"
+          return
+      }
+
+      def sonar_server_url = env['SONAR_SERVER_URL']
+      def sonar_auth_token = env['SONAR_AUTH_TOKEN']
+      def sonar_plugin_version = env['SONAR_PLUGIN_VERSION']
+      def sonar_additional_props = env['SONAR_ADDITIONAL_PROPS']
+
+
+      def SonarGlobalConfiguration sonar_conf = instance.getDescriptor(SonarGlobalConfiguration.class)
+
+      def sonar_inst = new SonarInstallation(
+              "sonar", // Name
+              sonar_server_url,
+              sonar_auth_token,
+              sonar_plugin_version,
+              sonar_additional_props,
+              new TriggersConfig(),
+              "" // Additional Analysis Properties
+      )
+
+      def sonar_installations = sonar_conf.getInstallations()
+      def sonar_inst_exists = false
+      def sonar_exists_index = 0
+      sonar_installations.eachWithIndex {
+          it, index ->
+          installation = (SonarInstallation) it
+          if (sonar_inst.getName() == installation.getName()) {
+            sonar_inst_exists = true
+            sonar_exists_index = index
+            println("Found existing installation: " + installation.getName() + " : " +index)
+          }
+      }
+
+      if (sonar_inst_exists) {
+          sonar_installations[sonar_exists_index] = sonar_inst
+          sonar_conf.setInstallations((SonarInstallation[]) sonar_installations)
+          sonar_conf.save()
+      }else{
+          sonar_installations += sonar_inst
+          sonar_conf.setInstallations((SonarInstallation[]) sonar_installations)
+          sonar_conf.save()
+      }
+
+
+      def sonar_runner_version = env['SONAR_RUNNER_VERSION']
+
+      println "--> Configuring SonarRunner"
+      def desc_SonarRunnerInst = instance.getDescriptor("hudson.plugins.sonar.SonarRunnerInstallation")
+
+      def sonarRunnerInstaller = new ZipExtractionInstaller('',"http://uc-jenkins-update-center/sonar-scanner-cli/sonar-scanner-cli-"+sonar_runner_version+".zip","sonar-scanner-"+sonar_runner_version)
+      def installSourceProperty = new InstallSourceProperty([sonarRunnerInstaller])
+      def sonarRunner_inst = new SonarRunnerInstallation("sonar", "", [installSourceProperty])
+
+      def sonar_runner_installations = desc_SonarRunnerInst.getInstallations()
+      def sonar_runner_inst_exists = false
+      def sonar_runner_exists_index = 0
+      sonar_runner_installations.eachWithIndex {
+          it, index ->
+          installation = (SonarRunnerInstallation) it
+          if (sonarRunner_inst.getName() == installation.getName()) {
+              sonar_runner_inst_exists = true
+              sonar_runner_exists_index = index
+              println("Found existing installation: " + installation.getName())
+          }
+      }
+
+      if (sonar_runner_inst_exists) {
+          sonar_runner_installations[sonar_runner_exists_index] = sonarRunner_inst
+          desc_SonarRunnerInst.setInstallations((SonarRunnerInstallation[]) sonar_runner_installations)
+          desc_SonarRunnerInst.save()
+      } else{
+          sonar_runner_installations += sonarRunner_inst
+          desc_SonarRunnerInst.setInstallations((SonarRunnerInstallation[]) sonar_runner_installations)
+          desc_SonarRunnerInst.save()
+      }
+
+      // Save the state
+      instance.save()
+
+
+# Ingress:
+#   Annotations:
+#     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+#     nginx.ingress.kubernetes.io/proxy-body-size: 50m
+#     nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+#     ingress.kubernetes.io/ssl-redirect: "false"
+#     ingress.kubernetes.io/proxy-body-size: 50m
+#     ingress.kubernetes.io/proxy-request-buffering: "off"
+HostName: jenkins.k8s.kubesphere.io
+
+rbac:
+  install: true
+
+Persistence:
+  # StorageClass: nfs-client
+
+  volumes:
+  - name: casc-config
+    configMap:
+      name: jenkins-casc-config
+  mounts:
+  - name: casc-config
+    mountPath: /var/jenkins_home/casc_configs
+    readOnly: true
+
+Agent:
+  Image: {{ jnlp_slave_repo }}
+  ImageTag: {{ jnlp_slave_tag }}

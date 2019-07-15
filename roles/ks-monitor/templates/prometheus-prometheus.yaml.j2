@@ -1,0 +1,56 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  labels:
+    prometheus: k8s
+  name: k8s
+  namespace: kubesphere-monitoring-system
+spec:
+  imagePullSecrets:
+  - name: qingcloud  
+  baseImage: {{ prometheus_repo }}
+  nodeSelector:
+    beta.kubernetes.io/os: linux
+  query:
+    maxConcurrency: 1000
+  replicas: {{ prometheus_replica }}
+  resources:
+    limits:
+      cpu: "2.5"
+      memory: 2Gi
+    requests:
+      cpu: 80m
+      memory: {{ prometheus_memory_size }}
+  retention: 7d
+  ruleSelector:
+    matchLabels:
+      prometheus: k8s
+      role: alert-rules
+  scrapeInterval: 1m
+  securityContext:
+    fsGroup: 0
+    runAsNonRoot: false
+    runAsUser: 0
+  serviceAccountName: prometheus-k8s
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector:
+    matchExpressions:
+    - key: k8s-app
+      operator: In
+      values:
+      - kube-state-metrics
+      - node-exporter
+      - kubelet
+      - prometheus-system
+  storage:
+    volumeClaimTemplate:
+      spec:
+        resources:
+          requests:
+            storage: {{ prometheus_volume_size }}
+  tolerations:
+  - effect: NoSchedule
+    key: dedicated
+    operator: Equal
+    value: monitoring
+  version: {{ prometheus_tag }}

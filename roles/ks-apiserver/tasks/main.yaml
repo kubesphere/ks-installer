@@ -1,0 +1,32 @@
+---
+
+- name: ks-apiserver | Getting ks-apiserver installation files
+  copy:
+    src: "ks-apiserver"
+    dest: "{{ kubesphere_dir }}/"
+  tags:
+    - upgrade
+
+- name: ks-apiserver | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/ks-apiserver/{{ item.file }}"
+  with_items:
+    - { name: ks-apiserver, file: ks-apiserver.yml, type: deploy }
+  register: ks-apiserver-deploy
+  tags:
+    - upgrade
+    
+- name: ks-apiserver | Creating Deployment
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-apiserver/ks-apiserver.yml"
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  tags:
+    - upgrade
+
+- name: KubeSphere | Restarting ks-apiserver 
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-apiserver --replicas=0 && 
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-apiserver --replicas=1
+  tags:
+    - upgrade

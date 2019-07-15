@@ -1,0 +1,101 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: ks-apigateway
+    tier: backend
+    version: advanced-2.0.0
+  name: ks-apigateway
+  namespace: kubesphere-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ks-apigateway
+      tier: backend
+      version: advanced-2.0.0
+  template:
+    metadata:
+      labels:
+        app: ks-apigateway
+        tier: backend
+        version: advanced-2.0.0
+    spec:
+      containers:
+      - command:
+        - ks-apigateway
+        - --conf=/etc/caddy/Caddyfile
+        - --log=stderr
+        env:
+        - name: KUBESPHERE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kubesphere-secret
+              key: token
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: jwt-secret
+              name: ks-account-secret
+        image: {{ ks_apigateway_repo }}:{{ ks_apigateway_tag }}
+        imagePullPolicy: {{ ks_image_pull_policy }}
+        name: ks-apigateway
+        ports:
+        # apiserver
+        - containerPort: 2018
+          protocol: TCP
+        resources:
+          limits:
+            cpu: {{ ks_apigateway_cpu_limit }}
+            memory: {{ ks_apigateway_memory_limit }}
+          requests:
+            cpu: {{ ks_apigateway_cpu_requests }}
+            memory: {{ ks_apigateway_memory_requests }}
+        volumeMounts:
+        - mountPath: /etc/caddy
+          name: caddyfile
+      serviceAccount: kubesphere
+      serviceAccountName: kubesphere
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - "" 
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: caddyfile
+        name: caddyfile
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ks-apigateway
+    tier: backend
+    version: advanced-2.0.0
+  name: ks-apigateway
+  namespace: kubesphere-system
+spec:
+  ports:
+  - name: 80-2018
+    port: 80
+    protocol: TCP
+    targetPort: 2018
+  selector:
+    app: ks-apigateway
+    tier: backend
+    version: advanced-2.0.0
+  type: ClusterIP

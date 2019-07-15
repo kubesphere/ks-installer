@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ks-devops
+  namespace: kubesphere-devops-system
+  labels:
+    app: ks-devops
+    tier: backend
+    version: advanced-1.0.0
+spec:
+  selector:
+    matchLabels:
+      app: ks-devops
+      tier: backend
+      version: advanced-1.0.0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ks-devops
+        tier: backend
+        version: advanced-1.0.0
+    spec:
+      initContainers:
+      - name: wait-jenkins
+        image: {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until wget --spider http://ks-jenkins.kubesphere-devops-system.svc/login; do echo "waiting for myservice"; sleep 2; done;']
+      containers:
+      - image: {{ ks_devops_repo }}:{{ ks_devops_tag }}
+        readinessProbe:
+          httpGet:
+            path: /api/v1alpha/projects/default_roles/
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        imagePullPolicy: IfNotPresent
+        name: devops
+        env:
+        - name: DEVOPSPHERE_MYSQL_USERNAME
+          value: "root"
+        - name: DEVOPSPHERE_MYSQL_PASSWORD
+          value: "password"
+        - name: DEVOPSPHERE_MYSQL_DATABASE
+          value: "devops"
+        - name: DEVOPSPHERE_JENKINS_ADDRESS
+          value: "http://ks-jenkins.kubesphere-devops-system.svc/"
+        - name: DEVOPSPHERE_JENKINS_USER
+          value: "admin"
+        - name: DEVOPSPHERE_JENKINS_PASSWORD
+          value: "{{ ks_token_str }}"
+        - name: DEVOPSPHERE_MYSQL_HOST
+          value: "openpitrix-db.openpitrix-system.svc"
+        - name: DEVOPSPHERE_MYSQL_PORT
+          value: "3306"
+{% if  sonarqube_enable is defined and sonarqube_enable == true %}
+        - name: DEVOPSPHERE_SONAR_ADDRESS
+          value: "{{ sonar_server_url }}"
+        - name: DEVOPSPHERE_SONAR_TOKEN
+          value: "{{ sonar_server_token }}"
+{% endif %}
+        - name: DEVOPSPHERE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        ports:
+        - containerPort: 8080

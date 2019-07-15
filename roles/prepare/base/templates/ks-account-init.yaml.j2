@@ -1,0 +1,2289 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+    tier: database
+    version: redis-4.0
+  name: redis
+  namespace: kubesphere-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      tier: database
+      version: redis-4.0
+  template:
+    metadata:
+      labels:
+        app: redis
+        tier: database
+        version: redis-4.0
+    spec:
+      containers:
+      - image: {{ redis_repo }}:{{ redis_tag }}
+        imagePullPolicy: IfNotPresent
+        name: redis
+        volumeMounts:
+        - mountPath: /data
+          name: redis-pvc
+          subPath: redis-data
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1000Mi
+          requests:
+            cpu: 30m
+            memory: 100Mi
+      volumes:
+      - name: redis-pvc
+        persistentVolumeClaim:
+          claimName: redis-pvc
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - "" 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis
+    tier: database
+    version: redis-4.0
+  name: redis
+  namespace: kubesphere-system
+spec:
+  ports:
+  - name: redis
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    app: redis
+    tier: database
+    version: redis-4.0
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: openldap
+    tier: database
+    version: openldap-2.4
+  name: openldap
+  namespace: kubesphere-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openldap
+      tier: database
+      version: openldap-2.4
+  template:
+    metadata:
+      labels:
+        app: openldap
+        tier: database
+        version: openldap-2.4
+    spec:
+      containers:
+      - env:
+        - name: LDAP_ORGANISATION
+          value: kubesphere
+        - name: LDAP_DOMAIN
+          value: kubesphere.io
+        - name: LDAP_ADMIN_PASSWORD
+          value: admin
+        image: {{ openldap_repo }}:{{ openldap_tag }}
+        imagePullPolicy: IfNotPresent
+        name: openldap
+        volumeMounts:
+        - mountPath: /var/lib/ldap
+          name: openldap-pvc
+          subPath: ldap-data
+        - mountPath: /etc/ldap/slapd.d
+          name: openldap-pvc
+          subPath: ldap-config
+        ports:
+        - containerPort: 389
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1500Mi
+          requests:
+            cpu: 30m
+            memory: 900Mi
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - ""        
+      volumes:
+      - name: openldap-pvc
+        persistentVolumeClaim:
+          claimName: openldap-pvc
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: openldap
+    tier: database
+    version: openldap-2.4
+  name: openldap
+  namespace: kubesphere-system
+spec:
+  ports:
+  - name: ldap
+    port: 389
+    protocol: TCP
+    targetPort: 389
+  selector:
+    app: openldap
+    tier: database
+    version: openldap-2.4
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openldap-pvc
+  namespace: kubesphere-system
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: kubesphere-system
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+
+apiVersion: v1
+data:
+  ldap-admin-password: YWRtaW4=
+  jwt-secret: {{ op_secret_str | b64encode }}
+kind: Secret
+metadata:
+  labels:
+    creator: system
+  name: ks-account-secret
+  namespace: kubesphere-system
+type: Opaque
+
+---
+
+apiVersion: v1
+data:
+  users.json: |
+    [{"username":"sonarqube","password":"sonarqube","cluster_role":"cluster-regular","hidden":true}]
+kind: ConfigMap
+metadata:
+  name: user-init
+  namespace: kubesphere-system
+
+---
+
+apiVersion: v1
+data:
+  clusterrules.json: |
+    [
+      {
+        "name": "workspaces",
+        "actions": [
+          {
+            "name": "manage",
+            "rules": [
+              {
+                "verbs": [
+                  "*"
+                ],
+                "apiGroups": [
+                  "*"
+                ],
+                "resources": [
+                  "workspaces",
+                  "workspaces/*"
+                ]
+              },
+              {
+                "verbs": [
+                  "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "users"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "monitoring",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "monitoring.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "health"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "alerting",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list",
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "logging",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "logging.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "accounts",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "users",
+                  "users/*"
+                ]
+              },
+              {
+                "verbs": [
+                  "get"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "rulesmapping"
+                ],
+                "resourceNames": [
+                  "clusterroles"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterrolebindings"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create",
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "users"
+                ]
+              },
+              {
+                "verbs": [
+                  "get"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "clusterrules"
+                ],
+                "resourceNames": [
+                  "mapping"
+                ]
+              },
+              {
+                "verbs": [
+                  "create",
+                  "delete",
+                  "deletecollection"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterrolebindings"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list",
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "users"
+                ]
+              },
+              {
+                "verbs": [
+                  "create",
+                  "delete",
+                  "deletecollection"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterrolebindings"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete",
+                  "deletecollection"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "users"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "roles",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterroles"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "clusterroles",
+                  "clusterroles/*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterroles"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterroles"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete",
+                  "deletecollection"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterroles"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "storageclasses",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list"
+                ],
+                "apiGroups": [
+                  "",
+                  "storage.k8s.io",
+                  "resources.kubesphere.io",
+                  "metrics.kubesphere.io"
+                ],
+                "resources": [
+                  "pods",
+                  "persistentvolumeclaims",
+                  "storageclasses",
+                  "storageclasses/*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "storage.k8s.io"
+                ],
+                "resources": [
+                  "storageclasses"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "storage.k8s.io"
+                ],
+                "resources": [
+                  "storageclasses"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete",
+                  "deletecollection"
+                ],
+                "apiGroups": [
+                  "storage.k8s.io"
+                ],
+                "resources": [
+                  "storageclasses"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "nodes",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "pods",
+                  "nodes",
+                  "events"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "nodes",
+                  "nodes/*"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "monitoring.kubesphere.io"
+                ],
+                "resources": [
+                  "nodes"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "nodes"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "repos",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "repos"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "repos"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "repos"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete",
+                  "deletecollection"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "repos"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "apps",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "list",
+                  "get"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "repos",
+                  "app_versions",
+                  "app_versions/*",
+                  "apps",
+                  "clusters"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "components",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "list",
+                  "get"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "components",
+                  "components/*"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  rules.json: |
+    [
+      {
+        "name": "projects",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get"
+                ],
+                "apiGroups": [
+                  "*"
+                ],
+                "resources": [
+                  "namespaces"
+                ]
+              },
+              {
+                "verbs": [
+                  "list"
+                ],
+                "apiGroups": [
+                  "*"
+                ],
+                "resources": [
+                  "events"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "namespaces"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "namespaces"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "monitoring",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "monitoring.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "health"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "alerting",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list",
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "alerting.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "members",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "rolebindings"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "users"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "rolebindings"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list",
+                  "create",
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "rolebindings"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "rolebindings"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "roles",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "roles"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "roles"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "patch",
+                  "update"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "roles"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "roles"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "deployments",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "deployments",
+                  "deployments/scale"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "pods",
+                  "pods/*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions"
+                ],
+                "resources": [
+                  "deployments"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions"
+                ],
+                "resources": [
+                  "deployments",
+                  "deployments/*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions"
+                ],
+                "resources": [
+                  "deployments"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "scale",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions"
+                ],
+                "resources": [
+                  "deployments/scale"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "statefulsets",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "statefulsets"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "pods",
+                  "pods/*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "apps"
+                ],
+                "resources": [
+                  "statefulsets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "apps"
+                ],
+                "resources": [
+                  "statefulsets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "apps"
+                ],
+                "resources": [
+                  "statefulsets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "scale",
+            "rules": [
+              {
+                "verbs": [
+                  "patch"
+                ],
+                "apiGroups": [
+                  "apps"
+                ],
+                "resources": [
+                  "statefulsets"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "daemonsets",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "daemonsets"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "pods",
+                  "pods/*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions"
+                ],
+                "resources": [
+                  "daemonsets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions"
+                ],
+                "resources": [
+                  "daemonsets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "apps",
+                  "extensions"
+                ],
+                "resources": [
+                  "daemonsets"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "pods",
+        "actions": [
+          {
+            "name": "terminal",
+            "rules": [
+              {
+                "verbs": [
+                  "get"
+                ],
+                "apiGroups": [
+                  "terminal.kubesphere.io"
+                ],
+                "resources": [
+                  "pods"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "pods"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "*"
+                ],
+                "resources": [
+                  "pods"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "services",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "list",
+                  "get"
+                ],
+                "apiGroups": [
+                  "",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "services"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "services"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "services"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "services"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "internet",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "router"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "router"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "router"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "router"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "routes",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "extensions",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "ingresses"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "extensions"
+                ],
+                "resources": [
+                  "ingresses"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "extensions"
+                ],
+                "resources": [
+                  "ingresses"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "extensions"
+                ],
+                "resources": [
+                  "ingresses"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "volumes",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "persistentvolumeclaims"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "persistentvolumeclaims"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "persistentvolumeclaims"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "persistentvolumeclaims"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "applications",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io",
+                  "app.k8s.io"
+                ],
+                "resources": [
+                  "applications"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "servicemesh.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              },
+              {
+                "verbs": [
+                  "list"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "repos",
+                  "app_versions"
+                ]
+              },
+              {
+                "verbs": [
+                  "get"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "app_version/*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "create",
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io",
+                  "app.k8s.io"
+                ],
+                "resources": [
+                  "applications"
+                ]
+              },
+              {
+                "verbs": [
+                  "create",
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "servicemesh.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io",
+                  "app.k8s.io"
+                ],
+                "resources": [
+                  "applications"
+                ]
+              },
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "servicemesh.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "jobs",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "batch",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "jobs"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "batch"
+                ],
+                "resources": [
+                  "jobs"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "batch"
+                ],
+                "resources": [
+                  "jobs"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "batch"
+                ],
+                "resources": [
+                  "jobs"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "cronjobs",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "batch",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "cronjobs"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "batch"
+                ],
+                "resources": [
+                  "cronjobs"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "batch"
+                ],
+                "resources": [
+                  "cronjobs"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "batch"
+                ],
+                "resources": [
+                  "cronjobs"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "secrets",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "secrets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "secrets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "secrets"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "secrets"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "configmaps",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "configmaps"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "configmaps"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "configmaps"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "configmaps"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+kind: ConfigMap
+metadata:
+  name: policy-rules
+  namespace: kubesphere-system

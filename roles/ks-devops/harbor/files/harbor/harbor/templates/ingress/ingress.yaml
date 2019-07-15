@@ -1,0 +1,71 @@
+{{- if eq .Values.expose.type "ingress" }}
+{{- $ingress := .Values.expose.ingress -}}
+{{- $tls := .Values.expose.tls -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "{{ template "harbor.ingress" . }}"
+  labels:
+{{ include "harbor.labels" . | indent 4 }}
+  annotations:
+{{ toYaml $ingress.annotations | indent 4 }}
+spec:
+  {{- if $tls.enabled }}
+  tls:
+  - hosts:
+    - {{ $ingress.hosts.core }}
+    {{- if $tls.secretName }}
+    secretName: {{ $tls.secretName }}
+    {{- else }}
+    secretName: "{{ template "harbor.ingress" . }}"
+    {{- end }}
+  {{- if .Values.notary.enabled }}
+  - hosts:
+    - {{ $ingress.hosts.notary }}
+    {{- if $tls.notarySecretName }}
+    secretName: {{ $tls.notarySecretName }}
+    {{- else if $tls.secretName }}
+    secretName: {{ $tls.secretName }}
+    {{- else }}
+    secretName: "{{ template "harbor.ingress" . }}"
+    {{- end }}
+  {{- end }}
+  {{- end }}
+  rules:
+  - host: {{ $ingress.hosts.core }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ template "harbor.portal" . }}
+          servicePort: 80
+      - path: /api/
+        backend:
+          serviceName: {{ template "harbor.core" . }}
+          servicePort: 80
+      - path: /service/
+        backend:
+          serviceName: {{ template "harbor.core" . }}
+          servicePort: 80
+      - path: /v2/
+        backend:
+          serviceName: {{ template "harbor.core" . }}
+          servicePort: 80
+      - path: /chartrepo/
+        backend:
+          serviceName: {{ template "harbor.core" . }}
+          servicePort: 80
+      - path: /c/
+        backend:
+          serviceName: {{ template "harbor.core" . }}
+          servicePort: 80
+  {{- if .Values.notary.enabled }}
+  - host: {{ $ingress.hosts.notary }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ template "harbor.notary-server" . }}
+          servicePort: 4443
+  {{- end }}
+{{- end }}

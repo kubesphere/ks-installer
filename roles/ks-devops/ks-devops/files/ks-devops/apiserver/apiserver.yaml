@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ks-devops
+  namespace: kubesphere-devops-system
+  labels:
+    app: ks-devops
+    tier: backend
+    version: advanced-1.0.0
+spec:
+  selector:
+    matchLabels:
+      app: ks-devops
+      tier: backend
+      version: advanced-1.0.0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ks-devops
+        tier: backend
+        version: advanced-1.0.0
+    spec:
+      containers:
+      - image: kubesphere/devops:latest
+        livenessProbe:
+          httpGet:
+            path: /api/v1alpha/projects/default_roles/
+            port: 8080
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        imagePullPolicy: Always
+        name: devops
+        env:
+        - name: DEVOPSPHERE_MYSQL_USERNAME
+          value: "root"
+        - name: DEVOPSPHERE_MYSQL_PASSWORD
+          value: "password"
+        - name: DEVOPSPHERE_MYSQL_DATABASE
+          value: "devops"
+        - name: DEVOPSPHERE_JENKINS_ADDRESS
+          value: "http://ks-jenkins.kubesphere-devops-system.svc/"
+        - name: DEVOPSPHERE_JENKINS_USER
+          value: "admin"
+        - name: DEVOPSPHERE_JENKINS_PASSWORD
+          value: "passw0rd"
+        - name: DEVOPSPHERE_MYSQL_HOST
+          value: "openpitrix-db.openpitrix-system.svc"
+        - name: DEVOPSPHERE_MYSQL_PORT
+          value: "3306"
+        - name: DEVOPSPHERE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        ports:
+        - containerPort: 8080

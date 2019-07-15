@@ -1,0 +1,6 @@
+---
+
+sonarqube_enable: true
+
+sonarqube_user_name: sonarqube
+sonarqube_user_passwd: sonarqube

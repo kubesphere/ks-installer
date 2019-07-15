@@ -1,0 +1,35 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+
+import os,sys
+import json
+
+
+FluentBitCrdPath = sys.argv[1]
+NewFluentBitCrdPath = sys.argv[2]
+
+
+with open(FluentBitCrdPath, 'rb') as f:
+    FluentBitCrd = json.load(f)
+f.close()
+
+
+FluentBitCrdOutput = FluentBitCrd.get('spec').get('output')
+NewFluentBitCrd = []
+
+
+for index, configs in enumerate(FluentBitCrdOutput):
+	CheckFlag = ('es' in str(configs.get('parameters'))) and ('elasticsearch-logging-data.kubesphere-logging-system.svc' in str(configs.get('parameters')))
+	if CheckFlag:
+		for parameter in FluentBitCrdOutput[index].get('parameters'):
+			if parameter.get('name') == 'Logstash_Prefix':
+				parameter['value'] = "ks-{{ elk_prefix }}-log"
+	NewFluentBitCrd.append(configs)
+
+
+FluentBitCrdPatch = {"spec": {"output": NewFluentBitCrd}}
+
+
+with open(NewFluentBitCrdPath, 'w') as f:
+	json.dump(FluentBitCrdPatch,f)
+f.close()

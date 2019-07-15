@@ -1,0 +1,119 @@
+apiVersion: v1
+data:
+  Caddyfile: |
+    :2018 {
+      
+      authenticate {
+        secret {{ op_secret_str }}
+        path /
+        except /apis/account.kubesphere.io/v1alpha1/authenticate,/kapis/iam.kubesphere.io/v1alpha2/login,/kapis/iam.kubesphere.io/v1alpha2/authenticate,/images,/kapis/devops.kubesphere.io/v1alpha2/webhook/github,/kapis/devops.kubesphere.io/v1alpha2/webhook/git,/swagger
+      }
+
+      authentication {
+        path /
+        except /kapis/tenant.kubesphere.io/v1alpha2,/kapis/alerting.kubesphere.io/v1/comment,/kapis/alerting.kubesphere.io/v1/resource_type,/kapis/alerting.kubesphere.io/v1/metric,/kapis/notification.kubesphere.io/v1/notifications,/kapis/resources.kubesphere.io/v1alpha2/registry/verify,/kapis/iam.kubesphere.io/v1alpha2/rulesmapping,/kapis/jenkins.kubesphere.io,/kapis/devops.kubesphere.io,/apis/devops.kubesphere.io
+      }
+      
+      swagger
+
+      # k8s api
+      proxy /api https://kubernetes.default {
+        header_upstream Authorization "Bearer {$KUBESPHERE_TOKEN}"
+        insecure_skip_verify
+      }
+
+      # fix jenkins auth plugin
+      proxy /apis/account.kubesphere.io/v1alpha1/authenticate http://ks-account.kubesphere-system.svc/kapis/iam.kubesphere.io/v1alpha2/authenticate {
+        without /apis/account.kubesphere.io/v1alpha1/authenticate
+        transparent
+      }
+
+      # jenkins
+      proxy /kapis/jenkins.kubesphere.io http://ks-jenkins.kubesphere-devops-system.svc {
+        without /kapis/jenkins.kubesphere.io
+        transparent
+      }
+      
+      proxy /job http://ks-jenkins.kubesphere-devops-system.svc {
+        transparent
+      }
+
+      # old devops api
+      proxy /kapis/devops.kubesphere.io/v1alpha/ http://ks-devops.kubesphere-devops-system.svc/api {
+        without /kapis/devops.kubesphere.io
+      }
+
+      # new devops api
+      proxy /kapis/devops.kubesphere.io/v1alpha2/ http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+      
+      # iam
+      proxy /kapis/iam.kubesphere.io http://ks-account.kubesphere-system.svc {
+        transparent
+      }
+
+      # tenant
+      proxy /kapis/tenant.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+
+      # operations
+      proxy /kapis/operations.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+
+      # openpitrix
+      proxy /kapis/openpitrix.io openpitrix-api-gateway.openpitrix-system.svc:9100 {
+        header_upstream Authorization "Bearer {{ op_token_str }}"
+        websocket
+        without /kapis/openpitrix.io  
+      }
+
+      # logging
+      proxy /kapis/logging.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+
+      # alerting
+      proxy /kapis/alerting.kubesphere.io http://alerting-client-server.kubesphere-alerting-system.svc:9200/api {
+        without /kapis/alerting.kubesphere.io 
+      }
+
+      # servicemesh
+      proxy /kapis/servicemesh.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+
+      proxy /kapis/resources.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+
+      proxy /kapis/metrics.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+
+      # terminal
+      proxy /kapis/terminal.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+        websocket
+      }
+
+
+      # monitoring
+      proxy /kapis/monitoring.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
+      }
+
+      # notification
+      proxy /kapis/notification.kubesphere.io http://notification.kubesphere-alerting-system.svc:9200 {
+        without /kapis/notification.kubesphere.io
+        transparent
+      }
+      
+      log / stdout "{remote} {when} {method} {uri} {proto} {status} {size} {latency_ms}"
+    }
+kind: ConfigMap
+metadata:
+  name: caddyfile
+  namespace: kubesphere-system

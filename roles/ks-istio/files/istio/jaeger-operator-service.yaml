@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: jaeger-operator
+  name: jaeger-operator
+  namespace: istio-system
+spec:
+  ports:
+  - name: metrics
+    port: 8383
+    protocol: TCP
+    targetPort: 8383
+  selector:
+    app.kubernetes.io/instance: jaeger-operator
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: jaeger-operator
+  sessionAffinity: None
+  type: ClusterIP
