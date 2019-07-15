@@ -5,6 +5,7 @@ Requirements
 -   **kubernetes version > 1.13.0**
 -   **helm version > 2.10.0**
 -   **a default storage class must be in kubernetes cluster**
+> 注：请确保集群中剩余可用内存  >16G
 
 Deploy
 ------------
@@ -24,7 +25,7 @@ Deploy
 4. 部署installer job
    ```
    cd deploy
-   
+
    vim kubesphere-installer.yaml   ## 编辑kubesphere-installer.yaml中kubesphere-config相关参数为当前集群参数。（若etcd无证书，设置etcd_tls_enable: False）
 
    kubectl apply -f kubesphere-installer.yaml
