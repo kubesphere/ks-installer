@@ -1,5 +1,15 @@
 ---
+- name: KubeSphere | Getting kubernetes version
+  shell: >
+    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
+  register: kubernetes_version
+  ignore_errors: True
 
+- name: KubeSphere | Setting kubernetes version
+  set_fact: 
+    kube_version: "{{ kubernetes_version.stdout }}"
+  ignore_errors: True
+  
 - name: KubeSphere | Getting ks-console installation files
   copy:
     src: "ks-console"
@@ -26,16 +36,6 @@
   when: result.stdout.find("ks-console") != -1
   tags:
     - upgrade
-
-# - name: ks-console | Creating front-proxy-client-secret
-#   command: >
-#     {{ bin_dir }}/kubectl -n kubesphere-system create secret generic front-proxy-client 
-#     --from-file=front-proxy-client.crt={{ kubernetes_front_proxy_client_crt }} 
-#     --from-file=front-proxy-client.key={{ kubernetes_front_proxy_client_key }}
-#   register: import 
-#   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-#   tags:
-#     - upgrade
  
 - name: ks-console | Creating manifests
   template:
