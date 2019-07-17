@@ -5,7 +5,7 @@ data:
     kube_apiserver_host: 192.168.0.3:6443
     etcd_tls_enable: True
     etcd_endpoint_ips: 192.168.0.3
-    disableMultiLogin: true
+    disableMultiLogin: True
     elk_prefix: logstash
 kind: ConfigMap
 metadata:
