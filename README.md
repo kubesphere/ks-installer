@@ -57,9 +57,10 @@ Configuration
 | Parameter                            | Description                                      | Default                                                 |
 | ------------------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
 |      kube_apiserver_host             |     当前集群kube-apiserver地址（ip:port）          |                                                        |
-|      etcd_tls_enable                 |     是否开启etcd TLS证书认证                       |  True                                                  |
+|      etcd_tls_enable                 |     是否开启etcd TLS证书认证（True / False）                       |  True                                                  |
 |      etcd_endpoint_ips               |     etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）             |                                                        |
-|      disableMultiLogin               |     是否关闭多点登录                               |  True                                                  |
-|      elk_prefix                      |     日志索引                                      |  logstash
+|      disableMultiLogin               |     是否关闭多点登录   （True / False）                            |  True                                                  |
+|      elk_prefix                      |     日志索引                                      |  logstash                                                |
+|      containersLogMountedPath（可选）        |     容器日志挂载路径                               | “”
 |      external_es_url（可选）          |     外部es地址，支持对接外部es用                    |                                                       |
 |      external_es_port（可选）         |     外部es端口，支持对接外部es用                    |                                                        | 
