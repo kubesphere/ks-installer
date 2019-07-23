@@ -57,7 +57,6 @@ hyperkube_image_tag: "{{ kube_version }}"
 
 ks_dev_image_tag: "advanced-2.0.0"
 ks_dev_image_ns: "kubesphere"
-ks_image_tag: "KsTag"
 
 #KubeSphere:
 ks_apiserver_repo: "kubesphere/ks-apiserver"
@@ -88,7 +87,7 @@ ks_image_pull_policy: IfNotPresent
 
 #ks-notification
 notification_flyway_repo: "kubesphere/notification"
-notification_flyway_tag: "flyway_advanced-2.0.2"
+notification_flyway_tag: "flyway-advanced-2.0.2"
 notification_repo: "kubesphere/notification"
 notification_tag: "advanced-2.0.2"
 alerting_dbinit_repo: "kubesphere/alerting-dbinit"
@@ -238,9 +237,9 @@ configmap_reload_tag: v0.0.1
 prometheus_repo: "{{ ks_image_repo }}/prometheus/prometheus"
 prometheus_tag: v2.5.0
 prometheus_config_reloader_repo: "{{ ks_image_repo }}/coreos/prometheus-config-reloader"
-prometheus_config_reloader_tag: v0.27.0
+prometheus_config_reloader_tag: v0.27.1
 prometheus_operator_repo: "{{ ks_image_repo }}/coreos/prometheus-operator"
-prometheus_operator_tag: v0.27.0
+prometheus_operator_tag: v0.27.1
 kube_rbac_proxy_repo: "{{ ks_image_repo }}/coreos/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
 kube_state_metrics_repo: "{{ ks_image_repo }}/coreos/kube-state-metrics"
