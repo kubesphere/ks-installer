@@ -42,7 +42,7 @@ Deploy
    
    kubectl apply -f kubesphere-installer.yaml
    ```
-   部署日志查看:
+5. 部署日志查看
    ```
    kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
    ```
