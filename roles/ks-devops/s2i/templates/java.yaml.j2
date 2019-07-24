@@ -8,8 +8,8 @@ metadata:
     "helm.sh/hook": pre-install
 spec:
   baseImages:
-    - {{ java11centos7_repo }}:{{ ks_dev_image_tag }}
-    - {{ java8centos7_repo }}:{{ ks_dev_image_tag }}
+    - {{ java11centos7_repo }}:{{ ks_image_tag }}
+    - {{ java8centos7_repo }}:{{ ks_image_tag }}
   environment:
     - key: MAVEN_ARGS
       type: string
@@ -182,7 +182,7 @@ spec:
       required: false
       defaultValue: ""
   codeFramework: java
-  defaultBaseImage: {{ java8centos7_repo }}:{{ ks_dev_image_tag }}
+  defaultBaseImage: {{ java8centos7_repo }}:{{ ks_image_tag }}
   version: 0.0.1
   description: "This is a S2I builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\").
 

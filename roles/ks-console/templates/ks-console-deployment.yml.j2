@@ -35,8 +35,8 @@ spec:
             cpu: {{ ks_console_cpu_requests }}
             memory: {{ ks_console_memory_requests }}
         volumeMounts:
-        - mountPath: /etc/kubernetes/pki
-          name: ca-dir
+        # - mountPath: /etc/kubernetes/pki
+        #   name: ca-dir
         - mountPath: /etc/kubesphere/ks-console
           name: ks-console-ae-config
         - mountPath: /root/KubeSphereUI/server/sample
@@ -62,10 +62,10 @@ spec:
                 values:
                 - "" 
       volumes:
-      - name: ca-dir
-        secret:
-          defaultMode: 420
-          secretName: front-proxy-client
+      # - name: ca-dir
+      #   secret:
+      #     defaultMode: 420
+      #     secretName: front-proxy-client
       - configMap:
           defaultMode: 420
           name: ks-console-ae-config

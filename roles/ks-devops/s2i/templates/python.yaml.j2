@@ -8,10 +8,10 @@ metadata:
     "helm.sh/hook": pre-install
 spec:
   baseImages:
-    - {{ python36centos7_repo }}:{{ ks_dev_image_tag }}
-    - {{ python35centos7_repo }}:{{ ks_dev_image_tag }}
-    - {{ python34centos7_repo }}:{{ ks_dev_image_tag }}
-    - {{ python27centos7_repo }}:{{ ks_dev_image_tag }}
+    - {{ python36centos7_repo }}:{{ ks_image_tag }}
+    - {{ python35centos7_repo }}:{{ ks_image_tag }}
+    - {{ python34centos7_repo }}:{{ ks_image_tag }}
+    - {{ python27centos7_repo }}:{{ ks_image_tag }}
   environment:
     - key: APP_SCRIPT
       type: string
@@ -75,7 +75,7 @@ spec:
       defaultValue: ""
       type: string
   codeFramework: python
-  defaultBaseImage: {{ python36centos7_repo }}:{{ ks_dev_image_tag }}
+  defaultBaseImage: {{ python36centos7_repo }}:{{ ks_image_tag }}
   version: 0.0.1
   description: "Python available as container is a base platform for building and running various Python applications and frameworks. Python is an easy to learn, powerful programming language. It has efficient high-level data structures and a simple but effective approach to object-oriented programming. Python's elegant syntax and dynamic typing, together with its interpreted nature, make it an ideal language for scripting and rapid application development in many areas on most platforms.
 

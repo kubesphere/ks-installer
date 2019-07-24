@@ -21,13 +21,7 @@ Deploy
    --from-file=ca.crt=/etc/kubernetes/ssl/ca.crt  \
    --from-file=ca.key=/etc/kubernetes/ssl/ca.key 
    ```
-3. 创建集群front-proxy-client证书secret
-   >注：按照当前集群front-proxy-client.crt和front-proxy-client.key证书路径创建（kubeadm创建集群的证书路径一般为/etc/kubernetes/pki）
-   ```
-   kubectl -n kubesphere-system create secret generic front-proxy-client  \
-   --from-file=front-proxy-client.crt=/etc/kubernetes/pki/front-proxy-client.crt  \
-   --from-file=front-proxy-client.key=/etc/kubernetes/pki/front-proxy-client.key
-4. 创建etcd证书secret
+3. 创建etcd证书secret
    >注：以集群实际etcd证书位置创建；若etcd没有配置证书，则创建空secret
    ```
    kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
@@ -40,7 +34,7 @@ Deploy
    kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
    ```
 
-5. 部署installer job
+4. 部署installer job
    ```
    cd deploy
 
@@ -64,3 +58,4 @@ Configuration
 |      containersLogMountedPath（可选）        |     容器日志挂载路径                               | “”
 |      external_es_url（可选）          |     外部es地址，支持对接外部es用                    |                                                       |
 |      external_es_port（可选）         |     外部es端口，支持对接外部es用                    |                                                        | 
+|      local_registry (离线部署使用)                 |     离线部署时，对接本地仓库 （使用该参数需将安装镜像使用scripts/download-docker-images.sh导入本地仓库中）                   |                                                        | 

@@ -8,9 +8,9 @@ metadata:
     "helm.sh/hook": pre-install
 spec:
   baseImages:
-    - {{ nodejs8centos7_repo }}:{{ ks_dev_image_tag }}
-    - {{ nodejs6centos7_repo }}:{{ ks_dev_image_tag }}
-    - {{ nodejs4centos7_repo }}:{{ ks_dev_image_tag }}
+    - {{ nodejs8centos7_repo }}:{{ ks_image_tag }}
+    - {{ nodejs6centos7_repo }}:{{ ks_image_tag }}
+    - {{ nodejs4centos7_repo }}:{{ ks_image_tag }}
   environment:
     - key: NODE_ENV
       type: string
@@ -53,7 +53,7 @@ spec:
       required: false
       defaultValue: ""
   codeFramework: nodejs
-  defaultBaseImage: {{ nodejs8centos7_repo }}:{{ ks_dev_image_tag }}
+  defaultBaseImage: {{ nodejs8centos7_repo }}:{{ ks_image_tag }}
   version: 0.0.1
   description: "Node.js available as container is a base platform for building and running various Node.js applications and frameworks. Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices."
   iconPath: assets/nodejs.png

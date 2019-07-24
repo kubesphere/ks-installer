@@ -2,11 +2,12 @@
 apiVersion: v1
 data:
   ks-config.yaml: |
-    kube_apiserver_host: 192.168.0.3:6443
+    kube_apiserver_host: 192.168.0.2:6443
     etcd_tls_enable: True
-    etcd_endpoint_ips: 192.168.0.3
+    etcd_endpoint_ips: 192.168.0.2
     disableMultiLogin: True
     elk_prefix: logstash
+  #  local_registry: 192.168.1.2:5000
 kind: ConfigMap
 metadata:
   name: kubesphere-config
