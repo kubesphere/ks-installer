@@ -65,61 +65,62 @@ ks_images=(dockerhub.qingcloud.com/kubesphere/ks-console:advanced-2.0.2  \
            kubesphere/python-34-centos7:advanced-2.0.0  \
            kubesphere/python-27-centos7:advanced-2.0.0  \
 
-           dockerhub.qingcloud.com/coreos/configmap-reload:v0.0.1 \
-           dockerhub.qingcloud.com/prometheus/prometheus:v2.5.0 \
-           dockerhub.qingcloud.com/coreos/prometheus-config-reloader:v0.27.1 \
-           dockerhub.qingcloud.com/coreos/prometheus-operator:v0.27.1 \
-           dockerhub.qingcloud.com/coreos/kube-rbac-proxy:v0.4.1 \
-           dockerhub.qingcloud.com/coreos/kube-state-metrics:v1.5.2 \
-           dockerhub.qingcloud.com/prometheus/node-exporter:ks-v0.16.0 \
-           dockerhub.qingcloud.com/coreos/addon-resizer:1.8.4 \
-           dockerhub.qingcloud.com/coreos/k8s-prometheus-adapter-amd64:v0.4.1 \
+           dockerhub.qingcloud.com/coreos/configmap-reload:v0.0.1  \
+           dockerhub.qingcloud.com/prometheus/prometheus:v2.5.0  \
+           dockerhub.qingcloud.com/coreos/prometheus-config-reloader:v0.27.1  \
+           dockerhub.qingcloud.com/coreos/prometheus-operator:v0.27.1  \
+           dockerhub.qingcloud.com/coreos/kube-rbac-proxy:v0.4.1  \
+           dockerhub.qingcloud.com/coreos/kube-state-metrics:v1.5.2  \
+           dockerhub.qingcloud.com/prometheus/node-exporter:ks-v0.16.0  \
+           dockerhub.qingcloud.com/coreos/addon-resizer:1.8.4  \
+           dockerhub.qingcloud.com/coreos/k8s-prometheus-adapter-amd64:v0.4.1  \
 
-           dockerhub.qingcloud.com/pires/docker-elasticsearch-curator:5.5.4 \
-           dockerhub.qingcloud.com/elasticsearch/elasticsearch-oss:6.7.0 \
-           dockerhub.qingcloud.com/fluent/fluent-bit:0.14.7 \
-           dockerhub.qingcloud.com/kibana/kibana-oss:6.7.0 \
-           dduportal/bats:0.4.0 \
-           kubesphere/fluentbit-operator:advanced-2.0.0 \
-           kubesphere/fluent-bit:advanced-2.0.0 \
-           kubesphere/configmap-reload:advanced-2.0.0 \
+           dockerhub.qingcloud.com/pires/docker-elasticsearch-curator:5.5.4  \
+           dockerhub.qingcloud.com/elasticsearch/elasticsearch-oss:6.7.0  \
+           dockerhub.qingcloud.com/fluent/fluent-bit:0.14.7  \
+           dockerhub.qingcloud.com/kibana/kibana-oss:6.7.0  \
+           dduportal/bats:0.4.0  \
+           kubesphere/fluentbit-operator:advanced-2.0.0  \
+           kubesphere/fluent-bit:advanced-2.0.0  \
+           kubesphere/configmap-reload:advanced-2.0.0  \
 
-           docker.io/istio/kubectl:1.1.1 \
-           docker.io/istio/proxy_init:1.1.1 \
-           docker.io/istio/proxyv2:1.1.1 \
-           docker.io/istio/citadel:1.1.1 \
-           docker.io/istio/pilot:1.1.1 \
-           docker.io/istio/mixer:1.1.1 \
-           docker.io/istio/galley:1.1.1 \
-           docker.io/istio/sidecar_injector:1.1.1 \
-           docker.io/istio/node-agent-k8s:1.1.1 \
-           jaegertracing/jaeger-operator:1.11.0 \
-           jaegertracing/jaeger-agent:1.11 \
-           jaegertracing/jaeger-collector:1.11 \
-           jaegertracing/jaeger-query:1.11 \
+           docker.io/istio/kubectl:1.1.1  \
+           docker.io/istio/proxy_init:1.1.1  \
+           docker.io/istio/proxyv2:1.1.1  \
+           docker.io/istio/citadel:1.1.1  \
+           docker.io/istio/pilot:1.1.1  \
+           docker.io/istio/mixer:1.1.1  \
+           docker.io/istio/galley:1.1.1  \
+           docker.io/istio/sidecar_injector:1.1.1  \
+           docker.io/istio/node-agent-k8s:1.1.1  \
+           jaegertracing/jaeger-operator:1.11.0  \
+           jaegertracing/jaeger-agent:1.11  \
+           jaegertracing/jaeger-collector:1.11  \
+           jaegertracing/jaeger-query:1.11  \
 
-           redis:4.0 \
-           busybox:1.28.4 \
-           mysql:8.0.11 \
-           nginx:1.14-alpine \
-           postgres:9.6.8 \
-           osixia/openldap:1.2.2 \
-           alpine:3.9 \
+           redis:4.0  \
+           busybox:1.28.4  \
+           mysql:8.0.11  \
+           nginx:1.14-alpine  \
+           postgres:9.6.8  \
+           osixia/openldap:1.2.2  \
+           alpine:3.9  \
 
-           kubesphere/examples-bookinfo-productpage-v1:1.13.0 \
-           kubesphere/examples-bookinfo-reviews-v1:1.13.0 \
-           kubesphere/examples-bookinfo-reviews-v2:1.13.0 \
-           kubesphere/examples-bookinfo-reviews-v3:1.13.0 \
-           kubesphere/examples-bookinfo-details-v1:1.13.0 \
-           kubesphere/examples-bookinfo-ratings-v1:1.13.0 \
+           kubesphere/examples-bookinfo-productpage-v1:1.13.0  \
+           kubesphere/examples-bookinfo-reviews-v1:1.13.0  \
+           kubesphere/examples-bookinfo-reviews-v2:1.13.0  \
+           kubesphere/examples-bookinfo-reviews-v3:1.13.0  \
+           kubesphere/examples-bookinfo-details-v1:1.13.0  \
+           kubesphere/examples-bookinfo-ratings-v1:1.13.0  \
 
            nginxdemos/hello:plain-text \
-           mysql:5.6 \
-           wordpress:4.8-apache \
-           mirrorgooglecontainers/hpa-example:latest \
-           java:openjdk-8-jre-alpine \
-           fluent/fluentd:v1.4.2-2.0 \
-           perl:latest \
+           mysql:5.6  \
+           wordpress:4.8-apache  \
+           mirrorgooglecontainers/hpa-example:latest  \
+           java:openjdk-8-jre-alpine  \
+           fluent/fluentd:v1.4.2-2.0  \
+           perl:latest  \
+           kubespheredev/ks-installer:advanced-2.0.2  \
    )
   
 registryurl="$1"
