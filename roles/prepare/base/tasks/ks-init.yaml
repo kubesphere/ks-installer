@@ -98,3 +98,5 @@
     {{ bin_dir }}/helm upgrade --install istio-init {{ kubesphere_dir }}/ks-init/istio-init-1.1.0.tgz 
     -f {{ kubesphere_dir }}/ks-init/custom-values-istio-init.yaml 
     --namespace istio-system
+  when:
+    - istio_enable == true

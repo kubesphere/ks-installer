@@ -7,7 +7,7 @@
     - ks-devops/sonarqube
     - openpitrix
     - prepare/base
-    - metrics-server
+    - { role: metrics-server, when: "metrics_server_enable == true" }
     - ingress
     - ks-account
     - ks-apigateway
@@ -21,4 +21,4 @@
     - ks-alerting
     - ks-devops/jenkins
     - ks-apiserver
-    - ks-istio
+    - { role: ks-istio, when: "istio_enable == true" }

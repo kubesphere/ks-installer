@@ -65,3 +65,7 @@ kube_apiserver_host: |-
 elk_prefix: logstash
 
 vertical_pod_autoscaler_enable: false
+
+istio_enable: true
+
+metrics_server_enable: true
