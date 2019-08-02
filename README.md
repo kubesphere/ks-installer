@@ -84,6 +84,8 @@ Configuration
 |      etcd_endpoint_ips               |     etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）             |                                                        |
 |      disableMultiLogin               |     是否关闭多点登录   （True / False）                            |  True                                                  |
 |      elk_prefix                      |     日志索引                                      |  logstash                                                |
+|      metrics_server_enable            |    是否安装metrics_server    （True / False）                 |   True
+|      istio_enable                    |     是否安装istio           （True / False）                   |   True
 |      containersLogMountedPath（可选）        |     容器日志挂载路径                               | “”
 |      external_es_url（可选）          |     外部es地址，支持对接外部es用                    |                                                       |
 |      external_es_port（可选）         |     外部es端口，支持对接外部es用                    |                                                        | 
