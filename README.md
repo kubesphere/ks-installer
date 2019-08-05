@@ -81,9 +81,10 @@ Configuration
 | ------------------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
 |      kube_apiserver_host             |     当前集群kube-apiserver地址（ip:port）          |                                                        |
 |      etcd_tls_enable                 |     是否开启etcd TLS证书认证（True / False）                       |  True                                                  |
-|      etcd_endpoint_ips               |     etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）             |                                                        |
+|      etcd_endpoint_ips               |     etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）             |                           |
 |      disableMultiLogin               |     是否关闭多点登录   （True / False）                            |  True                                                  |
 |      elk_prefix                      |     日志索引                                      |  logstash                                                |
+|      keep_log_days                   |     日志保存时间（天）                                  |   7                                    |
 |      metrics_server_enable            |    是否安装metrics_server    （True / False）                 |   True
 |      istio_enable                    |     是否安装istio           （True / False）                   |   True
 |      containersLogMountedPath（可选）        |     容器日志挂载路径                               | “”
