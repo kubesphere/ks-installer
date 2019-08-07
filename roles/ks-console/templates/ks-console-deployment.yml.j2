@@ -60,7 +60,20 @@ spec:
               - key: node-role.kubernetes.io/master
                 operator: In
                 values:
-                - "" 
+                - ""
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - ks-console
+              namespaces:
+              - kubesphere-system
+              topologyKey: kubernetes.io/hostname
+            weight: 100 
       volumes:
       # - name: ca-dir
       #   secret:

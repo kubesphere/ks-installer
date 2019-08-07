@@ -7,7 +7,21 @@ metadata:
   namespace: kubesphere-monitoring-system
 spec:
   imagePullSecrets:
-  - name: qingcloud  
+  - name: qingcloud 
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: prometheus
+              operator: In
+              values:
+              - k8s
+          namespaces:
+          - kubesphere-monitoring-system
+          topologyKey: kubernetes.io/hostname
+        weight: 100 
   baseImage: {{ prometheus_repo }}
   nodeSelector:
     beta.kubernetes.io/os: linux
