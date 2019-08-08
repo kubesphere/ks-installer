@@ -12,9 +12,18 @@
     - sonar_server_url is not defined
     - sonar_server_token is not defined
     
-- name: ks-devops | Getting ks-sonarqube svc clusterIP
-  shell: "{{ bin_dir }}/kubectl get --namespace kubesphere-devops-system -o jsonpath='{.spec.clusterIP}' services ks-sonarqube-sonarqube"
-  register:  ks_sonarqube_clusterIP
+- name: ks-devops | Getting ks-sonarqube NodeIp
+  shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
+  register:  ks_sonarqube_nodeIP
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
+- name: ks-devops | Getting ks-sonarqube NodePort
+  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.ports[0].nodePort}'"
+  register:  ks_sonarqube_nodePort
   when: 
     - sonarqube_enable is defined
     - sonarqube_enable == true
@@ -23,8 +32,8 @@
 
 - name: ks-devops | Waitting for ks-sonarqube port to become open
   wait_for:
-    host: "{{ ks_sonarqube_clusterIP.stdout }}"
-    port: "9000"
+    host: "{{ ks_sonarqube_nodeIP.stdout }}"
+    port: "{{ ks_sonarqube_nodePort.stdout }}"
     delay: 3
     timeout: 600
   when: 
@@ -35,7 +44,7 @@
 
 - name: ks-devops | Setting ks-sonarqube url
   set_fact: 
-    sonar_server_url: "http://{{ ks_sonarqube_clusterIP.stdout }}:9000"
+    sonar_server_url: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
   when: 
     - sonarqube_enable is defined
     - sonarqube_enable == true
