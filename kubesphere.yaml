@@ -4,21 +4,14 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
-    - ks-devops/sonarqube
-    - openpitrix
-    - prepare/base
+    - { role: ks-devops/sonarqube, when: "sonarqube_enable == true" }
+    - { role: openpitrix, when: "openpitrix_enable == true" }
+    - ks-core
     - { role: metrics-server, when: "metrics_server_enable == true" }
-    - ingress
-    - ks-account
-    - ks-apigateway
-    - ks-controller-manager
-    - ks-devops/s2i
-    - ks-monitor
-    - ks-logging
-    - ks-console
-    - ks-devops/ks-devops
-    - ks-notification
-    - ks-alerting
-    - ks-devops/jenkins
-    - ks-apiserver
+    - { role: ks-monitor, when: "monitoring_enable == true" }
+    - { role: ks-logging, when: "logging_enable == true" }
+    - { role: ks-notification, when: "notification_enable == true" }
+    - { role: ks-alerting, when: "alerting_enable == true" }
+    - ks-devops
+    - ks-core/ks-apiserver
     - { role: ks-istio, when: "istio_enable == true" }

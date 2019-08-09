@@ -7,9 +7,17 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
 spec:
-  baseImages:
-    - {{ java11centos7_repo }}:{{ ks_image_tag }}
-    - {{ java8centos7_repo }}:{{ ks_image_tag }}
+  containerInfo:
+     - builderImage: {{ java11centos7_repo }}:{{ ks_image_tag }}
+       runtimeImage: {{ java8_runtime_repo }}:{{ ks_image_tag }}
+       runtimeArtifacts:
+         - source: "/deployments"
+       buildVolumes: ["s2i_java_cache:/tmp/artifacts"]
+     - builderImage: {{ java8centos7_repo }}:{{ ks_image_tag }}
+       runtimeImage: {{ java11_runtime_repo }}:{{ ks_image_tag }}
+       runtimeArtifacts:
+         - source: "/deployments"
+       buildVolumes: ["s2i_java_cache:/tmp/artifacts"]
   environment:
     - key: MAVEN_ARGS
       type: string

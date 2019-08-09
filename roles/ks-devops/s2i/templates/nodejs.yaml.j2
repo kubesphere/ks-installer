@@ -7,10 +7,13 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
 spec:
-  baseImages:
-    - {{ nodejs8centos7_repo }}:{{ ks_image_tag }}
-    - {{ nodejs6centos7_repo }}:{{ ks_image_tag }}
-    - {{ nodejs4centos7_repo }}:{{ ks_image_tag }}
+  containerInfo:
+     - builderImage: {{ nodejs8centos7_repo }}:{{ ks_image_tag }}
+       buildVolumes: ["s2i_nodejs_cache:/opt/app-root/src/.npm"]
+     - builderImage: {{ nodejs6centos7_repo }}:{{ ks_image_tag }}
+       buildVolumes: ["s2i_nodejs_cache:/opt/app-root/src/.npm"]
+     - builderImage: {{ nodejs4centos7_repo }}:{{ ks_image_tag }}
+       buildVolumes: ["s2i_nodejs_cache:/opt/app-root/src/.npm"]
   environment:
     - key: NODE_ENV
       type: string

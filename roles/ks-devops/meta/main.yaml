@@ -1,0 +1,26 @@
+---
+
+dependencies:
+  # - role: ks-devops/sonarqube
+  #   when:
+  #     - sonarqube_enable == true
+
+  - role: ks-devops/ks-devops
+    when: 
+      - devops_enable == true
+
+  - role: ks-devops/s2i
+    when:
+      - s2i_enable == true
+
+  - role: ks-devops/harbor
+    when: 
+      - harbor_enable == true
+
+  - role: ks-devops/gitlab
+    when:
+      - gitlab_enable == true
+
+  - role: ks-devops/jenkins
+    when:
+      - jenkins_enable == true

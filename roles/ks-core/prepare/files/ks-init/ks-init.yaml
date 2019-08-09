@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubesphere
+  namespace: kubesphere-system
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubesphere-secret
+  namespace: kubesphere-system
+  annotations:
+    kubernetes.io/service-account.name: kubesphere
+type: kubernetes.io/service-account-token
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubesphere
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubesphere
+  namespace: kubesphere-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    creator: system
+    desc: "Allows cluster-admin access to perform any action on any resource, it gives full control over every resource in the cluster and in all namespaces."
+  name: cluster-admin
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- nonResourceURLs:
+  - '*'
+  verbs:
+  - '*'
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    creator: system
+    desc: "Normal user in the cluster, there is no permission for any resource operations until he is  invited to the workspace."
+  name: cluster-regular
+rules: 
+- apiGroups:
+  - openpitrix.io
+  resources:
+  - repos
+  - app_versions
+  - app_version/*
+  - apps
+  - clusters
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - '*'
+  resources:
+  - storageclasses
+  verbs:
+  - list
+- apiGroups:
+  - ''
+  resources:
+  - limitranges
+  verbs:
+  - create
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    creator: system
+    desc: "Allows workspace-manager access to manage all the workspaces in the cluster."
+  name: workspaces-manager
+rules: 
+- apiGroups:
+  - '*'
+  resources:
+  - workspaces
+  - workspaces/*
+  verbs:
+  - '*'
+- apiGroups:
+  - iam.kubesphere.io
+  resources:
+  - users
+  verbs:
+  - list
+- apiGroups:
+  - '*'
+  resources:
+  - storageclasses
+  verbs:
+  - list
+- apiGroups:
+  - "*"
+  resources:
+  - namespaces
+  verbs:
+  - '*'
+- apiGroups:
+  - '*'
+  resources:
+  - serviceaccounts
+  - limitranges
+  - deployments
+  - configmaps
+  - secrets
+  - jobs
+  - cronjobs
+  - persistentvolumeclaims
+  - statefulsets
+  - daemonsets
+  - ingresses
+  - services
+  - pods/*
+  - pods
+  - events
+  - deployments/scale
+  - workloadstatuses
+  - applications
+  - quotas
+  - resourcequotas
+  - roles
+  - router
+  - s2ibuilders
+  verbs:
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  - roles
+  verbs:
+  - '*'

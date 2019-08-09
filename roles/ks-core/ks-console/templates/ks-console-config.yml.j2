@@ -14,17 +14,15 @@ data:
       http:
         hostname: localhost
         port: 8000
-        favicon: src/assets/favicon.ico
         static:
           production:
             /public: server/public
-            /assets: src/assets
+            /assets: dist/assets
             /dist: dist
       redis:
         port: 6379
         host: redis.kubesphere-system.svc
       sessionTimeout: 7200000 
-      disableMultiLogin: {{ disableMultiLogin }}
     client:
       version:
         console: {{ console_version }}

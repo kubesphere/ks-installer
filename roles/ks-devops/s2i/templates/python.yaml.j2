@@ -7,11 +7,15 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
 spec:
-  baseImages:
-    - {{ python36centos7_repo }}:{{ ks_image_tag }}
-    - {{ python35centos7_repo }}:{{ ks_image_tag }}
-    - {{ python34centos7_repo }}:{{ ks_image_tag }}
-    - {{ python27centos7_repo }}:{{ ks_image_tag }}
+  containerInfo:
+    - builderImage: {{ python36centos7_repo }}:{{ ks_image_tag }}
+      buildVolumes: ["s2i_python36_cache:/opt/app-root/lib"]
+    - builderImage: {{ python35centos7_repo }}:{{ ks_image_tag }}
+      buildVolumes: ["s2i_python35_cache:/opt/app-root/lib"]
+    - builderImage: {{ python34centos7_repo }}:{{ ks_image_tag }}
+      buildVolumes: ["s2i_python34_cache:/opt/app-root/lib"]
+    - builderImage: {{ python27centos7_repo }}:{{ ks_image_tag }}
+      buildVolumes: ["s2i_python27_cache:/opt/app-root/lib"]
   environment:
     - key: APP_SCRIPT
       type: string

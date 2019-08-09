@@ -104,6 +104,10 @@ ks_devops_tag: advanced-2.0.0-dev
 ks_image_pull_policy: IfNotPresent
 #ks_image_pull_policy: Always
 
+#ks-hostnic
+ks_hostnic_repo: "kubespheredev/hostnic"
+ks_hostnic_tag: "v1.0.0-alpha"
+
 #ks-notification
 notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
 notification_flyway_tag: "flyway-advanced-2.0.2"
@@ -204,6 +208,8 @@ s2irun_repo: "{{ base_repo }}kubesphere/s2irun"
 s2irun_tag: "advanced-2.0.0"
 java11centos7_repo: "{{ base_repo }}kubesphere/java-11-centos7"
 java8centos7_repo: "{{ base_repo }}kubesphere/java-8-centos7"
+java8_runtime_repo: "{{ base_repo }}/java8-runtime"
+java11_runtime_repo: "{{ base_repo }}/java11-runtime"
 nodejs8centos7_repo: "{{ base_repo }}kubesphere/nodejs-8-centos7"
 nodejs6centos7_repo: "{{ base_repo }}kubesphere/nodejs-6-centos7"
 nodejs4centos7_repo: "{{ base_repo }}kubesphere/nodejs-4-centos7"

@@ -14,5 +14,5 @@ subsets:
 {% endfor %}
   ports:
   - name: metrics
-    port: 2379
+    port: {{ etcd_port }}
     protocol: TCP
