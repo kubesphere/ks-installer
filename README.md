@@ -1,5 +1,7 @@
 # KubeSphere Installer
 
+&ensp;&ensp;&ensp;&ensp;该项目支持在已有kubernetes集群之上部署[KubeSphere](https://kubesphere.io/)。
+
 Requirements
 ------------
 -   **kubernetes version: 1.13.0+**
