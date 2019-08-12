@@ -30,8 +30,8 @@ Deploy
    >注：按照当前集群ca.crt和ca.key证书路径创建（kubeadm创建集群的证书路径一般为/etc/kubernetes/pki）
    ```
    kubectl -n kubesphere-system create secret generic kubesphere-ca  \
-   --from-file=ca.crt=/etc/kubernetes/ssl/ca.crt  \
-   --from-file=ca.key=/etc/kubernetes/ssl/ca.key 
+   --from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
+   --from-file=ca.key=/etc/kubernetes/pki/ca.key 
    ```
 3. 创建etcd证书secret
    >注：以集群实际etcd证书位置创建；若etcd没有配置证书，则创建空secret
