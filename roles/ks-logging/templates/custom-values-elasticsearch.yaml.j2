@@ -79,6 +79,7 @@ master:
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   persistence:
     enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
+
     accessMode: ReadWriteOnce
     name: data
     size: "4Gi"
@@ -130,6 +131,7 @@ data:
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
   persistence:
     enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
+    
     accessMode: ReadWriteOnce
     name: data
     size: "{{ elasticsearch_volume_size }}"

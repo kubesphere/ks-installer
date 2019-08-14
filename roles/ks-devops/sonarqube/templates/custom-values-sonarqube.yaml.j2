@@ -162,6 +162,7 @@ postgresql:
     port: 5432
   persistence:
     enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
+    
 {% if persistence.storageClass is defined and persistence.storageClass != None %} 
     storageClass: "{{ persistence.storageClass }}"
 {% endif %}

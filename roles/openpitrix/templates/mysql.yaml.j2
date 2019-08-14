@@ -16,6 +16,8 @@ spec:
     protocol: TCP
     port: 3306
     targetPort: 3306
+
+{% if persistence.enable is defined and persistence.enable == true %}     
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -34,6 +36,8 @@ spec:
   resources:
     requests:
       storage: 20Gi
+{% endif %}
+
 ---
 apiVersion: apps/v1beta2
 kind: Deployment

@@ -30,12 +30,30 @@
     - sonar_server_url is not defined
     - sonar_server_token is not defined
 
+- name: ks-devops | Getting ks-sonarqube ClusterIP
+  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.clusterIP}'"
+  register:  ks_sonarqube_clusterIP
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
 - name: ks-devops | Waitting for ks-sonarqube port to become open
   wait_for:
-    host: "{{ ks_sonarqube_nodeIP.stdout }}"
-    port: "{{ ks_sonarqube_nodePort.stdout }}"
+    host: "{{ ks_sonarqube_clusterIP.stdout }}"
+    port: 9000
     delay: 3
     timeout: 600
+  when: 
+    - sonarqube_enable is defined
+    - sonarqube_enable == true
+    - sonar_server_url is not defined
+    - sonar_server_token is not defined
+
+- name: ks-devops | Setting ks-sonarqube url
+  set_fact: 
+    sonar_server_url_internal: "http://{{ ks_sonarqube_clusterIP.stdout }}:9000"
   when: 
     - sonarqube_enable is defined
     - sonarqube_enable == true
@@ -53,7 +71,7 @@
 
 - name: ks-devops | Waiting for ks-sonarqube
   shell: >
-    curl -I -s -u {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }} -X POST {{ sonar_server_url }}/api/user_tokens/generate|awk '{if(NR==1){print $2}}'
+    curl -I -s -u {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }} -X POST {{ sonar_server_url_internal }}/api/user_tokens/generate|awk '{if(NR==1){print $2}}'
   register: result
   until: 
     - result is succeeded
@@ -69,7 +87,7 @@
     
 - name: ks-devops | Checking ks-sonarqube token
   uri:
-    url: "{{ sonar_server_url }}/api/user_tokens/search"
+    url: "{{ sonar_server_url_internal }}/api/user_tokens/search"
     method: POST
     user: "{{ sonarqube_user_name }}"
     password: "{{ sonarqube_user_passwd }}"
@@ -87,7 +105,7 @@
 
 - name: ks-devops | Deleting ks-sonarqube old token 
   uri:
-    url: "{{ sonar_server_url }}/api/user_tokens/revoke?name=jenkins"
+    url: "{{ sonar_server_url_internal }}/api/user_tokens/revoke?name=jenkins"
     method: POST
     user: "{{ sonarqube_user_name }}"
     password: "{{ sonarqube_user_passwd }}"
@@ -102,7 +120,7 @@
 
 - name: ks-devops | Generating ks-sonarqube token 
   uri:
-    url: "{{ sonar_server_url }}/api/user_tokens/generate?name=jenkins"
+    url: "{{ sonar_server_url_internal }}/api/user_tokens/generate?name=jenkins"
     method: POST
     user: "{{ sonarqube_user_name }}"
     password: "{{ sonarqube_user_passwd }}"
@@ -116,7 +134,7 @@
 
 - name: ks-devops | Setting user permission(admin)
   uri:
-    url: "{{ sonar_server_url }}/api/permissions/add_user"
+    url: "{{ sonar_server_url_internal }}/api/permissions/add_user"
     method: POST
     user: admin
     password: admin
@@ -133,7 +151,7 @@
 
 - name: ks-devops | Setting user permission(gateadmin)
   uri:
-    url: "{{ sonar_server_url }}/api/permissions/add_user"
+    url: "{{ sonar_server_url_internal }}/api/permissions/add_user"
     method: POST
     user: admin
     password: admin
@@ -150,7 +168,7 @@
 
 - name: ks-devops | Setting user permission(profileadmin)
   uri:
-    url: "{{ sonar_server_url }}/api/permissions/add_user"
+    url: "{{ sonar_server_url_internal }}/api/permissions/add_user"
     method: POST
     user: admin
     password: admin
@@ -167,7 +185,7 @@
 
 - name: ks-devops | Creating ks-jenkins webhook(internal)
   uri:
-    url: "{{ sonar_server_url }}/api/webhooks/create"
+    url: "{{ sonar_server_url_internal }}/api/webhooks/create"
     method: POST
     user: "{{ sonarqube_user_name }}"
     password: "{{ sonarqube_user_passwd }}"
