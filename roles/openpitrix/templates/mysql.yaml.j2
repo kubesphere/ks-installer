@@ -28,6 +28,9 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+  storageClassName: {{ persistence.storageClass }}
+{% endif %}
   resources:
     requests:
       storage: 20Gi
@@ -107,5 +110,11 @@ spec:
                 - "" 
       volumes:
       - name: db-persistent-storage
+{% if persistence.enable is defined and persistence.enable == true %}  
         persistentVolumeClaim:
           claimName: openpitrix-db-pvc
+{% else %} 
+        hostPath:
+          patch: /var/lib/kubesphere/db-data
+          type: Directory
+{% endif %}

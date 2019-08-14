@@ -160,7 +160,14 @@ postgresql:
   # Specify the TCP port that PostgreSQL should use
   service:
     port: 5432
-
+  persistence:
+    enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
+{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+    storageClass: "{{ persistence.storageClass }}"
+{% endif %}
+    accessMode: ReadWriteOnce
+    size: 8Gi
+ 
 mysql:
   # Enable to deploy the mySQL chart
   enabled: false

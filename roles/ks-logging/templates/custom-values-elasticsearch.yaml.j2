@@ -78,11 +78,13 @@ master:
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   persistence:
-    enabled: true
+    enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
     accessMode: ReadWriteOnce
     name: data
     size: "4Gi"
-    # storageClass: "ssd"
+{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+    storageClass: "{{ persistence.storageClass }}"
+{% endif %}
   readinessProbe:
     httpGet:
       path: /_cluster/health?local=true
@@ -127,11 +129,13 @@ data:
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
   persistence:
-    enabled: true
+    enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
     accessMode: ReadWriteOnce
     name: data
     size: "{{ elasticsearch_volume_size }}"
-    # storageClass: "ssd"
+{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+    storageClass: "{{ persistence.storageClass }}"
+{% endif %}
   readinessProbe:
     httpGet:
       path: /_cluster/health?local=true

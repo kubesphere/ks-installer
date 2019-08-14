@@ -420,8 +420,13 @@ rbac:
   install: true
 
 Persistence:
-  # StorageClass: nfs-client
-
+  Enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
+{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+  StorageClass: "{{ persistence.storageClass }}"
+{% endif %}
+  AccessMode: ReadWriteOnce
+  Size: 8Gi
+  
   volumes:
   - name: casc-config
     configMap:
