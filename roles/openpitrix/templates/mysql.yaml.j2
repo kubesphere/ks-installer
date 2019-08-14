@@ -115,6 +115,6 @@ spec:
           claimName: openpitrix-db-pvc
 {% else %} 
         hostPath:
-          patch: /var/lib/kubesphere/db-data
+          path: /var/lib/kubesphere/db-data
           type: Directory
 {% endif %}

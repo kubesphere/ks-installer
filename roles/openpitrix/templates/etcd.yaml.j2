@@ -81,6 +81,6 @@ spec:
           claimName: openpitrix-etcd-pvc
 {% else %} 
         hostPath:
-          patch: /var/lib/kubesphere/etcd-data
+          path: /var/lib/kubesphere/etcd-data
           type: Directory
 {% endif %}

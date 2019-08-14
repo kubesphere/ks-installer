@@ -91,6 +91,6 @@ spec:
           claimName: openpitrix-minio-pvc
 {% else %} 
         hostPath:
-          patch: /var/lib/kubesphere/minio-data
+          path: /var/lib/kubesphere/minio-data
           type: Directory
 {% endif %}

@@ -47,7 +47,7 @@ spec:
           claimName: redis-pvc
 {% else %} 
         hostPath:
-          patch: /var/lib/kubesphere/redis-data
+          path: /var/lib/kubesphere/redis-data
           type: Directory
 {% endif %}         
       tolerations:
@@ -165,7 +165,7 @@ spec:
           claimName: openldap-pvc
 {% else %} 
         hostPath:
-          patch: /var/lib/kubesphere/ldap-data
+          path: /var/lib/kubesphere/ldap-data
           type: Directory
 {% endif %}
 
