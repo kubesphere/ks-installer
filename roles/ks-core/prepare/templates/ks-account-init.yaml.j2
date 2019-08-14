@@ -48,7 +48,7 @@ spec:
 {% else %} 
         hostPath:
           path: /var/lib/kubesphere/redis-data
-          type: Directory
+          type: DirectoryOrCreate
 {% endif %}         
       tolerations:
         - key: node-role.kubernetes.io/master
@@ -166,7 +166,7 @@ spec:
 {% else %} 
         hostPath:
           path: /var/lib/kubesphere/ldap-data
-          type: Directory
+          type: DirectoryOrCreate
 {% endif %}
 
 ---
