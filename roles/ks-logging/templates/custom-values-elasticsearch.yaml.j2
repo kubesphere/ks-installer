@@ -67,9 +67,8 @@ cluster:
     # RECOVER_AFTER_MASTER_NODES: master.replicas/2 +1
     # RECOVER_AFTER_DATA_NODES: data.replicas/2 +1
   # List of plugins to install via dedicated init container
-  plugins: []
-    # - ingest-attachment
-    # - mapper-size
+  plugins:
+  - http://elasticsearch-logging-plugins-nginx/analysis-icu-6.7.0.zip
 
 master:
   name: master
@@ -183,3 +182,15 @@ sysctlInitContainer:
   enabled: true
 ## Additional init containers
 extraInitContainers: |
+  - name: es-plugin-install-extra
+    image: {{ busybox_repo }}:{{ busybox_tag }}
+    command:
+    - sh
+    - -c
+    - |
+      mkdir /es-plugins/analysis-ik
+      wget -qO- http://elasticsearch-logging-plugins-nginx/analysis-ik-6.7.0.zip | unzip -d /es-plugins/analysis-ik -
+      chown -R 1000.1000 /es-plugins/analysis-ik
+    volumeMounts:
+    - mountPath: /es-plugins
+      name: plugindir
