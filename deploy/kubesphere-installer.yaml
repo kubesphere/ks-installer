@@ -8,7 +8,7 @@ data:
     disableMultiLogin: True
     elk_prefix: logstash
     persistence:
-      enabled: false
+      enable: false
       storageClass: ""
 kind: ConfigMap
 metadata:
