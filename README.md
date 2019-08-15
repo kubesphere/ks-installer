@@ -131,7 +131,7 @@ Configuration
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td rowspan=2 height=36 class=xl68 style='height:27.6pt'>persistence</td>
-  <td class=xl66>enabled</td>
+  <td class=xl66>enable</td>
   <td>是否启用持久化存储<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True /
   False）（非测试环境建议开启数据持久化）</td>
   <td class=xl69></td>
