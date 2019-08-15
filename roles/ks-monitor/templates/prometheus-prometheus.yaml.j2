@@ -57,11 +57,18 @@ spec:
       - kubelet
       - prometheus-system
   storage:
+{% if persistence.enable is defined and persistence.enable == true %} 
     volumeClaimTemplate:
       spec:
+{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+        storageClassName: {{ persistence.storageClass }}
+{% endif %}
         resources:
           requests:
             storage: {{ prometheus_volume_size }}
+{% else %}
+    emptyDir: {}
+{% endif %}
   tolerations:
   - effect: NoSchedule
     key: dedicated
