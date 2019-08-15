@@ -151,6 +151,16 @@
   when: 
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") == -1
 
+- name: ks-logging | Deploy elasticsearch-plugins
+  shell: >
+    {{ bin_dir }}/helm upgrade --install elasticsearch-logging-plugins
+    {{ kubesphere_dir }}/logging/nginx-1.0.0.tgz  
+    -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch-plugins.yaml
+    --namespace kubesphere-logging-system
+  when:
+    - external_es_url is not defined
+    - external_es_port is not defined
+
 - name: ks-logging | Deploy elasticsearch-logging
   shell: >
     {{ bin_dir }}/helm upgrade --install elasticsearch-logging 
