@@ -18,3 +18,5 @@ etcd_tls_enable: true
 etcd_client_ca_crt: "{{ etcd_cert_dir }}/ca.pem"
 etcd_client_crt: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}.pem"
 etcd_client_key: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}-key.pem"
+
+etcd_port: 2379
