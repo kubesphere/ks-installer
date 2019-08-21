@@ -54,7 +54,7 @@ kubesphere:
     containerLogPath: /var/log/containers
     endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
   
-  openPitrix:
+  openpitrix:
     install: "internal"
     apigateway:
       endpoint: http://api.openpitrix.svc:9100
