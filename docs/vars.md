@@ -1,81 +1,87 @@
 # Configurable Parameters in KubeSphere
 
+
+
+
+
 installer configuration, used when install a KubeSphere
 ```yaml
-# kubernetes apiserver configuration
-apiserver:
-  endpoints:
-    - https://192.168.0.2:6443
-    - https://192.168.0.3:6443
-    - https://192.168.0.3:6443
 
-# etcd configuration
-etcd:
-  caFile: /etc/kubernetes/etcd/etcd.ca
-  certFile: /etc/kubernetes/etcd/etcd.crt
-  keyFile: /etc/kubernetes/etcd/etcd.key
-  endpoints:
-    - https://192.168.0.8:2379
-    - https://192.168.0.9:2379
-    - https://192.168.0.7:2379
+apiVersion: v1
+data:
+  ks-config.yaml: |
+    # kubernetes apiserver configuration
+    apiserver:
+      endpoints: 192.168.0.2:6443      # master addr or master's lb addr
 
-metricsServer:
-  # install has three values ["interal","external","disable"]
-  # internal means installed defaultly by installer
-  # external means provider by user 
-  # disable means disable this component entirely. 
-  # When type is external, user is responsible for providing required info, such endpoint address/authentiation etc.
-  install: "internal"
+    # etcd configuration
+    etcd:
+      endpoints:
+        - 192.168.0.8:2379
+        - 192.168.0.9:2379
+        - 192.168.0.7:2379
 
-# Kubesphere 
-kubesphere:
-  ks-console:
-    disableMultiLogin: True  # enable/disable multi login
+    metricsServer:
+      # install has three values ["interal","external","disable"]
+      # internal means installed defaultly by installer
+      # external means provider by user 
+      # disable means disable this component entirely. 
+      # When type is external, user is responsible for providing required info, such endpoint address/authentiation etc.
+      install: "internal"
+      endpoint: http://metrics-server.kube-system.svc:6603
+    # Kubesphere 
+    kubesphere:
+      ks-console:
+        disableMultiLogin: True  # enable/disable multi login
 
-  mysql:
-    install: "internal"/"external"/"disable"
-  
-  redis:
-    install: "internal"/"external"/"disable"
-    address: redis.kubesphere-system.svc:6379
-    password: $@$!#!#
+      mysql:
+        install: "internal"/"external"/"disable"
+      
+      redis:
+        install: "internal"/"external"/"disable"
+        address: redis.kubesphere-system.svc:6379
+        password: $@$!#!#
 
-  monitoring:
-    install: "internal"  
-    replicas: 2  
-    volumeSize: 20G
-    endpoint: http://prometheus.kubesphere.svc:8088
-  
-  logging:
-    install: "internal"
-    elkPrefix: logstash
-    volumeSize: 20G
-    logMaxAge: 7d
-    containerLogPath: /var/log/containers
-    endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
-  
-  openpitrix:
-    install: "internal"
-    apigateway:
-      endpoint: http://api.openpitrix.svc:9100
-  
-  devops:
-    install: "internal"
-    endpoint: http://devops.kubesphere-system.svc:9000
-    sonarqube:
-      type: "internal"
+      monitoring:
+        install: "internal"  
+        replicas: 2  
+        volumeSize: 20Gi
+        endpoint: http://prometheus.kubesphere.svc:8088
+      
+      logging:
+        install: "internal"
+        elkPrefix: logstash
+        volumeSize: 20Gi
+        logMaxAge: 7     # 
+        containerLogPath: /var/log/containers
+        endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
+      
+      openpitrix:
+        install: "internal"
+        apigateway:
+          endpoint: http://api.openpitrix.svc:9100
+      
+      devops:
+        install: "internal"
+        endpoint: http://devops.kubesphere-system.svc:9000
+        sonarqube:
+          type: "internal"
 
-  servicemesh:
-    install: "internal"
-    
-  notification:
-    install: "internal"
+      servicemesh:
+        install: "internal"
+        
+      notification:
+        install: "internal"
 
-  alert:
-    install: "internal"
-  
-  storage:
-    storageClass: ""
+      alert:
+        install: "internal"
+      
+      storage:
+        storageClass: ""
+kind: ConfigMap
+metadata:
+  name: ks-installer-config
+  namespace: kubesphere-system
 ```
 
 
@@ -86,20 +92,14 @@ data:
   kubesphere.yaml: |
     # kubernetes apiserver configuration
     apiserver:
-      endpoints:
-        - https://192.168.0.2:6443
-        - https://192.168.0.3:6443
-        - https://192.168.0.3:6443
+      endpoints: 192.168.0.2:6443
     
     # etcd configuration
     etcd:
-      caFile: /etc/kubernetes/etcd/etcd.ca
-      certFile: /etc/kubernetes/etcd/etcd.crt
-      keyFile: /etc/kubernetes/etcd/etcd.key
       endpoints:
-        - https://192.168.0.8:2379
-        - https://192.168.0.9:2379
-        - https://192.168.0.7:2379
+        - 192.168.0.8:2379
+        - 192.168.0.9:2379
+        - 192.168.0.7:2379
     
     metricsServer:
       endpoint: http://metrics-server.kubernetes.svc:6603
