@@ -1,196 +1,156 @@
 # Configurable Parameters in KubeSphere
 
-ConfigMap 
-------------
-```
+
+
+
+
+installer configuration, used when install a KubeSphere
+```yaml
+
 apiVersion: v1
 data:
   ks-config.yaml: |
-    kubeApiServerHost: 192.168.0.2:6443
-    etcdTlsEnable: True
-    etcdEndPointIps: 192.168.0.2
-    etcdPort: 2379
-    metricsServerEnable: True
-    persistence:
-      enable: false
-      storageClass: ""
-    ksCore:
-      disableMultiLogin: True
-      ingress:
-        enable: False
-        hosts: console.kubesphere.local
-    monitoring:
-      enable: True
-      prometheusReplica: 2
-      prometheusVolumeSize: 20Gi
-    logging:
-      enable: True
-      elkPrefix: logstash
-      keepLogDays: 7
-      elasticsearchVolumeSize: 20Gi
-      containersLogMountedPath: ""
-    # externalElasticsearchUrl:
-    # externalElasticsearchPort: 
-    openPitrix:
-      enable: False
-    devOps:
-      enable: False
-    microService:
-      enable: False
-    noticeAndAlarm:
-      enable: False
+    # kubernetes apiserver configuration
+    apiserver:
+      endpoints: 192.168.0.2:6443      # master addr or master's lb addr
+
+    # etcd configuration
+    etcd:
+      endpoints:
+        - 192.168.0.8:2379
+        - 192.168.0.9:2379
+        - 192.168.0.7:2379
+
+    metricsServer:
+      # install has three values ["interal","external","disable"]
+      # internal means installed defaultly by installer
+      # external means provider by user 
+      # disable means disable this component entirely. 
+      # When type is external, user is responsible for providing required info, such endpoint address/authentiation etc.
+      install: "internal"
+      endpoint: http://metrics-server.kube-system.svc:6603
+    # Kubesphere 
+    kubesphere:
+      ks-console:
+        disableMultiLogin: True  # enable/disable multi login
+
+      mysql:
+        install: "internal"/"external"/"disable"
+      
+      redis:
+        install: "internal"/"external"/"disable"
+        address: redis.kubesphere-system.svc:6379
+        password: $@$!#!#
+
+      monitoring:
+        install: "internal"  
+        replicas: 2  
+        volumeSize: 20Gi
+        endpoint: http://prometheus.kubesphere.svc:8088
+      
+      logging:
+        install: "internal"
+        elkPrefix: logstash
+        volumeSize: 20Gi
+        logMaxAge: 7     # 
+        containerLogPath: /var/log/containers
+        endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
+      
+      openpitrix:
+        install: "internal"
+        apigateway:
+          endpoint: http://api.openpitrix.svc:9100
+      
+      devops:
+        install: "internal"
+        endpoint: http://devops.kubesphere-system.svc:9000
+        sonarqube:
+          type: "internal"
+
+      servicemesh:
+        install: "internal"
+        
+      notification:
+        install: "internal"
+
+      alert:
+        install: "internal"
+      
+      storage:
+        storageClass: ""
+kind: ConfigMap
+metadata:
+  name: ks-installer-config
+  namespace: kubesphere-system
+```
+
+
+KubeSphere Configuration, shared by kubesphere component. Installer is response for creating this configmap. If there is no configuration section in kubesphere.yaml, means component is disabled.
+```yaml
+apiVersion: v1
+data:
+  kubesphere.yaml: |
+    # kubernetes apiserver configuration
+    apiserver:
+      endpoints: 192.168.0.2:6443
+    
+    # etcd configuration
+    etcd:
+      endpoints:
+        - 192.168.0.8:2379
+        - 192.168.0.9:2379
+        - 192.168.0.7:2379
+    
+    metricsServer:
+      endpoint: http://metrics-server.kubernetes.svc:6603
+    
+    # Kubesphere 
+    kubesphere:
+      ks-console:
+        disableMultiLogin: True  # enable/disable multi login
+
+      mysql:
+        username: root
+        password: #@$%$#
+        address: mysql.kubesphere-system.svc:3306
+      
+      redis:
+        address: redis.kubesphere-system.svc:6379
+        password: $@$!#!#
+
+      monitoring:
+        endpoint: http://prometheus.kubesphere.svc:8088
+      
+      logging:
+        endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
+      
+      openpitrix:
+        apigateway:
+          endpoint: http://api.openpitrix.svc:9100
+      
+      devops:
+        endpoint: http://devops.kubesphere-system.svc:9000
+        sonarqube:
+          token: 
+          endpoint: http://sonarqube.kubesphere-system.svc:9000
+
+      servicemesh:
+        tracing:
+          endpoint: http://jaeger.kubesphere-system.svc:8000
+        moinitoring:
+          endpoint: http://prometheus.kubesphere-system.svc:8008
+        
+      notification:
+        endpoint: http://notification.kubesphere-system.svc:9000
+
+      alert:
+        endpoint: http://alert.kubesphere-system.svc:8000
+      
+      storage:
+        storageClass: "csi-qingcloud"
+
 kind: ConfigMap
 metadata:
   name: kubesphere-config
   namespace: kubesphere-system
 ```
-Description 
-------------
-
-<table>
- <tr>
-  <td  colspan=2>Parameter</td>
-  <td>Description</td>
-  <td>Default</td>
- </tr>
- <tr>
-  <td  colspan=2>kubeApiServerHost</td>
-  <td>当前集群kube-apiserver地址（ip:port）</td>
-  <td></td>
- </tr>
- <tr>
-  <td  colspan=2>etcdTlsEnable</td>
-  <td>是否开启etcd TLS证书认证（True / False）</td>
-  <td>True</td>
- </tr>
- <tr>
-  <td colspan=2>etcdEndPointIps</td>
-  <td>etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）</td>
-  <td></td>
- </tr>
- <tr>
-  <td colspan=2>etcdPort</td>
-  <td>etcd端口 (默认2379，如使用其它端口，请配置此参数)</td>
-  <td>2379</td>
- </tr>
- <tr>
-  <td colspan=2>metricsServerEnable</td>
-  <td>是否安装metrics_server<span>&nbsp;&nbsp;&nbsp;
-  </span>（True / False）</td>
-  <td>True</td>
- </tr>
- <tr>
-  <td rowspan=2>persistence</td>
-  <td>enabled</td>
-  <td>是否启用持久化存储<span>&nbsp;&nbsp; </span>（True /
-  False）（非测试环境建议开启数据持久化）</td>
-  <td></td>
- </tr>
- <tr>
-  <td>storageClass</td>
-  <td>启用持久化存储要求环境中存在已经创建好的storageClass（默认为空，使用default storageClass）</td>
-  <td>“”</td>
- </tr>
- <tr>
-  <td rowspan=3>ksCore</td>
-  <td>disableMultiLogin<span>&nbsp;</span></td>
-  <td>是否关闭多点登录<span>&nbsp;&nbsp; </span>（True / False）</td>
-  <td>True</td>
- </tr>
- <tr>
-  <td>ingress.enable</td>
-  <td>是否为kubesphere<span>&nbsp;
-  </span>console创建ingress<span>&nbsp; </span>（True /
-  False）</td>
-  <td>False</td>
- </tr>
- <tr>
-  <td>ingress.hosts</td>
-  <td>kubesphere<span>&nbsp; </span>console访问域名</td>
-  <td>console.kubesphere.local</td>
- </tr>
- <tr>
-  <td rowspan=3>monitoring</td>
-  <td>enable</td>
-  <td>是否启用监控组件prometheus<span>&nbsp;&nbsp;
-  </span>（True / False）</td>
-  <td>True</td>
- </tr>
- <tr>
-  <td>prometheusReplica</td>
-  <td>prometheus副本数</td>
-  <td>2</td>
- </tr>
- <tr>
-  <td>prometheusVolumeSize</td>
-  <td>prometheus持久化存储空间</td>
-  <td>20Gi</td>
- </tr>
- <tr>
-  <td rowspan=7>logging</td>
-  <td>enable</td>
-  <td>是否启用日志组件elasticsearch<span>&nbsp;&nbsp;
-  </span>（True / False）</td>
-  <td>True</td>
- </tr>
- <tr>
-  <td>elkPrefix</td>
-  <td>日志索引<span>&nbsp;</span></td>
-  <td>logstash<span>&nbsp;</span></td>
- </tr>
- <tr>
-  <td>keepLogDays</td>
-  <td>日志留存时间（天）</td>
-  <td>7</td>
- </tr>
- <tr>
-  <td>elasticsearchVolumeSize</td>
-  <td>elasticsearch持久化存储空间</td>
-  <td>20Gi</td>
- </tr>
- <tr>
-  <td>containersLogMountedPath</td>
-  <td>容器日志挂载路径</td>
-  <td>“”</td>
- </tr>
- <tr>
-  <td>externalElasticsearchUrl（可选）</td>
-  <td>外部es地址，支持对接外部es用</td>
-  <td></td>
- </tr>
- <tr>
-  <td>externalElasticsearchPort（可选）</td>
-  <td>外部es端口，支持对接外部es用</td>
-  <td></td>
- </tr>
- <tr>
-  <td>openPitrix</td>
-  <td>enable</td>
-  <td>是否启用应用管理组件openpitrix<span>&nbsp;&nbsp;
-  </span>（True / False）</td>
-  <td>False</td>
- </tr>
- <tr>
-  <td>devOps</td>
-  <td>enable</td>
-  <td>是否启用DevOps功能<span>&nbsp; </span>（True / False）</td>
-  <td>False</td>
- </tr>
- <tr>
-  <td>microService</td>
-  <td>enable</td>
-  <td>是否启用微服务治理功能<span>&nbsp; </span>（True / False）</td>
-  <td>False</td>
- </tr>
- <tr>
-  <td>noticeAndAlarm</td>
-  <td>enable</td>
-  <td>是否启用通知告警功能<span>&nbsp; </span>（True / False）</td>
-  <td>False</td>
- </tr>
- <tr>
-  <td colspan=2>local_registry (离线部署使用)</td>
-  <td>离线部署时，对接本地仓库 （使用该参数需将安装镜像使用scripts/download-docker-images.sh导入本地仓库中）</td>
-  <td></td>
- </tr>
-</table>
