@@ -67,6 +67,16 @@ data:
                 - hostPathVolume:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "jenkins_nodejs_cache"
+                    mountPath: "/root/.npm"
+                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
+                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
+                \          matchExpressions:\n          - key: node-role.kubesphere.io/worker\n  \
+                \          operator: In\n            values:\n            - ci\n       \
+                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: kubesphere.io/ci\n\
+                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: kubesphere.io/ci\n\
+                \    operator: Exists\n"
               - name: "maven"
                 namespace: "kubesphere-devops-system"
                 label: "maven"
@@ -89,6 +99,16 @@ data:
                 - hostPathVolume:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "jenkins_maven_cache"
+                    mountPath: "/root"
+                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
+                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
+                \          matchExpressions:\n          - key: node-role.kubesphere.io/worker\n  \
+                \          operator: In\n            values:\n            - ci\n       \
+                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: kubesphere.io/ci\n\
+                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: kubesphere.io/ci\n\
+                \    operator: Exists\n"
               - name: "go"
                 namespace: "kubesphere-devops-system"
                 label: "go"
@@ -111,6 +131,16 @@ data:
                 - hostPathVolume:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "jenkins_go_cache"
+                    mountPath: "/home/jenkins/go/pkg"
+                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
+                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
+                \          matchExpressions:\n          - key: node-role.kubesphere.io/worker\n  \
+                \          operator: In\n            values:\n            - ci\n       \
+                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: kubesphere.io/ci\n\
+                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: kubesphere.io/ci\n\
+                \    operator: Exists\n"
       securityRealm:
         ldap:
           configurations:
