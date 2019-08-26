@@ -181,9 +181,9 @@ harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
 jenkins_uc_repo: "{{ ks_image_repo }}/qingcloud/jenkins-uc"
-jenkins_uc_tag: 0.8.0-dev
+jenkins_uc_tag: 0.9.0-dev
 jenkins_repo: "{{ base_repo }}jenkins/jenkins"
-jenkins_tag: 2.138.4
+jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
 jnlp_slave_tag: 3.27-1
 builder_base_repo: "{{ base_repo }}kubesphere/builder-base"
