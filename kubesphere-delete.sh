@@ -5,7 +5,7 @@ helms="elasticsearch-logging elasticsearch-logging-curator istio istio-init jaeg
 
 for id in `helm list|awk '{print $1}'|grep -v NAME`; do
      result=$(echo $helms | grep "$id")
-	 if [[ "$result" != "" ]]
+     if [[ "$result" != "" ]]
      then
         helm delete --purge $id
      else
