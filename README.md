@@ -35,12 +35,12 @@ Deploy
    --from-file=ca.key=/etc/kubernetes/pki/ca.key 
    ```
 3. 创建etcd证书secret
-   >注：以集群实际etcd证书位置创建；若etcd没有配置证书，则创建空secret
+   >注：以集群实际etcd证书位置创建；若etcd没有配置证书，则创建空secret（以下命令适用于 kubeadm 创建的集群环境）
    ```
    kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
-   --from-file=etcd-client-ca.crt=/etc/ssl/etcd/ssl/ca.pem  \
-   --from-file=etcd-client.crt=/etc/ssl/etcd/ssl/admin-node1.pem  \
-   --from-file=etcd-client.key=/etc/ssl/etcd/ssl/admin-node1-key.pem
+   --from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
+   --from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
+   --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
    ```
    etcd没有配置证书
    ```
