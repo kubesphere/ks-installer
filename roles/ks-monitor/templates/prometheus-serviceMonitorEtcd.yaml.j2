@@ -15,7 +15,6 @@ spec:
       caFile: /etc/prometheus/secrets/kube-etcd-client-certs/etcd-client-ca.crt
       certFile: /etc/prometheus/secrets/kube-etcd-client-certs/etcd-client.crt
       keyFile: /etc/prometheus/secrets/kube-etcd-client-certs/etcd-client.key
-      serverName: etcd.kube-system.svc.cluster.local
 {% endif %}
   jobLabel: k8s-app
   namespaceSelector:
