@@ -63,7 +63,7 @@ base_library_repo: >-
 
 kube_image_repo: "{{ ks_image_repo }}/google_containers"
 
-ks_image_tag: "advanced-2.0.2"
+ks_image_tag: "advanced-2.0.0"
 
 # Containers
 # In some cases, we need a way to set --registry-mirror or --insecure-registry for docker,
