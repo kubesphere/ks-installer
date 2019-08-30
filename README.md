@@ -147,7 +147,7 @@ Configuration
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>containersLogMountedPath（可选）</td>
   <td>容器日志挂载路径</td>
-  <td class=xl69>“”</td>
+  <td class=xl69>"/var/lib/docker/containers"</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>external_es_url（可选）</td>
