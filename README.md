@@ -59,8 +59,11 @@ Deploy
    ```
    kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
    ```
-
-
+6. 访问web界面
+   ```
+   kubectl get svc -n kubesphere-system    
+   查看ks-console端口  默认为nodePort: 30880
+   ```
 Configuration 
 ------------
 <table border=0 cellpadding=0 cellspacing=0 width=1364 style='border-collapse:
