@@ -42,7 +42,7 @@
 - name: Sonarqube | Deploy Sonarqube
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-sonarqube 
-    {{ kubesphere_dir }}/sonarqube/sonarqube-0.13.5.tgz
+    {{ kubesphere_dir }}/sonarqube/sonarqube
     -f {{ kubesphere_dir }}/sonarqube/custom-values-sonarqube.yaml 
     --namespace kubesphere-devops-system
   when:
