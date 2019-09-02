@@ -35,12 +35,12 @@ Deploy
    --from-file=ca.key=/etc/kubernetes/pki/ca.key 
    ```
 3. 创建etcd证书secret
-   >注：以集群实际etcd证书位置创建；若etcd没有配置证书，则创建空secret
+   >注：以集群实际etcd证书位置创建；若etcd没有配置证书，则创建空secret（以下命令适用于 kubeadm 创建的集群环境）
    ```
    kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
-   --from-file=etcd-client-ca.crt=/etc/ssl/etcd/ssl/ca.pem  \
-   --from-file=etcd-client.crt=/etc/ssl/etcd/ssl/admin-node1.pem  \
-   --from-file=etcd-client.key=/etc/ssl/etcd/ssl/admin-node1-key.pem
+   --from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
+   --from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
+   --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
    ```
    etcd没有配置证书
    ```
@@ -59,8 +59,11 @@ Deploy
    ```
    kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
    ```
-
-
+6. 访问web界面
+   ```
+   kubectl get svc -n kubesphere-system    
+   查看ks-console端口  默认为nodePort: 30880
+   ```
 Configuration 
 ------------
 <table border=0 cellpadding=0 cellspacing=0 width=1364 style='border-collapse:
@@ -144,7 +147,7 @@ Configuration
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>containersLogMountedPath（可选）</td>
   <td>容器日志挂载路径</td>
-  <td class=xl69>“”</td>
+  <td class=xl69>"/var/lib/docker/containers"</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>external_es_url（可选）</td>
@@ -171,30 +174,8 @@ Configuration
  <![endif]>
 </table>
 
-离线部署
+
+RoadMap
 ------------
-1. 下载镜像包并解压
-   ```
-   wget https://kubesphere-installer.pek3b.qingstor.com/ks-only/kubesphere-images-advanced-2.0.2.tar.gz
-
-   tar -zxvf kubesphere-images-advanced-2.0.2.tar.gz
-   ```
-2. 导入镜像（镜像包较大，导入时间较久）
-   ```
-   docker load < kubesphere-images-advanced-2.0.2.tar
-   ```
-3. 将安装所需镜像导入本地镜像仓库
-   ```
-   cd scripts
-   ./download-docker-images.sh  仓库地址
-
-   注：“仓库地址” 请替换为本地镜像仓库地址，例：
-
-   ./download-docker-images.sh  192.168.1.2:5000
-   ```
-4. 替换deploy/kubesphere-installer.yaml中镜像
-   >注：以下命令中192.168.1.2:5000/kubespheredev/ks-installer:advanced-2.0.2为示例镜像，执行时请替换。
-   ```
-   sed -i 's|kubespheredev/ks-installer:advanced-2.0.2|192.168.1.2:5000/kubespheredev/ks-installer:advanced-2.0.2|g' deploy/kubesphere-installer.yaml
-   ```
-5. 按Deploy中步骤执行安装
+- #### Support public cloud network and storage plug-ins
+- #### function modularization
