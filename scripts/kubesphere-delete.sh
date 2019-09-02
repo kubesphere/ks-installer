@@ -32,7 +32,7 @@ for pvcnamespace in `kubectl get pvc --all-namespaces|awk '{print $1}'|grep -v N
      result=$(echo $pvcs | grep "$pvcnamespace")
      if [[ "$result" != "" ]]
      then
-        kubectl delete pvc -n $pvcnamespace `kubectl get pvc -n kubesphere-system|awk '{print $1}'|grep -v NAME`
+        kubectl delete pvc -n $pvcnamespace `kubectl get pvc -n $pvcnamespace|awk '{print $1}'|grep -v NAME`
      else
         echo "pvc resource 已删除"
      fi   
