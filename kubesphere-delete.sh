@@ -26,3 +26,14 @@ for namespace in `kubectl get namespaces|awk '{print $1}'|grep -v NAME`; do
      fi   
 done
 
+# pvc delete
+pvcs="kubesphere-system openpitrix-system kubesphere-monitoring-system kubesphere-devops-system kubesphere-logging-system"
+for pvcnamespace in `kubectl get pvc --all-namespaces|awk '{print $1}'|grep -v NAMESPACE`; do
+     result=$(echo $pvcs | grep "$pvcnamespace")
+     if [[ "$result" != "" ]]
+     then
+        kubectl delete pvc -n $pvcnamespace `kubectl get pvc -n kubesphere-system|awk '{print $1}'|grep -v NAME`
+     else
+        echo "pvc resource 已删除"
+     fi   
+done
