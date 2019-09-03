@@ -203,9 +203,14 @@ sonarqube_tag: 7.4-community
 
 #s2i
 s2ioperator_repo: "{{ base_repo }}kubesphere/s2ioperator"
-s2ioperator_tag: "advanced-2.0.0"
+s2ioperator_tag: "advanced-2.1.0"
 s2irun_repo: "{{ base_repo }}kubesphere/s2irun"
-s2irun_tag: "advanced-2.0.0"
+s2irun_tag: "advanced-2.1.0"
+binary_repo: "{{ base_repo }}kubesphere/s2i-binary"
+tomcat85-java11_repo: "{{ base_repo }}tomcat85-java11-centos7"
+tomcat85-java11-runtime_repo: "{{ base_repo }}tomcat85-java11-runtime"
+tomcat85-java8_repo: "{{ base_repo }}tomcat85-java8-centos7"
+tomcat85-java8-runtime_repo: "{{ base_repo }}tomcat85-java8-runtime"
 java11centos7_repo: "{{ base_repo }}kubesphere/java-11-centos7"
 java8centos7_repo: "{{ base_repo }}kubesphere/java-8-centos7"
 java8_runtime_repo: "{{ base_repo }}/java8-runtime"

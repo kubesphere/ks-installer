@@ -34,6 +34,8 @@
     - java.yaml
     - nodejs.yaml
     - python.yaml
+    - binary.yaml
+    - tomcat.yaml
   register: import
   until: import is succeeded
   retries: 3
