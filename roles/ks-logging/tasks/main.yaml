@@ -7,6 +7,7 @@
   tags:
     - elasticsearch
 
+
 - name: ks-logging | Remove old elasticsearch
   shell: "{{ bin_dir }}/helm del --purge elasticsearch-logging"
   when: 
@@ -15,17 +16,12 @@
   tags:
     - elasticsearch
 
-# - name: ks-logging | Create kubesphere logging namespace
-#   command: "{{ bin_dir }}/kubectl create namespace {{ item }}"
-#   register: import
-#   failed_when: "import.stderr and 'already exists' not in import.stderr"
-#   loop:
-#     - kubesphere-logging-system
 
 - name: ks-logging | Getting logging installation files
   copy:
     src: "logging"
     dest: "{{ kubesphere_dir }}/"
+
 
 - name: ks-logging | Creating manifests
   template:
@@ -36,10 +32,12 @@
     - { path: logging, file: custom-values-elasticsearch-curator.yaml }
     - { path: logging, file: custom-values-kibana.yaml }
     - { path: logging, file: custom-values-fluentbit-operator.yaml }
+    - { path: logging, file: custom-values-elasticsearch-plugins.yaml }
     - { path: logging, file: fluentbit-crd.yaml }
     - { path: logging, file: fluent-bit-outputs.template }
     - { path: logging, file: FluentBitCrd.py }
     - { path: logging, file: FluentBitOutputsConfig.py }
+
 
 - name: ks-logging | Checking elasticsearch-logging-data-svc
   shell: >
@@ -47,11 +45,13 @@
   register: elasticsearch_logging_data_svc
   ignore_errors: True
 
+
 - name: ks-logging | Checking kubesphere-version
   shell: >
     {{ bin_dir }}/kubectl describe  configmap -n kubesphere-system ks-console-ae-config | grep "kubesphere:" | awk '{print $2}'
   register: kubesphere_version
   ignore_errors: True
+
 
 - name: ks-logging | Changing logging index
   shell: >
@@ -66,15 +66,18 @@
     - kubesphere_version.stdout == "2.0.0"
   ignore_errors: True
 
+
 - name: ks-logging | Checking fluent-bit-output-config
   shell: >
     {{ bin_dir }}/kubectl get cm -n kubesphere-logging-system
   register: check_fluent_bit_config_result
   ignore_errors: True
 
+
 - name: ks-logging | Generate fluent-bit-output-config
   shell: >
     sed "s/<UPDATETIME>/`date +"%Y-%m-%dT%H:%M:%SZ"`/" {{ kubesphere_dir }}/logging/fluent-bit-outputs.template > {{ kubesphere_dir }}/logging/fluent-bit-outputs.config 
+
 
 - name: ks-logging | Fetching fluent-bit-output-config
   shell: >
@@ -82,6 +85,7 @@
   when: 
     - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
     - kubesphere_version.stdout == "2.0.0"
+
 
 - name: ks-logging | Checking fluent-bit-output-config
   shell: >
@@ -92,12 +96,14 @@
     - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
     - kubesphere_version.stdout == "2.0.0"
 
+
 - name: ks-logging | Deleting old fluent-bit-output-config
   shell: >
     {{ bin_dir }}/kubectl delete  cm -n kubesphere-logging-system fluent-bit-output-config
   when: 
     - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
     - kubesphere_version.stdout == "2.0.0"
+
 
 - name: ks-logging | Create fluentbit-config
   shell: >
@@ -106,11 +112,13 @@
   register: import
   failed_when: "import.stderr and 'already exists' not in import.stderr"
 
+
 - name: ks-logging | Checking fluentbit crd
   shell: >
     {{ bin_dir }}/kubectl get FluentBit -n kubesphere-logging-system
   register: check_fluent_bit_crd_result
   ignore_errors: True
+
 
 - name: ks-logging | Fetching fluent-bit-crd
   shell: >
@@ -118,6 +126,7 @@
   when: 
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
     - kubesphere_version.stdout == "2.0.0"
+
 
 - name: ks-logging | Checking fluent-bit-crd
   shell: >
@@ -128,6 +137,7 @@
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
     - kubesphere_version.stdout == "2.0.0"
 
+
 - name: ks-logging | Patching fluent-bit-crd
   shell: >
     {{ bin_dir }}/kubectl patch FluentBit fluent-bit -n kubesphere-logging-system --type merge --patch "$(cat {{ kubesphere_dir }}/logging/fluentbit-crd-patch.json)"
@@ -135,12 +145,14 @@
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
     - kubesphere_version.stdout == "2.0.0"
 
+
 - name: ks-logging | Deploy logging-fluentbit-operator
   shell: >
     {{ bin_dir }}/helm upgrade --install logging-fluentbit-operator 
     {{ kubesphere_dir }}/logging/fluentbit-operator-0.1.0.tgz
     -f {{ kubesphere_dir }}/logging/custom-values-fluentbit-operator.yaml
     --namespace kubesphere-logging-system
+
 
 - name: ks-logging | Create fluentbit-crd
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-crd.yaml"
@@ -150,6 +162,7 @@
   delay: 10
   when: 
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") == -1
+
 
 - name: ks-logging | Deploy elasticsearch-plugins
   shell: >
@@ -161,6 +174,7 @@
     - external_es_url is not defined
     - external_es_port is not defined
 
+
 - name: ks-logging | Deploy elasticsearch-logging
   shell: >
     {{ bin_dir }}/helm upgrade --install elasticsearch-logging 
@@ -171,12 +185,14 @@
     - external_es_url is not defined
     - external_es_port is not defined
 
+
 - name: ks-logging | Deploy elasticsearch-logging-curator
   shell: >
     {{ bin_dir }}/helm upgrade --install elasticsearch-logging-curator 
     {{ kubesphere_dir }}/logging/elasticsearch-curator-1.3.3.tgz  
     -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch-curator.yaml
     --namespace kubesphere-logging-system
+
 
 - name: ks-logging | Deploy elasticsearch-logging-kibana
   shell: >
