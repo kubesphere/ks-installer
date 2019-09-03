@@ -1,0 +1,28 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: logsidecar-injector
+  namespace: kubesphere-logging-system
+webhooks:
+  - name: logsidecar-injector.logging.kubesphere.io
+    failurePolicy: Fail
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - pods
+    clientConfig:
+      service:
+        namespace: kubesphere-logging-system
+        name: logsidecar-injector
+      caBundle: <<CACERT>>
+    namespaceSelector:
+      matchExpressions:
+      - key: logging.kubesphere.io/logsidecar-injection
+        operator: In
+        values:
+        - enabled

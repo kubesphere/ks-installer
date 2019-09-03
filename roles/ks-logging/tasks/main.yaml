@@ -186,4 +186,8 @@
     --namespace kubesphere-logging-system
   when:
     - kibana_enable == true  
+
+- import_tasks: logsidercar.yaml
+  when:
+    - ks-logsidecar-injector_enable == true 
   

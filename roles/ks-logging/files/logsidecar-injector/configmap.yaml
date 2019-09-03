@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  filebeat.yml.template: |-
+  inputs.yml.template: |-
+metadata:
+  name: logsidecar-injector-configmap
+  namespace: kubesphere-logging-system
