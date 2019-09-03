@@ -1,0 +1,13 @@
+---
+- name: logsidecar-injector | Getting logsidecar-injector installation files
+  copy:
+    src: "logsidecar-injector"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: logsidecar-injector | Creating manifests
+  template:
+    src: "logsidecar-injector.yaml"
+    dest: "{{ kubesphere_dir }}/logsidecar-injector/"
+
+- name: logsidecar-injector | Deploy logsidecar-injector
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logsidecar-injector"
