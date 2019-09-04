@@ -89,3 +89,8 @@
   until: import is succeeded
   retries: 5
   delay: 3
+
+- import_tasks: grafana.yaml
+  when:
+    - ks-grafana_enable == true 
+  
