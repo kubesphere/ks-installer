@@ -24,7 +24,8 @@
     mode: 0755
 
 - name: S2I | Creating S2I secret(2)
-  shell: "{{ kubesphere_dir }}/s2i/certs.sh --service webhook-server-service --namespace kubesphere-devops-system --secret webhook-server-secret" 
+  shell: >
+    /bin/bash {{ kubesphere_dir }}/s2i/certs.sh --service webhook-server-service --namespace kubesphere-devops-system --secret webhook-server-secret 
 
 
 - name: S2I | Deploy S2I template&&operator

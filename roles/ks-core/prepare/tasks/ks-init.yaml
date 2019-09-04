@@ -34,14 +34,14 @@
 
 - name: KubeSphere | Getting OP Token
   shell: >
-    {{ kubesphere_dir }}/ks-init/jwt.sh  {{ op_secret_str }} '{"sub": "system","role": "global_admin","iat": 1516239022,"exp": 1816239022}'
+    /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ op_secret_str }} '{"sub": "system","role": "global_admin","iat": 1516239022,"exp": 1816239022}'
   register: op_token
   tags:
     - upgrade
 
 - name: KubeSphere | Getting KS Token
   shell: >
-    {{ kubesphere_dir }}/ks-init/jwt.sh  {{ op_secret_str }} '{"email": "admin@kubesphere.io","exp": 1816239022,"username": "admin"}'
+    /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ op_secret_str }} '{"email": "admin@kubesphere.io","exp": 1816239022,"username": "admin"}'
   register: ks_token
   tags:
     - upgrade

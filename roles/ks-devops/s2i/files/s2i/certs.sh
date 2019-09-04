@@ -117,7 +117,8 @@ if [[ ${serverCert} == '' ]]; then
 fi
 echo ${serverCert} | openssl base64 -d -A -out ${tmpdir}/server-cert.pem
 
-kubectl config view --raw -o json | jq -r '.clusters[0].cluster."certificate-authority-data"' | tr -d '"' | base64 --decode > ${tmpdir}/ca.pem
+# kubectl config view --raw -o json | jq -r '.clusters[0].cluster."certificate-authority-data"' | tr -d '"' | base64 --decode > ${tmpdir}/ca.pem
+kubectl -n kubesphere-system get  secret kubesphere-ca -o json | jq '.data."ca.crt"' | tr -d '"' | base64 -d > ${tmpdir}/ca.pem
 # create the secret with CA cert and server cert/key
 kubectl create secret generic ${secret} \
         --from-file=key.pem=${tmpdir}/server-key.pem \
