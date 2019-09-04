@@ -101,6 +101,7 @@ ks_docs_tag: "advanced-2.0.2"
 ks_devops_repo: "{{ base_repo }}kubespheredev/ks-devops"
 ks_devops_tag: advanced-2.0.0-dev
 
+
 ks_image_pull_policy: IfNotPresent
 #ks_image_pull_policy: Always
 
@@ -280,6 +281,8 @@ addon_resizer_repo: "{{ ks_image_repo }}/coreos/addon-resizer"
 addon_resizer_tag: 1.8.4
 prometheus_adapter_repo: "{{ ks_image_repo }}/coreos/k8s-prometheus-adapter-amd64"
 prometheus_adapter_tag: v0.4.1
+grafana_repo: "{{ base_repo }}grafana/grafana"
+grafana_tag: 5.2.4
 
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ ks_image_repo }}/pires/docker-elasticsearch-curator"
@@ -300,6 +303,8 @@ ks_fluent_bit_repo: "{{ base_repo }}kubesphere/fluent-bit"
 ks_fluent_bit_tag: "advanced-2.0.0"
 kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
 kslogging_configmap_reload_tag: "advanced-2.0.0"
+ks_log_sidecar_injector_repo: "{{ base_repo }}kubespheredev/log-sidecar-injector"
+ks_log_sidecar_injector_tag: 1.0
 
 #ingress:
 nginx_ingress_controller_repo: "{{ ks_image_repo }}/kubernetes_ingress_controller/nginx-ingress-controller"

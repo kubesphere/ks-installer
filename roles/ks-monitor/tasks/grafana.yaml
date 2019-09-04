@@ -1,0 +1,13 @@
+---
+- name: ks-grafana | Getting ks-grafana installation files
+  copy:
+    src: "prometheus/grafana"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: ks-ks-grafana | Creating manifests
+  template:
+    src: "grafana-deployment.yaml"
+    dest: "{{ kubesphere_dir }}/prometheus/grafana/"
+
+- name: ks-monitor | Init prometheus-operator
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/grafana

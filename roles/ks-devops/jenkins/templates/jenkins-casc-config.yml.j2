@@ -36,7 +36,7 @@ data:
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
-                  resourceRequestCpu: "100m"
+                  resourceRequestCpu: "50m"
                   resourceRequestMemory: "32Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
@@ -58,7 +58,7 @@ data:
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
-                  resourceRequestCpu: "100m"
+                  resourceRequestCpu: "50m"
                   resourceRequestMemory: "32Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
@@ -90,7 +90,7 @@ data:
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
-                  resourceRequestCpu: "100m"
+                  resourceRequestCpu: "50m"
                   resourceRequestMemory: "32Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
@@ -122,7 +122,7 @@ data:
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
-                  resourceRequestCpu: "100m"
+                  resourceRequestCpu: "50m"
                   resourceRequestMemory: "32Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
