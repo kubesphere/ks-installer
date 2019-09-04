@@ -281,6 +281,8 @@ addon_resizer_repo: "{{ ks_image_repo }}/coreos/addon-resizer"
 addon_resizer_tag: 1.8.4
 prometheus_adapter_repo: "{{ ks_image_repo }}/coreos/k8s-prometheus-adapter-amd64"
 prometheus_adapter_tag: v0.4.1
+grafana_repo: "{{ base_repo }}grafana/grafana"
+grafana_tag: 5.2.4
 
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ ks_image_repo }}/pires/docker-elasticsearch-curator"
