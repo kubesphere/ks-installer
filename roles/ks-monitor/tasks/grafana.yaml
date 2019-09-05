@@ -6,8 +6,8 @@
 
 - name: ks-ks-grafana | Creating manifests
   template:
-    src: "grafana-deployment.yaml"
-    dest: "{{ kubesphere_dir }}/prometheus/grafana/"
+    src: "grafana-deployment.yaml.j2"
+    dest: "{{ kubesphere_dir }}/prometheus/grafana/grafana-deployment.yaml"
 
 - name: ks-monitor | Init prometheus-operator
   shell: >
