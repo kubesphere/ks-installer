@@ -7,8 +7,8 @@
 
 - name: logsidecar-injector | Creating manifests
   template:
-    src: "logsidecar-injector.yaml"
-    dest: "{{ kubesphere_dir }}/logsidecar-injector/"
+    src: "logsidecar-injector.yaml.j2"
+    dest: "{{ kubesphere_dir }}/logsidecar-injector/logsidecar-injector.yaml"
 
 - name: logsidecar-injector | Deploy logsidecar-injector
   shell: >
