@@ -203,7 +203,8 @@
   when:
     - kibana_enable == true  
 
-- import_tasks: logsidercar.yaml
+
+- import_tasks: logsidecar.yaml
   when:
-    - ks-logsidecar-injector_enable == true 
+    - ks_logsidecar_injector_enable == true 
   

@@ -5,6 +5,7 @@
   ignore_errors: True
   register: prometheus_old_check
 
+
 - name: ks-monitor | deleting old prometheus-operator files
   file: 
     path: "{{ kubesphere_dir }}/prometheus/00namespace-namespace.yaml"
@@ -12,11 +13,13 @@
   ignore_errors: True
   when: prometheus_old_check.stat.exists
 
+
 - name: ks-monitor | deleting old prometheus-operator
   shell: "{{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/prometheus/"
   register: import
   failed_when: "import.stderr and 'NotFound' not in import.stderr"
   when: prometheus_old_check.stat.exists
+
 
 - name: ks-monitor | deleting old prometheus-operator files
   file: 
@@ -27,12 +30,14 @@
     - "prometheus"
   when: prometheus_old_check.stat.exists
 
+
 - name: ks-monitor | Getting monitor installation files
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
   loop: 
     - "prometheus"
+
 
 - name: ks-monitor | Creating manifests
   template:
@@ -79,6 +84,7 @@
   retries: 5
   delay: 3
 
+
 - name: ks-monitor | Installing prometheus-operator
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
   loop: 
@@ -90,7 +96,8 @@
   retries: 5
   delay: 3
 
+
 - import_tasks: grafana.yaml
   when:
-    - ks-grafana_enable == true 
+    - ks_grafana_enable == true 
   

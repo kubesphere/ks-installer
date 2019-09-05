@@ -2,7 +2,7 @@
 
 kibana_enable: false
 
-ks-logsidecar-injector_enable: false
+ks_logsidecar_injector_enable: false
 
 elasticsearch_master_replica: 1
 elasticsearch_data_replica: 2
