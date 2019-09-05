@@ -51,7 +51,7 @@ spec:
         name: kube-state-metrics
         resources:
           requests:
-            cpu: 100m
+            cpu: 10m
             memory: 150Mi
       - command:
         - /pod_nanny

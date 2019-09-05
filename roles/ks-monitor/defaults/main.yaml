@@ -1,7 +1,7 @@
 ---
 prometheus_replica: 2
 
-ks-grafana_enable: false
+ks_grafana_enable: false
 
 prometheus_memory_size: 400Mi
 prometheus_volume_size: 20Gi

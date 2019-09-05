@@ -10,4 +10,5 @@
     dest: "{{ kubesphere_dir }}/prometheus/grafana/"
 
 - name: ks-monitor | Init prometheus-operator
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/grafana
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/grafana
