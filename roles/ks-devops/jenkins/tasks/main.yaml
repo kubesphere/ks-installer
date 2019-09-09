@@ -2,10 +2,12 @@
 
 - import_tasks: wait_sonar.yaml
 
+
 - name: ks-devops | Getting jenkins installation files
   copy:
     src: "jenkins"
     dest: "{{ kubesphere_dir }}/"
+
 
 - name: Jenkins | Creating manifests
   template:
@@ -15,22 +17,10 @@
     - { name: custom-values-jenkins, file: custom-values-jenkins.yaml }
     - { name: jenkins-casc-config, file: jenkins-casc-config.yml }
 
-- name: jenkins-update-center | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/jenkins/jenkins-update-center/values.yaml"
-  with_items:
-    - { name: values-jenkins-uc, file: values-jenkins-uc.yaml, type: values }
-
-- name: Jenkins | Start Jenkins plugins update center
-  shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins/jenkins-update-center --namespace kubesphere-devops-system"
-  register: result
-  until: result.rc == 0
-  retries: 20
-  delay: 30
 
 - name: Jenkins | Configure Jenkins host and port
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system"
+
 
 - name: Jenkins | Deploy Jenkins
   shell: "{{ bin_dir }}/helm upgrade --install ks-jenkins {{ kubesphere_dir }}/jenkins/jenkins-0.19.0.tgz -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml --namespace kubesphere-devops-system"

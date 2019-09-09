@@ -12,7 +12,7 @@ spec:
     interval: 1m
     metricRelabelings:
     - action: keep
-      regex: kubelet_running_container_count|kubelet_running_pod_count|kubelet_containers_per_pod_count.*
+      regex: kubelet_running_container_count|kubelet_running_pod_count|kubelet_volume_stats.*
       sourceLabels:
       - __name__
     port: https-metrics

@@ -1,5 +1,27 @@
 ---
 
+- name: ks-devops | Getting sonarqube installation files
+  copy:
+    src: "sonarqube"
+    dest: "{{ kubesphere_dir }}/"
+
+
+- name: jenkins-update-center | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/sonarqube/jenkins-update-center/values.yaml"
+  with_items:
+    - { name: values-jenkins-uc, file: values-jenkins-uc.yaml, type: values }
+
+
+- name: jenkins-update-center | Start Jenkins plugins update center
+  shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/sonarqube/jenkins-update-center --namespace kubesphere-devops-system"
+  register: result
+  until: result.rc == 0
+  retries: 20
+  delay: 30
+
+
 - name: ks-devops | Creating ks-jenkins webhook(external)
   uri:
     url: "{{ sonar_server_url }}/api/webhooks/create"
@@ -17,15 +39,6 @@
     - sonar_server_url is defined
     - sonar_server_token is defined
 
-- name: ks-devops | Getting sonarqube installation files
-  copy:
-    src: "sonarqube"
-    dest: "{{ kubesphere_dir }}/"
-  when: 
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
 
 - name: Sonarqube | Creating manifests
   template:
@@ -38,6 +51,7 @@
     - sonarqube_enable == true
     - sonar_server_url is not defined
     - sonar_server_token is not defined
+
 
 - name: Sonarqube | Deploy Sonarqube
   shell: >
