@@ -47,15 +47,6 @@ spec:
         ports:
         - name: postgresql
           containerPort: 5432
-        livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - exec pg_isready --host $POD_IP
-          initialDelaySeconds: 60
-          timeoutSeconds: 5
-          failureThreshold: 6
         readinessProbe:
           exec:
             command:
