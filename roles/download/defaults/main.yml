@@ -63,7 +63,7 @@ base_library_repo: >-
 
 kube_image_repo: "{{ ks_image_repo }}/google_containers"
 
-ks_image_tag: "advanced-2.0.2"
+ks_image_tag: "latest"
 
 # Containers
 # In some cases, we need a way to set --registry-mirror or --insecure-registry for docker,
@@ -187,16 +187,14 @@ jenkins_repo: "{{ base_repo }}jenkins/jenkins"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
 jnlp_slave_tag: 3.27-1
-builder_base_repo: "{{ base_repo }}kubesphere/builder-base"
-builder_base_tag: advanced-1.0.0
-builder_nodejs_repo: "{{ base_repo }}kubesphere/builder-nodejs"
-builder_nodejs_tag: advanced-1.0.0
-docker_ce_repo: "{{ base_library_repo }}docker"
-docker_ce_tag: 18.06.1-ce-dind
-builder_maven_repo: "{{ base_repo }}kubesphere/builder-maven"
-builder_maven_tag: advanced-1.0.0
-builder_go_repo: "{{ base_repo }}kubesphere/builder-go"
-builder_go_tag: advanced-1.0.0
+builder_base_repo: "{{ base_repo }}kubespheredev/builder-base"
+builder_base_tag: advanced-2.1.0-dev
+builder_nodejs_repo: "{{ base_repo }}kubespheredev/builder-nodejs"
+builder_nodejs_tag: advanced-2.1.0-dev
+builder_maven_repo: "{{ base_repo }}kubespheredev/builder-maven"
+builder_maven_tag: advanced-2.1.0-dev
+builder_go_repo: "{{ base_repo }}kubespheredev/builder-go"
+builder_go_tag: advanced-2.1.0-dev
 
 #sonarqube:
 sonarqube_repo: "{{ base_library_repo }}sonarqube"
@@ -207,22 +205,22 @@ s2ioperator_repo: "{{ base_repo }}kubesphere/s2ioperator"
 s2ioperator_tag: "advanced-2.1.0"
 s2irun_repo: "{{ base_repo }}kubesphere/s2irun"
 s2irun_tag: "advanced-2.1.0"
-binary_repo: "{{ base_repo }}kubesphere/s2i-binary"
-tomcat85-java11_repo: "{{ base_repo }}tomcat85-java11-centos7"
-tomcat85-java11-runtime_repo: "{{ base_repo }}tomcat85-java11-runtime"
-tomcat85-java8_repo: "{{ base_repo }}tomcat85-java8-centos7"
-tomcat85-java8-runtime_repo: "{{ base_repo }}tomcat85-java8-runtime"
-java11centos7_repo: "{{ base_repo }}kubesphere/java-11-centos7"
-java8centos7_repo: "{{ base_repo }}kubesphere/java-8-centos7"
-java8_runtime_repo: "{{ base_repo }}/java8-runtime"
-java11_runtime_repo: "{{ base_repo }}/java11-runtime"
-nodejs8centos7_repo: "{{ base_repo }}kubesphere/nodejs-8-centos7"
-nodejs6centos7_repo: "{{ base_repo }}kubesphere/nodejs-6-centos7"
-nodejs4centos7_repo: "{{ base_repo }}kubesphere/nodejs-4-centos7"
-python36centos7_repo: "{{ base_repo }}kubesphere/python-36-centos7"
-python35centos7_repo: "{{ base_repo }}kubesphere/python-35-centos7"
-python34centos7_repo: "{{ base_repo }}kubesphere/python-34-centos7"
-python27centos7_repo: "{{ base_repo }}kubesphere/python-27-centos7"
+binary_repo: "{{ base_repo }}kubespheredev/s2i-binary"
+tomcat85-java11_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-centos7"
+tomcat85-java11-runtime_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-runtime"
+tomcat85-java8_repo: "{{ base_repo }}kubespheredev/tomcat85-java8-centos7"
+tomcat85-java8-runtime_repo: "{{ base_repo }}kubespheredev/tomcat85-java8-runtime"
+java11centos7_repo: "{{ base_repo }}kubespheredev/java-11-centos7"
+java8centos7_repo: "{{ base_repo }}kubespheredev/java-8-centos7"
+java8_runtime_repo: "{{ base_repo }}kubespheredev/java8-runtime"
+java11_runtime_repo: "{{ base_repo }}kubespheredev/java11-runtime"
+nodejs8centos7_repo: "{{ base_repo }}kubespheredev/nodejs-8-centos7"
+nodejs6centos7_repo: "{{ base_repo }}kubespheredev/nodejs-6-centos7"
+nodejs4centos7_repo: "{{ base_repo }}kubespheredev/nodejs-4-centos7"
+python36centos7_repo: "{{ base_repo }}kubespheredev/python-36-centos7"
+python35centos7_repo: "{{ base_repo }}kubespheredev/python-35-centos7"
+python34centos7_repo: "{{ base_repo }}kubespheredev/python-34-centos7"
+python27centos7_repo: "{{ base_repo }}kubespheredev/python-27-centos7"
 
 #gitlab:
 gitaly_repo: "{{ ks_image_repo }}/gitlab_org/gitaly"
