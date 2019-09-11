@@ -1,71 +1,96 @@
-# KubeSphere Installer
+# Install KubeSphere on Existing Kubernetes Cluster
 
-&ensp;&ensp;&ensp;&ensp;该项目支持在已有kubernetes集群之上部署[KubeSphere](https://kubesphere.io/)。
+> English | [中文](README_zh.md)
 
+In addition to supporting deploy on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises Kubernetes clusters,
+ 
 Requirements
-------------
--   **kubernetes version: 1.13.0+**
--   **helm version: 2.10.0+**
-> 注：
-  1. 请确保集群中剩余可用内存  >10G
-  2. 建议使用持久化存储
 
-Deploy
-------------
-1. 集群中创建名为kubesphere-system和kubesphere-monitoring-system的namespace
-   ```
-   cat <<EOF | kubectl create -f -
-   ---
-   apiVersion: v1
-   kind: Namespace
-   metadata:
-     name: kubesphere-system
-   ---
-   apiVersion: v1
-   kind: Namespace
-   metadata:
-     name: kubesphere-monitoring-system
-   EOF
-   ```
-2. 创建集群ca证书secret
-   >注：按照当前集群ca.crt和ca.key证书路径创建（kubeadm创建集群的证书路径一般为/etc/kubernetes/pki）
-   ```
-   kubectl -n kubesphere-system create secret generic kubesphere-ca  \
-   --from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
-   --from-file=ca.key=/etc/kubernetes/pki/ca.key 
-   ```
-3. 创建etcd证书secret
-   >注：以集群实际etcd证书位置创建；若etcd没有配置证书，则创建空secret（以下命令适用于 kubeadm 创建的集群环境）
-   ```
-   kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
-   --from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
-   --from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
-   --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
-   ```
-   etcd没有配置证书
-   ```
-   kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
-   ```
+- Kubernetes Version: **1.13.0+**
+- Helm Version: **2.10.0+**
 
-4. 部署
-   ```
-   cd deploy
+> Note:
+> - Make sure the remaining available memory in the cluster is `10G at least`.
+> - It's recommended that the K8s cluster use persistent storage and has created default storage class.
 
-   vim kubesphere.yaml   ## 根据参数说明编辑kubesphere.yaml中kubesphere-config为当前集群参数信息。（若etcd无证书，设置etcd_tls_enable: False）
-   
-   kubectl apply -f kubesphere.yaml
-   ```
-5. 部署日志查看
-   ```
-   kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
-   ```
-6. 访问web界面
-   ```
-   kubectl get svc -n kubesphere-system    
-   查看ks-console端口  默认为nodePort: 30880
-   ```
-Configuration 
-------------
+## To Start Deploying KubeSphere
+
+1. First, you need to create 2 namespaces in Kubernetes cluster, named `kubesphere-system` and `kubesphere-monitoring-system`.
+
+```
+$ cat <<EOF | kubectl create -f -
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: kubesphere-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: kubesphere-monitoring-system
+EOF
+```
+
+2. Create the Secret of CA certificate of your current Kubernetes cluster.
+
+> Note: Follow the certificate paths of `ca.crt` and `ca.key` of your current cluster to create this secret.
+
+```bash
+kubectl -n kubesphere-system create secret generic kubesphere-ca  \
+--from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
+--from-file=ca.key=/etc/kubernetes/pki/ca.key 
+```
+
+3. Create the Secret of certificate for ETCD in your Kubernetes cluster.
+
+> Note: Create with the actual ETCD certificate location of the cluster; If the ETCD does not have a configured certificate, an empty secret is created（The following command applies to the cluster created by Kubeadm）
+
+> Note: Create the secret according to the your actual path of ETCD for the k8s cluster;
+
+  - If the ETCD has been configured with certificates, refer to the following step:
+
+```bash
+$ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
+--from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
+--from-file=ca.key=/etc/kubernetes/pki/ca.key 
+```
+
+ - If the ETCD has been not configured with certificates.
+
+```bash
+$ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
+```
+
+4. Then we can start to install KubeSphere.
+
+```bash
+$ cd deploy
+
+$ vim kubesphere.yaml   
+# According to the parameter table at the bottom, replace the value of "kubesphere-config" in "kubesphere.yaml" file with your current Kubernetes cluster parameters (If the ETCD has no certificate, set etcd_tls_enable: False).
+
+$ kubectl apply -f kubesphere.yaml
+```
+
+5. Inspect the logs of installation.
+
+```bash
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
+```
+
+6. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
+
+```bash
+$ kubectl get svc -n kubesphere-system    
+# Inspect the NodePort of ks-console, it's 30880 by default.
+```
+
+![](https://pek3b.qingstor.com/kubesphere-docs/png/20190912020300.png)
+
+## Configuration Table
+
+
 <table border=0 cellpadding=0 cellspacing=0 width=1364 style='border-collapse:
  collapse;table-layout:fixed;width:1023pt;font-variant-ligatures: normal;
  font-variant-caps: normal;orphans: 2;text-align:start;widows: 2;-webkit-text-stroke-width: 0px;
@@ -85,49 +110,49 @@ Configuration
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>kube_apiserver_host</td>
-  <td>当前集群kube-apiserver地址（ip:port）</td>
+  <td>The address of kube-apiserver of your current Kubernetes cluster（i.e. IP:NodePort）</td>
   <td class=xl69></td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>etcd_tls_enable</td>
-  <td>是否开启etcd TLS证书认证（True / False）</td>
+  <td>Whether to enable etcd TLS certificate authentication（True / False）</td>
   <td class=xl69>True</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 class=xl66 style='height:13.8pt'>etcd_endpoint_ips</td>
-  <td>etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）</td>
+  <td>Etcd addresses, such as ETCD clusters, you need to separate IPs by commas（e.g.192.168.0.7,192.168.0.8,192.168.0.9）</td>
   <td class=xl69></td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>etcd_port</td>
-  <td>etcd端口 (默认2379，如使用其它端口，请配置此参数)</td>
+  <td>ETCD Port (2379 by default, you can configure this parameter if you are using another port)</td>
   <td class=xl69>2379</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>disableMultiLogin<span
   style='mso-spacerun:yes'>&nbsp;</span></td>
-  <td>是否关闭多点登录<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True / False）</td>
+  <td>Whether to turn off multipoint login for accounts<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True / False）</td>
   <td class=xl69>True</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>elk_prefix</td>
-  <td>日志索引<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td>Logging index<span style='mso-spacerun:yes'>&nbsp;</span></td>
   <td class=xl69>logstash<span style='mso-spacerun:yes'>&nbsp;</span></td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>keep_log_days</td>
-  <td>日志留存时间（天）</td>
+  <td>Log retention time (days)</td>
   <td class=xl69>7</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>metrics_server_enable</td>
-  <td>是否安装metrics_server<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+  <td>whether to install metrics_server<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
   </span>（True / False）</td>
   <td class=xl69>True</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>istio_enable</td>
-  <td>是否安装istio<span
+  <td>whether to install Istio<span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span>（True / False）</td>
   <td class=xl69>True</td>
@@ -135,33 +160,32 @@ Configuration
  <tr height=18 style='height:13.8pt'>
   <td rowspan=2 height=36 class=xl68 style='height:27.6pt'>persistence</td>
   <td class=xl66>enable</td>
-  <td>是否启用持久化存储<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True /
-  False）（非测试环境建议开启数据持久化）</td>
+  <td>Whether the persistent storage server is enabled<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True / False）（It is recommended tp enable persistent storage in a formal environment）</td>
   <td class=xl69></td>
  </tr>
  <tr height=18 style='height:13.8pt'>
   <td height=18 class=xl66 style='height:13.8pt'>storageClass</td>
-  <td>启用持久化存储要求环境中存在已经创建好的storageClass（默认为空，使用default storageClass）</td>
+  <td>Enabling persistent storage requires that the storageClass has been created already in the cluster (The default value is empty, which means it'll use default StorageClass)</td>
   <td class=xl69>“”</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>containersLogMountedPath（可选）</td>
-  <td>容器日志挂载路径</td>
+  <td colspan=2 height=18 style='height:13.8pt'>containersLogMountedPath（Optional）</td>
+  <td>Mount path of container logs</td>
   <td class=xl69>"/var/lib/docker/containers"</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>external_es_url（可选）</td>
-  <td>外部es地址，支持对接外部es用</td>
+  <td colspan=2 height=18 style='height:13.8pt'>external_es_url（Optional）</td>
+  <td>External Elasticsearch address, it supports integrate your external ES or install internal ES directly. If you have ES, you can directly integrate it into KubeSphere</td>
   <td class=xl69></td>
  </tr>
  <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>external_es_port（可选）</td>
-  <td>外部es端口，支持对接外部es用</td>
+  <td colspan=2 height=18 style='height:13.8pt'>external_es_port（Optional）</td>
+  <td>External ES port, supports integrate external ES</td>
   <td class=xl69></td>
  </tr>
  <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>local_registry (离线部署使用)</td>
-  <td>离线部署时，对接本地仓库 （使用该参数需将安装镜像使用scripts/download-docker-images.sh导入本地仓库中）</td>
+  <td colspan=2 height=18 style='height:13.8pt'>local_registry (Offline installation only)</td>
+  <td>Integrate with the local repository when deploy on offline environment（To use this parameter, import the installation image into the local repository using "scripts/downloader-docker-images.sh"）</td>
   <td class=xl69></td>
  </tr>
  <![if supportMisalignedColumns]>
@@ -174,8 +198,17 @@ Configuration
  <![endif]>
 </table>
 
+## Quick Start Guide
 
-RoadMap
-------------
-- #### Support public cloud network and storage plug-ins
-- #### function modularization
+[10 Quick Start guides of KubeSphere](https://github.com/kubesphere/kubesphere.github.io/tree/master/blog/advanced-2.0/en)
+
+## Support, Discussion, and Community
+
+If you need any help with KubeSphere, please join us at [Slack Channel](https://join.slack.com/t/kubesphere/shared_invite/enQtNTE3MDIxNzUxNzQ0LTZkNTdkYWNiYTVkMTM5ZThhODY1MjAyZmVlYWEwZmQ3ODQ1NmM1MGVkNWEzZTRhNzk0MzM5MmY4NDc3ZWVhMjE).
+
+
+## Installer RoadMap
+
+- Support multiple public cloud and private cloud, network plug-ins and storage plug-ins.
+- All components are designed to be loosely-coupled, and all features are pluggable. Installation will become very light and fast.
+
