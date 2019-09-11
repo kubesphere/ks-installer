@@ -45,6 +45,16 @@ data:
                 - hostPathVolume:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "sonar_cache"
+                    mountPath: "/root/.sonar/cache"
+                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
+                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
+                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
+                \          operator: In\n            values:\n            - ci\n       \
+                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
+                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
+                \    operator: Exists\n"
               - name: "nodejs"
                 namespace: "kubesphere-devops-system"
                 label: "nodejs"
@@ -70,12 +80,15 @@ data:
                 - hostPathVolume:
                     hostPath: "jenkins_nodejs_cache"
                     mountPath: "/root/.npm"
+                - hostPathVolume:
+                    hostPath: "sonar_cache"
+                    mountPath: "/root/.sonar/cache"
                 yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
                 \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
-                \          matchExpressions:\n          - key: node-role.kubesphere.io/worker\n  \
+                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
                 \          operator: In\n            values:\n            - ci\n       \
-                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: kubesphere.io/ci\n\
-                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: kubesphere.io/ci\n\
+                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
+                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
                 \    operator: Exists\n"
               - name: "maven"
                 namespace: "kubesphere-devops-system"
@@ -101,13 +114,16 @@ data:
                     mountPath: "/var/run/docker.sock"
                 - hostPathVolume:
                     hostPath: "jenkins_maven_cache"
-                    mountPath: "/root"
+                    mountPath: "/root/.m2"
+                - hostPathVolume:
+                    hostPath: "sonar_cache"
+                    mountPath: "/root/.sonar/cache"
                 yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
                 \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
-                \          matchExpressions:\n          - key: node-role.kubesphere.io/worker\n  \
+                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
                 \          operator: In\n            values:\n            - ci\n       \
-                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: kubesphere.io/ci\n\
-                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: kubesphere.io/ci\n\
+                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
+                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
                 \    operator: Exists\n"
               - name: "go"
                 namespace: "kubesphere-devops-system"
@@ -134,12 +150,15 @@ data:
                 - hostPathVolume:
                     hostPath: "jenkins_go_cache"
                     mountPath: "/home/jenkins/go/pkg"
+                - hostPathVolume:
+                    hostPath: "sonar_cache"
+                    mountPath: "/root/.sonar/cache"
                 yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
                 \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
-                \          matchExpressions:\n          - key: node-role.kubesphere.io/worker\n  \
+                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
                 \          operator: In\n            values:\n            - ci\n       \
-                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: kubesphere.io/ci\n\
-                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: kubesphere.io/ci\n\
+                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
+                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
                 \    operator: Exists\n"
       securityRealm:
         ldap:
