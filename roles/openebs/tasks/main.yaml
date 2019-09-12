@@ -1,0 +1,30 @@
+---
+
+- name: openebs | Getting openebs installation files
+  copy:
+    src: "openebs"
+    dest: "{{ kubesphere_dir }}/"
+  
+
+- name: openebs | Creating manifests
+  template:
+    src: "openebs-operator-lite.yaml.j2"
+    dest: "{{ kubesphere_dir }}/openebs/openebs-operator-lite.yaml"
+  
+
+- name: openebs | Creating openebs
+  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openebs/openebs-operator-lite.yaml"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when:
+    - openebs_enable == true
+
+- name: openebs | Creating openebs sc
+  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openebs/openebs-lite-sc.yaml"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when:
+    - openebs_enable == true
+
+ 
+

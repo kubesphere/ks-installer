@@ -4,6 +4,7 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
+    - { role: openebs, when: "openebs_enable == true" }
     - { role: ks-devops/sonarqube, when: "sonarqube_enable == true" }
     - { role: openpitrix, when: "openpitrix_enable == true" }
     - ks-core
