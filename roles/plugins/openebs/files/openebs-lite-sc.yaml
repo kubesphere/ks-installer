@@ -4,6 +4,8 @@ kind: StorageClass
 metadata:
   name: openebs-hostpath
   annotations:
+    storageclass.kubesphere.io/supported_access_modes: '["ReadWriteOnce","ReadOnlyMany","ReadWriteMany"]'
+    storageclass.beta.kubernetes.io/is-default-class: "{% if openebs_is_default_class %}true{% else %}false{% endif %}"
     openebs.io/cas-type: local
     cas.openebs.io/config: |
       - name: StorageType
