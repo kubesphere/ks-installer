@@ -118,13 +118,7 @@ data:
                 - hostPathVolume:
                     hostPath: "sonar_cache"
                     mountPath: "/root/.sonar/cache"
-                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
-                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
-                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
-                \          operator: In\n            values:\n            - ci\n       \
-                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"maven\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n    volumeMounts:\r\n    - name: config-volume\r\n      mountPath: /opt/apache-maven-3.5.3/conf/settings.xml\r\n      subPath: settings.xml\r\n  volumes:\r\n    - name: config-volume\r\n      configMap:\r\n        name: ks-devops-agent\r\n        items:\r\n        - key: MavenSetting\r\n          path: settings.xml"
               - name: "go"
                 namespace: "kubesphere-devops-system"
                 label: "go"
