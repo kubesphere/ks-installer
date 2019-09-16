@@ -8,9 +8,12 @@
 
 - name: openebs | Creating manifests
   template:
-    src: "openebs-operator-lite.yaml.j2"
-    dest: "{{ kubesphere_dir }}/openebs/openebs-operator-lite.yaml"
-  
+    src: "{{ item.file}}.j2"
+    dest: "{{ kubesphere_dir }}/openebs/{{ item.file }}"
+  with_items:
+    - { type: sc, file: openebs-lite-sc.yaml }
+    - { type: operator, file: openebs-operator-lite.yaml }
+
 
 - name: openebs | Creating openebs
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openebs/openebs-operator-lite.yaml"
