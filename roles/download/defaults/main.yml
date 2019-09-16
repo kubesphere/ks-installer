@@ -357,6 +357,18 @@ nfs_client_provisioner_tag: v3.1.0-k8s1.11
 nfs_server_provisioner_repo: "{{ ks_image_repo }}/kubernetes_incubator/nfs-provisioner"
 nfs_server_provisioner_tag: v1.0.9
 
+#openebs
+openebs_provisioner_localpv_repo: "{{ base_repo }}quay.io/openebs/provisioner-localpv"
+openebs_provisioner_localpv_tag: 1.1.0
+openebs_openebs_tools_repo: "{{ base_repo }}quay.io/openebs/openebs-tools"
+openebs_openebs_tools_tag: 3.8
+openebs_node_disk_manager_amd64_repo: "{{ base_repo }}quay.io/openebs/node-disk-manager-amd64"
+openebs_node_disk_manager_amd64_tag: v0.4.1
+openebs_node_disk_operator_amd64_repo: "{{ base_repo }}quay.io/openebs/node-disk-operator-amd64"
+openebs_node_disk_operator_amd64_tag: v0.4.1
+openebs_linux_utils_repo: "{{ base_repo }}quay.io/openebs/linux-utils"
+openebs_linux_utils_tag: 3.9
+
 #VPA:
 vpa_version: 0.5.0
 vpa_admission_controller_repo: dockerhub.qingcloud.com/google_containers/vpa-admission-controller
