@@ -46,7 +46,7 @@ $ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
 
 > 注：根据集群实际 etcd 证书位置创建；
 
-   - 若 etcd 已经配置过证书，则参考如下创建：
+   - 若 etcd 已经配置过证书，则参考如下创建（以下命令适用于 Kubeadm 创建的 Kubernetes 集群环境）：
 
 ```
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
@@ -55,7 +55,7 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
 ```
 
-- 若 etcd 没有配置证书，则创建空 Secret（以下命令适用于 Kubeadm 创建的 Kubernetes 集群环境）：
+- 若 etcd 没有配置证书，则创建空 Secret：
 
 - It will create an empty Secret if the ETCD doesn'st have a configured certificate (The following command has been tested in the Kubernetes created by Kubeadm)
 
