@@ -51,9 +51,10 @@ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
   - If the ETCD has been configured with certificates, refer to the following step:
 
 ```bash
-$ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
---from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
---from-file=ca.key=/etc/kubernetes/pki/ca.key 
+$ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
+--from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
+--from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
+--from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
 ```
 
  - If the ETCD has been not configured with certificates.
