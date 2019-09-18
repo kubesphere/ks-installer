@@ -7,8 +7,8 @@ metadata:
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-  - interval: 1m
-    port: web
+    - interval: 1m
+      port: web
   selector:
     matchLabels:
       prometheus: k8s

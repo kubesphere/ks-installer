@@ -6,9 +6,9 @@ metadata:
   name: etcd
   namespace: kube-system
 subsets:
-- addresses:
-  - ip: 127.0.0.1
-  ports:
-  - name: metrics
-    port: 2379
-    protocol: TCP
+  - addresses:
+      - ip: 127.0.0.1
+    ports:
+      - name: metrics
+        port: 2379
+        protocol: TCP

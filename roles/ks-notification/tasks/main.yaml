@@ -45,26 +45,26 @@
     - upgrade
 
 - name: ks-notification | Delete db-ctrl-job
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch notification-db-ctrl-job" 
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch notification-db-ctrl-job"
   when: result.stdout.find("notification-db-ctrl-job") != -1
   tags:
     - upgrade
 
 - name: ks-notification | Delete db-init-job
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch notification-db-init-job" 
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch notification-db-init-job"
   when: result.stdout.find("notification-db-init-job") != -1
   tags:
     - upgrade
 
 - name: ks-notification | Init ks-notification
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification-db-init-job.yaml" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification-db-init-job.yaml"
 
 - name: ks-notification | Ctrl ks-notification
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification-db-ctrl-job.yaml" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification-db-ctrl-job.yaml"
   tags:
     - upgrade
 
 - name: ks-notification | Deploy ks-notification
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification.yaml" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification.yaml"
   tags:
     - upgrade

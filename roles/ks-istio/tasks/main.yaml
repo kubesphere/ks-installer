@@ -4,7 +4,7 @@
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
-  loop: 
+  loop:
     - "istio"
 
 - name: istio | Creating manifests
@@ -28,11 +28,11 @@
     - kube-system
     - kubesphere-system
     - openpitrix-system
-  
+
 - name: istio | Waiting for istio-init
   shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd | awk '{print $3}'"
   register: result
-  until: 
+  until:
     - result.stdout.find("Completed") != -1
   retries: 30
   delay: 2

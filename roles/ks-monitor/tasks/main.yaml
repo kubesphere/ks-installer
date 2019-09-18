@@ -7,7 +7,7 @@
 
 
 - name: ks-monitor | deleting old prometheus-operator files
-  file: 
+  file:
     path: "{{ kubesphere_dir }}/prometheus/00namespace-namespace.yaml"
     state: absent
   ignore_errors: True
@@ -22,11 +22,11 @@
 
 
 - name: ks-monitor | deleting old prometheus-operator files
-  file: 
+  file:
     path: "{{ kubesphere_dir }}/{{ item }}"
     state: absent
   ignore_errors: True
-  loop: 
+  loop:
     - "prometheus"
   when: prometheus_old_check.stat.exists
 
@@ -35,7 +35,7 @@
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
-  loop: 
+  loop:
     - "prometheus"
 
 
@@ -87,7 +87,7 @@
 
 - name: ks-monitor | Installing prometheus-operator
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
-  loop: 
+  loop:
     - "sources"
     - "sources"
   register: import

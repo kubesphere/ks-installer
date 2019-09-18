@@ -11,10 +11,10 @@ metadata:
   namespace: kubesphere-system
 spec:
   ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 80
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
   selector:
     app: kubesphere
     component: ks-docs

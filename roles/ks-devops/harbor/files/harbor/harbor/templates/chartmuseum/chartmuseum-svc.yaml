@@ -4,12 +4,12 @@ kind: Service
 metadata:
   name: "{{ template "harbor.chartmuseum" . }}"
   labels:
-{{ include "harbor.labels" . | indent 4 }}
+  {{ include "harbor.labels" . | indent 4 }}
 spec:
   ports:
     - port: 80
       targetPort: 9999
   selector:
-{{ include "harbor.matchLabels" . | indent 4 }}
-    component: chartmuseum
-{{- end }}
+  {{ include "harbor.matchLabels" . | indent 4 }}
+component: chartmuseum
+  {{- end }}

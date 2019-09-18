@@ -33,7 +33,7 @@
     body:
       name: ks-jenkins
       url: 'http://ks-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is defined
@@ -46,7 +46,7 @@
     dest: "{{ kubesphere_dir }}/sonarqube/{{ item.file }}"
   with_items:
     - { name: custom-values-sonarqube, file: custom-values-sonarqube.yaml }
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined

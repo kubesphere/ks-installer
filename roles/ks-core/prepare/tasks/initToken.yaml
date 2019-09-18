@@ -1,0 +1,65 @@
+---
+- name: KubeSphere | Getting K8S Token
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system get secrets $({{ bin_dir }}/kubectl -n kubesphere-system get sa kubesphere -o jsonpath='{.secrets[0].name}') -o jsonpath='{.data.token}' | base64 -d
+  register: k8s_token
+
+
+- name: KubeSphere | Setting k8s_token
+  set_fact:
+    k8s_token_str: "{{ k8s_token.stdout }}"
+
+
+- name: KubeSphere | Creating KubeSphere Secret
+  shell: >
+    dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=100 count=1 2>/dev/null | tr -d '\n'
+  register: ks_secret
+
+
+- name: KubeSphere | Getting OP Secret
+  shell: "cat {{ kubesphere_dir }}/openpitrix/kubernetes/iam-config/secret-key.txt"
+  register: op_secret
+  when:
+    - openpitrix.enabled == True
+
+
+- name: KubeSphere | Setting op_secret
+  set_fact:
+    op_secret_str: "{{ op_secret.stdout }}"
+  when:
+    - openpitrix.enabled == True
+
+
+- name: KubeSphere | Enable Token Script
+  file:
+    path: "{{ kubesphere_dir }}/ks-init/jwt.sh"
+    mode: 0755
+
+
+- name: KubeSphere | Getting OP Token
+  shell: >
+    /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ op_secret_str }} '{"sub": "system","role": "global_admin","iat": 1516239022,"exp": 1816239022}'
+  register: op_token
+  when:
+    - openpitrix.enabled == True
+
+
+- name: KubeSphere | Getting KS Token
+  shell: >
+    /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","exp": 1816239022,"username": "admin"}'
+  register: ks_token
+
+
+- name: KubeSphere | Setting op_token
+  set_fact:
+    op_token_str: "{{ op_token.stdout }}"
+  when:
+    - openpitrix.enabled == True
+
+
+- name: KubeSphere | Setting ks_token
+  set_fact:
+    ks_token_str: "{{ ks_token.stdout }}"
+
+
+

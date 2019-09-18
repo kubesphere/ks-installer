@@ -95,7 +95,7 @@ spec:
                           this object.
                         type: string
                     required:
-                    - name
+                      - name
                   type: array
                 result:
                   description: Status is a return value for calls that don't return
@@ -226,7 +226,7 @@ spec:
                         "Failure". More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status'
                       type: string
               required:
-              - pending
+                - pending
             labels:
               description: 'Map of string keys and values that can be used to organize
                 and categorize (scope and select) objects. May match selectors of
@@ -279,10 +279,10 @@ spec:
                     description: 'UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
                     type: string
                 required:
-                - apiVersion
-                - kind
-                - name
-                - uid
+                  - apiVersion
+                  - kind
+                  - name
+                  - uid
               type: array
             resourceVersion:
               description: |-
@@ -324,8 +324,8 @@ spec:
                           type: object
                         expr:
                           anyOf:
-                          - type: string
-                          - type: integer
+                            - type: string
+                            - type: integer
                         for:
                           type: string
                         labels:
@@ -333,10 +333,10 @@ spec:
                         record:
                           type: string
                       required:
-                      - expr
+                        - expr
                     type: array
                 required:
-                - name
-                - rules
+                  - name
+                  - rules
               type: array
   version: v1

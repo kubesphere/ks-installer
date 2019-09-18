@@ -1,31 +1,27 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import os,sys
+import os, sys
 import json
-
 
 FluentOutputconfigPath = sys.argv[1]
 NewFluentOutputconfigPath = sys.argv[2]
-
 
 with open(FluentOutputconfigPath, 'rb') as f:
     FluentOutputconfig = json.load(f)
 f.close()
 
-
 NewFluentOutputconfig = []
 
-
 for index, configs in enumerate(FluentOutputconfig):
-	CheckFlag = ('es' in str(configs.get('parameters'))) and ('elasticsearch-logging-data.kubesphere-logging-system.svc' in str(configs.get('parameters')))
-	if CheckFlag:
-		for parameter in FluentOutputconfig[index].get('parameters'):
-			if parameter.get('name') == 'Logstash_Prefix':
-				parameter['value'] = "ks-{{ elk_prefix }}-log"
-	NewFluentOutputconfig.append(configs)
-
+    CheckFlag = ('es' in str(configs.get('parameters'))) and (
+                'elasticsearch-logging-data.kubesphere-logging-system.svc' in str(configs.get('parameters')))
+    if CheckFlag:
+        for parameter in FluentOutputconfig[index].get('parameters'):
+            if parameter.get('name') == 'Logstash_Prefix':
+                parameter['value'] = "ks-{{ elk_prefix }}-log"
+    NewFluentOutputconfig.append(configs)
 
 with open(NewFluentOutputconfigPath, 'w') as f:
-	json.dump(NewFluentOutputconfig,f)
+    json.dump(NewFluentOutputconfig, f)
 f.close()

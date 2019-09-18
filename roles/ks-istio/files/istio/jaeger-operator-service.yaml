@@ -7,10 +7,10 @@ metadata:
   namespace: istio-system
 spec:
   ports:
-  - name: metrics
-    port: 8383
-    protocol: TCP
-    targetPort: 8383
+    - name: metrics
+      port: 8383
+      protocol: TCP
+      targetPort: 8383
   selector:
     app.kubernetes.io/instance: jaeger-operator
     app.kubernetes.io/managed-by: Tiller

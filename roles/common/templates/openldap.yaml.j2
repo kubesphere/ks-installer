@@ -1,0 +1,117 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openldap-pvc
+  namespace: kubesphere-system
+spec:
+  accessModes:
+  - ReadWriteOnce
+{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+  storageClassName: {{ persistence.storageClass }}
+{% endif %}
+  resources:
+    requests:
+      storage: {{ common.openldapVolumeSize }}
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: openldap
+    tier: database
+    version: openldap-2.4
+  name: openldap
+  namespace: kubesphere-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openldap
+      tier: database
+      version: openldap-2.4
+  template:
+    metadata:
+      labels:
+        app: openldap
+        tier: database
+        version: openldap-2.4
+    spec:
+      containers:
+      - env:
+        - name: LDAP_ORGANISATION
+          value: kubesphere
+        - name: LDAP_DOMAIN
+          value: kubesphere.io
+        - name: LDAP_ADMIN_PASSWORD
+          value: admin
+        image: {{ openldap_repo }}:{{ openldap_tag }}
+        imagePullPolicy: IfNotPresent
+        name: openldap
+        volumeMounts:
+        - mountPath: /var/lib/ldap
+          name: openldap-pvc
+          subPath: ldap-data
+        - mountPath: /etc/ldap/slapd.d
+          name: openldap-pvc
+          subPath: ldap-config
+        ports:
+        - containerPort: 389
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1500Mi
+          requests:
+            cpu: 20m
+            memory: 900Mi
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - ""        
+      volumes:
+      - name: openldap-pvc
+        persistentVolumeClaim:
+          claimName: openldap-pvc
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: openldap
+    tier: database
+    version: openldap-2.4
+  name: openldap
+  namespace: kubesphere-system
+spec:
+  ports:
+  - name: ldap
+    port: 389
+    protocol: TCP
+    targetPort: 389
+  selector:
+    app: openldap
+    tier: database
+    version: openldap-2.4
+  sessionAffinity: None
+  type: ClusterIP
+
+
+
+

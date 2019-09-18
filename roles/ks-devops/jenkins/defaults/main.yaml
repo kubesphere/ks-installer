@@ -1,6 +1,6 @@
 ---
 
-jenkins_memory_lim: "8Gi" 
+jenkins_memory_lim: "8Gi"
 jenkins_memory_req: "4Gi"
 
 Java_Opts: -Xms3g -Xmx6g -XX:MaxPermSize=512m -XX:MaxRAM=8g -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85 -verbose:gc -Xloggc:/var/jenkins_home/gc-%t.log -XX:NumberOfGCLogFiles=2 -XX:+UseGCLogFileRotation -XX:GCLogFileSize=100m -XX:+PrintGC  -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintReferenceGC -XX:+PrintAdaptiveSizePolicy -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
@@ -17,7 +17,7 @@ EMAIL_SMTP_HOST: mail.example.com
 EMAIL_FROM_ADDR: admin@example.com
 EMAIL_FROM_NAME: KubeSphere
 EMAIL_USE_SSL: false
-EMAIL_SMTP_PORT: 465 
+EMAIL_SMTP_PORT: 465
 EMAIL_FROM_PASS: P@ssw0rd
 
 sonar_account_user: ks-devops

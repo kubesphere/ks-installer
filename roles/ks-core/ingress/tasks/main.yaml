@@ -13,5 +13,5 @@
 
 - name: KubeSphere | Creating Ingress-controller configmap
   command: "{{ bin_dir }}/kubectl create configmap ks-router-config --from-file=ingress-controller.yaml={{ kubesphere_dir }}/ingress/ingress-controller.yaml --from-file=ingress-controller-svc.yaml={{ kubesphere_dir }}/ingress/ingress-controller-svc.yaml -n kubesphere-system"
-  register: import 
+  register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"

@@ -51,7 +51,7 @@ spec:
                               be defined
                             type: boolean
                         required:
-                        - key
+                          - key
                       username:
                         description: SecretKeySelector selects a key of a Secret.
                         properties:
@@ -67,7 +67,7 @@ spec:
                               be defined
                             type: boolean
                         required:
-                        - key
+                          - key
                   bearerTokenFile:
                     description: File to read bearer token for scraping targets.
                     type: string
@@ -189,8 +189,8 @@ spec:
                     type: string
                   targetPort:
                     anyOf:
-                    - type: string
-                    - type: integer
+                      - type: string
+                      - type: integer
                   tlsConfig:
                     description: TLSConfig specifies TLS configuration parameters.
                     properties:
@@ -269,8 +269,8 @@ spec:
                           type: string
                         type: array
                     required:
-                    - key
-                    - operator
+                      - key
+                      - operator
                   type: array
                 matchLabels:
                   description: matchLabels is a map of {key,value} pairs. A single
@@ -286,6 +286,6 @@ spec:
                 type: string
               type: array
           required:
-          - endpoints
-          - selector
+            - endpoints
+            - selector
   version: v1

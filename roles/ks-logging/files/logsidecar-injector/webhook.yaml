@@ -22,7 +22,7 @@ webhooks:
       caBundle: <<CACERT>>
     namespaceSelector:
       matchExpressions:
-      - key: logging.kubesphere.io/logsidecar-injection
-        operator: In
-        values:
-        - enabled
+        - key: logging.kubesphere.io/logsidecar-injection
+          operator: In
+          values:
+            - enabled

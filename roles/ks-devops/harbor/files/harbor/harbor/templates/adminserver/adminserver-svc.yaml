@@ -7,5 +7,5 @@ spec:
     - port: 80
       targetPort: 8080
   selector:
-{{ include "harbor.matchLabels" . | indent 4 }}
-    component: adminserver
+  {{ include "harbor.matchLabels" . | indent 4 }}
+component: adminserver

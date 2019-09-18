@@ -112,7 +112,7 @@ spec:
   targetRef:
     apiVersion: "extensions/v1beta1"
     kind: Deployment
-    name: openpitrix-minio-deployment 
+    name: openpitrix-minio-deployment
     namespace: openpitrix-system
 
 ---
@@ -347,7 +347,7 @@ spec:
     apiVersion: "apps/v1"
     kind: StatefulSet
     name: elasticsearch-logging-discovery
-    namespace: kubesphere-logging-system   
+    namespace: kubesphere-logging-system
 
 ---
 apiVersion: autoscaling.k8s.io/v1beta2

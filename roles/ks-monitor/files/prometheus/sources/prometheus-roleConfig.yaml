@@ -4,9 +4,9 @@ metadata:
   name: prometheus-k8s-config
   namespace: kubesphere-monitoring-system
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get

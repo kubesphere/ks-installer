@@ -92,8 +92,8 @@ spec:
                                         type: string
                                       type: array
                                   required:
-                                  - key
-                                  - operator
+                                    - key
+                                    - operator
                                 type: array
                               matchFields:
                                 description: A list of node selector requirements
@@ -125,8 +125,8 @@ spec:
                                         type: string
                                       type: array
                                   required:
-                                  - key
-                                  - operator
+                                    - key
+                                    - operator
                                 type: array
                           weight:
                             description: Weight associated with matching the corresponding
@@ -134,8 +134,8 @@ spec:
                             format: int32
                             type: integer
                         required:
-                        - weight
-                        - preference
+                          - weight
+                          - preference
                       type: array
                     requiredDuringSchedulingIgnoredDuringExecution:
                       description: A node selector represents the union of the results
@@ -182,8 +182,8 @@ spec:
                                         type: string
                                       type: array
                                   required:
-                                  - key
-                                  - operator
+                                    - key
+                                    - operator
                                 type: array
                               matchFields:
                                 description: A list of node selector requirements
@@ -215,12 +215,12 @@ spec:
                                         type: string
                                       type: array
                                   required:
-                                  - key
-                                  - operator
+                                    - key
+                                    - operator
                                 type: array
                           type: array
                       required:
-                      - nodeSelectorTerms
+                        - nodeSelectorTerms
                 podAffinity:
                   description: Pod affinity is a group of inter pod affinity scheduling
                     rules.
@@ -285,8 +285,8 @@ spec:
                                             type: string
                                           type: array
                                       required:
-                                      - key
-                                      - operator
+                                        - key
+                                        - operator
                                     type: array
                                   matchLabels:
                                     description: matchLabels is a map of {key,value}
@@ -313,15 +313,15 @@ spec:
                                   is running. Empty topologyKey is not allowed.
                                 type: string
                             required:
-                            - topologyKey
+                              - topologyKey
                           weight:
                             description: weight associated with matching the corresponding
                               podAffinityTerm, in the range 1-100.
                             format: int32
                             type: integer
                         required:
-                        - weight
-                        - podAffinityTerm
+                          - weight
+                          - podAffinityTerm
                       type: array
                     requiredDuringSchedulingIgnoredDuringExecution:
                       description: If the affinity requirements specified by this
@@ -376,8 +376,8 @@ spec:
                                         type: string
                                       type: array
                                   required:
-                                  - key
-                                  - operator
+                                    - key
+                                    - operator
                                 type: array
                               matchLabels:
                                 description: matchLabels is a map of {key,value} pairs.
@@ -403,7 +403,7 @@ spec:
                               topologyKey is not allowed.
                             type: string
                         required:
-                        - topologyKey
+                          - topologyKey
                       type: array
                 podAntiAffinity:
                   description: Pod anti affinity is a group of inter pod anti affinity
@@ -470,8 +470,8 @@ spec:
                                             type: string
                                           type: array
                                       required:
-                                      - key
-                                      - operator
+                                        - key
+                                        - operator
                                     type: array
                                   matchLabels:
                                     description: matchLabels is a map of {key,value}
@@ -498,15 +498,15 @@ spec:
                                   is running. Empty topologyKey is not allowed.
                                 type: string
                             required:
-                            - topologyKey
+                              - topologyKey
                           weight:
                             description: weight associated with matching the corresponding
                               podAffinityTerm, in the range 1-100.
                             format: int32
                             type: integer
                         required:
-                        - weight
-                        - podAffinityTerm
+                          - weight
+                          - podAffinityTerm
                       type: array
                     requiredDuringSchedulingIgnoredDuringExecution:
                       description: If the anti-affinity requirements specified by
@@ -561,8 +561,8 @@ spec:
                                         type: string
                                       type: array
                                   required:
-                                  - key
-                                  - operator
+                                    - key
+                                    - operator
                                 type: array
                               matchLabels:
                                 description: matchLabels is a map of {key,value} pairs.
@@ -588,7 +588,7 @@ spec:
                               topologyKey is not allowed.
                             type: string
                         required:
-                        - topologyKey
+                          - topologyKey
                       type: array
             baseImage:
               description: Base image that is used to deploy pods, without tag.
@@ -671,7 +671,7 @@ spec:
                                     key must be defined
                                   type: boolean
                               required:
-                              - key
+                                - key
                             fieldRef:
                               description: ObjectFieldSelector selects an APIVersioned
                                 field of an object.
@@ -685,7 +685,7 @@ spec:
                                     specified API version.
                                   type: string
                               required:
-                              - fieldPath
+                                - fieldPath
                             resourceFieldRef:
                               description: ResourceFieldSelector represents container
                                 resources (cpu, memory) and their output format
@@ -699,7 +699,7 @@ spec:
                                   description: 'Required: resource to select'
                                   type: string
                               required:
-                              - resource
+                                - resource
                             secretKeyRef:
                               description: SecretKeySelector selects a key of a Secret.
                               properties:
@@ -715,9 +715,9 @@ spec:
                                     key must be defined
                                   type: boolean
                               required:
-                              - key
+                                - key
                       required:
-                      - name
+                        - name
                     type: array
                   envFrom:
                     description: List of sources to populate environment variables
@@ -821,22 +821,22 @@ spec:
                                       description: The header field value
                                       type: string
                                   required:
-                                  - name
-                                  - value
+                                    - name
+                                    - value
                                 type: array
                               path:
                                 description: Path to access on the HTTP server.
                                 type: string
                               port:
                                 anyOf:
-                                - type: string
-                                - type: integer
+                                  - type: string
+                                  - type: integer
                               scheme:
                                 description: Scheme to use for connecting to the host.
                                   Defaults to HTTP.
                                 type: string
                             required:
-                            - port
+                              - port
                           tcpSocket:
                             description: TCPSocketAction describes an action based
                               on opening a socket
@@ -847,10 +847,10 @@ spec:
                                 type: string
                               port:
                                 anyOf:
-                                - type: string
-                                - type: integer
+                                  - type: string
+                                  - type: integer
                             required:
-                            - port
+                              - port
                       preStop:
                         description: Handler defines a specific action that should
                           be taken
@@ -894,22 +894,22 @@ spec:
                                       description: The header field value
                                       type: string
                                   required:
-                                  - name
-                                  - value
+                                    - name
+                                    - value
                                 type: array
                               path:
                                 description: Path to access on the HTTP server.
                                 type: string
                               port:
                                 anyOf:
-                                - type: string
-                                - type: integer
+                                  - type: string
+                                  - type: integer
                               scheme:
                                 description: Scheme to use for connecting to the host.
                                   Defaults to HTTP.
                                 type: string
                             required:
-                            - port
+                              - port
                           tcpSocket:
                             description: TCPSocketAction describes an action based
                               on opening a socket
@@ -920,10 +920,10 @@ spec:
                                 type: string
                               port:
                                 anyOf:
-                                - type: string
-                                - type: integer
+                                  - type: string
+                                  - type: integer
                             required:
-                            - port
+                              - port
                   livenessProbe:
                     description: Probe describes a health check to be performed against
                       a container to determine whether it is alive or ready to receive
@@ -973,22 +973,22 @@ spec:
                                   description: The header field value
                                   type: string
                               required:
-                              - name
-                              - value
+                                - name
+                                - value
                             type: array
                           path:
                             description: Path to access on the HTTP server.
                             type: string
                           port:
                             anyOf:
-                            - type: string
-                            - type: integer
+                              - type: string
+                              - type: integer
                           scheme:
                             description: Scheme to use for connecting to the host.
                               Defaults to HTTP.
                             type: string
                         required:
-                        - port
+                          - port
                       initialDelaySeconds:
                         description: 'Number of seconds after the container has started
                           before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
@@ -1015,10 +1015,10 @@ spec:
                             type: string
                           port:
                             anyOf:
-                            - type: string
-                            - type: integer
+                              - type: string
+                              - type: integer
                         required:
-                        - port
+                          - port
                       timeoutSeconds:
                         description: 'Number of seconds after which the probe times
                           out. Defaults to 1 second. Minimum value is 1. More info:
@@ -1068,7 +1068,7 @@ spec:
                             Defaults to "TCP".
                           type: string
                       required:
-                      - containerPort
+                        - containerPort
                     type: array
                   readinessProbe:
                     description: Probe describes a health check to be performed against
@@ -1119,22 +1119,22 @@ spec:
                                   description: The header field value
                                   type: string
                               required:
-                              - name
-                              - value
+                                - name
+                                - value
                             type: array
                           path:
                             description: Path to access on the HTTP server.
                             type: string
                           port:
                             anyOf:
-                            - type: string
-                            - type: integer
+                              - type: string
+                              - type: integer
                           scheme:
                             description: Scheme to use for connecting to the host.
                               Defaults to HTTP.
                             type: string
                         required:
-                        - port
+                          - port
                       initialDelaySeconds:
                         description: 'Number of seconds after the container has started
                           before liveness probes are initiated. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes'
@@ -1161,10 +1161,10 @@ spec:
                             type: string
                           port:
                             anyOf:
-                            - type: string
-                            - type: integer
+                              - type: string
+                              - type: integer
                         required:
-                        - port
+                          - port
                       timeoutSeconds:
                         description: 'Number of seconds after which the probe times
                           out. Defaults to 1 second. Minimum value is 1. More info:
@@ -1330,8 +1330,8 @@ spec:
                             in the pod
                           type: string
                       required:
-                      - name
-                      - devicePath
+                        - name
+                        - devicePath
                     type: array
                   volumeMounts:
                     description: Pod volumes to mount into the container's filesystem.
@@ -1362,8 +1362,8 @@ spec:
                             volume should be mounted. Defaults to "" (volume's root).
                           type: string
                       required:
-                      - name
-                      - mountPath
+                        - name
+                        - mountPath
                     type: array
                   workingDir:
                     description: Container's working directory. If not specified,
@@ -1371,7 +1371,7 @@ spec:
                       configured in the container image. Cannot be updated.
                     type: string
                 required:
-                - name
+                  - name
               type: array
             externalUrl:
               description: The external URL the Alertmanager instances will be available
@@ -1485,7 +1485,7 @@ spec:
                               initializing this object.
                             type: string
                         required:
-                        - name
+                          - name
                       type: array
                     result:
                       description: Status is a return value for calls that don't return
@@ -1619,7 +1619,7 @@ spec:
                             or "Failure". More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status'
                           type: string
                   required:
-                  - pending
+                    - pending
                 labels:
                   description: 'Map of string keys and values that can be used to
                     organize and categorize (scope and select) objects. May match
@@ -1674,10 +1674,10 @@ spec:
                         description: 'UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
                         type: string
                     required:
-                    - apiVersion
-                    - kind
-                    - name
-                    - uid
+                      - apiVersion
+                      - kind
+                      - name
+                      - uid
                   type: array
                 resourceVersion:
                   description: |-
@@ -1817,8 +1817,8 @@ spec:
                         description: Value of a property to set
                         type: string
                     required:
-                    - name
-                    - value
+                      - name
+                      - value
                   type: array
             serviceAccountName:
               description: ServiceAccountName is the name of the ServiceAccount to
@@ -1942,7 +1942,7 @@ spec:
                                       for initializing this object.
                                     type: string
                                 required:
-                                - name
+                                  - name
                               type: array
                             result:
                               description: Status is a return value for calls that
@@ -2086,7 +2086,7 @@ spec:
                                     or "Failure". More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status'
                                   type: string
                           required:
-                          - pending
+                            - pending
                         labels:
                           description: 'Map of string keys and values that can be
                             used to organize and categorize (scope and select) objects.
@@ -2145,10 +2145,10 @@ spec:
                                 description: 'UID of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#uids'
                                 type: string
                             required:
-                            - apiVersion
-                            - kind
-                            - name
-                            - uid
+                              - apiVersion
+                              - kind
+                              - name
+                              - uid
                           type: array
                         resourceVersion:
                           description: |-
@@ -2195,8 +2195,8 @@ spec:
                               description: Name is the name of resource being referenced
                               type: string
                           required:
-                          - kind
-                          - name
+                            - kind
+                            - name
                         resources:
                           description: ResourceRequirements describes the compute
                             resource requirements.
@@ -2246,8 +2246,8 @@ spec:
                                       type: string
                                     type: array
                                 required:
-                                - key
-                                - operator
+                                  - key
+                                  - operator
                               type: array
                             matchLabels:
                               description: matchLabels is a map of {key,value} pairs.
@@ -2322,8 +2322,8 @@ spec:
                               type:
                                 type: string
                             required:
-                            - type
-                            - status
+                              - type
+                              - status
                           type: array
                         phase:
                           description: Phase represents the current phase of PersistentVolumeClaim.
@@ -2404,9 +2404,9 @@ spec:
               format: int32
               type: integer
           required:
-          - paused
-          - replicas
-          - updatedReplicas
-          - availableReplicas
-          - unavailableReplicas
+            - paused
+            - replicas
+            - updatedReplicas
+            - availableReplicas
+            - unavailableReplicas
   version: v1

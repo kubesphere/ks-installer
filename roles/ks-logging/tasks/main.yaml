@@ -10,7 +10,7 @@
 
 - name: ks-logging | Remove old elasticsearch
   shell: "{{ bin_dir }}/helm del --purge elasticsearch-logging"
-  when: 
+  when:
     - check_es_result.stdout.find("kubesphere-logging-system") != -1
   ignore_errors: True
   tags:
@@ -82,7 +82,7 @@
 - name: ks-logging | Fetching fluent-bit-output-config
   shell: >
     {{ bin_dir }}/kubectl get  cm -n kubesphere-logging-system fluent-bit-output-config -o=jsonpath='{.data.outputs}' > {{ kubesphere_dir }}/logging/fluent-bit-outputs.config.bak
-  when: 
+  when:
     - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
     - kubesphere_version.stdout == "2.0.0"
 
@@ -92,7 +92,7 @@
     chmod +x {{ kubesphere_dir }}/logging/FluentBitOutputsConfig.py &&
     {{ kubesphere_dir }}/logging/FluentBitOutputsConfig.py {{ kubesphere_dir }}/logging/fluent-bit-outputs.config.bak 
     {{ kubesphere_dir }}/logging/fluent-bit-outputs.config
-  when: 
+  when:
     - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
     - kubesphere_version.stdout == "2.0.0"
 
@@ -100,7 +100,7 @@
 - name: ks-logging | Deleting old fluent-bit-output-config
   shell: >
     {{ bin_dir }}/kubectl delete  cm -n kubesphere-logging-system fluent-bit-output-config
-  when: 
+  when:
     - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
     - kubesphere_version.stdout == "2.0.0"
 
@@ -123,7 +123,7 @@
 - name: ks-logging | Fetching fluent-bit-crd
   shell: >
     {{ bin_dir }}/kubectl get FluentBit fluent-bit -n kubesphere-logging-system --export -o json > {{ kubesphere_dir }}/logging/fluentbit-crd.json
-  when: 
+  when:
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
     - kubesphere_version.stdout == "2.0.0"
 
@@ -133,7 +133,7 @@
     chmod +x {{ kubesphere_dir }}/logging/FluentBitCrd.py &&
     {{ kubesphere_dir }}/logging/FluentBitCrd.py {{ kubesphere_dir }}/logging/fluentbit-crd.json
     {{ kubesphere_dir }}/logging/fluentbit-crd-patch.json
-  when: 
+  when:
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
     - kubesphere_version.stdout == "2.0.0"
 
@@ -141,7 +141,7 @@
 - name: ks-logging | Patching fluent-bit-crd
   shell: >
     {{ bin_dir }}/kubectl patch FluentBit fluent-bit -n kubesphere-logging-system --type merge --patch "$(cat {{ kubesphere_dir }}/logging/fluentbit-crd-patch.json)"
-  when: 
+  when:
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
     - kubesphere_version.stdout == "2.0.0"
 
@@ -160,7 +160,7 @@
   until: import is succeeded
   retries: 5
   delay: 10
-  when: 
+  when:
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") == -1
 
 
@@ -201,7 +201,7 @@
     -f {{ kubesphere_dir }}/logging/custom-values-kibana.yaml
     --namespace kubesphere-logging-system
   when:
-    - kibana_enable == true  
+    - kibana_enable == true
 
 
 - import_tasks: logsidecar.yaml

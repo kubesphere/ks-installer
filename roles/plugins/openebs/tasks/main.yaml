@@ -4,7 +4,7 @@
   copy:
     src: "openebs"
     dest: "{{ kubesphere_dir }}/"
-  
+
 
 - name: openebs | Creating manifests
   template:

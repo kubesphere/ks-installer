@@ -3,8 +3,8 @@ kind: ConfigMap
 metadata:
   name: "{{ template "harbor.adminserver" . }}"
   labels:
-{{ include "harbor.labels" . | indent 4 }}
-    component: adminserver
+  {{ include "harbor.labels" . | indent 4 }}
+component: adminserver
 data:
   DATABASE_TYPE: "postgresql"
   POSTGRESQL_HOST: "{{ template "harbor.database.host" . }}"
@@ -41,7 +41,7 @@ data:
   # The following properties have no default value in Harbor core if not 
   # set via env. They should be removed after the refactoring:
   # AUTH_MODE, SELF_REGISTRATION, PROJECT_CREATION_RESTRICTION 
-  AUTH_MODE: "db_auth"	
+  AUTH_MODE: "db_auth"
   SELF_REGISTRATION: "on"
   PROJECT_CREATION_RESTRICTION: "everyone"
   TOKEN_EXPIRATION: "30"

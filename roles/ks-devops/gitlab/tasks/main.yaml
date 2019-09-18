@@ -5,26 +5,26 @@
     src: "gitlab"
     dest: "{{ kubesphere_dir }}/"
 
-# - name: Gitlab | Creating values files
-#   template:
-#     src: "{{ item.file }}.j2"
-#     dest: "{{ kubesphere_dir }}/gitlab/chart-1.6.1/charts/{{ item.path }}/values.yaml"
-#   with_items:
-#     - { path: shared-secrets, file: values-shared-secrets.yaml }
-#     - { path: redis-ha, file: values-redis-ha.yaml } 
-#     - { path: redis, file: values-redis.yaml } 
-#     - { path: postgresql, file: values-postgresql.yaml } 
-#     - { path: nginx-ingress, file: values-nginx-ingress.yaml } 
-#     - { path: minio, file: values-minio.yaml }
-#     - { path: gitlab-runner, file: values-gitlab-runner.yaml }
-#     - { path: gitlab/charts/gitaly, file: values-gitaly.yaml }
-#     - { path: gitlab/charts/gitlab-shell, file: values-gitlab-shell.yaml }
-#     - { path: gitlab/charts/mailroom, file: values-mailroom.yaml }
-#     - { path: gitlab/charts/migrations, file: values-migrations.yaml }
-#     - { path: gitlab/charts/sidekiq, file: values-sidekiq.yaml }
-#     - { path: gitlab/charts/task-runner, file: values-task-runner.yaml }  
-#     - { path: gitlab/charts/unicorn, file: values-unicorn.yaml } 
-  
+  # - name: Gitlab | Creating values files
+  #   template:
+  #     src: "{{ item.file }}.j2"
+  #     dest: "{{ kubesphere_dir }}/gitlab/chart-1.6.1/charts/{{ item.path }}/values.yaml"
+  #   with_items:
+  #     - { path: shared-secrets, file: values-shared-secrets.yaml }
+  #     - { path: redis-ha, file: values-redis-ha.yaml }
+  #     - { path: redis, file: values-redis.yaml }
+  #     - { path: postgresql, file: values-postgresql.yaml }
+  #     - { path: nginx-ingress, file: values-nginx-ingress.yaml }
+  #     - { path: minio, file: values-minio.yaml }
+  #     - { path: gitlab-runner, file: values-gitlab-runner.yaml }
+  #     - { path: gitlab/charts/gitaly, file: values-gitaly.yaml }
+  #     - { path: gitlab/charts/gitlab-shell, file: values-gitlab-shell.yaml }
+  #     - { path: gitlab/charts/mailroom, file: values-mailroom.yaml }
+  #     - { path: gitlab/charts/migrations, file: values-migrations.yaml }
+  #     - { path: gitlab/charts/sidekiq, file: values-sidekiq.yaml }
+  #     - { path: gitlab/charts/task-runner, file: values-task-runner.yaml }
+  #     - { path: gitlab/charts/unicorn, file: values-unicorn.yaml }
+
 - name: Gitlab | Creating manifests
   template:
     src: "{{ item.file }}.j2"

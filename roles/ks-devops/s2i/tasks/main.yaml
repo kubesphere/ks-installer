@@ -30,7 +30,7 @@
 
 - name: S2I | Deploy S2I template&&operator
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/{{ item }}"
-  loop: 
+  loop:
     - s2ioperator.yaml
     - java.yaml
     - nodejs.yaml

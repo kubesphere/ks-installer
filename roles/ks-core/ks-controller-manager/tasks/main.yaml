@@ -25,7 +25,7 @@
 
 - name: ks-controller-manager | Creating Controller Manager
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-controller-manager/ks-controller-manager.yaml"
-  register: import 
+  register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
   tags:
     - upgrade

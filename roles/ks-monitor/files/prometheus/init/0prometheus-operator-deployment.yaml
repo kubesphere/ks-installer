@@ -16,26 +16,26 @@ spec:
         k8s-app: prometheus-operator
     spec:
       containers:
-      - args:
-        - --kubelet-service=kube-system/kubelet
-        - --logtostderr=true
-        - --config-reloader-image=dockerhub.qingcloud.com/coreos/configmap-reload:v0.0.1
-        - --prometheus-config-reloader=dockerhub.qingcloud.com/coreos/prometheus-config-reloader:v0.27.1
-        image: dockerhub.qingcloud.com/coreos/prometheus-operator:v0.27.1
-        name: prometheus-operator
-        ports:
-        - containerPort: 8080
-          name: http
-        resources:
-          limits:
-            cpu: 200m
-            memory: 200Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+        - args:
+            - --kubelet-service=kube-system/kubelet
+            - --logtostderr=true
+            - --config-reloader-image=dockerhub.qingcloud.com/coreos/configmap-reload:v0.0.1
+            - --prometheus-config-reloader=dockerhub.qingcloud.com/coreos/prometheus-config-reloader:v0.27.1
+          image: dockerhub.qingcloud.com/coreos/prometheus-operator:v0.27.1
+          name: prometheus-operator
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
       nodeSelector:
         beta.kubernetes.io/os: linux
       securityContext:

@@ -3,7 +3,7 @@
 - name: OpenPitrix | Waiting for openpitrix-db
   shell: "{{ bin_dir }}/kubectl -n openpitrix-system get pod | grep openpitrix-db-deployment | awk '{print $3}'"
   register: result
-  until: 
+  until:
     - result.stdout.find("Running") != -1
   retries: 15
   delay: 10
@@ -38,22 +38,22 @@
     - upgrade
 
 - name: ks-devops | Delete db-ctrl-job
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-ctrl-job" 
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-ctrl-job"
   when: result.stdout.find("ks-devops-db-ctrl-job") != -1
   tags:
     - upgrade
 
 - name: ks-devops | Delete db-init-job
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-init-job" 
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-init-job"
   when: result.stdout.find("ks-devops-db-init-job") != -1
   tags:
     - upgrade
 
 - name: ks-devops | Init ks-devops
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/init/" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/init/"
 
 - name: ks-devops | Ctrl ks-devops
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/ctrl/" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/ctrl/"
   tags:
     - upgrade
 

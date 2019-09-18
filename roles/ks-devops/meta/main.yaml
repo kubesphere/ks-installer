@@ -6,7 +6,7 @@ dependencies:
   #     - sonarqube_enable == true
 
   - role: ks-devops/ks-devops
-    when: 
+    when:
       - devops_enable == true
 
   - role: ks-devops/s2i
@@ -14,7 +14,7 @@ dependencies:
       - s2i_enable == true
 
   - role: ks-devops/harbor
-    when: 
+    when:
       - harbor_enable == true
 
   - role: ks-devops/gitlab

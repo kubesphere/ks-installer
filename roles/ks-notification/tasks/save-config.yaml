@@ -14,7 +14,7 @@
 
 - name: ks-notification | Getting notification configs (EMAIL_SMTP_HOST)
   shell:
-    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    cat {{ kubesphere_dir }}/notification/notification-configs.json |
     jq '.email_service_config.email_host' |
     sed 's/\"//g'
   register: email_host
@@ -25,7 +25,7 @@
 
 - name: ks-notification | Getting notification configs (EMAIL_SMTP_PORT)
   shell:
-    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    cat {{ kubesphere_dir }}/notification/notification-configs.json |
     jq '.email_service_config.port' |
     sed 's/\"//g'
   register: port
@@ -36,7 +36,7 @@
 
 - name: ks-notification | Getting notification configs (EMAIL_FROM_NAME)
   shell:
-    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    cat {{ kubesphere_dir }}/notification/notification-configs.json |
     jq '.email_service_config.display_sender' |
     sed 's/\"//g'
   register: display_sender
@@ -47,7 +47,7 @@
 
 - name: ks-notification | Getting notification configs (EMAIL_FROM_ADDR)
   shell:
-    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    cat {{ kubesphere_dir }}/notification/notification-configs.json |
     jq '.email_service_config.email' |
     sed 's/\"//g'
   register: email
@@ -58,7 +58,7 @@
 
 - name: ks-notification | Getting notification configs (EMAIL_FROM_PASS)
   shell:
-    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    cat {{ kubesphere_dir }}/notification/notification-configs.json |
     jq '.email_service_config.password' |
     sed 's/\"//g'
   register: password
@@ -69,7 +69,7 @@
 
 - name: ks-notification | Getting notification configs (EMAIL_USE_SSL)
   shell:
-    cat {{ kubesphere_dir }}/notification/notification-configs.json | 
+    cat {{ kubesphere_dir }}/notification/notification-configs.json |
     jq '.email_service_config.ssl_enable' |
     sed 's/\"//g'
   register: ssl_enable

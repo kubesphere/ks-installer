@@ -29,14 +29,14 @@
     - istio-system
 
 - name: KubeSphere | Init KubeSphere system
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-init.yaml" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-init.yaml"
   ignore_errors: true
   tags:
     - upgrade
 
 - import_tasks: ks-init.yaml
 
-- name: KubeSphere | Getting controls-system file 
+- name: KubeSphere | Getting controls-system file
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.file }}"
@@ -44,9 +44,9 @@
     - { name: kubesphere-controls-system, file: kubesphere-controls-system.yaml }
   tags:
     - upgrade
-     
+
 - name: KubeSphere | Create KubeSphere crds
-  shell: "{{ bin_dir }}/kubectl create -f {{ kubesphere_dir }}/ks-crds/" 
+  shell: "{{ bin_dir }}/kubectl create -f {{ kubesphere_dir }}/ks-crds/"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
@@ -58,7 +58,7 @@
     - upgrade
 
 - name: KubeSphere | Create KubeSphere workspace
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/workspace.yaml" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/workspace.yaml"
   register: result
   until: result is succeeded
   retries: 5
@@ -105,11 +105,11 @@
     - kubesphere-devops-system
     - kubesphere-logging-system
     - kubesphere-alerting-system
-    - istio-system  
+    - istio-system
 
-    
+
 - name: KubeSphere | Create KubeSphere vpa
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml" 
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml"
   register: result
   until: result is succeeded
   retries: 5

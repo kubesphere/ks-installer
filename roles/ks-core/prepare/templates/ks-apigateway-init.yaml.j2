@@ -4,7 +4,7 @@ data:
     :2018 {
       
       authenticate {
-        secret {{ op_secret_str }}
+        secret {{ ks_secret_str }}
         path /
         except /apis/account.kubesphere.io/v1alpha1/authenticate,/kapis/iam.kubesphere.io/v1alpha2/login,/kapis/iam.kubesphere.io/v1alpha2/authenticate,/images,/kapis/devops.kubesphere.io/v1alpha2/webhook/github,/kapis/devops.kubesphere.io/v1alpha2/webhook/git,/swagger
       }

@@ -130,8 +130,8 @@ spec:
                                               cookie.
                                             type: string
                                         required:
-                                        - name
-                                        - ttl
+                                          - name
+                                          - ttl
                                         type: object
                                       httpHeaderName:
                                         description: 'It is required to specify exactly
@@ -263,8 +263,8 @@ spec:
                                                     of the cookie.
                                                   type: string
                                               required:
-                                              - name
-                                              - ttl
+                                                - name
+                                                - ttl
                                               type: object
                                             httpHeaderName:
                                               description: 'It is required to specify
@@ -396,10 +396,10 @@ spec:
                                             type: string
                                           type: array
                                       required:
-                                      - mode
+                                        - mode
                                       type: object
                                   required:
-                                  - port
+                                    - port
                                   type: object
                                 type: array
                               tls:
@@ -445,12 +445,12 @@ spec:
                                       type: string
                                     type: array
                                 required:
-                                - mode
+                                  - mode
                                 type: object
                             type: object
                         required:
-                        - name
-                        - labels
+                          - name
+                          - labels
                         type: object
                       type: array
                     trafficPolicy:
@@ -509,8 +509,8 @@ spec:
                                       description: REQUIRED. Lifetime of the cookie.
                                       type: string
                                   required:
-                                  - name
-                                  - ttl
+                                    - name
+                                    - ttl
                                   type: object
                                 httpHeaderName:
                                   description: 'It is required to specify exactly
@@ -633,8 +633,8 @@ spec:
                                               cookie.
                                             type: string
                                         required:
-                                        - name
-                                        - ttl
+                                          - name
+                                          - ttl
                                         type: object
                                       httpHeaderName:
                                         description: 'It is required to specify exactly
@@ -757,10 +757,10 @@ spec:
                                       type: string
                                     type: array
                                 required:
-                                - mode
+                                  - mode
                                 type: object
                             required:
-                            - port
+                              - port
                             type: object
                           type: array
                         tls:
@@ -803,11 +803,11 @@ spec:
                                 type: string
                               type: array
                           required:
-                          - mode
+                            - mode
                           type: object
                       type: object
                   required:
-                  - host
+                    - host
                   type: object
               type: object
           type: object

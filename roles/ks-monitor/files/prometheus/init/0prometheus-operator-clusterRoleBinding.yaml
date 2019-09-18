@@ -7,6 +7,6 @@ roleRef:
   kind: ClusterRole
   name: prometheus-operator
 subjects:
-- kind: ServiceAccount
-  name: prometheus-operator
-  namespace: kubesphere-monitoring-system
+  - kind: ServiceAccount
+    name: prometheus-operator
+    namespace: kubesphere-monitoring-system

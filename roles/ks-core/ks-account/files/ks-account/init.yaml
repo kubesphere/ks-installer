@@ -29,9 +29,9 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
-- kind: ServiceAccount
-  name: kubesphere
-  namespace: kubesphere-system
+  - kind: ServiceAccount
+    name: kubesphere
+    namespace: kubesphere-system
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -45,8 +45,8 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
-- kind: User
-  name: admin
+  - kind: User
+    name: admin
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -56,16 +56,16 @@ metadata:
     creator: system
   name: cluster-admin
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- nonResourceURLs:
-  - '*'
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - nonResourceURLs:
+      - '*'
+    verbs:
+      - '*'
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -75,40 +75,40 @@ metadata:
     creator: admin
     desc: ""
   name: cluster-regular
-rules: 
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - repos
-  - app_versions
-  verbs:
-  - list
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - app_version/*
-  verbs:
-  - get
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - apps
-  - clusters
-  verbs:
-  - '*'
-- apiGroups:
-  - '*'
-  resources:
-  - storageclasses
-  verbs:
-  - list
-- apiGroups:
-  - ''
-  resources:
-  - limitranges
-  verbs:
-  - create
-  
+rules:
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - repos
+      - app_versions
+    verbs:
+      - list
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - app_version/*
+    verbs:
+      - get
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - apps
+      - clusters
+    verbs:
+      - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - storageclasses
+    verbs:
+      - list
+  - apiGroups:
+      - ''
+    resources:
+      - limitranges
+    verbs:
+      - create
+
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -118,64 +118,64 @@ metadata:
     creator: admin
     desc: ""
   name: workspaces-manager
-rules: 
-- apiGroups:
-  - '*'
-  resources:
-  - workspaces
-  - workspaces/*
-  verbs:
-  - '*'
-- apiGroups:
-  - iam.kubesphere.io
-  resources:
-  - users
-  verbs:
-  - list
-- apiGroups:
-  - ""
-  resources:
-  - namespaces
-  verbs:
-  - '*'
-- apiGroups:
-  - ""
-  - apps
-  - extensions
-  - batch
-  resources:
-  - serviceaccounts
-  - limitranges
-  - deployments
-  - configmaps
-  - secrets
-  - jobs
-  - cronjobs
-  - persistentvolumeclaims
-  - statefulsets
-  - daemonsets
-  - ingresses
-  - services
-  - pods/*
-  - pods
-  - events
-  - deployments/scale
-  verbs:
-  - '*'
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - rolebindings
-  - roles
-  verbs:
-  - '*'
-- apiGroups:
-  - jenkins.kubesphere.io
-  - devops.kubesphere.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaces
+      - workspaces/*
+    verbs:
+      - '*'
+  - apiGroups:
+      - iam.kubesphere.io
+    resources:
+      - users
+    verbs:
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+      - apps
+      - extensions
+      - batch
+    resources:
+      - serviceaccounts
+      - limitranges
+      - deployments
+      - configmaps
+      - secrets
+      - jobs
+      - cronjobs
+      - persistentvolumeclaims
+      - statefulsets
+      - daemonsets
+      - ingresses
+      - services
+      - pods/*
+      - pods
+      - events
+      - deployments/scale
+    verbs:
+      - '*'
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+      - roles
+    verbs:
+      - '*'
+  - apiGroups:
+      - jenkins.kubesphere.io
+      - devops.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
 
 ---
 
@@ -186,7 +186,7 @@ metadata:
   namespace: kubesphere-system
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 2Gi
@@ -200,7 +200,7 @@ metadata:
   namespace: kubesphere-system
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 2Gi

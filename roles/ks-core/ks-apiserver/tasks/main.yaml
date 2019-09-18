@@ -16,15 +16,15 @@
   register: ks-apiserver-deploy
   tags:
     - upgrade
-    
+
 - name: ks-apiserver | Creating Deployment
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-apiserver/ks-apiserver.yml"
-  register: import 
+  register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
   tags:
     - upgrade
 
-- name: KubeSphere | Restarting ks-apiserver 
+- name: KubeSphere | Restarting ks-apiserver
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-apiserver --replicas=0 && 
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-apiserver --replicas=1

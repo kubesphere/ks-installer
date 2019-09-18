@@ -7,6 +7,6 @@ roleRef:
   kind: ClusterRole
   name: kube-state-metrics
 subjects:
-- kind: ServiceAccount
-  name: kube-state-metrics
-  namespace: kubesphere-monitoring-system
+  - kind: ServiceAccount
+    name: kube-state-metrics
+    namespace: kubesphere-monitoring-system

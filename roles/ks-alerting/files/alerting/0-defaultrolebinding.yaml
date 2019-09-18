@@ -7,6 +7,6 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: kubesphere-alerting-system
+  - kind: ServiceAccount
+    name: default
+    namespace: kubesphere-alerting-system

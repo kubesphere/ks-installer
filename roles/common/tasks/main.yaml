@@ -1,0 +1,57 @@
+---
+
+- name: Kubesphere | Getting common component installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "common"
+
+
+- name: Kubesphere | Creating common component manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/common/{{ item.file }}"
+  with_items:
+    - { name: mysql, file: mysql.yaml }
+    - { path: etcd, file: etcd.yaml }
+    - { path: redis, file: redis.yaml }
+    - { path: openldap, file: openldap.yaml }
+    - { path: minio, file: minio.yaml }
+
+
+- name: Kubesphere | Checking common component
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n openpitrix-system 
+  register: openpitrix_component
+
+
+- name: Kubesphere | Deploying mysql
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/mysql.yaml
+  when:
+    - "'openpitrix-db-deployment' not in openpitrix_component.stdout"
+
+
+- name: Kubesphere | Deploying etcd
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/etcd.yaml 
+  when:
+    - "'openpitrix-etcd-deployment' not in openpitrix_component.stdout"
+
+
+- name: Kubesphere | Deploying minio
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/minio.yaml 
+  when:
+    - "'openpitrix-minio-deployment' not in openpitrix_component.stdout"
+
+
+- name: Kubesphere | Deploying openldap
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/openldap.yaml 
+
+
+- name: Kubesphere | Deploying redis
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/redis.yaml 

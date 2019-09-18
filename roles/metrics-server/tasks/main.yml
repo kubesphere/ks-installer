@@ -15,11 +15,11 @@
 
 
 - name: Metrics-Server | deleting old prometheus-operator files
-  file: 
+  file:
     path: "{{ kubesphere_dir }}/{{ item }}"
     state: absent
   ignore_errors: True
-  loop: 
+  loop:
     - "metrics-server"
   when: metrics_server_old_check
 

@@ -7,24 +7,24 @@ metadata:
   name: s2ibuilders.devops.kubesphere.io
 spec:
   additionalPrinterColumns:
-  - JSONPath: .status.runCount
-    name: RunCount
-    type: integer
-  - JSONPath: .status.lastRunState
-    name: LastRunState
-    type: string
-  - JSONPath: .status.lastRunName
-    name: LastRunName
-    type: string
-  - JSONPath: .status.lastRunStartTime
-    name: LastRunStartTime
-    type: date
+    - JSONPath: .status.runCount
+      name: RunCount
+      type: integer
+    - JSONPath: .status.lastRunState
+      name: LastRunState
+      type: string
+    - JSONPath: .status.lastRunName
+      name: LastRunName
+      type: string
+    - JSONPath: .status.lastRunStartTime
+      name: LastRunStartTime
+      type: date
   group: devops.kubesphere.io
   names:
     kind: S2iBuilder
     plural: s2ibuilders
     shortNames:
-    - s2ib
+      - s2ib
   scope: Namespaced
   subresources:
     status: {}
@@ -141,8 +141,8 @@ spec:
                       value:
                         type: string
                     required:
-                    - name
-                    - value
+                      - name
+                      - value
                     type: object
                   type: array
                 excludeRegExp:
@@ -399,8 +399,8 @@ spec:
                     as the root for ignore processing
                   type: string
               required:
-              - imageName
-              - sourceUrl
+                - imageName
+                - sourceUrl
               type: object
             fromTemplate:
               description: FromTemplate define some inputs from user
@@ -458,7 +458,7 @@ spec:
               format: int64
               type: integer
           required:
-          - runCount
+            - runCount
           type: object
   version: v1alpha1
 status:
@@ -477,21 +477,21 @@ metadata:
   name: s2ibuildertemplates.devops.kubesphere.io
 spec:
   additionalPrinterColumns:
-  - JSONPath: .spec.codeFramework
-    name: Framework
-    type: string
-  - JSONPath: .spec.defaultBaseImage
-    name: DefaultBaseImage
-    type: string
-  - JSONPath: .spec.version
-    name: Version
-    type: string
+    - JSONPath: .spec.codeFramework
+      name: Framework
+      type: string
+    - JSONPath: .spec.defaultBaseImage
+      name: DefaultBaseImage
+      type: string
+    - JSONPath: .spec.version
+      name: Version
+      type: string
   group: devops.kubesphere.io
   names:
     kind: S2iBuilderTemplate
     plural: s2ibuildertemplates
     shortNames:
-    - s2ibt
+      - s2ibt
   scope: Cluster
   validation:
     openAPIV3Schema:
@@ -603,27 +603,27 @@ metadata:
   name: s2iruns.devops.kubesphere.io
 spec:
   additionalPrinterColumns:
-  - JSONPath: .status.runState
-    name: State
-    type: string
-  - JSONPath: .status.kubernetesJobName
-    name: K8sJobName
-    type: string
-  - JSONPath: .status.startTime
-    name: StartTime
-    type: date
-  - JSONPath: .status.completionTime
-    name: CompletionTime
-    type: date
-  - JSONPath: .status.s2iBuildResult.imageName
-    name: ImageName
-    type: string
+    - JSONPath: .status.runState
+      name: State
+      type: string
+    - JSONPath: .status.kubernetesJobName
+      name: K8sJobName
+      type: string
+    - JSONPath: .status.startTime
+      name: StartTime
+      type: date
+    - JSONPath: .status.completionTime
+      name: CompletionTime
+      type: date
+    - JSONPath: .status.s2iBuildResult.imageName
+      name: ImageName
+      type: string
   group: devops.kubesphere.io
   names:
     kind: S2iRun
     plural: s2iruns
     shortNames:
-    - s2ir
+      - s2ir
   scope: Namespaced
   subresources:
     status: {}
@@ -670,7 +670,7 @@ spec:
               format: int32
               type: integer
           required:
-          - builderName
+            - builderName
           type: object
         status:
           properties:

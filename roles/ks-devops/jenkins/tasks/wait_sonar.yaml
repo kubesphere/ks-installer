@@ -6,16 +6,16 @@
   until: result.stdout.find("Running") != -1
   retries: 30
   delay: 5
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined
     - sonar_server_token is not defined
-    
+
 - name: ks-devops | Getting ks-sonarqube NodeIp
   shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
   register:  ks_sonarqube_nodeIP
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined
@@ -24,7 +24,7 @@
 - name: ks-devops | Getting ks-sonarqube NodePort
   shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register:  ks_sonarqube_nodePort
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined
@@ -33,7 +33,7 @@
 - name: ks-devops | Getting ks-sonarqube ClusterIP
   shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.clusterIP}'"
   register:  ks_sonarqube_clusterIP
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined
@@ -45,25 +45,25 @@
     port: 9000
     delay: 3
     timeout: 600
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined
     - sonar_server_token is not defined
 
 - name: ks-devops | Setting ks-sonarqube url
-  set_fact: 
+  set_fact:
     sonar_server_url_internal: "http://{{ ks_sonarqube_clusterIP.stdout }}:9000"
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined
     - sonar_server_token is not defined
 
 - name: ks-devops | Setting ks-sonarqube url
-  set_fact: 
+  set_fact:
     sonar_server_url: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_url is not defined
@@ -73,18 +73,18 @@
   shell: >
     curl -I -s -u {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }} -X POST {{ sonar_server_url_internal }}/api/user_tokens/generate|awk '{if(NR==1){print $2}}'
   register: result
-  until: 
+  until:
     - result is succeeded
-    - result.stdout == "400"  
+    - result.stdout == "400"
   retries: 30
   delay: 3
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_token is not defined
   tags:
     - upgrade
-    
+
 - name: ks-devops | Checking ks-sonarqube token
   uri:
     url: "{{ sonar_server_url_internal }}/api/user_tokens/search"
@@ -94,16 +94,16 @@
     force_basic_auth: yes
     body_format: json
   register: checkinfo
-  until: 
+  until:
     - checkinfo is succeeded
   retries: 30
   delay: 3
-  when: 
+  when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
     - sonar_server_token is not defined
 
-- name: ks-devops | Deleting ks-sonarqube old token 
+- name: ks-devops | Deleting ks-sonarqube old token
   uri:
     url: "{{ sonar_server_url_internal }}/api/user_tokens/revoke?name=jenkins"
     method: POST
@@ -118,7 +118,7 @@
     - sonar_server_token is not defined
     - checkinfo.json.userTokens|length != 0
 
-- name: ks-devops | Generating ks-sonarqube token 
+- name: ks-devops | Generating ks-sonarqube token
   uri:
     url: "{{ sonar_server_url_internal }}/api/user_tokens/generate?name=jenkins"
     method: POST
@@ -164,7 +164,7 @@
   when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
-    - sonar_server_token is not defined  
+    - sonar_server_token is not defined
 
 - name: ks-devops | Setting user permission(profileadmin)
   uri:
@@ -181,7 +181,7 @@
   when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
-    - sonar_server_token is not defined 
+    - sonar_server_token is not defined
 
 - name: ks-devops | Creating ks-jenkins webhook(internal)
   uri:
@@ -197,8 +197,8 @@
   when:
     - sonarqube_enable is defined
     - sonarqube_enable == true
-    - sonar_server_token is not defined 
-  
+    - sonar_server_token is not defined
+
 - name: ks-devops | Setting ks-sonarqube token
   set_fact:
     sonar_server_token: "{{ userinfo.json.token }}"

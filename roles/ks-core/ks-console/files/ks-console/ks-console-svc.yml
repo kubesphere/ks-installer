@@ -9,10 +9,10 @@ metadata:
   namespace: kubesphere-system
 spec:
   ports:
-  - name: nginx
-    port: 80
-    protocol: TCP
-    targetPort: 8000
+    - name: nginx
+      port: 80
+      protocol: TCP
+      targetPort: 8000
   selector:
     app: ks-console
     tier: frontend

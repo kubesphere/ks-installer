@@ -1,0 +1,95 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubesphere-minio
+  namespace: kubesphere-system
+  labels:
+    app: kubesphere
+    tier: minio
+    version: advanced-2.0.1
+spec:
+  selector:
+    app: kubesphere
+    tier: minio
+  ports:
+  - name: tcp
+    protocol: TCP
+    port: 9000
+    targetPort: 9000
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kubesphere-minio-pvc
+  namespace: kubesphere-system
+  labels:
+    app: kubesphere
+    tier: minio
+spec:
+  accessModes:
+    - ReadWriteOnce
+{% if persistence.storageClass is defined and persistence.storageClass != None %}
+  storageClassName: {{ persistence.storageClass }}
+{% endif %}
+  resources:
+    requests:
+      storage: {{ common.minioVolumeSize }}
+
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: kubesphere-minio-deployment
+  namespace: kubesphere-system
+  labels:
+    app: kubesphere
+    tier: minio
+    version: advanced-2.0.1
+spec:
+  selector:
+    matchLabels:
+      app: kubesphere
+      tier: minio
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: kubesphere
+        tier: minio
+        version: advanced-2.0.1
+    spec:
+      containers:
+      - name: kubesphere-minio
+        image: {{ minio_repo }}:{{ minio_tag }}
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          postStart:
+            exec:
+              command: ["sh", "-c", "mkdir -p /data/openpitrix-internal-repo/vmbased /data/openpitrix-internal-repo/helm"]
+        args:
+          - server
+          - /data
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: "openpitrixminioaccesskey"
+        - name: MINIO_SECRET_KEY
+          value: "openpitrixminiosecretkey"
+        ports:
+        - containerPort: 9000
+          name: minio
+        volumeMounts:
+        - name: minio-persistent-storage
+          mountPath: /data
+      volumes:
+      - name: minio-persistent-storage
+{% if persistence.enable is defined and persistence.enable == true %}
+        persistentVolumeClaim:
+          claimName: kubesphere-minio-pvc
+{% else %}
+        hostPath:
+          path: /var/lib/kubesphere/minio-data
+          type: DirectoryOrCreate
+{% endif %}

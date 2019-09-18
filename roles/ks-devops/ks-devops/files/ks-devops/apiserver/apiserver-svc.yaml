@@ -15,8 +15,8 @@ spec:
     tier: backend
     version: advanced-1.0.0
   ports:
-  - name: http
-    port: 80
-    targetPort: 8080
-    protocol: TCP
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
   sessionAffinity: None

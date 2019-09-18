@@ -7,22 +7,22 @@ metadata:
   name: strategies.servicemesh.kubesphere.io
 spec:
   additionalPrinterColumns:
-  - JSONPath: .spec.type
-    description: type of strategy
-    name: Type
-    type: string
-  - JSONPath: .spec.template.spec.hosts
-    description: destination hosts
-    name: Hosts
-    type: string
-  - JSONPath: .metadata.creationTimestamp
-    description: 'CreationTimestamp is a timestamp representing the server time when
+    - JSONPath: .spec.type
+      description: type of strategy
+      name: Type
+      type: string
+    - JSONPath: .spec.template.spec.hosts
+      description: destination hosts
+      name: Hosts
+      type: string
+    - JSONPath: .metadata.creationTimestamp
+      description: 'CreationTimestamp is a timestamp representing the server time when
       this object was created. It is not guaranteed to be set in happens-before order
       across separate operations. Clients may not set this value. It is represented
       in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
       lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
-    name: Age
-    type: date
+      name: Age
+      type: date
   group: servicemesh.kubesphere.io
   names:
     kind: Strategy
@@ -181,7 +181,7 @@ spec:
                                     format: int64
                                     type: integer
                                 required:
-                                - httpStatus
+                                  - httpStatus
                                 type: object
                               delay:
                                 description: Delay requests before forwarding, emulating
@@ -205,7 +205,7 @@ spec:
                                     format: int64
                                     type: integer
                                 required:
-                                - fixedDelay
+                                  - fixedDelay
                                 type: object
                             type: object
                           match:
@@ -380,7 +380,7 @@ spec:
                                   subset must be defined in a corresponding DestinationRule.
                                 type: string
                             required:
-                            - host
+                              - host
                             type: object
                           redirect:
                             description: A http rule can either redirect or forward
@@ -419,8 +419,8 @@ spec:
                                   request. format: 1h/1m/1s/1ms. MUST BE >=1ms.'
                                 type: string
                             required:
-                            - attempts
-                            - perTryTimeout
+                              - attempts
+                              - perTryTimeout
                             type: object
                           rewrite:
                             description: Rewrite HTTP URIs and Authority headers.
@@ -493,7 +493,7 @@ spec:
                                         corresponding DestinationRule.
                                       type: string
                                   required:
-                                  - host
+                                    - host
                                   type: object
                                 weight:
                                   description: REQUIRED. The proportion of traffic
@@ -504,8 +504,8 @@ spec:
                                   format: int64
                                   type: integer
                               required:
-                              - destination
-                              - weight
+                                - destination
+                                - weight
                               type: object
                             type: array
                           timeout:
@@ -621,7 +621,7 @@ spec:
                                         corresponding DestinationRule.
                                       type: string
                                   required:
-                                  - host
+                                    - host
                                   type: object
                                 weight:
                                   description: REQUIRED. The proportion of traffic
@@ -632,13 +632,13 @@ spec:
                                   format: int64
                                   type: integer
                               required:
-                              - destination
-                              - weight
+                                - destination
+                                - weight
                               type: object
                             type: array
                         required:
-                        - match
-                        - route
+                          - match
+                          - route
                         type: object
                       type: array
                     tls:
@@ -694,7 +694,7 @@ spec:
                                     field to be applicable.
                                   type: object
                               required:
-                              - sniHosts
+                                - sniHosts
                               type: object
                             type: array
                           route:
@@ -748,7 +748,7 @@ spec:
                                         corresponding DestinationRule.
                                       type: string
                                   required:
-                                  - host
+                                    - host
                                   type: object
                                 weight:
                                   description: REQUIRED. The proportion of traffic
@@ -759,17 +759,17 @@ spec:
                                   format: int64
                                   type: integer
                               required:
-                              - destination
-                              - weight
+                                - destination
+                                - weight
                               type: object
                             type: array
                         required:
-                        - match
-                        - route
+                          - match
+                          - route
                         type: object
                       type: array
                   required:
-                  - hosts
+                    - hosts
                   type: object
               type: object
             type:

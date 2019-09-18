@@ -7,25 +7,25 @@ metadata:
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    honorLabels: true
-    interval: 1m
-    metricRelabelings:
-    - action: drop
-      regex: kube_pod_container_status_.*terminated_reason
-      sourceLabels:
-      - __name__
-    port: https-main
-    scheme: https
-    scrapeTimeout: 30s
-    tlsConfig:
-      insecureSkipVerify: true
-  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    interval: 1m
-    port: https-self
-    scheme: https
-    tlsConfig:
-      insecureSkipVerify: true
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      honorLabels: true
+      interval: 1m
+      metricRelabelings:
+        - action: drop
+          regex: kube_pod_container_status_.*terminated_reason
+          sourceLabels:
+            - __name__
+      port: https-main
+      scheme: https
+      scrapeTimeout: 30s
+      tlsConfig:
+        insecureSkipVerify: true
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      interval: 1m
+      port: https-self
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
   jobLabel: k8s-app
   selector:
     matchLabels:

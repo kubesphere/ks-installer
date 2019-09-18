@@ -51,14 +51,14 @@ base_repo: >-
   {% if local_registry is defined -%}
   {{ local_registry }}/
   {%- else -%}
-  
+
   {%- endif %}
 
 base_library_repo: >-
   {% if local_registry is defined -%}
   {{ local_registry }}/library/
   {%- else -%}
-  
+
   {%- endif %}
 
 kube_image_repo: "{{ ks_image_repo }}/google_containers"
@@ -114,12 +114,12 @@ notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
 notification_flyway_tag: "flyway-advanced-2.0.2"
 notification_repo: "{{ base_repo }}kubesphere/notification"
 notification_tag: "advanced-2.0.2"
-alerting_dbinit_repo: "{{ base_repo }}kubesphere/alerting-dbinit"
-alerting_dbinit_tag: "advanced-2.0.2"
-ks_alerting_repo: "{{ base_repo }}kubesphere/alerting"
-ks_alerting_tag: "advanced-2.0.2"
-ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert_adapter"
-ks_alerting_adapter_tag: "advanced-2.0.2"
+alerting_dbinit_repo: "{{ base_repo }}kubespheredev/alerting-dbinit"
+alerting_dbinit_tag: "advanced-2.1.0"
+ks_alerting_repo: "{{ base_repo }}kubespheredev/alerting"
+ks_alerting_tag: "advanced-2.1.0"
+ks_alerting_adapter_repo: "{{ base_repo }}kubespheredev/alert_adapter"
+ks_alerting_adapter_tag: "advanced-2.1.0"
 
 #openpitrix:
 openpitrix_repo: "{{ base_repo }}openpitrix/openpitrix"
@@ -156,7 +156,7 @@ harbor_version: "v1.7.5"
 nginx_photon_repo: "{{ ks_image_repo }}/goharbor/nginx-photon"
 nginx_photon_tag: "{{ harbor_version }}"
 chartmuseum_photon_repo: "{{ ks_image_repo }}/goharbor/chartmuseum-photon"
-chartmuseum_photon_tag: "v0.8.1-{{ harbor_version }}" 
+chartmuseum_photon_tag: "v0.8.1-{{ harbor_version }}"
 notary_server_photon_repo: "{{ ks_image_repo }}/goharbor/notary-server-photon"
 notary_server_photon_tag: "v0.6.1-{{ harbor_version }}"
 harbor_registryctl_repo: "{{ ks_image_repo }}/goharbor/harbor-registryctl"
@@ -173,7 +173,7 @@ harbor_db_repo: "{{ ks_image_repo }}/goharbor/harbor-db"
 harbor_db_tag: "{{ harbor_version }}"
 clair_photon_repo: "{{ ks_image_repo }}/goharbor/clair-photon"
 clair_photon_tag: "v2.0.8-{{ harbor_version }}"
-notary_signer_photon_repo: "{{ ks_image_repo }}/goharbor/notary-signer-photon" 
+notary_signer_photon_repo: "{{ ks_image_repo }}/goharbor/notary-signer-photon"
 notary_signer_photon_tag: "v0.6.1-{{ harbor_version }}"
 redis_photon_repo: "{{ ks_image_repo }}/goharbor/redis-photon"
 redis_photon_tag: "{{ harbor_version }}"
@@ -419,7 +419,7 @@ downloads:
     sha256: "{{ mysql_checksum|default(None) }}"
     groups:
       - k8s-cluster
-  
+
   postgres:
     enabled: "true"
     container: true
@@ -436,7 +436,7 @@ downloads:
     tag: "{{ alerting_dbinit_tag }}"
     sha256: "{{ alerting_dbinit_checksum|default(None) }}"
     groups:
-      - kube-node     
+      - kube-node
 
   ks_apiserver:
     enabled: true
@@ -445,7 +445,7 @@ downloads:
     tag: "{{ ks_apiserver_tag }}"
     sha256: "{{ ks_apiserver_checksum|default(None) }}"
     groups:
-      - kube-master 
+      - kube-master
 
   ks_devops:
     enabled: true
@@ -454,7 +454,7 @@ downloads:
     tag: "{{ ks_devops_tag }}"
     sha256: "{{ ks_devops_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   ks_devops_flyway:
     enabled: true
@@ -463,7 +463,7 @@ downloads:
     tag: "{{ ks_devops_flyway_tag }}"
     sha256: "{{ ks_devops_flyway_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   ks_console:
     enabled: true
@@ -490,7 +490,7 @@ downloads:
     tag: "{{ ks_apigateway_tag }}"
     sha256: "{{ ks_apigateway_checksum|default(None) }}"
     groups:
-      - kube-master 
+      - kube-master
 
   openldap:
     enabled: true
@@ -499,7 +499,7 @@ downloads:
     tag: "{{ openldap_tag }}"
     sha256: "{{ openldap_checksum|default(None) }}"
     groups:
-      - kube-node   
+      - kube-node
 
   jenkins_uc:
     enabled: true
@@ -517,8 +517,8 @@ downloads:
     tag: "{{ jenkins_tag }}"
     sha256: "{{ jenkins_checksum|default(None) }}"
     groups:
-      - kube-node 
-      
+      - kube-node
+
   csi_provisioner:
     enabled: "{{ qingcloud_csi_enabled }}"
     container: true
@@ -544,7 +544,7 @@ downloads:
     tag: "{{ csi_qingcloud_tag }}"
     sha256: "{{ csi_qingcloud_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   driver_registrar:
     enabled: "{{ qingcloud_csi_enabled }}"
@@ -553,7 +553,7 @@ downloads:
     tag: "{{ driver_registrar_tag }}"
     sha256: "{{ driver_registrar_checksum|default(None) }}"
     groups:
-      - kube-node  
+      - kube-node
 
   neonsan_driver_registrar:
     enabled: "{{ neonsan_csi_enabled }}"
@@ -562,7 +562,7 @@ downloads:
     tag: "{{ neonsan_driver_registrar_tag }}"
     sha256: "{{ neonsan_driver_registrar_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   csi_neonsan:
     enabled: "{{ neonsan_csi_enabled }}"
@@ -571,7 +571,7 @@ downloads:
     tag: "{{ csi_neonsan_tag }}"
     sha256: "{{ csi_neonsan_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   neonsan_csi_provisioner:
     enabled: "{{ neonsan_csi_enabled }}"
@@ -580,8 +580,8 @@ downloads:
     tag: "{{ neonsan_csi_provisioner_tag }}"
     sha256: "{{ neonsan_csi_provisioner_checksum|default(None) }}"
     groups:
-      - kube-node 
-      
+      - kube-node
+
   neonsan_csi_attacher:
     enabled: "{{ neonsan_csi_enabled }}"
     container: true
@@ -589,7 +589,7 @@ downloads:
     tag: "{{ neonsan_csi_attacher_tag }}"
     sha256: "{{ neonsan_csi_attacher_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   neonsan_csi_snapshotter:
     enabled: "{{ neonsan_csi_enabled }}"
@@ -598,8 +598,8 @@ downloads:
     tag: "{{ neonsan_csi_snapshotter_tag }}"
     sha256: "{{ neonsan_csi_snapshotter_checksum|default(None) }}"
     groups:
-      - kube-node 
- 
+      - kube-node
+
   nfs_client_provisioner:
     enabled: "{{ nfs_client_enable }}"
     container: true
@@ -607,8 +607,8 @@ downloads:
     tag: "{{ nfs_client_provisioner_tag }}"
     sha256: "{{ nfs_client_provisioner_checksum|default(None) }}"
     groups:
-      - kube-node 
-  
+      - kube-node
+
   jnlp_slave:
     enabled: "true"
     container: true
@@ -616,7 +616,7 @@ downloads:
     tag: "{{ jnlp_slave_tag }}"
     sha256: "{{ jnlp_slave_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   builder_base:
     enabled: "true"
@@ -625,7 +625,7 @@ downloads:
     tag: "{{ builder_base_tag }}"
     sha256: "{{ builder_base_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   builder_nodejs:
     enabled: "true"
@@ -634,7 +634,7 @@ downloads:
     tag: "{{ builder_nodejs_tag }}"
     sha256: "{{ builder_nodejs_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   docker_ce:
     enabled: "true"
@@ -643,7 +643,7 @@ downloads:
     tag: "{{ docker_ce_tag }}"
     sha256: "{{ docker_ce_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   builder_maven:
     enabled: "true"
@@ -652,7 +652,7 @@ downloads:
     tag: "{{ builder_maven_tag }}"
     sha256: "{{ builder_maven_checksum|default(None) }}"
     groups:
-      - kube-node 
+      - kube-node
 
   builder_go:
     enabled: "true"
@@ -680,7 +680,7 @@ downloads:
     sha256: "{{ istio_sidecar_injector_checksum|default(None) }}"
     groups:
       - kube-node
-  
+
   sonarqube:
     enabled: "true"
     container: true

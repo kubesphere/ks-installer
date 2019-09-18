@@ -8,8 +8,8 @@ metadata:
 spec:
   clusterIP: None
   ports:
-  - name: http-metrics
-    port: 10252
-    targetPort: 10252
+    - name: http-metrics
+      port: 10252
+      targetPort: 10252
   selector:
     component: kube-controller-manager
