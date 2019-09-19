@@ -4,10 +4,49 @@
 
 In addition to supporting deploy on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises Kubernetes clusters,
  
-Requirements
+## Prerequisites
 
-- Kubernetes Version: **1.13.0+**
-- Helm Version: **2.10.0+**
+- Kubernetes Version: >= 1.13.0
+- Helm Version: >= 2.10.0
+
+1. Make sure your Kubernetes version is greater than 1.13.0, run `kubectl version` in your cluster node. The output looks like the following:
+```bash
+root@kubernetes:~# kubectl version
+Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
+```
+
+Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.13.0`, it's good. Otherwise you need to upgrade your kubernetes first. You can refer to [Upgrading kubeadm clusters from v1.12 to v1.13](https://v1-13.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade-1-13/).
+
+2. Make sure you've already installed `Helm`, and it's version is greater than `2.10.0`. You can run `helm version` to check, the output looks like below:
+```bash
+root@kubernetes:~# helm version
+Client: &version.Version{SemVer:"v2.13.1", GitCommit:"618447cbf203d147601b4b9bd7f8c37a5d39fbb4", GitTreeState:"clean"}
+Server: &version.Version{SemVer:"v2.13.1", GitCommit:"618447cbf203d147601b4b9bd7f8c37a5d39fbb4", GitTreeState:"clean"}
+```
+
+If you get `helm: command not found`, it means `Helm` is not installed yet. You can check this doc [Install Helm](https://helm.sh/docs/using_helm/#from-the-binary-releases) to find out how to install `Helm`, and don't forget to run `helm init` first after installation.
+
+If you use an older version (<2.10.0), you need to upgrade your helm first. [Upgrading Tiller](https://github.com/helm/helm/blob/master/docs/install.md#upgrading-tiller)
+
+3. Check the available resources in your cluster is meets the requirement. For `allinone` installation, means there is just one node in your cluster, you must have at least `10Gi` memory left to finish installation. You can run `free -g` to get a roughly estimate.
+```bash
+root@kubernetes:~# free -g
+              total        used        free      shared  buff/cache   available
+Mem:              16          4          10           0           3           2
+Swap:             0           0           0
+```
+
+4. (Optional) Check if there is default storage class in your class. This is not required, but it's highly recommended use a Persistent Volume (not local volume).
+```bash
+root@kubernetes:~$ kubectl get sc
+NAME                      PROVISIONER               AGE
+ceph                      kubernetes.io/rbd         3d4h
+csi-qingcloud (default)   disk.csi.qingcloud.com    54d
+glusterfs                 kubernetes.io/glusterfs   3d4h
+```
+
+If your Kubernetes cluster environment meets all above requirements, you are good to go.
 
 > Note:
 > - Make sure the remaining available memory in the cluster is `10G at least`.
