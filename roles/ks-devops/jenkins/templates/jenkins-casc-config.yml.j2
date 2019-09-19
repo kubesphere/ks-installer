@@ -33,11 +33,16 @@ data:
                   image: "{{ builder_base_repo }}:{{ builder_base_tag }}"
                   command: "cat"
                   ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceRequestMemory: "32Mi"
+                  resourceRequestMemory: "300Mi"
+                  resourceLimitMemory: "500Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false
@@ -48,13 +53,7 @@ data:
                 - hostPathVolume:
                     hostPath: "sonar_cache"
                     mountPath: "/root/.sonar/cache"
-                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
-                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
-                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
-                \          operator: In\n            values:\n            - ci\n       \
-                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"base\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n   "
               - name: "nodejs"
                 namespace: "kubesphere-devops-system"
                 label: "nodejs"
@@ -65,11 +64,16 @@ data:
                   image: "{{ builder_nodejs_repo }}:{{ builder_nodejs_tag }}"
                   command: "cat"
                   ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceRequestMemory: "32Mi"
+                  resourceRequestMemory: "300Mi"
+                  resourceLimitMemory: "500Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false
@@ -83,13 +87,7 @@ data:
                 - hostPathVolume:
                     hostPath: "sonar_cache"
                     mountPath: "/root/.sonar/cache"
-                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
-                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
-                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
-                \          operator: In\n            values:\n            - ci\n       \
-                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"nodejs\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n   "
               - name: "maven"
                 namespace: "kubesphere-devops-system"
                 label: "maven"
@@ -100,11 +98,16 @@ data:
                   image: "{{ builder_maven_repo }}:{{ builder_maven_tag }}"
                   command: "cat"
                   ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceRequestMemory: "32Mi"
+                  resourceRequestMemory: "300Mi"
+                  resourceLimitMemory: "500Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false
@@ -129,11 +132,16 @@ data:
                   image: "{{ builder_go_repo }}:{{ builder_go_tag }}"
                   command: "cat"
                   ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceRequestMemory: "32Mi"
+                  resourceRequestMemory: "300Mi"
+                  resourceLimitMemory: "500Mi"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false
@@ -147,13 +155,7 @@ data:
                 - hostPathVolume:
                     hostPath: "sonar_cache"
                     mountPath: "/root/.sonar/cache"
-                yaml: "apiVersion: v1\nkind: Pod\nspec: \n  affinity:\n    nodeAffinity:\n\
-                \      preferredDuringSchedulingIgnoredDuringExecution:\n      - preference:\n\
-                \          matchExpressions:\n          - key: node-role.kubernetes.io/worker\n  \
-                \          operator: In\n            values:\n            - ci\n       \
-                \ weight: 1\n  tolerations:\n  - effect: NoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n  - effect: PreferNoSchedule\n    key: node.kubernetes.io/ci\n\
-                \    operator: Exists\n"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"go\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n   "
       securityRealm:
         ldap:
           configurations:
