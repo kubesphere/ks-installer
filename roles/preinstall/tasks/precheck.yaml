@@ -6,14 +6,43 @@
 
 - name: init k8s version
   set_fact: >
-    k8s_version: {{ kubernetes_version.stdout }}
+     k8s_version: {{ kubernetes_version.stdout }}
 
 - name: Stop if kuernetes version is nonsupport
   assert:
     that: kubernetes_version.stdout is version('v1.16.0', '<=')
     msg: The current k8s version is not supported
 
-- name: check k8s version
+- name: check helm status
   shell: >
-    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
-  register: kubernetes_version
+    {{ bin_dir }}/helm list
+  register: helm_check
+  ignore_errors: yes
+
+- name: Stop if Helm is not available
+  assert:
+    that: helm_check.rc == 0
+    msg: Helm is not available
+
+- name: check storage class
+  shell: >
+    {{ bin_dir }}/kubectl get sc | awk '{if(NR>1){print $1}}'
+  register: storage_class_check
+
+- name: Stop if Helm is not available
+  assert:
+    that: persistence.storageClass in storage_class_check.stdout_lines
+    msg: "StorageClass {{ persistence.storageClass }}  was not found !"
+  when:
+    - persistence.storageClass is defined
+    - persistence.storageClass != ""
+
+
+- include_tasks: preCheckSize.yaml
+  loop:
+    - {ns: "kubesphere-system", pvc: "kubesphere-db-pvc", size: "{{ common.mysqlVolumeSize }}"}
+    - {ns: "kubesphere-system", pvc: "kubesphere-etcd-pvc", size: "{{ common.etcdVolumeSize }} "}
+    - {ns: "kubesphere-system", pvc: "kubesphere-minio-pvc", size: "{{ common.minioVolumeSize }}"}
+    - {ns: "kubesphere-system", pvc: "openldap-pvc", size: "{{ common.openldapVolumeSize }}"}
+    - {ns: "kubesphere-system", pvc: "redis-pvc", size: "{{ common.redisVolumSize }}"}
+

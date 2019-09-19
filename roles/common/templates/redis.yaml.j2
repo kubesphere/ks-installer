@@ -58,14 +58,8 @@ spec:
             memory: 100Mi
       volumes:
       - name: redis-pvc
-{% if persistence.enable is defined and persistence.enable == true %}      
         persistentVolumeClaim:
           claimName: redis-pvc
-{% else %} 
-        hostPath:
-          path: /var/lib/kubesphere/redis-data
-          type: DirectoryOrCreate
-{% endif %}         
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule

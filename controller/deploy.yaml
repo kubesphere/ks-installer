@@ -1,0 +1,226 @@
+---
+apiVersion: v1
+data:
+  ks-config.yaml: |
+    ---
+    persistence:
+      storageClass: "openebs-hostpath"
+
+    kubeApiserver: 192.168.0.2:6443      # master addr or master's lb addr
+
+    etcd:
+      endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
+      port: 2379
+
+    common:
+      mysqlVolumeSize: 20Gi
+      minioVolumeSize: 20Gi
+      etcdVolumeSize: 20Gi
+      openldapVolumeSize: 2Gi
+      redisVolumSize: 2Gi
+
+    metricsServer:
+      enabled: True
+
+
+    ks-console:
+      disableMultiLogin: True  # enable/disable multi login
+
+
+    monitoring:
+      enabled: True
+      replicas: 2
+      volumeSize: 20Gi
+      endpoint: http://prometheus.kubesphere.svc:8088
+
+    logging:
+      enabled: True
+      elkPrefix: logstash
+      volumeSize: 20Gi
+      logMaxAge: 7     #
+      containerLogPath: /var/log/containers
+      endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
+
+    openpitrix:
+      enabled: True
+      apigateway:
+            endpoint: http://api.openpitrix.svc:9100
+
+    devops:
+      enabled: True
+      endpoint: http://devops.kubesphere-system.svc:9000
+      sonarqube:
+            enabled: True
+
+    servicemesh:
+      enabled: True
+
+    notification:
+      enabled: True
+
+    alert:
+      enabled: True
+kind: ConfigMap
+metadata:
+  name: ks-installer
+  namespace: kubesphere-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ks-installer
+  namespace: kubesphere-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: ks-installer
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - extensions
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - batch
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - apiregistration.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - tenant.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - devops.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - logging.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - jaegertracing.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ks-installer
+subjects:
+- kind: ServiceAccount
+  name: ks-installer
+  namespace: kubesphere-system
+roleRef:
+  kind: ClusterRole
+  name: ks-installer
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubesphere-installer
+  namespace: kubesphere-system
+  labels:
+    app: ks-install
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ks-install
+  template:
+    metadata:
+      labels:
+        app: ks-install
+    spec:
+      serviceAccountName: ks-installer
+      containers:
+      - name: installer
+        image: "pixiake/shell-operator:test"
+        imagePullPolicy: "Always"
+        volumeMounts:
+          - name: kubesphere-config
+            mountPath: /kubesphere/config
+          - name: kubesphere
+            mountPath: /etc/kubesphere
+      volumes:
+        - name: kubesphere-config
+          configMap:
+            name: ks-installer
+        - name: kubesphere
+          hostPath:
+            path: /etc/kubesphere
+            type: DirectoryOrCreate
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - ""
+
+

@@ -36,12 +36,16 @@ spec:
   resources:
     requests:
       storage: {{ common.etcdVolumeSize }}
+{% if etcd_pv_name is defined and etcd_pv_name != None %}
+  volumeName: {{ etcd_pv_name }}
+{% endif %}
+
 
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: kubesphere-etcd-deployment
+  name: ks-etcd-deployment
   namespace: kubesphere-system
   labels:
     app: kubesphere
@@ -67,7 +71,7 @@ spec:
       - name: kubesphere-etcd
         image: {{ etcd_image_repo }}:{{ etcd_image_tag }}
         imagePullPolicy: IfNotPresent
-        command: ["etcd", "--data-dir=/data", "--listen-client-urls=http://0.0.0.0:2379", "--advertise-client-urls=http://openpitrix-etcd.${NAMESPACE}.svc:2379", "--max-snapshots=5", "--max-wals=5", "--auto-compaction-retention=168"]
+        command: ["etcd", "--data-dir=/data", "--listen-client-urls=http://0.0.0.0:2379", "--advertise-client-urls=http://kubesphere-etcd.kubesphere-system.svc:2379", "--max-snapshots=5", "--max-wals=5", "--auto-compaction-retention=168"]
         ports:
         - containerPort: 2379
           name: etcd
