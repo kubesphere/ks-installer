@@ -1,0 +1,13 @@
+---
+
+- name: Get Common PVC PersistentVolumeClaim
+  shell: >
+    kubectl get pvc -n {{ item.ns }} | grep "{{ item.pvc }}" | awk '{print $4}'
+  register: pvSize
+
+- name: Stop if PV size mismatch
+  assert:
+    that: pvSize.stdout in item.size.split()
+    msg: "{{ item.pvc }}'s size is {{ pvSize.stdout }} (Don't match your config), Please modify the configuration"
+  when:
+    - "pvSize.stdout | length  != 0"

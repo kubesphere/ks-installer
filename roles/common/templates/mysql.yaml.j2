@@ -36,12 +36,16 @@ spec:
   resources:
     requests:
       storage: {{ common.mysqlVolumeSize }}
+{% if db_pv_name is defined and db_pv_name != None %}
+  volumeName: {{ db_pv_name }}
+{% endif %}
+
 
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: kubesphere-db-deployment
+  name: ks-db-deployment
   namespace: kubesphere-system
   labels:
     app: kubesphere

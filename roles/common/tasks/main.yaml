@@ -8,6 +8,81 @@
     - "common"
 
 
+- name: Kubesphere | Checking openpitrix common component
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n openpitrix-system
+  register: openpitrix_component_pod
+
+
+- include_tasks: pvMigration.yaml
+  loop:
+    - {op: "openpitrix-db", ks: "kubesphere-db-pvc"}
+    - {op: "openpitrix-etcd", ks: "kubesphere-etcd-pvc"}
+    - {op: "openpitrix-minio", ks: "kubesphere-minio-pvc"}
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
+
+
+- name: Kubesphere | Getting PersistentVolumeName (mysql/etcd/minio)
+  block:
+
+    - name: Getting PersistentVolumeName (mysql)
+      shell: >
+        kubectl get pv | grep "kubesphere-db-pvc" | awk '{print $1}'
+      register: pvName
+    - name: Getting PersistentVolumeSize (mysql)
+      shell: >
+        kubectl get pv | grep "kubesphere-db-pvc" | awk '{print $2}'
+      register: pvSize
+
+    - name: Setting PersistentVolumeName (mysql)
+      set_fact:
+        db_pv_name: "{{ pvName.stdout }}"
+    - name: Setting PersistentVolumeSize (mysql)
+      set_fact:
+        common:
+          mysqlVolumeSize: "{{ pvSize.stdout }}"
+
+
+    - name: Getting PersistentVolumeName (etcd)
+      shell: >
+        kubectl get pv | grep "kubesphere-etcd-pvc" | awk '{print $1}'
+      register: pvName
+    - name: Getting PersistentVolumeSize (etcd)
+      shell: >
+        kubectl get pv | grep "kubesphere-etcd-pvc" | awk '{print $2}'
+      register: pvSize
+
+    - name: Setting PersistentVolumeName (etcd)
+      set_fact:
+        etcd_pv_name: "{{ pvName.stdout }}"
+    - name: Setting PersistentVolumeSize (etcd)
+      set_fact:
+        common:
+          etcdVolumeSize: "{{ pvSize.stdout}}"
+
+
+    - name: Getting PersistentVolumeName (minio)
+      shell: >
+        kubectl get pv | grep "kubesphere-minio-pvc" | awk '{print $1}'
+      register: pvName
+    - name: Getting PersistentVolumeSize (minio)
+      shell: >
+        kubectl get pv | grep "kubesphere-minio-pvc" | awk '{print $2}'
+      register: pvSize
+
+    - name: Setting PersistentVolumeName (minio)
+      set_fact:
+        minio_pv_name: "{{ pvName.stdout }}"
+    - name: Setting PersistentVolumeSize (minio)
+      set_fact:
+        common:
+          minioVolumeSize: "{{ pvSize.stdout }}"
+
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
+
+
 - name: Kubesphere | Creating common component manifests
   template:
     src: "{{ item.file }}.j2"
@@ -20,38 +95,58 @@
     - { path: minio, file: minio.yaml }
 
 
-- name: Kubesphere | Checking common component
-  shell: >
-    {{ bin_dir }}/kubectl get deploy -n openpitrix-system 
-  register: openpitrix_component
-
-
-- name: Kubesphere | Deploying mysql
-  shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/mysql.yaml
-  when:
-    - "'openpitrix-db-deployment' not in openpitrix_component.stdout"
-
-
-- name: Kubesphere | Deploying etcd
-  shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/etcd.yaml 
-  when:
-    - "'openpitrix-etcd-deployment' not in openpitrix_component.stdout"
-
-
-- name: Kubesphere | Deploying minio
-  shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/minio.yaml 
-  when:
-    - "'openpitrix-minio-deployment' not in openpitrix_component.stdout"
-
-
 - name: Kubesphere | Deploying openldap
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/openldap.yaml 
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/openldap.yaml
 
 
 - name: Kubesphere | Deploying redis
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system {{ kubesphere_dir }}/common/redis.yaml 
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/redis.yaml
+
+
+- name: Kubesphere | Creating mysql sercet
+  shell: >
+    {{ bin_dir }}/kubectl create secret generic mysql-pass
+    --from-file={{ kubesphere_dir }}/common/password.txt
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+
+- name: Kubesphere | Deploying mysql
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/mysql.yaml
+
+
+- name: Kubesphere | Deploying etcd
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/etcd.yaml
+
+
+- name: Kubesphere | Deploying minio
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/minio.yaml
+
+
+
+- name: Kubesphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
+  block:
+
+    - name: Setting persistentVolumeReclaimPolicy (mysql)
+      shell: >
+        kubectl patch pv $(kubectl get pv | grep "kubesphere-db-pvc" | awk '{print $1}')
+        -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
+
+    - name: Setting persistentVolumeReclaimPolicy (etcd)
+      shell: >
+        kubectl patch pv $(kubectl get pv | grep "kubesphere-etcd-pvc" | awk '{print $1}')
+        -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
+
+    - name: Setting persistentVolumeReclaimPolicy (minio)
+      shell: >
+        kubectl patch pv $(kubectl get pv | grep "kubesphere-minio-pvc" | awk '{print $1}')
+        -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
+
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
