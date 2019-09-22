@@ -1,24 +1,24 @@
 ---
-prometheus_replica: 2
 
-ks_grafana_enable: false
+monitoring:
+  prometheusReplica: 2
+  prometheusMemoryRequest: 400Mi
+  prometheusVolumeSize: 20Gi
+  grafana:
+    enable: false
 
-prometheus_memory_size: 400Mi
-prometheus_volume_size: 20Gi
 
-
-etcd_endpoint_ips: |-
+etcd.endpointIps: |-
   {% for item in groups['etcd'] -%}
     {{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address'])) }}{% if not loop.last %},{% endif %}
   {%- endfor %}
 
-etcd_config_dir: /etc/ssl/etcd
-etcd_cert_dir: "{{ etcd_config_dir }}/ssl"
+etcd.port: 2379
+etcd.tlsEnable: true
 
+#etcd_config_dir: /etc/ssl/etcd
+#etcd_cert_dir: "{{ etcd_config_dir }}/ssl"
+#etcd_client_ca_crt: "{{ etcd_cert_dir }}/ca.pem"
+#etcd_client_crt: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}.pem"
+#etcd_client_key: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}-key.pem"
 
-etcd_tls_enable: true
-etcd_client_ca_crt: "{{ etcd_cert_dir }}/ca.pem"
-etcd_client_crt: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}.pem"
-etcd_client_key: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}-key.pem"
-
-etcd_port: 2379

@@ -9,7 +9,7 @@ spec:
   endpoints:
   - interval: 1m
     port: metrics
-{% if etcd_tls_enable is defined and etcd_tls_enable == true %}
+{% if etcd.tlsEnable is defined and etcd.tlsEnable == true %}
     scheme: https
     tlsConfig:
       caFile: /etc/prometheus/secrets/kube-etcd-client-certs/etcd-client-ca.crt

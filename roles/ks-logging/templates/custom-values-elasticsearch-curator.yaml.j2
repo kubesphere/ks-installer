@@ -48,7 +48,7 @@ configMaps:
           direction: older
           timestring: '%Y.%m.%d'
           unit: days
-          unit_count: {{ keep_log_days }}
+          unit_count: {{ logging.logMaxAge }}
           field:
           stats_result:
           epoch:
@@ -58,9 +58,9 @@ configMaps:
     ---
     client:
       hosts:
-        - {% if external_es_url is defined %}{{ external_es_url }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}
+        - {% if logging.externalElasticsearchUrl is defined %}{{ logging.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}
 
-      port: {% if external_es_port is defined %}{{ external_es_port }}{% else %}9200{% endif %}
+      port: {% if logging.externalElasticsearchPort is defined %}{{ logging.externalElasticsearchPort }}{% else %}9200{% endif %}
       
       # url_prefix:
       # use_ssl: True

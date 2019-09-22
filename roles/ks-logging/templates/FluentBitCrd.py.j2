@@ -20,7 +20,7 @@ for index, configs in enumerate(FluentBitCrdOutput):
     if CheckFlag:
         for parameter in FluentBitCrdOutput[index].get('parameters'):
             if parameter.get('name') == 'Logstash_Prefix':
-                parameter['value'] = "ks-{{ elk_prefix }}-log"
+                parameter['value'] = "ks-{{ logging.elkPrefix }}-log"
     NewFluentBitCrd.append(configs)
 
 FluentBitCrdPatch = {"spec": {"output": NewFluentBitCrd}}

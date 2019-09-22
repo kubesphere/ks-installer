@@ -1,16 +1,16 @@
 ---
 
-kibana_enable: false
+logging:
+  elasticsearchMasterReplica: 1
+  elasticsearchDataReplica: 2
+  elasticsearchVolumeSize: 20Gi
+  logMaxAge: 7
+  elkPrefix: logstash
+  containersLogMountedPath: ""
+  kibana:
+    enable: false
+  logsidecarInjector:
+    enable: false
+# externalElasticsearchUrl:
+# externalElasticsearchPort:
 
-ks_logsidecar_injector_enable: false
-
-elasticsearch_master_replica: 1
-elasticsearch_data_replica: 2
-
-elasticsearch_volume_size: 20Gi
-
-keep_log_days: 7
-
-elk_prefix: logstash
-
-containersLogMountedPath: ""

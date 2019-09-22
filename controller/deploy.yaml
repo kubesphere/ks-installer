@@ -11,6 +11,7 @@ data:
     etcd:
       endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
       port: 2379
+      tlsEnable: True
 
     common:
       mysqlVolumeSize: 20Gi
@@ -26,20 +27,30 @@ data:
     ks-console:
       disableMultiLogin: True  # enable/disable multi login
 
-
     monitoring:
       enabled: True
-      replicas: 2
-      volumeSize: 20Gi
-      endpoint: http://prometheus.kubesphere.svc:8088
+      prometheusReplica: 2
+      prometheusMemoryRequest: 400Mi
+      prometheusVolumeSize: 20Gi
+      grafana:
+        enabled: false
+
 
     logging:
       enabled: True
+      elasticsearchMasterReplica: 1
+      elasticsearchDataReplica: 2
+      elasticsearchVolumeSize: 20Gi
+      logMaxAge: 7
       elkPrefix: logstash
-      volumeSize: 20Gi
-      logMaxAge: 7     #
-      containerLogPath: /var/log/containers
-      endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
+      containersLogMountedPath: ""
+      kibana:
+        enabled: false
+      logsidecarInjector:
+        enabled: false
+#     externalElasticsearchUrl:
+#     externalElasticsearchPort:
+#     endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
 
     openpitrix:
       enabled: True
