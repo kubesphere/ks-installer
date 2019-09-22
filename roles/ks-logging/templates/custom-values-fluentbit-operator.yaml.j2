@@ -26,7 +26,7 @@ fluentbit:
   enabled: true
   namespace: "kubesphere-logging-system"
   image: {{ ks_fluent_bit_repo }}:{{ ks_fluent_bit_tag }}
-  containersLogMountedPath: "{{ containersLogMountedPath }}"
+  containersLogMountedPath: "{{ logging.containersLogMountedPath }}"
 
 configmap_reload:
   image: {{ kslogging_configmap_reload_repo }}:{{ kslogging_configmap_reload_tag }}

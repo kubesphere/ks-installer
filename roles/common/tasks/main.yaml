@@ -6,6 +6,13 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "common"
+    - "ks-crds"
+
+
+- name: KubeSphere | Create KubeSphere crds
+  shell: "{{ bin_dir }}/kubectl create -f {{ kubesphere_dir }}/ks-crds/"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
 - name: Kubesphere | Checking openpitrix common component

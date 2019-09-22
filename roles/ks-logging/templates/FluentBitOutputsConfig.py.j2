@@ -19,7 +19,7 @@ for index, configs in enumerate(FluentOutputconfig):
     if CheckFlag:
         for parameter in FluentOutputconfig[index].get('parameters'):
             if parameter.get('name') == 'Logstash_Prefix':
-                parameter['value'] = "ks-{{ elk_prefix }}-log"
+                parameter['value'] = "ks-{{ logging.elkPrefix }}-log"
     NewFluentOutputconfig.append(configs)
 
 with open(NewFluentOutputconfigPath, 'w') as f:

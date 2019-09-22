@@ -73,12 +73,11 @@ cluster:
 master:
   name: master
   exposeHttp: false
-  replicas: {{ elasticsearch_master_replica }} 
+  replicas: {{ logging.elasticsearchMasterReplica }}
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   persistence:
-    enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
-
+    enabled: true
     accessMode: ReadWriteOnce
     name: data
     size: "4Gi"
@@ -125,15 +124,14 @@ data:
   serviceType: ClusterIP
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
-  replicas: {{ elasticsearch_data_replica }}
+  replicas: {{ logging.elasticsearchDataReplica }}
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
   persistence:
-    enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
-    
+    enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: "{{ elasticsearch_volume_size }}"
+    size: "{{ logging.elasticsearchVolumeSize }}"
 {% if persistence.storageClass is defined and persistence.storageClass != None %} 
     storageClass: "{{ persistence.storageClass }}"
 {% endif %}

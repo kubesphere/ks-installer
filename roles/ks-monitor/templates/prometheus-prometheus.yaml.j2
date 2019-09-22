@@ -27,14 +27,14 @@ spec:
     beta.kubernetes.io/os: linux
   query:
     maxConcurrency: 1000
-  replicas: {{ prometheus_replica }}
+  replicas: {{ monitoring.prometheusReplica }}
   resources:
     limits:
       cpu: "2.5"
       memory: 2Gi
     requests:
       cpu: 10m
-      memory: {{ prometheus_memory_size }}
+      memory: {{ monitoring.prometheusMemoryRequest }}
   retention: 7d
   ruleSelector:
     matchLabels:
@@ -57,7 +57,6 @@ spec:
       - kubelet
       - prometheus-system
   storage:
-{% if persistence.enable is defined and persistence.enable == true %} 
     volumeClaimTemplate:
       spec:
 {% if persistence.storageClass is defined and persistence.storageClass != None %} 
@@ -65,10 +64,7 @@ spec:
 {% endif %}
         resources:
           requests:
-            storage: {{ prometheus_volume_size }}
-{% else %}
-    emptyDir: {}
-{% endif %}
+            storage: {{ monitoring.prometheusVolumeSize }}
   tolerations:
   - effect: NoSchedule
     key: dedicated

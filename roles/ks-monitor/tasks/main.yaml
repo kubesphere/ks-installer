@@ -53,29 +53,6 @@
     - { path: prometheus/sources, file: prometheus-endpointsEtcd.yaml }
 
 
-# - name: ks-monitor | Creating kube-etcd-client-certs-secret
-#   command: >
-#     {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  
-#     --from-file=etcd-client-ca.crt={{ etcd_client_ca_crt }}
-#     --from-file=etcd-client.crt={{ etcd_client_crt }}
-#     --from-file=etcd-client.key={{ etcd_client_key }}
-#   register: import 
-#   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-#   when:
-#     - etcd_tls_enable == true
-#   tags:
-#     - upgrade
-
-# - name: ks-monitor | Creating kube-etcd-client-certs
-#   command: >
-#     {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  
-#   register: import 
-#   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-#   when:
-#     - etcd_tls_enable == false
-#   tags:
-#     - upgrade
-
 - name: ks-monitor | Init prometheus-operator
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/init"
   register: import
@@ -99,5 +76,5 @@
 
 - import_tasks: grafana.yaml
   when:
-    - ks_grafana_enable == true 
+    - monitoring.grafana.enabled == true
   

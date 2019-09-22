@@ -12,7 +12,6 @@
   loop:
     - "workspace.yaml"
     - "ks-init"
-    - "ks-crds"
 
 - name: KubeSphere | Create kubesphere namespace
   command: "{{ bin_dir }}/kubectl create namespace {{ item }}"
@@ -45,10 +44,7 @@
   tags:
     - upgrade
 
-- name: KubeSphere | Create KubeSphere crds
-  shell: "{{ bin_dir }}/kubectl create -f {{ kubesphere_dir }}/ks-crds/"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
 
 - name: KubeSphere | Installing controls-system
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubesphere-controls-system.yaml  -n kubesphere-controls-system"

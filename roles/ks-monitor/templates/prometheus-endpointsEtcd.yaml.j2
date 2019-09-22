@@ -9,10 +9,10 @@ metadata:
   namespace: kube-system
 subsets:
 - addresses:
-{% for endpoint in etcd_endpoint_ips.split(',') %}
+{% for endpoint in etcd.endpointIps.split(',') %}
   - ip: {{ endpoint }}
 {% endfor %}
   ports:
   - name: metrics
-    port: {{ etcd_port }}
+    port: {{ etcd.port }}
     protocol: TCP

@@ -171,8 +171,8 @@
     -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch-plugins.yaml
     --namespace kubesphere-logging-system
   when:
-    - external_es_url is not defined
-    - external_es_port is not defined
+    - logging.externalElasticsearchUrl is not defined
+    - logging.externalElasticsearchPort is not defined
 
 
 - name: ks-logging | Deploy elasticsearch-logging
@@ -182,8 +182,8 @@
     -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch.yaml
     --namespace kubesphere-logging-system
   when:
-    - external_es_url is not defined
-    - external_es_port is not defined
+    - logging.externalElasticsearchUrl is not defined
+    - logging.externalElasticsearchPort is not defined
 
 
 - name: ks-logging | Deploy elasticsearch-logging-curator
@@ -201,10 +201,10 @@
     -f {{ kubesphere_dir }}/logging/custom-values-kibana.yaml
     --namespace kubesphere-logging-system
   when:
-    - kibana_enable == true
+    - logging.kibana.enabled == true
 
 
 - import_tasks: logsidecar.yaml
   when:
-    - ks_logsidecar_injector_enable == true 
+    - logging.logsidecarInjector.enabled == true
   
