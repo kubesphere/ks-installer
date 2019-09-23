@@ -19,11 +19,11 @@ spec:
       - name: wait-mysql
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ dbHost }} {{ dbPort }}; do echo "waiting for mysql"; sleep 2; done;']
       - name: wait-etcd
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-etcd.openpitrix-system.svc 2379; do echo "waiting for etcd"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ etcdHost }} {{ etcdPort }}; do echo "waiting for etcd"; sleep 2; done;']
       containers:
       - command:
         - /alerting/adapter
@@ -49,15 +49,15 @@ spec:
         - name: ALERT_APP_RUN_MODE
           value: "executor"
         - name: ALERT_MYSQL_HOST
-          value: "openpitrix-db.openpitrix-system.svc"
+          value: "{{ dbHost }}"
         - name: ALERT_ETCD_ENDPOINTS
-          value: "openpitrix-etcd.openpitrix-system.svc:2379"
+          value: "{{ etcdEndpoint }}"
         - name: ALERT_APP_MONITORING_HOST
           value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha2"
         - name: ALERT_QUEUE_TYPE
           value: "redis"
         - name: ALERT_QUEUE_ADDR
-          value: "redis://redis.kubesphere-system.svc:6379"
+          value: "redis://{{ redisEndpoint }}"
         - name: ALERT_APP_NOTIFICATION_HOST
           value: "notification.kubesphere-alerting-system.svc:9201"
         - name: ALERT_LOG_LEVEL

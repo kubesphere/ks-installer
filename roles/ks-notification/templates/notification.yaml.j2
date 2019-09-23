@@ -48,11 +48,11 @@ spec:
       - name: wait-mysql
         image:  {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ dbHost }} {{ dbPort }}; do echo "waiting for mysql"; sleep 2; done;']
       - name: wait-etcd
         image:  {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-etcd.openpitrix-system.svc 2379; do echo "waiting for etcd"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ etcdHost }} {{ etcdPort }}; do echo "waiting for etcd"; sleep 2; done;']
       containers:
       - name: notification
         image: {{ notification_repo }}:{{ notification_tag }}
@@ -72,9 +72,9 @@ spec:
         - name: NOTIFICATION_APP_API_HOST
           value: 'notification.kubesphere-alerting-system'
         - name: NOTIFICATION_MYSQL_HOST
-          value: 'openpitrix-db.openpitrix-system.svc'
+          value: '{{ dbHost }}'
         - name: NOTIFICATION_MYSQL_PORT
-          value: '3306'
+          value: '{{ dbPort }}'
         - name: NOTIFICATION_LOG_LEVEL
           value: "error"
         - name: NOTIFICATION_MYSQL_LOG_MODE
@@ -100,11 +100,11 @@ spec:
         - name: NOTIFICATION_QUEUE_TYPE
           value: "redis"
         - name: NOTIFICATION_QUEUE_ADDR
-          value: "redis://redis.kubesphere-system.svc:6379"
+          value: "redis://{{ redisEndpoint }}"
         - name: NOTIFICATION_PUB_SUB_TYPE
           value: "redis"
         - name: NOTIFICATION_PUB_SUB_ADDR
-          value: "redis://redis.kubesphere-system.svc:6379"
+          value: "redis://{{ redisEndpoint }}"
         - name: NOTIFICATION_WEBSOCKET_SERVICE_MESSAGE_TYPES
           value: "none"
         resources:
