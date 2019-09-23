@@ -1,0 +1,65 @@
+apiVersion: v1
+data:
+  kubesphere.yaml: |
+    mysql:
+      host: openpitrix-db.openpitrix.svc:3306
+      username: root
+      password: password
+      maxIdleConnections: 100
+      maxOpenConnections: 100
+      maxConnectionLifeTime: 10s
+    devops:
+      host: http://ks-jenkins.kubesphere-devops-system.svc/
+      username: admin
+      password: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGt1YmVzcGhlcmUuaW8iLCJleHAiOjE4MTYyMzkwMjIsInVzZXJuYW1lIjoiYWRtaW4ifQ.NfytBmc5Cl4NgtsughThg9dEl0vcNQIE405gm0daAGs
+      maxConnections: 100
+    sonarQube:
+      host: http://10.233.57.250:9000
+      token: 32f0124a923f845a8cf919ffb979ff47263010bb
+    kubernetes:
+      kubeconfig: ""
+      master: 192.168.0.18:6443
+      qps: 1e+06
+      burst: 1000000
+    servicemesh:
+      istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
+      jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
+      servicemeshPrometheusHost: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
+    ldap:
+      host: openldap.kubesphere-system.svc:389
+      managerDN: cn=admin,dc=kubesphere,dc=io
+      managerPassword: admin
+      userSearchBase: ou=Users,dc=kubesphere,dc=io
+      groupSearchBase: ou=Groups,dc=kubesphere,dc=io
+    redis:
+      host: redis.kubesphere-system.svc:6379
+      port: 6379
+      password: ""
+      db: 0
+    s3:
+      endpoint: http://openpitrix-minio.openpitrix.svc:9000
+      region: us-east-1
+      disableSSL: true
+      forcePathStyle: true
+      accessKeyID: openpitrixminioaccesskey
+      secretAccessKey: openpitrixminiosecretkey
+      bucket: s2i-binaries
+    openpitrix:
+      apiServer: http://openpitrix-hyperpitrix.openpitrix.svc:9100
+      token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzeXN0ZW0iLCJyb2xlIjoiZ2xvYmFsX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE4MTYyMzkwMjJ9.bFiot8xTwikGTu-3XI5VDIWHFdXoEnNKqc619SF-sEg
+    monitoring:
+      endpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090/api/v1/
+      secondaryEndpoint: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090/api/v1/
+    logging:
+      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      logstashFormat: true
+      logstashPrefix: ks-logstash-log
+      match: kube.*
+    alerting:
+      endpoint: http://alerting.kubesphere-alerting-system.svc
+    notification:
+      endpoint: http://notification.kubesphere-alerting-system.svc
+kind: ConfigMap
+metadata:
+  name: kubesphere
+  namespace: kubesphere-system

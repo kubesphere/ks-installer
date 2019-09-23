@@ -28,32 +28,9 @@ spec:
         command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
       containers:
       - command:
+        - hypersphere
         - ks-apiserver
-        - --v=4
         - --logtostderr=true
-        - --ldap-server=openldap.kubesphere-system.svc:389
-        - --redis-server=redis.kubesphere-system.svc:6379
-        - --openpitrix-proxy-token=Bearer {{ op_token_str }}
-        - --openpitrix-api-server=http://openpitrix-api-gateway.openpitrix-system:9100
-        - --ldap-manager-dn=cn=admin,dc=kubesphere,dc=io
-        - --ldap-manager-password=$(LDAP_PASSWORD)
-        - --ldap-user-search-base=ou=Users,dc=kubesphere,dc=io
-        - --ldap-group-search-base=ou=Groups,dc=kubesphere,dc=io
-        - --jaeger-query-service-url=http://jaeger-query.istio-system.svc:16686 
-        - --jenkins-address=http://ks-jenkins.kubesphere-devops-system.svc/
-        - --jenkins-password={{ ks_token_str }}
-        - --devops-database-connection=root:password@tcp(openpitrix-db.openpitrix-system.svc:3306)/devops
-        - --master-url={{ kube_apiserver_host }}
-{% if  sonarqube_enable is defined and sonarqube_enable == true %}
-        - --sonar-token={{ sonar_server_token }}
-        - --sonar-address={{ sonar_server_url }}
-{% endif %}
-        env:
-        - name: LDAP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: ldap-admin-password
-              name: ks-account-secret
         image: {{ ks_apiserver_repo }}:{{ ks_apiserver_tag }}
         imagePullPolicy: {{ ks_image_pull_policy }}
         name: ks-apiserver
@@ -76,6 +53,8 @@ spec:
           name: ks-router-config
         - mountPath: /etc/kubesphere/rules
           name: policy-rules
+        - mountPath: /etc/kubesphere/
+          name: kubesphere-config
       serviceAccount: kubesphere
       serviceAccountName: kubesphere
       tolerations:
@@ -92,7 +71,20 @@ spec:
               - key: node-role.kubernetes.io/master
                 operator: In
                 values:
-                - "" 
+                - ""
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - ks-apiserver
+              namespaces:
+              - kubesphere-system
+              topologyKey: kubernetes.io/hostname
+            weight: 100
       volumes:
       - name: ca-dir
         secret:
@@ -110,6 +102,10 @@ spec:
           defaultMode: 420
           name: policy-rules
         name: policy-rules
+      - configMap:
+          defaultMode: 420
+          name: kubesphere-config
+        name: kubesphere-config
 
 
 ---

@@ -37,7 +37,20 @@ spec:
               - key: node-role.kubernetes.io/master
                 operator: In
                 values:
-                - "" 
+                - ""
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - ks-account
+              namespaces:
+              - kubesphere-system
+              topologyKey: kubernetes.io/hostname
+            weight: 100
       volumes:
       - configMap:
           defaultMode: 420
@@ -51,6 +64,10 @@ spec:
           defaultMode: 420
           name: user-init
         name: user-init
+      - configMap:
+          defaultMode: 420
+          name: kubesphere-config
+        name: kubesphere-config
       initContainers:
       - name: wait-redis
         image: {{ busybox_repo }}:{{ busybox_tag }}
@@ -63,34 +80,10 @@ spec:
       containers:
       - command:
         - ks-iam
-        - --v=4
         - --logtostderr=true
-        - --devops-database-connection=root:password@tcp(openpitrix-db.openpitrix-system.svc:3306)/devops
-        - --ldap-server=openldap.kubesphere-system.svc:389
-        - --redis-server=redis.kubesphere-system.svc:6379
-        - --ldap-manager-dn=cn=admin,dc=kubesphere,dc=io
-        - --ldap-manager-password=$(LDAP_PASSWORD)
-        - --ldap-user-search-base=ou=Users,dc=kubesphere,dc=io
-        - --ldap-group-search-base=ou=Groups,dc=kubesphere,dc=io
-        - --jwt-secret=$(JWT_SECRET)
-        - --admin-password=P@88w0rd
-        - --token-expire-time=0h
-        - --jenkins-address=http://ks-jenkins.kubesphere-devops-system.svc/
-        - --jenkins-password={{ ks_token_str }}
-        - --master-url={{ kube_apiserver_host }}
         env:
         - name: KUBECTL_IMAGE
           value: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              key: jwt-secret
-              name: ks-account-secret
-        - name: LDAP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: ldap-admin-password
-              name: ks-account-secret
         volumeMounts:
         - mountPath: /etc/kubernetes/pki
           name: ca-dir
@@ -98,6 +91,8 @@ spec:
           name: user-init
         - mountPath: /etc/kubesphere/rules
           name: policy-rules
+        - mountPath: /etc/kubesphere
+          name: kubesphere-config
         image: {{ ks_account_repo }}:{{ ks_account_tag }}
         imagePullPolicy: {{ ks_image_pull_policy }}
         name: ks-account        
@@ -111,8 +106,6 @@ spec:
           requests:
             cpu: {{ ks_account_cpu_requests }}
             memory: {{ ks_account_memory_requests }}
-
-
 ---
 
 apiVersion: v1
