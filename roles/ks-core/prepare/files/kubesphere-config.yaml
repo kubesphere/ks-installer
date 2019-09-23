@@ -61,5 +61,5 @@ data:
       endpoint: http://notification.kubesphere-alerting-system.svc
 kind: ConfigMap
 metadata:
-  name: kubesphere
+  name: kubesphere-config
   namespace: kubesphere-system
