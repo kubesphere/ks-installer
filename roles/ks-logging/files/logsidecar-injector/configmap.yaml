@@ -2,7 +2,29 @@ apiVersion: v1
 kind: ConfigMap
 data:
   filebeat.yml.template: |-
+    filebeat.config.inputs:
+      enabled: true
+      path: ${path.config}/inputs.yml
+      reload.enabled: true
+      reload.period: 10s
+    output.console:
+      codec.format:
+        string: '%{[message]}'
+    logging.level: warning
+
+
   inputs.yml.template: |-
+    - type: log
+      paths:
+    {{range .Paths}}
+      - {{.}}
+    {{end}}
+      tail_files: true
+      scan_frequency: 1s
+      max_backoff: 1s
+      backoff: 1s
+
+
 metadata:
   name: logsidecar-injector-configmap
   namespace: kubesphere-logging-system
