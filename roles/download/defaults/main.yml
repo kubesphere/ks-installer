@@ -298,7 +298,7 @@ testFramework_tag: 0.4.0
 fluentbit_operator_repo: "{{ base_repo }}kubesphere/fluentbit-operator"
 fluentbit_operator_tag: "advanced-2.0.0"
 ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
-ks_fluent_bit_tag: "advanced-2.1.0"
+ks_fluent_bit_tag: "v1.2.1-reload"
 kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
 kslogging_configmap_reload_tag: "advanced-2.0.0"
 ks_log_sidecar_injector_repo: "{{ base_repo }}kubespheredev/log-sidecar-injector"
