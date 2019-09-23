@@ -24,9 +24,9 @@ spec:
       - name: wait-mysql
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z {{ dbHost }} {{ dbPort }}; do echo "waiting for mysql"; sleep 2; done;']
       containers:
-      - command: ["flyway", "-X", "-url=jdbc:mysql://openpitrix-db.openpitrix-system.svc/notification", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/notification", "migrate"]
+      - command: ["flyway", "-X", "-url=jdbc:mysql://{{ dbHost }}/notification", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/notification", "migrate"]
         env:
         - name: FLYWAY_PASSWORD
           value: "password"
