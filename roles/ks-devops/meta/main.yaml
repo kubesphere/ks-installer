@@ -1,26 +1,31 @@
 ---
 
 dependencies:
-  # - role: ks-devops/sonarqube
-  #   when:
-  #     - sonarqube_enable == true
+  - role: ks-devops/sonarqube
+    when:
+      - devops.sonarqube is defined
+      - devops.sonarqube.enabled is defined
+      - devops.sonarqube.enabled == true
+
 
   - role: ks-devops/ks-devops
-    when:
-      - devops_enable == true
+
 
   - role: ks-devops/s2i
-    when:
-      - s2i_enable == true
+
 
   - role: ks-devops/harbor
     when:
-      - harbor_enable == true
+      - devops.harbor is defined
+      - devops.harbor.enabled is defined
+      - devops.harbor.enabled == true
+
 
   - role: ks-devops/gitlab
     when:
-      - gitlab_enable == true
+      - devops.gitlab is defined
+      - devops.gitlab.enabled is defined
+      - devops.gitlab.enabled == true
+
 
   - role: ks-devops/jenkins
-    when:
-      - jenkins_enable == true

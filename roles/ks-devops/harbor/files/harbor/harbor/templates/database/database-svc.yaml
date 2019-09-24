@@ -4,11 +4,11 @@ kind: Service
 metadata:
   name: "{{ template "harbor.database" . }}"
   labels:
-  {{ include "harbor.labels" . | indent 4 }}
+{{ include "harbor.labels" . | indent 4 }}
 spec:
   ports:
     - port: 5432
   selector:
-  {{ include "harbor.matchLabels" . | indent 4 }}
-component: database
-  {{- end -}}
+{{ include "harbor.matchLabels" . | indent 4 }}
+    component: database
+{{- end -}}

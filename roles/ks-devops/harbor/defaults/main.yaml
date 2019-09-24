@@ -1,4 +1,6 @@
 ---
 
-harbor_enable: false
-harbor_domain: harbor.devops.kubesphere.local
+devops:
+  harbor:
+    enabled: False
+    domain: harbor.devops.kubesphere.local

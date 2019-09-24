@@ -7,37 +7,37 @@
   retries: 30
   delay: 5
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Getting ks-sonarqube NodeIp
   shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
   register:  ks_sonarqube_nodeIP
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Getting ks-sonarqube NodePort
   shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register:  ks_sonarqube_nodePort
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Getting ks-sonarqube ClusterIP
   shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.clusterIP}'"
   register:  ks_sonarqube_clusterIP
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Waitting for ks-sonarqube port to become open
   wait_for:
@@ -46,28 +46,30 @@
     delay: 3
     timeout: 600
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Setting ks-sonarqube url
   set_fact:
     sonar_server_url_internal: "http://{{ ks_sonarqube_clusterIP.stdout }}:9000"
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Setting ks-sonarqube url
   set_fact:
-    sonar_server_url: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
+    devops:
+      sonarqube:
+        externalSonarUrl: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 - name: ks-devops | Waiting for ks-sonarqube
   shell: >
@@ -79,11 +81,10 @@
   retries: 30
   delay: 3
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
-  tags:
-    - upgrade
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
 
 - name: ks-devops | Checking ks-sonarqube token
   uri:
@@ -99,9 +100,10 @@
   retries: 30
   delay: 3
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined
+
 
 - name: ks-devops | Deleting ks-sonarqube old token
   uri:
@@ -113,10 +115,11 @@
   register: result
   failed_when: "result.msg and 'OK' not in result.msg"
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined
     - checkinfo.json.userTokens|length != 0
+
 
 - name: ks-devops | Generating ks-sonarqube token
   uri:
@@ -128,9 +131,10 @@
     body_format: json
   register: userinfo
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined
+
 
 - name: ks-devops | Setting user permission(admin)
   uri:
@@ -145,9 +149,10 @@
       permission: admin
     status_code: 204
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined
+
 
 - name: ks-devops | Setting user permission(gateadmin)
   uri:
@@ -162,9 +167,10 @@
       permission: gateadmin
     status_code: 204
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined
+
 
 - name: ks-devops | Setting user permission(profileadmin)
   uri:
@@ -179,9 +185,10 @@
       permission: profileadmin
     status_code: 204
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined
+
 
 - name: ks-devops | Creating ks-jenkins webhook(internal)
   uri:
@@ -195,14 +202,17 @@
       name: ks-jenkins
       url: 'http://ks-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined
+
 
 - name: ks-devops | Setting ks-sonarqube token
   set_fact:
-    sonar_server_token: "{{ userinfo.json.token }}"
+    devops:
+      sonarqube:
+        externalSonarToken: "{{ userinfo.json.token }}"
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_token is not defined  
+    - devops.sonarqube.enable is defined
+    - devops.sonarqube.enable == true
+    - devops.sonarqube.externalSonarToken is not defined

@@ -5,16 +5,16 @@ engine: gotpl
 home: https://goharbor.io
 icon: https://raw.githubusercontent.com/goharbor/harbor/master/docs/img/harbor_logo.png
 keywords:
-  - docker
-  - registry
-  - harbor
+- docker
+- registry
+- harbor
 maintainers:
-  - email: huh@vmware.com
-    name: Jesse Hu
-  - email: username.taken@gmail.com
-    name: paulczar
+- email: huh@vmware.com
+  name: Jesse Hu
+- email: username.taken@gmail.com
+  name: paulczar
 name: harbor
 sources:
-  - https://github.com/goharbor/harbor
-  - https://github.com/goharbor/harbor-helm
+- https://github.com/goharbor/harbor
+- https://github.com/goharbor/harbor-helm
 version: 1.0.1

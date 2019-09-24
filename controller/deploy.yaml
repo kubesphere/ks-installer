@@ -23,7 +23,6 @@ data:
     metricsServer:
       enabled: True
 
-
     ks-console:
       disableMultiLogin: True  # enable/disable multi login
 
@@ -59,9 +58,19 @@ data:
 
     devops:
       enabled: True
-      endpoint: http://devops.kubesphere-system.svc:9000
+      jenkinsMemoryLim: "8Gi"
+      jenkinsMemoryReq: "4Gi"
+      jenkinsVolumeSize: "8Gi"
+#      endpoint: http://devops.kubesphere-system.svc:9000
       sonarqube:
-            enabled: True
+        enabled: True
+#        externalSonarUrl:
+#        externalSonarToken:
+      harbor:
+        enabled: True
+      gitlab:
+        enabled: True
+
 
     servicemesh:
       enabled: True
