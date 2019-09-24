@@ -87,7 +87,7 @@ $ kubectl apply -f kubesphere.yaml
 $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-7. 访问 KubeSphere UI 界面。
+7. 查看控制台的服务端口，使用 `IP:30880` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
 
 ```
 $ kubectl get svc -n kubesphere-system    
