@@ -18,11 +18,19 @@
     - { name: jenkins-casc-config, file: jenkins-casc-config.yml }
     - { name: jenkins-agent-config, file: jenkins-agent-config.yaml}
 
+
 - name: Jenkins | Configure Jenkins host and port
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system"
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
+
 
 - name: Jenkins | Create Jenkins Agent Config File
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-system"
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-system
+
 
 - name: Jenkins | Deploy Jenkins
-  shell: "{{ bin_dir }}/helm upgrade --install ks-jenkins {{ kubesphere_dir }}/jenkins/jenkins-0.19.0.tgz -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml --namespace kubesphere-devops-system"
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-jenkins {{ kubesphere_dir }}/jenkins/jenkins-0.19.0.tgz
+    -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml
+    --namespace kubesphere-devops-system

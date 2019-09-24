@@ -5,25 +5,6 @@
     src: "gitlab"
     dest: "{{ kubesphere_dir }}/"
 
-  # - name: Gitlab | Creating values files
-  #   template:
-  #     src: "{{ item.file }}.j2"
-  #     dest: "{{ kubesphere_dir }}/gitlab/chart-1.6.1/charts/{{ item.path }}/values.yaml"
-  #   with_items:
-  #     - { path: shared-secrets, file: values-shared-secrets.yaml }
-  #     - { path: redis-ha, file: values-redis-ha.yaml }
-  #     - { path: redis, file: values-redis.yaml }
-  #     - { path: postgresql, file: values-postgresql.yaml }
-  #     - { path: nginx-ingress, file: values-nginx-ingress.yaml }
-  #     - { path: minio, file: values-minio.yaml }
-  #     - { path: gitlab-runner, file: values-gitlab-runner.yaml }
-  #     - { path: gitlab/charts/gitaly, file: values-gitaly.yaml }
-  #     - { path: gitlab/charts/gitlab-shell, file: values-gitlab-shell.yaml }
-  #     - { path: gitlab/charts/mailroom, file: values-mailroom.yaml }
-  #     - { path: gitlab/charts/migrations, file: values-migrations.yaml }
-  #     - { path: gitlab/charts/sidekiq, file: values-sidekiq.yaml }
-  #     - { path: gitlab/charts/task-runner, file: values-task-runner.yaml }
-  #     - { path: gitlab/charts/unicorn, file: values-unicorn.yaml }
 
 - name: Gitlab | Creating manifests
   template:
@@ -32,13 +13,19 @@
   with_items:
     - { name: custom-values-gitlab, file: custom-values-gitlab.yaml, type: values }
 
+
 - name: Gitlab | Deploy Gitlab OpenldapSecret
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/gitlab/openldap-secret.yml -n kubesphere-devops-system"
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/gitlab/openldap-secret.yml -n kubesphere-devops-system
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
+
 - name: Gitlab | Deploy Gitlab
-  shell: "{{ bin_dir }}/helm upgrade --install ks-gitlab {{ kubesphere_dir }}/gitlab/gitlab-1.6.1.tgz -f {{ kubesphere_dir }}/gitlab/custom-values-gitlab.yaml --namespace kubesphere-devops-system"
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-gitlab {{ kubesphere_dir }}/gitlab/gitlab-1.6.1.tgz
+    -f {{ kubesphere_dir }}/gitlab/custom-values-gitlab.yaml
+    --namespace kubesphere-devops-system
   async: 600
   poll: 0
 

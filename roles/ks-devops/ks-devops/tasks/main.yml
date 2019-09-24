@@ -1,15 +1,15 @@
 ---
 
-- name: OpenPitrix | Waiting for openpitrix-db
-  shell: "{{ bin_dir }}/kubectl -n openpitrix-system get pod | grep openpitrix-db-deployment | awk '{print $3}'"
+- name: KubeSphere | Waiting for kubesphere-db
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-system get pod | grep ks-db-deployment | awk '{print $3}'"
   register: result
   until:
     - result.stdout.find("Running") != -1
   retries: 15
   delay: 10
 
-- name: OpenPitrix | Installing OpenPitrix(3)
-  command: "{{ kubesphere_dir }}/openpitrix/kubernetes/scripts/deploy-k8s.sh -n openpitrix-system -v {{ openpitrix_version }} -d"
+#- name: OpenPitrix | Installing OpenPitrix(3)
+#  command: "{{ kubesphere_dir }}/openpitrix/kubernetes/scripts/deploy-k8s.sh -n openpitrix-system -v {{ openpitrix_version }} -d"
 
 - name: ks-devops | Getting ks-devops installation files
   copy:

@@ -4,8 +4,8 @@ kind: ConfigMap
 metadata:
   name: {{ template "harbor.clair" . }}
   labels:
-  {{ include "harbor.labels" . | indent 4 }}
-component: clair
+{{ include "harbor.labels" . | indent 4 }}
+    component: clair
 data:
   config.yaml: |
     clair:
@@ -32,4 +32,4 @@ data:
         renotifyinterval: 2h
         http:
           endpoint: "http://{{ template "harbor.core" . }}/service/notifications/clair"
-  {{ end }}
+{{ end }}

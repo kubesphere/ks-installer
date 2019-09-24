@@ -34,10 +34,10 @@
       name: ks-jenkins
       url: 'http://ks-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is defined
-    - sonar_server_token is defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is  defined
+    - devops.sonarqube.externalSonarToken is  defined
 
 
 - name: Sonarqube | Creating manifests
@@ -47,10 +47,10 @@
   with_items:
     - { name: custom-values-sonarqube, file: custom-values-sonarqube.yaml }
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
 
 - name: Sonarqube | Deploy Sonarqube
@@ -60,7 +60,7 @@
     -f {{ kubesphere_dir }}/sonarqube/custom-values-sonarqube.yaml 
     --namespace kubesphere-devops-system
   when:
-    - sonarqube_enable is defined
-    - sonarqube_enable == true
-    - sonar_server_url is not defined
-    - sonar_server_token is not defined
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: "{{ template "harbor.registry" . }}"
   labels:
-  {{ include "harbor.labels" . | indent 4 }}
+{{ include "harbor.labels" . | indent 4 }}
 spec:
   ports:
     - name: registry
@@ -11,5 +11,5 @@ spec:
     - name: controller
       port: 8080
   selector:
-  {{ include "harbor.matchLabels" . | indent 4 }}
-component: registry
+{{ include "harbor.matchLabels" . | indent 4 }}
+    component: registry

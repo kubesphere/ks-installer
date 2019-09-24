@@ -6,10 +6,10 @@ Master:
   resources:
     requests:
       cpu: "0.1"
-      memory: "{{ jenkins_memory_req }}"
+      memory: "{{ devops.jenkinsMemoryReq }}"
     limits:
       cpu: "1"
-      memory: "{{ jenkins_memory_lim }}"
+      memory: "{{ devops.jenkinsMemoryLim }}"
   JavaOpts: "{{ JavaOpts }}"
   ServicePort: 80
   ServiceType: NodePort
@@ -43,15 +43,15 @@ Master:
       value: "{{ EMAIL_FROM_ADDR }}"
     - name: EMAIL_FROM_PASS
       value: "{{ EMAIL_FROM_PASS }}"
-{% if  sonarqube_enable is defined and sonarqube_enable == true %}
+{% if  devops.sonarqube.enabled is defined and devops.sonarqube.enabled == true %}
     - name: SONAR_ENABLED
       value: "true"
     - name: SONAR_RUNNER_VERSION
       value: "3.3.0.1492"
     - name: SONAR_SERVER_URL
-      value: "{{ sonar_server_url }}"
+      value: "{{ devops.sonarqube.externalSonarUrl }}"
     - name: SONAR_AUTH_TOKEN
-      value: "{{ sonar_server_token }}"
+      value: "{{ devops.sonarqube.externalSonarToken }}"
 {% endif %}
 
   InstallPlugins:
@@ -429,7 +429,7 @@ Persistence:
   StorageClass: "{{ persistence.storageClass }}"
 {% endif %}
   AccessMode: ReadWriteOnce
-  Size: 8Gi
+  Size: {{ devops.jenkinsVolumeSize }}
   
   volumes:
   - name: casc-config

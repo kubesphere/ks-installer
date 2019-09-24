@@ -1,0 +1,4 @@
+---
+
+dbHost: kubesphere-db.kubesphere-system.svc
+dbPort: 3306

@@ -21,7 +21,7 @@
   register: openpitrix_component_pod
 
 
-- include_tasks: pvMigration.yaml
+- include_tasks: pv-migration.yaml
   loop:
     - {op: "openpitrix-db", ks: "kubesphere-db-pvc"}
     - {op: "openpitrix-etcd", ks: "kubesphere-etcd-pvc"}
