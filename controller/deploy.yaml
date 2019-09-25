@@ -66,11 +66,6 @@ data:
         enabled: True
 #        externalSonarUrl:
 #        externalSonarToken:
-      harbor:
-        enabled: True
-      gitlab:
-        enabled: True
-
 
     servicemesh:
       enabled: True
@@ -80,6 +75,13 @@ data:
 
     alert:
       enabled: True
+
+    harbor:
+      enabled: True
+
+    gitlab:
+      enabled: True
+
 kind: ConfigMap
 metadata:
   name: ks-installer

@@ -14,18 +14,4 @@ dependencies:
   - role: ks-devops/s2i
 
 
-  - role: ks-devops/harbor
-    when:
-      - devops.harbor is defined
-      - devops.harbor.enabled is defined
-      - devops.harbor.enabled == true
-
-
-  - role: ks-devops/gitlab
-    when:
-      - devops.gitlab is defined
-      - devops.gitlab.enabled is defined
-      - devops.gitlab.enabled == true
-
-
   - role: ks-devops/jenkins
