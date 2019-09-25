@@ -46,7 +46,7 @@ spec:
           requests:
             cpu: 30m
             memory: 50Mi
-        volumeMount:
+        volumeMounts:
         - mountPath: /etc/kubesphere/
           name: kubesphere-config
       dnsPolicy: ClusterFirst
@@ -55,6 +55,11 @@ spec:
       serviceAccount: kubesphere
       serviceAccountName: kubesphere
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: kubesphere-config
+          configMap:
+            name: kubesphere-config
+            defaultMode: 420
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
@@ -71,17 +76,19 @@ spec:
                 values:
                 - ""
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - ks-controller-manager
-      - configMap:
-          defaultMode: 420
-          name: kubesphere-config
-        name: kubesphere-config
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - ks-controller-manager
+              namespaces:
+              - kubesphere-system
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+
 
 ---
 

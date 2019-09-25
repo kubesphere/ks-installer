@@ -1,0 +1,96 @@
+apiVersion: v1
+data:
+  kubesphere.yaml: |
+    kubernetes:
+      kubeconfig: ""
+      master: {{ kubeApiserver }}
+      qps: 1e+06
+      burst: 1000000
+    ldap:
+      host: openldap.kubesphere-system.svc:389
+      managerDN: cn=admin,dc=kubesphere,dc=io
+      managerPassword: {{ ks_secret_str }}
+      userSearchBase: ou=Users,dc=kubesphere,dc=io
+      groupSearchBase: ou=Groups,dc=kubesphere,dc=io
+    redis:
+      host: redis.kubesphere-system.svc:6379
+      port: 6379
+      password: ""
+      db: 0
+    s3:
+      endpoint: http://kubesphere-minio.kubesphere-system.svc:9000
+      region: us-east-1
+      disableSSL: true
+      forcePathStyle: true
+      accessKeyID: openpitrixminioaccesskey
+      secretAccessKey: openpitrixminiosecretkey
+      bucket: s2i-binaries
+    mysql:
+      host: kubesphere-db.kubesphere-system.svc:3306
+      username: root
+      password: password
+      maxIdleConnections: 100
+      maxOpenConnections: 100
+      maxConnectionLifeTime: 10s
+
+
+{% if devops.enabled is defined and devops.enabled == true %}
+    devops:
+      host: http://ks-jenkins.kubesphere-devops-system.svc/
+      username: admin
+      password: {{ ks_token_str }}
+      maxConnections: 100
+    {% if devops.sonarqube.enabled is defined and devops.sonarqube.enabled == true %}
+    sonarQube:
+      host: http://10.233.57.250:9000
+      token: 32f0124a923f845a8cf919ffb979ff47263010bb
+    {% endif %}
+{% endif %}
+
+
+{% if servicemesh.enabled is defined and servicemesh.enabled == true %}
+    servicemesh:
+      istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
+      jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
+      servicemeshPrometheusHost: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
+{% endif %}
+
+
+{% if openpitrix.enabled is defined and openpitrix.enabled == true %}
+    openpitrix:
+      apiServer: http://openpitrix-hyperpitrix.openpitrix.svc:9100
+      token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzeXN0ZW0iLCJyb2xlIjoiZ2xvYmFsX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE4MTYyMzkwMjJ9.bFiot8xTwikGTu-3XI5VDIWHFdXoEnNKqc619SF-sEg
+{% endif %}
+
+
+{% if monitoring.enabled is defined and monitoring.enabled == true %}
+    monitoring:
+      endpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090/api/v1/
+      secondaryEndpoint: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090/api/v1/
+{% endif %}
+
+
+{% if openpitrix.enabled is defined and openpitrix.enabled == true %}
+    logging:
+      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      logstashFormat: true
+      logstashPrefix: ks-logstash-log
+      match: kube.*
+{% endif %}
+
+
+{% if alerting.enabled is defined and alerting.enabled == true %}
+    alerting:
+      endpoint: http://alerting.kubesphere-alerting-system.svc
+{% endif %}
+
+
+{% if notification.enabled is defined and notification.enabled == true %}
+    notification:
+      endpoint: http://notification.kubesphere-alerting-system.svc
+{% endif %}
+
+kind: ConfigMap
+metadata:
+  name: kubesphere-config
+  namespace: kubesphere-system

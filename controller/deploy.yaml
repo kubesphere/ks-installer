@@ -34,7 +34,6 @@ data:
       grafana:
         enabled: false
 
-
     logging:
       enabled: True
       elasticsearchMasterReplica: 1
@@ -73,7 +72,7 @@ data:
     notification:
       enabled: True
 
-    alert:
+    alerting:
       enabled: True
 
     harbor:

@@ -16,6 +16,12 @@
   register: ks_secret
 
 
+- name: KubeSphere | Creating KubeSphere Secret
+  set_fact:
+    ks_secret_str: "ks_secret.stdout"
+  register: ks_secret
+
+
 - name: KubeSphere | Getting OP Secret
   shell: "cat {{ kubesphere_dir }}/openpitrix/kubernetes/iam-config/secret-key.txt"
   register: op_secret
