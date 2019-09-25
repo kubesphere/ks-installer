@@ -4,7 +4,10 @@ data:
   ks-config.yaml: |
     ---
     persistence:
-      storageClass: "openebs-hostpath"
+      storageClass: ""
+
+    plugins:
+      defaultStorage: "openebs-hostpath"    # "csi-aliyun", "csi-tencentcloud"
 
     kubeApiserver: 192.168.0.2:6443      # master addr or master's lb addr
 

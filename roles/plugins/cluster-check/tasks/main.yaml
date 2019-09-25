@@ -1,0 +1,17 @@
+---
+
+- name: check storage class
+  shell: >
+    {{ bin_dir }}/kubectl get sc | awk '{if(NR>1){print $1}}'
+  register: storage_class_check
+
+- name: Determines whether the default storage class exists
+  set_fact:
+    defaultStorageClassNotExist: >
+      {% if storage_class_check.stdout.find('(default)') == -1 %}True{% else %}False{% endif %}
+
+#- debug:
+#    msg:
+#      - "{{ defaultStorageClassExist }}"
+#      - "{{ persistence.storageClass }}"
+#      - "{{ plugins.defaultStorage }}"

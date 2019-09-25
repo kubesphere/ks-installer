@@ -29,7 +29,7 @@
     {{ bin_dir }}/kubectl get sc | awk '{if(NR>1){print $1}}'
   register: storage_class_check
 
-- name: Stop if Helm is not available
+- name: Stop if StorageClass was not found
   assert:
     that: persistence.storageClass in storage_class_check.stdout_lines
     msg: "StorageClass {{ persistence.storageClass }}  was not found !"

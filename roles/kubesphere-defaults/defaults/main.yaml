@@ -63,21 +63,26 @@ elk_prefix: logstash
 
 vertical_pod_autoscaler_enable: false
 
-istio_enable: true
 
-metrics_server_enable: true
 
-openpitrix_enable: true
 
-logging_enable: true
-monitoring_enable: true
-notification_enable: true
-alerting_enable: true
 
-# devops 
-sonarqube_enable: true
-devops_enable: true
-s2i_enable: true
-jenkins_enable: true
-harbor_enable: false
-gitlab_enable: false
+
+#istio_enable: true
+#
+#metrics_server_enable: true
+#
+#openpitrix_enable: true
+#
+#logging_enable: true
+#monitoring_enable: true
+#notification_enable: true
+#alerting_enable: true
+#
+## devops
+#sonarqube_enable: true
+#devops_enable: true
+#s2i_enable: true
+#jenkins_enable: true
+#harbor_enable: false
+#gitlab_enable: false
