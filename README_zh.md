@@ -192,6 +192,12 @@ $ kubectl get svc -n kubesphere-system
   <td class=xl69>True</td>
  </tr>
  <tr height=18 style='height:13.8pt'>
+  <td colspan=2 height=18 style='height:13.8pt'>sonarqube_enable</td>
+  <td>是否安装sonarqube<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+  </span>（True / False）</td>
+  <td class=xl69>True</td>
+ </tr>
+ <tr height=18 style='height:13.8pt'>
   <td colspan=2 height=18 style='height:13.8pt'>istio_enable</td>
   <td>是否安装istio<span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
