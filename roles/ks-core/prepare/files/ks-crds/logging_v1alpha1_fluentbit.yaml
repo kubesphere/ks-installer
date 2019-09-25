@@ -1,0 +1,18 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: fluentbits.logging.kubesphere.io
+  labels:
+    app: fluentbit-operator
+    chart: fluentbit-operator-0.1.0
+    heritage: Tiller
+    release: logging-fluentbit-operator
+spec:
+  group: logging.kubesphere.io
+  names:
+    kind: FluentBit
+    listKind: FluentBitList
+    plural: fluentbits
+    singular: fluentbit
+  scope: Namespaced
+  version: v1alpha1

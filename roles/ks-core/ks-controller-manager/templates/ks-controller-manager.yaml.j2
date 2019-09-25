@@ -32,8 +32,7 @@ spec:
       containers:
       - command:
         - controller-manager
-        - --v=2
-        - --openpitrix-proxy-token=Bearer {{ op_token_str }}
+        - --logtostderr=true
         image: {{ ks_controller_manager_repo }}:{{ ks_controller_manager_tag }}
         imagePullPolicy: {{ ks_image_pull_policy }}
         name: ks-controller-manager
@@ -47,6 +46,9 @@ spec:
           requests:
             cpu: 30m
             memory: 50Mi
+        volumeMount:
+        - mountPath: /etc/kubesphere/
+          name: kubesphere-config
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -67,7 +69,19 @@ spec:
               - key: node-role.kubernetes.io/master
                 operator: In
                 values:
-                - "" 
+                - ""
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - ks-controller-manager
+      - configMap:
+          defaultMode: 420
+          name: kubesphere-config
+        name: kubesphere-config
 
 ---
 
