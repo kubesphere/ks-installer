@@ -5,6 +5,7 @@
     state: directory
     mode: 0755
 
+
 - name: KubeSphere | Getting installation init files
   copy:
     src: "{{ item }}"
@@ -12,6 +13,7 @@
   loop:
     - "workspace.yaml"
     - "ks-init"
+
 
 - name: KubeSphere | Create kubesphere namespace
   command: "{{ bin_dir }}/kubectl create namespace {{ item }}"
@@ -27,13 +29,16 @@
     - kubesphere-alerting-system
     - istio-system
 
+
 - name: KubeSphere | Init KubeSphere system
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-init.yaml"
   ignore_errors: true
   tags:
     - upgrade
 
+
 - import_tasks: ks-init.yaml
+
 
 - name: KubeSphere | Getting controls-system file
   template:
@@ -45,7 +50,6 @@
     - upgrade
 
 
-
 - name: KubeSphere | Installing controls-system
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubesphere-controls-system.yaml  -n kubesphere-controls-system"
   register: import
@@ -53,12 +57,14 @@
   tags:
     - upgrade
 
+
 - name: KubeSphere | Create KubeSphere workspace
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/workspace.yaml"
   register: result
   until: result is succeeded
   retries: 5
   delay: 3
+
 
 - name: KubeSphere | Labeling system-workspace
   shell: >
@@ -77,6 +83,7 @@
     - kubesphere-logging-system
     - kubesphere-alerting-system
     - istio-system
+
 
 - name: KubeSphere | Create ImagePullSecrets
   shell: |

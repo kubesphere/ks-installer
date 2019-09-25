@@ -3,4 +3,5 @@
 - hosts: localhost
   gather_facts: false
   roles:
+    - kubesphere-defaults
     - preinstall

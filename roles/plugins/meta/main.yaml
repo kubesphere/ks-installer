@@ -1,0 +1,10 @@
+---
+dependencies:
+  - role: plugins/cluster-check
+
+
+  - role: plugins/openebs
+    when:
+      - persistence.storageClass == ''
+      - defaultStorageClassNotExist
+      - plugins.defaultStorage == "openebs-hostpath"

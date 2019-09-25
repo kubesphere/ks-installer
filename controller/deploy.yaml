@@ -4,7 +4,10 @@ data:
   ks-config.yaml: |
     ---
     persistence:
-      storageClass: "openebs-hostpath"
+      storageClass: ""
+
+    plugins:
+      defaultStorage: "openebs-hostpath"    # "csi-aliyun", "csi-tencentcloud"
 
     kubeApiserver: 192.168.0.2:6443      # master addr or master's lb addr
 
@@ -33,7 +36,6 @@ data:
       prometheusVolumeSize: 20Gi
       grafana:
         enabled: false
-
 
     logging:
       enabled: True
@@ -73,7 +75,7 @@ data:
     notification:
       enabled: True
 
-    alert:
+    alerting:
       enabled: True
 
     harbor:

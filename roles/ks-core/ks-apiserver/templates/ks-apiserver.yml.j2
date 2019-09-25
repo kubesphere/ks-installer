@@ -25,7 +25,7 @@ spec:
       - name: wait-mysql
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-db.openpitrix-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z kubesphere-db.kubesphere-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
       containers:
       - command:
         - hypersphere
