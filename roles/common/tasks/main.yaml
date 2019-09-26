@@ -1,5 +1,8 @@
 ---
 
+- import_tasks: init-namespaces.yaml
+
+
 - name: Kubesphere | Getting common component installation files
   copy:
     src: "{{ item }}"
@@ -102,16 +105,6 @@
     - { path: minio, file: minio.yaml }
 
 
-- name: Kubesphere | Deploying openldap
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/openldap.yaml
-
-
-- name: Kubesphere | Deploying redis
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/redis.yaml
-
-
 - name: Kubesphere | Creating mysql sercet
   shell: >
     {{ bin_dir }}/kubectl create secret generic mysql-pass
@@ -123,18 +116,15 @@
 
 - name: Kubesphere | Deploying mysql
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/mysql.yaml
-
-
-- name: Kubesphere | Deploying etcd
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/etcd.yaml
-
-
-- name: Kubesphere | Deploying minio
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/minio.yaml
-
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+  loop:
+    - "mysql.yaml"
+    - "etcd.yaml"
+    - "minio.yaml"
+    - "openldap.yaml"
+    - "redis.yaml"
+  register: import
+  failed_when: "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
 
 
 - name: Kubesphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)

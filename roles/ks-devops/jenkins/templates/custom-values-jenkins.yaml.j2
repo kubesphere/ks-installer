@@ -423,9 +423,8 @@ rbac:
   install: true
 
 Persistence:
-  Enabled: {% if persistence.enable is defined and persistence.enable == true %}true{% else %}false{% endif %}
-  
-{% if persistence.storageClass is defined and persistence.storageClass != None %} 
+  Enabled: true
+{% if persistence.storageClass is defined and persistence.storageClass != "" %}
   StorageClass: "{{ persistence.storageClass }}"
 {% endif %}
   AccessMode: ReadWriteOnce
