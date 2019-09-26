@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import os
 import sys
 import time
-import ansible_runner
-import os
+import shutil
 import yaml
+import json
+import ansible_runner
 import collections
 
 
@@ -38,7 +40,14 @@ ks_hook = '''
 
 class component():
 
-    def __init__(self, playbook, private_data_dir, artifact_dir, ident, quiet):
+    def __init__(
+            self,
+            playbook,
+            private_data_dir,
+            artifact_dir,
+            ident,
+            quiet,
+            rotate_artifacts):
         '''
         :param private_data_dir: The directory containing all runner metadata needed to invoke the runner
                                  module. Output artifacts will also be stored here for later consumption.
@@ -54,9 +63,9 @@ class component():
         self.artifact_dir = artifact_dir
         self.ident = ident
         self.quiet = quiet
+        self.rotate_artifacts = rotate_artifacts
 
     # Generate ansible_runner objects based on parameters
-
 
     def installRunner(self):
         installer = ansible_runner.run_async(
@@ -64,31 +73,70 @@ class component():
             private_data_dir=self.private_data_dir,
             artifact_dir=self.artifact_dir,
             ident=self.ident,
-            quiet=self.quiet
+            quiet=self.quiet,
+            rotate_artifacts=self.rotate_artifacts
         )
         return installer[1]
+
+
+def getResultInfo():
+    resultsList = checkExecuteResult()
+    for taskResult in resultsList:
+        taskName = taskResult.keys()[0]
+        taskRC = taskResult.values()[0]
+
+        if taskRC != 0:
+            resultInfoPath = os.path.join(
+                privateDataDir,
+                str(taskName),
+                'artifacts/',
+                str(taskName),
+                'job_events'
+            )
+
+            jobList = os.listdir(resultInfoPath)
+            jobList.sort(
+                key=lambda x: int(x.split('-')[0])
+            )
+
+            errorEventFile = os.path.join(resultInfoPath, jobList[-2])
+            with open(errorEventFile, 'r') as f:
+                failedEvent = json.load(f)
+            errorMsg = failedEvent["stdout"]
+            print("\n")
+            print("Task '{}' failed:".format(taskName))
+            print('*' * 150)
+            print(errorMsg)
+            print('*' * 150)
 
 # Operation result check
 
 
-def checkExecuteResult(interval=1):
+def checkExecuteResult(interval=2):
     '''
     :param interval: Result inspection cycle. Unit: second(s)
     '''
     taskProcessList = executeTask()
-    completedTasks = []
     while True:
+        time.sleep(interval)
+        completedTasks = []
+
         for taskProcess in taskProcessList:
-            if taskProcess[taskProcess.keys()[0]].rc is not None:
-                print("task {} rc is {}".format(taskProcess.keys(),
-                                                taskProcess[taskProcess.keys()[0]].rc))
-                completedTasks.append(taskProcess.keys()[0])
-                print("Completion of task: {}".format(taskProcess.keys()[0]))
+            taskName = taskProcess.keys()[0]
+            result = taskProcess[taskName].rc
+            if result is not None:
+                print(
+                    "task {} status is {}".format(
+                        taskName,
+                        taskProcess[taskName].status))
+                completedTasks.append({taskName: result})
+
+        if len(completedTasks) != 0:
+            print('*' * 50)
         if len(completedTasks) == len(taskProcessList):
             break
-        time.sleep(interval)
-        print("Please wait patiently for the tasks to complete !")
 
+    return completedTasks
 # Execute and add the installation task process
 
 
@@ -114,12 +162,16 @@ def generateTaskLists():
     for taskName in readyToEnabledList:
         playbookPath = os.path.join(playbookBasePath, str(taskName) + '.yaml')
         artifactDir = os.path.join(privateDataDir, str(taskName))
+
+        shutil.rmtree(artifactDir)
+
         tasksDict[str(taskName)] = component(
             playbook=playbookPath,
             private_data_dir=privateDataDir,
             artifact_dir=artifactDir,
             ident=str(taskName),
-            quiet=False
+            quiet=True,
+            rotate_artifacts=1
         )
 
     return tasksDict
@@ -131,6 +183,7 @@ def getComponentLists():
     readyToEnabledList = []
     readyToDisableList = []
     global configFile
+
     if os.path.exists(configFile):
         with open(configFile, 'r') as f:
             configs = yaml.load(f.read())
@@ -147,27 +200,25 @@ def getComponentLists():
             elif (j == 'enabled') and (value == False):
                 readyToDisableList.append(component)
                 break
-    print(readyToEnabledList)
-    print(readyToDisableList)
+
     return readyToEnabledList, readyToDisableList
+
 
 def preInstallTasks():
     preInstallTasks = collections.OrderedDict()
     preInstallTasks['preInstall'] = [
-            os.path.join(playbookBasePath, 'preinstall.yaml'),
-            os.path.join(privateDataDir, 'preinstall')
-        ]
+        os.path.join(playbookBasePath, 'preinstall.yaml'),
+        os.path.join(privateDataDir, 'preinstall')
+    ]
     preInstallTasks['plugins'] = [
-            os.path.join(playbookBasePath, 'plugins.yaml'),
-            os.path.join(privateDataDir, 'plugins')
-        ]
+        os.path.join(playbookBasePath, 'plugins.yaml'),
+        os.path.join(privateDataDir, 'plugins')
+    ]
     preInstallTasks['common'] = [
-            os.path.join(playbookBasePath, 'common.yaml'),
-            os.path.join(privateDataDir, 'common')
-        ]
+        os.path.join(playbookBasePath, 'common.yaml'),
+        os.path.join(privateDataDir, 'common')
+    ]
 
-    # print(preInstallTasks)
-    # print(preInstallTasks['preInstall'])
     for task, paths in preInstallTasks.items():
         ansible_runner.run(
             playbook=paths[0],
@@ -182,11 +233,10 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
     else:
-        # time.sleep(10)
+        time.sleep(10)
         # execute preInstall tasks
         preInstallTasks()
-        # checkExecuteResult()
-        print("successful")
+        getResultInfo()
 
 
 if __name__ == '__main__':

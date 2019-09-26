@@ -3,7 +3,7 @@ data:
   kubesphere.yaml: |
     kubernetes:
       kubeconfig: ""
-      master: {{ kubeApiserver }}
+      master: {{ kubernetes.apiserverAddr }}
       qps: 1e+06
       burst: 1000000
     ldap:
