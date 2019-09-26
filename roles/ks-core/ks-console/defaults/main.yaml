@@ -1,16 +1,8 @@
 ---
-
-console_version: Advanced Edition
 ks_version: 2.1.0-dev
 kube_version: v1.13.5
 openpitrix_version: v0.3.5
 
-kubernetes_front_proxy_client_crt: "{{ kube_cert_dir }}/front-proxy-client.crt"
-kubernetes_front_proxy_client_key: "{{ kube_cert_dir }}/front-proxy-client.key"
-
-
 console_port: 30880
-
-disableMultiLogin: true
 
 ks_console_replicas: 2
