@@ -127,10 +127,19 @@
   failed_when: "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
 
 - name: check redis for check StroageClass
-  shell: {{ bin_dir }}/kubectl get pod -n kubesphere-system|grep redis|grep Running
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kubesphere-system|grep redis|grep Running
   register: redis_and_storage_class_check
+  retries: 20
   delay: 5
-  failed_when: "'redis' not in redis_and_storage_class_check.stdout"
+  ignore_errors: yes
+  
+- name: redis failed and how to solve
+  fail:
+     msg: "Please follow the steps below \n First: docker images|grep redis  \n second: kubectl get sc \n Third: k
+ubectl get pvc -n kubesphere-system \n Fourth: create nginx-pvc test"
+  when: "redis_and_storage_class_check.rc!=0"
+
 
 
 - name: Kubesphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
