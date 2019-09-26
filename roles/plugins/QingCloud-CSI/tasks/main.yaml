@@ -1,0 +1,60 @@
+---
+
+- name: QCloud-CSI | Getting QCloud-CSI installation files
+  copy:
+    src: "qingcloud-csi"
+    dest: "{{ kube_config_dir }}/addons/"
+
+- name: QCloud-CSI | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kube_config_dir }}/addons/qingcloud-csi/{{ item.file }}"
+  with_items:
+    - { name: config, file: config.yaml, type: config }
+    - { name: sc, file: sc.yaml, type: sc }
+    - { name: qingcloud-csi-disk-v1, file: qingcloud-csi-disk-v1.10-rc.1.yaml, type: qingcloud-csi-disk-v1 }
+   # - { name: csi-controller-sts, file: csi-controller-sts.yaml, type: sts }
+   # - { name: csi-node-ds, file: csi-node-ds.yaml, type: ds }
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: QCloud-CSI | Creating Configmap
+  command: "{{ bin_dir }}/kubectl create configmap csi-qingcloud --from-file=config.yaml={{ kube_config_dir }}/addons/qingcloud-csi/config.yaml --namespace=kube-system"
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]
+
+#- name: QCloud-CSI | Creating Secret
+#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-secret.yaml"
+#  register: import 
+#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+# when: inventory_hostname == groups['kube-master'][0]
+
+#- name: QCloud-CSI | Creating Controller RBAC
+#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-controller-rbac.yaml"
+#  register: import 
+#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#  when: inventory_hostname == groups['kube-master'][0]
+
+#- name: QCloud-CSI | Creating Node RBAC
+#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-node-rbac.yaml"
+#  register: import 
+#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#  when: inventory_hostname == groups['kube-master'][0]
+
+- name: QCloud-CSI | Creating StorageClass
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/sc.yaml"
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: QCloud-CSI | Creating qingcloud-csi-disk-v1
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/qingcloud-csi-disk-v1.10-rc.1.yaml"
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]
+
+#- name: QCloud-CSI | Creating Node ds
+#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-node-ds.yaml"
+#  register: import 
+#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#  when: inventory_hostname == groups['kube-master'][0]
