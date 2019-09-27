@@ -58,8 +58,13 @@ data:
 
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     openpitrix:
-      apiServer: http://openpitrix-hyperpitrix.openpitrix.svc:9100
-      token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzeXN0ZW0iLCJyb2xlIjoiZ2xvYmFsX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE4MTYyMzkwMjJ9.bFiot8xTwikGTu-3XI5VDIWHFdXoEnNKqc619SF-sEg
+      runtimeManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9103",
+      clusterManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9104",
+      repoManagerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9101",
+      appManagerEndpoint:        "openpitrix-hyperpitrix.openpitrix-system.svc:9102",
+      categoryManagerEndpoint:   "openpitrix-hyperpitrix.openpitrix-system.svc:9113",
+      attachmentManagerEndpoint: "openpitrix-hyperpitrix.openpitrix-system.svc:9122",
+      repoIndexerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9108",
 {% endif %}
 
 
