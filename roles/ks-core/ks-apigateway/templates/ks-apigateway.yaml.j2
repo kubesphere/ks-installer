@@ -54,6 +54,8 @@ spec:
         volumeMounts:
         - mountPath: /etc/caddy
           name: caddyfile
+        - mountPath: /etc/kubesphere
+          name: kubesphere-config
       serviceAccount: kubesphere
       serviceAccountName: kubesphere
       tolerations:
@@ -89,6 +91,10 @@ spec:
           defaultMode: 420
           name: caddyfile
         name: caddyfile
+      - configMap:
+          defaultMode: 420
+          name: kubesphere-config
+        name: kubesphere-config
 
 ---
 
