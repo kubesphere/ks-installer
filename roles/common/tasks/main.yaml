@@ -137,7 +137,7 @@
 - name: redis failed and how to solve
   fail:
      msg: "Please follow the steps below \n First: docker images|grep redis  \n second: kubectl get sc \n Third: k
-ubectl get pvc -n kubesphere-system \n Fourth: create nginx-pvc test"
+ubectl get pvc -n kubesphere-system "
   when: "redis_and_storage_class_check.rc!=0"
 
 
