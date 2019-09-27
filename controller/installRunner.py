@@ -11,13 +11,13 @@ import ansible_runner
 import collections
 
 
-# playbookBasePath = '/home/ubuntu/ks-installer/playbooks'
-# privateDataDir = '/etc/kubesphere'
-# configFile = '/home/ubuntu/ks-installer/playbooks/vars.yaml'
-
-playbookBasePath = '/kubesphere/playbooks'
+playbookBasePath = '/root/ks-installer/playbooks'
 privateDataDir = '/etc/kubesphere'
-configFile = '/kubesphere/config/ks-config.yaml'
+configFile = '/root/ks-installer/controller/config.yaml'
+
+# playbookBasePath = '/kubesphere/playbooks'
+# privateDataDir = '/etc/kubesphere'
+# configFile = '/kubesphere/config/ks-config.yaml'
 
 ks_hook = '''
 {
@@ -93,21 +93,21 @@ def getResultInfo():
                 str(taskName),
                 'job_events'
             )
+            if os.path.exists(resultInfoPath):
+                jobList = os.listdir(resultInfoPath)
+                jobList.sort(
+                    key=lambda x: int(x.split('-')[0])
+                )
 
-            jobList = os.listdir(resultInfoPath)
-            jobList.sort(
-                key=lambda x: int(x.split('-')[0])
-            )
-
-            errorEventFile = os.path.join(resultInfoPath, jobList[-2])
-            with open(errorEventFile, 'r') as f:
-                failedEvent = json.load(f)
-            errorMsg = failedEvent["stdout"]
-            print("\n")
-            print("Task '{}' failed:".format(taskName))
-            print('*' * 150)
-            print(errorMsg)
-            print('*' * 150)
+                errorEventFile = os.path.join(resultInfoPath, jobList[-2])
+                with open(errorEventFile, 'r') as f:
+                    failedEvent = json.load(f)
+                errorMsg = failedEvent["stdout"]
+                print("\n")
+                print("Task '{}' failed:".format(taskName))
+                print('*' * 150)
+                print(errorMsg)
+                print('*' * 150)
 
 # Operation result check
 
@@ -162,15 +162,15 @@ def generateTaskLists():
     for taskName in readyToEnabledList:
         playbookPath = os.path.join(playbookBasePath, str(taskName) + '.yaml')
         artifactDir = os.path.join(privateDataDir, str(taskName))
-
-        shutil.rmtree(artifactDir)
+        if os.path.exists(artifactDir):
+            shutil.rmtree(artifactDir)
 
         tasksDict[str(taskName)] = component(
             playbook=playbookPath,
             private_data_dir=privateDataDir,
             artifact_dir=artifactDir,
             ident=str(taskName),
-            quiet=True,
+            quiet=False,
             rotate_artifacts=1
         )
 
@@ -218,18 +218,26 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'common.yaml'),
         os.path.join(privateDataDir, 'common')
     ]
+    preInstallTasks['ks-core'] = [
+        os.path.join(playbookBasePath, 'ks-core.yaml'),
+        os.path.join(privateDataDir, 'ks-core')
+    ]
 
     for task, paths in preInstallTasks.items():
-        ansible_runner.run(
+        pretask = ansible_runner.run(
             playbook=paths[0],
             private_data_dir=privateDataDir,
             artifact_dir=paths[1],
             ident=str(task),
             quiet=False
         )
-
+        if pretask.rc != 0:
+            exit()
 
 def main():
+    if not os.path.exists(privateDataDir):
+        os.makedirs(privateDataDir)
+
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
     else:

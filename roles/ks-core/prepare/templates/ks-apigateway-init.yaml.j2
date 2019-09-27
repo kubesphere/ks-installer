@@ -4,7 +4,7 @@ data:
     :2018 {
       
       authenticate {
-        secret {{ ks_secret_str }}
+        secret {$JWT_SECRET}
         path /
         except /apis/account.kubesphere.io/v1alpha1/authenticate,/kapis/iam.kubesphere.io/v1alpha2/login,/kapis/iam.kubesphere.io/v1alpha2/authenticate,/images,/kapis/devops.kubesphere.io/v1alpha2/webhook/github,/kapis/devops.kubesphere.io/v1alpha2/webhook/git,/swagger
       }
@@ -64,10 +64,8 @@ data:
       }
 
       # openpitrix
-      proxy /kapis/openpitrix.io openpitrix-api-gateway.openpitrix-system.svc:9100 {
-        header_upstream Authorization "Bearer {{ op_token_str }}"
-        websocket
-        without /kapis/openpitrix.io  
+      proxy /kapis/openpitrix.io http://ks-apiserver.kubesphere-system.svc {
+        transparent
       }
 
       # logging
@@ -111,7 +109,7 @@ data:
         transparent
       }
       
-      log / stdout "{remote} {when} {method} {uri} {proto} {status} {size} {latency_ms}"
+      log / stdout "{remote} {when} {method} {uri} {proto} {status} {size} {latency_ms}ms"
     }
 kind: ConfigMap
 metadata:

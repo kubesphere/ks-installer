@@ -49,14 +49,14 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/alerting-db-init-job.yaml
 
 
-- name: ks-alerting | Waiting for alerting-db-init
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-alerting-system get pod | grep alerting-db-init | awk '{print $3}'
-  register: result
-  until:
-    - result.stdout.find("Completed") != -1
-  retries: 30
-  delay: 5
+#- name: ks-alerting | Waiting for alerting-db-init
+#  shell: >
+#    {{ bin_dir }}/kubectl -n kubesphere-alerting-system get pod | grep alerting-db-init | awk '{print $3}'
+#  register: result
+#  until:
+#    - result.stdout.find("Completed") != -1
+#  retries: 30
+#  delay: 5
 
 
 - name: ks-alerting | Create ks-alerting mysql ctrl
