@@ -209,7 +209,7 @@ spec:
 
 apiVersion: v1
 data:
-  ldap-admin-password: YWRtaW4=
+  admin-password: UEA4OHcwcmQK
   jwt-secret: {{ op_secret_str | b64encode }}
 kind: Secret
 metadata:
