@@ -37,8 +37,9 @@ spec:
         volumeMounts:
         # - mountPath: /etc/kubernetes/pki
         #   name: ca-dir
-        - mountPath: /etc/kubesphere/ks-console
-          name: ks-console-ae-config
+        - mountPath: /root/KubeSphereUI/server/local_config.yaml
+          name: ks-console-config
+          subPath: local_config.yaml
         - mountPath: /root/KubeSphereUI/server/sample
           name: sample-bookinfo
       # - image: {{ redis_repo }}:{{ redis_tag }}
@@ -81,8 +82,11 @@ spec:
       #     secretName: front-proxy-client
       - configMap:
           defaultMode: 420
-          name: ks-console-ae-config
-        name: ks-console-ae-config
+          name: ks-console-config
+          items:
+          - key: local_config.yaml
+            path: local_config.yaml
+        name: ks-console-config
       - configMap:
           defaultMode: 420
           name: sample-bookinfo
