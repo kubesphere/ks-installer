@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubesphere-minio
+  name: minio
   namespace: kubesphere-system
   labels:
     app: kubesphere
@@ -46,7 +46,7 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: ks-minio-deployment
+  name: minio
   namespace: kubesphere-system
   labels:
     app: kubesphere

@@ -9,7 +9,7 @@ data:
     ldap:
       host: openldap.kubesphere-system.svc:389
       managerDN: cn=admin,dc=kubesphere,dc=io
-      managerPassword: {{ ks_secret_str }}
+      managerPassword: admin
       userSearchBase: ou=Users,dc=kubesphere,dc=io
       groupSearchBase: ou=Groups,dc=kubesphere,dc=io
     redis:
@@ -18,7 +18,7 @@ data:
       password: ""
       db: 0
     s3:
-      endpoint: http://kubesphere-minio.kubesphere-system.svc:9000
+      endpoint: http://minio.kubesphere-system.svc:9000
       region: us-east-1
       disableSSL: true
       forcePathStyle: true
@@ -26,7 +26,7 @@ data:
       secretAccessKey: openpitrixminiosecretkey
       bucket: s2i-binaries
     mysql:
-      host: kubesphere-db.kubesphere-system.svc:3306
+      host: mysql.kubesphere-system.svc:3306
       username: root
       password: password
       maxIdleConnections: 100
