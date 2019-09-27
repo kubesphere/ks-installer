@@ -289,10 +289,8 @@ grafana_tag: 5.2.4
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ ks_image_repo }}/pires/docker-elasticsearch-curator"
 docker_elasticsearch_curator_tag: 5.5.4
-elasticsearch_plugins_repo: "{{ base_repo }}kubespheredev/elasticsearch-plugins"
-elasticsearch_plugins_tag: 0.1.0
-elasticsearch_oss_repo: "{{ ks_image_repo }}/elasticsearch/elasticsearch-oss"
-elasticsearch_oss_tag: 6.7.0
+elasticsearch_oss_repo: "{{ base_repo }}kubespheredev/elasticsearch-oss"
+elasticsearch_oss_tag: 6.7.0-1
 fluent_bit_repo: "{{ ks_image_repo }}/fluent/fluent-bit"
 fluent_bit_tag: 0.14.7
 kibana_oss_repo: "{{ ks_image_repo }}/kibana/kibana-oss"

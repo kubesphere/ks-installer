@@ -32,7 +32,6 @@
     - { path: logging, file: custom-values-elasticsearch-curator.yaml }
     - { path: logging, file: custom-values-kibana.yaml }
     - { path: logging, file: custom-values-fluentbit-operator.yaml }
-    - { path: logging, file: custom-values-elasticsearch-plugins.yaml }
     - { path: logging, file: fluentbit-crd.yaml }
     - { path: logging, file: fluent-bit-outputs.template }
     - { path: logging, file: FluentBitCrd.py }
@@ -162,17 +161,6 @@
   delay: 10
   when:
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") == -1
-
-
-- name: ks-logging | Deploy elasticsearch-plugins
-  shell: >
-    {{ bin_dir }}/helm upgrade --install elasticsearch-logging-plugins
-    {{ kubesphere_dir }}/logging/nginx-1.0.0.tgz  
-    -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch-plugins.yaml
-    --namespace kubesphere-logging-system
-  when:
-    - logging.externalElasticsearchUrl is not defined
-    - logging.externalElasticsearchPort is not defined
 
 
 - name: ks-logging | Deploy elasticsearch-logging
