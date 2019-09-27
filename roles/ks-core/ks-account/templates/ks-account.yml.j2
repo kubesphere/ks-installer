@@ -84,6 +84,7 @@ spec:
         - --jwt-secret=$(JWT_SECRET)
         - --admin-password=$(LDAP_PASSWORD)
         - --token-expire-time=2h
+        - --admin-password=P@88w0rd
         env:
         - name: KUBECTL_IMAGE
           value: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
