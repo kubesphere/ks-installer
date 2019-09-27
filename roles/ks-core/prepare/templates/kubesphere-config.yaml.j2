@@ -70,8 +70,8 @@ data:
 
 {% if monitoring.enabled is defined and monitoring.enabled == true %}
     monitoring:
-      endpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090/api/v1/
-      secondaryEndpoint: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090/api/v1/
+      endpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
+      secondaryEndpoint: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
 {% endif %}
 
 
