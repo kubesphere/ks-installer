@@ -1,0 +1,76 @@
+- name: KubeSphere | Waiting for ks-account
+  shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-account | awk '{print $3}'"
+  register: result
+  until: result.stdout.find("Running") != -1
+  retries: 30
+  delay: 10
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
+
+- name: ks-devops | Getting ks-sonarqube NodeIp
+  shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
+  register:  ks_sonarqube_nodeIP
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
+
+- name: ks-devops | Getting ks-sonarqube NodePort
+  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.ports[0].nodePort}'"
+  register:  ks_sonarqube_nodePort
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
+
+- name: ks-devops | Getting ks-sonarqube ClusterIP
+  shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.clusterIP}'"
+  register:  ks_sonarqube_clusterIP
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
+
+- name: ks-devops | Waitting for ks-sonarqube port to become open
+  wait_for:
+    host: "{{ ks_sonarqube_clusterIP.stdout }}"
+    port: 9000
+    delay: 3
+    timeout: 600
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
+  register: sonarqube_health
+  ignore_errors: True
+
+- name: ks-devops | Setting sonarqube heaalth status
+  set_fact:
+    sonar_health: "{% if sonarqube_health.state is defined and sonarqube_health.state == 'started' %}true{% else %}false{% endif %}"
+
+- name: ks-devops | Setting ks-sonarqube url
+  set_fact:
+    sonar_server_url_internal: "http://{{ ks_sonarqube_clusterIP.stdout }}:9000"
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
+
+- name: ks-devops | Setting ks-sonarqube url
+  set_fact:
+    devops:
+      sonarqube:
+        externalSonarUrl: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined

@@ -5,3 +5,4 @@
   roles:
     - kubesphere-defaults
     - ks-devops
+    - { role: ks-core, when: sonar_health is defined and sonar_health == true }

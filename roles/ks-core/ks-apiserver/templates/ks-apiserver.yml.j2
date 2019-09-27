@@ -28,7 +28,6 @@ spec:
         command: ['sh', '-c', 'until nc -z kubesphere-db.kubesphere-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
       containers:
       - command:
-        - hypersphere
         - ks-apiserver
         - --logtostderr=true
         image: {{ ks_apiserver_repo }}:{{ ks_apiserver_tag }}

@@ -5,7 +5,7 @@ dependencies:
     when:
       - devops.sonarqube is defined
       - devops.sonarqube.enabled is defined
-      - devops.sonarqube.enabled == true
+      - devops.sonarqube.enabled == True
 
 
   - role: ks-devops/ks-devops

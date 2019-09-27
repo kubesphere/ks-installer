@@ -1,7 +1,15 @@
 ---
 
-- import_tasks: wait_sonar.yaml
+- import_tasks: check_sonar.yaml
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is not defined
+    - devops.sonarqube.externalSonarToken is not defined
 
+- import_tasks: sonar_token.yaml
+  when:
+    - sonar_health is defined and sonar_health == true
 
 - name: ks-devops | Getting jenkins installation files
   copy:

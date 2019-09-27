@@ -43,7 +43,7 @@ Master:
       value: "{{ EMAIL_FROM_ADDR }}"
     - name: EMAIL_FROM_PASS
       value: "{{ EMAIL_FROM_PASS }}"
-{% if  devops.sonarqube.enabled is defined and devops.sonarqube.enabled == true %}
+{% if  devops.sonarqube.externalSonarUrl is defined and devops.sonarqube.externalSonarToken is defined %}
     - name: SONAR_ENABLED
       value: "true"
     - name: SONAR_RUNNER_VERSION

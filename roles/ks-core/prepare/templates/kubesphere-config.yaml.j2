@@ -40,11 +40,11 @@ data:
       username: admin
       password: {{ ks_token_str }}
       maxConnections: 100
-    {% if devops.sonarqube.enabled is defined and devops.sonarqube.enabled == true %}
+{% if devops.sonarqube.externalSonarUrl is defined and devops.sonarqube.externalSonarToken is defined %}
     sonarQube:
-      host: http://10.233.57.250:9000
-      token: 32f0124a923f845a8cf919ffb979ff47263010bb
-    {% endif %}
+      host: {{ externalSonarUrl }}
+      token: {{ externalSonarToken }}
+{% endif %}
 {% endif %}
 
 
@@ -58,13 +58,13 @@ data:
 
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     openpitrix:
-      runtimeManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9103",
-      clusterManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9104",
-      repoManagerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9101",
-      appManagerEndpoint:        "openpitrix-hyperpitrix.openpitrix-system.svc:9102",
-      categoryManagerEndpoint:   "openpitrix-hyperpitrix.openpitrix-system.svc:9113",
-      attachmentManagerEndpoint: "openpitrix-hyperpitrix.openpitrix-system.svc:9122",
-      repoIndexerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9108",
+      runtimeManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9103"
+      clusterManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9104"
+      repoManagerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9101"
+      appManagerEndpoint:        "openpitrix-hyperpitrix.openpitrix-system.svc:9102"
+      categoryManagerEndpoint:   "openpitrix-hyperpitrix.openpitrix-system.svc:9113"
+      attachmentManagerEndpoint: "openpitrix-hyperpitrix.openpitrix-system.svc:9122"
+      repoIndexerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9108"
 {% endif %}
 
 
