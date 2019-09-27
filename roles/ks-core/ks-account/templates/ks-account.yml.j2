@@ -81,9 +81,22 @@ spec:
       - command:
         - ks-iam
         - --logtostderr=true
+        - --jwt-secret=$(JWT_SECRET)
+        - --admin-password=$(LDAP_PASSWORD)
+        - --token-expire-time=2h
         env:
         - name: KUBECTL_IMAGE
           value: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: jwt-secret
+              name: ks-account-secret
+        - name: LDAP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: ldap-admin-password
+              name: ks-account-secret
         volumeMounts:
         - mountPath: /etc/kubernetes/pki
           name: ca-dir
