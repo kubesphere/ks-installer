@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ks-harbor-setup-ldap
+spec:
+  template:
+    spec:
+      containers:
+      - name: set-up-ldap-auth
+        image: pstauffer/curl:v1.0.3
+        env:
+        - name: LDAP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: openldap-secret
+              key: password
+        command:
+        - /bin/sh
+        - -c
+        - |
+          curl -s -m 5 -u "admin:Harbor12345" -XPUT -H "Content-Type: application/json" harbor/api/configurations -d@- <<- EOF
+          {
+            "auth_mode": "ldap_auth",
+            "ldap_base_dn": "dc=kubesphere,dc=io",
+            "ldap_scope": 2,
+            "ldap_search_dn": "cn=admin,dc=kubesphere,dc=io",
+            "ldap_search_password": "$LDAP_PASSWORD",
+            "ldap_uid": "uid",
+            "ldap_url": "ldap://openldap.kubesphere-system.svc:389",
+            "ldap_verify_cert": false
+          }
+          EOF
+      restartPolicy: Never
+  backoffLimit: 4
