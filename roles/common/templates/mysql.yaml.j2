@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubesphere-db
+  name: mysql
   namespace: kubesphere-system
   labels:
     app: kubesphere
@@ -45,7 +45,7 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: ks-db-deployment
+  name: mysql
   namespace: kubesphere-system
   labels:
     app: kubesphere
