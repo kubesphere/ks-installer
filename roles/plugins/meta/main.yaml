@@ -5,6 +5,6 @@ dependencies:
 
   - role: plugins/openebs
     when:
-      - persistence.storageClass == ''
-      - defaultStorageClassNotExist | bool
-      - plugins.defaultStorage == "openebs-hostpath"
+      - persistence.storageClass == ""
+      - defaultStorageClassExist == false
+      - plugins.defaultStorage == 'openebs-hostpath'

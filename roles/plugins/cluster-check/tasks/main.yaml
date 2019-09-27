@@ -7,11 +7,4 @@
 
 - name: Determines whether the default storage class exists
   set_fact:
-    defaultStorageClassNotExist: >
-      {% if storage_class_check.stdout.find('(default)') == -1 %}True{% else %}False{% endif %}
-
-#- debug:
-#    msg:
-#      - "{{ defaultStorageClassExist }}"
-#      - "{{ persistence.storageClass }}"
-#      - "{{ plugins.defaultStorage }}"
+    defaultStorageClassExist: "{% if storage_class_check.stdout.find('(default)') != -1 %}true{% else %}false{% endif %}"

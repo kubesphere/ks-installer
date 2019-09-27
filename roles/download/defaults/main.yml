@@ -92,8 +92,8 @@ ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_flyway_tag: "flyway-advanced-2.0.2"
 cloud_controller_manager_repo: "{{ base_repo }}kubesphere/cloud-controller-manager"
 cloud_controller_manager_tag: v1.3.5
-ks_console_repo: "{{ ks_image_repo }}/kubesphere/ks-console"
-ks_console_tag: "advanced-2.0.2"
+ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
+ks_console_tag: "latest"
 ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
 ks_kubectl_tag: advanced-1.0.0
 ks_docs_repo: "{{ base_repo }}kubesphere/ks-docs"

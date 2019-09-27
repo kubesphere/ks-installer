@@ -18,8 +18,6 @@
 - name: KubeSphere | Init KubeSphere system
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-init.yaml"
   ignore_errors: true
-  tags:
-    - upgrade
 
 
 - import_tasks: ks-init.yaml
@@ -31,16 +29,12 @@
     dest: "{{ kubesphere_dir }}/{{ item.file }}"
   with_items:
     - { name: kubesphere-controls-system, file: kubesphere-controls-system.yaml }
-  tags:
-    - upgrade
 
 
 - name: KubeSphere | Installing controls-system
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubesphere-controls-system.yaml  -n kubesphere-controls-system"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-  tags:
-    - upgrade
 
 
 - name: KubeSphere | Create KubeSphere workspace
@@ -49,7 +43,6 @@
   until: result is succeeded
   retries: 5
   delay: 3
-
 
 
 - name: KubeSphere | Create KubeSphere vpa
