@@ -20,6 +20,7 @@ data:
       proxy /api https://kubernetes.default {
         header_upstream Authorization "Bearer {$KUBESPHERE_TOKEN}"
         insecure_skip_verify
+        websocket
       }
 
       # fix jenkins auth plugin
