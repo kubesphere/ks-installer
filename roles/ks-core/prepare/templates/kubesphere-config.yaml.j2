@@ -33,7 +33,6 @@ data:
       maxOpenConnections: 100
       maxConnectionLifeTime: 10s
 
-
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
       host: http://ks-jenkins.kubesphere-devops-system.svc/
@@ -47,7 +46,6 @@ data:
 {% endif %}
 {% endif %}
 
-
 {% if servicemesh.enabled is defined and servicemesh.enabled == true %}
     servicemesh:
       istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
@@ -55,25 +53,22 @@ data:
       servicemeshPrometheusHost: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
 {% endif %}
 
-
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     openpitrix:
-      runtimeManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9103"
-      clusterManagerEndpoint:    "openpitrix-hyperpitrix.openpitrix-system.svc:9104"
-      repoManagerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9101"
-      appManagerEndpoint:        "openpitrix-hyperpitrix.openpitrix-system.svc:9102"
-      categoryManagerEndpoint:   "openpitrix-hyperpitrix.openpitrix-system.svc:9113"
-      attachmentManagerEndpoint: "openpitrix-hyperpitrix.openpitrix-system.svc:9122"
-      repoIndexerEndpoint:       "openpitrix-hyperpitrix.openpitrix-system.svc:9108"
+      runtimeManagerEndpoint:    "openpitrix-runtime-manager.openpitrix-system.svc:9103"
+      clusterManagerEndpoint:    "openpitrix-cluster-manager.openpitrix-system.svc:9104"
+      repoManagerEndpoint:       "openpitrix-repo-manager.openpitrix-system.svc:9101"
+      appManagerEndpoint:        "openpitrix-app-manager.openpitrix-system.svc:9102"
+      categoryManagerEndpoint:   "openpitrix-category-manager.openpitrix-system.svc:9113"
+      attachmentManagerEndpoint: "openpitrix-attachment-manager.openpitrix-system.svc:9122"
+      repoIndexerEndpoint:       "openpitrix-repo-indexer.openpitrix-system.svc:9108"
 {% endif %}
-
 
 {% if monitoring.enabled is defined and monitoring.enabled == true %}
     monitoring:
       endpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
       secondaryEndpoint: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
 {% endif %}
-
 
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     logging:
@@ -83,12 +78,10 @@ data:
       match: kube.*
 {% endif %}
 
-
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
       endpoint: http://alerting.kubesphere-alerting-system.svc
 {% endif %}
-
 
 {% if notification.enabled is defined and notification.enabled == true %}
     notification:
