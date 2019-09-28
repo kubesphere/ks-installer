@@ -24,7 +24,7 @@ ks_hook = '''
 	"onKubernetesEvent": [{
 		"name": "Monitor configmap",
 		"kind": "ConfigMap",
-		"event": ["update"],
+		"event": ["create", "update"],
 		"objectName": "ks-installer",
 		"namespaceSelector": {
 			"any": true
