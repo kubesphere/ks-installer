@@ -743,7 +743,7 @@ downloads:
       - kube-node
       -
   openebs_provisioner:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: true
     container: true
     repo: "{{ openebs_provisioner_localpv_repo }}"
     tag: "{{ openebs_provisioner_localpv_tag }}"
@@ -752,7 +752,7 @@ downloads:
       - kube-cluster
 
   openebs_openebs_tools:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: true
     container: true
     repo: "{{ openebs_openebs_tools_repo }}"
     tag: "{{ openebs_openebs_tools_tag }}"
@@ -761,7 +761,7 @@ downloads:
       - kube-cluster
 
   openebs_node_disk_manager_amd64:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: true
     container: true
     repo: "{{ openebs_node_disk_manager_amd64_repo }}"
     tag: "{{ openebs_node_disk_manager_amd64_tag }}"
@@ -770,7 +770,7 @@ downloads:
       - kube-cluster
 
   openebs_node_disk_operator_amd64:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: true
     container: true
     repo: "{{ openebs_node_disk_operator_amd64_repo }}"
     tag: "{{ openebs_node_disk_operator_amd64_tag }}"
@@ -779,13 +779,13 @@ downloads:
       - kube-cluster
 
   openebs_linux_utils:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: true
     container: true
     repo: "{{ openebs_linux_utils_repo }}"
     tag: "{{ openebs_linux_utils_tag }}"
     sha256: "{{openebs_linux_utils|default(None) }}"
     groups:
-      - kube-cluster
+      - kube-clusterls
 
 download_defaults:
   container: false
