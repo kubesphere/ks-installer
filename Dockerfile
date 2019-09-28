@@ -13,7 +13,7 @@ RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers pytho
 
 ENV  ANSIBLE_ROLES_PATH /kubesphere/installer/roles
 
-ADD controller/installer.py /hooks/kubesphere
+ADD controller/installRunner.py /hooks/kubesphere
 ADD roles /kubesphere/installer/roles
 ADD env /kubesphere/results/env
 ADD playbooks /kubesphere/playbooks
