@@ -30,8 +30,8 @@
   shell: >
     {{ bin_dir }}/kubectl get pod -n openebs | grep provisioner | grep Running
   register: openebs_check
-  retries: 20
-  delay: 10
+  retries: 3
+  delay: 150
   ignore_errors: yes
   
 - name: openebs failed and how to solve
