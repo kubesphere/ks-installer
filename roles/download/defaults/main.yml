@@ -399,6 +399,16 @@ bookinfo_ratings_v1_tag: "{{ examples_bookinfo_version }}"
 
 
 downloads:
+
+  ks_installer:
+    enabled: true
+    container: true
+    repo: "{{ks_installer_repo }}"
+    tag: "{{ ks_installer_tag }}"
+    sha256: "{{ ks_installer|default(None) }}"
+    groups:
+      - kube-node
+
   busybox:
     enabled: true
     container: true
@@ -436,7 +446,7 @@ downloads:
       - kube-node
 
   alerting_dbinit:
-    enabled: true
+    enabled: "{{ alerting_enabled }}"
     container: true
     repo: "{{ alerting_dbinit_repo }}"
     tag: "{{ alerting_dbinit_tag }}"
@@ -453,17 +463,17 @@ downloads:
     groups:
       - kube-master
 
-  ks_devops:
-    enabled: true
-    container: true
-    repo: "{{ ks_devops_repo }}"
-    tag: "{{ ks_devops_tag }}"
-    sha256: "{{ ks_devops_checksum|default(None) }}"
-    groups:
-      - kube-node
+#  ks_devops:
+#    enabled: true
+#    container: true
+#    repo: "{{ ks_devops_repo }}"
+#    tag: "{{ ks_devops_tag }}"
+#    sha256: "{{ ks_devops_checksum|default(None) }}"
+#    groups:
+#      - kube-node
 
   ks_devops_flyway:
-    enabled: true
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ ks_devops_flyway_repo }}"
     tag: "{{ ks_devops_flyway_tag }}"
@@ -508,7 +518,7 @@ downloads:
       - kube-node
 
   jenkins_uc:
-    enabled: true
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ jenkins_uc_repo }}"
     tag: "{{ jenkins_uc_tag }}"
@@ -517,7 +527,7 @@ downloads:
       - kube-node
 
   jenkins:
-    enabled: true
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ jenkins_repo }}"
     tag: "{{ jenkins_tag }}"
@@ -616,7 +626,7 @@ downloads:
       - kube-node
 
   jnlp_slave:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ jnlp_slave_repo }}"
     tag: "{{ jnlp_slave_tag }}"
@@ -625,7 +635,7 @@ downloads:
       - kube-node
 
   builder_base:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ builder_base_repo }}"
     tag: "{{ builder_base_tag }}"
@@ -634,7 +644,7 @@ downloads:
       - kube-node
 
   builder_nodejs:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ builder_nodejs_repo }}"
     tag: "{{ builder_nodejs_tag }}"
@@ -643,7 +653,7 @@ downloads:
       - kube-node
 
   docker_ce:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ docker_ce_repo }}"
     tag: "{{ docker_ce_tag }}"
@@ -652,7 +662,7 @@ downloads:
       - kube-node
 
   builder_maven:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ builder_maven_repo }}"
     tag: "{{ builder_maven_tag }}"
@@ -661,7 +671,7 @@ downloads:
       - kube-node
 
   builder_go:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ builder_go_repo }}"
     tag: "{{ builder_go_tag }}"
@@ -670,7 +680,7 @@ downloads:
       - kube-node
 
   istio_kubectl:
-    enabled: "true"
+    enabled: "{{ servicemesh_enabled }}"
     container: true
     repo: "{{ istio_hub }}/{{ istio_kubectl_image }}"
     tag: "{{ istio_tag }}"
@@ -679,7 +689,7 @@ downloads:
       - kube-node
 
   istio_sidecar_injector:
-    enabled: "true"
+    enabled: "{{ servicemesh_enabled }}"
     container: true
     repo: "{{ istio_hub }}/{{ istio_sidecar_injector_image }}"
     tag: "{{ istio_tag }}"
@@ -688,7 +698,7 @@ downloads:
       - kube-node
 
   sonarqube:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ sonarqube_repo }}"
     tag: "{{ sonarqube_tag }}"
@@ -697,7 +707,7 @@ downloads:
       - kube-node
 
   fluentbit_operator:
-    enabled: "true"
+    enabled: "{{ logging_enabled }}"
     container: true
     repo: "{{ fluentbit_operator_repo }}"
     tag: "{{ fluentbit_operator_tag }}"
