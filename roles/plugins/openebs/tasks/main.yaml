@@ -26,6 +26,18 @@
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
+- name: check openebs is ok
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n openebs | grep provisioner | grep Running
+  register: openebs_check
+  retries: 20
+  delay: 10
+  ignore_errors: yes
+  
+- name: openebs failed and how to solve
+  fail:
+     msg: "Please follow the steps below \n kubectl describe pod -n openebs `kubectl get pod -n openebs |grep provisioner|awk '{print $1}'` "
+  when: "openebs_check.rc!=0"
 
  
 

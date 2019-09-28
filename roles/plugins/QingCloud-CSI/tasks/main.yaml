@@ -58,3 +58,18 @@
 #  register: import 
 #  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 #  when: inventory_hostname == groups['kube-master'][0]
+
+- name: check csi is ok
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kube-system | grep csi-qingcloud-controller | grep Running
+  register: csi_check
+  retries: 20
+  delay: 10
+  ignore_errors: yes
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: csi failed and how to solve
+  fail:
+     msg: "Please follow the steps below \n kubectl describe pod -n kube-system `kubectl get pod -n kube-system |grep csi-qingcloud-controller|awk '{print $1}'` "
+  when: "csi.rc!=0"
+  when: inventory_hostname == groups['kube-master'][0]

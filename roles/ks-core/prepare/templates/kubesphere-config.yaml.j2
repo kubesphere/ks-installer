@@ -70,7 +70,7 @@ data:
       secondaryEndpoint: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
 {% endif %}
 
-{% if openpitrix.enabled is defined and openpitrix.enabled == true %}
+{% if logging.enabled is defined and logging.enabled == true %}
     logging:
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
       logstashFormat: true
