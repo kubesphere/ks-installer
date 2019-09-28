@@ -98,7 +98,6 @@ data:
         websocket
       }
 
-
       # monitoring
       proxy /kapis/monitoring.kubesphere.io http://ks-apiserver.kubesphere-system.svc {
         transparent
@@ -107,6 +106,11 @@ data:
       # notification
       proxy /kapis/notification.kubesphere.io http://notification.kubesphere-alerting-system.svc:9200 {
         without /kapis/notification.kubesphere.io
+        transparent
+      }
+
+      # everything else goes to ks-apiserver
+      proxy /kapis http://ks-apiserver.kubesphere-system.svc {
         transparent
       }
       
