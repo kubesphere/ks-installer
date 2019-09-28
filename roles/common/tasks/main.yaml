@@ -130,8 +130,8 @@
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system|grep redis|grep Running
   register: redis_and_storage_class_check
-  retries: 20
-  delay: 10
+  retries: 10
+  delay: 100
   ignore_errors: yes
   
 - name: redis failed and how to solve
