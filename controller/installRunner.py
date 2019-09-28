@@ -12,7 +12,7 @@ import collections
 
 
 playbookBasePath = '/root/ks-installer/playbooks'
-privateDataDir = '/etc/kubesphere'
+privateDataDir = '/etc/kubesphere/results'
 configFile = '/root/ks-installer/controller/config.yaml'
 
 # playbookBasePath = '/kubesphere/playbooks'
@@ -81,6 +81,7 @@ class component():
 
 def getResultInfo():
     resultsList = checkExecuteResult()
+    # print(resultsList)
     for taskResult in resultsList:
         taskName = taskResult.keys()[0]
         taskRC = taskResult.values()[0]
@@ -89,7 +90,7 @@ def getResultInfo():
             resultInfoPath = os.path.join(
                 privateDataDir,
                 str(taskName),
-                'artifacts/',
+                # 'artifacts/',
                 str(taskName),
                 'job_events'
             )
@@ -102,21 +103,22 @@ def getResultInfo():
                 errorEventFile = os.path.join(resultInfoPath, jobList[-2])
                 with open(errorEventFile, 'r') as f:
                     failedEvent = json.load(f)
-                errorMsg = failedEvent["stdout"]
                 print("\n")
                 print("Task '{}' failed:".format(taskName))
                 print('*' * 150)
-                print(errorMsg)
+                print(failedEvent)
                 print('*' * 150)
 
 # Operation result check
 
 
-def checkExecuteResult(interval=2):
+def checkExecuteResult(interval=5):
     '''
     :param interval: Result inspection cycle. Unit: second(s)
     '''
     taskProcessList = executeTask()
+    taskProcessListLen = len(taskProcessList)
+    print('*' * 50)
     while True:
         time.sleep(interval)
         completedTasks = []
@@ -132,9 +134,13 @@ def checkExecuteResult(interval=2):
                 completedTasks.append({taskName: result})
 
         if len(completedTasks) != 0:
+            print("total: {}     completed:{}".format(taskProcessListLen, len(completedTasks)))
             print('*' * 50)
-        if len(completedTasks) == len(taskProcessList):
+
+        if len(completedTasks) == taskProcessListLen:
             break
+
+
 
     return completedTasks
 # Execute and add the installation task process
@@ -170,7 +176,7 @@ def generateTaskLists():
             private_data_dir=privateDataDir,
             artifact_dir=artifactDir,
             ident=str(taskName),
-            quiet=False,
+            quiet=True,
             rotate_artifacts=1
         )
 
@@ -186,7 +192,7 @@ def getComponentLists():
 
     if os.path.exists(configFile):
         with open(configFile, 'r') as f:
-            configs = yaml.load(f.read())
+            configs = yaml.load(f.read(), Loader=yaml.FullLoader)
         f.close()
     else:
         print("The configuration file does not exist !  {}".format(configFile))
@@ -200,7 +206,8 @@ def getComponentLists():
             elif (j == 'enabled') and (value == False):
                 readyToDisableList.append(component)
                 break
-
+    # print(readyToEnabledList)
+    # print(readyToDisableList)
     return readyToEnabledList, readyToDisableList
 
 
