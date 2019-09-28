@@ -15,7 +15,10 @@ data:
       storageClass: ""
 
     plugins:
-      defaultStorage: "openebs-hostpath"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
+      defaultStorage: "{{ defaultStorage }}"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
+
+
+
 
     common:
       mysqlVolumeSize: 20Gi
@@ -27,8 +30,9 @@ data:
     metrics-server:
       enabled: False
 
-    ks-console:
+    console:
       disableMultiLogin: True  # enable/disable multi login
+      port: 30880
 
     monitoring:
       enabled: True

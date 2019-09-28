@@ -109,6 +109,10 @@ ks_image_pull_policy: IfNotPresent
 ks_hostnic_repo: "kubespheredev/hostnic"
 ks_hostnic_tag: "v1.0.0-alpha"
 
+#ks-installer
+ks_installer_repo: "{{ base_repo }}kubespheredev/ks-installer"
+ks_installer_tag: "latest"
+
 #ks-notification
 notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
 notification_flyway_tag: "flyway-advanced-2.0.2"

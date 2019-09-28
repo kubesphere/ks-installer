@@ -16,7 +16,7 @@ import collections
 # configFile = '/root/ks-installer/controller/config.yaml'
 
 playbookBasePath = '/kubesphere/playbooks'
-privateDataDir = '/etc/kubesphere/results'
+privateDataDir = '/kubesphere/results'
 configFile = '/kubesphere/config/ks-config.yaml'
 
 ks_hook = '''
