@@ -15,7 +15,7 @@ data:
       storageClass: ""
 
     plugins:
-      defaultStorage: "openebs-hostpath"    # "csi-aliyun", "csi-tencentcloud"
+      defaultStorage: "openebs-hostpath"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
 
     common:
       mysqlVolumeSize: 20Gi
@@ -25,7 +25,7 @@ data:
       redisVolumSize: 2Gi
 
     metrics-server:
-      enabled: True
+      enabled: False
 
     ks-console:
       disableMultiLogin: True  # enable/disable multi login
@@ -52,38 +52,34 @@ data:
         enabled: false
 #     externalElasticsearchUrl:
 #     externalElasticsearchPort:
-#     endpoint: http://elasticsearch-logging.kubesphere-system.svc:9200
 
     openpitrix:
-      enabled: True
-      apigateway:
-            endpoint: http://api.openpitrix.svc:9100
+      enabled: False
 
     devops:
-      enabled: True
+      enabled: False
       jenkinsMemoryLim: "8Gi"
       jenkinsMemoryReq: "4Gi"
       jenkinsVolumeSize: "8Gi"
-#      endpoint: http://devops.kubesphere-system.svc:9000
       sonarqube:
-        enabled: True
+        enabled: False
 #        externalSonarUrl:
 #        externalSonarToken:
 
     servicemesh:
-      enabled: True
+      enabled: False
 
     notification:
-      enabled: True
+      enabled: False
 
     alerting:
-      enabled: True
+      enabled: False
 
     harbor:
-      enabled: True
+      enabled: False
 
     gitlab:
-      enabled: True
+      enabled: False
 
 kind: ConfigMap
 metadata:

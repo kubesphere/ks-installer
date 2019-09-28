@@ -11,13 +11,13 @@ import ansible_runner
 import collections
 
 
-playbookBasePath = '/root/ks-installer/playbooks'
-privateDataDir = '/etc/kubesphere/results'
-configFile = '/root/ks-installer/controller/config.yaml'
+# playbookBasePath = '/root/ks-installer/playbooks'
+# privateDataDir = '/etc/kubesphere/results'
+# configFile = '/root/ks-installer/controller/config.yaml'
 
-# playbookBasePath = '/kubesphere/playbooks'
-# privateDataDir = '/etc/kubesphere'
-# configFile = '/kubesphere/config/ks-config.yaml'
+playbookBasePath = '/kubesphere/playbooks'
+privateDataDir = '/etc/kubesphere/results'
+configFile = '/kubesphere/config/ks-config.yaml'
 
 ks_hook = '''
 {
