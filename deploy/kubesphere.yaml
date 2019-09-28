@@ -1,22 +1,5 @@
 ---
 apiVersion: v1
-data:
-  ks-config.yaml: |
-    kube_apiserver_host: 192.168.0.2:6443
-    etcd_tls_enable: True
-    etcd_endpoint_ips: 192.168.0.2
-    disableMultiLogin: True
-    elk_prefix: logstash
-    persistence:
-      enable: false
-      storageClass: ""
-kind: ConfigMap
-metadata:
-  name: kubesphere-config
-  namespace: kubesphere-system
-
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: ks-installer
@@ -123,27 +106,53 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 
 ---
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: kubesphere-installer
   namespace: kubesphere-system
+  labels:
+    app: ks-install
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ks-install
   template:
+    metadata:
+      labels:
+        app: ks-install
     spec:
       serviceAccountName: ks-installer
       containers:
-      - name: ansible
-        command: ["ansible-playbook", "/usr/src/kubesphere/kubesphere.yaml", "-b", "-e", "@/usr/src/kubesphere/conf/ks-config.yaml"]
-        image: "kubespheredev/ks-installer:advanced-2.0.2"
+      - name: installer
+        image: "pixiake/shell-operator:test"
         imagePullPolicy: "Always"
         volumeMounts:
           - name: kubesphere-config
-            mountPath: /usr/src/kubesphere/conf
-      restartPolicy: OnFailure
+            mountPath: /kubesphere/config
+          - name: kubesphere
+            mountPath: /etc/kubesphere
       volumes:
         - name: kubesphere-config
           configMap:
-            name: kubesphere-config
-
-
+            name: ks-installer
+        - name: kubesphere
+          hostPath:
+            path: /etc/kubesphere
+            type: DirectoryOrCreate
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: In
+                values:
+                - ""

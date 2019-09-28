@@ -27,5 +27,3 @@
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-controller-manager/ks-controller-manager.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-  tags:
-    - upgrade

@@ -1,13 +1,19 @@
-FROM ubuntu:18.04
+FROM flant/shell-operator:latest-alpine3.9
 
-WORKDIR /usr/src/kubesphere
+RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers python2-dev py-pip make openssl curl && \
+    pip install --no-cache-dir psutil ansible_runner ansible && \
+    wget https://get.helm.sh/helm-v2.10.0-linux-amd64.tar.gz && \
+    tar -zxf helm-v2.10.0-linux-amd64.tar.gz && \
+    mv linux-amd64/helm /bin/helm && \
+    rm -rf *linux-amd64* && \
+    chmod +x /bin/helm && \
+    ln -s /bin/kubectl /usr/local/bin/kubectl && \
+    ln -s /bin/helm /usr/local/bin/helm && \
+    mkdir -p /hooks/kubesphere /kubesphere/installer/roles /kubesphere/results/env /kubesphere/playbooks
 
-RUN apt update && apt install ansible python-netaddr openssl  curl jq  make software-properties-common -y &&  apt-add-repository --yes --update ppa:ansible/ansible && apt install ansible -y && apt clean
+ENV  ANSIBLE_ROLES_PATH /kubesphere/installer/roles
 
-RUN curl -SsL https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl &&  chmod +x /usr/local/bin/kubectl
-
-RUN curl -OSsL https://get.helm.sh/helm-v2.10.0-linux-amd64.tar.gz && tar -zxf helm-v2.10.0-linux-amd64.tar.gz && mv linux-amd64/helm /usr/local/bin/helm && rm -rf *linux-amd64* && chmod +x /usr/local/bin/helm
-
-COPY roles .
-
-COPY kubesphere.yaml .
+ADD controller/installRunner.py /hooks/kubesphere
+ADD roles /kubesphere/installer/roles
+ADD env /kubesphere/results/env
+ADD playbooks /kubesphere/playbooks
