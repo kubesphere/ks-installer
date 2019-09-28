@@ -1,0 +1,83 @@
+---
+apiVersion: v1
+data:
+  ks-config.yaml: |
+    ---
+    kubernetes:
+      apiserverAddr: 192.168.0.2:6443      # master addr or master's lb addr
+
+    etcd:
+      endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
+      port: 2379
+      tlsEnable: True
+
+    persistence:
+      storageClass: ""
+
+    plugins:
+      defaultStorage: "openebs-hostpath"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
+
+    common:
+      mysqlVolumeSize: 20Gi
+      minioVolumeSize: 20Gi
+      etcdVolumeSize: 20Gi
+      openldapVolumeSize: 2Gi
+      redisVolumSize: 2Gi
+
+    metrics-server:
+      enabled: False
+
+    ks-console:
+      disableMultiLogin: True  # enable/disable multi login
+
+    monitoring:
+      enabled: True
+      prometheusReplica: 2
+      prometheusMemoryRequest: 400Mi
+      prometheusVolumeSize: 20Gi
+      grafana:
+        enabled: false
+
+    logging:
+      enabled: True
+      elasticsearchMasterReplica: 1
+      elasticsearchDataReplica: 2
+      elasticsearchVolumeSize: 20Gi
+      logMaxAge: 7
+      elkPrefix: logstash
+      containersLogMountedPath: ""
+      kibana:
+        enabled: false
+      logsidecarInjector:
+        enabled: false
+
+    openpitrix:
+      enabled: False
+
+    devops:
+      enabled: False
+      jenkinsMemoryLim: "8Gi"
+      jenkinsMemoryReq: "4Gi"
+      jenkinsVolumeSize: "8Gi"
+      sonarqube:
+        enabled: False
+
+    servicemesh:
+      enabled: False
+
+    notification:
+      enabled: False
+
+    alerting:
+      enabled: False
+
+    harbor:
+      enabled: False
+
+    gitlab:
+      enabled: False
+
+kind: ConfigMap
+metadata:
+  name: ks-installer
+  namespace: kubesphere-system
