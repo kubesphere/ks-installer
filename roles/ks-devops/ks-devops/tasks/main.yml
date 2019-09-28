@@ -1,7 +1,7 @@
 ---
 
-- name: KubeSphere | Waiting for kubesphere-db
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system get pod | grep ks-db-deployment | awk '{print $3}'"
+- name: KubeSphere | Waiting for mysql
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-system get pod | grep mysql | awk '{print $3}'"
   register: result
   until:
     - result.stdout.find("Running") != -1

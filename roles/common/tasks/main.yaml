@@ -26,9 +26,9 @@
 
 - include_tasks: pv-migration.yaml
   loop:
-    - {op: "openpitrix-db", ks: "kubesphere-db-pvc"}
-    - {op: "openpitrix-etcd", ks: "kubesphere-etcd-pvc"}
-    - {op: "openpitrix-minio", ks: "kubesphere-minio-pvc"}
+    - {op: "openpitrix-db", ks: "mysql-pvc"}
+    - {op: "openpitrix-etcd", ks: "etcd-pvc"}
+    - {op: "openpitrix-minio", ks: "minio-pvc"}
   when:
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
 
@@ -38,11 +38,11 @@
 
     - name: Getting PersistentVolumeName (mysql)
       shell: >
-        kubectl get pv | grep "kubesphere-db-pvc" | awk '{print $1}'
+        kubectl get pv | grep "mysql-pvc" | awk '{print $1}'
       register: pvName
     - name: Getting PersistentVolumeSize (mysql)
       shell: >
-        kubectl get pv | grep "kubesphere-db-pvc" | awk '{print $2}'
+        kubectl get pv | grep "mysql-pvc" | awk '{print $2}'
       register: pvSize
 
     - name: Setting PersistentVolumeName (mysql)
@@ -56,11 +56,11 @@
 
     - name: Getting PersistentVolumeName (etcd)
       shell: >
-        kubectl get pv | grep "kubesphere-etcd-pvc" | awk '{print $1}'
+        kubectl get pv | grep "etcd-pvc" | awk '{print $1}'
       register: pvName
     - name: Getting PersistentVolumeSize (etcd)
       shell: >
-        kubectl get pv | grep "kubesphere-etcd-pvc" | awk '{print $2}'
+        kubectl get pv | grep "etcd-pvc" | awk '{print $2}'
       register: pvSize
 
     - name: Setting PersistentVolumeName (etcd)
@@ -74,11 +74,11 @@
 
     - name: Getting PersistentVolumeName (minio)
       shell: >
-        kubectl get pv | grep "kubesphere-minio-pvc" | awk '{print $1}'
+        kubectl get pv | grep "minio-pvc" | awk '{print $1}'
       register: pvName
     - name: Getting PersistentVolumeSize (minio)
       shell: >
-        kubectl get pv | grep "kubesphere-minio-pvc" | awk '{print $2}'
+        kubectl get pv | grep "minio-pvc" | awk '{print $2}'
       register: pvSize
 
     - name: Setting PersistentVolumeName (minio)
@@ -147,17 +147,17 @@ ubectl get pvc -n kubesphere-system "
 
     - name: Setting persistentVolumeReclaimPolicy (mysql)
       shell: >
-        kubectl patch pv $(kubectl get pv | grep "kubesphere-db-pvc" | awk '{print $1}')
+        kubectl patch pv $(kubectl get pv | grep "mysql-pvc" | awk '{print $1}')
         -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
 
     - name: Setting persistentVolumeReclaimPolicy (etcd)
       shell: >
-        kubectl patch pv $(kubectl get pv | grep "kubesphere-etcd-pvc" | awk '{print $1}')
+        kubectl patch pv $(kubectl get pv | grep "etcd-pvc" | awk '{print $1}')
         -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
 
     - name: Setting persistentVolumeReclaimPolicy (minio)
       shell: >
-        kubectl patch pv $(kubectl get pv | grep "kubesphere-minio-pvc" | awk '{print $1}')
+        kubectl patch pv $(kubectl get pv | grep "minio-pvc" | awk '{print $1}')
         -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
 
   when:
