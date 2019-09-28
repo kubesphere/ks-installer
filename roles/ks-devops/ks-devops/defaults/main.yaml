@@ -1,4 +1,4 @@
 ---
 
-dbHost: kubesphere-db.kubesphere-system.svc
+dbHost: mysql.kubesphere-system.svc
 dbPort: 3306

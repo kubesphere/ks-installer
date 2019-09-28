@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: kubesphere-minio-pvc
+  name: minio-pvc
   namespace: kubesphere-system
   labels:
     app: kubesphere
@@ -67,7 +67,7 @@ spec:
         version: advanced-2.0.1
     spec:
       containers:
-      - name: kubesphere-minio
+      - name: minio
         image: {{ minio_repo }}:{{ minio_tag }}
         imagePullPolicy: IfNotPresent
         lifecycle:
@@ -91,4 +91,4 @@ spec:
       volumes:
       - name: minio-persistent-storage
         persistentVolumeClaim:
-          claimName: kubesphere-minio-pvc
+          claimName: minio-pvc
