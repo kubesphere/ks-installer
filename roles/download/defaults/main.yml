@@ -652,14 +652,14 @@ downloads:
     groups:
       - kube-node
 
-  docker_ce:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ docker_ce_repo }}"
-    tag: "{{ docker_ce_tag }}"
-    sha256: "{{ docker_ce_checksum|default(None) }}"
-    groups:
-      - kube-node
+#  docker_ce:
+#    enabled: "{{ devops_enabled }}"
+#    container: true
+#    repo: "{{ docker_ce_repo }}"
+#    tag: "{{ docker_ce_tag }}"
+#    sha256: "{{ docker_ce_checksum|default(None) }}"
+#    groups:
+#      - kube-node
 
   builder_maven:
     enabled: "{{ devops_enabled }}"
