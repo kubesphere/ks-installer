@@ -15,7 +15,9 @@
 #    - { path: minio, file: minio.yaml }
 
 - name: OpenPitrix | Installing OpenPitrix(1)
-  shell: "cd {{ kubesphere_dir }}/openpitrix/hyperpitrix-kubernetes && chmod +x -R ./"
+  shell: >
+    chmod +x -R {{ kubesphere_dir }}/openpitrix
 
 - name: OpenPitrix | Installing OpenPitrix(2)
-  command: "{{ kubesphere_dir }}/openpitrix/hyperpitrix-kubernetes/scripts/deploy-k8s.sh -n openpitrix-system -v {{ openpitrix_version }} -a"
+  shell: >
+    {{ kubesphere_dir }}/openpitrix/hyperpitrix-kubernetes/scripts/deploy-k8s.sh -n openpitrix-system -v {{ openpitrix_version }} -a

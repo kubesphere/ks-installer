@@ -8,10 +8,10 @@ EMAIL_SMTP_PORT: 25
 EMAIL_FROM_PASS: P@ssw0rd
 
 
-dbHost: kubesphere-db.kubesphere-system.svc
+dbHost: mysql.kubesphere-system.svc
 dbPort: 3306
 
-etcdHost: kubesphere-etcd.kubesphere-system.svc
+etcdHost: etcd.kubesphere-system.svc
 etcdPort: 2379
 etcdEndpoint: "{{ etcdHost }}:{{ etcdPort }}"
 
