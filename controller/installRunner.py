@@ -106,7 +106,7 @@ def getResultInfo():
                 print("\n")
                 print("Task '{}' failed:".format(taskName))
                 print('*' * 150)
-                print(failedEvent)
+                print(json.dumps(failedEvent, sort_keys=True, indent=2))
                 print('*' * 150)
 
 # Operation result check
