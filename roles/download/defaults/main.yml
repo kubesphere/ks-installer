@@ -536,7 +536,7 @@ downloads:
       - kube-node
 
   csi_provisioner:
-    enabled: "{{ qingcloud_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ csi_provisioner_repo }}"
     tag: "{{ csi_provisioner_tag }}"
@@ -545,7 +545,7 @@ downloads:
       - kube-node
 
   csi_attacher:
-    enabled: "{{ qingcloud_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ csi_attacher_repo }}"
     tag: "{{ csi_attacher_tag }}"
@@ -554,7 +554,7 @@ downloads:
       - kube-node
 
   csi_qingcloud:
-    enabled: "{{ qingcloud_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ csi_qingcloud_repo }}"
     tag: "{{ csi_qingcloud_tag }}"
@@ -563,7 +563,7 @@ downloads:
       - kube-node
 
   driver_registrar:
-    enabled: "{{ qingcloud_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ driver_registrar_repo }}"
     tag: "{{ driver_registrar_tag }}"
@@ -572,7 +572,7 @@ downloads:
       - kube-node
 
   neonsan_driver_registrar:
-    enabled: "{{ neonsan_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ neonsan_driver_registrar_repo }}"
     tag: "{{ neonsan_driver_registrar_tag }}"
@@ -581,7 +581,7 @@ downloads:
       - kube-node
 
   csi_neonsan:
-    enabled: "{{ neonsan_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ csi_neonsan_repo }}"
     tag: "{{ csi_neonsan_tag }}"
@@ -590,7 +590,7 @@ downloads:
       - kube-node
 
   neonsan_csi_provisioner:
-    enabled: "{{ neonsan_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ neonsan_csi_provisioner_repo }}"
     tag: "{{ neonsan_csi_provisioner_tag }}"
@@ -599,7 +599,7 @@ downloads:
       - kube-node
 
   neonsan_csi_attacher:
-    enabled: "{{ neonsan_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ neonsan_csi_attacher_repo }}"
     tag: "{{ neonsan_csi_attacher_tag }}"
@@ -608,7 +608,7 @@ downloads:
       - kube-node
 
   neonsan_csi_snapshotter:
-    enabled: "{{ neonsan_csi_enabled }}"
+    enabled: false
     container: true
     repo: "{{ neonsan_csi_snapshotter_repo }}"
     tag: "{{ neonsan_csi_snapshotter_tag }}"
@@ -716,7 +716,7 @@ downloads:
       - kube-node
 
   vpa_admission_controller:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: false
     container: true
     repo: "{{ vpa_admission_controller_repo }}"
     tag: "{{ vpa_admission_controller_tag }}"
@@ -725,7 +725,7 @@ downloads:
       - kube-node
 
   vpa_recommender:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: false
     container: true
     repo: "{{ vpa_recommender_repo }}"
     tag: "{{ vpa_recommender_tag }}"
@@ -734,7 +734,7 @@ downloads:
       - kube-node
 
   vpa_updater:
-    enabled: "{{ vertical_pod_autoscaler_enable }}"
+    enabled: false
     container: true
     repo: "{{ vpa_updater_repo }}"
     tag: "{{ vpa_updater_tag }}"
