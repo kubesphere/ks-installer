@@ -13,7 +13,7 @@ spec:
     port: 80
     protocol: TCP
     targetPort: 8000
-    {% if console_port != None -%}
+    {% if console.port != None -%}
     nodePort: {{ console.port }}
     {%- endif %}
     
