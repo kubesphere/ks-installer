@@ -17,9 +17,6 @@
     - { name: tomcat, file: tomcat.yaml }
     - { name: s2ioperator, file: s2ioperator.yaml }
 
-- name: S2I | Creating S2I crds
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/s2i-crd.yaml"
-
 - name: S2I | Creating S2I secret(1)
   file:
     path: "{{ kubesphere_dir }}/s2i/certs.sh"
