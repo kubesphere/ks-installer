@@ -134,13 +134,14 @@ def checkExecuteResult(interval=5):
                 completedTasks.append({taskName: result})
 
         if len(completedTasks) != 0:
-            print("total: {}     completed:{}".format(taskProcessListLen, len(completedTasks)))
+            print(
+                "total: {}     completed:{}".format(
+                    taskProcessListLen,
+                    len(completedTasks)))
             print('*' * 50)
 
         if len(completedTasks) == taskProcessListLen:
             break
-
-
 
     return completedTasks
 # Execute and add the installation task process
@@ -241,16 +242,22 @@ def preInstallTasks():
         if pretask.rc != 0:
             exit()
 
+
 def resultInfo():
     result = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'result-info.yaml'),
         private_data_dir=privateDataDir,
         artifact_dir=os.path.join(privateDataDir, 'result-info'),
         ident='result',
-        quiet=False
+        quiet=True
     )
+
     if result.rc != 0:
         exit()
+
+    with open('/kubesphere/playbooks/kubesphere_running', 'r') as f:
+        info = f.read()
+        print(info)
 
 
 def main():
