@@ -73,9 +73,7 @@ data:
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
-      logstashFormat: true
-      logstashPrefix: ks-logstash-log
-      match: kube.*
+      indexPrefix: ks-logstash-log
 {% endif %}
 
 {% if alerting.enabled is defined and alerting.enabled == true %}
