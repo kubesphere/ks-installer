@@ -247,7 +247,7 @@ def resultInfo():
         private_data_dir=privateDataDir,
         artifact_dir=os.path.join(privateDataDir, 'result-info'),
         ident='result',
-        quiet=True
+        quiet=False
     )
     if resultInfo.rc != 0:
         exit()
