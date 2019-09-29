@@ -43,7 +43,7 @@ ks_hook = '''
       "kind": "ConfigMap",
       "watchEvent": ["Added", "Modified"],
       "nameSelector": {
-         "matchNames": ["ks-installer"],
+         "matchNames": ["ks-installer"]
       },
       "namespace": {
         "nameSelector": ["kubesphere-system"]
