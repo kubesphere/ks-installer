@@ -226,6 +226,7 @@ Master:
       import java.util.*
       import com.michelin.cio.hudson.plugins.rolestrategy.*
       import java.lang.reflect.*
+      import com.synopsys.arc.jenkins.plugins.rolestrategy.*
 
       def env = System.getenv()
 
@@ -254,7 +255,7 @@ Master:
       }
 
       // Make the method assignRole accessible
-      Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", String.class, Role.class, String.class);
+      Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", RoleType.class, Role.class, String.class);
       assignRoleMethod.setAccessible(true);
 
       // Create admin set of permissions
@@ -295,10 +296,10 @@ Master:
 
       // Create the admin Role
       Role adminRole = new Role(globalRoleAdmin, adminPermissions);
-      roleBasedAuthenticationStrategy.addRole(RoleBasedAuthorizationStrategy.GLOBAL, adminRole);
+      roleBasedAuthenticationStrategy.addRole(RoleType.Global, adminRole);
 
       // Assign the role
-      roleBasedAuthenticationStrategy.assignRole(RoleBasedAuthorizationStrategy.GLOBAL, adminRole, ldapUserNameAdmin);
+      roleBasedAuthenticationStrategy.assignRole(RoleType.Global, adminRole, ldapUserNameAdmin);
       println "Admin role created...OK"
 
       /// Read access for authenticated users
@@ -307,10 +308,10 @@ Master:
       authenticatedPermissions.add(Permission.fromId("hudson.model.Hudson.Read"));
 
       Role authenticatedRole = new Role(globalRoleRead, authenticatedPermissions);
-      roleBasedAuthenticationStrategy.addRole(RoleBasedAuthorizationStrategy.GLOBAL, authenticatedRole);
+      roleBasedAuthenticationStrategy.addRole(RoleType.Global, authenticatedRole);
 
       // Assign the role
-      roleBasedAuthenticationStrategy.assignRole(RoleBasedAuthorizationStrategy.GLOBAL, authenticatedRole, 'authenticated');
+      roleBasedAuthenticationStrategy.assignRole(RoleType.Global, authenticatedRole, 'authenticated');
       println "Read role created...OK"
 
       // Save the state
