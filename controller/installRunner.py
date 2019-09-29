@@ -241,6 +241,18 @@ def preInstallTasks():
         if pretask.rc != 0:
             exit()
 
+def resultInfo():
+    resultInfo = ansible_runner.run(
+        playbook=os.path.join(playbookBasePath, 'preinstall.yaml'),
+        private_data_dir=privateDataDir,
+        artifact_dir=os.path.join(privateDataDir, 'preinstall'),
+        ident='result',
+        quiet=False
+    )
+    if resultInfo.rc != 0:
+        exit()
+
+
 def main():
     if not os.path.exists(privateDataDir):
         os.makedirs(privateDataDir)
@@ -252,6 +264,7 @@ def main():
         # execute preInstall tasks
         preInstallTasks()
         getResultInfo()
+        resultInfo()
 
 
 if __name__ == '__main__':
