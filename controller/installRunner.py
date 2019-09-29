@@ -24,10 +24,10 @@ ks_hook = '''
 	"onKubernetesEvent": [{
 		"name": "Monitor configmap",
 		"kind": "ConfigMap",
-		"event": ["create", "update"],
+		"event": [ "add", "update" ],
 		"objectName": "ks-installer",
 		"namespaceSelector": {
-			"any": true
+			"matchNames": ["kubesphere-system"]
 		},
 		"jqFilter": ".data",
 		"allowFailure": false
