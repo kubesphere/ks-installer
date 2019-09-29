@@ -35,10 +35,10 @@
   delay: 30
   ignore_errors: yes
   
-- name: openebs failed and how to solve
-  fail:
-     msg: "Please follow the steps below \n kubectl describe pod -n openebs `kubectl get pod -n openebs |grep provisioner|awk '{print $1}'` "
-  when: "openebs_check.rc!=0"
+#- name: openebs failed and how to solve
+#  fail:
+#     msg: "Please follow the steps below \n kubectl describe pod -n openebs `kubectl get pod -n openebs |grep provisioner|awk '{print $1}'` "
+#  when: "openebs_check.rc!=0"
 
  
 
