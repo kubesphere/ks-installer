@@ -130,7 +130,7 @@
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system|grep redis|grep Running
   register: redis_and_storage_class_check
-  until: redis_and_storage_class_check.find("Running") != -1
+  until: redis_and_storage_class_check.stdout.find("Running") != -1
   retries: 30
   delay: 30
   ignore_errors: yes

@@ -30,7 +30,7 @@
   shell: >
     {{ bin_dir }}/kubectl get pod -n openebs | grep provisioner | grep Running
   register: openebs_check
-  until: openebs_check.find("Running") != -1
+  until: openebs_check.stdout.find("Running") != -1
   retries: 30
   delay: 30
   ignore_errors: yes
