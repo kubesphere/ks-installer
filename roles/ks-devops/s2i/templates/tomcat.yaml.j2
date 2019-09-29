@@ -135,7 +135,7 @@ spec:
       description: "The list of hosts that should be reached directly, bypassing the proxy, that translates into the http.nonProxyHosts system property."
       required: false
       defaultValue: ""
-  codeFramework: tomcat
+  codeFramework: java
   defaultBaseImage: {{ tomcat85_java8_repo }}:{{ ks_image_tag }}
   version: 0.0.1
   description: "This is a S2I builder template for Java builds whose result can be run directly with Tomcat application server."
