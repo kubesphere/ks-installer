@@ -135,11 +135,11 @@
   delay: 30
   ignore_errors: yes
   
-- name: redis failed and how to solve
-  fail:
-     msg: "Please follow the steps below \n First: docker images|grep redis  \n second: kubectl get sc \n Third: k
-ubectl get pvc -n kubesphere-system "
-  when: "redis_and_storage_class_check.rc!=0"
+#- name: redis failed and how to solve
+#  fail:
+#     msg: "Please follow the steps below \n First: docker images|grep redis  \n second: kubectl get sc \n Third: k
+#ubectl get pvc -n kubesphere-system "
+ # when: "redis_and_storage_class_check.rc!=0"
 
 
 
