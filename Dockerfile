@@ -1,4 +1,4 @@
-FROM flant/shell-operator:latest-alpine3.9
+FROM flant/shell-operator:v1.0.0-beta.5-alpine3.9
 
 RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers python2-dev py-pip make openssl curl && \
     pip install --no-cache-dir psutil ansible_runner ansible && \

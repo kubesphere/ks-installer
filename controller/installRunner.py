@@ -19,39 +19,19 @@ playbookBasePath = '/kubesphere/playbooks'
 privateDataDir = '/kubesphere/results'
 configFile = '/kubesphere/config/ks-config.yaml'
 
-# ks_hook = '''
-# {
-# 	"onKubernetesEvent": [{
-# 		"name": "Monitor configmap",
-# 		"kind": "ConfigMap",
-# 		"event": [ "Added", "Modified"],
-# 		"objectName": "ks-installer",
-# 		"namespaceSelector": {
-# 			"any": true
-# 		},
-# 		"jqFilter": ".data",
-# 		"allowFailure": false
-# 	}]
-# }
-
 ks_hook = '''
 {
-  "configVersion": "v1",
-  "kubernetes": [
-    {
-      "name": "Monitor configmap",
-      "kind": "ConfigMap",
-      "watchEvent": ["Added", "Modified"],
-      "nameSelector": {
-         "matchNames": ["ks-installer"]
-      },
-      "namespace": {
-        "nameSelector": ["kubesphere-system"]
-      },
-      "jqFilter": ".data",
-      "allowFailure": false
-    }
-  ]
+	"onKubernetesEvent": [{
+		"name": "Monitor configmap",
+		"kind": "ConfigMap",
+		"event": [ "add", "update" ],
+		"objectName": "ks-installer",
+		"namespaceSelector": {
+			"matchNames": ["kubesphere-system"]
+		},
+		"jqFilter": ".data",
+		"allowFailure": false
+	}]
 }
 '''
 
