@@ -242,14 +242,14 @@ def preInstallTasks():
             exit()
 
 def resultInfo():
-    resultInfo = ansible_runner.run(
+    result = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'result-info.yaml'),
         private_data_dir=privateDataDir,
         artifact_dir=os.path.join(privateDataDir, 'result-info'),
         ident='result',
         quiet=False
     )
-    if resultInfo.rc != 0:
+    if result.rc != 0:
         exit()
 
 
