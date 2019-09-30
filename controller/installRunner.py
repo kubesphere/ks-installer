@@ -267,7 +267,7 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
     else:
-        time.sleep(10)
+        time.sleep(60)
         # execute preInstall tasks
         preInstallTasks()
         getResultInfo()
