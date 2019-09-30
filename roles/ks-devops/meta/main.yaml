@@ -15,3 +15,5 @@ dependencies:
 
 
   - role: ks-devops/jenkins
+
+  - role: ks-devops/jenkins-update-center
