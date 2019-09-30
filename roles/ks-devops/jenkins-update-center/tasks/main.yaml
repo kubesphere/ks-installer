@@ -1,0 +1,23 @@
+---
+
+- name: ks-devops | Getting sonarqube installation files
+  copy:
+    src: "jenkins-update-center"
+    dest: "{{ kubesphere_dir }}/"
+
+
+- name: jenkins-update-center | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/jenkins-update-center/values.yaml"
+  with_items:
+    - { name: values-jenkins-uc, file: values-jenkins-uc.yaml, type: values }
+
+
+- name: jenkins-update-center | Start Jenkins plugins update center
+  shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
+  register: result
+  until: result.rc == 0
+  retries: 20
+  delay: 30
+
