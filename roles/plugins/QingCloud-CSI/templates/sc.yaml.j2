@@ -20,7 +20,7 @@ metadata:
   name: csi-qingcloud
   annotations:
     storageclass.kubesphere.io/supported_access_modes: '["ReadWriteOnce"]'
-    storageclass.beta.kubernetes.io/is-default-class: "{% if qingcloud_csi_is_default_class %}true{% else %}false{% endif %}"
+    storageclass.beta.kubernetes.io/is-default-class: "{% if if defaultStorage is defined and defaultStorage == "csi-qingcloud" %}true{% else %}false{% endif %}"
 provisioner: csi-qingcloud
 parameters:
   type: "{{ qingcloud_type }}"
