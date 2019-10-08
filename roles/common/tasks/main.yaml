@@ -114,7 +114,7 @@
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
-- name: Kubesphere | Deploying mysql
+- name: Kubesphere | Deploying common component
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
   loop:
@@ -124,8 +124,9 @@
     - "minio.yaml"
     - "openldap.yaml"
   register: import
-  failed_when: "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
-
+  failed_when:
+    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
+    - "import.stderr and 'is forbidden' not in import.stderr"
 - name: check redis for check StroageClass
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system|grep redis|grep Running
