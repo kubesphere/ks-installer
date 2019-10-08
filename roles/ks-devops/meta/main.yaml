@@ -1,6 +1,9 @@
 ---
 
 dependencies:
+  - role: ks-devops/jenkins-update-center
+
+      
   - role: ks-devops/sonarqube
     when:
       - devops.sonarqube is defined
@@ -16,4 +19,4 @@ dependencies:
 
   - role: ks-devops/jenkins
 
-  - role: ks-devops/jenkins-update-center
+
