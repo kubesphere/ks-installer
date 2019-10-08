@@ -142,10 +142,10 @@ csi_qingcloud_repo: "{{ base_repo }}csiplugin/csi-qingcloud"
 csi_qingcloud_tag: v1.1.0-rc.1
 driver_registrar_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-node-driver-registrar"
 driver_registrar_tag: v1.2.0
-csi-snapshotter_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-snapshotter"
-csi-snapshotter_tag: v1.2.1
-csi-resizer_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-resizer"
-csi-resizer_tag: v0.2.0
+csi_snapshotter_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-snapshotter"
+csi_snapshotter_tag: v1.2.1
+csi_resizer_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-resizer"
+csi_resizer_tag: v0.2.0
 
 #neonsan-csi
 neonsan_driver_registrar_repo: "{{ ks_image_repo }}/k8scsi/driver-registrar"
