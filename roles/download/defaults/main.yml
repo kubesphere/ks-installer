@@ -146,7 +146,7 @@ csi_snapshotter_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-snapshotter"
 csi_snapshotter_tag: v1.2.1
 csi_resizer_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-resizer"
 csi_resizer_tag: v0.2.0
-csi_qingcloud_download: {% if default_storage is defined and default_storage == "csi-qingcloud" %}true{% else %}false{% endif %}
+csi_qingcloud_download: "{% if default_storage is defined and default_storage == 'csi-qingcloud' %}true{% else %}false{% endif %}"
 
 #neonsan-csi
 neonsan_driver_registrar_repo: "{{ ks_image_repo }}/k8scsi/driver-registrar"
