@@ -109,8 +109,8 @@ $ git clone https://github.com/kubesphere/ks-installer.git
 ```
 $ cd deploy
 
-$ vim kubesphere.yaml
-# 根据下方的参数说明列表，编辑 kubesphere.yaml 中 kubesphere-config 为当前集群参数信息（若etcd 无证书，设置 etcd_tls_enable: False）。
+$ vim kubesphere-installer.yaml
+# 根据下方的参数说明列表，编辑 kubesphere-installer.yaml 中 kubesphere-config 为当前集群参数信息（若 etcd 无证书，设置 etcd_tls_enable: False）。
 
 $ kubectl apply -f kubesphere-installer.yaml
 ```
