@@ -36,7 +36,7 @@ image_arch: "{{host_architecture | default('amd64')}}"
 
 # Versions
 ks_version: 2.0.2
-kube_version: v1.13.5
+kube_version: v1.15.4
 op_version: v0.3.5
 etcd_version: v3.2.18
 # kube image repo define
@@ -61,7 +61,16 @@ base_library_repo: >-
 
   {%- endif %}
 
-kube_image_repo: "{{ ks_image_repo }}/google_containers"
+
+# gcr and kubernetes image repo define
+gcr_image_repo: >-
+  {% if local_registry is defined -%}
+  {{ local_registry }}
+  {%- else -%}
+  gcr.azk8s.cn
+  {%- endif %}
+kube_image_repo: "{{ gcr_image_repo }}/google-containers"
+
 
 ks_image_tag: "latest"
 
