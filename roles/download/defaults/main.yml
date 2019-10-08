@@ -311,8 +311,8 @@ kibana_oss_repo: "{{ ks_image_repo }}/kibana/kibana-oss"
 kibana_oss_tag: 6.7.0
 testFramework_repo: "{{ base_repo }}dduportal/bats"
 testFramework_tag: 0.4.0
-fluentbit_operator_repo: "{{ base_repo }}kubesphere/fluentbit-operator"
-fluentbit_operator_tag: "advanced-2.0.0"
+fluentbit_operator_repo: "{{ base_repo }}kubespheredev/fluentbit-operator"
+fluentbit_operator_tag: "latest"
 ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
 ks_fluent_bit_tag: "v1.2.1-reload"
 kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
