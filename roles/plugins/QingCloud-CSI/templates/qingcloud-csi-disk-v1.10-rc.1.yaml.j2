@@ -712,7 +712,7 @@ spec:
         env:
         - name: ADDRESS
           value: /csi/csi.sock
-        image: {{ csi-snapshotter_repo }}:{{ csi-snapshotter_tag }}
+        image: {{ csi_snapshotter_repo }}:{{ csi_snapshotter_tag }}
         imagePullPolicy: IfNotPresent
         name: csi-snapshotter
         resources:
@@ -732,7 +732,7 @@ spec:
         env:
         - name: ADDRESS
           value: /csi/csi.sock
-        image: {{ csi-resizer_repo }}:{{ csi-resizer_tag}}
+        image: {{ csi_resizer_repo }}:{{ csi_resizer_tag}}
         imagePullPolicy: IfNotPresent
         name: csi-resizer
         resources:
