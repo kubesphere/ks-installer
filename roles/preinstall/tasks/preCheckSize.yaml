@@ -8,6 +8,7 @@
 - name: Stop if PV size mismatch
   assert:
     that: pvSize.stdout in item.size.split()
-    msg: "{{ item.pvc }}'s size is {{ pvSize.stdout }} (Don't match your config), Please modify the configuration"
+    msg: "{{ item.pvc }}'s size don't match your config, Please modify the configuration"
   when:
     - "pvSize.stdout | length  != 0"
+    - pvSize.stdout.find("G") != -1
