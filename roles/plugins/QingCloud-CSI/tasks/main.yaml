@@ -48,7 +48,7 @@
 - name: QCloud-CSI | Creating qingcloud-csi-disk-v1
   command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/qingcloud-csi-disk-v1.10-rc.1.yaml"
   register: import 
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
 
 #- name: QCloud-CSI | Creating Node ds
 #  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-node-ds.yaml"
