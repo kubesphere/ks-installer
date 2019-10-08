@@ -3,7 +3,7 @@
 > English | [中文](README_zh.md)
 
 In addition to supporting deploy on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises Kubernetes clusters,
- 
+
 ## Prerequisites
 
 - Kubernetes Version: >= 1.13.0
@@ -78,7 +78,7 @@ EOF
 ```bash
 kubectl -n kubesphere-system create secret generic kubesphere-ca  \
 --from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
---from-file=ca.key=/etc/kubernetes/pki/ca.key 
+--from-file=ca.key=/etc/kubernetes/pki/ca.key
 ```
 
 3. Create the Secret of certificate for ETCD in your Kubernetes cluster.
@@ -102,27 +102,33 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-4. Then we can start to install KubeSphere.
+4. Clone kubesphere-installer to your local
+
+```
+$ git clone https://github.com/kubesphere/ks-installer.git
+```
+
+5. Then we can start to install KubeSphere.
 
 ```bash
 $ cd deploy
 
-$ vim kubesphere.yaml   
+$ vim kubesphere-installer.yaml
 # According to the parameter table at the bottom, replace the value of "kubesphere-config" in "kubesphere.yaml" file with your current Kubernetes cluster parameters (If the ETCD has no certificate, set etcd_tls_enable: False).
 
-$ kubectl apply -f kubesphere.yaml
+$ kubectl apply -f kubesphere-installer.yaml
 ```
 
-5. Inspect the logs of installation.
+6. Inspect the logs of installation.
 
 ```bash
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-6. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
+7. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
 
 ```bash
-$ kubectl get svc -n kubesphere-system    
+$ kubectl get svc -n kubesphere-system
 # Inspect the NodePort of ks-console, it's 30880 by default.
 ```
 
@@ -258,4 +264,3 @@ If you need any help with KubeSphere, please join us at [Slack Channel](https://
 
 - Support multiple public cloud and private cloud, network plug-ins and storage plug-ins.
 - All components are designed to be loosely-coupled, and all features are pluggable. Installation will become very light and fast.
-

@@ -1,6 +1,6 @@
 # 在 Kubernetes 集群在线部署 KubeSphere
 
-> [English](README.md) | 中文 
+> [English](README.md) | 中文
 
 KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://kubesphere.io/)。
 
@@ -73,7 +73,7 @@ EOF
 ```bash
 $ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
 --from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
---from-file=ca.key=/etc/kubernetes/pki/ca.key 
+--from-file=ca.key=/etc/kubernetes/pki/ca.key
 ```
 
 3. 创建集群 etcd 的证书 Secret。
@@ -109,10 +109,10 @@ $ git clone https://github.com/kubesphere/ks-installer.git
 ```
 $ cd deploy
 
-$ vim kubesphere.yaml   
-# 根据下方的参数说明列表，编辑 kubesphere.yaml 中 kubesphere-config 为当前集群参数信息（若etcd 无证书，设置 etcd_tls_enable: False）。
+$ vim kubesphere-installer.yaml
+# 根据下方的参数说明列表，编辑 kubesphere-installer.yaml 中 kubesphere-config 为当前集群参数信息（若 etcd 无证书，设置 etcd_tls_enable: False）。
 
-$ kubectl apply -f kubesphere.yaml
+$ kubectl apply -f kubesphere-installer.yaml
 ```
 
 6. 查看部署日志。
@@ -124,7 +124,7 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l jo
 7. 查看控制台的服务端口，使用 `IP:30880` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
 
 ```
-$ kubectl get svc -n kubesphere-system    
+$ kubectl get svc -n kubesphere-system
 # 查看 ks-console 服务的端口  默认为 NodePort: 30880
 ```
 
