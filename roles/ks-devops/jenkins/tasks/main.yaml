@@ -1,5 +1,23 @@
 ---
 
+- name: ks-devops | Setting external sonarqube url
+  set_fact:
+    externalSonarUrl: "{{ devops.sonarqube.externalSonarUrl }}"
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is defined
+    - devops.sonarqube.externalSonarToken is defined
+
+- name: ks-devops | Setting ks-sonarqube token
+  set_fact:
+    externalSonarToken: "{{ devops.sonarqube.externalSonarToken }}"
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarUrl is defined
+    - devops.sonarqube.externalSonarToken is defined
+
 - import_tasks: check_sonar.yaml
   when:
     - devops.sonarqube.enabled is defined

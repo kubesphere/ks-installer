@@ -52,7 +52,7 @@
   ignore_errors: True
 
 - name: ks-devops | Setting sonarqube heaalth status
-  set_fact:
+  set_fact:s
     sonar_health: "{% if sonarqube_health.state is defined and sonarqube_health.state == 'started' %}true{% else %}false{% endif %}"
 
 - name: ks-devops | Setting ks-sonarqube url
@@ -66,9 +66,7 @@
 
 - name: ks-devops | Setting ks-sonarqube url
   set_fact:
-    devops:
-      sonarqube:
-        externalSonarUrl: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
+    externalSonarUrl: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
