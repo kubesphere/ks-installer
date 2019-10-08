@@ -82,7 +82,10 @@ data:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
                 - hostPathVolume:
-                    hostPath: "jenkins_nodejs_cache"
+                    hostPath: "jenkins_nodejs_yarn_cache"
+                    mountPath: "/usr/local/share/.cache"
+                - hostPathVolume:
+                    hostPath: "jenkins_nodejs_npm_cache"
                     mountPath: "/root/.npm"
                 - hostPathVolume:
                     hostPath: "sonar_cache"
