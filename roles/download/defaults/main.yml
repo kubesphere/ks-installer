@@ -146,6 +146,7 @@ csi_snapshotter_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-snapshotter"
 csi_snapshotter_tag: v1.2.1
 csi_resizer_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-resizer"
 csi_resizer_tag: v0.2.0
+csi_qingcloud_download: {% if default_storage is defined and default_storage == "csi-qingcloud" %}true{% else %}false{% endif %}
 
 #neonsan-csi
 neonsan_driver_registrar_repo: "{{ ks_image_repo }}/k8scsi/driver-registrar"
@@ -536,7 +537,7 @@ downloads:
       - kube-node
 
   csi_provisioner:
-    enabled: false
+    enabled: "{{ csi_qingcloud_download | default(false) }}"
     container: true
     repo: "{{ csi_provisioner_repo }}"
     tag: "{{ csi_provisioner_tag }}"
@@ -545,7 +546,7 @@ downloads:
       - kube-node
 
   csi_attacher:
-    enabled: false
+    enabled: "{{ csi_qingcloud_download | default(false) }}"
     container: true
     repo: "{{ csi_attacher_repo }}"
     tag: "{{ csi_attacher_tag }}"
@@ -554,7 +555,7 @@ downloads:
       - kube-node
 
   csi_qingcloud:
-    enabled: false
+    enabled: "{{ csi_qingcloud_download | default(false) }}"
     container: true
     repo: "{{ csi_qingcloud_repo }}"
     tag: "{{ csi_qingcloud_tag }}"
@@ -563,11 +564,29 @@ downloads:
       - kube-node
 
   driver_registrar:
-    enabled: false
+    enabled: "{{ csi_qingcloud_download | default(false) }}"
     container: true
     repo: "{{ driver_registrar_repo }}"
     tag: "{{ driver_registrar_tag }}"
     sha256: "{{ driver_registrar_checksum|default(None) }}"
+    groups:
+      - kube-node
+
+  csi_snapshotter:
+    enabled: "{{ csi_qingcloud_download | default(false) }}"
+    container: true
+    repo: "{{ csi_snapshotter_repo }}"
+    tag: "{{ csi_snapshotter_tag }}"
+    sha256: "{{ csi_snapshotter_checksum|default(None) }}"
+    groups:
+      - kube-node
+
+  csi_resizer:
+    enabled: "{{ csi_qingcloud_download | default(false) }}"
+    container: true
+    repo: "{{ csi_resizer_repo }}"
+    tag: "{{ csi_resizer_tag }}"
+    sha256: "{{ csi_resizer_checksum|default(None) }}"
     groups:
       - kube-node
 
