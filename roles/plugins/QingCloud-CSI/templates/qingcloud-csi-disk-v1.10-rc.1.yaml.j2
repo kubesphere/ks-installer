@@ -600,15 +600,27 @@ data:
     #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     #  See the License for the specific language governing permissions and
     #  limitations under the License.
-    qy_access_key_id: 'ACCESS_KEY_ID'
-    qy_secret_access_key: 'ACCESS_KEY_SECRET'
-    zone: 'ZONE'
-    host: 'api.qingcloud.com'
-    port: 443
-    protocol: 'https'
-    uri: '/iaas'
-    connection_retries: 3
-    connection_timeout: 30
+    qy_access_key_id: '{{ plugins.qingcloud_access_key_id }}'
+    qy_secret_access_key: '{{ plugins.qingcloud_secret_access_key }}'
+    zone: '{{ plugins.qingcloud_zone }}'
+    {% if qingcloud_host != None %}
+    host: '{{ plugins.qingcloud_host }}'
+    {% endif %}
+    {% if qingcloud_port != None %}
+    port: {{ plugins.qingcloud_port }}
+    {% endif %}
+    {% if qingcloud_protocol != None %}
+    protocol: '{{ plugins.qingcloud_protocol }}'
+    {% endif %}
+    {% if qingcloud_uri != None %}
+    uri: '{{ plugins.qingcloud_uri }}'
+    {% endif %}
+    {% if qingcloud_connection_retries != None %}
+    connection_retries: {{ plugins.qingcloud_connection_retries }}
+    {% endif %}
+    {% if qingcloud_connection_timeout != None %}
+    connection_timeout: {{ plugins.qingcloud_connection_timeout }}
+    {% endif %}
 kind: ConfigMap
 metadata:
   labels:
