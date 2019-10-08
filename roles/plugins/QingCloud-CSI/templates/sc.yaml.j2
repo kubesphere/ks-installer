@@ -20,13 +20,13 @@ metadata:
   name: csi-qingcloud
   annotations:
     storageclass.kubesphere.io/supported_access_modes: '["ReadWriteOnce"]'
-    storageclass.beta.kubernetes.io/is-default-class: "{% if if defaultStorage is defined and defaultStorage == "csi-qingcloud" %}true{% else %}false{% endif %}"
+    storageclass.beta.kubernetes.io/is-default-class: "{% if if plugins.defaultStorage is defined and plugins.defaultStorage == "csi-qingcloud" %}true{% else %}false{% endif %}"
 provisioner: csi-qingcloud
 parameters:
-  type: "{{ qingcloud_type }}"
-  maxSize: "{{ qingcloud_maxSize }}"
-  minSize: "{{ qingcloud_minSize }}"
-  stepSize: "{{ qingcloud_stepSize }}"
-  fsType: "{{ qingcloud_fsType }}"
-  replica: "{{ qingcloud_disk_replica }}"
+  type: "{{ plugins.qingcloud_type }}"
+  maxSize: "{{ plugins.qingcloud_maxSize }}"
+  minSize: "{{ plugins.qingcloud_minSize }}"
+  stepSize: "{{ plugins.qingcloud_stepSize }}"
+  fsType: "{{ plugins.qingcloud_fsType }}"
+  replica: "{{ plugins.qingcloud_disk_replica }}"
 reclaimPolicy: Delete 
