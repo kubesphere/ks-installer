@@ -39,7 +39,7 @@ data:
       username: admin
       password: {{ ks_token_str }}
       maxConnections: 100
-{% if devops.sonarqube.externalSonarUrl is defined and devops.sonarqube.externalSonarToken is defined %}
+{% if externalSonarUrl is defined and externalSonarToken is defined %}
     sonarQube:
       host: {{ externalSonarUrl }}
       token: {{ externalSonarToken }}

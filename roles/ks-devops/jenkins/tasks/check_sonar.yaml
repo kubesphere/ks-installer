@@ -66,9 +66,7 @@
 
 - name: ks-devops | Setting ks-sonarqube url
   set_fact:
-    devops:
-      sonarqube:
-        externalSonarUrl: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
+    externalSonarUrl: "http://{{ ks_sonarqube_nodeIP.stdout }}:{{ ks_sonarqube_nodePort.stdout }}"
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true

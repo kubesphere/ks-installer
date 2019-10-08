@@ -138,9 +138,7 @@
 
 - name: ks-devops | Setting ks-sonarqube token
   set_fact:
-    devops:
-      sonarqube:
-        externalSonarToken: "{{ userinfo.json.token }}"
+    externalSonarToken: "{{ userinfo.json.token }}"
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
