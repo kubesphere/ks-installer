@@ -102,7 +102,7 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-4. clone kubesphere-installer to local
+4. Clone kubesphere-installer to your local
 
 ```
 $ git clone https://github.com/kubesphere/ks-installer.git
@@ -113,7 +113,7 @@ $ git clone https://github.com/kubesphere/ks-installer.git
 ```bash
 $ cd deploy
 
-$ vim kubesphere.yaml
+$ vim kubesphere-installer.yaml
 # According to the parameter table at the bottom, replace the value of "kubesphere-config" in "kubesphere.yaml" file with your current Kubernetes cluster parameters (If the ETCD has no certificate, set etcd_tls_enable: False).
 
 $ kubectl apply -f kubesphere-installer.yaml
