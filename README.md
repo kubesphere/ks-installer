@@ -102,7 +102,13 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-4. Then we can start to install KubeSphere.
+4. clone kubesphere-installer to local
+
+```
+$ git clone https://github.com/kubesphere/ks-installer.git
+```
+
+5. Then we can start to install KubeSphere.
 
 ```bash
 $ cd deploy
@@ -113,13 +119,13 @@ $ vim kubesphere.yaml
 $ kubectl apply -f kubesphere-installer.yaml
 ```
 
-5. Inspect the logs of installation.
+6. Inspect the logs of installation.
 
 ```bash
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-6. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
+7. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
 
 ```bash
 $ kubectl get svc -n kubesphere-system
