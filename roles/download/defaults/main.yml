@@ -645,7 +645,7 @@ downloads:
       - kube-node
 
   nfs_client_provisioner:
-    enabled: "{{ nfs_client_enable }}"
+    enabled: "{{ nfs_client_enabled }}"
     container: true
     repo: "{{ nfs_client_provisioner_repo }}"
     tag: "{{ nfs_client_provisioner_tag }}"
