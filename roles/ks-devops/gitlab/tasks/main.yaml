@@ -26,6 +26,8 @@
     {{ bin_dir }}/helm upgrade --install ks-gitlab {{ kubesphere_dir }}/gitlab/gitlab-1.6.1.tgz
     -f {{ kubesphere_dir }}/gitlab/custom-values-gitlab.yaml
     --namespace kubesphere-devops-system
-#  async: 600
-#  poll: 0
+  register: import
+  until: import is succeeded
+  retries: 3
+  delay: 5
 

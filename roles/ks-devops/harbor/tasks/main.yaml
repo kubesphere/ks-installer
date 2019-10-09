@@ -15,11 +15,11 @@
     - { name: harbor-init-ldap, file: harbor-init-ldap.yml, type: secret }
 
 
- - name: Harbor | Create openldap secret
-   shell: >
-     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/harbor/openldap-secret.yml -n kubesphere-devops-system
-   register: import
-   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+- name: Harbor | Create openldap secret
+  shell: >
+   {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/harbor/openldap-secret.yml -n kubesphere-devops-system
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
 - name: Harbor | Deploy Harbor
