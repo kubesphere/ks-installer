@@ -123,9 +123,9 @@ ks_installer_repo: "{{ base_repo }}kubespheredev/ks-installer"
 ks_installer_tag: "latest"
 
 #ks-notification
-notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
+notification_flyway_repo: "{{ base_repo }}kubespheredev/notification"
 notification_flyway_tag: "flyway-advanced-2.1.0"
-notification_repo: "{{ base_repo }}kubesphere/notification"
+notification_repo: "{{ base_repo }}kubespheredev/notification"
 notification_tag: "advanced-2.1.0"
 alerting_dbinit_repo: "{{ base_repo }}kubespheredev/alerting-dbinit"
 alerting_dbinit_tag: "advanced-2.1.0"
