@@ -7,10 +7,10 @@ dependencies:
     when:
       - persistence.storageClass == ""
       - defaultStorageClassExist == false
-      - plugins.defaultStorage == 'openebs-hostpath'
+      - plugins.storage == 'openebs-hostpath'
 
   - role: plugins/QingCloud-CSI
     when:
       - persistence.storageClass == ""
       - defaultStorageClassExist == false
-      - plugins.defaultStorage == 'csi-qingcloud'
+      - plugins.storage == 'csi-qingcloud'

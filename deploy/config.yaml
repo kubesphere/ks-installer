@@ -15,7 +15,8 @@ data:
       storageClass: ""
 
     plugins:
-      defaultStorage: "{{ defaultStorage }}"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
+      storage: "{{ defaultStorage }}"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
+      cloud-
 
 
 
