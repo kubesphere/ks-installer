@@ -12,10 +12,18 @@
     dest: "{{ kubesphere_dir }}/harbor/{{ item.file }}"
   with_items:
     - { name: custom-values-harbor, file: custom-values-harbor.yaml, type: values }
+    - { name: harbor-init-ldap, file: harbor-init-ldap.yml, type: secret }
+
+
+ - name: Harbor | Create openldap secret
+   shell: >
+     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/harbor/openldap-secret.yml -n kubesphere-devops-system
+   register: import
+   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
 - name: Harbor | Deploy Harbor
   shell: >
-    {{ bin_dir }}/helm upgrade --install ks-harbor {{ kubesphere_dir }}/harbor.tgz
+    {{ bin_dir }}/helm upgrade --install ks-harbor {{ kubesphere_dir }}/harbor/harbor.tgz
     -f {{ kubesphere_dir }}/harbor/custom-values-harbor.yaml
     --namespace kubesphere-devops-system

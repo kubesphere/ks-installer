@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: set-up-ldap-auth
-        image: pstauffer/curl:v1.0.3
+        image: {{ busybox_repo }}:{{ busybox_tag }}
         env:
         - name: LDAP_PASSWORD
           valueFrom:
