@@ -9,6 +9,7 @@ dependencies:
       - defaultStorageClassExist == false
       - plugins.storage == 'openebs-hostpath'
 
+
   - role: plugins/QingCloud-CSI
     when:
       - persistence.storageClass == ""

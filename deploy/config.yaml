@@ -15,11 +15,7 @@ data:
       storageClass: ""
 
     plugins:
-      storage: "{{ defaultStorage }}"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
-      cloud-
-
-
-
+      storage: "openebs-hostpath"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
 
     common:
       mysqlVolumeSize: 20Gi
