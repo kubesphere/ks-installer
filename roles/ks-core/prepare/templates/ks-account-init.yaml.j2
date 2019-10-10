@@ -6,8 +6,8 @@ data:
   jwt-secret: {{ ks_secret_str | b64encode }}
 kind: Secret
 metadata:
-  labels:
-    creator: system
+  annotations:
+    kubesphere.io/creator: system
   name: ks-account-secret
   namespace: kubesphere-system
 type: Opaque
@@ -89,7 +89,7 @@ data:
                   "resources.kubesphere.io"
                 ],
                 "resources": [
-                  "health"
+                  "componenthealth"
                 ]
               }
             ]
@@ -569,79 +569,6 @@ data:
         ]
       },
       {
-        "name": "repos",
-        "actions": [
-          {
-            "name": "view",
-            "rules": [
-              {
-                "verbs": [
-                  "get",
-                  "watch",
-                  "list"
-                ],
-                "apiGroups": [
-                  "openpitrix.io"
-                ],
-                "resources": [
-                  "repos"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "create",
-            "rules": [
-              {
-                "verbs": [
-                  "create"
-                ],
-                "apiGroups": [
-                  "openpitrix.io"
-                ],
-                "resources": [
-                  "repos"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "edit",
-            "rules": [
-              {
-                "verbs": [
-                  "update",
-                  "patch"
-                ],
-                "apiGroups": [
-                  "openpitrix.io"
-                ],
-                "resources": [
-                  "repos"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "delete",
-            "rules": [
-              {
-                "verbs": [
-                  "delete",
-                  "deletecollection"
-                ],
-                "apiGroups": [
-                  "openpitrix.io"
-                ],
-                "resources": [
-                  "repos"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "apps",
         "actions": [
           {
@@ -649,18 +576,35 @@ data:
             "rules": [
               {
                 "verbs": [
-                  "list",
-                  "get"
+                  "get",
+                  "list"
                 ],
                 "apiGroups": [
                   "openpitrix.io"
                 ],
                 "resources": [
-                  "repos",
-                  "app_versions",
-                  "app_version/*",
+                  "applications",
                   "apps",
-                  "clusters"
+                  "apps/versions",
+                  "apps/events",
+                  "categories",
+                  "attachments"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "manage",
+            "rules": [
+              {
+                "verbs": [
+                  "*"
+                ],
+                "apiGroups": [
+                  "openpitrix.io"
+                ],
+                "resources": [
+                  "*"
                 ]
               }
             ]
@@ -818,25 +762,6 @@ data:
               {
                 "verbs": [
                   "create"
-                ],
-                "apiGroups": [
-                  "alerting.kubesphere.io"
-                ],
-                "resources": [
-                  "*"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "edit",
-            "rules": [
-              {
-                "verbs": [
-                  "get",
-                  "list",
-                  "update",
-                  "patch"
                 ],
                 "apiGroups": [
                   "alerting.kubesphere.io"
@@ -1451,63 +1376,18 @@ data:
         ]
       },
       {
-        "name": "internet",
+        "name": "advance",
         "actions": [
           {
-            "name": "view",
+            "name": "manage",
             "rules": [
               {
                 "verbs": [
                   "get",
-                  "list"
-                ],
-                "apiGroups": [
-                  "resources.kubesphere.io"
-                ],
-                "resources": [
-                  "router"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "create",
-            "rules": [
-              {
-                "verbs": [
-                  "create"
-                ],
-                "apiGroups": [
-                  "resources.kubesphere.io"
-                ],
-                "resources": [
-                  "router"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "edit",
-            "rules": [
-              {
-                "verbs": [
+                  "list",
+                  "create",
                   "update",
-                  "patch"
-                ],
-                "apiGroups": [
-                  "resources.kubesphere.io"
-                ],
-                "resources": [
-                  "router"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "delete",
-            "rules": [
-              {
-                "verbs": [
+                  "patch",
                   "delete"
                 ],
                 "apiGroups": [
@@ -1677,7 +1557,7 @@ data:
                   "list"
                 ],
                 "apiGroups": [
-                  "resources.kubesphere.io",
+                  "openpitrix.io",
                   "app.k8s.io"
                 ],
                 "resources": [
@@ -1695,29 +1575,6 @@ data:
                 "resources": [
                   "*"
                 ]
-              },
-              {
-                "verbs": [
-                  "list"
-                ],
-                "apiGroups": [
-                  "openpitrix.io"
-                ],
-                "resources": [
-                  "repos",
-                  "app_versions"
-                ]
-              },
-              {
-                "verbs": [
-                  "get"
-                ],
-                "apiGroups": [
-                  "openpitrix.io"
-                ],
-                "resources": [
-                  "app_version/*"
-                ]
               }
             ]
           },
@@ -1731,7 +1588,7 @@ data:
                   "patch"
                 ],
                 "apiGroups": [
-                  "resources.kubesphere.io",
+                  "openpitrix.io",
                   "app.k8s.io"
                 ],
                 "resources": [
@@ -1761,7 +1618,7 @@ data:
                   "delete"
                 ],
                 "apiGroups": [
-                  "resources.kubesphere.io",
+                  "openpitrix.io",
                   "app.k8s.io"
                 ],
                 "resources": [

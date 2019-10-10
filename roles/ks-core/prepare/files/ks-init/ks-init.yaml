@@ -34,8 +34,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    creator: system
-    desc: "Allows cluster-admin access to perform any action on any resource, it gives full control over every resource in the cluster and in all namespaces."
+    kubesphere.io/creator: system
+    kubesphere.io/description: "Allows cluster-admin access to perform any action on any resource, it gives full control over every resource in the cluster and in all namespaces."
   name: cluster-admin
 rules:
   - apiGroups:
@@ -54,21 +54,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    creator: system
-    desc: "Normal user in the cluster, there is no permission for any resource operations until he is  invited to the workspace."
+    kubesphere.io/creator: system
+    kubesphere.io/description: "Normal user in the cluster, there is no permission for any resource operations until he is  invited to the workspace."
   name: cluster-regular
 rules:
-  - apiGroups:
-      - openpitrix.io
-    resources:
-      - repos
-      - app_versions
-      - app_version/*
-      - apps
-      - clusters
-    verbs:
-      - get
-      - list
   - apiGroups:
       - '*'
     resources:
@@ -88,8 +77,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    creator: system
-    desc: "Allows workspace-manager access to manage all the workspaces in the cluster."
+    kubesphere.io/creator: system
+    kubesphere.io/description: "Allows workspace-manager access to manage all the workspaces in the cluster."
   name: workspaces-manager
 rules:
   - apiGroups:

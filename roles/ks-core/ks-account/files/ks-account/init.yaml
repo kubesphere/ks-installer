@@ -53,7 +53,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    creator: system
+    kubesphere.io/creator: system
   name: cluster-admin
 rules:
   - apiGroups:
@@ -72,30 +72,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    creator: admin
-    desc: ""
+    kubesphere.io/creator: admin
   name: cluster-regular
 rules:
-  - apiGroups:
-      - openpitrix.io
-    resources:
-      - repos
-      - app_versions
-    verbs:
-      - list
-  - apiGroups:
-      - openpitrix.io
-    resources:
-      - app_version/*
-    verbs:
-      - get
-  - apiGroups:
-      - openpitrix.io
-    resources:
-      - apps
-      - clusters
-    verbs:
-      - '*'
   - apiGroups:
       - '*'
     resources:
@@ -115,8 +94,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    creator: admin
-    desc: ""
+    kubesphere.io/creator: admin
   name: workspaces-manager
 rules:
   - apiGroups:
@@ -214,7 +192,7 @@ data:
 kind: Secret
 metadata:
   labels:
-    creator: system
+    kubesphere.io/creator: system
   name: ks-account-secret
   namespace: kubesphere-system
 type: Opaque
