@@ -185,8 +185,8 @@ harbor_jobservice_repo: "{{ base_repo }}goharbor/harbor-jobservice"
 harbor_jobservice_tag: "{{ harbor_version }}"
 harbor_portal_repo: "{{ base_repo }}goharbor/harbor-portal"
 harbor_portal_tag: "{{ harbor_version }}"
-harbor_adminserver_repo: "{{ base_repo }}goharbor/harbor-adminserver"
-harbor_adminserver_tag: "{{ harbor_version }}"
+#harbor_adminserver_repo: "{{ base_repo }}goharbor/harbor-adminserver"
+#harbor_adminserver_tag: "{{ harbor_version }}"
 harbor_db_repo: "{{ base_repo }}goharbor/harbor-db"
 harbor_db_tag: "{{ harbor_version }}"
 clair_photon_repo: "{{ base_repo }}goharbor/clair-photon"
@@ -473,15 +473,6 @@ downloads:
     groups:
       - kube-master
 
-#  ks_devops:
-#    enabled: true
-#    container: true
-#    repo: "{{ ks_devops_repo }}"
-#    tag: "{{ ks_devops_tag }}"
-#    sha256: "{{ ks_devops_checksum|default(None) }}"
-#    groups:
-#      - kube-node
-
   ks_devops_flyway:
     enabled: "{{ devops_enabled }}"
     container: true
@@ -680,15 +671,6 @@ downloads:
     groups:
       - kube-node
 
-#  docker_ce:
-#    enabled: "{{ devops_enabled }}"
-#    container: true
-#    repo: "{{ docker_ce_repo }}"
-#    tag: "{{ docker_ce_tag }}"
-#    sha256: "{{ docker_ce_checksum|default(None) }}"
-#    groups:
-#      - kube-node
-
   builder_maven:
     enabled: "{{ devops_enabled }}"
     container: true
@@ -784,7 +766,7 @@ downloads:
     container: true
     repo: "{{ openebs_openebs_tools_repo }}"
     tag: "{{ openebs_openebs_tools_tag }}"
-    sha256: "{{openebs_openebs_tools|default(None) }}"
+    sha256: "{{ openebs_openebs_tools|default(None) }}"
     groups:
       - kube-cluster
 
@@ -793,7 +775,7 @@ downloads:
     container: true
     repo: "{{ openebs_node_disk_manager_amd64_repo }}"
     tag: "{{ openebs_node_disk_manager_amd64_tag }}"
-    sha256: "{{openebs_node_disk_manager_amd64|default(None) }}"
+    sha256: "{{ openebs_node_disk_manager_amd64|default(None) }}"
     groups:
       - kube-cluster
 
@@ -802,7 +784,7 @@ downloads:
     container: true
     repo: "{{ openebs_node_disk_operator_amd64_repo }}"
     tag: "{{ openebs_node_disk_operator_amd64_tag }}"
-    sha256: "{{openebs_node_disk_operator_amd64|default(None) }}"
+    sha256: "{{ openebs_node_disk_operator_amd64|default(None) }}"
     groups:
       - kube-cluster
 
@@ -811,9 +793,119 @@ downloads:
     container: true
     repo: "{{ openebs_linux_utils_repo }}"
     tag: "{{ openebs_linux_utils_tag }}"
-    sha256: "{{openebs_linux_utils|default(None) }}"
+    sha256: "{{ openebs_linux_utils|default(None) }}"
     groups:
-      - kube-clusterls
+      - kube-cluster
+
+  nginx_photon:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ nginx_photon_repo }}"
+    tag: "{{ nginx_photon_tag }}"
+    sha256: "{{ nginx_photon|default(None) }}"
+    groups:
+      - kube-node
+
+  chartmuseum_photon:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ chartmuseum_photon_repo }}"
+    tag: "{{ chartmuseum_photon_tag }}"
+    sha256: "{{ chartmuseum_photon|default(None) }}"
+    groups:
+      - kube-node
+
+  notary_server_photon:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ notary_server_photon_repo }}"
+    tag: "{{ notary_server_photon_tag }}"
+    sha256: "{{ notary_server_photon|default(None) }}"
+    groups:
+      - kube-node
+
+  harbor_registryctl:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ harbor_registryctl_repo }}"
+    tag: "{{ harbor_registryctl_tag }}"
+    sha256: "{{ harbor_registryctl|default(None) }}"
+    groups:
+      - kube-node
+
+  registry_photon:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ registry_photon_repo }}"
+    tag: "{{ registry_photon_tag }}"
+    sha256: "{{ registry_photon|default(None) }}"
+    groups:
+      - kube-node
+
+  harbor_jobservice:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ harbor_jobservice_repo }}"
+    tag: "{{ harbor_jobservice_tag }}"
+    sha256: "{{ harbor_jobservice|default(None) }}"
+    groups:
+      - kube-node
+
+  harbor_portal:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ harbor_portal_repo }}"
+    tag: "{{ harbor_portal_tag }}"
+    sha256: "{{ harbor_portal|default(None) }}"
+    groups:
+      - kube-node
+
+  harbor_db:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ harbor_db_repo }}"
+    tag: "{{ harbor_db_tag }}"
+    sha256: "{{ harbor_db|default(None) }}"
+    groups:
+      - kube-node
+
+  clair_photon:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ clair_photon_repo }}"
+    tag: "{{ clair_photon_tag }}"
+    sha256: "{{ clair_photon|default(None) }}"
+    groups:
+      - kube-node
+
+  notary_signer_photon:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ notary_signer_photon_repo }}"
+    tag: "{{ notary_signer_photon_tag }}"
+    sha256: "{{ notary_signer_photon|default(None) }}"
+    groups:
+      - kube-node
+
+  redis_photon:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ redis_photon_repo }}"
+    tag: "{{ redis_photon_tag }}"
+    sha256: "{{ redis_photon|default(None) }}"
+    groups:
+      - kube-node
+
+  harbor_core:
+    enabled: "{{ harbor_enabled | default(false) }}"
+    container: true
+    repo: "{{ harbor_core_repo }}"
+    tag: "{{ harbor_core_tag }}"
+    sha256: "{{ harbor_core|default(None) }}"
+    groups:
+      - kube-node
+      
+
 
 download_defaults:
   container: false

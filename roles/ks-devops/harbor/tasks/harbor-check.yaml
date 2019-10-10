@@ -1,0 +1,28 @@
+---
+
+- name: ks-harbor | Checking old harbor
+  shell: >
+    {{ bin_dir }}/helm list | grep "ks-harbor"
+  register: check_harbor_result
+  ignore_errors: True
+
+- name: ks-harbor | Scale harbor-chartmuseum to 0
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system scale deploy ks-harbor-harbor-chartmuseum --replicas=0
+  when:
+    - check_harbor_result.stdout.find("kubesphere-devops-system") != -1
+  ignore_errors: True
+
+- name: ks-harbor | Scale harbor-jobservice to 0
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system scale deploy ks-harbor-harbor-jobservice --replicas=0
+  when:
+    - check_harbor_result.stdout.find("kubesphere-devops-system") != -1
+  ignore_errors: True
+
+- name: ks-harbor | Scale harbor-registry to 0
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system scale deploy ks-harbor-harbor-registry --replicas=0
+  when:
+    - check_harbor_result.stdout.find("kubesphere-devops-system") != -1
+  ignore_errors: True
