@@ -1,5 +1,8 @@
 ---
 
+- import_tasks: harbor-check.yaml
+
+
 - name: ks-devops | Getting harbor installation files
   copy:
     src: "harbor"
@@ -27,3 +30,18 @@
     {{ bin_dir }}/helm upgrade --install ks-harbor {{ kubesphere_dir }}/harbor/harbor.tgz
     -f {{ kubesphere_dir }}/harbor/custom-values-harbor.yaml
     --namespace kubesphere-devops-system
+
+- name: Harbor | Check harbor status
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kubesphere-devops-system | grep 'ks-harbor' | grep -v 'Running' | wc -l
+  register: import
+  until: import.stdout == "0"
+  retries: 30
+  delay: 30
+  ignore_errors: True
+
+- name: Harbor | Init harbor ldap
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/harbor/harbor-init-ldap.yml -n kubesphere-devops-system
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
