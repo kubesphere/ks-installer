@@ -4,13 +4,36 @@ devops:
   jenkinsMemoryLim: "{{ jenkins_memory_lim |default('8Gi') }}"
   jenkinsMemoryReq: "{{ jenkins_memory_req |default('4Gi') }}"
 
-Java_Opts: -Xms3g -Xmx6g -XX:MaxPermSize=512m -XX:MaxRAM=8g -Dhudson.slaves.NodeProvisioner.initialDelay=20  -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85 -Dhudson.model.LoadStatistics.clock=5000  -Dhudson.model.LoadStatistics.decay=0.2 -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000 -verbose:gc -Xloggc:/var/jenkins_home/gc-%t.log -XX:NumberOfGCLogFiles=2 -XX:+UseGCLogFileRotation -XX:GCLogFileSize=100m -XX:+PrintGC  -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintReferenceGC -XX:+PrintAdaptiveSizePolicy -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
-JavaOpts: >-
-  {% if devops.JavaOpts_Xms is defined or devops.JavaOpts_Xmx is defined -%}
-  {{ devops.JavaOpts_Xms }} {{ devops.JavaOpts_Xmx }} -Dhudson.slaves.NodeProvisioner.initialDelay=20  -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85 -Dhudson.model.LoadStatistics.clock=5000  -Dhudson.model.LoadStatistics.decay=0.2 -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000 -verbose:gc -Xloggc:/var/jenkins_home/gc-%t.log -XX:NumberOfGCLogFiles=2 -XX:+UseGCLogFileRotation -XX:GCLogFileSize=100m -XX:+PrintGC  -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintReferenceGC -XX:+PrintAdaptiveSizePolicy -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
-  {%- else -%}
-  {{ Java_Opts }}
-  {%- endif %}
+Java_Opts: -Xms3g -Xmx6g -XX:MaxRAM=8g -Dhudson.slaves.NodeProvisioner.initialDelay=20  -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85 -Dhudson.model.LoadStatistics.clock=5000  -Dhudson.model.LoadStatistics.decay=0.2 -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000 -verbose:gc -Xloggc:/var/jenkins_home/gc-%t.log -XX:NumberOfGCLogFiles=2 -XX:+UseGCLogFileRotation -XX:GCLogFileSize=100m -XX:+PrintGC  -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -XX:+PrintGCCause -XX:+PrintTenuringDistribution -XX:+PrintReferenceGC -XX:+PrintAdaptiveSizePolicy -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:+DisableExplicitGC -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
+JavaOpts: >
+  -Xms{{ devops.jenkinsJavaOpts_Xms | default(3g) }}
+  -Xmx{{ devops.jenkinsJavaOpts_Xmx | default(6g) }}
+  -XX:MaxRAM={{ devops.jenkinsJavaOpts_MaxRAM | default(8g) }}
+  -Dhudson.slaves.NodeProvisioner.initialDelay=20
+  -Dhudson.slaves.NodeProvisioner.MARGIN=50
+  -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
+  -Dhudson.model.LoadStatistics.clock=5000
+  -Dhudson.model.LoadStatistics.decay=0.2
+  -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000
+  -verbose:gc
+  -Xloggc:/var/jenkins_home/gc-%t.log
+  -XX:NumberOfGCLogFiles=2
+  -XX:+UseGCLogFileRotation
+  -XX:GCLogFileSize=100m
+  -XX:+PrintGC
+  -XX:+PrintGCDateStamps
+  -XX:+PrintGCDetails
+  -XX:+PrintHeapAtGC
+  -XX:+PrintGCCause
+  -XX:+PrintTenuringDistribution
+  -XX:+PrintReferenceGC
+  -XX:+PrintAdaptiveSizePolicy
+  -XX:+UseG1GC
+  -XX:+UseStringDeduplication
+  -XX:+ParallelRefProcEnabled
+  -XX:+DisableExplicitGC
+  -XX:+UnlockDiagnosticVMOptions
+  -XX:+UnlockExperimentalVMOptions
 
 JenkinsLocationUrl: jenkins.devops.kubesphere.local
 
