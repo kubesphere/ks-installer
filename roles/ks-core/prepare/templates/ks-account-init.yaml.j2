@@ -30,6 +30,27 @@ data:
   clusterrules.json: |
     [
       {
+        "name": "projects",
+        "actions": [
+          {
+            "name": "manage",
+            "rules": [
+              {
+                "verbs": [
+                  "*"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "namspaces"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "name": "workspaces",
         "actions": [
           {
@@ -1376,7 +1397,7 @@ data:
         ]
       },
       {
-        "name": "advance",
+        "name": "advanced",
         "actions": [
           {
             "name": "manage",
@@ -1395,6 +1416,113 @@ data:
                 ],
                 "resources": [
                   "router"
+                ]
+              },
+              {
+                "verbs": [
+                  "patch"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "namespaces"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "router"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "s2ibuilders",
+        "actions": [
+          {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "devops.kubesphere.io",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "s2ibuilders",
+                  "s2iruns"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "devops.kubesphere.io",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "s2ibuilders",
+                  "s2iruns"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "edit",
+            "rules": [
+              {
+                "verbs": [
+                  "update",
+                  "patch"
+                ],
+                "apiGroups": [
+                  "devops.kubesphere.io",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "s2ibuilders",
+                  "s2iruns"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "delete",
+            "rules": [
+              {
+                "verbs": [
+                  "delete"
+                ],
+                "apiGroups": [
+                  "devops.kubesphere.io",
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "s2ibuilders",
+                  "s2iruns"
                 ]
               }
             ]
