@@ -1,0 +1,46 @@
+- name: Kubesphere | Deploying common component
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+  loop:
+    - "redis.yaml"
+    - "openldap.yaml"
+  register: import
+  failed_when:
+    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
+    - "import.stderr and 'is forbidden' not in import.stderr"
+
+
+- name: Kubesphere | Deploying common component
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+  loop:
+    - "minio.yaml"
+  register: import
+  failed_when:
+    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
+    - "import.stderr and 'is forbidden' not in import.stderr"
+  when: devops.enabled or openpitrix.enabled
+
+
+- name: Kubesphere | Deploying common component
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+  loop:
+    - "mysql.yaml"
+  register: import
+  failed_when:
+    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
+    - "import.stderr and 'is forbidden' not in import.stderr"
+  when: devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled
+
+
+- name: Kubesphere | Deploying common component
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+  loop:
+    - "etcd.yaml"
+  register: import
+  failed_when:
+    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
+    - "import.stderr and 'is forbidden' not in import.stderr"
+  when: openpitrix.enabled or notification.enabled or alerting.enabled
