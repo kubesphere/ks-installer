@@ -7,6 +7,8 @@ metadata:
     builder-type.kubesphere.io/b2i: "b2i"
     binary-type.kubesphere.io: "war"
   name: tomcat
+  annotations:
+    "helm.sh/hook": pre-install
 spec:
   containerInfo:
     - builderImage: {{ tomcat85_java11_repo }}:{{ ks_image_tag }}

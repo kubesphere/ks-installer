@@ -3,6 +3,9 @@ kind: S2iBuilderTemplate
 metadata:
   labels:
     controller-tools.k8s.io: "1.0"
+    builder-type.kubesphere.io/s2i: "s2i"
+    builder-type.kubesphere.io/b2i: "b2i"
+    binary-type.kubesphere.io: "jar"
   name: java
   annotations:
     "helm.sh/hook": pre-install
@@ -132,61 +135,6 @@ spec:
     - key: NO_PROXY
       type: string
       description: "The list of hosts that should be reached directly, bypassing the proxy, that translates into the http.nonProxyHosts system property."
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_OFF
-      type: string
-      description: "If set disables activation of Jolokia (i.e. echos an empty value). By default, Jolokia is enabled."
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_CONFIG
-      type: string
-      description: " If set uses this file (including path) as Jolokia JVM agent properties (as described in Jolokia's reference manual). If not set, the /opt/jolokia/etc/jolokia.properties will be created using the settings as defined in this document, otherwise the reset of the settings in this document are ignored."
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_HOST
-      type: string
-      description: "Host address to bind to (Default: 0.0.0.0)"
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_HOST
-      type: string
-      description: "Port to use (Default: 8778)"
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_USER
-      type: string
-      description: "User for basic authentication. Defaults to 'jolokia'"
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_PASSWORD
-      type: string
-      description: "Password for basic authentication. By default authentication is switched off."
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_PASSWORD_RANDOM
-      type: string
-      description: "Should a random AB_JOLOKIA_PASSWORD be generated? Generated value will be written to /opt/jolokia/etc/jolokia.pw"
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_HTTPS
-      type: string
-      description: "Switch on secure communication with https. By default self signed server certificates are generated if no serverCert configuration is given in AB_JOLOKIA_OPTS"
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_ID
-      type: string
-      description: "Agent ID to use ($HOSTNAME by default, which is the container id)"
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_DISCOVERY_ENABLED
-      type: string
-      description: "Enable Jolokia discovery. Defaults to false."
-      required: false
-      defaultValue: ""
-    - key: AB_JOLOKIA_OPTS
-      type: string
-      description: "Additional options to be appended to the agent configuration. They should be given in the format \"key=value,key=value,...\""
       required: false
       defaultValue: ""
   codeFramework: java
