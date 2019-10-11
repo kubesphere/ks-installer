@@ -8,7 +8,7 @@ KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://ku
 ## 准备工作
 
 
-1. 确认现有的 `Kubernetes` 版本在 `>=1.13.0`，KubeSphere 需要 `K8s 1.13.0` 版本之后的新特性，可以在执行 `kubectl version` 来确认 :
+1. 确认现有的 `Kubernetes` 版本在 `>= 1.13.0, < 1.16`，KubeSphere 需要 `K8s 1.13.0` 版本之后的新特性，可以在执行 `kubectl version` 来确认 :
 ```bash
 root@kubernetes:~# kubectl version
 Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
