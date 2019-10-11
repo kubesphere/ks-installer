@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: set-up-ldap-auth
-        image: {{ busybox_repo }}:{{ busybox_tag }}
+        image: {{ ks_installer_repo }}:{{ ks_installer_tag }}
         env:
         - name: LDAP_PASSWORD
           valueFrom:
