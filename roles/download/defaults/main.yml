@@ -111,8 +111,8 @@ ks_devops_repo: "{{ base_repo }}kubespheredev/ks-devops"
 ks_devops_tag: advanced-2.0.0-dev
 
 
-ks_image_pull_policy: IfNotPresent
-#ks_image_pull_policy: Always
+#ks_image_pull_policy: IfNotPresent
+ks_image_pull_policy: Always
 
 #ks-hostnic
 ks_hostnic_repo: "kubespheredev/hostnic"

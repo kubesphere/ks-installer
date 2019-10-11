@@ -21,11 +21,6 @@ spec:
         tier: backend
         version: advanced-2.0.0
     spec:
-      initContainers:
-      - name: wait-mysql
-        image: {{ busybox_repo }}:{{ busybox_tag }}
-        imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z mysql.kubesphere-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
       containers:
       - command:
         - ks-apiserver
