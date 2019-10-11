@@ -127,6 +127,15 @@
   failed_when:
     - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
     - "import.stderr and 'is forbidden' not in import.stderr"
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
+
+
+- import_tasks: common-install.yaml
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") == -1
+
+
 - name: check redis for check StroageClass
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system|grep redis|grep Running
@@ -140,9 +149,7 @@
 #  fail:
 #     msg: "Please follow the steps below \n First: docker images|grep redis  \n second: kubectl get sc \n Third: k
 #ubectl get pvc -n kubesphere-system "
- # when: "redis_and_storage_class_check.rc!=0"
-
-
+#  when: "redis_and_storage_class_check.rc!=0"
 
 - name: Kubesphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
   block:
