@@ -78,15 +78,15 @@
   tags:
     - console
 
-- name: ks-console | Creating docs service
-  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-docs-service.yaml -n kubesphere-system"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-
-- name: ks-console | Creating docs deploy
-  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-docs-deployment.yaml -n kubesphere-system"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#- name: ks-console | Creating docs service
+#  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-docs-service.yaml -n kubesphere-system"
+#  register: import
+#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#
+#- name: ks-console | Creating docs deploy
+#  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-docs-deployment.yaml -n kubesphere-system"
+#  register: import
+#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 - name: KubeSphere | Restarting ks-console
   shell: >
