@@ -9,8 +9,6 @@ logging:
   containersLogMountedPath: ""
   kibana:
     enable: false
-  logsidecarInjector:
-    enable: false
 # externalElasticsearchUrl:
 # externalElasticsearchPort:
 
