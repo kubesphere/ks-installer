@@ -193,6 +193,4 @@
 
 
 - import_tasks: logsidecar.yaml
-  when:
-    - logging.logsidecarInjector.enabled == true
   
