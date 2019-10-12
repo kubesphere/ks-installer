@@ -27,3 +27,9 @@
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-controller-manager/ks-controller-manager.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+
+- name: KubeSphere | Restarting ks-controller-manager
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager --replicas=0 &&
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager --replicas=1
