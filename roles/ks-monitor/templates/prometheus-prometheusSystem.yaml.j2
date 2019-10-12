@@ -30,7 +30,7 @@ spec:
     beta.kubernetes.io/os: linux
   query:
     maxConcurrency: 1000
-  replicas: {{ monitoring.prometheusReplica }}
+  replicas: {{ monitoring.prometheusReplicas }}
   resources:
     limits:
       cpu: "2.5"

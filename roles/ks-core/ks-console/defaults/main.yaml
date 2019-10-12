@@ -6,4 +6,4 @@ openpitrix_version: v0.3.5
 console:
   port: 30880
 
-ks_console_replicas: 2
+#ks_console_replicas: 2

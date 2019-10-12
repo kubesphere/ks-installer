@@ -5,37 +5,35 @@
   register: kubernetes_version
   ignore_errors: True
 
+
 - name: KubeSphere | Setting kubernetes version
   set_fact:
     kube_version: "{{ kubernetes_version.stdout }}"
   ignore_errors: True
 
+
 - name: KubeSphere | Getting ks-console installation files
   copy:
     src: "ks-console"
     dest: "{{ kubesphere_dir }}/"
-  tags:
-    - upgrade
+
 
 - name: ks-console | Checking ks-console svc
   shell: "{{ bin_dir }}/kubectl get svc -n kubesphere-system"
   register: result
-  tags:
-    - upgrade
+
 
 - name: ks-console | Getting ks-console svc port
   shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register: ks_console_svc_port
   when: result.stdout.find("ks-console") != -1
-  tags:
-    - upgrade
+
 
 - name: ks-console | Setting console_port
   set_fact:
     console_port: "{{ ks_console_svc_port.stdout }}"
   when: result.stdout.find("ks-console") != -1
-  tags:
-    - upgrade
+
 
 - name: ks-console | Creating manifests
   template:
@@ -47,36 +45,31 @@
     - { name: ks-console-svc, file: ks-console-svc.yml, type: svc }
     - { name: ks-docs-deployment, file: ks-docs-deployment.yaml, type: deploy }
     - { name: sample-bookinfo-configmap, file: sample-bookinfo-configmap.yaml, type: config }
-  tags:
-    - upgrade
+
 
 - name: ks-console | Creating sample-bookinfo configmap
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/sample-bookinfo-configmap.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-  tags:
-    - upgrade
+
 
 - name: ks-console | Creating configmap
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-console-config.yml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-  tags:
-    - upgrade
+
 
 - name: ks-console | Creating Deployment
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-console-deployment.yml -n kubesphere-system"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-  tags:
-    - upgrade
+
 
 - name: ks-console | Creating Service
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-console-svc.yml -n kubesphere-system"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-  tags:
-    - console
+
 
 #- name: ks-console | Creating docs service
 #  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-console/ks-docs-service.yaml -n kubesphere-system"
@@ -92,5 +85,3 @@
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas=0 && 
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas={{ ks_console_replicas }}
-  tags:
-    - upgrade

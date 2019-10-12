@@ -8,7 +8,7 @@ metadata:
   name: ks-console
   namespace: kubesphere-system
 spec:
-  replicas: {{ ks_console_replicas }}
+  replicas: {{ console.replicas }}
   selector:
     matchLabels:
       app: ks-console

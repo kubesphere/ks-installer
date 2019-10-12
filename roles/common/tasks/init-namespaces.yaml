@@ -52,7 +52,7 @@
     {{ bin_dir }}/kubectl label ns {{ item }} kubesphere.io/workspace=system-workspace && {{ bin_dir }}/kubectl annotate namespaces {{ item }} creator=admin
   register: import
   failed_when: "import.stderr and 'already' not in import.stderr"
-  loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
+  loop: "{{ ['default', 'kube-public', 'kube-system', 'kube-node-lease', systemNamespacesList] | flatten(1) }}"
 
 
 - name: KubeSphere | Create ImagePullSecrets
