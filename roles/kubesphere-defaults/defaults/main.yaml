@@ -38,6 +38,7 @@ dns_servers: "{{kube_dns_servers[dns_mode]}}"
 kubesphere_dir: /etc/kubesphere
 kube_config_dir: /etc/kubernetes
 kube_cert_dir: "{{ kube_config_dir }}/ssl"
+kube_addons_dir: "{{ kube_config_dir }}/addons"
 # Directory where the binaries will be installed
 bin_dir: /usr/local/bin
 docker_bin_dir: /usr/bin
