@@ -13,9 +13,6 @@
 #
 gateways:
   enabled: true
-  istio-ingressgateway:
-    type: NodePort
-    image: {{ istio_node_agent_image }}
 
 #
 # sidecar-injector webhook configuration, refer to the
@@ -23,8 +20,6 @@ gateways:
 #
 sidecarInjectorWebhook:
   enabled: true
-  enableNamespacesByDefault: true
-  image: {{ istio_sidecar_injector_image }}
 
 #
 # galley configuration, refer to charts/galley/values.yaml
@@ -32,15 +27,12 @@ sidecarInjectorWebhook:
 #
 galley:
   enabled: true
-  image: {{ istio_galleyr_image }}
 
 #
 # mixer configuration
 #
 # @see charts/mixer/values.yaml, it takes precedence
 mixer:
-  enabled: true
-  image: {{ istio_mixer_image }}
   policy:
     # if policy is enabled the global.disablePolicyChecks has affect.
     enabled: true
@@ -53,18 +45,12 @@ mixer:
 # @see charts/pilot/values.yaml
 pilot:
   enabled: true
-  image: {{ istio_pilot_image }}
-  requests:
-    cpu: 10m
-    memory: 1024Mi
 
 #
 # security configuration
 #
 security:
   enabled: true
-  image: {{ istio_security_image }}
-  createMeshPolicy: false
 
 #
 # nodeagent configuration
@@ -82,7 +68,7 @@ grafana:
 # addon prometheus configuration
 #
 prometheus:
-  enabled: false
+  enabled: true
 
 #
 # addon jaeger tracing configuration
@@ -121,11 +107,10 @@ global:
   # Default hub for Istio images.
   # Releases are published to docker hub under 'istio' project.
   # Daily builds from prow are on gcr.io
-  hub: {{ istio_hub }}
-  image: {{ istio_kubectl_image }}
+  hub: docker.io/istio
 
   # Default tag for Istio images.
-  tag: {{ istio_tag }}
+  tag: 1.3.2
 
   # Comma-separated minimum per-scope logging level of messages to output, in the form of <scope>:<level>,<scope>:<level>
   # The control plane has different scopes depending on component, but can configure default log level across all components
@@ -159,7 +144,7 @@ global:
         requests:
           cpu: 10m
           memory: 10Mi
-    image: {{ istio_proxyv2_image }}
+    image: proxyv2
 
     # cluster domain. Default value is "cluster.local".
     clusterDomain: "cluster.local"
@@ -202,7 +187,7 @@ global:
         caCertificates: # example: /etc/istio/als/root-cert.pem
         sni: # example: als.somedomain
         subjectAltNames: []
-        # - als.somedomain
+        # - als.somedomain 
       tcpKeepalive:
         probes: 3
         time: 10s
@@ -273,7 +258,7 @@ global:
     excludeInboundPorts: ""
 
     # This controls the 'policy' in the sidecar injector.
-    autoInject: disabled
+    autoInject: enabled
 
     # Sets the destination Statsd in envoy (the value of the "--statsdUdpAddress" proxy argument
     # would be <host>:<port>).
@@ -305,7 +290,7 @@ global:
 
   proxy_init:
     # Base name for the proxy_init container, used to configure iptables.
-    image: {{ istio_proxy_init_image }}
+    image: proxy_init
 
   # imagePullPolicy is applied to istio control plane components.
   # local tests require IfNotPresent, to avoid uploading to dockerhub.
@@ -347,7 +332,7 @@ global:
     zipkin:
       # Host:Port for reporting trace data in zipkin format. If not specified, will default to
       # zipkin service (port 9411) in the same namespace as the other istio components.
-      address: jaeger-collector.istio-system.svc:9411
+      address: ""
     datadog:
       # Host:Port for submitting traces to the Datadog agent.
       address: "$(HOST_IP):8126"
