@@ -21,7 +21,7 @@
 
 - name: KubeSphere | Init istio-system
   shell: >
-    {{ bin_dir }}/helm upgrade --install istio-init {{ kubesphere_dir }}/istio/istio-init-1.1.0.tgz
+    {{ bin_dir }}/helm upgrade --install istio-init {{ kubesphere_dir }}/istio/istio-init
     -f {{ kubesphere_dir }}/istio/custom-values-istio-init.yaml
     --namespace istio-system
 
@@ -44,7 +44,7 @@
   register: result
   until:
     - result.stdout.find("Completed") != -1
-  retries: 30
+  retries: 50
   delay: 10
 
 - name: istio | Waiting for istio-init-crd-11
@@ -52,12 +52,20 @@
   register: result
   until:
     - result.stdout.find("Completed") != -1
-  retries: 30
+  retries: 50
+  delay: 10
+
+- name: istio | Waiting for istio-init-crd-12
+  shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-12 | awk '{print $3}'"
+  register: result
+  until:
+    - result.stdout.find("Completed") != -1
+  retries: 50
   delay: 10
 
 - name: istio | Deploy istio
   shell: >
-    {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio-1.1.0.tgz
+    {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
     -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml 
     --namespace istio-system
   register: istio_result
@@ -84,7 +92,7 @@
 
 - name: istio | Deploy jaeger-operator
   shell: >
-    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/istio/jaeger-operator-2.4.0.tgz
+    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/istio/jaeger-operator
     -f {{ kubesphere_dir }}/istio/custom-values-jaeger.yaml 
     --namespace istio-system
 
