@@ -331,7 +331,7 @@ metrics_server_tag: v0.3.1
 
 #istio
 istio_hub: "{{ base_repo }}istio"
-istio_tag: 1.1.1
+istio_tag: 1.3.2
 istio_kubectl_image: kubectl
 istio_proxy_init_image: proxy_init
 istio_proxyv2_image: proxyv2
@@ -342,13 +342,13 @@ istio_galleyr_image: galley
 istio_sidecar_injector_image: sidecar_injector
 istio_node_agent_image: node-agent-k8s
 jaeger_operator_repo: "{{ base_repo }}jaegertracing/jaeger-operator"
-jaeger_operator_tag: 1.11.0
+jaeger_operator_tag: 1.13.1
 jaeger_agent_repo: "{{ base_repo }}jaegertracing/jaeger-agent"
-jaeger_agent_tag: 1.11
+jaeger_agent_tag: 1.13
 jaeger_collector_repo: "{{ base_repo }}jaegertracing/jaeger-collector"
-jaeger_collector_tag: 1.11
+jaeger_collector_tag: 1.13
 jaeger_query_repo: "{{ base_repo }}jaegertracing/jaeger-query"
-jaeger_query_tag: 1.11
+jaeger_query_tag: 1.13
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
