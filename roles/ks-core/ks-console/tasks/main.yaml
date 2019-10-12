@@ -84,4 +84,4 @@
 - name: KubeSphere | Restarting ks-console
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas=0 && 
-    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas={{ ks_console_replicas }}
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas={{ console.replicas }}
