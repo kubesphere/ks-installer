@@ -25,7 +25,7 @@ OPENPITRIX_MYSQL_HOST="mysql.kubesphere-system.svc"
 OPENPITRIX_ETCD_ENDPOINTS="etcd.kubesphere-system.svc:2379"
 DB_SERVICE="mysql.kubesphere-system.svc"
 ETCD_SERVICE="etcd.kubesphere-system.svc"
-MINIO_SERVICE="minio.kubesphere-system.svc"
+OPENPITRIX_ATTACHMENT_ENDPOINT='http://minio.kubesphere-system.svc:9000'
 OPENPITRIX_ATTACHMENT_BUCKET_NAME='openpitrix-attachment'
 DB_LOG_MODE_ENABLE="true"
 GRPC_SHOW_ERROR_CAUSE="true"
@@ -195,6 +195,8 @@ replace() {
 	  -e "s!\${OPENPITRIX_ETCD_ENDPOINTS}!${OPENPITRIX_ETCD_ENDPOINTS}!g" \
 	  -e "s!\${DB_SERVICE}!${DB_SERVICE}!g" \
 	  -e "s!\${ETCD_SERVICE}!${ETCD_SERVICE}!g" \
+	  -e "s!\${OPENPITRIX_ATTACHMENT_ENDPOINT}!${OPENPITRIX_ATTACHMENT_ENDPOINT}!g" \
+	  -e "s!\${OPENPITRIX_ATTACHMENT_BUCKET_NAME}!${OPENPITRIX_ATTACHMENT_BUCKET_NAME}!g" \
 	  -e "s#${busybox_image_old}#${busybox_image_new}#" \
 	  $1
 }
