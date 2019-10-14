@@ -135,7 +135,7 @@ eof
 function result_notes(){
     timeout=0
     info='The ks-installer is running'
-    while [ $timeout -le 600 ]
+    while [ $timeout -le 1200 ]
     do
       clear
       echo -e "\033[1;36m$info\033[0m"

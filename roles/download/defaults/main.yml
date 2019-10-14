@@ -72,7 +72,7 @@ gcr_image_repo: >-
 kube_image_repo: "{{ gcr_image_repo }}/google-containers"
 
 
-ks_image_tag: latest
+ks_image_tag: "{{ dev_tag | default('latest') }}"
 
 # Containers
 # In some cases, we need a way to set --registry-mirror or --insecure-registry for docker,
