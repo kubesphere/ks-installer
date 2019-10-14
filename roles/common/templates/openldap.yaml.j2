@@ -30,6 +30,8 @@ spec:
           value: kubesphere.io
         - name: LDAP_ADMIN_PASSWORD
           value: admin
+        - name: LDAP_NOFILE
+          value: "2048"
         image: {{ openldap_repo }}:{{ openldap_tag }}
         imagePullPolicy: IfNotPresent
         name: openldap
@@ -45,11 +47,11 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: 1000m
-            memory: 1500Mi
+            cpu: 200m
+            memory: 200Mi
           requests:
             cpu: 20m
-            memory: 900Mi
+            memory: 100Mi
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
