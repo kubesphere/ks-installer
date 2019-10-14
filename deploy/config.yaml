@@ -14,9 +14,6 @@ data:
     persistence:
       storageClass: ""
 
-    plugins:
-      storage: "openebs-hostpath"    # "csi-qingcloud", "csi-aliyun", "csi-tencentcloud"
-
     common:
       mysqlVolumeSize: 20Gi
       minioVolumeSize: 20Gi
@@ -48,8 +45,6 @@ data:
       elkPrefix: logstash
       containersLogMountedPath: ""
       kibana:
-        enabled: false
-      logsidecarInjector:
         enabled: false
 
     openpitrix:
