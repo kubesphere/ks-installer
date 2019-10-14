@@ -206,7 +206,7 @@ data:
     cp /var/jenkins_config/plugins.txt /var/jenkins_home;
     rm -rf /usr/share/jenkins/ref/plugins/*.lock
     /usr/local/bin/install-plugins.sh `echo $(cat /var/jenkins_home/plugins.txt)`;
-    if [[ $? != 0 ]]; then
+    if [ $? != 0 ]; then
       echo "exit beacause install plugin failed"
       exit 1
     fi
