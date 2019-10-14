@@ -12,6 +12,13 @@
         src: "/etc/kubernetes/admin.conf"
         dest: "./config"
         flat: yes
+    - name: Get the tag date
+      shell: >
+        date  +"%Y%m%d" -d  "-1 days"
+      register: tag_date
+    - name: set dev version
+      set_fact:
+        dev_tag: "dev-{{ tag_date }}"
 
 - hosts: k8s-cluster
   roles:
