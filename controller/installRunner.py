@@ -7,6 +7,7 @@ import time
 import shutil
 import yaml
 import json
+import datetime
 import ansible_runner
 import collections
 
@@ -263,6 +264,11 @@ def resultInfo():
 def main():
     if not os.path.exists(privateDataDir):
         os.makedirs(privateDataDir)
+
+    tagDate = (datetime.date.today() + datetime.timedelta(-1)).strftime("%Y%m%d")
+    cmd = 'sed -i "/ks_image_tag/s/\:.*/\: dev-{}/g" /kubesphere/installer/roles/download/defaults/main.yml'.format(
+        tagDate)
+    os.system(cmd)
 
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
