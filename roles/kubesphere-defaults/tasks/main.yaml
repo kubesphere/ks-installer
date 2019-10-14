@@ -4,6 +4,3 @@
     msg: "Check roles/kubesphere-defaults/defaults/main.yml"
   tags:
     - always
-
-- name: Set dev version
-  set_fact:
