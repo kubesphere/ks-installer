@@ -1,0 +1,29 @@
+etcd_endpoint_ips: |-
+  {% for item in groups['etcd'] -%}
+    {{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address'])) }}{% if not loop.last %},{% endif %}
+  {%- endfor %}
+
+
+etcd_config_dir: /etc/ssl/etcd
+etcd_cert_dir: "{{ etcd_config_dir }}/ssl"
+
+
+etcd_tls_enable: true
+etcd_client_ca_crt: "{{ etcd_cert_dir }}/ca.pem"
+etcd_client_crt: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}.pem"
+etcd_client_key: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}-key.pem"
+
+storage_class: >-
+  {% if local_volume_enabled is defined and local_volume_enabled and local_volume_is_default_class is defined and local_volume_is_default_class %}
+  {{ local_volume_storage_class }}
+  {% elif qingcloud_csi_enabled is defined and qingcloud_csi_enabled and qingcloud_csi_is_default_class is defined and qingcloud_csi_is_default_class %}
+  csi-qingcloud
+  {% elif ceph_rbd_enabled is defined and ceph_rbd_enabled and ceph_rbd_is_default_class is defined and ceph_rbd_is_default_class %}
+  {{ ceph_rbd_storage_class }}
+  {% elif nfs_client_enabled is defined and nfs_client_enabled and nfs_client_is_default_class is defined and nfs_client_is_default_class %}
+  nfs-client
+  {% elif neonsan_csi_enabled is defined and neonsan_csi_enabled and neonsan_csi_is_default_class is defined and neonsan_csi_is_default_class %}
+  csi-neonsan
+  {% elif glusterfs_provisioner_enabled is defined and glusterfs_provisioner_enabled and glusterfs_is_default_class is defined and glusterfs_is_default_class %}
+  {{ glusterfs_provisioner_storage_class }}
+  {% endif %}

@@ -1,0 +1,39 @@
+---
+
+- name: Ceph RBD | Creating addons dir
+  file:
+    path: "{{ kube_config_dir }}/addons/ceph_rbd"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Ceph RBD | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kube_config_dir }}/addons/ceph_rbd/{{ item.file }}"
+  with_items:
+    - { name: ceph-rbd-admin-secret, file: ceph-rbd-admin-secret.yml, type: secret }
+    - { name: ceph-rbd-user-secret-kubesystem, file: ceph-rbd-user-secret-kubesystem.yml, type: secret }
+    - { name: ceph-rbd-sc, file: ceph-rbd-sc.yml, type: sc }
+  register: ceph_rbd_manifests
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Ceph RBD | Creating admin secret
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/ceph_rbd/ceph-rbd-admin-secret.yml"
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: Ceph RBD | Creating user secret in default
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/ceph_rbd/{{ item }}"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  loop: 
+    - ceph-rbd-user-secret-kubesystem.yml
+
+- name: Ceph RBD | Creating StorageClass
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/ceph_rbd/ceph-rbd-sc.yml"
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]

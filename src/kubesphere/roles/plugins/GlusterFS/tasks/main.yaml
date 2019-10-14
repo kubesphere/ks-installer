@@ -1,0 +1,31 @@
+---
+
+- name: GlusterFS Provisioner | Creating addons dir
+  file:
+    path: "{{ kube_config_dir }}/addons/glusterfs"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: GlusterFS Provisioner | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kube_config_dir }}/addons/glusterfs/{{ item.file }}"
+  with_items:
+    - { name: glusterfs-provisioner-sc, file: glusterfs-provisioner-sc.yml, type: sc }
+  register: glusterfs_provisioner_manifests
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: GlusterFS Provisioner | Creating Secret
+  command: kubectl create secret generic {{glusterfs_provisioner_secretName}} --type="kubernetes.io/glusterfs" --from-literal=key={{ jwt_admin_key }}  --namespace=kube-system
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: GlusterFS Provisioner | Creating StorageClass
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/glusterfs/glusterfs-provisioner-sc.yml"
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]

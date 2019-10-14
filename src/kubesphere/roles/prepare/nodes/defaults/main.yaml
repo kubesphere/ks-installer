@@ -1,0 +1,3 @@
+---
+#Docker periodic cleaning time (Can be reboot/yearly/annually/monthly/weekly/daily/hourly)
+periodic_cleaning_time: weekly

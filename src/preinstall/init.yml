@@ -1,0 +1,51 @@
+---
+
+- hosts: k8s-cluster
+  gather_facts: False
+  tasks:
+    - name: Disable swap
+      raw: 'sed -i /^[^#]*swap*/s/^/\#/g /etc/fstab'
+    - name: Swap off
+      raw: swapoff -a 
+
+- hosts: all
+  gather_facts: False
+  tasks:
+    - name: Fetch /etc/os-release
+      raw: cat /etc/os-release
+      register: os_release
+      changed_when: false
+      environment: {}
+    - name: Check os release
+      set_fact:
+        os_release: >-
+          {%- if 'Ubuntu' in os_release.stdout and '18.04' in os_release.stdout -%}
+           ubuntu18.04
+          {%- endif -%}
+          {%- if 'CentOS' in os_release.stdout -%}
+           centos
+          {%- endif -%}
+    - name: Add APT repositories(Ubuntu 18.04)
+      raw:  "echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse' > /etc/apt/sources.list && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse' >> /etc/apt/sources.list  && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse' >> /etc/apt/sources.list  && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse' >> /etc/apt/sources.list"
+      when: os_release == "ubuntu18.04"
+
+
+    # - include_tasks: bootstrap-ubuntu.yml
+    #   when: os_family == "ubuntu"
+    #     - name: Disable swap
+    #       raw: 'sed -i /^[^#]*swap*/s/^/\#/g /etc/fstab'
+    #     - name: Swap off
+    #       raw: swapoff -a 
+
+# - hosts: kube-master[0]
+#   gather_facts: False
+#   roles:
+#     - ntp
+
+# - hosts: all:!kube-master[0]
+#   gather_facts: False
+#   roles: 
+#     - ntp-client
+
+
+

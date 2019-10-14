@@ -1,0 +1,22 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ ceph_rbd_storage_class }}
+  annotations:
+    storageclass.kubesphere.io/supported_access_modes: '["ReadWriteOnce","ReadOnlyMany"]'
+    storageclass.beta.kubernetes.io/is-default-class: "{% if ceph_rbd_is_default_class %}true{% else %}false{% endif %}"
+provisioner: kubernetes.io/rbd
+parameters:
+  monitors: {{ ceph_rbd_monitors | join(',') }}
+  adminId: {{ ceph_rbd_admin_id }}
+  adminSecretName: ceph-rbd-admin-secret
+  adminSecretNamespace: kube-system
+  pool: {{ ceph_rbd_pool }}
+  userId: {{ ceph_rbd_user_id }}
+  userSecretName: ceph-rbd-user-secret
+  userSecretNamespace: kube-system
+  fsType: {{ ceph_rbd_fsType }}
+  imageFormat: "{{ ceph_rbd_imageFormat }}"
+  {% if ceph_rbd_imageFormat==2 %}imageFeatures: "{{ ceph_rbd_imageFeatures }}"{% endif %}
+
+allowVolumeExpansion: true

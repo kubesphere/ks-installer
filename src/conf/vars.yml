@@ -1,0 +1,232 @@
+##config
+## Please configure the API service, if your cluster based on QingCloud IaaS 
+## platform and want to use qingcloud-csi or qingcloud-cloud-controller-manager.
+# Access key pair can be created in QingCloud console
+qingcloud_access_key_id: ACCESS_KEY_ID
+qingcloud_secret_access_key: ACCESS_KEY_SECRET
+# Zone should be the same as Kubernetes cluster
+qingcloud_zone: ZONE
+# QingCloud IaaS platform service url.
+qingcloud_host: api.qingcloud.com
+qingcloud_port: 443
+qingcloud_protocol: https
+qingcloud_uri: /iaas
+qingcloud_connection_retries: 3
+qingcloud_connection_timeout: 30
+
+## If you want to use QingCloud LoadBlancer Plugin, please reference the documentation for installation instructions.
+## https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/qingcloud-lb
+qingcloud_lb_enabled: false
+qingcloud_vxnet_id: SHOULD_BE_REPLACED
+
+######################################################################
+# Storage configuration
+######################################################################
+## https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/storage-configuration
+
+# Local volume
+local_volume_enabled: true
+local_volume_is_default_class: true
+local_volume_storage_class: local
+
+# csi-qingcloud
+qingcloud_csi_enabled: false
+qingcloud_csi_is_default_class: false
+#The type of volume in QingCloud IaaS platform. 
+# 0 represents high performance volume
+# 3 respresents super high performance volume.
+# 1 or 2 represents high capacity volume depending on cluste's zone
+# 5 represents enterprise distributed SAN (NeonSAN) volume
+# 100 represents basic volume
+# 200 represents SSD enterprise volume.
+qingcloud_type: 2
+qingcloud_maxSize: 5000
+qingcloud_minSize: 100
+qingcloud_stepSize: 50
+qingcloud_fsType: ext4
+# 1 means single replica, 2 means multiple replicas. Default 2.
+qingcloud_disk_replica: 2
+
+# ceph-rbd
+ceph_rbd_enabled: false
+ceph_rbd_is_default_class: false
+ceph_rbd_storage_class: rbd
+# e.g. ceph_rbd_monitors:
+#   - 172.24.0.1:6789
+#   - 172.24.0.2:6789
+#   - 172.24.0.3:6789
+ceph_rbd_monitors:
+  - SHOULD_BE_REPLACED
+ceph_rbd_admin_id: admin
+# e.g. ceph_rbd_admin_secret: AQAnwihbXo+uDxAAD0HmWziVgTaAdai90IzZ6Q==
+ceph_rbd_admin_secret: SHOULD_BE_REPLACED
+ceph_rbd_pool: rbd
+ceph_rbd_user_id: admin
+# e.g. ceph_rbd_user_secret: AQAnwihbXo+uDxAAD0HmWziVgTaAdai90IzZ6Q==
+ceph_rbd_user_secret: SHOULD_BE_REPLACED
+ceph_rbd_fsType: ext4
+ceph_rbd_imageFormat: 1
+#ceph_rbd_imageFeatures: layering
+
+# nfs-client
+nfs_client_enabled: false
+nfs_client_is_default_class: false
+# Hostname of the NFS server(ip or hostname)
+nfs_server: SHOULD_BE_REPLACED
+# Basepath of the mount point to be used
+nfs_path: SHOULD_BE_REPLACED
+
+# csi-neonsan
+neonsan_csi_enabled: false
+neonsan_csi_is_default_class: false
+# csi-neonsan container option protocol: TCP or RDMA
+neonsan_csi_protocol: TCP
+# address of the NeonSAN server
+neonsan_server_address: IP:PORT 
+# cluster_name of the NeonSAN server
+neonsan_cluster_name: CLUSTER_NAME
+# the name of the volume storage pool
+neonsan_server_pool: kube
+# NeonSAN image replica count
+neonsan_server_replicas: 1
+# set the increment of volumes size in GiB
+neonsan_server_stepSize: 10
+# the file system to use for the volume
+neonsan_server_fsType: ext4
+client_tcp_no_delay: 1
+client_io_depth: 64
+client_io_timeout: 30
+conn_timeout: 8
+open_volume_timeout: 180
+
+# glusterfs
+glusterfs_provisioner_enabled: false
+glusterfs_is_default_class: false
+glusterfs_provisioner_storage_class: glusterfs
+glusterfs_provisioner_restauthenabled: true
+# e.g. glusterfs_provisioner_resturl: http://192.168.0.4:8080
+glusterfs_provisioner_resturl: SHOULD_BE_REPLACED
+# e.g. glusterfs_provisioner_clusterid: 6a6792ed25405eaa6302da99f2f5e24b
+glusterfs_provisioner_clusterid: SHOULD_BE_REPLACED
+glusterfs_provisioner_restuser: admin
+glusterfs_provisioner_secretName: heketi-secret
+glusterfs_provisioner_gidMin: 40000
+glusterfs_provisioner_gidMax: 50000
+glusterfs_provisioner_volumetype: replicate:2
+# e.g. jwt_admin_key: 123456
+jwt_admin_key: SHOULD_BE_REPLACED
+
+
+######################################################################
+# Cluster configuration
+######################################################################
+## Change this to use another Kubernetes version
+ks_version: 2.1.0
+kube_version: v1.15.4
+etcd_version: v3.2.18
+#openpitrix_version: v0.3.5
+
+ks_image_pull_policy: IfNotPresent
+# Choose network plugin (calico or flannel)
+kube_network_plugin: calico
+
+# Kubernetes internal network for services, unused block of space.
+kube_service_addresses: 10.233.0.0/18
+
+# internal network. When used, it will assign IP
+# addresses from this range to individual pods.
+# This network must be unused in your network infrastructure!
+kube_pods_subnet: 10.233.64.0/18
+
+# Kube-proxy proxyMode configuration.
+# Can be ipvs, iptables
+kube_proxy_mode: ipvs
+
+# Configure the amount of pods able to run on single node
+# default is equal to application default
+kubelet_max_pods: 110
+
+# Access Port of KubeSphere   
+# 30000-32767 (30180/30280/30380 are not allowed)
+console_port: 30880 
+ 
+disableMultiLogin: true
+
+## HA(Highly Available) loadbalancer example config
+## apiserver_loadbalancer_domain_name: "lb.kubesphere.local"
+#loadbalancer_apiserver:
+#  address: 192.168.0.10
+#  port: 6443
+
+#Docker periodic cleaning time (Can be reboot/yearly/annually/monthly/weekly/daily/hourly)
+periodic_cleaning_time: weekly
+
+#Etcd periodic backup time (Specify a period in minutes)
+etcd_backup_period: 30
+keep_backup_number: 5
+etcd_backup_dir: "/var/backups/kube_etcd"
+
+#CommonComponent
+mysql_volume_size: 20Gi
+minio_volume_size: 20Gi
+etcd_volume_size: 20Gi
+openldap_volume_size: 2Gi
+redis_volume_size: 2Gi
+
+
+# Monitoring
+monitoring_enabled: true
+prometheus_replicas: 2
+prometheus_memory_request: 400Mi
+prometheus_volume_size: 20Gi
+grafana_enabled: false
+
+# Logging
+logging_enabled: true
+elasticsearch_master_replica: 1
+elasticsearch_data_replica: 2
+elasticsearch_volume_size: 20Gi
+log_max_age: 7
+elk_prefix: logstash
+kibana_enabled: false
+#external_es_url: SHOULD_BE_REPLACED
+#external_es_port: SHOULD_BE_REPLACED
+
+#DevOps
+devops_enabled: false
+jenkins_memory_lim: 8Gi
+jenkins_memory_req: 4Gi
+jenkins_volume_size: 8Gi
+jenkinsJavaOpts_Xms: 3g
+jenkinsJavaOpts_Xmx: 6g
+jenkinsJavaOpts_MaxRAM: 8g
+sonarqube_enabled: false
+#sonar_server_url: SHOULD_BE_REPLACED
+#sonar_server_token: SHOULD_BE_REPLACED
+
+
+#Metrics-Server
+metrics_server_enabled: false
+#OpenPitrix
+openpitrix_enabled: false
+# ServiceMesh:
+servicemesh_enabled: false
+# Notification
+notification_enabled: false
+# Alerting
+alerting_enabled: false
+
+
+# Harbor
+harbor_enabled: false
+harbor_domain: harbor.devops.kubesphere.local
+# GitLab
+gitlab_enabled: false
+gitlab_hosts_domain: devops.kubesphere.local
+
+
+## Container Engine Acceleration
+## Use nvidia gpu acceleration in containers
+# nvidia_accelerator_enabled: true
+# nvidia_gpu_nodes:
+#   - kube-gpu-001

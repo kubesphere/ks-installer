@@ -1,0 +1,102 @@
+---
+
+- name: Installing epel-release (YUM)
+  yum:
+    name: epel-release
+  register: result
+  until: result is succeeded
+  retries: 5
+  delay: 5
+  when: ansible_os_family in ["RedHat", "Centos"] 
+
+- name: KubeSphere | Installing JQ (APT)
+  apt:
+    name: jq
+    update_cache: yes
+  register: result
+  until: result is succeeded
+  retries: 5
+  delay: 5
+  when: ansible_os_family in ["Ubuntu", "Debian"]
+  
+- name: KubeSphere| Installing JQ (YUM)
+  yum:
+    name: jq
+  register: result
+  until: result is succeeded
+  retries: 5
+  delay: 5
+  when: ansible_os_family in ["RedHat", "Centos"]
+
+- import_tasks: kubectl.yaml
+  when: inventory_hostname not in groups['kube-master']
+  tags:
+    - nodes
+
+- import_tasks: ceph-client.yaml
+  tags:
+    - nodes
+
+- import_tasks: glusterfs-client.yaml
+  tags:
+    - nodes
+
+- import_tasks: nfs-client.yaml
+  tags:
+    - nodes
+
+- name: periodic cleaning (docker)
+  cron:
+    name: "periodic cleaning (docker)"
+    special_time: "{{ periodic_cleaning_time }}"
+    job: "{{ docker_bin_dir }}/docker system prune -f"
+
+- name: Annotating nodes
+  shell: "{{ bin_dir }}/kubectl annotate node {{ inventory_hostname }} alpha.kubernetes.io/provided-node-ip={{ access_ip | default(ip) | default(ansible_default_ipv4['address']) }}"
+  register: import
+  failed_when: "import.stderr and 'already' not in import.stderr"
+
+- name: Labeling master nodes
+  shell: "{{ bin_dir }}/kubectl label node {{ inventory_hostname }} node-role.kubernetes.io/master="
+  when: inventory_hostname in groups['kube-master']
+  register: import
+  failed_when: "import.stderr and 'already' not in import.stderr"
+
+- name: Labeling worker nodes
+  shell: "{{ bin_dir }}/kubectl label node {{ inventory_hostname }} node-role.kubernetes.io/worker="
+  when: (inventory_hostname in groups['kube-node']) and (inventory_hostname not in groups['kube-master'])
+  register: import
+  failed_when: "import.stderr and 'already' not in import.stderr"
+
+- name: Annotating nodes (cloud-controller-manager)
+  shell: >
+    {{ bin_dir }}/kubectl annotate node {{ inventory_hostname }} node.beta.kubernetes.io/instance-id=$(cat /etc/qingcloud/instance-id)
+  register: import
+  failed_when: "import.stderr and 'already' not in import.stderr"
+  when: 
+    - qingcloud_lb_enabled == true
+
+
+- name: Adding harbor domain into hosts file
+  blockinfile:
+    path: /etc/hosts
+    block: |-
+      {{ first_kube_master }}  {{ harbor_domain }}
+    state: present
+    create: yes
+    unsafe_writes: yes
+    marker: "# Harbor domain {mark}"
+  when: 
+    - harbor_enabled == true
+
+- name: Adding gitlab domain into hosts file
+  blockinfile:
+    path: /etc/hosts
+    block: |-
+      {{ first_kube_master }}  gitlab.{{ gitlab_hosts_domain }}
+    state: present
+    create: yes
+    unsafe_writes: yes
+    marker: "# Gitlab domain {mark}"
+  when: 
+    - gitlab_enabled == true
