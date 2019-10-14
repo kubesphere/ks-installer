@@ -82,6 +82,18 @@ rules:
     verbs:
       - list
   - apiGroups:
+      - openpitrix.io
+    resources:
+      - applications
+      - apps
+      - apps/versions
+      - apps/events
+      - categories
+      - attachments
+    verbs:
+      - list
+      - get
+  - apiGroup:
       - ''
     resources:
       - limitranges
