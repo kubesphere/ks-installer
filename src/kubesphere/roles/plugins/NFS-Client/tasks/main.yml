@@ -1,0 +1,19 @@
+---
+- name: NFS-Client | Getting NFS-Client files
+  copy:
+    src: "nfs-client-provisioner"
+    dest: "{{ kube_config_dir }}/addons/"
+
+- name: NFS-Client | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kube_config_dir }}/addons/nfs-client-provisioner/{{ item.file }}"
+  with_items:
+    - { name: values, file: values.yaml, type: values }
+
+- name: NFS-Client | Deploy NFS-Client
+  shell: >
+    {{ bin_dir }}/helm upgrade --install nfs-client {{ kube_config_dir }}/addons/nfs-client-provisioner 
+    --set nfs.server={{ nfs_server }} 
+    --set nfs.path={{ nfs_path }}
+    --set storageClass.defaultClass={{ nfs_client_is_default_class }}

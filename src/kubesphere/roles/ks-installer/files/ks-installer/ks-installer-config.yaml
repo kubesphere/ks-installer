@@ -1,0 +1,102 @@
+---
+apiVersion: v1
+data:
+  ks-config.yaml: |
+    ---
+    kubernetes:
+      apiserverAddr: {{ kube_apiserver_host }}      # master addr or master's lb addr
+
+    etcd:
+      endpointIps: {{ etcd_endpoint_ips }}
+      port: 2379
+      tlsEnable: True
+
+    persistence:
+      storageClass: ""
+
+    plugins:
+      defaultStorage: "{{ defaultStorage | default("openebs-hostpath") }}"    # "csi-qingcloud"
+{% if defaultStorage is defined and devops.enabled == 'csi-qingcloud' %}
+      qingcloud_access_key_id: {{ qingcloud_access_key_id }}
+      qingcloud_secret_access_key: {{ qingcloud_secret_access_key }}
+      qingcloud_zone: {{ qingcloud_zone }}
+      qingcloud_host: {{ qingcloud_host }}
+      qingcloud_port: {{ qingcloud_port }}
+      qingcloud_protocol: {{ qingcloud_protocol }}
+      qingcloud_uri: {{ qingcloud_uri }}
+      qingcloud_connection_retries: {{ qingcloud_connection_retries }}
+      qingcloud_connection_timeout: {{ qingcloud_connection_timeout }}
+      qingcloud_type: {{ qingcloud_type }}
+      qingcloud_maxSize: {{ qingcloud_maxSize }}
+      qingcloud_minSize: {{ qingcloud_minSize }}
+      qingcloud_stepSize: {{ qingcloud_stepSize }}
+      qingcloud_fsType: {{ qingcloud_fsType }}
+      qingcloud_disk_replica: {{ qingcloud_disk_replica }}
+{% endif %}
+
+    common:
+      mysqlVolumeSize: {{ mysql_volume_size }}
+      minioVolumeSize: {{ minio_volume_size }}
+      etcdVolumeSize: {{ etcd_volume_size }}
+      openldapVolumeSize: {{ openldap_volume_size }}
+      redisVolumSize: {{ redis_volume_size }}
+
+    metrics-server:
+      enabled: {{ metrics_server_enabled }}
+
+    console:
+      disableMultiLogin: True  # enable/disable multi login
+      port: {{ console_port }}
+
+    monitoring:
+      enabled: {{ monitoring_enabled }}
+      prometheusReplica: {{ prometheus_replica }}
+      prometheusMemoryRequest: {{ prometheus_memory_request }}
+      prometheusVolumeSize: {{ prometheus_volume_size }}
+      grafana:
+        enabled: {{ grafana_enabled }}
+
+    logging:
+      enabled: {{ logging_enabled }}
+      elasticsearchMasterReplica: {{ elasticsearch_master_replica }}
+      elasticsearchDataReplica: {{ elasticsearch_data_replica }}
+      elasticsearchVolumeSize: {{ elasticsearch_volume_size }}
+      logMaxAge: {{ log_max_age }}
+      elkPrefix: {{ elk_prefix }}
+      containersLogMountedPath: ""
+      kibana:
+        enabled: {{ kibana_enabled }}
+      logsidecarInjector:
+        enabled: {{ logsidecar_injector_enabled }}
+
+    openpitrix:
+      enabled: {{ openpitrix_enabled }}
+
+    devops:
+      enabled: False
+      jenkinsMemoryLim: "8Gi"
+      jenkinsMemoryReq: "4Gi"
+      jenkinsVolumeSize: "8Gi"
+      sonarqube:
+        enabled: False
+
+    servicemesh:
+      enabled: {{ servicemesh_enabled }}
+
+    notification:
+      enabled: {{ notification_enabled }}
+
+    alerting:
+      enabled: {{ alerting_enabled }}
+
+    harbor:
+      enabled: {{ harbor_enable }}
+      domain:
+    gitlab:
+      enabled: {{ gitlab_enable }}
+      domain:
+
+kind: ConfigMap
+metadata:
+  name: ks-installer
+  namespace: kubesphere-system

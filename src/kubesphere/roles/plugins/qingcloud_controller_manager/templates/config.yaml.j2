@@ -1,0 +1,15 @@
+qy_access_key_id: '{{ qingcloud_access_key_id }}'
+qy_secret_access_key: '{{ qingcloud_secret_access_key }}'
+zone: '{{ qingcloud_zone }}'
+{% if qingcloud_host != None %}
+host: '{{ qingcloud_host }}'
+{% endif %}
+{% if qingcloud_port != None %}
+port: {{ qingcloud_port }}
+{% endif %}
+{% if qingcloud_protocol != None %}
+protocol: '{{ qingcloud_protocol }}'
+{% endif %}
+{% if qingcloud_uri != None %}
+uri: '{{ qingcloud_uri }}'
+{% endif %}

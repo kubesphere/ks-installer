@@ -1,0 +1,145 @@
+#  Copyright (C) 2018 Yunify, Inc.
+# 
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this work except in compliance with the License.
+#  You may obtain a copy of the License in the LICENSE file, or at:
+# 
+#  http://www.apache.org/licenses/LICENSE-2.0
+# 
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: csi-neonsan-node
+  namespace: kube-system
+  labels:
+    app: "csi-neonsan"
+    role: "node"
+    csi: "v0.3.0"
+    owner: "yunify"
+spec:
+  selector:
+    matchLabels:
+      app: "csi-neonsan"
+      role: "node"
+      csi: "v0.3.0"
+      owner: "yunify"
+  template:
+    metadata:
+      labels:
+        app: "csi-neonsan"
+        role: "node"
+        csi: "v0.3.0"
+        owner: "yunify"
+    spec:
+      serviceAccount: csi-neonsan-node
+      imagePullSecrets:
+      - name: csi-neonsan
+      hostNetwork: true
+      containers:
+        - name: driver-registrar
+          image: {{ neonsan_driver_registrar_repo }}:{{ neonsan_driver_registrar_tag }}
+          args:
+            - "--v=5"
+            - "--csi-address=$(ADDRESS)"
+            - "--kubelet-registration-path=/var/lib/kubelet/plugins/csi-neonsan/csi.sock"
+          env:
+            - name: ADDRESS
+              value: /csi/csi.sock
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: registration-dir
+              mountPath: /registration
+        - name: csi-neonsan
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          image: {{ csi_neonsan_repo }}:{{ csi_neonsan_tag }}
+          args :
+            - "--nodeid=$(NODE_ID)"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--v=5"
+            - "--drivername=csi-neonsan"
+            - "--config=/etc/config/qbd.conf"
+            - "--pools=kube"
+            - "--protocol={{ neonsan_csi_protocol }}"
+          env:
+            - name: NODE_ID
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: CSI_ENDPOINT
+              value: unix:///csi/csi.sock
+          imagePullPolicy: "IfNotPresent"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: mount-dir
+              mountPath: /var/lib/kubelet
+              mountPropagation: "Bidirectional"
+            - name: dev-dir
+              mountPath: /dev
+              mountPropagation: "HostToContainer"
+            - name: server-config
+              mountPath: /etc/config
+            - name: neonsan-cmd
+              mountPath: /usr/bin
+            - name: qbd-cmd
+              mountPath: /usr/sbin
+            - name: lib
+              mountPath: /lib
+            - name: usrlib
+              mountPath: /usr/lib
+      tolerations:
+      - operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+      volumes:
+        # make sure mount propagate feature gate is enabled
+        - name: mount-dir
+          hostPath:
+            path: /var/lib/kubelet
+            type: DirectoryOrCreate
+        - name: socket-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins/csi-neonsan
+            type: DirectoryOrCreate
+        - name: registration-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins
+            type: Directory
+        - name: dev-dir
+          hostPath:
+            path: /dev
+            type: Directory
+        - name: server-config
+          configMap:
+            name: csi-neonsan
+        - name: neonsan-cmd
+          hostPath:
+            path: /usr/bin
+            type: DirectoryOrCreate
+        - name: qbd-cmd
+          hostPath:
+            path: /usr/sbin
+            type: DirectoryOrCreate
+        - name: lib
+          hostPath:
+            path: /lib
+        - name: usrlib
+          hostPath:
+            path: /usr/lib
