@@ -1,12 +1,78 @@
-##config
-## Please configure the API service, if your cluster based on QingCloud IaaS 
-## platform and want to use qingcloud-csi or qingcloud-cloud-controller-manager.
-# Access key pair can be created in QingCloud console
+# KubeSphere Installer configuration file example.
+#
+# Note that this configuration is intended to be used to install
+# both Kubernetes and KubeSphere at the same time. If you want
+# to install KubeSphere on a existing Kubernetes cluster, please
+# check https://github.com/kubesphere/ks-installer
+
+######################### Kubernetes #########################
+
+# Which Kubernetes version you want to install? Note not all
+# Kubernetes versions are supported by KubeSphere, better to
+# https://kubesphere.io/docs to find support list.
+kube_version: v1.13.5
+
+# Which etcd version you want to install?
+etcd_version: v3.2.18
+
+# Installer can set up a cron job to backup etcd data.
+# How often do you want to backup etcd?
+# 30 means backup etcd every 30 minutes.
+etcd_backup_period: 30
+
+# How many backup replicas do you want to keep?
+# 5 means will only keep latest 5 backups, delete older backups.
+keep_backup_number: 5
+
+# Where to place backups?
+etcd_backup_dir: "/var/backups/kube_etcd"
+
+# Kubernetes network plugin. Note that calico and flannel
+# are recommended plugins, they are heavily tested.
+kube_network_plugin: calico
+
+# A valid CIDR range for Kubernetes services,
+# 1. should not overlap with your node subnet
+# 2. should not overlap with Kubernetes pod subnet
+kube_service_addresses: 10.233.0.0/18
+
+# A valid CIDR range for Kubernetes pod subnet,
+# 1. should not overlap with your node subnet
+# 2. should not overlap with Kubernetes services subnet
+kube_pods_subnet: 10.233.64.0/18
+
+# Kube-proxy proxyMode configuration, either ipvs, or iptables
+kube_proxy_mode: ipvs
+
+# Maximum pods allowed running on a single node.
+kubelet_max_pods: 110
+
+# HA(Highly Available) loadbalancer example config
+# apiserver_loadbalancer_domain_name: "lb.kubesphere.local"
+# loadbalancer_apiserver:
+#   address: 192.168.0.10
+#   port: 6443
+
+######################### QingCloud Authentication #########################
+
+# If you are installing KubeSphere on QingCloud environment, please provide
+# your api access key in this section.
+# You can skip this section if you are installing on any other environment.
+
+# QingCloud access key pair, you can go to https://console.qingcloud.com/access_keys/
+# to create a new key pair if don't have one.
 qingcloud_access_key_id: ACCESS_KEY_ID
 qingcloud_secret_access_key: ACCESS_KEY_SECRET
-# Zone should be the same as Kubernetes cluster
+
+# Which zone do your clusters locate? Zone list can be found in
+# https://docs.qingcloud.com/product/region/.
+# for example,
+# qingcloud_zone: pek3
 qingcloud_zone: ZONE
-# QingCloud IaaS platform service url.
+
+# QingCloud API server endpoint. Don't change this if you
+# are using public QingCloud. Only change this if you are installing
+# on a private QingCloud environment.
 qingcloud_host: api.qingcloud.com
 qingcloud_port: 443
 qingcloud_protocol: https
@@ -14,25 +80,49 @@ qingcloud_uri: /iaas
 qingcloud_connection_retries: 3
 qingcloud_connection_timeout: 30
 
-## If you want to use QingCloud LoadBlancer Plugin, please reference the documentation for installation instructions.
-## https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/qingcloud-lb
+# Highly recommend to enable LoadBalancer plugin if you are
+# using KubeSphere on QingCloud.
+# You can check following link to find more details.
+# https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/qingcloud-lb
 qingcloud_lb_enabled: false
+# Which vxnet are Kubernetes nodes in?
+# for example
+# qingcloud_vxnet_id: vxnet-d3sfx
 qingcloud_vxnet_id: SHOULD_BE_REPLACED
 
-######################################################################
-# Storage configuration
-######################################################################
-## https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/storage-configuration
 
-# Local volume
+######################### Storage #########################
+
+# This section will configure storage type to use in Kubernetes.
+# For more specific supported storage list, please check
+# https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/storage-configuration
+
+# LOCAL VOLUME
+# KubeSphere will use local volume as storage by default.
+# This is just for quick and easy testing, and  highly not
+# recommended in production environment.
+# Please change to other storage type if you want to create
+# a production environment.
 local_volume_enabled: true
 local_volume_is_default_class: true
 local_volume_storage_class: local
 
-# csi-qingcloud
+
+# QINGCLOUD CSI
+# If you want to install to KubeSphere on QingCloud,
+# you should use qingcloud-csi as storage type.
+# Note also need to disable other storage types in
+# configuration file.
+# Don't forget to provide your QingCloud API access key
+# in QingCloud section
+
+# Change to enable if you want to use qingcloud-csi
 qingcloud_csi_enabled: false
+
+# whether to set qingcloud-csi as default storage class in Kubernetes
 qingcloud_csi_is_default_class: false
-#The type of volume in QingCloud IaaS platform. 
+
+# The type of volume in QingCloud IaaS platform.
 # 0 represents high performance volume
 # 3 respresents super high performance volume.
 # 1 or 2 represents high capacity volume depending on cluste's zone
@@ -47,42 +137,15 @@ qingcloud_fsType: ext4
 # 1 means single replica, 2 means multiple replicas. Default 2.
 qingcloud_disk_replica: 2
 
-# ceph-rbd
-ceph_rbd_enabled: false
-ceph_rbd_is_default_class: false
-ceph_rbd_storage_class: rbd
-# e.g. ceph_rbd_monitors:
-#   - 172.24.0.1:6789
-#   - 172.24.0.2:6789
-#   - 172.24.0.3:6789
-ceph_rbd_monitors:
-  - SHOULD_BE_REPLACED
-ceph_rbd_admin_id: admin
-# e.g. ceph_rbd_admin_secret: AQAnwihbXo+uDxAAD0HmWziVgTaAdai90IzZ6Q==
-ceph_rbd_admin_secret: SHOULD_BE_REPLACED
-ceph_rbd_pool: rbd
-ceph_rbd_user_id: admin
-# e.g. ceph_rbd_user_secret: AQAnwihbXo+uDxAAD0HmWziVgTaAdai90IzZ6Q==
-ceph_rbd_user_secret: SHOULD_BE_REPLACED
-ceph_rbd_fsType: ext4
-ceph_rbd_imageFormat: 1
-#ceph_rbd_imageFeatures: layering
 
-# nfs-client
-nfs_client_enabled: false
-nfs_client_is_default_class: false
-# Hostname of the NFS server(ip or hostname)
-nfs_server: SHOULD_BE_REPLACED
-# Basepath of the mount point to be used
-nfs_path: SHOULD_BE_REPLACED
-
-# csi-neonsan
+# QINGCLOUD NEOSAN
+# change to true to use neosan as backend storage.
 neonsan_csi_enabled: false
 neonsan_csi_is_default_class: false
 # csi-neonsan container option protocol: TCP or RDMA
 neonsan_csi_protocol: TCP
 # address of the NeonSAN server
-neonsan_server_address: IP:PORT 
+neonsan_server_address: IP:PORT
 # cluster_name of the NeonSAN server
 neonsan_cluster_name: CLUSTER_NAME
 # the name of the volume storage pool
@@ -99,7 +162,58 @@ client_io_timeout: 30
 conn_timeout: 8
 open_volume_timeout: 180
 
-# glusterfs
+# CEPH RDB
+# KubeSphere can use a existing ceph as backend storage service.
+# change to true if you want to use ceph,
+# don't forget to disable other storage
+ceph_rbd_enabled: false
+ceph_rbd_is_default_class: false
+ceph_rbd_storage_class: rbd
+
+# Ceph rbd monitor endpoints, for example
+#
+# ceph_rbd_monitors:
+#   - 172.24.0.1:6789
+#   - 172.24.0.2:6789
+#   - 172.24.0.3:6789
+ceph_rbd_monitors:
+  - SHOULD_BE_REPLACED
+
+# ceph admin account name
+ceph_rbd_admin_id: admin
+
+# ceph admin secret, for example,
+# ceph_rbd_admin_secret: AQAnwihbXo+uDxAAD0HmWziVgTaAdai90IzZ6Q==
+ceph_rbd_admin_secret: TYPE_ADMIN_ACCOUNT_HERE
+ceph_rbd_pool: rbd
+ceph_rbd_user_id: admin
+# e.g. ceph_rbd_user_secret: AQAnwihbXo+uDxAAD0HmWziVgTaAdai90IzZ6Q==
+ceph_rbd_user_secret: TYPE_ADMIN_SECRET_HERE
+ceph_rbd_fsType: ext4
+ceph_rbd_imageFormat: 1
+
+# Additional ceph configurations
+# ceph_rbd_imageFeatures: layering
+
+
+
+# NFS CONFIGURATION
+# KubeSphere can use existing nfs service as backend storage.
+# change to true to use nfs.
+nfs_client_enabled: false
+nfs_client_is_default_class: false
+
+# Hostname of the NFS server(ip or hostname)
+nfs_server: SHOULD_BE_REPLACED
+
+# Basepath of the mount point
+nfs_path: SHOULD_BE_REPLACED
+
+
+# GLUSTERFS CONFIGURATION
+# change to true to use glusterfs as backend storage.
+# for more detailed configuration, please check
+# https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/storage-configuration
 glusterfs_provisioner_enabled: false
 glusterfs_is_default_class: false
 glusterfs_provisioner_storage_class: glusterfs
@@ -117,56 +231,27 @@ glusterfs_provisioner_volumetype: replicate:2
 jwt_admin_key: SHOULD_BE_REPLACED
 
 
-######################################################################
-# Cluster configuration
-######################################################################
-## Change this to use another Kubernetes version
-ks_version: 2.1.0
-kube_version: v1.15.4
-etcd_version: v3.2.18
-#openpitrix_version: v0.3.5
+######################### KubeSphere #########################
 
+# which version of KubeSphere do you want to install ?
+ks_version: v2.1.0
+
+# image pull policy
 ks_image_pull_policy: IfNotPresent
-# Choose network plugin (calico or flannel)
-kube_network_plugin: calico
 
-# Kubernetes internal network for services, unused block of space.
-kube_service_addresses: 10.233.0.0/18
+# KubeSphere console port, range 30000-32767,
+# but 30180/30280/30380 are reserved for internal service
+console_port: 30880
 
-# internal network. When used, it will assign IP
-# addresses from this range to individual pods.
-# This network must be unused in your network infrastructure!
-kube_pods_subnet: 10.233.64.0/18
-
-# Kube-proxy proxyMode configuration.
-# Can be ipvs, iptables
-kube_proxy_mode: ipvs
-
-# Configure the amount of pods able to run on single node
-# default is equal to application default
-kubelet_max_pods: 110
-
-# Access Port of KubeSphere   
-# 30000-32767 (30180/30280/30380 are not allowed)
-console_port: 30880 
- 
+# whether to enable single user login.
+# true means only one person can login KubeSphere using
+# same account. If there is one already logged in, he or she
+# will be kicked out if another person logged with same account.
 disableMultiLogin: true
 
-## HA(Highly Available) loadbalancer example config
-## apiserver_loadbalancer_domain_name: "lb.kubesphere.local"
-#loadbalancer_apiserver:
-#  address: 192.168.0.10
-#  port: 6443
-
-#Docker periodic cleaning time (Can be reboot/yearly/annually/monthly/weekly/daily/hourly)
-periodic_cleaning_time: weekly
-
-#Etcd periodic backup time (Specify a period in minutes)
-etcd_backup_period: 30
-keep_backup_number: 5
-etcd_backup_dir: "/var/backups/kube_etcd"
-
-#CommonComponent
+# devops/openpitrix/notification/alerting will
+# depend mysql/minio/etcd/openldap/redis to store credentials.
+# following to set how much storage they will use.
 mysql_volume_size: 20Gi
 minio_volume_size: 20Gi
 etcd_volume_size: 20Gi
@@ -174,14 +259,31 @@ openldap_volume_size: 2Gi
 redis_volume_size: 2Gi
 
 
-# Monitoring
+# MONITORING CONFIGURATION
+# monitoring is a required component for KubeSphere,
+# you can't disable it.
+# monitoring deployment configuration
 monitoring_enabled: true
+
+# prometheus replicas numbers,
+# 2 means better availability, but more resource consumption
 prometheus_replicas: 2
+
+# prometheus pod memory requests
 prometheus_memory_request: 400Mi
+
+# prometheus storage size,
+# 20Gi means for every pod if you have
+# multiple prometheus replicas
 prometheus_volume_size: 20Gi
+
+# whether to install a grafana
 grafana_enabled: false
 
-# Logging
+# LOGGING CONFIGURATION
+# KubeSphere logging is an optional component. KubeSphere will
+# Kubernetes builtin log API if you disabled logging. Builtin
+# log only provide limited functions, so recommend to enable logging.
 logging_enabled: true
 elasticsearch_master_replica: 1
 elasticsearch_data_replica: 2
@@ -192,7 +294,8 @@ kibana_enabled: false
 #external_es_url: SHOULD_BE_REPLACED
 #external_es_port: SHOULD_BE_REPLACED
 
-#DevOps
+# DEVOPS CONFIGURATION
+# Devops is an optional component for KubeSphere.
 devops_enabled: false
 jenkins_memory_lim: 8Gi
 jenkins_memory_req: 4Gi
@@ -204,18 +307,13 @@ sonarqube_enabled: false
 #sonar_server_url: SHOULD_BE_REPLACED
 #sonar_server_token: SHOULD_BE_REPLACED
 
-
-#Metrics-Server
-metrics_server_enabled: false
-#OpenPitrix
+# following components are all optional to KubeSphere,
+# you can install later by change the value to true
 openpitrix_enabled: false
-# ServiceMesh:
+metrics_server_enabled: false
 servicemesh_enabled: false
-# Notification
 notification_enabled: false
-# Alerting
 alerting_enabled: false
-
 
 # Harbor
 harbor_enabled: false
@@ -230,3 +328,4 @@ gitlab_hosts_domain: devops.kubesphere.local
 # nvidia_accelerator_enabled: true
 # nvidia_gpu_nodes:
 #   - kube-gpu-001
+
