@@ -84,6 +84,10 @@ spec:
               value: "${OPENPITRIX_ETCD_ENDPOINTS}"
             - name: OPENPITRIX_MYSQL_HOST
               value: "${OPENPITRIX_MYSQL_HOST}"
+            - name: OPENPITRIX_ATTACHMENT_ENDPOINT
+              value: ${MINIO_SERVICE}:9000
+            - name: OPENPITRIX_ATTACHMENT_BUCKET_NAME
+              value: ${OPENPITRIX_ATTACHMENT_BUCKET_NAME}
             - name: OPENPITRIX_MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
