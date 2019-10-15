@@ -18,7 +18,7 @@
       register: tag_date
     - name: set dev version
       set_fact:
-        dev_tag: "dev-{{ tag_date }}"
+        dev_tag: "dev-{{ tag_date.stdout }}"
 
 - hosts: k8s-cluster
   roles:
