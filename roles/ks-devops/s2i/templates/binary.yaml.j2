@@ -8,7 +8,7 @@ metadata:
   name: binary
 spec:
   containerInfo:
-    - builderImage: {{ binary_repo }}:{{ ks_image_tag }}
+    - builderImage: {{ binary_repo }}:{{ s2irun_tag }}
   environment:
     - key: ARGS
       type: string
@@ -16,7 +16,7 @@ spec:
       required: false
       defaultValue: ""
   codeFramework: binary
-  defaultBaseImage: {{ binary_repo }}:{{ ks_image_tag }}
+  defaultBaseImage: {{ binary_repo }}:{{ s2irun_tag }}
   version: 0.0.1
   description: "This is a B2i builder template for binary build"
   iconPath: assets/binary.png
