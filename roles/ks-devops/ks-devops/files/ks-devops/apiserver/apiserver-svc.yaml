@@ -6,12 +6,12 @@ metadata:
   labels:
     app: ks-devops
     tier: backend
-    version: advanced-1.0.0
+    version: v2.1.0
 spec:
   selector:
     app: ks-devops
     tier: backend
-    version: advanced-1.0.0
+    version: v2.1.0
   ports:
     - name: http
       port: 80
