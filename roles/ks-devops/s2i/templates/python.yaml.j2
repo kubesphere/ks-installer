@@ -9,13 +9,13 @@ metadata:
     "helm.sh/hook": pre-install
 spec:
   containerInfo:
-    - builderImage: {{ python36centos7_repo }}:{{ s2irun_tag }}
+    - builderImage: {{ python36centos7_repo }}:{{ s2itemplates_tag }}
       buildVolumes: ["s2i_python36_cache:/opt/app-root/lib"]
-    - builderImage: {{ python35centos7_repo }}:{{ s2irun_tag }}
+    - builderImage: {{ python35centos7_repo }}:{{ s2itemplates_tag }}
       buildVolumes: ["s2i_python35_cache:/opt/app-root/lib"]
-    - builderImage: {{ python34centos7_repo }}:{{ s2irun_tag }}
+    - builderImage: {{ python34centos7_repo }}:{{ s2itemplates_tag }}
       buildVolumes: ["s2i_python34_cache:/opt/app-root/lib"]
-    - builderImage: {{ python27centos7_repo }}:{{ s2irun_tag }}
+    - builderImage: {{ python27centos7_repo }}:{{ s2itemplates_tag }}
       buildVolumes: ["s2i_python27_cache:/opt/app-root/lib"]
   environment:
     - key: APP_SCRIPT
@@ -80,7 +80,7 @@ spec:
       defaultValue: ""
       type: string
   codeFramework: python
-  defaultBaseImage: {{ python36centos7_repo }}:{{ s2irun_tag }}
+  defaultBaseImage: {{ python36centos7_repo }}:{{ s2itemplates_tag }}
   version: 0.0.1
   description: "Python available as container is a base platform for building and running various Python applications and frameworks. Python is an easy to learn, powerful programming language. It has efficient high-level data structures and a simple but effective approach to object-oriented programming. Python's elegant syntax and dynamic typing, together with its interpreted nature, make it an ideal language for scripting and rapid application development in many areas on most platforms.
 
