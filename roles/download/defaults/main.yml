@@ -221,6 +221,7 @@ s2ioperator_repo: "{{ base_repo }}kubespheredev/s2ioperator"
 s2ioperator_tag: "advanced-2.1.0"
 s2irun_repo: "{{ base_repo }}kubespheredev/s2irun"
 s2irun_tag: "advanced-2.1.0"
+s2itemplates_tag: latest
 binary_repo: "{{ base_repo }}kubespheredev/s2i-binary"
 tomcat85_java11_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-centos7"
 tomcat85_java11_runtime_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-runtime"

@@ -11,13 +11,13 @@ metadata:
     "helm.sh/hook": pre-install
 spec:
   containerInfo:
-    - builderImage: {{ tomcat85_java11_repo }}:{{ s2irun_tag }}
-      runtimeImage: {{ tomcat85_java11_runtime_repo }}:{{ s2irun_tag }}
+    - builderImage: {{ tomcat85_java11_repo }}:{{ s2itemplates_tag }}
+      runtimeImage: {{ tomcat85_java11_runtime_repo }}:{{ s2itemplates_tag }}
       runtimeArtifacts:
         - source: "/deployments"
       buildVolumes: ["s2i_java_cache:/tmp/artifacts"]
-    - builderImage: {{ tomcat85_java8_repo }}:{{ s2irun_tag }}
-      runtimeImage: {{ tomcat85_java8_runtime_repo }}:{{ s2irun_tag }}
+    - builderImage: {{ tomcat85_java8_repo }}:{{ s2itemplates_tag }}
+      runtimeImage: {{ tomcat85_java8_runtime_repo }}:{{ s2itemplates_tag }}
       runtimeArtifacts:
         - source: "/deployments"
       buildVolumes: ["s2i_java_cache:/tmp/artifacts"]
@@ -138,7 +138,7 @@ spec:
       required: false
       defaultValue: ""
   codeFramework: java
-  defaultBaseImage: {{ tomcat85_java8_repo }}:{{ s2irun_tag }}
+  defaultBaseImage: {{ tomcat85_java8_repo }}:{{ s2itemplates_tag }}
   version: 0.0.1
   description: "This is a S2I builder template for Java builds whose result can be run directly with Tomcat application server."
   iconPath: assets/tomcat.png
