@@ -83,7 +83,7 @@ qingcloud_connection_timeout: 30
 # Highly recommend to enable LoadBalancer plugin if you are
 # using KubeSphere on QingCloud.
 # You can check following link to find more details.
-# https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/qingcloud-lb
+# https://docs.kubesphere.io/v2.1/zh-CN/installation/qingcloud-lb
 qingcloud_lb_enabled: false
 # Which vxnet are Kubernetes nodes in?
 # for example
@@ -95,7 +95,7 @@ qingcloud_vxnet_id: SHOULD_BE_REPLACED
 
 # This section will configure storage type to use in Kubernetes.
 # For more specific supported storage list, please check
-# https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/storage-configuration
+# https://docs.kubesphere.io/v2.1/zh-CN/installation/storage-configuration
 
 # LOCAL VOLUME
 # KubeSphere will use local volume as storage by default.
@@ -138,8 +138,8 @@ qingcloud_fsType: ext4
 qingcloud_disk_replica: 2
 
 
-# QINGCLOUD NEOSAN
-# change to true to use neosan as backend storage.
+# QINGCLOUD NEONSAN
+# change to true to use neonsan as backend storage.
 neonsan_csi_enabled: false
 neonsan_csi_is_default_class: false
 # csi-neonsan container option protocol: TCP or RDMA
@@ -162,7 +162,7 @@ client_io_timeout: 30
 conn_timeout: 8
 open_volume_timeout: 180
 
-# CEPH RDB
+# CEPH RBD
 # KubeSphere can use a existing ceph as backend storage service.
 # change to true if you want to use ceph,
 # don't forget to disable other storage
@@ -213,7 +213,7 @@ nfs_path: SHOULD_BE_REPLACED
 # GLUSTERFS CONFIGURATION
 # change to true to use glusterfs as backend storage.
 # for more detailed configuration, please check
-# https://docs.kubesphere.io/advanced-v2.0/zh-CN/installation/storage-configuration
+# https://docs.kubesphere.io/v2.1/zh-CN/installation/storage-configuration
 glusterfs_provisioner_enabled: false
 glusterfs_is_default_class: false
 glusterfs_provisioner_storage_class: glusterfs
