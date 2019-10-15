@@ -253,7 +253,7 @@ function all-in-one(){
                    -e jenkinsJavaOpts_Xmx='512m' \
                    -e jenkinsJavaOpts_MaxRAM='2g' \
                    -e jenkins_memory_lim="2Gi" \
-                   -e jenkins_memory_req="800Mi" \
+                   -e jenkins_memory_req="1500Mi" \
                    -e elasticsearch_data_replica=1
   if [[ $? -eq 0 ]]; then
     #statements
