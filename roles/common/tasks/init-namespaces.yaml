@@ -5,9 +5,7 @@
     systemNamespaces: >-
       kubesphere-system
       kubesphere-controls-system
-      {%- if monitoring.enabled is defined and monitoring.enabled %}
       kubesphere-monitoring-system
-      {%- endif %}
       {%- if logging.enabled is defined and logging.enabled %}
       kubesphere-logging-system
       {%- endif %}
