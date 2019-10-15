@@ -13,7 +13,7 @@ etcd_client_ca_crt: "{{ etcd_cert_dir }}/ca.pem"
 etcd_client_crt: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}.pem"
 etcd_client_key: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}-key.pem"
 
-storage_class: >-
+storage_class: >
   {% if local_volume_enabled is defined and local_volume_enabled and local_volume_is_default_class is defined and local_volume_is_default_class %}
   {{ local_volume_storage_class }}
   {% elif qingcloud_csi_enabled is defined and qingcloud_csi_enabled and qingcloud_csi_is_default_class is defined and qingcloud_csi_is_default_class %}
