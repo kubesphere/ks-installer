@@ -4,7 +4,7 @@ metadata:
   labels:
     app: ks-controller-manager
     tier: backend
-    version: advanced-2.0.0
+    version: v2.1.0
   name: ks-controller-manager
   namespace: kubesphere-system
 spec:
@@ -15,7 +15,7 @@ spec:
     matchLabels:
       app: ks-controller-manager
       tier: backend
-      version: advanced-2.0.0
+      version: v2.1.0
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -27,7 +27,7 @@ spec:
       labels:
         app: ks-controller-manager
         tier: backend
-        version: advanced-2.0.0
+        version: v2.1.0
     spec:
       containers:
       - command:

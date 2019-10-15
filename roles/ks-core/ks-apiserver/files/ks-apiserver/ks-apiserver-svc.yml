@@ -6,7 +6,7 @@ metadata:
   labels:
     app: ks-apiserver
     tier: backend
-    version: advanced-1.0.0
+    version: v2.1.0
   name: ks-apiserver
   namespace: kubesphere-system
 spec:
@@ -17,5 +17,5 @@ spec:
   selector:
     app: ks-apiserver
     tier: backend
-    version: advanced-1.0.0
+    version: v2.1.0
   type: ClusterIP

@@ -5,7 +5,6 @@ metadata:
   labels:
     app: openldap
     tier: database
-    version: openldap-2.4
   name: openldap
   namespace: kubesphere-system
 spec:
@@ -14,13 +13,11 @@ spec:
     matchLabels:
       app: openldap
       tier: database
-      version: openldap-2.4
   template:
     metadata:
       labels:
         app: openldap
         tier: database
-        version: openldap-2.4
     spec:
       containers:
       - env:
@@ -81,7 +78,6 @@ metadata:
   labels:
     app: openldap
     tier: database
-    version: openldap-2.4
   name: openldap
   namespace: kubesphere-system
 spec:
@@ -93,7 +89,6 @@ spec:
   selector:
     app: openldap
     tier: database
-    version: openldap-2.4
   sessionAffinity: None
   type: ClusterIP
 

@@ -218,7 +218,7 @@ function all-in-one(){
     str="failed!"
     echo -e "\033[31;47m$str\033[0m"
     echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/advanced-v2.0/zh-CN/faq/faq-install/"
+    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
     echo "**********************************"
     exit
   fi
@@ -236,7 +236,7 @@ function all-in-one(){
     str="failed!"
     echo -e "\033[31;47m$str\033[0m"
     echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/advanced-v2.0/zh-CN/faq/faq-install/"
+    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
     echo "**********************************"
     exit
   fi
@@ -264,7 +264,7 @@ function all-in-one(){
     str="failed!"
     echo -e "\033[31;47m$str\033[0m"
     echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/advanced-v2.0/zh-CN/faq/faq-install/"
+    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
     echo "**********************************"
     exit
   fi
@@ -293,7 +293,7 @@ function multi-node(){
     str="failed!"
     echo -e "\033[31;47m$str\033[0m"
     echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/advanced-v2.0/zh-CN/faq/faq-install/"
+    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
     echo "**********************************"
     exit
   fi
@@ -312,7 +312,7 @@ function multi-node(){
     str="failed!"
     echo -e "\033[31;47m$str\033[0m"
     echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/advanced-v2.0/zh-CN/faq/faq-install/"
+    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
     echo "**********************************"
     exit
   fi
@@ -332,7 +332,7 @@ function multi-node(){
     str="failed!"
     echo -e "\033[31;47m$str\033[0m"
     echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/advanced-v2.0/zh-CN/faq/faq-install/"
+    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
     echo "**********************************"
     exit
   fi
