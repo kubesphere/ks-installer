@@ -236,9 +236,6 @@ jwt_admin_key: SHOULD_BE_REPLACED
 # which version of KubeSphere do you want to install ?
 ks_version: v2.1.0
 
-# image pull policy
-ks_image_pull_policy: IfNotPresent
-
 # KubeSphere console port, range 30000-32767,
 # but 30180/30280/30380 are reserved for internal service
 console_port: 30880
