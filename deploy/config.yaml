@@ -29,7 +29,6 @@ data:
       port: 30880
 
     monitoring:
-      enabled: True
       prometheusReplica: 2
       prometheusMemoryRequest: 400Mi
       prometheusVolumeSize: 20Gi

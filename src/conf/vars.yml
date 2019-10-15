@@ -260,8 +260,6 @@ redis_volume_size: 2Gi
 # monitoring is a required component for KubeSphere,
 # you can't disable it.
 # monitoring deployment configuration
-monitoring_enabled: true
-
 # prometheus replicas numbers,
 # 2 means better availability, but more resource consumption
 prometheus_replicas: 2
