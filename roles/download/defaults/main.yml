@@ -444,6 +444,15 @@ downloads:
     groups:
       - k8s-cluster
 
+  nginx:
+    enabled: "true"
+    container: true
+    repo: "{{ nginx_repo }}"
+    tag: "{{ nginx_tag }}"
+    sha256: "{{ nginx_checksum|default(None) }}"
+    groups:
+      - kube-node
+
   postgres:
     enabled: "true"
     container: true
@@ -452,6 +461,8 @@ downloads:
     sha256: "{{ postgres_checksum|default(None) }}"
     groups:
       - kube-node
+
+
 
   alerting_dbinit:
     enabled: "{{ alerting_enabled }}"
