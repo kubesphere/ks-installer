@@ -56,7 +56,7 @@
 
 - name: kubesphere-installer is ok
   shell: >
-     {{ bin_dir }}/kubectl get pod -n kubesphere-system | grep Running | grep kubesphere-installer
+     {{ bin_dir }}/kubectl get pod -n kubesphere-system | grep Running | grep ks-installer
   register: result
   until: result.stdout.find("Running") != -1
   retries: 30
