@@ -21,3 +21,14 @@
   retries: 20
   delay: 30
 
+
+- name: jenkins-update-center | jenkins-update-center is ok
+  shell: >
+     {{ bin_dir }}/kubectl get pod -n kubesphere-devops-system | grep Running | grep uc-jenkins-update-center
+  register: result
+  until: result.stdout.find("Running") != -1
+  retries: 30
+  delay: 20
+  ignore_errors: True
+
+
