@@ -1,0 +1,14 @@
+---
+
+- hosts: kube-master[0]
+  tasks:
+    - name: fetch config
+      fetch:
+        src: "/etc/kubernetes/admin.conf"
+        dest: "./config"
+        flat: yes
+
+- hosts: k8s-cluster
+  roles:
+    - kubesphere-defaults
+    - prepare/nodes
