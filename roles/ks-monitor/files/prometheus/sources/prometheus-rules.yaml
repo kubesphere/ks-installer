@@ -42,13 +42,13 @@ spec:
           record: node:node_cpu_utilisation:avg1m
         - expr: |
             1 -
-            sum(node_memory_MemFree_bytes{job="node-exporter"} + node_memory_Cached_bytes{job="node-exporter"} + node_memory_Buffers_bytes{job="node-exporter"})
+            sum(node_memory_MemFree_bytes{job="node-exporter"} + node_memory_Cached_bytes{job="node-exporter"} + node_memory_Buffers_bytes{job="node-exporter"} + node_memory_SReclaimable_bytes{job="node-exporter"})
             /
             sum(node_memory_MemTotal_bytes{job="node-exporter"})
           record: ':node_memory_utilisation:'
         - expr: |
             sum by (node) (
-              (node_memory_MemFree_bytes{job="node-exporter"} + node_memory_Cached_bytes{job="node-exporter"} + node_memory_Buffers_bytes{job="node-exporter"})
+              (node_memory_MemFree_bytes{job="node-exporter"} + node_memory_Cached_bytes{job="node-exporter"} + node_memory_Buffers_bytes{job="node-exporter"} + node_memory_SReclaimable_bytes{job="node-exporter"})
               * on (namespace, pod) group_left(node)
                 node_namespace_pod:kube_pod_info:
             )
