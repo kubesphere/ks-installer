@@ -10,7 +10,7 @@
 # Which Kubernetes version you want to install? Note not all
 # Kubernetes versions are supported by KubeSphere, better to
 # https://kubesphere.io/docs to find support list.
-kube_version: v1.15.4
+kube_version: v1.15.5
 
 # Which etcd version you want to install?
 etcd_version: v3.2.18
