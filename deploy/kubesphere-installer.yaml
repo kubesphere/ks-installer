@@ -102,6 +102,7 @@ rules:
   - '*'
   verbs:
   - '*'
+
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -120,7 +121,7 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kubesphere-installer
+  name: ks-installer
   namespace: kubesphere-system
   labels:
     app: ks-install
@@ -137,7 +138,7 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: "pixiake/shell-operator:test"
+        image: kubespheredev/ks-installer:latest
         imagePullPolicy: "Always"
         volumeMounts:
           - name: kubesphere-config
