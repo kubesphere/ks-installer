@@ -9,6 +9,8 @@ metadata:
   name: tomcat
   annotations:
     "helm.sh/hook": pre-install
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-java-container/tree/master/tomcat/images/
+
 spec:
   containerInfo:
     - builderImage: {{ tomcat85_java11_repo }}:{{ s2itemplates_tag }}

@@ -4,9 +4,10 @@ metadata:
   labels:
     controller-tools.k8s.io: "1.0"
     builder-type.kubesphere.io/s2i: "s2i"
-  name: nodejs
   annotations:
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-nodejs-container
     "helm.sh/hook": pre-install
+  name: nodejs
 spec:
   containerInfo:
      - builderImage: {{ nodejs8centos7_repo }}:{{ s2itemplates_tag }}
