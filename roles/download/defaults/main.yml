@@ -198,7 +198,7 @@ harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
 jenkins_uc_repo:  "{{ base_repo }}kubespheredev/jenkins-uc"
-jenkins_uc_tag: advanced-2.1.0-dev
+jenkins_uc_tag: 2.1.0-dev
 jenkins_repo: "{{ base_repo }}jenkins/jenkins"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
