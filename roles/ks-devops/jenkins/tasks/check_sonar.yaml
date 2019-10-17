@@ -2,7 +2,7 @@
   shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-account | awk '{print $3}'"
   register: result
   until: result.stdout.find("Running") != -1
-  retries: 30
+  retries: 60
   delay: 10
   when:
     - devops.sonarqube.enabled is defined
