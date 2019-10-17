@@ -6,6 +6,8 @@ metadata:
     builder-type.kubesphere.io/s2i: "s2i"
     builder-type.kubesphere.io/b2i: "b2i"
     binary-type.kubesphere.io: "jar"
+  annotations:
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-java-container/blob/master/java/images
   name: java
   annotations:
     "helm.sh/hook": pre-install

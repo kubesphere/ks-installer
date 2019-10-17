@@ -7,6 +7,7 @@ metadata:
   name: python
   annotations:
     "helm.sh/hook": pre-install
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-python-container
 spec:
   containerInfo:
     - builderImage: {{ python36centos7_repo }}:{{ s2itemplates_tag }}
