@@ -39,6 +39,7 @@ LIMITS=""
 
 PROVIDER_PLUGINS=""
 REPO_DIR=""
+RELEASE_APP_IMAGE="openpitrix/release-app:v0.4.2"
 
 usage() {
   echo "Usage:"
@@ -197,6 +198,7 @@ replace() {
 	  -e "s!\${ETCD_SERVICE}!${ETCD_SERVICE}!g" \
 	  -e "s!\${OPENPITRIX_ATTACHMENT_ENDPOINT}!${OPENPITRIX_ATTACHMENT_ENDPOINT}!g" \
 	  -e "s!\${OPENPITRIX_ATTACHMENT_BUCKET_NAME}!${OPENPITRIX_ATTACHMENT_BUCKET_NAME}!g" \
+	  -e "s!\${RELEASE_APP_IMAGE}!${RELEASE_APP_IMAGE}!g" \
 	  -e "s#${busybox_image_old}#${busybox_image_new}#" \
 	  $1
 }
