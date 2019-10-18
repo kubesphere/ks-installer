@@ -70,6 +70,18 @@ rules:
       - limitranges
     verbs:
       - create
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - applications
+      - apps
+      - apps/versions
+      - apps/events
+      - categories
+      - attachments
+    verbs:
+      - get
+      - list
 
 ---
 
