@@ -83,7 +83,8 @@ spec:
         - --logtostderr=true
         - --jwt-secret=$(JWT_SECRET)
         - --admin-password=$(ADMIN_PASSWORD)
-        - --token-expire-time=2h
+        - --token-idle-timeout=40m
+        - --redis-url=redis://redis.kubesphere-system.svc:6379
         env:
         - name: KUBECTL_IMAGE
           value: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
