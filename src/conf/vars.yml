@@ -122,7 +122,7 @@ local_volume_storage_class: local
 
 
 # QINGCLOUD CSI
-# qingcloud-csi as storage type, to specify KubeSphere use QingCloud SDS as backend storage service.
+# qingcloud-csi as storage type, which specifies KubeSphere to use QingCloud SDS as backend storage service.
 # Note: disable other storage types in configuration file.
 # MUST specify QingCloud API access key in QingCloud section.
 
@@ -277,7 +277,7 @@ prometheus_replicas: 2
 prometheus_memory_request: 400Mi
 
 # prometheus storage size,
-# 20Gi means every prometheus replica consume 20Gi storage
+# 20Gi means every prometheus replica consumes 20Gi storage
 prometheus_volume_size: 20Gi
 
 # whether to install a grafana
@@ -285,7 +285,7 @@ grafana_enabled: false
 
 # LOGGING CONFIGURATION
 # logging is an optional component when installing KubeSphere, and
-# Kubernetes builtin logging APIs are uses if logging_enabled is set to false. 
+# Kubernetes builtin logging APIs will be used if logging_enabled is set to false. 
 # Builtin logging only provides limited functions, so recommend to enable logging.
 logging_enabled: true
 elasticsearch_master_replica: 1
@@ -311,7 +311,7 @@ sonarqube_enabled: false
 #sonar_server_token: SHOULD_BE_REPLACED
 
 # Following components are all optional for KubeSphere,
-# Whicn could be install when install KubeSphere or later by updating the values to true
+# Which could be turned on to install it before installation or later by updating its value to true
 openpitrix_enabled: false
 metrics_server_enabled: false
 servicemesh_enabled: false
@@ -319,11 +319,11 @@ notification_enabled: false
 alerting_enabled: false
 
 # Harbor is an optional component for KubeSphere.
-# Whicn could be install when install KubeSphere or later by updating the value to true
+# Which could be turned on to install it before installation or later by updating its value to true
 harbor_enabled: false
 harbor_domain: harbor.devops.kubesphere.local
 # GitLab is an optional component for KubeSphere.
-# Whicn could be install when install KubeSphere or later by updating the value to true
+# Which could be turned on to install it before installation or later by updating its value to true
 gitlab_enabled: false
 gitlab_hosts_domain: devops.kubesphere.local
 
