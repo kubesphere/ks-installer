@@ -185,6 +185,10 @@ Master:
     - ws-cleanup:0.37
 
   InitScripts:
+    Casc: |-
+      import io.jenkins.plugins.casc.ConfigurationAsCode;
+      println "--> reload casc config"
+      ConfigurationAsCode.get().configure()
     Mailer: |-
       import jenkins.model.*
 
