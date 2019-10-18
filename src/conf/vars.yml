@@ -1,50 +1,64 @@
-# KubeSphere Installer configuration file example.
+# 
+# Copyright 2018 The KubeSphere Authors.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 
+# KubeSphere Installer Sample Configuration File
 #
-# Note that this configuration is intended to be used to install
-# both Kubernetes and KubeSphere at the same time. If you want
-# to install KubeSphere on a existing Kubernetes cluster, please
-# check https://github.com/kubesphere/ks-installer
+# Note that below sample configuration could be reference to install
+# both Kubernetes and KubeSphere together.
+# For the users who want to install KubeSphere upon an existing Kubernetes cluster
+# please visit https://github.com/kubesphere/ks-installer for more information
 
 ######################### Kubernetes #########################
 
-# Which Kubernetes version you want to install? Note not all
-# Kubernetes versions are supported by KubeSphere, better to
-# https://kubesphere.io/docs to find support list.
+# The supported Kubernetes to install. Note: not all
+# Kubernetes versions are supported by KubeSphere, visit
+# https://kubesphere.io/docs to get full support list.
 kube_version: v1.15.5
 
-# Which etcd version you want to install?
+# The supported etcd to install. Note: not all
+# etcd versions are supported by KubeSphere, visit
+# https://kubesphere.io/docs to get full support list.
 etcd_version: v3.2.18
 
-# Installer can set up a cron job to backup etcd data.
-# How often do you want to backup etcd?
-# 30 means backup etcd every 30 minutes.
+# Configure a cron job to backup etcd data, which is running on etcd host machines.
+# Period of running backup etcd job, the unit is minutes.
+# 30 as default, means backup etcd every 30 minutes.
 etcd_backup_period: 30
 
-# How many backup replicas do you want to keep?
-# 5 means will only keep latest 5 backups, delete older backups.
+# How many backup replicas to keep.
+# 5 means to keep latest 5 backups, older ones will be deleted by order.
 keep_backup_number: 5
 
-# Where to place backups?
+# The location to store etcd backups files on etcd host machines.
 etcd_backup_dir: "/var/backups/kube_etcd"
 
 # Kubernetes network plugin. Note that calico and flannel
-# are recommended plugins, they are heavily tested.
+# are recommended plugins, which are tested and verified by KubeSphere.
 kube_network_plugin: calico
 
 # A valid CIDR range for Kubernetes services,
-# 1. should not overlap with your node subnet
+# 1. should not overlap with node subnet
 # 2. should not overlap with Kubernetes pod subnet
 kube_service_addresses: 10.233.0.0/18
 
 # A valid CIDR range for Kubernetes pod subnet,
-# 1. should not overlap with your node subnet
+# 1. should not overlap with node subnet
 # 2. should not overlap with Kubernetes services subnet
 kube_pods_subnet: 10.233.64.0/18
 
 # Kube-proxy proxyMode configuration, either ipvs, or iptables
 kube_proxy_mode: ipvs
 
-# Maximum pods allowed running on a single node.
+# Maximum pods allowed to run on every node.
 kubelet_max_pods: 110
 
 # HA(Highly Available) loadbalancer example config
@@ -55,24 +69,24 @@ kubelet_max_pods: 110
 
 ######################### QingCloud Authentication #########################
 
-# If you are installing KubeSphere on QingCloud environment, please provide
-# your api access key in this section.
-# You can skip this section if you are installing on any other environment.
+# To install KubeSphere on QingCloud platform(public or private), please provide
+# the api access key in following section, which belongs to the user account 
+# who setup this KubeSphere on QingCloud platform
+# Skip this section in case of installing on any other non-QingCloud environment.
 
-# QingCloud access key pair, you can go to https://console.qingcloud.com/access_keys/
-# to create a new key pair if don't have one.
+# QingCloud access key pair, which could be find at https://console.qingcloud.com/access_keys/.
+# Ceate one if don't have it.
 qingcloud_access_key_id: ACCESS_KEY_ID
 qingcloud_secret_access_key: ACCESS_KEY_SECRET
 
-# Which zone do your clusters locate? Zone list can be found in
+# Zone where KubeSphere cluster resides on. Zone list can be found in
 # https://docs.qingcloud.com/product/region/.
-# for example,
+# For example,
 # qingcloud_zone: pek3
 qingcloud_zone: ZONE
 
-# QingCloud API server endpoint. Don't change this if you
-# are using public QingCloud. Only change this if you are installing
-# on a private QingCloud environment.
+# QingCloud API server endpoint. Don't change it for public QingCloud environment.
+# Updating it with right data in case of installing KubeSphere in private QingCloud environment.
 qingcloud_host: api.qingcloud.com
 qingcloud_port: 443
 qingcloud_protocol: https
@@ -80,49 +94,45 @@ qingcloud_uri: /iaas
 qingcloud_connection_retries: 3
 qingcloud_connection_timeout: 30
 
-# Highly recommend to enable LoadBalancer plugin if you are
+# Highly recommend to enable LoadBalancer plugin in case of 
 # using KubeSphere on QingCloud.
-# You can check following link to find more details.
+# Check link below to find out more details.
 # https://docs.kubesphere.io/v2.1/zh-CN/installation/qingcloud-lb
 qingcloud_lb_enabled: false
-# Which vxnet are Kubernetes nodes in?
-# for example
+# vxnet where Kubernetes nodes are located in
+# For example
 # qingcloud_vxnet_id: vxnet-d3sfx
 qingcloud_vxnet_id: SHOULD_BE_REPLACED
 
 
 ######################### Storage #########################
 
-# This section will configure storage type to use in Kubernetes.
-# For more specific supported storage list, please check
+# This section will configure storage to use in Kubernetes.
+# For full supported storage list, please check
 # https://docs.kubesphere.io/v2.1/zh-CN/installation/storage-configuration
 
 # LOCAL VOLUME
 # KubeSphere will use local volume as storage by default.
-# This is just for quick and easy testing, and  highly not
+# This is just for demostration and testing purpose, and highly not
 # recommended in production environment.
-# Please change to other storage type if you want to create
-# a production environment.
+# For production environment, please change to other storage type.
 local_volume_enabled: true
 local_volume_is_default_class: true
 local_volume_storage_class: local
 
 
 # QINGCLOUD CSI
-# If you want to install to KubeSphere on QingCloud,
-# you should use qingcloud-csi as storage type.
-# Note also need to disable other storage types in
-# configuration file.
-# Don't forget to provide your QingCloud API access key
-# in QingCloud section
+# qingcloud-csi as storage type, which specifies KubeSphere to use QingCloud SDS as backend storage service.
+# Note: disable other storage types in configuration file.
+# MUST specify QingCloud API access key in QingCloud section.
 
-# Change to enable if you want to use qingcloud-csi
+# Change to enable to use qingcloud-csi
 qingcloud_csi_enabled: false
 
 # whether to set qingcloud-csi as default storage class in Kubernetes
 qingcloud_csi_is_default_class: false
 
-# The type of volume in QingCloud IaaS platform.
+# The type of volume in QingCloud platform.
 # 0 represents high performance volume
 # 3 respresents super high performance volume.
 # 1 or 2 represents high capacity volume depending on cluste's zone
@@ -139,7 +149,7 @@ qingcloud_disk_replica: 2
 
 
 # QINGCLOUD NEONSAN
-# change to true to use neonsan as backend storage.
+# change to true to use neonsan as backend storage service.
 neonsan_csi_enabled: false
 neonsan_csi_is_default_class: false
 # csi-neonsan container option protocol: TCP or RDMA
@@ -163,9 +173,9 @@ conn_timeout: 8
 open_volume_timeout: 180
 
 # CEPH RBD
-# KubeSphere can use a existing ceph as backend storage service.
-# change to true if you want to use ceph,
-# don't forget to disable other storage
+# KubeSphere can use an existing ceph as backend storage service.
+# change to true to use ceph,
+# MUST disable other storage types in configuration file.
 ceph_rbd_enabled: false
 ceph_rbd_is_default_class: false
 ceph_rbd_storage_class: rbd
@@ -198,7 +208,7 @@ ceph_rbd_imageFormat: 1
 
 
 # NFS CONFIGURATION
-# KubeSphere can use existing nfs service as backend storage.
+# KubeSphere can use existing nfs service as backend storage service.
 # change to true to use nfs.
 nfs_client_enabled: false
 nfs_client_is_default_class: false
@@ -211,7 +221,7 @@ nfs_path: SHOULD_BE_REPLACED
 
 
 # GLUSTERFS CONFIGURATION
-# change to true to use glusterfs as backend storage.
+# change to true to use glusterfs as backend storage service.
 # for more detailed configuration, please check
 # https://docs.kubesphere.io/v2.1/zh-CN/installation/storage-configuration
 glusterfs_provisioner_enabled: false
@@ -233,22 +243,22 @@ jwt_admin_key: SHOULD_BE_REPLACED
 
 ######################### KubeSphere #########################
 
-# which version of KubeSphere do you want to install ?
+# Version of KubeSphere
 ks_version: v2.1.0
 
 # KubeSphere console port, range 30000-32767,
 # but 30180/30280/30380 are reserved for internal service
 console_port: 30880
 
-# whether to enable single user login.
-# true means only one person can login KubeSphere using
-# same account. If there is one already logged in, he or she
-# will be kicked out if another person logged with same account.
+# Enable single user login.
+# true means allowing only one active session to access KubeSphere for same account.
+# Duplicated login action will cause previous session invalid and 
+# that user will be logged out by force.
 disableMultiLogin: true
 
-# devops/openpitrix/notification/alerting will
-# depend mysql/minio/etcd/openldap/redis to store credentials.
-# following to set how much storage they will use.
+# devops/openpitrix/notification/alerting components depend on
+# mysql/minio/etcd/openldap/redis to store credentials.
+# Configure parameters below to set how much storage they use.
 mysql_volume_size: 20Gi
 minio_volume_size: 20Gi
 etcd_volume_size: 20Gi
@@ -257,8 +267,7 @@ redis_volume_size: 2Gi
 
 
 # MONITORING CONFIGURATION
-# monitoring is a required component for KubeSphere,
-# you can't disable it.
+# monitoring is a MUST required component for KubeSphere,
 # monitoring deployment configuration
 # prometheus replicas numbers,
 # 2 means better availability, but more resource consumption
@@ -268,17 +277,16 @@ prometheus_replicas: 2
 prometheus_memory_request: 400Mi
 
 # prometheus storage size,
-# 20Gi means for every pod if you have
-# multiple prometheus replicas
+# 20Gi means every prometheus replica consumes 20Gi storage
 prometheus_volume_size: 20Gi
 
 # whether to install a grafana
 grafana_enabled: false
 
 # LOGGING CONFIGURATION
-# KubeSphere logging is an optional component. KubeSphere will
-# Kubernetes builtin log API if you disabled logging. Builtin
-# log only provide limited functions, so recommend to enable logging.
+# logging is an optional component when installing KubeSphere, and
+# Kubernetes builtin logging APIs will be used if logging_enabled is set to false. 
+# Builtin logging only provides limited functions, so recommend to enable logging.
 logging_enabled: true
 elasticsearch_master_replica: 1
 elasticsearch_data_replica: 2
@@ -302,25 +310,28 @@ sonarqube_enabled: false
 #sonar_server_url: SHOULD_BE_REPLACED
 #sonar_server_token: SHOULD_BE_REPLACED
 
-# following components are all optional to KubeSphere,
-# you can install later by change the value to true
+# Following components are all optional for KubeSphere,
+# Which could be turned on to install it before installation or later by updating its value to true
 openpitrix_enabled: false
 metrics_server_enabled: false
 servicemesh_enabled: false
 notification_enabled: false
 alerting_enabled: false
 
-# Harbor
+# Harbor is an optional component for KubeSphere.
+# Which could be turned on to install it before installation or later by updating its value to true
 harbor_enabled: false
 harbor_domain: harbor.devops.kubesphere.local
-# GitLab
+# GitLab is an optional component for KubeSphere.
+# Which could be turned on to install it before installation or later by updating its value to true
 gitlab_enabled: false
 gitlab_hosts_domain: devops.kubesphere.local
 
 
-## Container Engine Acceleration
-## Use nvidia gpu acceleration in containers
+# Container Engine Acceleration
+# Use nvidia gpu acceleration in containers
+# KubeSphere currently support Nvidia GPU V100 P100 1060 1080 1080Ti
+# The driver version is 387.26，cuda is 9.1
 # nvidia_accelerator_enabled: true
 # nvidia_gpu_nodes:
 #   - kube-gpu-001
-
