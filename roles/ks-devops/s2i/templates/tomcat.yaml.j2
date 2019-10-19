@@ -8,6 +8,8 @@ metadata:
     binary-type.kubesphere.io: "war"
   name: tomcat
   annotations:
+    descirptionCN: "Tomcat 应用的 S2i 构建器模版，通过该模版可构建出直接运行的应用镜像。"
+    descriptionEN: "This is a S2I builder template for Java builds whose result can be run directly with Tomcat application server."
     "helm.sh/hook": pre-install
     devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-java-container/tree/master/tomcat/images/
 
