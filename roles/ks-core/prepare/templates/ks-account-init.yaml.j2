@@ -666,13 +666,18 @@ data:
             "rules": [
               {
                 "verbs": [
-                  "get"
+                  "get",
+                  "list",
+                  "watch"
                 ],
                 "apiGroups": [
                   "*"
                 ],
                 "resources": [
-                  "namespaces"
+                  "namespaces",
+                  "limitranges",
+                  "resourcequotas",
+                  "serviceaccounts"
                 ]
               },
               {
@@ -700,7 +705,10 @@ data:
                   ""
                 ],
                 "resources": [
-                  "namespaces"
+                  "namespaces",
+                  "limitranges",
+                  "resourcequotas",
+                  "serviceaccounts"
                 ]
               }
             ]
@@ -716,7 +724,10 @@ data:
                   ""
                 ],
                 "resources": [
-                  "namespaces"
+                  "namespaces",
+                  "limitranges",
+                  "resourcequotas",
+                  "serviceaccounts"
                 ]
               }
             ]
@@ -1420,7 +1431,8 @@ data:
               },
               {
                 "verbs": [
-                  "patch"
+                  "patch",
+                  "update"
                 ],
                 "apiGroups": [
                   ""
@@ -1685,7 +1697,6 @@ data:
                   "list"
                 ],
                 "apiGroups": [
-                  "openpitrix.io",
                   "app.k8s.io"
                 ],
                 "resources": [
@@ -1716,7 +1727,6 @@ data:
                   "patch"
                 ],
                 "apiGroups": [
-                  "openpitrix.io",
                   "app.k8s.io"
                 ],
                 "resources": [
@@ -1746,7 +1756,6 @@ data:
                   "delete"
                 ],
                 "apiGroups": [
-                  "openpitrix.io",
                   "app.k8s.io"
                 ],
                 "resources": [
