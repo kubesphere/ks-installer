@@ -1,0 +1,22 @@
+language: python
+python:
+  - "3.7.1"
+
+before_install:
+  - sudo apt-get install -y sshpass
+
+install:
+  - pip install qingcloud-sdk==1.2.10
+
+jobs:
+  include:
+    - stage: deploy
+      script: 
+        - python <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/qingcloud.py) "$QC_INSTANCE_ID"
+        - sleep 10
+        - sshpass  -p "$QC_PASSWORD" ssh -o StrictHostKeyChecking=no root@$QC_EIP "bash <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/allinone.sh) $(env|grep -E 'QC_|_enabled'|tr "\n" " ")"
+    - 
+      script:
+        - python <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/qingcloud.py) "$QC_INSTANCE_ID_1" "$QC_INSTANCE_ID_2" "$QC_INSTANCE_ID_3" 
+        - sleep 10
+        - sshpass  -p "$QC_PASSWORD" ssh -o StrictHostKeyChecking=no root@$QC_EIP_1 "bash <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/multinode.sh) $(env|grep -E 'QC_|_enabled'|tr "\n" " ")"
