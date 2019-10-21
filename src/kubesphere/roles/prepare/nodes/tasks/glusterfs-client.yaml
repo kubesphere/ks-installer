@@ -47,7 +47,7 @@
 
 - name: GlusterFS | add glusterfs-client apt_key (APT)
   apt_key:
-    url: https://download.gluster.org/pub/gluster/glusterfs/3.12/rsa.pub
+    url: https://download.gluster.org/pub/gluster/glusterfs/01.old-releases/3.12/rsa.pub
     state: present
   register: result
   until: result is succeeded
@@ -60,7 +60,7 @@
     DEBID=$(grep 'VERSION_ID=' /etc/os-release | cut -d '=' -f 2 | tr -d '"') &&
     DEBVER=$(grep 'VERSION=' /etc/os-release | grep -Eo '[a-z]+') &&
     DEBARCH=$(dpkg --print-architecture) &&
-    echo ls > /etc/apt/sources.list.d/gluster.list
+    echo deb https://download.gluster.org/pub/gluster/glusterfs/01.old-releases/3.12/LATEST/Debian/${DEBID}/${DEBARCH}/apt ${DEBVER} main > /etc/apt/sources.list.d/gluster.list
   when: '"Debian" in os_release.stdout'
 
 - name: GlusterFS | Installing glusterfs-client (APT)
