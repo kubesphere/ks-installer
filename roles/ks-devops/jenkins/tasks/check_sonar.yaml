@@ -42,7 +42,7 @@
     host: "{{ ks_sonarqube_clusterIP.stdout }}"
     port: 9000
     delay: 3
-    timeout: 600
+    timeout: 1200
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
