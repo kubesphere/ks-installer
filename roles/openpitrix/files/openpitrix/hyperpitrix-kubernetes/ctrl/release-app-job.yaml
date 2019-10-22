@@ -19,6 +19,15 @@ spec:
         version: ${VERSION}
       name: hyperpitrix-release-app-job
     spec:
+      initContainers:
+      - name: wait-app-manager
+        image: ${BUSYBOX}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-app-manager.${NAMESPACE}.svc 9102; do echo "waiting for app-manager"; sleep 2; done;']
+      - name: wait-attachment-manager
+        image: ${BUSYBOX}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'until nc -z openpitrix-attachment-manager.${NAMESPACE}.svc 9122; do echo "waiting for attachment-manager"; sleep 2; done;']
       containers:
       - command: ["release-app","-path","/data/helm-pkg/"]
         name: hyperpitrix-release-app-job
