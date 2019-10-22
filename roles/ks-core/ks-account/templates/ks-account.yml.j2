@@ -83,6 +83,7 @@ spec:
         - --logtostderr=true
         - --jwt-secret=$(JWT_SECRET)
         - --admin-password=$(ADMIN_PASSWORD)
+        - --enable-multi-login={{ console.enableMultiLogin | default(false) }}
         - --token-idle-timeout=40m
         - --redis-url=redis://redis.kubesphere-system.svc:6379
         env:
