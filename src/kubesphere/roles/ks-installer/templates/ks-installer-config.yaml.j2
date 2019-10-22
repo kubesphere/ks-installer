@@ -25,7 +25,7 @@ data:
       enabled: {{ metrics_server_enabled }}
 
     console:
-      disableMultiLogin: True  # enable/disable multi login
+      enableMultiLogin: {{ enableMultiLogin | default(false) }}  # enable/disable multi login
       port: {{ console_port }}
       replicas: {{ ks_console_replicas | default(2) }}
 

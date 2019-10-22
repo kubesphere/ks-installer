@@ -12,14 +12,14 @@
   with_items:
     - { name: config, file: config.yaml, type: config }
     - { name: sc, file: sc.yaml, type: sc }
-    - { name: qingcloud-csi-disk-v1, file: qingcloud-csi-disk-v1.10-rc.1.yaml, type: qingcloud-csi-disk-v1 }
+    - { name: qingcloud-csi-disk-v1, file: qingcloud-csi-disk-v1.1.0-rc.3.yaml, type: workload }
    # - { name: csi-controller-sts, file: csi-controller-sts.yaml, type: sts }
    # - { name: csi-node-ds, file: csi-node-ds.yaml, type: ds }
 
-#- name: QCloud-CSI | Creating Configmap
-#  command: "{{ bin_dir }}/kubectl create configmap csi-qingcloud --from-file=config.yaml={{ kube_config_dir }}/addons/qingcloud-csi/config.yaml --namespace=kube-system"
-#  register: import
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+- name: QCloud-CSI | Creating Configmap
+  command: "{{ bin_dir }}/kubectl create configmap csi-qingcloud --from-file=config.yaml={{ kube_config_dir }}/addons/qingcloud-csi/config.yaml --namespace=kube-system"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
 #- name: QCloud-CSI | Creating Secret
@@ -41,12 +41,14 @@
 #  when: inventory_hostname == groups['kube-master'][0]
 
 - name: QCloud-CSI | Creating StorageClass
-  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/sc.yaml"
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/sc.yaml
   register: import 
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
-- name: QCloud-CSI | Creating qingcloud-csi-disk-v1
-  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/qingcloud-csi-disk-v1.10-rc.1.yaml"
+- name: QCloud-CSI | Creating qingcloud-csi-disk
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/qingcloud-csi-disk-v1.1.0-rc.3.yaml
   register: import 
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
 

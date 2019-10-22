@@ -250,11 +250,11 @@ ks_version: v2.1.0
 # but 30180/30280/30380 are reserved for internal service
 console_port: 30880
 
-# Enable single user login.
-# true means allowing only one active session to access KubeSphere for same account.
+# Enable Multi users login.
+# false means allowing only one active session to access KubeSphere for same account.
 # Duplicated login action will cause previous session invalid and 
 # that user will be logged out by force.
-disableMultiLogin: true
+enableMultiLogin: false
 
 # devops/openpitrix/notification/alerting components depend on
 # mysql/minio/etcd/openldap/redis to store credentials.

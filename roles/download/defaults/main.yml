@@ -143,15 +143,15 @@ minio_tag: RELEASE.2018-09-25T21-34-43Z
 
 #qingcloud-csi:
 csi_provisioner_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-provisioner"
-csi_provisioner_tag: v1.4.0-rc1
+csi_provisioner_tag: v1.4.0
 csi_attacher_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-attacher"
 csi_attacher_tag: v2.0.0
 csi_qingcloud_repo: "{{ base_repo }}csiplugin/csi-qingcloud"
-csi_qingcloud_tag: v1.1.0-rc.1
+csi_qingcloud_tag: v1.1.0-rc.3
 driver_registrar_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-node-driver-registrar"
 driver_registrar_tag: v1.2.0
 csi_snapshotter_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-snapshotter"
-csi_snapshotter_tag: v1.2.1
+csi_snapshotter_tag: v1.2.2
 csi_resizer_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-resizer"
 csi_resizer_tag: v0.2.0
 
