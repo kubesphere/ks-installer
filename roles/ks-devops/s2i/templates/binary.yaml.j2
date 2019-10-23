@@ -6,8 +6,8 @@ metadata:
     builder-type.kubesphere.io/b2i: "b2i"
     binary-type.kubesphere.io: "binary"
   annotations:
-    descriptionEN: "This is a B2i builder template for binary build"
-    descriptionCN: "二进制文件的 B2i 构建器模版"
+    descriptionEN: "This is a builder template for binary build"
+    descriptionCN: "二进制文件的构建器模版"
     devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-binary-container
   name: binary
 spec:
@@ -22,5 +22,5 @@ spec:
   codeFramework: binary
   defaultBaseImage: {{ binary_repo }}:{{ s2itemplates_tag }}
   version: 0.0.1
-  description: "This is a B2i builder template for binary build"
+  description: "This is a builder template for binary build"
   iconPath: assets/binary.png
