@@ -107,17 +107,13 @@ rules:
     verbs:
       - list
   - apiGroups:
-      - '*'
-    resources:
-      - storageclasses
-    verbs:
-      - list
-  - apiGroups:
       - "*"
     resources:
       - namespaces
     verbs:
-      - '*'
+      - get
+      - list
+      - watch
   - apiGroups:
       - '*'
     resources:
@@ -137,15 +133,23 @@ rules:
       - pods
       - events
       - deployments/scale
-      - workloadstatuses
+      - abnormalworkloads
+      - workloads
       - applications
       - quotas
       - resourcequotas
       - roles
       - router
       - s2ibuilders
+      - apps
+      - apps/versions
+      - apps/events
+      - categories
+      - attachments
     verbs:
-      - '*'
+      - 'get'
+      - 'list'
+      - 'watch'
   - apiGroups:
       - rbac.authorization.k8s.io
     resources:
