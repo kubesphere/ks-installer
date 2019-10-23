@@ -1,5 +1,7 @@
 # 在 Kubernetes 集群在线部署 KubeSphere
 
+[![Build Status](https://travis-ci.org/kubesphere/ks-installer.svg?branch=master)](https://github.com/kubesphere/ks-installer/tree/master)
+
 > [English](README.md) | 中文 
 
 KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://kubesphere.io/)。

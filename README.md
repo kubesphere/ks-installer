@@ -1,5 +1,7 @@
 # Install KubeSphere on Existing Kubernetes Cluster
 
+[![Build Status](https://travis-ci.org/kubesphere/ks-installer.svg?branch=master)](https://github.com/kubesphere/ks-installer/tree/master)
+
 > English | [中文](README_zh.md)
 
 In addition to supporting deploy on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises Kubernetes clusters,
