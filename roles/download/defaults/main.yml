@@ -139,7 +139,7 @@ openpitrix_tag: "{{ op_version }}"
 openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_flyway_tag: "flyway-{{ op_version }}"
 minio_repo: "{{ base_repo }}minio/minio"
-minio_tag: RELEASE.2018-09-25T21-34-43Z
+minio_tag: RELEASE.2019-08-07T01-59-21Z
 
 #qingcloud-csi:
 csi_provisioner_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-provisioner"
@@ -273,7 +273,7 @@ cfssl_self_sign_tag: 1.2
 gitlab_operator_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-operator"
 gitlab_operator_tag: v0.3
 mc_repo: "{{ base_repo }}minio/mc"
-mc_tag: RELEASE.2018-07-13T00-53-22Z
+mc_tag: RELEASE.2019-08-07T23-14-43Z
 registry_repo: "{{ base_library_repo }}registry"
 registry_tag: 2.7.1
 
@@ -352,13 +352,17 @@ jaeger_query_tag: 1.13
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
-redis_tag: 4.0
+redis_tag: 5.0.5-alpine
+haproxy_repo:  "{{ base_library_repo }}haproxy"
+haproxy_tag: 2.0.4
 busybox_repo: "{{ base_library_repo }}busybox"
 busybox_tag: 1.28.4
 etcd_image_repo: "{{ ks_image_repo }}/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
-mysql_tag: 8.0.11
+mysql_tag: 5.7.13
+xtrabackup_repo: "{{ base_repo }}googlecontainer/xtrabackup"
+xtrabackup_tag: 1.0
 nginx_repo: "{{ base_library_repo }}nginx"
 nginx_tag: 1.14-alpine
 postgres_repo: "{{ base_library_repo }}postgres"

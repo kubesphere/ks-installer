@@ -5,22 +5,22 @@ clusterDomain: cluster.local
 ## Set default image, imageTag, and imagePullPolicy. mode is used to indicate the
 ##
 image:
-  repository: minio/minio
-  tag: RELEASE.2019-08-07T01-59-21Z
+  repository: {{ minio_repo }}
+  tag: {{ minio_tag }}
   pullPolicy: IfNotPresent
 
 ## Set default image, imageTag, and imagePullPolicy for the `mc` (the minio
 ## client used to create a default bucket).
 ##
 mcImage:
-  repository: minio/mc
-  tag: RELEASE.2019-08-07T23-14-43Z
+  repository: {{ mc_repo }}
+  tag: {{ mc_tag }}
   pullPolicy: IfNotPresent
 
 ## minio server mode, i.e. standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
-mode: distributed
+mode: {% if common.enableHA %}distributed{% else %}standalone{% endif %}
 
 ## Additional arguments to pass to minio binary
 extraArgs: []
@@ -81,10 +81,12 @@ persistence:
   ##
   ## Storage class of PV to bind. By default it looks for standard storage class.
   ## If the PV uses a different storage class, specify that here.
-  # storageClass: standard
+{% if persistence.storageClass is defined and persistence.storageClass != "" %}
+  storageClass: "{{ persistence.storageClass }}"
+{% endif %}
   # VolumeName: ""
   accessMode: ReadWriteOnce
-  size: 20Gi
+  size: {{ common.minioVolumeSize }}
 
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).

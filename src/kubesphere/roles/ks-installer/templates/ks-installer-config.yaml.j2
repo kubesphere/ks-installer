@@ -15,6 +15,7 @@ data:
       storageClass: {{ storage_class }}
 
     common:
+      enableHA: True
       mysqlVolumeSize: {{ mysql_volume_size }}
       minioVolumeSize: {{ minio_volume_size }}
       etcdVolumeSize: {{ etcd_volume_size }}
