@@ -8,8 +8,8 @@ metadata:
     binary-type.kubesphere.io: "jar"
   annotations:
     "helm.sh/hook": pre-install
-    descriptionCN: "Java 应用的 S2i 构建器模版。通过该模版可构建出直接运行的应用镜像。"
-    descriptionEN: "This is a S2I builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\")."
+    descriptionCN: "Java 应用的构建器模版。通过该模版可构建出直接运行的应用镜像。"
+    descriptionEN: "This is a builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\")."
     devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-java-container/blob/master/java/images
   name: java
 spec:
@@ -143,5 +143,5 @@ spec:
   codeFramework: java
   defaultBaseImage: {{ java8centos7_repo }}:{{ s2itemplates_tag }}
   version: 0.0.1
-  description: "This is a S2I builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\")"
+  description: "This is a builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\")"
   iconPath: assets/java.png
