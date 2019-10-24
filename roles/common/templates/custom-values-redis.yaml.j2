@@ -6,7 +6,7 @@ image:
   tag: {{ redis_tag }}
   pullPolicy: IfNotPresent
 ## replicas number for each component
-replicas: {% if common.enableHA %}3{% else %}1{% endif %}
+replicas: {% if common.enableHA %}3{% else %}3{% endif %}
 
 ## Kubernetes priorityClass name for the redis-ha-server pod
 # priorityClassName: ""
@@ -163,7 +163,7 @@ nodeSelector: {}
 ## This is accomplished by setting their AntiAffinity with requiredDuringSchedulingIgnoredDuringExecution as opposed to preferred.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature
 ##
-hardAntiAffinity: true
+hardAntiAffinity: {% if common.enableHA %}true{% else %}false{% endif %}
 
 ## Additional affinities to add to the Redis server pods.
 ##
