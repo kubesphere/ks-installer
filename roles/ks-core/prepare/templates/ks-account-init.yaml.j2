@@ -1691,7 +1691,8 @@ data:
               {
                 "verbs": [
                   "get",
-                  "list"
+                  "list",
+                  "watch"
                 ],
                 "apiGroups": [
                   "app.k8s.io"
@@ -1703,7 +1704,35 @@ data:
               {
                 "verbs": [
                   "get",
-                  "list"
+                  "list",
+                  "watch"
+                ],
+                "apiGroups": [
+                  "servicemesh.kubesphere.io"
+                ],
+                "resources": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "create",
+            "rules": [
+              {
+                "verbs": [
+                  "create"
+                ],
+                "apiGroups": [
+                  "app.k8s.io"
+                ],
+                "resources": [
+                  "applications"
+                ]
+              },
+              {
+                "verbs": [
+                  "create"
                 ],
                 "apiGroups": [
                   "servicemesh.kubesphere.io"
