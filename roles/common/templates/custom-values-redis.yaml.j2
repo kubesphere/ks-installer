@@ -34,6 +34,7 @@ haproxy:
     enabled: false
     port: 6380
   replicas: {% if common.enableHA %}3{% else %}1{% endif %}
+
   image:
     repository: {{ haproxy_repo }}
     tag: {{ haproxy_tag }}

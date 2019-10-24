@@ -17,6 +17,7 @@ service:
 
 ldap:
   replication: {% if common.enableHA %}true{% else %}false{% endif %}
+
   organisation: kubesphere
   domain: kubesphere.io
   adminPassword: admin
