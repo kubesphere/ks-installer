@@ -92,9 +92,18 @@ spec:
       - name: mysql
         image: {{ .Values.mysqlImage }}
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - sh
+                - -c
+                - rm -rf /var/lib/mysql/lost+found
         env:
         - name: MYSQL_DATABASE
           value: {{ default "" .Values.mysqlha.mysqlDatabase | quote }}
+        - name: MYSQL_ROOT_HOST
+          value: '%'
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
