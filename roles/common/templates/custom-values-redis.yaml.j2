@@ -184,25 +184,6 @@ hardAntiAffinity: {% if common.enableHA %}true{% else %}false{% endif %}
 additionalAffinities: {}
 
 ## Override all other affinity settings for the Redis server pods with a string.
-##
-## Example:
-## affinity: |
-##   podAntiAffinity:
-##     requiredDuringSchedulingIgnoredDuringExecution:
-##       - labelSelector:
-##           matchLabels:
-##             app: {{ template "redis-ha.name" . }}
-##             release: {{ .Release.Name }}
-##         topologyKey: kubernetes.io/hostname
-##     preferredDuringSchedulingIgnoredDuringExecution:
-##       - weight: 100
-##         podAffinityTerm:
-##           labelSelector:
-##             matchLabels:
-##               app:  {{ template "redis-ha.name" . }}
-##               release: {{ .Release.Name }}
-##           topologyKey: failure-domain.beta.kubernetes.io/zone
-##
 affinity: |
 
 # Prometheus exporter specific configuration options
@@ -260,7 +241,7 @@ init:
 # Warning: this might overwrite existing folders on the host system!
 hostPath:
   ## path is evaluated as template so placeholders are replaced
-  # path: "/data/{{ .Release.Name }}"
+  # path: "/data/redis"
 
   # if chown is true, an init-container with root permissions is launched to
   # change the owner of the hostPath folder to the user defined in the
