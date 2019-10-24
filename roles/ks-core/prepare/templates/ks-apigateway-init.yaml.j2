@@ -5,7 +5,7 @@ data:
       
       authenticate {
         token-idle-timeout 40m
-        redis-url redis://redis.kubesphere-system.svc:6379
+        redis-url redis://redis-haproxy.kubesphere-system.svc:6379
         secret {$JWT_SECRET}
         path /
         except /apis/account.kubesphere.io/v1alpha1/authenticate,/kapis/iam.kubesphere.io/v1alpha2/login,/kapis/iam.kubesphere.io/v1alpha2/authenticate,/images,/kapis/devops.kubesphere.io/v1alpha2/webhook/github,/kapis/devops.kubesphere.io/v1alpha2/webhook/git,/swagger,/kapis/v1alpha1/configz

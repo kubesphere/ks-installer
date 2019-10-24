@@ -1,0 +1,23 @@
+- name: Kubesphere | Getting openldap installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "openldap-ha"
+
+
+- name: Kubesphere | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.file }}"
+  with_items:
+    - { name: custom-values-openldap, file: custom-values-openldap.yaml }
+
+
+- name: Kubesphere | Deploy openldap
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-openldap
+    {{ kubesphere_dir }}/openldap-ha
+    -f {{ kubesphere_dir }}/custom-values-openldap.yaml
+    --set fullnameOverride=openldap
+    --namespace kubesphere-system

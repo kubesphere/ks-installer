@@ -368,7 +368,7 @@ nginx_tag: 1.14-alpine
 postgres_repo: "{{ base_library_repo }}postgres"
 postgres_tag: 9.6.8   #Notice
 openldap_repo: "{{ base_repo }}osixia/openldap"
-openldap_tag: 1.2.2
+openldap_tag: 1.3.0
 
 #NFS:
 nfs_client_provisioner_repo: "{{ ks_image_repo }}/external_storage/nfs-client-provisioner"
@@ -420,7 +420,7 @@ downloads:
     tag: "{{ ks_installer_tag }}"
     sha256: "{{ ks_installer|default(None) }}"
     groups:
-      - kube-node
+      - k8s-cluster
 
   busybox:
     enabled: true
@@ -429,7 +429,7 @@ downloads:
     tag: "{{ busybox_tag }}"
     sha256: "{{ busybox_checksum|default(None) }}"
     groups:
-      - kube-node
+      - k8s-cluster
 
   mysql:
     enabled: true
@@ -440,12 +440,30 @@ downloads:
     groups:
       - k8s-cluster
 
+  xtrabackup:
+    enabled: true
+    container: true
+    repo: "{{ xtrabackup_repo }}"
+    tag: "{{ xtrabackup_tag }}"
+    sha256: "{{ xtrabackup_checksum|default(None) }}"
+    groups:
+      - k8s-cluster
+
   redis:
     enabled: true
     container: true
     repo: "{{ redis_repo }}"
     tag: "{{ redis_tag }}"
-    sha256: "{{ mysql_checksum|default(None) }}"
+    sha256: "{{ redis_checksum|default(None) }}"
+    groups:
+      - k8s-cluster
+
+  haproxy:
+    enabled: true
+    container: true
+    repo: "{{ haproxy_repo }}"
+    tag: "{{ haproxy_tag }}"
+    sha256: "{{ haproxy_checksum|default(None) }}"
     groups:
       - k8s-cluster
 
@@ -459,15 +477,13 @@ downloads:
       - kube-node
 
   postgres:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ postgres_repo }}"
     tag: "{{ postgres_tag }}"
     sha256: "{{ postgres_checksum|default(None) }}"
     groups:
       - kube-node
-
-
 
   alerting_dbinit:
     enabled: "{{ alerting_enabled }}"
@@ -530,7 +546,7 @@ downloads:
     tag: "{{ openldap_tag }}"
     sha256: "{{ openldap_checksum|default(None) }}"
     groups:
-      - kube-node
+      - k8s-cluster
 
   jenkins_uc:
     enabled: "{{ devops_enabled }}"

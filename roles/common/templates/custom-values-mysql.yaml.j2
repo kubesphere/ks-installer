@@ -21,8 +21,8 @@ mysqlha:
   replicaCount: {% if common.enableHA %}3{% else %}1{% endif %}
 
   ## Password for MySQL root user
-  ##
-  # mysqlRootPassword: ## Default: random 10 character string
+  ## Default: random 10 character string
+  mysqlRootPassword: password
 
   ## Username/password for MySQL replication user
   ##
@@ -40,7 +40,7 @@ mysqlha:
   # mysqlAllowEmptyPassword: true
 
   ## Create database with name and grant all permissions to user on startup, if needed
-  # mysqlDatabase:
+  mysqlDatabase: kubesphere
 
   ## Configuration files for the master and slaves
   ##

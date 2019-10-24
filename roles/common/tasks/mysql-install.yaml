@@ -1,0 +1,23 @@
+- name: Kubesphere | Getting mysql installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "mysql-ha"
+
+
+- name: Kubesphere | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.file }}"
+  with_items:
+    - { name: custom-values-mysql, file: custom-values-mysql.yaml }
+
+
+- name: Kubesphere | Deploy mysql
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-mysql
+    {{ kubesphere_dir }}/mysql-ha
+    -f {{ kubesphere_dir }}/custom-values-mysql.yaml
+    --set fullnameOverride=mysql
+    --namespace kubesphere-system

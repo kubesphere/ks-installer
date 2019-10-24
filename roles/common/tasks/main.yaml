@@ -98,31 +98,31 @@
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/common/{{ item.file }}"
   with_items:
-    - { name: mysql, file: mysql.yaml }
     - { path: etcd, file: etcd.yaml }
-    - { path: redis, file: redis.yaml }
-    - { path: openldap, file: openldap.yaml }
-    - { path: minio, file: minio.yaml }
+#    - { path: redis, file: redis.yaml }
+#    - { path: openldap, file: openldap.yaml }
+#    - { path: minio, file: minio.yaml }
+#    - { name: mysql, file: mysql.yaml }
 
 
-- name: Kubesphere | Creating mysql sercet
-  shell: >
-    {{ bin_dir }}/kubectl create secret generic mysql-pass
-    --from-file={{ kubesphere_dir }}/common/password.txt
-    -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#- name: Kubesphere | Creating mysql sercet
+#  shell: >
+#    {{ bin_dir }}/kubectl create secret generic mysql-pass
+#    --from-file={{ kubesphere_dir }}/common/password.txt
+#    -n kubesphere-system
+#  register: import
+#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
 - name: Kubesphere | Deploying common component
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
   loop:
-    - "redis.yaml"
-    - "mysql.yaml"
     - "etcd.yaml"
-    - "minio.yaml"
-    - "openldap.yaml"
+#    - "redis.yaml"
+#    - "mysql.yaml"
+#    - "minio.yaml"
+#    - "openldap.yaml"
   register: import
   failed_when:
     - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"

@@ -1,0 +1,23 @@
+- name: Kubesphere | Getting minio installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "minio-ha"
+
+
+- name: Kubesphere | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.file }}"
+  with_items:
+    - { name: custom-values-minio, file: custom-values-minio.yaml }
+
+
+- name: Kubesphere | Deploy minio
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-minio
+    {{ kubesphere_dir }}/minio-ha
+    -f {{ kubesphere_dir }}/custom-values-minio.yaml
+    --set fullnameOverride=minio
+    --namespace kubesphere-system

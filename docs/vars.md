@@ -39,7 +39,7 @@ data:
       
       redis:
         install: "internal"/"external"/"disable"
-        address: redis.kubesphere-system.svc:6379
+        address: redis-haproxy.kubesphere-system.svc:6379
         password: $@$!#!#
 
       monitoring:
@@ -115,7 +115,7 @@ data:
         address: mysql.kubesphere-system.svc:3306
       
       redis:
-        address: redis.kubesphere-system.svc:6379
+        address: redis-haproxy.kubesphere-system.svc:6379
         password: $@$!#!#
 
       monitoring:
