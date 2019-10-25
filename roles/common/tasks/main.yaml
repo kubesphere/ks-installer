@@ -99,7 +99,7 @@
     dest: "{{ kubesphere_dir }}/common/{{ item.file }}"
   with_items:
     - { path: etcd, file: etcd.yaml }
-#    - { path: redis, file: redis.yaml }
+    - { path: redis, file: redis.yaml }
 #    - { path: openldap, file: openldap.yaml }
 #    - { path: minio, file: minio.yaml }
 #    - { name: mysql, file: mysql.yaml }

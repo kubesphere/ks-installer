@@ -72,7 +72,7 @@ spec:
       - name: wait-redis
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z redis-haproxy.kubesphere-system.svc 6379; do echo "waiting for redis"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z redis.kubesphere-system.svc 6379; do echo "waiting for redis"; sleep 2; done;']
       - name: wait-ldap
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
@@ -85,7 +85,7 @@ spec:
         - --admin-password=$(ADMIN_PASSWORD)
         - --enable-multi-login={{ console.enableMultiLogin | default(false) }}
         - --token-idle-timeout=40m
-        - --redis-url=redis://redis-haproxy.kubesphere-system.svc:6379
+        - --redis-url=redis://redis.kubesphere-system.svc:6379
         env:
         - name: KUBECTL_IMAGE
           value: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}

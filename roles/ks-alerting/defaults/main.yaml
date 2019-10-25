@@ -7,6 +7,6 @@ etcdHost: etcd.kubesphere-system.svc
 etcdPort: 2379
 etcdEndpoint: "{{ etcdHost }}:{{ etcdPort }}"
 
-redisHost: redis-haproxy.kubesphere-system.svc
+redisHost: redis.kubesphere-system.svc
 redisPort: 6379
 redisEndpoint: "{{ redisHost }}:{{ redisPort }}"

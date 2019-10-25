@@ -4,6 +4,8 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "redis-ha"
+  when:
+    - common.enableHA is defiend and common.enableHA
 
 
 - name: Kubesphere | Creating manifests
@@ -12,12 +14,29 @@
     dest: "{{ kubesphere_dir }}/{{ item.file }}"
   with_items:
     - { name: custom-values-redis, file: custom-values-redis.yaml }
+  when:
+    - common.enableHA is defiend and common.enableHA
 
 
-- name: Kubesphere | Deploy redis
+- name: Kubesphere | Deploying redis
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-redis
     {{ kubesphere_dir }}/redis-ha
     -f {{ kubesphere_dir }}/custom-values-redis.yaml
-    --set fullnameOverride=redis
+    --set fullnameOverride=redis-ha
     --namespace kubesphere-system
+  when:
+    - common.enableHA is defiend and common.enableHA
+
+
+- name: Kubesphere | Deploying redis
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+  loop:
+    - "redis.yaml"
+  register: import
+  failed_when:
+    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
+    - "import.stderr and 'is forbidden' not in import.stderr"
+  when:
+    - (common.enableHA is defiend and not common.enableHA) or (common.enableHA is not defiend)
