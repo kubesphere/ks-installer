@@ -5,7 +5,7 @@
   loop:
     - "redis-ha"
   when:
-    - common.enableHA is defiend and common.enableHA
+    - common.enableHA is defined and common.enableHA
 
 
 - name: Kubesphere | Creating manifests
