@@ -53,6 +53,7 @@ mixer:
 # @see charts/pilot/values.yaml
 pilot:
   enabled: true
+  traceSampling: 10.0
   image: {{ istio_pilot_image }}
   requests:
     cpu: 10m
