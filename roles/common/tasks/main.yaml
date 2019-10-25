@@ -100,18 +100,19 @@
   with_items:
     - { path: etcd, file: etcd.yaml }
     - { path: redis, file: redis.yaml }
+    - { name: mysql, file: mysql.yaml }
 #    - { path: openldap, file: openldap.yaml }
 #    - { path: minio, file: minio.yaml }
-#    - { name: mysql, file: mysql.yaml }
 
 
-#- name: Kubesphere | Creating mysql sercet
-#  shell: >
-#    {{ bin_dir }}/kubectl create secret generic mysql-pass
-#    --from-file={{ kubesphere_dir }}/common/password.txt
-#    -n kubesphere-system
-#  register: import
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+- name: Kubesphere | Creating mysql sercet
+  shell: >
+    {{ bin_dir }}/kubectl create secret generic mysql-pass
+    --from-file={{ kubesphere_dir }}/common/password.txt
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
 - name: Kubesphere | Deploying common component
