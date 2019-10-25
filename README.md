@@ -6,7 +6,7 @@ In addition to supporting deploy on VM and BM, KubeSphere also supports installi
 
 ## Prerequisites
 
-- Kubernetes Version: >= 1.13.0
+- Kubernetes Version: v1.13.0 ≤ K8s version < v1.16
 - Helm Version: >= 2.10.0
 
 1. Make sure your Kubernetes version is greater than 1.13.0, run `kubectl version` in your cluster node. The output looks like the following:
