@@ -15,7 +15,7 @@
   with_items:
     - { name: custom-values-redis, file: custom-values-redis.yaml }
   when:
-    - common.enableHA is defiend and common.enableHA
+    - common.enableHA is defined and common.enableHA
 
 
 - name: Kubesphere | Deploying redis
@@ -26,7 +26,7 @@
     --set fullnameOverride=redis-ha
     --namespace kubesphere-system
   when:
-    - common.enableHA is defiend and common.enableHA
+    - common.enableHA is defined and common.enableHA
 
 
 - name: Kubesphere | Deploying redis
@@ -39,4 +39,4 @@
     - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
     - "import.stderr and 'is forbidden' not in import.stderr"
   when:
-    - (common.enableHA is defiend and not common.enableHA) or (common.enableHA is not defiend)
+    - (common.enableHA is defined and not common.enableHA) or (common.enableHA is not defined)
