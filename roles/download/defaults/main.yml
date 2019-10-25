@@ -360,7 +360,7 @@ busybox_tag: 1.28.4
 etcd_image_repo: "{{ ks_image_repo }}/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
-mysql_tag: 5.7.13
+mysql_tag: 8.0.11
 xtrabackup_repo: "{{ base_repo }}googlecontainer/xtrabackup"
 xtrabackup_tag: 1.0
 nginx_repo: "{{ base_library_repo }}nginx"
@@ -440,14 +440,14 @@ downloads:
     groups:
       - k8s-cluster
 
-  xtrabackup:
-    enabled: true
-    container: true
-    repo: "{{ xtrabackup_repo }}"
-    tag: "{{ xtrabackup_tag }}"
-    sha256: "{{ xtrabackup_checksum|default(None) }}"
-    groups:
-      - k8s-cluster
+#  xtrabackup:
+#    enabled: true
+#    container: true
+#    repo: "{{ xtrabackup_repo }}"
+#    tag: "{{ xtrabackup_tag }}"
+#    sha256: "{{ xtrabackup_checksum|default(None) }}"
+#    groups:
+#      - k8s-cluster
 
   redis:
     enabled: true
