@@ -17,7 +17,8 @@
     - upgrade
 
 - name: ks-account | Creating ks-account
-  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-account/ks-account.yml"
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-account/ks-account.yml --force
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
   tags:

@@ -62,9 +62,9 @@ haproxy:
   init:
     resources: {}
   timeout:
-    connect: 4s
-    server: 30s
-    client: 30s
+    connect: 10s
+    server: 360s
+    client: 360s
   securityContext:
     runAsUser: 1000
     fsGroup: 1000
