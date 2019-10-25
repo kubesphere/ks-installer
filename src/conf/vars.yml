@@ -254,7 +254,7 @@ console_port: 30880
 # false means allowing only one active session to access KubeSphere for same account.
 # Duplicated login action will cause previous session invalid and 
 # that user will be logged out by force.
-enableMultiLogin: false
+enable_multi_login: false
 
 # devops/openpitrix/notification/alerting components depend on
 # mysql/minio/etcd/openldap/redis to store credentials.
