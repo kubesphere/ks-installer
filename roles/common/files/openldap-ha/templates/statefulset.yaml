@@ -90,10 +90,10 @@ spec:
           - mountPath: /etc/ldap/slapd.d
             name: openldap-pvc
             subPath: ldap-config
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+          readinessProbe:
+            tcpSocket:
+              port: 389
+            initialDelaySeconds: 15
     {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
@@ -102,6 +102,14 @@ spec:
       - name: openldap-pvc
         persistentVolumeClaim:
           claimName: openldap-pvc
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
   volumeClaimTemplates:
     - metadata:
         name: openldap-pvc
