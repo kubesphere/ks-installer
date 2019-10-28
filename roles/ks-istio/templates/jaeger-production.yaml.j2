@@ -11,6 +11,8 @@ spec:
   query:
     image: {{ jaeger_query_repo }}:{{ jaeger_query_tag }}
   storage:
+    dependencies:
+      enabled: false
     esIndexCleaner:
       enabled: false
     options:
