@@ -27,7 +27,7 @@ data:
                 namespace: "kubesphere-devops-system"
                 label: "base"
                 nodeUsageMode: "NORMAL"
-                idleMinutes: 20
+                idleMinutes: 0
                 containers:
                 - name: "base"
                   image: "{{ builder_base_repo }}:{{ builder_base_tag }}"
@@ -58,7 +58,7 @@ data:
                 namespace: "kubesphere-devops-system"
                 label: "nodejs"
                 nodeUsageMode: "EXCLUSIVE"
-                idleMinutes: 20
+                idleMinutes: 0
                 containers:
                 - name: "nodejs"
                   image: "{{ builder_nodejs_repo }}:{{ builder_nodejs_tag }}"
@@ -95,7 +95,7 @@ data:
                 namespace: "kubesphere-devops-system"
                 label: "maven"
                 nodeUsageMode: "EXCLUSIVE"
-                idleMinutes: 20
+                idleMinutes: 0
                 containers:
                 - name: "maven"
                   image: "{{ builder_maven_repo }}:{{ builder_maven_tag }}"
@@ -129,7 +129,7 @@ data:
                 namespace: "kubesphere-devops-system"
                 label: "go"
                 nodeUsageMode: "EXCLUSIVE"
-                idleMinutes: 20
+                idleMinutes: 0
                 containers:
                 - name: "go"
                   image: "{{ builder_go_repo }}:{{ builder_go_tag }}"
