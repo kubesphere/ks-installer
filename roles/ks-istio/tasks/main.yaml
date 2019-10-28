@@ -44,7 +44,7 @@
   register: result
   until:
     - result.stdout.find("Completed") != -1
-  retries: 50
+  retries: 60
   delay: 10
 
 - name: istio | Waiting for istio-init-crd-11

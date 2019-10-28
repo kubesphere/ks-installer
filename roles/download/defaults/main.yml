@@ -139,7 +139,7 @@ openpitrix_tag: "{{ op_version }}"
 openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_flyway_tag: "flyway-{{ op_version }}"
 minio_repo: "{{ base_repo }}minio/minio"
-minio_tag: RELEASE.2018-09-25T21-34-43Z
+minio_tag: RELEASE.2019-08-07T01-59-21Z
 
 #qingcloud-csi:
 csi_provisioner_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-provisioner"
@@ -273,7 +273,7 @@ cfssl_self_sign_tag: 1.2
 gitlab_operator_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-operator"
 gitlab_operator_tag: v0.3
 mc_repo: "{{ base_repo }}minio/mc"
-mc_tag: RELEASE.2018-07-13T00-53-22Z
+mc_tag: RELEASE.2019-08-07T23-14-43Z
 registry_repo: "{{ base_library_repo }}registry"
 registry_tag: 2.7.1
 
@@ -352,19 +352,23 @@ jaeger_query_tag: 1.13
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
-redis_tag: 4.0
+redis_tag: 5.0.5-alpine
+haproxy_repo:  "{{ base_library_repo }}haproxy"
+haproxy_tag: 2.0.4
 busybox_repo: "{{ base_library_repo }}busybox"
 busybox_tag: 1.28.4
 etcd_image_repo: "{{ ks_image_repo }}/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
 mysql_tag: 8.0.11
+xtrabackup_repo: "{{ base_repo }}googlecontainer/xtrabackup"
+xtrabackup_tag: 1.0
 nginx_repo: "{{ base_library_repo }}nginx"
 nginx_tag: 1.14-alpine
 postgres_repo: "{{ base_library_repo }}postgres"
 postgres_tag: 9.6.8   #Notice
 openldap_repo: "{{ base_repo }}osixia/openldap"
-openldap_tag: 1.2.2
+openldap_tag: 1.3.0
 
 #NFS:
 nfs_client_provisioner_repo: "{{ ks_image_repo }}/external_storage/nfs-client-provisioner"
@@ -416,7 +420,7 @@ downloads:
     tag: "{{ ks_installer_tag }}"
     sha256: "{{ ks_installer|default(None) }}"
     groups:
-      - kube-node
+      - k8s-cluster
 
   busybox:
     enabled: true
@@ -425,7 +429,7 @@ downloads:
     tag: "{{ busybox_tag }}"
     sha256: "{{ busybox_checksum|default(None) }}"
     groups:
-      - kube-node
+      - k8s-cluster
 
   mysql:
     enabled: true
@@ -436,12 +440,30 @@ downloads:
     groups:
       - k8s-cluster
 
+#  xtrabackup:
+#    enabled: true
+#    container: true
+#    repo: "{{ xtrabackup_repo }}"
+#    tag: "{{ xtrabackup_tag }}"
+#    sha256: "{{ xtrabackup_checksum|default(None) }}"
+#    groups:
+#      - k8s-cluster
+
   redis:
     enabled: true
     container: true
     repo: "{{ redis_repo }}"
     tag: "{{ redis_tag }}"
-    sha256: "{{ mysql_checksum|default(None) }}"
+    sha256: "{{ redis_checksum|default(None) }}"
+    groups:
+      - k8s-cluster
+
+  haproxy:
+    enabled: true
+    container: true
+    repo: "{{ haproxy_repo }}"
+    tag: "{{ haproxy_tag }}"
+    sha256: "{{ haproxy_checksum|default(None) }}"
     groups:
       - k8s-cluster
 
@@ -455,15 +477,13 @@ downloads:
       - kube-node
 
   postgres:
-    enabled: "true"
+    enabled: "{{ devops_enabled }}"
     container: true
     repo: "{{ postgres_repo }}"
     tag: "{{ postgres_tag }}"
     sha256: "{{ postgres_checksum|default(None) }}"
     groups:
       - kube-node
-
-
 
   alerting_dbinit:
     enabled: "{{ alerting_enabled }}"
@@ -526,7 +546,7 @@ downloads:
     tag: "{{ openldap_tag }}"
     sha256: "{{ openldap_checksum|default(None) }}"
     groups:
-      - kube-node
+      - k8s-cluster
 
   jenkins_uc:
     enabled: "{{ devops_enabled }}"

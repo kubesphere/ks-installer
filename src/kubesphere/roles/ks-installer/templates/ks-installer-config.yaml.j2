@@ -15,6 +15,8 @@ data:
       storageClass: {{ storage_class }}
 
     common:
+      enableHA: {% if loadbalancer_apiserver is defined and loadbalancer_apiserver.address is defined and loadbalancer_apiserver.port is defined %}True{% else %}False{% endif %}
+
       mysqlVolumeSize: {{ mysql_volume_size }}
       minioVolumeSize: {{ minio_volume_size }}
       etcdVolumeSize: {{ etcd_volume_size }}
@@ -25,7 +27,7 @@ data:
       enabled: {{ metrics_server_enabled }}
 
     console:
-      enableMultiLogin: {{ enableMultiLogin | default(false) }}  # enable/disable multi login
+      enableMultiLogin: {{ enable_multi_login | default(true) }}  # enable/disable multi login
       port: {{ console_port }}
       replicas: {{ ks_console_replicas | default(2) }}
 

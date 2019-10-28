@@ -16,4 +16,4 @@ dns|UDP|allow|53|
 local-registry|TCP|allow|5000||offline environment|
 local-apt|TCP|allow|5080||offline environment|
 rpcbind|TCP|allow|111|| use NFS
-ipip|IPIP|allow| | |calico needs to allow the ipip protocol
+ipip|IPENCAP / IPIP|allow| | |calico needs to allow the ipip protocol

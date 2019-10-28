@@ -17,7 +17,8 @@
     - upgrade
 
 - name: ks-apigateway | Installing ks-apigateway
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-apigateway/ks-apigateway.yaml"
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-apigateway/ks-apigateway.yaml --force
   register: import
   failed_when: "import.stderr and 'has been modified' not in import.stderr"
   tags:

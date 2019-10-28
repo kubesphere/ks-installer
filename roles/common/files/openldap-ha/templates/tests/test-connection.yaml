@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "openldap-ha.fullname" . }}-test-connection"
+  labels:
+{{ include "openldap-ha.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "openldap-ha.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

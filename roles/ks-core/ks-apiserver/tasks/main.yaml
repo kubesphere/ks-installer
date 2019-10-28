@@ -18,7 +18,8 @@
     - upgrade
 
 - name: ks-apiserver | Creating Deployment
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-apiserver/ks-apiserver.yml"
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-apiserver/ks-apiserver.yml --force
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
   tags:

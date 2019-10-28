@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#Get the current path
+BASE_FOLDER=$(dirname $(readlink -f "$0"))
 
 os_info=`cat /etc/os-release`
 if [[ `whoami` != 'root' ]]; then
@@ -29,6 +31,15 @@ if [[ $os_info =~ "Ubuntu" ]] && [[ $os_info =~ "18.04" ]]; then
       echo -e "\033[1;36m$notice_apt\033[0m"
       exit 0
    fi
+fi
+
+vars_path=$BASE_FOLDER/../conf/vars.yml
+defaultClassNum=$(grep -r "is_default_class" $vars_path | grep true | wc -l)
+
+if [ $defaultClassNum -ne 1 ]; then
+  notice_storage="Only one default storage class can be set !"
+  echo -e "\033[1;36m$notice_storage\033[0m"
+  exit 0
 fi
 
 DEFAULT_MODE=
