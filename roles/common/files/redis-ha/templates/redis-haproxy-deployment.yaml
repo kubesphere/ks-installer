@@ -104,3 +104,22 @@ spec:
       - name: data
         emptyDir: {}
 {{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                - labelSelector:
+                    matchLabels:
+                      app: {{ template "redis-ha.name" . }}-haproxy
+                      release: {{ .Release.Name }}
+                  topologyKey: kubernetes.io/hostname
+              weight: 100
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: In
+                    values:
+                      - ""

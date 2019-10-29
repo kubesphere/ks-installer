@@ -93,7 +93,15 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 389
-            initialDelaySeconds: 15
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 15
+          livenessProbe:
+            tcpSocket:
+              port: 389
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 15
     {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
@@ -104,12 +112,23 @@ spec:
           claimName: openldap-pvc
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
-                  app.kubernetes.io/instance: {{ .Release.Name }}
-              topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
+                      app.kubernetes.io/instance: {{ .Release.Name }}
+                  topologyKey: kubernetes.io/hostname
+              weight: 100
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: In
+                    values:
+                      - ""
   volumeClaimTemplates:
     - metadata:
         name: openldap-pvc
