@@ -322,7 +322,7 @@ ks_log_sidecar_injector_tag: 1.0
 #ingress:
 nginx_ingress_controller_repo: "{{ ks_image_repo }}/kubernetes_ingress_controller/nginx-ingress-controller"
 nginx_ingress_controller_tag: 0.24.1
-defaultbackend_repo: "{{ base_repo }}googlecontainer/defaultbackend-amd64"
+defaultbackend_repo: "{{ base_repo }}mirrorgooglecontainers/defaultbackend-amd64"
 defaultbackend_tag: 1.4
 
 #metrics:
