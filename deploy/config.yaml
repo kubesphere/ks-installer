@@ -15,47 +15,50 @@ data:
       storageClass: ""
 
     common:
+      enableHA: False
       mysqlVolumeSize: 20Gi
       minioVolumeSize: 20Gi
       etcdVolumeSize: 20Gi
       openldapVolumeSize: 2Gi
       redisVolumSize: 2Gi
-      enableHA: False
 
     metrics-server:
-      enabled: False
+      enabled: True
 
     console:
-      disableMultiLogin: True  # enable/disable multi login
+      enableMultiLogin: False  # enable/disable multi login
       port: 30880
       replicas: 1
 
     monitoring:
-      prometheusReplica: 2
+      prometheusReplicas: 1
       prometheusMemoryRequest: 400Mi
       prometheusVolumeSize: 20Gi
       grafana:
-        enabled: false
+        enabled: False
 
     logging:
       enabled: True
       elasticsearchMasterReplica: 1
-      elasticsearchDataReplica: 2
+      elasticsearchDataReplica: 1
       elasticsearchVolumeSize: 20Gi
       logMaxAge: 7
       elkPrefix: logstash
       containersLogMountedPath: ""
       kibana:
-        enabled: false
+        enabled: False
 
     openpitrix:
-      enabled: False
+      enabled: True
 
     devops:
-      enabled: False
-      jenkinsMemoryLim: "8Gi"
-      jenkinsMemoryReq: "4Gi"
-      jenkinsVolumeSize: "8Gi"
+      enabled: True
+      jenkinsMemoryLim: 2Gi
+      jenkinsMemoryReq: 1500Mi
+      jenkinsVolumeSize: 8Gi
+      jenkinsJavaOpts_Xms: 512m
+      jenkinsJavaOpts_Xmx: 512m
+      jenkinsJavaOpts_MaxRAM: 2g
       sonarqube:
         enabled: False
 
@@ -63,16 +66,17 @@ data:
       enabled: False
 
     notification:
-      enabled: False
+      enabled: True
 
     alerting:
-      enabled: False
+      enabled: True
 
     harbor:
       enabled: False
-
+      domain: harbor.devops.kubesphere.local
     gitlab:
       enabled: False
+      domain: devops.kubesphere.local
 
 kind: ConfigMap
 metadata:
