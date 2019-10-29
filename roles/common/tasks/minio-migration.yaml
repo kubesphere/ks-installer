@@ -1,0 +1,33 @@
+- name: empty backup directory
+  file:
+    state: absent
+    path: "/tmp/minio-backup/{{ item }}/"
+
+- name: recreate backup directory
+  file:
+    state: directory
+    path: "/tmp/minio-backup/{{ item }}/"
+
+- name: Kubesphere | Fetch op-minio data
+  shell: >
+    rclone copy
+    op-minio:openpitrix-internal-repo/{{ item }}
+    /tmp/minio-backup/{{ item }}/
+
+- name: Kubesphere | Check minio status
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kubesphere-system | grep 'minio' | grep -v 'Running' | wc -l
+  register: import
+  until: import.stdout == "0"
+  retries: 30
+  delay: 30
+
+- name: Kubesphere | Sync op-minio data
+  shell: >
+    rclone copy
+    /tmp/minio-backup/{{ item }}/
+    ks-minio:openpitrix-internal-repo/{{ item }}
+  register: import
+  until: import.stdout == "0"
+  retries: 30
+  delay: 30
