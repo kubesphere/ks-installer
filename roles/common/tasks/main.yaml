@@ -115,7 +115,7 @@
 
 - name: Kubesphere | Deploying common component
   block:
-    - name: Kubesphere | Deploying common component
+    - name: Kubesphere | Deploying etcd and mysql
       shell: >
         {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
       loop:

@@ -47,7 +47,7 @@
 
 - import_tasks: openldap-migration.yaml
   when:
-    - old_redis_exist.stdout != "0"
+    - old_openldap_exist.stdout != "0"
 
 
 - name: KubeSphere | Restarting ks-account
