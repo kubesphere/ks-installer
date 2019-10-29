@@ -114,11 +114,11 @@ spec:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
-                - labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
-                      app.kubernetes.io/instance: {{ .Release.Name }}
-                  topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
+                    app.kubernetes.io/instance: {{ .Release.Name }}
+                topologyKey: kubernetes.io/hostname
               weight: 100
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
