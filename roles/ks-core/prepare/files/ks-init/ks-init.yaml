@@ -64,6 +64,7 @@ rules:
       - storageclasses
     verbs:
       - list
+      - get
   - apiGroups:
       - ''
     resources:
