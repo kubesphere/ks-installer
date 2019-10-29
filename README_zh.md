@@ -102,25 +102,26 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 4. 克隆 kubesphere-installer 仓库至本地。
 
 ```
-$ git clone https://github.com/kubesphere/ks-installer.git
+$ git clone https://github.com/kubesphere/ks-installer.git -b master
 ```
 
 5. 进入 ks-installer，然后在 Kubernetes 集群部署 KubeSphere。
 
-
-```
+```bash
 $ cd deploy
+```
 
-$ vim kubesphere.yaml   
-# 根据下方的参数说明列表，编辑 kubesphere.yaml 中 kubesphere-config 为当前集群参数信息（若etcd 无证书，设置 etcd_tls_enable: False）。
+编辑 config.yaml 文件，填入集群 apiserverAddr、etcd、storageClass 信息。同时，也可以选择，需要安装的组件。
 
-$ kubectl apply -f kubesphere.yaml
+```bash
+$ kubectl apply -f config.yaml
+$ kubectl apply -f kubesphere-installer.yaml
 ```
 
 6. 查看部署日志。
 
 ```
-$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
+$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
 7. 查看控制台的服务端口，使用 `IP:30880` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
@@ -131,6 +132,14 @@ $ kubectl get svc -n kubesphere-system
 ```
 
 ![](https://pek3b.qingstor.com/kubesphere-docs/png/20190912002602.png)
+
+8. 更新 KubeSphere 安装
+
+```bash
+$ kubectl edit cm ks-installer -n kubesphere-system
+```
+
+编辑之后，推出等待生效即可。
 
 ## 参数说明
 

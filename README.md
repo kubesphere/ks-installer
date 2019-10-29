@@ -104,24 +104,34 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-4. Then we can start to install KubeSphere.
+4. Clone kubesphere-installer repo to local
+
+```
+$ git clone https://github.com/kubesphere/ks-installer.git -b master
+```
+
+5. Then we can start to install KubeSphere.
 
 ```bash
 $ cd deploy
-
-$ vim kubesphere.yaml   
-# According to the parameter table at the bottom, replace the value of "kubesphere-config" in "kubesphere.yaml" file with your current Kubernetes cluster parameters (If the ETCD has no certificate, set etcd_tls_enable: False).
-
-$ kubectl apply -f kubesphere.yaml
 ```
 
-5. Inspect the logs of installation.
+Edit the config.yaml file and fill in the cluster apiserverAddr, etcd, storageClass information. 
+
+At the same time, you can also choose which components need to be installed.
 
 ```bash
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l job-name=kubesphere-installer -o jsonpath='{.items[0].metadata.name}') -f
+$ kubectl apply -f config.yaml
+$ kubectl apply -f kubesphere-installer.yaml
 ```
 
-6. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
+6. Inspect the logs of installation.
+
+```bash
+$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+```
+
+7. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
 
 ```bash
 $ kubectl get svc -n kubesphere-system    
@@ -130,8 +140,15 @@ $ kubectl get svc -n kubesphere-system
 
 ![](https://pek3b.qingstor.com/kubesphere-docs/png/20190912020300.png)
 
-## Configuration Table
+8. Update KubeSphere Installer
 
+```bash
+$ kubectl edit cm ks-installer -n kubesphere-system
+```
+
+After editing and saveing, wait for it to take effect.
+
+## Configuration Table
 
 <table border=0 cellpadding=0 cellspacing=0 width=1364 style='border-collapse:
  collapse;table-layout:fixed;width:1023pt;font-variant-ligatures: normal;

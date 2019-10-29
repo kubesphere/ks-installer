@@ -20,6 +20,7 @@ data:
       etcdVolumeSize: 20Gi
       openldapVolumeSize: 2Gi
       redisVolumSize: 2Gi
+      enableHA: False
 
     metrics-server:
       enabled: False
@@ -27,6 +28,7 @@ data:
     console:
       disableMultiLogin: True  # enable/disable multi login
       port: 30880
+      replicas: 1
 
     monitoring:
       prometheusReplica: 2
