@@ -33,7 +33,7 @@ haproxy:
   readOnly:
     enabled: false
     port: 6380
-  replicas: {% if common.enableHA %}1{% else %}1{% endif %}
+  replicas: {% if common.enableHA %}3{% else %}1{% endif %}
 
   image:
     repository: {{ haproxy_repo }}
