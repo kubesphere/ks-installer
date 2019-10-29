@@ -1,0 +1,18 @@
+[op-minio]
+type = s3
+provider = Minio
+env_auth = false
+access_key_id = {{ op_minio_accesskey }}
+secret_access_key = {{ op_minio_secretkey }}
+region = us-east-1
+endpoint = {{ op_minio_svc }}
+
+
+[ks-minio]
+type = s3
+provider = Minio
+env_auth = false
+access_key_id = {{ op_minio_accesskey }}
+secret_access_key = {{ op_minio_secretkey }}
+region = us-east-1
+endpoint = {{ ks_minio_svc }}
