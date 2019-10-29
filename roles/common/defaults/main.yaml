@@ -14,3 +14,6 @@ op_minio_secretkey: openpitrixminiosecretkey
 
 op_minio_svc: openpitrix-minio.openpitrix-system.svc
 ks_minio_svc: minio.kubesphere-system.svc
+
+
+ks_redis_svc: redis.kubesphere-system.svc

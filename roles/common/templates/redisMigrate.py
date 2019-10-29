@@ -9,8 +9,8 @@ def redis_data_migration():
     实现方法:遍历源数据库中的键值对，判断类型，用对应的方法在目标数据库中创建对应键值对
     :return:
     """
-    src_redis = StrictRedis(host='10.233.7.192')
-    dst_redis = StrictRedis(host='10.233.17.2')
+    src_redis = StrictRedis(host='{{ redis_podIp.stdout }}')
+    dst_redis = StrictRedis(host='{{ ks_redis_svc }}')
 
     print("Begin data migration:")
 
