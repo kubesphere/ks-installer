@@ -113,24 +113,31 @@
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
-
 - name: Kubesphere | Deploying common component
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
-  loop:
-    - "etcd.yaml"
-    - "mysql.yaml"
-#    - "redis.yaml"
-#    - "minio.yaml"
-#    - "openldap.yaml"
-  register: import
-  failed_when:
-    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
-    - "import.stderr and 'is forbidden' not in import.stderr"
-  when:
-    - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
+  block:
+    - name: Kubesphere | Deploying common component
+      shell: >
+        {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+      loop:
+        - "etcd.yaml"
+        - "mysql.yaml"
+      #    - "redis.yaml"
+      #    - "minio.yaml"
+      #    - "openldap.yaml"
+      register: import
+      failed_when:
+        - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
+        - "import.stderr and 'is forbidden' not in import.stderr"
 
-- import_tasks: minio-install.yaml
+
+    - import_tasks: minio-install.yaml
+
+
+    - import_tasks: redis-install.yaml
+
+
+    - import_tasks: openldap-install.yaml
+
   when:
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
 

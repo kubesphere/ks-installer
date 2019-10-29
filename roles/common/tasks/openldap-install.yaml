@@ -14,6 +14,28 @@
     - { name: custom-values-openldap, file: custom-values-openldap.yaml }
 
 
+- name: Kubesphere | Check old openldap status
+  shell: >
+    {{ bin_dir }}/kubectl get pod
+    -n kubesphere-system
+    -l app=openldap,tier=database,version=openldap-2.4 | wc -l
+  register: old_openldap_exist
+
+- name: KubeSphere | Shutdown ks-account
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-account --replicas=0
+  when:
+    - old_openldap_exist.stdout != "0"
+
+- name: Kubesphere | Delete and backup old openldap svc
+  shell: >
+    {{ bin_dir }}/kubectl get svc -n kubesphere-system openldap -o yaml > {{ kubesphere_dir }}/openldap-svc-backup.yaml
+    &&
+    {{ bin_dir }}/kubectl delete svc -n kubesphere-system openldap
+  when:
+    - old_openldap_exist.stdout != "0"
+
+
 - name: Kubesphere | Deploy openldap
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-openldap
@@ -21,3 +43,16 @@
     -f {{ kubesphere_dir }}/custom-values-openldap.yaml
     --set fullnameOverride=openldap
     --namespace kubesphere-system
+
+
+- import_tasks: openldap-migration.yaml
+  when:
+    - old_redis_exist.stdout != "0"
+
+
+- name: KubeSphere | Restarting ks-account
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-account --replicas=1
+  when:
+    - old_openldap_exist.stdout != "0"
+

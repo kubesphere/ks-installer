@@ -16,7 +16,7 @@
   delay: 30
 
 
-- name: ks-logging | Checking fluent-bit-crd
+- name: ks-logging | Migrating redis data
   shell: >
     chmod +x {{ kubesphere_dir }}/redisMigrate.py &&
     {{ kubesphere_dir }}/redisMigrate.py
