@@ -21,3 +21,29 @@
     -f {{ kubesphere_dir }}/custom-values-minio.yaml
     --set fullnameOverride=minio
     --namespace kubesphere-system
+
+
+- name: Kubesphere | create minio config directory
+  file:
+    state: directory
+    path: "/root/.config/rclone/"
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-minio-deployment") != -1
+
+
+- name: Kubesphere | Creating common component manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "/root/.config/rclone/{{ item.file }}"
+  with_items:
+    - { path: /root/.config/rclone, file: rclone.conf }
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-minio-deployment") != -1
+
+
+- include_tasks: minio-migration.yaml
+  loop:
+    - helm
+    - vmbased
+  when:
+    - openpitrix_component_pod.stdout.find("openpitrix-minio-deployment") != -1

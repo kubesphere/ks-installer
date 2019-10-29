@@ -6,3 +6,14 @@ common:
   etcdVolumeSize: 20Gi
   openldapVolumeSize: 2Gi
   redisVolumSize: 2Gi
+
+
+op_minio_accesskey: openpitrixminioaccesskey
+op_minio_secretkey: openpitrixminiosecretkey
+
+
+op_minio_svc: openpitrix-minio.openpitrix-system.svc
+ks_minio_svc: minio.kubesphere-system.svc
+
+
+ks_redis_svc: redis.kubesphere-system.svc
