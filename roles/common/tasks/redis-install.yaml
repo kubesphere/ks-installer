@@ -40,3 +40,5 @@
     - "import.stderr and 'is forbidden' not in import.stderr"
   when:
     - (common.enableHA is defined and not common.enableHA) or (common.enableHA is not defined)
+
+
