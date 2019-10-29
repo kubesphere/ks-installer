@@ -1,30 +1,61 @@
-- name: Kubesphere | Getting redis installation files
-  copy:
-    src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
-  loop:
-    - "redis-ha"
-  when:
-    - common.enableHA is defined and common.enableHA
+- name: Kubesphere | Deploying ha redis
+  block:
+
+    - name: Kubesphere | Getting redis installation files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ kubesphere_dir }}/"
+      loop:
+        - "redis-ha"
 
 
-- name: Kubesphere | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.file }}"
-  with_items:
-    - { name: custom-values-redis, file: custom-values-redis.yaml }
-  when:
-    - common.enableHA is defined and common.enableHA
+    - name: Kubesphere | Creating manifests
+      template:
+        src: "{{ item.file }}.j2"
+        dest: "{{ kubesphere_dir }}/{{ item.file }}"
+      with_items:
+        - { name: custom-values-redis, file: custom-values-redis.yaml }
 
 
-- name: Kubesphere | Deploying redis
-  shell: >
-    {{ bin_dir }}/helm upgrade --install ks-redis
-    {{ kubesphere_dir }}/redis-ha
-    -f {{ kubesphere_dir }}/custom-values-redis.yaml
-    --set fullnameOverride=redis-ha
-    --namespace kubesphere-system
+    - name: Kubesphere | Check redis-ha status
+      shell: >
+        {{ bin_dir }}/kubectl get pod -n kubesphere-system  -l app=redis,tier=database,version=redis-4.0 | wc -l
+      register: old_redis_exist
+
+
+    - name: Kubesphere | Delete and backup old redis svc
+      shell: >
+        {{ bin_dir }}/kubectl get svc -n kubesphere-system redis -o yaml > {{ kubesphere_dir }}/redis-svc-backup.yaml
+        &&
+        {{ bin_dir }}/kubectl delete svc -n kubesphere-system redis
+      when:
+        - old_redis_exist.stdout != "0"
+
+
+    - name: Kubesphere | Deploying redis
+      shell: >
+        {{ bin_dir }}/helm upgrade --install ks-redis
+        {{ kubesphere_dir }}/redis-ha
+        -f {{ kubesphere_dir }}/custom-values-redis.yaml
+        --set fullnameOverride=redis-ha
+        --namespace kubesphere-system
+
+
+    - name: Kubesphere | Getting redis PodIp
+      shell: >
+        {{ bin_dir }}/kubectl get pod
+        -n kubesphere-system
+        -l  app=redis,tier=database,version=redis-4.0
+        -ojsonpath='{.items[0].status.podIP}'
+      register: redis_podIp
+      when:
+        - old_redis_exist.stdout != "0"
+
+
+    - import_tasks: redis-migration.yaml
+      when:
+        - old_redis_exist.stdout != "0"
+
   when:
     - common.enableHA is defined and common.enableHA
 
@@ -40,5 +71,3 @@
     - "import.stderr and 'is forbidden' not in import.stderr"
   when:
     - (common.enableHA is defined and not common.enableHA) or (common.enableHA is not defined)
-
-
