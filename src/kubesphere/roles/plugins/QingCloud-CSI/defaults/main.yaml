@@ -24,3 +24,4 @@ qingcloud_stepSize: 10
 qingcloud_fsType: 'ext4'
 qingcloud_disk_replica: 2
 qingcloud_allowVolumeExpansion: true
+qingcloud_volumeBindingMode: Immediate
