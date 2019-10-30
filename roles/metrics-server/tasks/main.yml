@@ -14,7 +14,7 @@
   when: metrics_server_old_check.stat.exists
 
 
-- name: Metrics-Server | deleting old prometheus-operator files
+- name: Metrics-Server | deleting old metrics-server files
   file:
     path: "{{ kubesphere_dir }}/{{ item }}"
     state: absent
@@ -42,11 +42,13 @@
   shell: >
     {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
   register: result
+  ignore_errors: True
 
 
 - name: Metrics-Server | Installing metrics-server retry
   shell: >
     {{ bin_dir }}/helm del --purge metrics-server &&
+    sleep 5 &&
     {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
   when:
     - result.rc != 0

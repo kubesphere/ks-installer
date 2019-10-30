@@ -102,10 +102,11 @@ spec:
             initialDelaySeconds: 30
             timeoutSeconds: 1
             periodSeconds: 15
-    {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
       volumes:
       - name: openldap-pvc
         persistentVolumeClaim:
