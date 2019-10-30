@@ -1,11 +1,21 @@
 ---
 
+- name: Kubesphere | Check kube-node-lease namespace
+  shell: >
+    {{ bin_dir }}/kubectl get ns | grep 'kube-node-lease' | wc -l
+  register: kube_node_lease
+  ignore_errors: True
+
+
 - name: KubeSphere | Get system namespaces
   set_fact:
     systemNamespaces: >-
       kubesphere-system
       kubesphere-controls-system
       kubesphere-monitoring-system
+      {%- if kube_node_lease is defined and kube_node_lease.stdout != "0" %}
+      kube-node-lease
+      {%- endif %}
       {%- if logging.enabled is defined and logging.enabled %}
       kubesphere-logging-system
       {%- endif %}
@@ -50,7 +60,7 @@
     {{ bin_dir }}/kubectl label ns {{ item }} kubesphere.io/workspace=system-workspace
   register: import
   failed_when: "import.stderr and 'already' not in import.stderr"
-  loop: "{{ ['default', 'kube-public', 'kube-system', 'kube-node-lease', systemNamespacesList] | flatten(1) }}"
+  loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
 
 
 - name: KubeSphere | Create ImagePullSecrets
