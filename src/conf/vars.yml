@@ -146,7 +146,9 @@ qingcloud_stepSize: 50
 qingcloud_fsType: ext4
 # 1 means single replica, 2 means multiple replicas. Default 2.
 qingcloud_disk_replica: 2
-
+## Tags ID in QingCloud IaaS platform split with a comma.
+#qingcloud_storageclass_tags:
+qingcloud_allowVolumeExpansion: true
 
 # QINGCLOUD NEONSAN
 # change to true to use neonsan as backend storage service.
