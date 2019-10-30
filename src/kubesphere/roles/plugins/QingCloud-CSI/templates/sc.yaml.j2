@@ -29,4 +29,8 @@ parameters:
   stepSize: "{{ qingcloud_stepSize }}"
   fsType: "{{ qingcloud_fsType }}"
   replica: "{{ qingcloud_disk_replica }}"
+{% if qingcloud_storageclass_tags is defined and qingcloud_storageclass_tags != None %}
+  tags: "{{ qingcloud_storageclass_tags }}"
+{% endif %}
 reclaimPolicy: Delete 
+allowVolumeExpansion: {{ qingcloud_allowVolumeExpansion }}

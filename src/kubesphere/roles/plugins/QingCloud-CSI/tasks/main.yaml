@@ -12,7 +12,7 @@
   with_items:
     - { name: config, file: config.yaml, type: config }
     - { name: sc, file: sc.yaml, type: sc }
-    - { name: qingcloud-csi-disk-v1, file: qingcloud-csi-disk-v1.1.0-rc.3.yaml, type: workload }
+    - { name: qingcloud-csi-disk-v3, file: qingcloud-csi-disk-v1.1.0-rc.3.yaml, type: workload }
    # - { name: csi-controller-sts, file: csi-controller-sts.yaml, type: sts }
    # - { name: csi-node-ds, file: csi-node-ds.yaml, type: ds }
 
@@ -42,7 +42,7 @@
 
 - name: QCloud-CSI | Creating StorageClass
   command: >
-    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/sc.yaml
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/sc.yaml --force
   register: import 
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
