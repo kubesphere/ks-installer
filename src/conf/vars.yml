@@ -149,6 +149,12 @@ qingcloud_disk_replica: 2
 ## Tags ID in QingCloud IaaS platform split with a comma.
 #qingcloud_storageclass_tags:
 qingcloud_allowVolumeExpansion: true
+# The volumeBindingMode field controls when volume binding
+# and dynamic provisioning should occur. (Immediate/WaitForFirstConsumer)
+# Immediate: volume binding and dynamic provisioning occurs once the PersistentVolumeClaim is created.
+# WaitForFirstConsumer: It will delay the binding and provisioning of a PersistentVolume until a Pod using the PersistentVolumeClaim is created.
+qingcloud_volumeBindingMode: Immediate
+
 
 # QINGCLOUD NEONSAN
 # change to true to use neonsan as backend storage service.
