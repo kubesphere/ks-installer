@@ -36,7 +36,10 @@ spec:
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
       initContainers:
       - name: config-init
         image: {{ .Values.haproxy.image.repository }}:{{ .Values.haproxy.image.tag }}
