@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   Caddyfile: |
     :2018 {
-      
+      root /home
       authenticate {
         token-idle-timeout 40m
         redis-url redis://redis.kubesphere-system.svc:6379
