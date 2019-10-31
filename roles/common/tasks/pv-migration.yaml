@@ -3,7 +3,7 @@
 - name: Kubesphere | Disabled openpitrix
   shell: >
     {{ bin_dir }}/kubectl scale --replicas=0 -n openpitrix-system deploy
-    $({{ bin_dir }}/kubectl get deploy -n openpitrix-system | awk '{if(NR>1){print $1}}')
+    $({{ bin_dir }}/kubectl get deploy -n openpitrix-system | awk '{if(NR>1){print $1}}' | grep -v 'openpitrix-minio-deployment')
 
 
 - name: Kubesphere | Checking openpitrix common component

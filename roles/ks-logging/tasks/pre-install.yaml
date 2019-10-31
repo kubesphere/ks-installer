@@ -30,7 +30,8 @@
 
 - name: ks-logging | set elasticsearch storageclass parameter
   set_fact:
-    persistence.storageClass: ""
+    persistence:
+      storageClass: ""
   when:
     - sts_number.stdout != "0"
     - sc_number.stdout == "0"
