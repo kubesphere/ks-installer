@@ -54,3 +54,6 @@
   when:
     - vertical_pod_autoscaler_enable == true
 
+
+- import_tasks: ks-stop.yaml
+

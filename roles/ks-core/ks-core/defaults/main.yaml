@@ -1,0 +1,11 @@
+---
+
+kubernetes_ca_crt: "{{ kube_cert_dir }}/ca.crt"
+kubernetes_ca_key: "{{ kube_cert_dir }}/ca.key"
+
+ks_version: 2.1.0-dev
+kube_version: v1.13.5
+openpitrix_version: v0.3.5
+
+console:
+  port: 30880
