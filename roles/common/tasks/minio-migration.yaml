@@ -27,7 +27,3 @@
     rclone copy
     /tmp/minio-backup/{{ item }}/
     ks-minio:openpitrix-internal-repo/{{ item }}
-  register: import
-  until: import.stdout == "0"
-  retries: 30
-  delay: 30
