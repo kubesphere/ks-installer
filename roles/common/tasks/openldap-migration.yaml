@@ -35,5 +35,5 @@
 - name: Kubesphere | Migrating openldap data
   shell: >
     kubectl -n kubesphere-system exec -it {{ item }} -- sh -c
-    '/etc/init.d/slapd stop && rm -rf /var/lib/ldap/* && /usr/sbin/slapadd -l /tmp/ldapdbak.ldif && chown -R openldap:openldap /var/lib/ldap/* && /etc/init.d/slapd start'
+    'rm -rf /var/lib/ldap/* && /usr/sbin/slapadd -l /tmp/ldapdbak.ldif && chown -R openldap:openldap /var/lib/ldap/*'
   loop: "{{ podList.stdout_lines }}"
