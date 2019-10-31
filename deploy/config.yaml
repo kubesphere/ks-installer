@@ -7,6 +7,7 @@ data:
       apiserverAddr: 192.168.0.2:6443      # master addr or master's lb addr
 
     etcd:
+      monitoring: False
       endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
       port: 2379
       tlsEnable: True

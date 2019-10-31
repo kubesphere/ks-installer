@@ -57,7 +57,9 @@ spec:
     - key: k8s-app
       operator: In
       values:
+{% if etcd.monitoring is defined and etcd.monitoring == true %}
       - etcd
+{% endif %}
       - coredns
       - apiserver
       - prometheus

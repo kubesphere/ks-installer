@@ -56,7 +56,9 @@ spec:
       - node-exporter
       - kubelet
       - prometheus-system
+{% if devops.enabled is defined and devops.enabled == true %}
       - s2i-operator
+{% endif %}
   storage:
     volumeClaimTemplate:
       spec:
