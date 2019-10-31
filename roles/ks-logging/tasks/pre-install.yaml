@@ -1,0 +1,36 @@
+---
+
+- name: ks-logging | Checking elasticsearch-logging
+  shell: >
+    {{ bin_dir }}/helm list | grep "elasticsearch-logging" | grep "elasticsearch-1.10.2"
+  register: check_es_result
+  ignore_errors: True
+  tags:
+    - elasticsearch
+
+
+- name: ks-logging | Remove old elasticsearch
+  shell: "{{ bin_dir }}/helm del --purge elasticsearch-logging"
+  when:
+    - check_es_result.stdout.find("kubesphere-logging-system") != -1
+  ignore_errors: True
+  tags:
+    - elasticsearch
+
+- name: ks-logging | check elasticsearch data StatefulSet
+  shell: >
+    {{ bin_dir }}/kubectl get sts -n kubesphere-logging-system  | grep "elasticsearch-logging-data" | wc -l
+  register: sts_number
+
+- name: ks-logging | check elasticsearch storageclass
+  shell: >
+    {{ bin_dir }}/kubectl get sts -n kubesphere-logging-system
+    elasticsearch-logging-data -o yaml | grep "storageClassName" | wc -l
+  register: sc_number
+
+- name: ks-logging | set elasticsearch storageclass parameter
+  set_fact:
+    persistence.storageClass: ""
+  when:
+    - sts_number.stdout != "0"
+    - sc_number.stdout == "0"

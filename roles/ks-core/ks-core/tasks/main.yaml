@@ -1,0 +1,102 @@
+---
+- name: KubeSphere | Getting kubernetes version
+  shell: >
+    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
+  register: kubernetes_version
+  ignore_errors: True
+
+
+- name: KubeSphere | Setting kubernetes version
+  set_fact:
+    kube_version: "{{ kubernetes_version.stdout }}"
+  ignore_errors: True
+
+
+- name: ks-console | Checking ks-console svc
+  shell: "{{ bin_dir }}/kubectl get svc -n kubesphere-system"
+  register: result
+
+
+- name: ks-console | Getting ks-console svc port
+  shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
+  register: ks_console_svc_port
+  when: result.stdout.find("ks-console") != -1
+
+
+- name: ks-console | Setting console_port
+  set_fact:
+    console_port: "{{ ks_console_svc_port.stdout }}"
+  when: result.stdout.find("ks-console") != -1
+
+
+- name: KubeSphere | Getting Ingress installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "ingress"
+    - "ks-account"
+    - "ks-apigateway"
+    - "ks-apiserver"
+    - "ks-console"
+    - "ks-controller-manager"
+
+
+- name: KubeSphere | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: ingress, file: ingress-controller.yaml, type: config }
+    - { path: ks-account, file: ks-account.yml, type: deployment }
+    - { path: ks-apigateway, file: ks-apigateway.yaml, type: deploy }
+    - { path: ks-apiserver, file: ks-apiserver.yml, type: deploy }
+    - { path: ks-controller-manager, file: ks-controller-manager.yaml, type: deploy }
+    - { path: ks-console, file: ks-console-config.yml, type: config }
+    - { path: ks-console, file: ks-console-deployment.yml, type: deploy }
+    - { path: ks-console, file: ks-console-svc.yml, type: svc }
+    - { path: ks-console, file: ks-docs-deployment.yaml, type: deploy }
+    - { path: ks-console, file: sample-bookinfo-configmap.yaml, type: config }
+
+
+- name: KubeSphere | Creating Ingress-controller configmap
+  command: >
+    {{ bin_dir }}/kubectl create configmap ks-router-config
+    --from-file=ingress-controller.yaml={{ kubesphere_dir }}/ingress/ingress-controller.yaml
+    --from-file=ingress-controller-svc.yaml={{ kubesphere_dir }}/ingress/ingress-controller-svc.yaml
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+
+- name: ks-account | Creating ks-account
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  loop:
+    - { path: ingress, file: ingress-controller.yaml }
+    - { path: ks-apigateway, file: ks-apigateway.yaml }
+    - { path: ks-apiserver, file: ks-apiserver.yml }
+    - { path: ks-controller-manager, file: ks-controller-manager.yaml }
+    - { path: ks-console, file: ks-console-config.yml }
+    - { path: ks-console, file: sample-bookinfo-configmap.yaml }
+    - { path: ks-console, file: ks-console-deployment.yml }
+    - { path: ks-console, file: ks-console-svc.yml }
+
+
+- name: KubeSphere | Restarting ks-core
+  block:
+    - shell: >
+        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager --replicas=0 &&
+        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager --replicas=1
+      loop:
+        - ks-apiserver
+        - ks-apigateway
+        - ks-account
+        - ks-controller-manager
+
+
+    - shell: >
+        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas=0 &&
+        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas={{ console.replicas }}

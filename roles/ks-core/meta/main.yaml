@@ -2,9 +2,11 @@
 
 dependencies:
   - role: ks-core/prepare
-  - role: ks-core/ingress
-  - role: ks-core/ks-account
-  - role: ks-core/ks-apigateway
-  - role: ks-core/ks-apiserver
-  - role: ks-core/ks-controller-manager
-  - role: ks-core/ks-console
+  - role: ks-core/ks-core
+
+#  - role: ks-core/ingress
+#  - role: ks-core/ks-account
+#  - role: ks-core/ks-apigateway
+#  - role: ks-core/ks-apiserver
+#  - role: ks-core/ks-controller-manager
+#  - role: ks-core/ks-console
