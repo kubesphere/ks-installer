@@ -78,7 +78,7 @@
     - { path: ingress, file: ingress-controller.yaml }
     - { path: ks-apigateway, file: ks-apigateway.yaml }
     - { path: ks-apiserver, file: ks-apiserver.yml }
-    - { name: ks-account, file: ks-account.yml }
+    - { path: ks-account, file: ks-account.yml }
     - { path: ks-controller-manager, file: ks-controller-manager.yaml }
     - { path: ks-console, file: ks-console-config.yml }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }
