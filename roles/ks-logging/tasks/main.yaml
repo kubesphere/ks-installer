@@ -22,6 +22,14 @@
     - { path: logging, file: FluentBitOutputsConfig.py }
 
 
+- name: ks-logging | comment elasticsearch storageclass parameter
+  shell: >
+    sed 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/logging/custom-values-elasticsearch.yaml
+  when:
+    - sts_number.stdout != "0"
+    - sc_number.stdout == "0"
+
+
 - name: ks-logging | Checking elasticsearch-logging-data-svc
   shell: >
     {{ bin_dir }}/kubectl get svc -n kubesphere-logging-system
