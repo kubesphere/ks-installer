@@ -10,7 +10,7 @@ RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers pytho
     curl https://rclone.org/install.sh | bash && \
     ln -s /bin/kubectl /usr/local/bin/kubectl && \
     ln -s /bin/helm /usr/local/bin/helm && \
-    mkdir -p /hooks/kubesphere /kubesphere/installer/roles /kubesphere/results/env /kubesphere/playbooks &&\
+    mkdir -p /hooks/kubesphere /kubesphere/installer/roles /kubesphere/results/env /kubesphere/playbooks /kubesphere/config &&\
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 ENV  ANSIBLE_ROLES_PATH /kubesphere/installer/roles
