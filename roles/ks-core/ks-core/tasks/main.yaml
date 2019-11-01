@@ -75,7 +75,6 @@
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
   loop:
-    - { path: ingress, file: ingress-controller.yaml }
     - { path: ks-apigateway, file: ks-apigateway.yaml }
     - { path: ks-apiserver, file: ks-apiserver.yml }
     - { path: ks-account, file: ks-account.yml }

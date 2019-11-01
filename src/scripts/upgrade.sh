@@ -69,7 +69,8 @@ function check_version_file() {
     ansible-playbook -i $2 $BASE_FOLDER/../kubesphere/check_version.yml -b > /dev/null
     # if [[ ! -f $1 ]]; then
     #    ansible-playbook -i $2 $BASE_FOLDER/../kubesphere/check_version.yml -b
-    # fi
+    # fils
+
 }
 
 
@@ -84,6 +85,13 @@ function check_nonsupport() {
 }
 
 
+function task_check() {
+	if [[ $? -ne 0 ]]; then
+       str="failed!"
+       echo -e "\033[31;47m$str\033[0m"
+       exit
+    fi
+}
 
 function upgrade_k8s_version() {
 
@@ -93,17 +101,19 @@ function upgrade_k8s_version() {
    while [[ $(($target_k8s_version-$current_k8s_version)) -ne 0 ]]; do
 
       if [[ $current_k8s_version -eq 13 ]]; then
-         sed -i "/kube_version/s/\:.*/\: v1.14.8/g" $vars_path
+         sed -i "/kube_version/s/\:.*/\: v1.14.8/g" $1
       elif [[ $current_k8s_version -eq 14 ]]; then
-         sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $vars_path
+         sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $1
       fi
-      
-      cp $vars_path $1
 
       ansible-playbook -i $2 $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
 
+      task_check
+      cp $vars_path $1
       ansible-playbook -i $2 $BASE_FOLDER/../kubesphere/check_version.yml -b
 
+      task_check
+      
       current_k8s_version=$(grep "k8s" $version_file | awk -F '[ ]' '{print $a}' a=2 | awk -F '[.]' '{print $2}')
       target_k8s_version=$(grep "k8s" $version_file | awk -F '[ ]' '{print $a}' a=4 | awk -F '[.]' '{print $2}')
 
