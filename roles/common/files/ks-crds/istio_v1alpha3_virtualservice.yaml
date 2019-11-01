@@ -4,9 +4,9 @@ metadata:
   creationTimestamp: null
   labels:
     controller-tools.k8s.io: "1.0"
-  name: virtualservices.istio.kubesphere.io
+  name: virtualservices.networking.istio.io
 spec:
-  group: istio.kubesphere.io
+  group: networking.istio.io
   names:
     kind: VirtualService
     plural: virtualservices
