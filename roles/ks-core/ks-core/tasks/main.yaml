@@ -65,17 +65,16 @@
     --from-file=ingress-controller.yaml={{ kubesphere_dir }}/ingress/ingress-controller.yaml
     --from-file=ingress-controller-svc.yaml={{ kubesphere_dir }}/ingress/ingress-controller-svc.yaml
     -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  register: cm_state
+  failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
 
 
 - name: ks-account | Creating ks-account
   command: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  register: source_state
+  failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
   loop:
-    - { path: ingress, file: ingress-controller.yaml }
     - { path: ks-apigateway, file: ks-apigateway.yaml }
     - { path: ks-apiserver, file: ks-apiserver.yml }
     - { path: ks-account, file: ks-account.yml }

@@ -261,11 +261,17 @@ def resultInfo():
         print(info)
 
 
+def generateConfig():
+    cmd = r"kubectl get cm -n kubesphere-system ks-installer -o jsonpath='{.data}' | grep -v '\[\|\]' > /kubesphere/config/ks-config.yaml"
+    os.system(cmd)
+
+
 def main():
     if not os.path.exists(privateDataDir):
         os.makedirs(privateDataDir)
 
-    tagDate = (datetime.date.today() + datetime.timedelta(-1)).strftime("%Y%m%d")
+    tagDate = (datetime.date.today() +
+               datetime.timedelta(-1)).strftime("%Y%m%d")
     cmd = 'sed -i "/ks_image_tag/s/\:.*/\: dev-{}/g" /kubesphere/installer/roles/download/defaults/main.yml'.format(
         tagDate)
     os.system(cmd)
@@ -273,7 +279,7 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
     else:
-        time.sleep(60)
+        generateConfig()
         # execute preInstall tasks
         preInstallTasks()
         getResultInfo()

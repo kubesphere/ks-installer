@@ -141,14 +141,14 @@ spec:
         image: kubespheredev/ks-installer:latest
         imagePullPolicy: "Always"
         volumeMounts:
-          - name: kubesphere-config
-            mountPath: /kubesphere/config
+#          - name: kubesphere-config
+#            mountPath: /kubesphere/config
           - name: kubesphere
             mountPath: /etc/kubesphere
       volumes:
-        - name: kubesphere-config
-          configMap:
-            name: ks-installer
+#        - name: kubesphere-config
+#          configMap:
+#            name: ks-installer
         - name: kubesphere
           hostPath:
             path: /etc/kubesphere

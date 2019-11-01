@@ -17,6 +17,7 @@ data:
       port: 6379
       password: ""
       db: 0
+{% if devops.enabled or openpitrix.enabled %}
     s3:
       endpoint: http://minio.kubesphere-system.svc:9000
       region: us-east-1
@@ -25,6 +26,8 @@ data:
       accessKeyID: openpitrixminioaccesskey
       secretAccessKey: openpitrixminiosecretkey
       bucket: s2i-binaries
+{% endif %}
+{% if devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled %}
     mysql:
       host: mysql.kubesphere-system.svc:3306
       username: root
@@ -32,6 +35,7 @@ data:
       maxIdleConnections: 100
       maxOpenConnections: 100
       maxConnectionLifeTime: 10s
+{% endif %}
 
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
