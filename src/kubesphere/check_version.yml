@@ -38,7 +38,7 @@
         echo "Upgrade_Confirmation" >> version.tmp &&
         echo '' >> version.tmp
         {%- if ksversion.stdout not in ks_version %} && echo "ks_version: {{ ksversion.stdout }} to {{ ks_version }}" >> version.tmp {% endif %}
-        && echo "k8s_version: {{ k8sversion.stdout }} to {{ kube_version }}" >> version.tmp
+        {%- if kube_version not in k8sversion.stdout %} && echo "k8s_version: {{ k8sversion.stdout }} to {{ kube_version }}" >> version.tmp
         {%- if etcdversion.stdout not in etcd_version %} && echo "etcd_version: v{{ etcdversion.stdout }} to {{ etcd_version }}" >> version.tmp {% endif %}
         {%- if kubeproxymode.stdout not in kube_proxy_mode %} && echo "kube_proxy_mode: {{ kubeproxymode.stdout }} to {{ kube_proxy_mode }}" >> version.tmp {% endif %}
         {%- if servicesubnet.stdout not in kube_service_addresses %} && echo "kube_service_addresses: {{ servicesubnet.stdout }} to {{ kube_service_addresses }}    nonsupport" >> version.tmp {% endif %}
