@@ -49,17 +49,18 @@
     msg: "{{ systemNamespacesList }}"
 
 - name: KubeSphere | Create kubesphere namespace
-  command: "{{ bin_dir }}/kubectl create namespace {{ item }}"
-  register: import
-  failed_when: "import.stderr and 'already exists' not in import.stderr"
+  command: >
+    {{ bin_dir }}/kubectl create namespace {{ item }}
+  register: ns_state
+  failed_when: "ns_state.stderr and 'already exists' not in ns_state.stderr"
   loop: "{{ systemNamespacesList }}"
 
 
 - name: KubeSphere | Labeling system-workspace
   shell: >
     {{ bin_dir }}/kubectl label ns {{ item }} kubesphere.io/workspace=system-workspace
-  register: import
-  failed_when: "import.stderr and 'already' not in import.stderr"
+  register: label_state
+  failed_when: "label_state.stderr and 'already' not in label_state.stderr"
   loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
 
 
