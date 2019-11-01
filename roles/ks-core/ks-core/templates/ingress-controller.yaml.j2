@@ -21,7 +21,7 @@ spec:
     spec:
       serviceAccountName: kubesphere-router-serviceaccount
       imagePullSecrets:
-      - name: qingcloud  
+      - name: qingcloud
       containers:
         - name: nginx-ingress-controller
           image: {{ nginx_ingress_controller_repo }}:{{ nginx_ingress_controller_tag }}
@@ -68,4 +68,3 @@ spec:
             timeoutSeconds: 1
           securityContext:
             runAsNonRoot: false
-
