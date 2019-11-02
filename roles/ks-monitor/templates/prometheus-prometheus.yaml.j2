@@ -9,6 +9,15 @@ spec:
   imagePullSecrets:
   - name: qingcloud 
   affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - preference:
+          matchExpressions:
+          - key: node-role.kubernetes.io/monitoring
+            operator: In
+            values:
+            - monitoring
+        weight: 100
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
       - podAffinityTerm:
