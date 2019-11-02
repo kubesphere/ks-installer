@@ -18,7 +18,7 @@
 ## Extended documenation at doc/charts/globals.md
 global:
   edition: ce
-  gitlabVersion: 11.8.1
+  gitlabVersion: 12.4.1
   ## GitLab operator is Alpha. Not for production use.
   operator:
     enabled: false
@@ -49,7 +49,6 @@ global:
     tls:
       enabled: false
 
-
   ## doc/charts/globals.md#configure-gitaly-settings
   gitaly:
     authToken: {}
@@ -66,6 +65,9 @@ global:
       size: 10Gi
     credentials: {}
       # secret:
+
+  grafana:
+    enabled: false
 
   ## doc/charts/globals.md#configure-appconfig-settings
   ## Rails based portions of this chart share many settings
@@ -116,6 +118,10 @@ global:
       bucket: gitlab-packages
       connection: {}
 
+    externalDiffs:
+      when:
+      bucket: gitlab-mr-diffs
+      connection: {}
     ## doc/charts/globals.md#pseudonymizer-settings
     pseudonymizer:
       configMap:
@@ -230,7 +236,7 @@ global:
     subject_suffix: ''
 
   ## Timezone for containers.
-  time_zone: UTC
+  time_zone: PRC
 
   ## Global Service Annotations
   service:
@@ -252,16 +258,24 @@ global:
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
+
+  kubectl:
+    image:
+      repository: {{ gitlab_kubectl_repo }}
+      tag: {{ gitlab_kubectl_tag }}
+      pullSecrets: []
 ## End of global
 
-## Settings to for the Let's Encrypt ACME Issuer
-certmanager-issuer:
+upgradeCheck:
+  enabled: true
   image:
-    repository: {{ gitlab_kubectl_repo }}
-    pullPolicy: IfNotPresent
-  ## The email address to register certificates requested from Let's Encrypt.
-  ## Required if using Let's Encrypt.
-  # email: email@example.com
+    repository: {{ busybox_repo }}
+    tag: 1.31.1
+  securityContext:
+    # in alpine/debian/busybox based images, this is `nobody:nogroup`
+    runAsUser: 65534
+    fsGroup: 65534
+  tolerations: []
 
 ## Installation & configuration of stable/cert-manager
 ## See requirements.yaml for current version
@@ -378,8 +392,9 @@ registry:
   init:
     image: {{ busybox_repo }}
     tag: {{ busybox_tag }}
-  minReplicas: 1
-  maxReplicas: 1
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
   resources:
     requests:
       cpu: 50m
@@ -392,11 +407,9 @@ shared-secrets:
   enabled: true
   rbac:
     create: true
-  image:
-    repository: {{ gitlab_kubectl_repo }}
-    pullPolicy: IfNotPresent
   selfsign:
     repository: {{ cfssl_self_sign_repo }}
+    tag: {{ cfssl_self_sign_tag }}
     pullPolicy: IfNotPresent
 
 ## Installation & configuration of gitlab/gitlab-runner
@@ -425,6 +438,7 @@ gitlab:
       tag: {{ busybox_tag }}
     image:
       repository: {{ gitaly_repo }}
+      tag: {{ gitaly_tag }}
       pullPolicy: IfNotPresent
     persistence:
       size: 10Gi    
@@ -436,10 +450,12 @@ gitlab:
       tag: {{ busybox_tag }}
     image:
       repository: {{ gitlab_shell_repo }}
+      tag: {{ gitlab_shell_tag }}
 
   mailroom:
     image:
       repository: {{ gitlab_mailroom_repo }}
+      tag: {{ gitlab_mailroom_tag }}
     init:
       image: {{ busybox_repo }}
       tag: {{ busybox_tag }}
@@ -455,10 +471,6 @@ gitlab:
       repository: {{ gitlab_operator_repo }}
       tag: {{ gitlab_operator_tag }}
       pullPolicy: IfNotPresent
-    install:
-      image:
-        repository: {{ hyperkube_image_repo }}
-        pullPolicy: IfNotPresent
 
   ## doc/charts/gitlab/sidekiq
   sidekiq:
@@ -484,10 +496,10 @@ minio:
     tag: {{ busybox_tag }}
   minioMc:
     image: {{ mc_repo }}
-    tag: "{{ mc_tag }}"
-  image: "{{ minio_repo }}"
-  imageTag: "{{ minio_tag }}"
+    tag: RELEASE.2018-07-13T00-53-22Z
+  image: {{ minio_repo }}
+  imageTag: RELEASE.2017-12-28T01-21-00Z
   securityContext:
     runAsUser: 0
     fsGroup: 0
-    
+
