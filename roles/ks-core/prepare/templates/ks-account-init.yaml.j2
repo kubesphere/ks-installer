@@ -37,7 +37,10 @@ data:
             "rules": [
               {
                 "verbs": [
-                  "*"
+                  "get",
+                  "list",
+                  "patch",
+                  "update"
                 ],
                 "apiGroups": [
                   "",
@@ -45,6 +48,28 @@ data:
                 ],
                 "resources": [
                   "namespaces"
+                ]
+              },
+              {
+                "verbs": [
+                  "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io"
+                ],
+                "resources": [
+                  "users"
+                ]
+              },
+              {
+                "verbs": [
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "workspaces"
                 ]
               }
             ]
@@ -108,10 +133,37 @@ data:
                   "list"
                 ],
                 "apiGroups": [
+                  "",
                   "resources.kubesphere.io"
                 ],
                 "resources": [
-                  "componenthealth"
+                  "componenthealth",
+                  "components",
+                  "nodes",
+                  "events",
+                  "pods"
+                ]
+              },
+              {
+                "verbs": [
+                  "get"
+                ],
+                "apiGroups": [
+                  ""
+                ],
+                "resources": [
+                  "namespaces"
+                ]
+              },
+              {
+                "verbs": [
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "pods"
                 ]
               }
             ]
@@ -244,7 +296,7 @@ data:
                   "rulesmapping"
                 ],
                 "resourceNames": [
-                  "clusterroles"
+                  "*"
                 ]
               },
               {
@@ -267,9 +319,22 @@ data:
             "rules": [
               {
                 "verbs": [
-                  "create",
-                  "get",
                   "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io",
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterroles"
+                ]
+              },
+              {
+                "verbs": [
+                  "get",
+                  "watch",
+                  "list",
+                  "create"
                 ],
                 "apiGroups": [
                   "iam.kubesphere.io"
@@ -286,10 +351,10 @@ data:
                   "iam.kubesphere.io"
                 ],
                 "resources": [
-                  "clusterrules"
+                  "rulesmapping"
                 ],
                 "resourceNames": [
-                  "mapping"
+                  "*"
                 ]
               },
               {
@@ -312,8 +377,6 @@ data:
             "rules": [
               {
                 "verbs": [
-                  "get",
-                  "list",
                   "update",
                   "patch"
                 ],
@@ -322,6 +385,18 @@ data:
                 ],
                 "resources": [
                   "users"
+                ]
+              },
+              {
+                "verbs": [
+                  "list"
+                ],
+                "apiGroups": [
+                  "iam.kubesphere.io",
+                  "rbac.authorization.k8s.io"
+                ],
+                "resources": [
+                  "clusterroles"
                 ]
               },
               {
