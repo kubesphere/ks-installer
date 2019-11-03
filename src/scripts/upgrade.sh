@@ -86,7 +86,7 @@ function check_nonsupport() {
 
 
 function task_check() {
-	if [[ $? -ne 0 ]]; then
+    if [[ $? -ne 0 ]]; then
        str="failed!"
        echo -e "\033[31;47m$str\033[0m"
        exit
@@ -113,7 +113,9 @@ function upgrade_k8s_version() {
       ansible-playbook -i $2 $BASE_FOLDER/../kubesphere/check_version.yml -b
 
       task_check
-      
+      if [[ $(grep -c "k8s" $version_file) -eq 0 ]]; then
+         break
+      fi
       current_k8s_version=$(grep "k8s" $version_file | awk -F '[ ]' '{print $a}' a=2 | awk -F '[.]' '{print $2}')
       target_k8s_version=$(grep "k8s" $version_file | awk -F '[ ]' '{print $a}' a=4 | awk -F '[.]' '{print $2}')
 
