@@ -86,7 +86,7 @@ function check_nonsupport() {
 
 
 function task_check() {
-	if [[ $? -ne 0 ]]; then
+    if [[ $? -ne 0 ]]; then
        str="failed!"
        echo -e "\033[31;47m$str\033[0m"
        exit

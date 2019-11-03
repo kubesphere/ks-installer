@@ -10,7 +10,7 @@
 - name: Kubesphere | Check openldap-ha status
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system
-    -l app.kubernetes.io/name=openldap-ha | awk '{if(NR>1){print}}' | grep -v 'Running' | wc -l
+    -l app.kubernetes.io/name=openldap-ha | awk '{if(NR>1){print}}' | grep -v '1/1' | wc -l
   register: import
   until: import.stdout == "0"
   retries: 30
