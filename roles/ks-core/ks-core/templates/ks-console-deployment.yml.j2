@@ -8,7 +8,11 @@ metadata:
   name: ks-console
   namespace: kubesphere-system
 spec:
-  replicas: {{ console.replicas }}
+{% if master_num is defined and master_num != 0 %}
+  replicas: {{ master_num }}
+{% else %}
+  replicas: 1
+{% endif %}
   selector:
     matchLabels:
       app: ks-console
@@ -61,18 +65,18 @@ spec:
               - key: node-role.kubernetes.io/master
                 operator: Exists
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchExpressions:
                 - key: app
                   operator: In
                   values:
-                  - ks-console
+                  - ks-account
               namespaces:
               - kubesphere-system
-              topologyKey: kubernetes.io/hostname
-            weight: 100 
       volumes:
       # - name: ca-dir
       #   secret:
