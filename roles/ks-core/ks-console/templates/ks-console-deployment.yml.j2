@@ -54,16 +54,14 @@ spec:
           operator: Exists
       affinity:
         nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
+          requiredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
             preference:
               matchExpressions:
               - key: node-role.kubernetes.io/master
-                operator: In
-                values:
-                - ""
+                operator: Exists
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
+          requiredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
               labelSelector:
                 matchExpressions:
