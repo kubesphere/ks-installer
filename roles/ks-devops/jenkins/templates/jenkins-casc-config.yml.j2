@@ -32,6 +32,7 @@ data:
                 - name: "base"
                   image: "{{ builder_base_repo }}:{{ builder_base_tag }}"
                   command: "cat"
+                  args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
                   resourceLimitCpu: "4000m"
@@ -39,6 +40,7 @@ data:
                   resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
                   resourceRequestMemory: "400Mi"
@@ -63,6 +65,7 @@ data:
                 - name: "nodejs"
                   image: "{{ builder_nodejs_repo }}:{{ builder_nodejs_tag }}"
                   command: "cat"
+                  args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
                   resourceLimitCpu: "4000m"
@@ -70,6 +73,7 @@ data:
                   resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
                   resourceRequestMemory: "400Mi"
@@ -100,6 +104,7 @@ data:
                 - name: "maven"
                   image: "{{ builder_maven_repo }}:{{ builder_maven_tag }}"
                   command: "cat"
+                  args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
                   resourceLimitCpu: "4000m"
@@ -107,6 +112,7 @@ data:
                   resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
                   resourceRequestMemory: "400Mi"
@@ -134,6 +140,7 @@ data:
                 - name: "go"
                   image: "{{ builder_go_repo }}:{{ builder_go_tag }}"
                   command: "cat"
+                  args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
                   resourceLimitCpu: "4000m"
@@ -141,6 +148,7 @@ data:
                   resourceLimitMemory: "8192Mi"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
+                  command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
                   resourceRequestMemory: "400Mi"
