@@ -8,7 +8,11 @@ metadata:
   name: ks-apiserver
   namespace: kubesphere-system
 spec:
+{% if master_num is defined and master_num != 0 %}
+  replicas: {{ master_num }}
+{% else %}
   replicas: 1
+{% endif %}
   selector:
     matchLabels:
       app: ks-apiserver
@@ -68,7 +72,9 @@ spec:
                 - ""
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchExpressions:
                 - key: app
@@ -77,8 +83,6 @@ spec:
                   - ks-apiserver
               namespaces:
               - kubesphere-system
-              topologyKey: kubernetes.io/hostname
-            weight: 100
       volumes:
       - name: ca-dir
         secret:

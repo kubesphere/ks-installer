@@ -12,6 +12,19 @@
   ignore_errors: True
 
 
+- name: KubeSphere | Getting kubernetes master num
+  shell: >
+    {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master |wc -l
+  register: masters
+  ignore_errors: True
+
+
+- name: KubeSphere | Setting master num
+  set_fact:
+    master_num: "{{ masters.stdout }}"
+  ignore_errors: True
+
+
 - name: ks-console | Checking ks-console svc
   shell: "{{ bin_dir }}/kubectl get svc -n kubesphere-system"
   register: result
@@ -84,20 +97,3 @@
     - { path: ks-console, file: ks-console-deployment.yml }
     - { path: ks-console, file: ks-console-svc.yml }
 
-
-- name: KubeSphere | Restarting components
-  block:
-    - name: KubeSphere | Restarting ks-core
-      shell: >
-        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager --replicas=0 &&
-        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager --replicas=1
-      loop:
-        - ks-apiserver
-        - ks-apigateway
-        - ks-account
-        - ks-controller-manager
-
-    - name: KubeSphere | Restarting ks-console
-      shell: >
-        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas=0 &&
-        {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas={{ console.replicas }}

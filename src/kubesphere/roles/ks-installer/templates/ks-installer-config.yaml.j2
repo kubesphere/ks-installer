@@ -30,7 +30,6 @@ data:
     console:
       enableMultiLogin: {{ enable_multi_login | default(true) }}  # enable/disable multi login
       port: {{ console_port }}
-      replicas: {{ ks_console_replicas | default(2) }}
 
     monitoring:
       prometheusReplicas: {{ prometheus_replicas | default(2) }}

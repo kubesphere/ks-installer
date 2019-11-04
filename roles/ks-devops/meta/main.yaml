@@ -20,3 +20,33 @@ dependencies:
   - role: ks-devops/jenkins
 
 
+  - { role: ks-core/prepare, when: sonar_health is defined and sonar_health == true }
+
+
+  - tasks:
+      - name: KubeSphere | Getting kubernetes master num
+        shell: >
+          {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master |wc -l
+        register: masters
+        ignore_errors: True
+
+
+      - name: KubeSphere | Setting master num
+        set_fact:
+          master_num: "{{ masters.stdout }}"
+        ignore_errors: True
+
+
+      - name: KubeSphere | Restarting ks-core
+        shell: >
+          {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager --replicas=0 &&
+          {{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-controller-manager
+          --replicas={% if master_num is defined and master_num != 0 %}{{ master_num }}{% else %}1{% endif %}
+        loop:
+          - ks-apiserver
+          - ks-apigateway
+          - ks-account
+          - ks-controller-manager
+        when:
+          - sonar_health is defined and sonar_health == true
+

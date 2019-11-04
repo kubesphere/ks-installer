@@ -9,7 +9,11 @@ metadata:
   namespace: kubesphere-system
 spec:
   progressDeadlineSeconds: 600
+{% if master_num is defined and master_num != 0 %}
+  replicas: {{ master_num }}
+{% else %}
   replicas: 1
+{% endif %}
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -77,17 +81,17 @@ spec:
                 - ""
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                    - ks-controller-manager
+                - key: app
+                  operator: In
+                  values:
+                  - ks-controller-manager
               namespaces:
               - kubesphere-system
-              topologyKey: kubernetes.io/hostname
-            weight: 100
 
 
 ---

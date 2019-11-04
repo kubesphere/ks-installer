@@ -8,7 +8,11 @@ metadata:
   name: ks-apigateway
   namespace: kubesphere-system
 spec:
+{% if master_num is defined and master_num != 0 %}
+  replicas: {{ master_num }}
+{% else %}
   replicas: 1
+{% endif %}
   selector:
     matchLabels:
       app: ks-apigateway
@@ -75,7 +79,9 @@ spec:
                 - ""
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchExpressions:
                 - key: app
@@ -84,8 +90,6 @@ spec:
                   - ks-apigateway
               namespaces:
               - kubesphere-system
-              topologyKey: kubernetes.io/hostname
-            weight: 100
       volumes:
       - configMap:
           defaultMode: 420
