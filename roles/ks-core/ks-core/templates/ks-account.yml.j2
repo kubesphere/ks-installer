@@ -35,9 +35,8 @@ spec:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            preference:
-              matchExpressions:
+            nodeSelectorTerms:
+            - matchExpressions:
               - key: node-role.kubernetes.io/master
                 operator: Exists
         podAntiAffinity:
