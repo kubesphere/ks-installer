@@ -29,7 +29,6 @@ data:
     console:
       enableMultiLogin: False  # enable/disable multi login
       port: 30880
-      replicas: 1
 
     monitoring:
       prometheusReplicas: 1

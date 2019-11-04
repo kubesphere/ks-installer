@@ -8,7 +8,7 @@
 
 - name: ks-installer | Createing system namespaces
   shell: >
-    kubectl create ns {{ item }}
+    {{ bin_dir }}/kubectl create ns {{ item }}
   register: import
   loop:
     - kubesphere-system
@@ -18,7 +18,7 @@
 
 - name: ks-installer | Create the Secret of CA
   shell: >
-    kubectl -n kubesphere-system create secret generic kubesphere-ca
+    {{ bin_dir }}/kubectl -n kubesphere-system create secret generic kubesphere-ca
     --from-file=ca.crt=/etc/kubernetes/pki/ca.crt
     --from-file=ca.key=/etc/kubernetes/pki/ca.key
   register: import

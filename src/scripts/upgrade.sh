@@ -132,32 +132,11 @@ function update-allinone() {
 
     check_nonsupport $version_file
 
-    # current_k8s_version_flag=$(grep -c "k8s" $version_file)
-    # current_etcd_version=$(grep -c "etcd" $version_file)
-
     Upgrade_Confirmation
 
-    
-    upgrade_k8s_version $allinone_vars_file $allinone_hosts
-
-    
-    # ansible-playbook -i $allinone_hosts $BASE_FOLDER/../kubesphere/check_version.yml -b  > /dev/null
-
-
-    # check_version_file $version_file $allinone_hosts
-
-    # check_nonsupport $version_file
-
-    # current_k8s_version_flag=$(grep -c "k8s" $version_file)
-    # current_etcd_version=$(grep -c "etcd" $version_file)
-
-    # Upgrade_Confirmation
-
-    # if [[ $current_k8s_version_flag -eq "1" ]]; then
-    #     ansible-playbook -i $allinone_hosts $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
-    # elif [[ $current_etcd_version -eq "1" ]]; then
-    #     ansible-playbook -i $allinone_hosts $BASE_FOLDER/../k8s/upgrade-cluster.yml -b --tags=etcd
-    # fi
+    if [[ $(grep -c "k8s" $version_file) -ne 0 ]]; then
+       upgrade_k8s_version $allinone_vars_file $allinone_hosts
+    fi
 
     ansible-playbook -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../kubesphere/upgrade.yml \
                      -b \
@@ -192,26 +171,15 @@ function update-multinode() {
        sed -i ''$id's/$/&  ansible_ssh_pass\='$passwd'/g'  $multinode_hosts
     done
 
-    # ansible-playbook -i $multinode_hosts $BASE_FOLDER/../kubesphere/check_version.yml -b  > /dev/null
-
     check_version_file $version_file $multinode_hosts
 
     check_nonsupport $version_file
 
     Upgrade_Confirmation
 
-    upgrade_k8s_version $multinode_vars_file $multinode_hosts
-
-
-    # current_k8s_version=$(grep -c "k8s" $version_file)
-    # current_etcd_version=$(grep -c "etcd" $version_file)
-
-    # if [[ $current_k8s_version -eq "1" ]]; then
-       #    ansible-playbook -i $multinode_hosts $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
-    # elif [[ $current_etcd_version -eq "1" ]]; then
-    #     ansible-playbook -i $multinode_hosts $BASE_FOLDER/../k8s/upgrade-cluster.yml -b --tags=etcd
-    # fi
-
+    if [[ $(grep -c "k8s" $version_file) -ne 0 ]]; then
+       upgrade_k8s_version $multinode_vars_file $multinode_hosts
+    fi
 
     ansible-playbook -i $multinode_hosts $BASE_FOLDER/../kubesphere/upgrade.yml \
                      -b \
