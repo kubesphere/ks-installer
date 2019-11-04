@@ -65,15 +65,15 @@ ks_images=(dockerhub.qingcloud.com/kubesphere/ks-console:advanced-2.0.2  \
            kubesphere/python-34-centos7:advanced-2.0.0  \
            kubesphere/python-27-centos7:advanced-2.0.0  \
 
-           dockerhub.qingcloud.com/coreos/configmap-reload:v0.0.1  \
-           dockerhub.qingcloud.com/prometheus/prometheus:v2.5.0  \
-           dockerhub.qingcloud.com/coreos/prometheus-config-reloader:v0.27.1  \
-           dockerhub.qingcloud.com/coreos/prometheus-operator:v0.27.1  \
-           dockerhub.qingcloud.com/coreos/kube-rbac-proxy:v0.4.1  \
-           dockerhub.qingcloud.com/coreos/kube-state-metrics:v1.5.2  \
-           dockerhub.qingcloud.com/prometheus/node-exporter:ks-v0.16.0  \
-           dockerhub.qingcloud.com/coreos/addon-resizer:1.8.4  \
-           dockerhub.qingcloud.com/coreos/k8s-prometheus-adapter-amd64:v0.4.1  \
+           kubesphere/configmap-reload:v0.0.1  \
+           kubesphere/prometheus:v2.5.0  \
+           kubesphere/prometheus-config-reloader:v0.27.1  \
+           kubesphere/prometheus-operator:v0.27.1  \
+           kubesphere/kube-rbac-proxy:v0.4.1  \
+           kubesphere/kube-state-metrics:v1.5.2  \
+           kubesphere/node-exporter:ks-v0.16.0  \
+           kubesphere/addon-resizer:1.8.4  \
+           kubesphere/k8s-prometheus-adapter-amd64:v0.4.1  \
 
            dockerhub.qingcloud.com/pires/docker-elasticsearch-curator:5.5.4  \
            dockerhub.qingcloud.com/elasticsearch/elasticsearch-oss:6.7.0  \
