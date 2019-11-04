@@ -611,37 +611,15 @@ data:
                   "list"
                 ],
                 "apiGroups": [
-                  ""
+                  "",
+                  "resources.kubesphere.io",
+                  "monitoring.kubesphere.io"
                 ],
                 "resources": [
                   "pods",
                   "nodes",
+                  "nodes/*",
                   "events"
-                ]
-              },
-              {
-                "verbs": [
-                  "get",
-                  "list"
-                ],
-                "apiGroups": [
-                  "resources.kubesphere.io"
-                ],
-                "resources": [
-                  "nodes",
-                  "nodes/*"
-                ]
-              },
-              {
-                "verbs": [
-                  "get",
-                  "list"
-                ],
-                "apiGroups": [
-                  "monitoring.kubesphere.io"
-                ],
-                "resources": [
-                  "nodes"
                 ]
               }
             ]
@@ -707,29 +685,6 @@ data:
             ]
           }
         ]
-      },
-      {
-        "name": "components",
-        "actions": [
-          {
-            "name": "view",
-            "rules": [
-              {
-                "verbs": [
-                  "list",
-                  "get"
-                ],
-                "apiGroups": [
-                  "resources.kubesphere.io"
-                ],
-                "resources": [
-                  "components",
-                  "components/*"
-                ]
-              }
-            ]
-          }
-        ]
       }
     ]
   rules.json: |
@@ -753,12 +708,28 @@ data:
                   "namespaces",
                   "limitranges",
                   "resourcequotas",
-                  "serviceaccounts"
+                  "serviceaccounts",
+                  "quotas",
+                  "abnormalworkloads",
+                  "workloads"
                 ]
               },
               {
                 "verbs": [
                   "list"
+                ],
+                "apiGroups": [
+                  "*"
+                ],
+                "resources": [
+                  "users",
+                  "roles"
+                ]
+              },
+              {
+                "verbs": [
+                  "list",
+                  "get"
                 ],
                 "apiGroups": [
                   "*"
@@ -782,9 +753,7 @@ data:
                 ],
                 "resources": [
                   "namespaces",
-                  "limitranges",
-                  "resourcequotas",
-                  "serviceaccounts"
+                  "limitranges"
                 ]
               }
             ]
@@ -801,9 +770,7 @@ data:
                 ],
                 "resources": [
                   "namespaces",
-                  "limitranges",
-                  "resourcequotas",
-                  "serviceaccounts"
+                  "limitranges"
                 ]
               }
             ]
@@ -1487,6 +1454,23 @@ data:
         "name": "advanced",
         "actions": [
           {
+            "name": "view",
+            "rules": [
+              {
+                "verbs": [
+                  "get",
+                  "list"
+                ],
+                "apiGroups": [
+                  "resources.kubesphere.io"
+                ],
+                "resources": [
+                  "router"
+                ]
+              }
+            ]
+          },
+          {
             "name": "manage",
             "rules": [
               {
@@ -1515,23 +1499,6 @@ data:
                 ],
                 "resources": [
                   "namespaces"
-                ]
-              }
-            ]
-          },
-          {
-            "name": "view",
-            "rules": [
-              {
-                "verbs": [
-                  "get",
-                  "list"
-                ],
-                "apiGroups": [
-                  "resources.kubesphere.io"
-                ],
-                "resources": [
-                  "router"
                 ]
               }
             ]

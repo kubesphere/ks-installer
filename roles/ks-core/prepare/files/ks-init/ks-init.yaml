@@ -55,7 +55,7 @@ kind: ClusterRole
 metadata:
   annotations:
     kubesphere.io/creator: system
-    kubesphere.io/description: "Normal user in the cluster, there is no permission for any resource operations until he is  invited to the workspace."
+    kubesphere.io/description: "Normal user in the cluster, there is no permission for any resource operations until he is invited to the workspace."
   name: cluster-regular
 rules:
   - apiGroups:
@@ -107,3 +107,9 @@ rules:
       - users
     verbs:
       - list
+  - apiGroups:
+      - ''
+    resources:
+      - limitranges
+    verbs:
+      - create
