@@ -113,14 +113,12 @@ spec:
           claimName: openldap-pvc
       affinity:
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
-                    app.kubernetes.io/instance: {{ .Release.Name }}
-                topologyKey: kubernetes.io/hostname
-              weight: 100
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
