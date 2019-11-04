@@ -21,7 +21,7 @@ spec:
             - --path.sysfs=/host/sys
             - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
             - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
-          image: dockerhub.qingcloud.com/prometheus/node-exporter:ks-v0.16.0
+          image: kubesphere/node-exporter:ks-v0.16.0
           name: node-exporter
           resources:
             limits:
@@ -49,7 +49,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-          image: dockerhub.qingcloud.com/coreos/kube-rbac-proxy:v0.4.1
+          image: kubesphere/kube-rbac-proxy:v0.4.1
           name: kube-rbac-proxy
           ports:
             - containerPort: 9100
