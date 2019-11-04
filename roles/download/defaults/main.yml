@@ -278,23 +278,23 @@ registry_repo: "{{ base_library_repo }}registry"
 registry_tag: 2.7.1
 
 #ks-monitor:
-configmap_reload_repo: "{{ ks_image_repo }}/coreos/configmap-reload"
+configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
 configmap_reload_tag: v0.0.1
-prometheus_repo: "{{ ks_image_repo }}/prometheus/prometheus"
+prometheus_repo: "{{ base_repo }}kubesphere/prometheus"
 prometheus_tag: v2.5.0
-prometheus_config_reloader_repo: "{{ ks_image_repo }}/coreos/prometheus-config-reloader"
+prometheus_config_reloader_repo: "{{ base_repo }}kubesphere/prometheus-config-reloader"
 prometheus_config_reloader_tag: v0.27.1
-prometheus_operator_repo: "{{ ks_image_repo }}/coreos/prometheus-operator"
+prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
 prometheus_operator_tag: v0.27.1
-kube_rbac_proxy_repo: "{{ ks_image_repo }}/coreos/kube-rbac-proxy"
+kube_rbac_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
-kube_state_metrics_repo: "{{ ks_image_repo }}/coreos/kube-state-metrics"
+kube_state_metrics_repo: "{{ base_repo }}kubesphere/kube-state-metrics"
 kube_state_metrics_tag: v1.5.2
-node_exporter_repo: "{{ ks_image_repo }}/prometheus/node-exporter"
+node_exporter_repo: "{{ base_repo }}kubesphere/node-exporter"
 node_exporter_tag: ks-v0.16.0
-addon_resizer_repo: "{{ ks_image_repo }}/coreos/addon-resizer"
+addon_resizer_repo: "{{ base_repo }}kubesphere/addon-resizer"
 addon_resizer_tag: 1.8.4
-prometheus_adapter_repo: "{{ ks_image_repo }}/coreos/k8s-prometheus-adapter-amd64"
+prometheus_adapter_repo: "{{ base_repo }}kubesphere/k8s-prometheus-adapter-amd64"
 prometheus_adapter_tag: v0.4.1
 grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 5.2.4
