@@ -67,45 +67,7 @@ kubelet_max_pods: 110
 #   address: 192.168.0.10
 #   port: 6443
 
-######################### QingCloud Authentication #########################
-
-# To install KubeSphere on QingCloud platform(public or private), please provide
-# the api access key in following section, which belongs to the user account 
-# who setup this KubeSphere on QingCloud platform
-# Skip this section in case of installing on any other non-QingCloud environment.
-
-# QingCloud access key pair, which could be find at https://console.qingcloud.com/access_keys/.
-# Ceate one if don't have it.
-qingcloud_access_key_id: ACCESS_KEY_ID
-qingcloud_secret_access_key: ACCESS_KEY_SECRET
-
-# Zone where KubeSphere cluster resides on. Zone list can be found in
-# https://docs.qingcloud.com/product/region/.
-# For example,
-# qingcloud_zone: pek3
-qingcloud_zone: ZONE
-
-# QingCloud API server endpoint. Don't change it for public QingCloud environment.
-# Updating it with right data in case of installing KubeSphere in private QingCloud environment.
-qingcloud_host: api.qingcloud.com
-qingcloud_port: 443
-qingcloud_protocol: https
-qingcloud_uri: /iaas
-qingcloud_connection_retries: 3
-qingcloud_connection_timeout: 30
-
-# Highly recommend to enable LoadBalancer plugin in case of 
-# using KubeSphere on QingCloud.
-# Check link below to find out more details.
-# https://docs.kubesphere.io/v2.1/zh-CN/installation/qingcloud-lb
-qingcloud_lb_enabled: false
-# vxnet where Kubernetes nodes are located in
-# For example
-# qingcloud_vxnet_id: vxnet-d3sfx
-qingcloud_vxnet_id: SHOULD_BE_REPLACED
-
-
-######################### Storage #########################
+######################### Common Storage #########################
 
 # This section will configure storage to use in Kubernetes.
 # For full supported storage list, please check
@@ -119,8 +81,6 @@ qingcloud_vxnet_id: SHOULD_BE_REPLACED
 local_volume_enabled: true
 local_volume_is_default_class: true
 local_volume_storage_class: local
-
-
 
 
 # CEPH RBD
@@ -155,7 +115,6 @@ ceph_rbd_imageFormat: 1
 
 # Additional ceph configurations
 # ceph_rbd_imageFeatures: layering
-
 
 
 # NFS CONFIGURATION
@@ -238,7 +197,7 @@ grafana_enabled: false
 # logging is an optional component when installing KubeSphere, and
 # Kubernetes builtin logging APIs will be used if logging_enabled is set to false. 
 # Builtin logging only provides limited functions, so recommend to enable logging.
-logging_enabled: true
+logging_enabled: false
 elasticsearch_master_replica: 1
 elasticsearch_data_replica: 2
 elasticsearch_volume_size: 20Gi
