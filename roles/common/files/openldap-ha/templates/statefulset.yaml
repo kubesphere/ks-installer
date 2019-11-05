@@ -47,7 +47,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
           - --copy-service
-          - --loglevel=debug
+          - --loglevel=warning
           env:
           - name: LDAP_ORGANISATION
             value: "{{ .Values.ldap.organisation }}"
