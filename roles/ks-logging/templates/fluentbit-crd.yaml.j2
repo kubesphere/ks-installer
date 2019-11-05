@@ -66,19 +66,6 @@ spec:
         - name: Prefix_with
           value: "kubernetes_"
     - type: fluentbit_filter
-      name: fluentbit-filter
-      parameters:
-        - name: Name
-          value: "nest"
-        - name: Match
-          value: "kube.*"
-        - name: Operation
-          value: "lift"
-        - name: Nested_under
-          value: "kubernetes"
-        - name: Prefix_with
-          value: "kubernetes_"
-    - type: fluentbit_filter
       name: fluentbit-filter-remove-stream
       parameters:
         - name: Name
