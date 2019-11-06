@@ -37,3 +37,14 @@
     kubectl -n kubesphere-system exec -it {{ item }} -- sh -c
     'rm -rf /var/lib/ldap/* && /usr/sbin/slapadd -l /tmp/ldapdbak.ldif && chown -R openldap:openldap /var/lib/ldap/*'
   loop: "{{ podList.stdout_lines }}"
+
+
+- name: Kubesphere | Disable old openldap
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment openldap --replicas=0
+
+
+- name: Kubesphere | Restart openldap
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system rollout restart sts/openldap
+  loop: "{{ podList.stdout_lines }}"

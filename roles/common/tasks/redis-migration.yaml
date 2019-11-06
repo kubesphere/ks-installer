@@ -20,3 +20,8 @@
   shell: >
     chmod +x {{ kubesphere_dir }}/redisMigrate.py &&
     {{ kubesphere_dir }}/redisMigrate.py
+
+
+- name: Kubesphere | Disable old redis
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system scale deployment redis --replicas=0
