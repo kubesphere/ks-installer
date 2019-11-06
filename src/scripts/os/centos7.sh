@@ -17,7 +17,7 @@
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 
-sudo yum install epel-release -y  && yum install  python  python-netaddr sshpass -y
+sudo yum install epel-release -y  && yum install python sshpass -y
 
 sudo python os/get-pip.py
 

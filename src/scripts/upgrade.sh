@@ -42,8 +42,8 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 allinone_hosts=$BASE_FOLDER/../k8s/inventory/local/hosts.ini
 multinode_hosts=$BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
 
-allinone_vars_path=$BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/
-multinode_vars_file=$BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/
+allinone_vars_path=$BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster
+multinode_vars_path=$BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster
 
 vars_path=$BASE_FOLDER/../conf
 common_file=$vars_path/common.yaml
@@ -102,9 +102,9 @@ function upgrade_k8s_version() {
    while [[ $(($target_k8s_version-$current_k8s_version)) -ne 0 ]]; do
 
       if [[ $current_k8s_version -eq 13 ]]; then
-         sed -i "/kube_version/s/\:.*/\: v1.14.8/g" $1
+         sed -i "/kube_version/s/\:.*/\: v1.14.8/g" $1/common.yaml
       elif [[ $current_k8s_version -eq 14 ]]; then
-         sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $1
+         sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $1/common.yaml
       fi
 
       ansible-playbook -i $2 $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
@@ -164,7 +164,7 @@ function update-allinone() {
 function update-multinode() {
     
     cp $BASE_FOLDER/../conf/hosts.ini $multinode_hosts
-    cp $BASE_FOLDER/../conf/*.yaml $multinode_vars_file
+    cp $BASE_FOLDER/../conf/*.yaml $multinode_vars_path
 
     ids=`cat -n $multinode_hosts | grep "ansible_user" | grep -v "#" | grep -v "root" | awk '{print $1}'`
     for id in $ids; do
@@ -179,7 +179,7 @@ function update-multinode() {
     Upgrade_Confirmation
 
     if [[ $(grep -c "k8s" $version_file) -ne 0 ]]; then
-       upgrade_k8s_version $multinode_vars_file $multinode_hosts
+       upgrade_k8s_version $multinode_vars_path $multinode_hosts
     fi
 
     ansible-playbook -i $multinode_hosts $BASE_FOLDER/../kubesphere/upgrade.yml \
