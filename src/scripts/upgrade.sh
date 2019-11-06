@@ -42,14 +42,15 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 allinone_hosts=$BASE_FOLDER/../k8s/inventory/local/hosts.ini
 multinode_hosts=$BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
 
-allinone_vars_file=$BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/k8s-cluster.yml
-multinode_vars_file=$BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/k8s-cluster.yml
+allinone_vars_path=$BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster
+multinode_vars_path=$BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster
 
-vars_path=$BASE_FOLDER/../conf/vars.yml
+vars_path=$BASE_FOLDER/../conf
+common_file=$vars_path/common.yaml
 version_file=$BASE_FOLDER/../kubesphere/version.tmp
 
-kube_version=$(grep -r "kube_version" $vars_path | awk '{print $2}')
-etcd_version=$(grep -r "etcd_version" $vars_path | awk '{print $2}')
+kube_version=$(grep -r "kube_version" $common_file | awk '{print $2}')
+etcd_version=$(grep -r "etcd_version" $common_file | awk '{print $2}')
 
 
 function Upgrade_Confirmation(){
@@ -78,7 +79,7 @@ function check_nonsupport() {
     cat $1
     grep "nonsupport" $1 >/dev/null
     if [ $? -eq 0 ]; then
-       upgrade_warnning="Warnning: Parameters containing the word 'nonsupport' can't change. Please change the relevant parameters in conf/vars.yml !"
+       upgrade_warnning="Warnning: Parameters containing the word 'nonsupport' can't change. Please change the relevant parameters in conf/common.yaml !"
        echo -e "\033[1;36m$upgrade_warnning\033[0m"
        exit
     fi
@@ -101,15 +102,15 @@ function upgrade_k8s_version() {
    while [[ $(($target_k8s_version-$current_k8s_version)) -ne 0 ]]; do
 
       if [[ $current_k8s_version -eq 13 ]]; then
-         sed -i "/kube_version/s/\:.*/\: v1.14.8/g" $1
+         sed -i "/kube_version/s/\:.*/\: v1.14.8/g" $1/common.yaml
       elif [[ $current_k8s_version -eq 14 ]]; then
-         sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $1
+         sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $1/common.yaml
       fi
 
       ansible-playbook -i $2 $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
 
       task_check
-      cp $vars_path $1
+      cp -f $vars_path/*.yaml $1
       ansible-playbook -i $2 $BASE_FOLDER/../kubesphere/check_version.yml -b
 
       task_check
@@ -126,7 +127,7 @@ function upgrade_k8s_version() {
 
 function update-allinone() {
     
-    cp $BASE_FOLDER/../conf/vars.yml $allinone_vars_path
+    cp -f $BASE_FOLDER/../conf/*.yaml $allinone_vars_path
 
     check_version_file $version_file $allinone_hosts
 
@@ -135,7 +136,7 @@ function update-allinone() {
     Upgrade_Confirmation
 
     if [[ $(grep -c "k8s" $version_file) -ne 0 ]]; then
-       upgrade_k8s_version $allinone_vars_file $allinone_hosts
+       upgrade_k8s_version $allinone_vars_path $allinone_hosts
     fi
 
     ansible-playbook -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../kubesphere/upgrade.yml \
@@ -162,8 +163,8 @@ function update-allinone() {
 
 function update-multinode() {
     
-    cp $BASE_FOLDER/../conf/hosts.ini $multinode_hosts
-    cp $BASE_FOLDER/../conf/vars.yml $multinode_vars_file
+    cp -f $BASE_FOLDER/../conf/hosts.ini $multinode_hosts
+    cp -f $BASE_FOLDER/../conf/*.yaml $multinode_vars_path
 
     ids=`cat -n $multinode_hosts | grep "ansible_user" | grep -v "#" | grep -v "root" | awk '{print $1}'`
     for id in $ids; do
@@ -178,7 +179,7 @@ function update-multinode() {
     Upgrade_Confirmation
 
     if [[ $(grep -c "k8s" $version_file) -ne 0 ]]; then
-       upgrade_k8s_version $multinode_vars_file $multinode_hosts
+       upgrade_k8s_version $multinode_vars_path $multinode_hosts
     fi
 
     ansible-playbook -i $multinode_hosts $BASE_FOLDER/../kubesphere/upgrade.yml \

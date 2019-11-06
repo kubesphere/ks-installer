@@ -33,14 +33,14 @@ if [[ $os_info =~ "Ubuntu" ]] && [[ $os_info =~ "18.04" ]]; then
    fi
 fi
 
-vars_path=$BASE_FOLDER/../conf/vars.yml
-defaultClassNum=$(grep -r "is_default_class" $vars_path | grep true | wc -l)
+#vars_path=$BASE_FOLDER/../conf/vars.yml
+#defaultClassNum=$(grep -r "is_default_class" $vars_path | grep true | wc -l)
 
-if [ $defaultClassNum -ne 1 ]; then
-  notice_storage="Only one default storage class can be set !"
-  echo -e "\033[1;36m$notice_storage\033[0m"
-  exit 0
-fi
+#if [ $defaultClassNum -ne 1 ]; then
+#  notice_storage="Only one default storage class can be set !"
+#  echo -e "\033[1;36m$notice_storage\033[0m"
+#  exit 0
+#fi
 
 DEFAULT_MODE=
 MODE=${DEFAULT_MODE}
@@ -105,7 +105,7 @@ $(echo -e "\033[1;36mPrerequisites:\033[0m")
 
 2. OS requirements：4 Core or faster processor，8GB or more of RAM.
 
-3. Please make sure the storage service is available if you've configured storage parameters in conf/vars.yml.
+3. Please make sure the storage service is available if you've configured storage parameters in the conf directory .
 
 4. Make sure the DNS address in /etc/resolv.conf is available.
 
@@ -219,8 +219,8 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 function all-in-one(){
 
   init_env
-
-  cp $BASE_FOLDER/../conf/vars.yml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/k8s-cluster.yml
+  cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/
+#  cp $BASE_FOLDER/../conf/vars.yml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/k8s-cluster.yml
   ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b 
   if [[ $? -eq 0 ]]; then
     str="successsful!"
@@ -286,8 +286,8 @@ function multi-node(){
   
   init_env
 
-  cp $BASE_FOLDER/../conf/hosts.ini $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
-  cp $BASE_FOLDER/../conf/vars.yml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/k8s-cluster.yml
+  cp -f $BASE_FOLDER/../conf/hosts.ini $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
+  cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/
 
   ids=`cat -n $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini | grep "ansible_user" | grep -v "#" | grep -v "root" | awk '{print $1}'`
   for id in $ids; do

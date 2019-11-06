@@ -25,7 +25,7 @@ fi
 
 sudo apt-get update
 
-sudo apt-get install  python-minimal  libssl-dev  python-netaddr  sshpass -y
+sudo apt-get install python-minimal libssl-dev sshpass -y
 
 sudo python os/get-pip.py
 

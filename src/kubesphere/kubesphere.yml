@@ -5,6 +5,12 @@
     - name: modify resolv.conf
       command: 'sed -i /^[^#]*search*/s/^/\#/g /etc/resolv.conf'
 
+    - name: modify resolv.conf
+      command: 'sed -i /^[^#]*search*/s/^/\#/g  /run/systemd/resolve/resolv.conf'
+      when:
+        - ansible_distribution == "Ubuntu"
+        - ansible_distribution_version == "18.04"
+
 - hosts: kube-master[0]
   tasks:
     - name: fetch config
@@ -30,12 +36,12 @@
   roles:
     - kubesphere-defaults
     - { role: plugins/LocalVolume, when: "local_volume_enabled == true" }
-    - { role: plugins/QingCloud-CSI, when: "qingcloud_csi_enabled == true" }
+    - { role: plugins/QingCloud-CSI, when: "qingcloud_csi_enabled is defined and qingcloud_csi_enabled == true" }
     - { role: plugins/NeonSAN-CSI, when: "neonsan_csi_enabled == true" }
     - { role: plugins/GlusterFS, when: "glusterfs_provisioner_enabled == true" }
     - { role: plugins/CephRBD, when: "ceph_rbd_enabled == true" }
     - { role: plugins/NFS-Client, when: "nfs_client_enabled == true" }
-    - { role: plugins/qingcloud_controller_manager, when: "qingcloud_lb_enabled == true" }
+    - { role: plugins/qingcloud_controller_manager, when: "qingcloud_lb_enabled is defined and qingcloud_lb_enabled == true" }
 #    - { role: VPA, when: "vertical_pod_autoscaler_enable == true" }
 
 - hosts: etcd[0]
