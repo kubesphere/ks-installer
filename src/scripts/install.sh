@@ -33,15 +33,6 @@ if [[ $os_info =~ "Ubuntu" ]] && [[ $os_info =~ "18.04" ]]; then
    fi
 fi
 
-#vars_path=$BASE_FOLDER/../conf/vars.yml
-#defaultClassNum=$(grep -r "is_default_class" $vars_path | grep true | wc -l)
-
-#if [ $defaultClassNum -ne 1 ]; then
-#  notice_storage="Only one default storage class can be set !"
-#  echo -e "\033[1;36m$notice_storage\033[0m"
-#  exit 0
-#fi
-
 DEFAULT_MODE=
 MODE=${DEFAULT_MODE}
 
@@ -190,14 +181,13 @@ function region_detection(){
 
 function init_env(){
 
-  storage_sure
-
-  echo "*********************************************"
-  echo "1. Initiating Environment"
-  echo "*********************************************"
-  
   region_detection &> /dev/null
-  $BASE_FOLDER/os/os_check.sh
+  $BASE_FOLDER/os/os_check.sh 1> /dev/null
+
+  if [[ $? -eq 0 ]]; then
+    #statements
+    echo "init_env successful" > os/install.tmp
+  fi
 
 }
 
@@ -216,11 +206,26 @@ export ANSIBLE_CALLBACK_WHITELIST=profile_tasks
 export ANSIBLE_TIMEOUT=300
 export ANSIBLE_HOST_KEY_CHECKING=False
 
+
 function all-in-one(){
 
-  init_env
+  storage_sure
+
+  if [[ -f os/install.tmp ]]; then
+    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+          init_env
+    fi
+  else
+          init_env
+  fi
+
+  python os/precheck.py
   cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/
 #  cp $BASE_FOLDER/../conf/vars.yml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/k8s-cluster.yml
+
+  echo "*********************************************"
+  echo "1. Initiating Environment"
+  echo "*********************************************"
   ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b 
   if [[ $? -eq 0 ]]; then
     str="successsful!"
@@ -283,9 +288,18 @@ function all-in-one(){
 }
 
 function multi-node(){
-  
-  init_env
 
+  storage_sure
+
+  if [[ -f os/install.tmp ]]; then
+    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+          init_env
+    fi
+  else
+          init_env
+  fi
+
+  python os/precheck.py
   cp -f $BASE_FOLDER/../conf/hosts.ini $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
   cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/
 
@@ -295,6 +309,9 @@ function multi-node(){
        sed -i ''$id's/$/&  ansible_ssh_pass\='$passwd'/g'  $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
   done
 
+  echo "*********************************************"
+  echo "1. Initiating Environment"
+  echo "*********************************************"
   ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b
   if [[ $? -eq 0 ]]; then
     #statements

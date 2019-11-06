@@ -13,7 +13,7 @@
 - name: KubeSphere | Setting master num
   set_fact:
     enableHA: >-
-      {% if masters is defined and masters.stdout is defined and masters.stdout != "0" %}true{% else %}false{% endif %}
+      {% if masters is defined and masters.stdout is defined and masters.stdout != "0" and masters.stdout != "1" %}true{% else %}false{% endif %}
 
 
 - name: Kubesphere | Getting common component installation files
