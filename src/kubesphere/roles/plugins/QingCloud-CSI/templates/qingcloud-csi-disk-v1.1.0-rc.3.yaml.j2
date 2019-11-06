@@ -5,7 +5,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-controller
   namespace: kube-system
 ---
@@ -16,7 +16,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: node
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-node
   namespace: kube-system
 ---
@@ -27,7 +27,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-attacher
   namespace: kube-system
 rules:
@@ -61,7 +61,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-provisioner
   namespace: kube-system
 rules:
@@ -95,7 +95,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-resizer
   namespace: kube-system
 rules:
@@ -118,7 +118,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-snapshotter
   namespace: kube-system
 rules:
@@ -141,7 +141,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-attacher
 rules:
 - apiGroups:
@@ -198,7 +198,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-controller
 rules: []
 ---
@@ -209,7 +209,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: node
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-node
 rules:
 - apiGroups:
@@ -231,7 +231,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-provisioner
 rules:
 - apiGroups:
@@ -309,7 +309,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-resizer
 rules:
 - apiGroups:
@@ -363,7 +363,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-snapshotter
 rules:
 - apiGroups:
@@ -461,7 +461,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-attacher
   namespace: kube-system
 roleRef:
@@ -480,7 +480,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-provsioner
   namespace: kube-system
 roleRef:
@@ -499,7 +499,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-resizer
   namespace: kube-system
 roleRef:
@@ -518,7 +518,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-snapshotter
   namespace: kube-system
 roleRef:
@@ -537,7 +537,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: controller
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-controller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -555,7 +555,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: node
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-node
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -573,7 +573,7 @@ metadata:
   labels:
     app: csi-qingcloud
     owner: yunify
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-controller
   namespace: kube-system
 spec:
@@ -583,14 +583,14 @@ spec:
       app: csi-qingcloud
       owner: yunify
       role: controller
-      ver: v1.1.0-rc.3
+      ver: v1.1.0-rc.4
   template:
     metadata:
       labels:
         app: csi-qingcloud
         owner: yunify
         role: controller
-        ver: v1.1.0-rc.3
+        ver: v1.1.0-rc.4
     spec:
       containers:
       - args:
@@ -734,7 +734,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     role: node
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud-node
   namespace: kube-system
 spec:
@@ -743,14 +743,14 @@ spec:
       app: csi-qingcloud
       owner: yunify
       role: node
-      ver: v1.1.0-rc.3
+      ver: v1.1.0-rc.4
   template:
     metadata:
       labels:
         app: csi-qingcloud
         owner: yunify
         role: node
-        ver: v1.1.0-rc.3
+        ver: v1.1.0-rc.4
     spec:
       containers:
       - args:
@@ -865,7 +865,7 @@ metadata:
   labels:
     app: csi-qingcloud
     owner: yunify
-    ver: v1.1.0-rc.3
+    ver: v1.1.0-rc.4
   name: csi-qingcloud
   namespace: kube-system
 spec:

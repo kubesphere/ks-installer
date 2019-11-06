@@ -3,6 +3,19 @@
 - import_tasks: init-namespaces.yaml
 
 
+- name: KubeSphere | Getting kubernetes master num
+  shell: >
+    {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master |wc -l
+  register: masters
+  ignore_errors: True
+
+
+- name: KubeSphere | Setting master num
+  set_fact:
+    enableHA: >-
+      {% if masters is defined and masters.stdout is defined and masters.stdout != "0" %}true{% else %}false{% endif %}
+
+
 - name: Kubesphere | Getting common component installation files
   copy:
     src: "{{ item }}"
@@ -72,23 +85,6 @@
           etcdVolumeSize: "{{ pvSize.stdout}}"
 
 
-#    - name: Getting PersistentVolumeName (minio)
-#      shell: >
-#        kubectl get pv | grep "minio-pvc" | awk '{print $1}'
-#      register: pvName
-#    - name: Getting PersistentVolumeSize (minio)
-#      shell: >
-#        kubectl get pv | grep "minio-pvc" | awk '{print $2}'
-#      register: pvSize
-#
-#    - name: Setting PersistentVolumeName (minio)
-#      set_fact:
-#        minio_pv_name: "{{ pvName.stdout }}"
-#    - name: Setting PersistentVolumeSize (minio)
-#      set_fact:
-#        common:
-#          minioVolumeSize: "{{ pvSize.stdout }}"
-
   when:
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
 
@@ -101,8 +97,6 @@
     - { path: etcd, file: etcd.yaml }
     - { name: mysql, file: mysql.yaml }
     - { path: redis, file: redis.yaml }
-#    - { path: openldap, file: openldap.yaml }
-#    - { path: minio, file: minio.yaml }
 
 
 - name: Kubesphere | Creating mysql sercet
@@ -121,9 +115,6 @@
       loop:
         - "etcd.yaml"
         - "mysql.yaml"
-      #    - "redis.yaml"
-      #    - "minio.yaml"
-      #    - "openldap.yaml"
       register: import
       failed_when:
         - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
@@ -147,21 +138,6 @@
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") == -1
 
 
-#- name: check redis for check StroageClass
-#  shell: >
-#    {{ bin_dir }}/kubectl get pod -n kubesphere-system | grep redis | grep Running
-#  register: redis_and_storage_class_check
-#  until: redis_and_storage_class_check.stdout.find("Running") != -1
-#  retries: 30
-#  delay: 30
-#  ignore_errors: yes
-#
-#- name: redis failed and how to solve
-#  fail:
-#     msg: "Please follow the steps below \n First: kubectl get sc  \n second: kubectl get pvc -n kubesphere-system "
-#  when:
-#    - redis_and_storage_class_check.stdout.find("Running") != -1
-
 - name: Kubesphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
   block:
 
@@ -174,11 +150,6 @@
       shell: >
         kubectl patch pv $(kubectl get pv | grep "etcd-pvc" | awk '{print $1}')
         -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
-
-#    - name: Setting persistentVolumeReclaimPolicy (minio)
-#      shell: >
-#        kubectl patch pv $(kubectl get pv | grep "minio-pvc" | awk '{print $1}')
-#        -p '{"spec":{"persistentVolumeReclaimPolicy": "Delete"}}'
 
   when:
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1

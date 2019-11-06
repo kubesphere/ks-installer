@@ -16,7 +16,6 @@ data:
       storageClass: ""
 
     common:
-      enableHA: False
       mysqlVolumeSize: 20Gi
       minioVolumeSize: 20Gi
       etcdVolumeSize: 20Gi

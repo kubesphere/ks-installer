@@ -147,7 +147,7 @@ csi_provisioner_tag: v1.4.0
 csi_attacher_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-attacher"
 csi_attacher_tag: v2.0.0
 csi_qingcloud_repo: "{{ base_repo }}csiplugin/csi-qingcloud"
-csi_qingcloud_tag: v1.1.0-rc.3
+csi_qingcloud_tag: v1.1.0-rc.4
 driver_registrar_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-node-driver-registrar"
 driver_registrar_tag: v1.2.0
 csi_snapshotter_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-snapshotter"
