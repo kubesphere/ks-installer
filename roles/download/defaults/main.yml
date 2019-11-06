@@ -198,19 +198,19 @@ harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
 jenkins_uc_repo:  "{{ base_repo }}kubespheredev/jenkins-uc"
-jenkins_uc_tag: 2.1.0-dev
+jenkins_uc_tag: 2.1.0
 jenkins_repo: "{{ base_repo }}jenkins/jenkins"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
 jnlp_slave_tag: 3.27-1
 builder_base_repo: "{{ base_repo }}kubespheredev/builder-base"
-builder_base_tag: advanced-2.1.0-dev
+builder_base_tag: 2.1.0
 builder_nodejs_repo: "{{ base_repo }}kubespheredev/builder-nodejs"
-builder_nodejs_tag: advanced-2.1.0-dev
+builder_nodejs_tag: 2.1.0
 builder_maven_repo: "{{ base_repo }}kubespheredev/builder-maven"
-builder_maven_tag: advanced-2.1.0-dev
+builder_maven_tag: 2.1.0
 builder_go_repo: "{{ base_repo }}kubespheredev/builder-go"
-builder_go_tag: advanced-2.1.0-dev
+builder_go_tag: 2.1.0
 
 #sonarqube:
 sonarqube_repo: "{{ base_library_repo }}sonarqube"
@@ -218,10 +218,10 @@ sonarqube_tag: 7.4-community
 
 #s2i
 s2ioperator_repo: "{{ base_repo }}kubespheredev/s2ioperator"
-s2ioperator_tag: "advanced-2.1.0"
+s2ioperator_tag: "2.1.0"
 s2irun_repo: "{{ base_repo }}kubespheredev/s2irun"
-s2irun_tag: "advanced-2.1.0"
-s2itemplates_tag: latest
+s2irun_tag: "2.1.0"
+s2itemplates_tag: 2.1.0
 binary_repo: "{{ base_repo }}kubespheredev/s2i-binary"
 tomcat85_java11_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-centos7"
 tomcat85_java11_runtime_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-runtime"
