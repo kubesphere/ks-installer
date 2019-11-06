@@ -18,7 +18,7 @@
 ## Extended documenation at doc/charts/globals.md
 global:
   edition: ce
-  gitlabVersion: 12.4.1
+  gitlabVersion: {{ gitlab_version }}
   ## GitLab operator is Alpha. Not for production use.
   operator:
     enabled: false
@@ -32,14 +32,19 @@ global:
   communityImages:
     migrations:
       repository: {{ gitlab_rails_ce_repo }}
+      tag: v{{ gitlab_version }}
     sidekiq:
       repository: {{ gitlab_sidekiq_ce_repo }}
+      tag: v{{ gitlab_version }}
     task-runner:
       repository: {{ gitlab_task_runner_ce_repo }}
+      tag: v{{ gitlab_version }}
     unicorn:
       repository: {{ gitlab_unicorn_ce_repo }}
+      tag: v{{ gitlab_version }}
       workhorse:
         repository: {{ gitlab_workhorse_ce_repo }}
+        tag: v{{ gitlab_version }}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
