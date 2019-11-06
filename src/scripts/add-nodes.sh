@@ -16,7 +16,7 @@
 
 BASE_FOLDER=$(dirname $(readlink -f "$0"))
 cp $BASE_FOLDER/../conf/hosts.ini $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
-cp $BASE_FOLDER/../conf/vars.yml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/k8s-cluster.yml
+cp $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/
 
 
 ids=`cat -n $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini | grep "ansible_user" | grep -v "#" | grep -v "root" | awk '{print $1}'`
