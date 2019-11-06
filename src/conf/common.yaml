@@ -135,7 +135,7 @@ nfs_path: SHOULD_BE_REPLACED
 # for more detailed configuration, please check
 # https://docs.kubesphere.io/v2.1/zh-CN/installation/storage-configuration
 glusterfs_provisioner_enabled: false
-glusterfs_is_default_class: false
+glusterfs_provisioner_is_default_class: false
 glusterfs_provisioner_storage_class: glusterfs
 glusterfs_provisioner_restauthenabled: true
 # e.g. glusterfs_provisioner_resturl: http://192.168.0.4:8080

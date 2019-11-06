@@ -24,6 +24,6 @@ storage_class: |
   nfs-client
   {% elif neonsan_csi_enabled is defined and neonsan_csi_enabled and neonsan_csi_is_default_class is defined and neonsan_csi_is_default_class %}
   csi-neonsan
-  {% elif glusterfs_provisioner_enabled is defined and glusterfs_provisioner_enabled and glusterfs_is_default_class is defined and glusterfs_is_default_class %}
+  {% elif glusterfs_provisioner_enabled is defined and glusterfs_provisioner_enabled and glusterfs_provisioner_is_default_class is defined and glusterfs_provisioner_is_default_class %}
   {{ glusterfs_provisioner_storage_class }}
   {% endif %}

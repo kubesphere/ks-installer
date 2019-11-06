@@ -4,7 +4,7 @@ metadata:
   name: {{ glusterfs_provisioner_storage_class }}
   annotations:
     storageclass.kubesphere.io/supported_access_modes: '["ReadWriteOnce","ReadOnlyMany","ReadWriteMany"]'
-    storageclass.beta.kubernetes.io/is-default-class: "{% if glusterfs_is_default_class %}true{% else %}false{% endif %}"
+    storageclass.beta.kubernetes.io/is-default-class: "{% if glusterfs_provisioner_is_default_class %}true{% else %}false{% endif %}"
 provisioner: kubernetes.io/glusterfs
 parameters:
   resturl: "{{ glusterfs_provisioner_resturl }}"
