@@ -5,6 +5,12 @@
     - name: modify resolv.conf
       command: 'sed -i /^[^#]*search*/s/^/\#/g /etc/resolv.conf'
 
+    - name: modify resolv.conf
+      command: 'sed -i /^[^#]*search*/s/^/\#/g  /run/systemd/resolve/resolv.conf'
+      when:
+        - ansible_distribution == "Ubuntu"
+        - ansible_distribution_version == "18.04"
+
 - hosts: kube-master[0]
   tasks:
     - name: fetch config
