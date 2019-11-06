@@ -47,4 +47,3 @@
 - name: Kubesphere | Restart openldap
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system rollout restart sts/openldap
-  loop: "{{ podList.stdout_lines }}"

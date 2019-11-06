@@ -36,11 +36,11 @@ fi
 #vars_path=$BASE_FOLDER/../conf/vars.yml
 #defaultClassNum=$(grep -r "is_default_class" $vars_path | grep true | wc -l)
 
-if [ $defaultClassNum -ne 1 ]; then
-  notice_storage="Only one default storage class can be set !"
-  echo -e "\033[1;36m$notice_storage\033[0m"
-  exit 0
-fi
+#if [ $defaultClassNum -ne 1 ]; then
+#  notice_storage="Only one default storage class can be set !"
+#  echo -e "\033[1;36m$notice_storage\033[0m"
+#  exit 0
+#fi
 
 DEFAULT_MODE=
 MODE=${DEFAULT_MODE}
