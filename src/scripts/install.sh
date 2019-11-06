@@ -180,12 +180,9 @@ function region_detection(){
 }
 
 function init_env(){
-  echo "*********************************************"
-  echo "1. Initiating Environment"
-  echo "*********************************************"
 
   region_detection &> /dev/null
-  $BASE_FOLDER/os/os_check.sh
+  $BASE_FOLDER/os/os_check.sh 1> /dev/null
 
   if [[ $? -eq 0 ]]; then
     #statements
@@ -209,22 +206,26 @@ export ANSIBLE_CALLBACK_WHITELIST=profile_tasks
 export ANSIBLE_TIMEOUT=300
 export ANSIBLE_HOST_KEY_CHECKING=False
 
-storage_sure
-
-if [[ -f os/install.tmp ]]; then
-  if [[ $(grep  "init_env successful" install.tmp > /dev/null) -ne '0' ]]; then
-        init_env
-  fi
-else
-        init_env
-fi
-
-python os/precheck.py
 
 function all-in-one(){
 
+  storage_sure
+
+  if [[ -f os/install.tmp ]]; then
+    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+          init_env
+    fi
+  else
+          init_env
+  fi
+
+  python os/precheck.py
   cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/
 #  cp $BASE_FOLDER/../conf/vars.yml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/k8s-cluster.yml
+
+  echo "*********************************************"
+  echo "1. Initiating Environment"
+  echo "*********************************************"
   ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b 
   if [[ $? -eq 0 ]]; then
     str="successsful!"
@@ -288,6 +289,17 @@ function all-in-one(){
 
 function multi-node(){
 
+  storage_sure
+
+  if [[ -f os/install.tmp ]]; then
+    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+          init_env
+    fi
+  else
+          init_env
+  fi
+
+  python os/precheck.py
   cp -f $BASE_FOLDER/../conf/hosts.ini $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
   cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/
 
@@ -297,6 +309,9 @@ function multi-node(){
        sed -i ''$id's/$/&  ansible_ssh_pass\='$passwd'/g'  $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
   done
 
+  echo "*********************************************"
+  echo "1. Initiating Environment"
+  echo "*********************************************"
   ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b
   if [[ $? -eq 0 ]]; then
     #statements
