@@ -16,7 +16,7 @@ service:
 
 
 ldap:
-  replication: {% if common.enableHA %}true{% else %}false{% endif %}
+  replication: {% if enableHA is defined and enableHA %}true{% else %}false{% endif %}
 
   organisation: kubesphere
   domain: kubesphere.io

@@ -44,6 +44,10 @@
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment openldap --replicas=0
 
 
+#- name: Kubesphere | Restart openldap
+#  shell: >
+#    {{ bin_dir }}/kubectl -n kubesphere-system rollout restart sts/openldap
+
 - name: Kubesphere | Restart openldap
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system rollout restart sts/openldap
+    {{ bin_dir }}/kubectl delete pod -n kubesphere-system -l app.kubernetes.io/instance=ks-openldap

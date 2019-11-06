@@ -57,7 +57,7 @@
         - old_redis_exist.stdout != "0"
 
   when:
-    - common.enableHA is defined and common.enableHA
+    - enableHA is defined and enableHA
 
 
 - name: Kubesphere | Deploying redis
@@ -70,4 +70,4 @@
     - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
     - "import.stderr and 'is forbidden' not in import.stderr"
   when:
-    - (common.enableHA is defined and not common.enableHA) or (common.enableHA is not defined)
+    - (enableHA is defined and not enableHA) or (enableHA is not defined)
