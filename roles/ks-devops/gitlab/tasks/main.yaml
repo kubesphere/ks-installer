@@ -23,7 +23,7 @@
 
 - name: Gitlab | Deploy Gitlab
   shell: >
-    {{ bin_dir }}/helm upgrade --install ks-gitlab {{ kubesphere_dir }}/gitlab/gitlab-1.6.1.tgz
+    {{ bin_dir }}/helm upgrade --install ks-gitlab {{ kubesphere_dir }}/gitlab/gitlab-2.4.5.tgz
     -f {{ kubesphere_dir }}/gitlab/custom-values-gitlab.yaml
     --namespace kubesphere-devops-system
   register: import
