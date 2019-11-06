@@ -110,7 +110,7 @@ function upgrade_k8s_version() {
       ansible-playbook -i $2 $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
 
       task_check
-      cp $vars_path/*.yaml $1
+      cp -f $vars_path/*.yaml $1
       ansible-playbook -i $2 $BASE_FOLDER/../kubesphere/check_version.yml -b
 
       task_check
@@ -127,7 +127,7 @@ function upgrade_k8s_version() {
 
 function update-allinone() {
     
-    cp $BASE_FOLDER/../conf/*.yaml $allinone_vars_path
+    cp -f $BASE_FOLDER/../conf/*.yaml $allinone_vars_path
 
     check_version_file $version_file $allinone_hosts
 
@@ -163,8 +163,8 @@ function update-allinone() {
 
 function update-multinode() {
     
-    cp $BASE_FOLDER/../conf/hosts.ini $multinode_hosts
-    cp $BASE_FOLDER/../conf/*.yaml $multinode_vars_path
+    cp -f $BASE_FOLDER/../conf/hosts.ini $multinode_hosts
+    cp -f $BASE_FOLDER/../conf/*.yaml $multinode_vars_path
 
     ids=`cat -n $multinode_hosts | grep "ansible_user" | grep -v "#" | grep -v "root" | awk '{print $1}'`
     for id in $ids; do

@@ -219,7 +219,7 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 function all-in-one(){
 
   init_env
-  cp $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/
+  cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/
 #  cp $BASE_FOLDER/../conf/vars.yml $BASE_FOLDER/../k8s/inventory/local/group_vars/k8s-cluster/k8s-cluster.yml
   ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b 
   if [[ $? -eq 0 ]]; then
@@ -286,8 +286,8 @@ function multi-node(){
   
   init_env
 
-  cp $BASE_FOLDER/../conf/hosts.ini $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
-  cp $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/
+  cp -f $BASE_FOLDER/../conf/hosts.ini $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
+  cp -f $BASE_FOLDER/../conf/*.yaml $BASE_FOLDER/../k8s/inventory/my_cluster/group_vars/k8s-cluster/
 
   ids=`cat -n $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini | grep "ansible_user" | grep -v "#" | grep -v "root" | awk '{print $1}'`
   for id in $ids; do
