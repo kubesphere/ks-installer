@@ -240,38 +240,38 @@ python34centos7_repo: "{{ base_repo }}kubespheredev/python-34-centos7"
 python27centos7_repo: "{{ base_repo }}kubespheredev/python-27-centos7"
 
 #gitlab:
-gitaly_repo: "{{ ks_image_repo }}/gitlab_org/gitaly"
-gitaly_tag: v1.20.0
-gitlab_rails_ce_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-rails-ce"
-gitlab_rails_ce_tag: v11.8.1
-gitlab_shell_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-shell"
-gitlab_shell_tag: v8.4.4
-gitlab_sidekiq_ce_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-sidekiq-ce"
-gitlab_sidekiq_ce_tag: v11.8.1
+gitaly_repo: "{{ base_repo }}mirrorgitlabcontainers/gitaly"
+gitaly_tag: v12-3-4
+gitlab_rails_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-rails-ce"
+gitlab_rails_ce_tag: v12.4.1
+gitlab_shell_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-shell"
+gitlab_shell_tag: v12-3-4
+gitlab_sidekiq_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-sidekiq-ce"
+gitlab_sidekiq_ce_tag: v12.4.1
 gitlab_runner_repo: "{{ base_repo }}gitlab/gitlab-runner"
 gitlab_runner_tag: alpine-v10.3.0
-gitlab_task_runner_ce_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-task-runner-ce"
-gitlab_task_runner_ce_tag: v11.8.1
-gitlab_unicorn_ce_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-unicorn-ce"
-gitlab_unicorn_ce_tag: v11.8.1
-gitlab_workhorse_ce_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-workhorse-ce"
-gitlab_workhorse_ce_tag: v11.8.1
-gitlab_kubectl_repo: "{{ ks_image_repo }}/gitlab_org/kubectl"
-gitlab_kubectl_tag: 1f8690f03f7aeef27e727396927ab3cc96ac89e7
-gitlab_mailroom_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-mailroom"
+gitlab_task_runner_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-task-runner-ce"
+gitlab_task_runner_ce_tag: v12.4.1
+gitlab_unicorn_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-unicorn-ce"
+gitlab_unicorn_ce_tag: v12.4.1
+gitlab_workhorse_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-workhorse-ce"
+gitlab_workhorse_ce_tag: v12.4.1
+gitlab_kubectl_repo: "{{ base_repo }}mirrorgitlabcontainers/kubectl"
+gitlab_kubectl_tag: v1.12.10
+gitlab_mailroom_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-mailroom"
 gitlab_mailroom_tag: 0.9.1
-gitlab_redis_ha_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-redis-ha"
+gitlab_redis_ha_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-redis-ha"
 gitlab_redis_ha_tag: 732704f18e34ba469df34b10c3b2465e0469d484
 redis_exporter_repo: "{{ base_repo }}oliver006/redis_exporter"
-redis_exporter_tag: v0.30.0
+redis_exporter_tag: v0.34.1-alpine
 postgres_exporter_repo: "{{ base_repo }}wrouesnel/postgres_exporter"
 postgres_exporter_tag: v0.1.1
-alpine_certificates_repo: "{{ ks_image_repo }}/gitlab_org/alpine-certificates"
+alpine_certificates_repo: "{{ base_repo }}mirrorgitlabcontainers/alpine-certificates"
 alpine_certificates_tag: 20171114-r3
-cfssl_self_sign_repo: "{{ ks_image_repo }}/gitlab_org/cfssl-self-sign"
-cfssl_self_sign_tag: 1.2
-gitlab_operator_repo: "{{ ks_image_repo }}/gitlab_org/gitlab-operator"
-gitlab_operator_tag: v0.3
+cfssl_self_sign_repo: "{{ base_repo }}mirrorgitlabcontainers/cfssl-self-sign"
+cfssl_self_sign_tag: "1.2"
+gitlab_operator_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-operator"
+gitlab_operator_tag: v0.7
 mc_repo: "{{ base_repo }}minio/mc"
 mc_tag: RELEASE.2019-08-07T23-14-43Z
 registry_repo: "{{ base_library_repo }}registry"
