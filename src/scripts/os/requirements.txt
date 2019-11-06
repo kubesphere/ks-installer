@@ -1,7 +1,9 @@
 ansible==2.7.12
+PyYAML==5.1.2
 jinja2==2.10.1
 netaddr==0.7.19
 pbr==5.2.0
 hvac==0.8.2
 jmespath==0.9.4
 ruamel.yaml==0.15.96
+

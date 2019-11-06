@@ -19,7 +19,7 @@ def getVars(varsFiles):
         filename, type = os.path.splitext(file)
         if type == '.yaml' or type == '.yml':
             with open(file, 'r') as f:
-                configs = yaml.load(f.read())
+                configs = yaml.load(f.read(), Loader=yaml.FullLoader)
             f.close()
             vars.update(configs)
     return vars
