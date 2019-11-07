@@ -23,6 +23,16 @@ if [[ `lsb_release -d` =~ '18.04' ]]; then
 
 fi
 
+
+if [[ `lsb_release -d` =~ '18.04' ]]; then
+   ps -ef | grep 'apt.systemd.daily' | grep -v grep  >  /dev/null
+   if [[ $? -eq 0 ]];then
+      notice_apt="Apt program is occupied. Please try again later !"
+      echo -e "\033[1;36m$notice_apt\033[0m"
+      exit 0
+   fi
+fi
+
 sudo apt-get update
 
 sudo apt-get install python-minimal libssl-dev sshpass -y

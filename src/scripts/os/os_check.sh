@@ -16,6 +16,13 @@
 
 
 os_info=`cat /etc/os-release`
+
+if [[ `whoami` != 'root' ]]; then
+  notice_user="Please install KubeSphere using the root user !"
+  echo -e "\033[1;36m$notice_user\033[0m"
+  exit 0
+fi
+
 if [[ $os_info =~ "Ubuntu" || $os_info =~ "Debian" ]]; then	
 
       source ./os/ubuntu.sh
