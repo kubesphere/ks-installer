@@ -1,6 +1,7 @@
 ---
 
 - hosts: localhost
+  gather_facts: False
   tasks:
     - name: loadbalancer_apiserver is not set
       fail:
