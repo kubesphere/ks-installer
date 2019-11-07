@@ -21,6 +21,7 @@
     -f {{ kubesphere_dir }}/custom-values-minio.yaml
     --set fullnameOverride=minio
     --namespace kubesphere-system
+    --wait --timeout 1800
 
 
 - name: Kubesphere | create minio config directory
