@@ -1,6 +1,5 @@
 ---
 
-- import_tasks: firewalld_stop.yml
 
 - hosts: kube-master[0]
   gather_facts: False
