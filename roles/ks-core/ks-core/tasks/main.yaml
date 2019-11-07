@@ -82,7 +82,7 @@
   failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
 
 
-- name: ks-account | Creating ks-account
+- name: KubeSphere | Creating ks-core
   command: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
   register: source_state
@@ -97,4 +97,15 @@
     - { path: ks-console, file: ks-console-deployment.yml }
     - { path: ks-console, file: ks-console-svc.yml }
 
+- name: KubeSphere | Check ks-account version
+  command: >
+    {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-account -o jsonpath='{.metadata.labels.version}'
+  register: account_version
 
+- name: KubeSphere | Update kubectl image
+  shell: >
+    for deploy in $(kubectl -n kubesphere-controls-system get deploy  | grep kubectl  | awk '{print $1}');
+    do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl=kubespheredev/kubectl:v1.0.0;
+    done
+  when:
+    - account_version.stdout != 'v2.1.0'
