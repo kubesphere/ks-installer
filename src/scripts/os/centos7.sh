@@ -21,5 +21,6 @@ sudo yum install epel-release -y  && yum install python sshpass -y
 
 sudo python os/get-pip.py
 
+pip install -U PyYAML
 pip install  -r os/requirements.txt
 
