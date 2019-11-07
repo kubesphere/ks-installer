@@ -35,7 +35,7 @@
 - hosts: kube-master[0]
   roles:
     - kubesphere-defaults
-    - { role: plugins/LocalVolume, when: "local_volume_enabled == true" }
+#    - { role: plugins/LocalVolume, when: "local_volume_enabled == true" }
     - { role: plugins/QingCloud-CSI, when: "qingcloud_csi_enabled is defined and qingcloud_csi_enabled == true" }
     - { role: plugins/NeonSAN-CSI, when: "neonsan_csi_enabled == true" }
     - { role: plugins/GlusterFS, when: "glusterfs_provisioner_enabled == true" }
