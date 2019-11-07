@@ -1,5 +1,15 @@
 ---
 
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: loadbalancer_apiserver is not set
+      fail:
+        msg: "**********Error,Please set loadbalancer_apiserver parameters in conf/common.yaml**********"
+      when:
+        - groups['kube-master'] | length > 1
+        - (loadbalancer_apiserver is not defined) or (loadbalancer_apiserver is defined and loadbalancer_apiserver.address is not defined)
+
 - hosts: k8s-cluster
   gather_facts: False
   tasks:

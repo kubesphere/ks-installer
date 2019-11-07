@@ -37,7 +37,7 @@ def defaultStorageClassCheck(vars, varsfiles):
             print("Default storage class must be set !")
         if len(defaultStorageClass) > 1:
             os.system("clear")
-            print("Only one default storage class can be set ! Have to choose one: \n")
+            print("Only one default storage class can be set ! Must choose one from the following list: \n")
             for index, sc in enumerate(defaultStorageClass):
                 print("{}. {}".format(index + 1, sc))
 
