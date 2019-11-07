@@ -35,9 +35,8 @@ download_delegate: "{% if download_localhost %}localhost{% else %}{{groups['kube
 image_arch: "{{host_architecture | default('amd64')}}"
 
 # Versions
-ks_version: 2.0.2
-kube_version: v1.15.4
-op_version: v0.3.5
+ks_version: 2.1.0
+kube_version: v1.15.5
 etcd_version: v3.2.18
 # kube image repo define
 ks_image_repo: >-
@@ -134,10 +133,13 @@ ks_alerting_adapter_repo: "{{ base_repo }}kubespheredev/alert_adapter"
 ks_alerting_adapter_tag: "advanced-2.1.0"
 
 #openpitrix:
+op_version: v0.4.4
 openpitrix_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_tag: "{{ op_version }}"
 openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_flyway_tag: "flyway-{{ op_version }}"
+openpitrix_runtime_provider_kubernetes_repo: "{{ base_repo }}openpitrix/runtime-provider-kubernetes"
+openpitrix_runtime_provider_kubernetes_tag: v0.1.2
 minio_repo: "{{ base_repo }}minio/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
 
