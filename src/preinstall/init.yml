@@ -32,9 +32,6 @@
           {%- if 'Ubuntu' in os_release.stdout and '18.04' in os_release.stdout -%}
            ubuntu18.04
           {%- endif -%}
-          {%- if 'Ubuntu' in os_release.stdout -%}
-           ubuntu
-          {%- endif -%}
           {%- if 'CentOS' in os_release.stdout -%}
            centos
           {%- endif -%}
@@ -43,15 +40,6 @@
       raw:  "echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse' > /etc/apt/sources.list && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse' >> /etc/apt/sources.list  && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse' >> /etc/apt/sources.list  && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse' >> /etc/apt/sources.list"
       when: os_release == "ubuntu18.04"
 
-    - name: Add APT repositories(centos)
-      raw: systemctl stop firewalld
-      when: os_release == "centos"
-      ignore_errors: True
-
-    - name: Add APT repositories(ubuntu)
-      raw:  ufw disable
-      when: os_release == "ubuntu"
-      ignore_errors: True
 
 
 
