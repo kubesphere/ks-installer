@@ -62,7 +62,7 @@ spec:
           - name: LDAP_TLS
             value: "false"
           - name: LDAP_REMOVE_CONFIG_AFTER_SETUP
-            value: "false"
+            value: "true"
           - name: MY_POD_NAME
             valueFrom:
               fieldRef:
