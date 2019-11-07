@@ -1,7 +1,5 @@
 ---
 
-- import_tasks: harbor-check.yaml
-
 
 - name: ks-devops | Getting harbor installation files
   copy:
