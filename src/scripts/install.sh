@@ -17,21 +17,6 @@
 #Get the current path
 BASE_FOLDER=$(dirname $(readlink -f "$0"))
 
-os_info=`cat /etc/os-release`
-if [[ `whoami` != 'root' ]]; then
-  notice_user="Please install KubeSphere using the root user !"
-  echo -e "\033[1;36m$notice_user\033[0m"
-  exit 0
-fi
-
-if [[ $os_info =~ "Ubuntu" ]] && [[ $os_info =~ "18.04" ]]; then
-   ps -ef | grep 'apt.systemd.daily' | grep -v grep  >  /dev/null
-   if [[ $? -eq 0 ]];then
-      notice_apt="Apt program is occupied. Please try again later !"
-      echo -e "\033[1;36m$notice_apt\033[0m"
-      exit 0
-   fi
-fi
 
 DEFAULT_MODE=
 MODE=${DEFAULT_MODE}
@@ -161,6 +146,14 @@ function result_notes(){
     echo
 }
 
+function failed_prompt(){
+  str="failed!"
+  echo -e "\033[31;47m$str\033[0m"
+  echo "**********************************"
+  echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
+  echo "**********************************"
+  exit
+}
 
 function config_pip(){
   mkdir ~/.pip
@@ -231,12 +224,7 @@ function all-in-one(){
     str="successsful!"
     echo -e "\033[32;47m$str\033[0m"  
   else
-    str="failed!"
-    echo -e "\033[31;47m$str\033[0m"
-    echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
-    echo "**********************************"
-    exit
+    failed_prompt
   fi
 
   echo "*********************************************"
@@ -249,12 +237,7 @@ function all-in-one(){
     str="successsful!"
     echo -e "\033[30;47m$str\033[0m"  
   else
-    str="failed!"
-    echo -e "\033[31;47m$str\033[0m"
-    echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
-    echo "**********************************"
-    exit
+    failed_prompt
   fi
 
   echo "*********************************************"
@@ -277,12 +260,7 @@ function all-in-one(){
     echo -e "\033[30;47m$str\033[0m"
     result_notes
   else
-    str="failed!"
-    echo -e "\033[31;47m$str\033[0m"
-    echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
-    echo "**********************************"
-    exit
+    failed_prompt
   fi
 
 }
@@ -318,12 +296,7 @@ function multi-node(){
     str="successsful!"
     echo -e "\033[30;47m$str\033[0m"  
   else
-    str="failed!"
-    echo -e "\033[31;47m$str\033[0m"
-    echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
-    echo "**********************************"
-    exit
+    failed_prompt
   fi
 
 
@@ -337,12 +310,7 @@ function multi-node(){
     str="successsful!"
     echo -e "\033[30;47m$str\033[0m"  
   else
-    str="failed!"
-    echo -e "\033[31;47m$str\033[0m"
-    echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
-    echo "**********************************"
-    exit
+    failed_prompt
   fi
 
   echo "*********************************************"
@@ -357,12 +325,7 @@ function multi-node(){
     echo -e "\033[30;47m$str\033[0m"
     result_notes
   else
-    str="failed!"
-    echo -e "\033[31;47m$str\033[0m"
-    echo "**********************************"
-    echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
-    echo "**********************************"
-    exit
+    failed_prompt
   fi
 
 }
