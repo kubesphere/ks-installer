@@ -102,22 +102,22 @@ eof
     fi
 }
 
-
-#function result_notes(){
-#   commandline='kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f'
-#   cat << eof
-#
-#$(echo -e "\033[1;36mNOTES:\033[0m")
-#
-#The ks-installer is running
-#
-#1. Verify the installation logs and result:
-#
-#   $commandline
-#
-#
-#eof
-#}
+function base_check(){
+    os_info=`cat /etc/os-release`
+    if [[ `whoami` != 'root' ]]; then
+      notice_user="Please install KubeSphere using the root user !"
+      echo -e "\033[1;36m$notice_user\033[0m"
+      exit 0
+    fi
+    if [[ $os_info =~ "Ubuntu" ]] && [[ $os_info =~ "18.04" ]]; then
+       ps -ef | grep 'apt.systemd.daily' | grep -v grep  >  /dev/null
+       if [[ $? -eq 0 ]];then
+          notice_apt="Apt program is occupied. Please try again later !"
+          echo -e "\033[1;36m$notice_apt\033[0m"
+          exit 0
+       fi
+    fi
+}
 
 function result_notes(){
     timeout=0
@@ -330,6 +330,7 @@ function multi-node(){
 
 }
 
+base_check
 
 #Whether there are parameters after the script，one-node or multi-node 
 if [[ 1 -le $# ]]; then
