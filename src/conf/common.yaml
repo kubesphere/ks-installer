@@ -63,6 +63,9 @@ kube_proxy_mode: ipvs
 # Maximum pods allowed to run on every node.
 kubelet_max_pods: 110
 
+# Enable nodelocal dns cache
+enable_nodelocaldns: true
+
 # HA(Highly Available) loadbalancer example config
 # apiserver_loadbalancer_domain_name: "lb.kubesphere.local"
 # loadbalancer_apiserver:
