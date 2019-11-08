@@ -26,17 +26,17 @@ else
 	sudo yum install epel-release -y
 fi
 
-python -V
+python -V 2> /dev/null
 if [[ $? -eq 0 ]]; then
-	echo "python is exits"
+	echo "python already exits"
 else
 	sudo yum install python -y
 	if [[ $? -eq 0 ]]; then
-		echo "python is exits"
+		echo "python already exits"
 	else
 		sudo yum install python2 -y
 		if [[ $? -eq 0 ]]; then
-			echo "python2 is exits"
+			echo "python2 already exits"
 			ln -s /usr/bin/python2 /usr/bin/python
 	    else 
 	    	echo "Yum source unavailable ,please check yum source"

@@ -30,7 +30,7 @@ else
     echo "It doesn't support the current operating system!"
 fi
 
-python -V
+python -V 2> /dev/null
 if [[ $? -eq 0 ]]; then
 	sudo python os/get-pip.py
 
