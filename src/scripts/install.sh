@@ -205,7 +205,8 @@ function all-in-one(){
   storage_sure
 
   if [[ -f os/install.tmp ]]; then
-    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+    grep  "init_env successful" os/install.tmp > /dev/null
+    if [[ $? -ne '0' ]]; then
           init_env
     fi
   else
@@ -270,7 +271,8 @@ function multi-node(){
   storage_sure
 
   if [[ -f os/install.tmp ]]; then
-    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+    grep  "init_env successful" os/install.tmp > /dev/null
+    if [[ $? -ne '0' ]]; then
           init_env
     fi
   else
