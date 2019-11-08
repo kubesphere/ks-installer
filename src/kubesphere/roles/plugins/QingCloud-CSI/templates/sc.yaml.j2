@@ -21,7 +21,7 @@ metadata:
   annotations:
     storageclass.kubesphere.io/supported_access_modes: '["ReadWriteOnce"]'
     storageclass.beta.kubernetes.io/is-default-class: "{% if qingcloud_csi_is_default_class %}true{% else %}false{% endif %}"
-provisioner: csi-qingcloud
+provisioner: {{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}
 parameters:
   type: "{{ qingcloud_type }}"
   maxSize: "{{ qingcloud_maxSize }}"
