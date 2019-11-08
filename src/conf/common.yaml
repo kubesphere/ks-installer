@@ -45,8 +45,6 @@ etcd_backup_dir: "/var/backups/kube_etcd"
 # are recommended plugins, which are tested and verified by KubeSphere.
 kube_network_plugin: calico
 
-enable_nodelocaldns: true
-
 # A valid CIDR range for Kubernetes services,
 # 1. should not overlap with node subnet
 # 2. should not overlap with Kubernetes pod subnet
@@ -133,7 +131,7 @@ nfs_server: SHOULD_BE_REPLACED
 
 # Basepath of the mount point
 nfs_path: SHOULD_BE_REPLACED
-
+nfs_nfsvers3_enabled: false
 
 # GLUSTERFS CONFIGURATION
 # change to true to use glusterfs as backend storage service.
