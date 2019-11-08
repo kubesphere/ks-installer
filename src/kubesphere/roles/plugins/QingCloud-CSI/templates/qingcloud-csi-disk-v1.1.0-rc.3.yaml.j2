@@ -842,7 +842,7 @@ spec:
           path: /var/lib/kubelet
         name: kubelet-dir
       - hostPath:
-          path: /var/lib/kubelet/plugins/csi-qingcloud/
+          path: /var/lib/kubelet/plugins/{{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}/
           type: DirectoryOrCreate
         name: socket-dir
       - hostPath:
