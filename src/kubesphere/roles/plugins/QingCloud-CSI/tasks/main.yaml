@@ -13,6 +13,8 @@
 - name: QCloud-CSI | Set old Csi DriverName
   set_fact:
     oldCsiDriverName: "csi-qingcloud"
+  when:
+    - old_csi_qingcloud_num.stdout != "0"
 
 - name: QCloud-CSI | Creating manifests
   template:
@@ -38,24 +40,6 @@
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
-#- name: QCloud-CSI | Creating Secret
-#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-secret.yaml"
-#  register: import 
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-# when: inventory_hostname == groups['kube-master'][0]
-
-#- name: QCloud-CSI | Creating Controller RBAC
-#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-controller-rbac.yaml"
-#  register: import 
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-#  when: inventory_hostname == groups['kube-master'][0]
-
-#- name: QCloud-CSI | Creating Node RBAC
-#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-node-rbac.yaml"
-#  register: import 
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-#  when: inventory_hostname == groups['kube-master'][0]
-
 - name: QCloud-CSI | Creating StorageClass
   command: >
     {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/sc.yaml --force
@@ -67,12 +51,6 @@
     {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/qingcloud-csi-disk-v1.1.0-rc.3.yaml
   register: import 
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
-
-#- name: QCloud-CSI | Creating Node ds
-#  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/qingcloud-csi/csi-node-ds.yaml"
-#  register: import 
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-#  when: inventory_hostname == groups['kube-master'][0]
 
 - name: check csi is ok
   shell: >
