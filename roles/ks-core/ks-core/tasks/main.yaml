@@ -90,7 +90,7 @@
 - name: KubeSphere | Update kubectl image
   shell: >
     for deploy in $(kubectl -n kubesphere-controls-system get deploy  | grep kubectl  | awk '{print $1}');
-    do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl=kubespheredev/kubectl:v1.0.0;
+    do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl={{ ks_kubectl_repo }}:{{ ks_kubectl_tag }};
     done
   when:
     - account_version.stdout != 'v2.1.0'
