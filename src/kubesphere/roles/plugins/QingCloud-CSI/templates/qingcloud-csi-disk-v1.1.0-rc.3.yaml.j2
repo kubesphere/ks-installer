@@ -692,7 +692,7 @@ spec:
           name: socket-dir
       - args:
         - --config=/etc/config/config.yaml
-        - --drivername=csi-qingcloud
+        - --drivername={{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}
         - --endpoint=$(CSI_ENDPOINT)
         - --maxvolume=10
         - --nodeid=$(NODE_ID)
@@ -755,7 +755,7 @@ spec:
       containers:
       - args:
         - --csi-address=$(ADDRESS)
-        - --kubelet-registration-path=/var/lib/kubelet/plugins/csi-qingcloud/csi.sock
+        - --kubelet-registration-path=/var/lib/kubelet/plugins/{{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}/csi.sock
         - --v=5
         env:
         - name: ADDRESS
@@ -767,7 +767,7 @@ spec:
               command:
               - /bin/sh
               - -c
-              - rm -rf /registration/csi-qingcloud /registration/csi-qingcloud-reg.sock
+              - rm -rf /registration/{{ oldCsiDriverName | default("disk.csi.qingcloud.com") }} /registration/{{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}-reg.sock
         name: node-registrar
         resources:
           limits:
@@ -783,7 +783,7 @@ spec:
           name: registration-dir
       - args:
         - --config=/etc/config/config.yaml
-        - --drivername=csi-qingcloud
+        - --drivername={{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}
         - --endpoint=$(CSI_ENDPOINT)
         - --maxvolume=10
         - --nodeid=$(NODE_ID)
@@ -842,7 +842,7 @@ spec:
           path: /var/lib/kubelet
         name: kubelet-dir
       - hostPath:
-          path: /var/lib/kubelet/plugins/csi-qingcloud/
+          path: /var/lib/kubelet/plugins/{{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}/
           type: DirectoryOrCreate
         name: socket-dir
       - hostPath:
@@ -866,7 +866,7 @@ metadata:
     app: csi-qingcloud
     owner: yunify
     ver: v1.1.0-rc.4
-  name: csi-qingcloud
+  name: {{ oldCsiDriverName | default("disk.csi.qingcloud.com") }}
   namespace: kube-system
 spec:
   attachRequired: true
