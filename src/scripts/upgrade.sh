@@ -141,12 +141,14 @@ function update-allinone() {
 
     ansible-playbook -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../kubesphere/upgrade.yml \
                      -b \
-                     -e logging_enable=false \
-                     -e prometheus_replica=1 \
-                     -e JavaOpts_Xms='-Xms512m' \
-                     -e JavaOpts_Xmx='-Xmx512m' \
+                     -e prometheus_replicas=1 \
+                     -e ks_console_replicas=1 \
+                     -e jenkinsJavaOpts_Xms='512m' \
+                     -e jenkinsJavaOpts_Xmx='512m' \
+                     -e jenkinsJavaOpts_MaxRAM='2g' \
                      -e jenkins_memory_lim="2Gi" \
-                     -e jenkins_memory_req="800Mi"
+                     -e jenkins_memory_req="1500Mi" \
+                     -e elasticsearch_data_replica=1
 
 
     if [[ $? -eq 0 ]]; then

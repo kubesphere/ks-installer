@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     k8s-app: kube-controller-manager
-  name: kube-controller-manager
+  name: kube-controller-manager-headless
   namespace: kube-system
 spec:
   clusterIP: None
