@@ -86,25 +86,25 @@ hyperkube_image_repo: "{{ kube_image_repo }}/hyperkube"
 hyperkube_image_tag: "{{ kube_version }}"
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
-ks_apiserver_tag: latest
-ks_account_repo: "{{ base_repo }}kubespheredev/ks-account"
-ks_account_tag: latest
-ks_apigateway_repo: "{{ base_repo }}kubespheredev/ks-apigateway"
-ks_apigateway_tag: latest
-ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
-ks_controller_manager_tag: latest
+ks_apiserver_repo: "{{ base_repo }}kubesphere/ks-apiserver"
+ks_apiserver_tag: v2.1.0
+ks_account_repo: "{{ base_repo }}kubesphere/ks-account"
+ks_account_tag: v2.1.0
+ks_apigateway_repo: "{{ base_repo }}kubesphere/ks-apigateway"
+ks_apigateway_tag: v2.1.0
+ks_controller_manager_repo: "{{ base_repo }}kubesphere/ks-controller-manager"
+ks_controller_manager_tag: v2.1.0
 ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
 ks_update_tag: "advanced-2.0.0"
 ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
-ks_devops_flyway_tag: "flyway-advanced-2.0.2"
-ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
-ks_console_tag: latest
-ks_kubectl_repo: "{{ base_repo }}kubespheredev/kubectl"
+ks_devops_flyway_tag: "flyway-v2.1.0"
+ks_console_repo: "{{ base_repo }}kubesphere/ks-console"
+ks_console_tag: v2.1.0
+ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
 ks_kubectl_tag: v1.0.0
 ks_docs_repo: "{{ base_repo }}kubesphere/ks-docs"
 ks_docs_tag: "advanced-2.0.2"
-ks_devops_repo: "{{ base_repo }}kubespheredev/ks-devops"
+ks_devops_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_tag: advanced-2.0.0-dev
 cloud_controller_manager_repo: "{{ base_repo }}kubesphere/cloud-controller-manager"
 cloud_controller_manager_tag: v1.4.0
@@ -113,24 +113,24 @@ ks_image_pull_policy: IfNotPresent
 #ks_image_pull_policy: Always
 
 #ks-hostnic
-ks_hostnic_repo: "kubespheredev/hostnic"
+ks_hostnic_repo: "kubesphere/hostnic"
 ks_hostnic_tag: "v1.0.0-alpha"
 
 #ks-installer
-ks_installer_repo: "{{ base_repo }}kubespheredev/ks-installer"
-ks_installer_tag: "latest"
+ks_installer_repo: "{{ base_repo }}kubesphere/ks-installer"
+ks_installer_tag: v2.1.0
 
 #ks-notification
-notification_flyway_repo: "{{ base_repo }}kubespheredev/notification"
-notification_flyway_tag: "flyway_advanced-2.1.0"
-notification_repo: "{{ base_repo }}kubespheredev/notification"
-notification_tag: "advanced-2.1.0"
-alerting_dbinit_repo: "{{ base_repo }}kubespheredev/alerting-dbinit"
-alerting_dbinit_tag: "advanced-2.1.0"
-ks_alerting_repo: "{{ base_repo }}kubespheredev/alerting"
-ks_alerting_tag: "advanced-2.1.0"
-ks_alerting_adapter_repo: "{{ base_repo }}kubespheredev/alert_adapter"
-ks_alerting_adapter_tag: "advanced-2.1.0"
+notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
+notification_flyway_tag: "flyway_v2.1.0"
+notification_repo: "{{ base_repo }}kubesphere/notification"
+notification_tag: "v2.1.0"
+alerting_dbinit_repo: "{{ base_repo }}kubesphere/alerting-dbinit"
+alerting_dbinit_tag: "v2.1.0"
+ks_alerting_repo: "{{ base_repo }}kubesphere/alerting"
+ks_alerting_tag: "v2.1.0"
+ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert_adapter"
+ks_alerting_adapter_tag: "v2.1.0"
 
 #openpitrix:
 op_version: v0.4.4
@@ -197,47 +197,47 @@ harbor_core_repo: "{{ base_repo }}goharbor/harbor-core"
 harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
-jenkins_uc_repo:  "{{ base_repo }}kubespheredev/jenkins-uc"
-jenkins_uc_tag: 2.1.0
+jenkins_uc_repo:  "{{ base_repo }}kubesphere/jenkins-uc"
+jenkins_uc_tag: v2.1.0
 jenkins_repo: "{{ base_repo }}jenkins/jenkins"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
 jnlp_slave_tag: 3.27-1
-builder_base_repo: "{{ base_repo }}kubespheredev/builder-base"
-builder_base_tag: 2.1.0
-builder_nodejs_repo: "{{ base_repo }}kubespheredev/builder-nodejs"
-builder_nodejs_tag: 2.1.0
-builder_maven_repo: "{{ base_repo }}kubespheredev/builder-maven"
-builder_maven_tag: 2.1.0
-builder_go_repo: "{{ base_repo }}kubespheredev/builder-go"
-builder_go_tag: 2.1.0
+builder_base_repo: "{{ base_repo }}kubesphere/builder-base"
+builder_base_tag: v2.1.0
+builder_nodejs_repo: "{{ base_repo }}kubesphere/builder-nodejs"
+builder_nodejs_tag: v2.1.0
+builder_maven_repo: "{{ base_repo }}kubesphere/builder-maven"
+builder_maven_tag: v2.1.0
+builder_go_repo: "{{ base_repo }}kubesphere/builder-go"
+builder_go_tag: v2.1.0
 
 #sonarqube:
 sonarqube_repo: "{{ base_library_repo }}sonarqube"
 sonarqube_tag: 7.4-community
 
 #s2i
-s2ioperator_repo: "{{ base_repo }}kubespheredev/s2ioperator"
-s2ioperator_tag: "2.1.0"
-s2irun_repo: "{{ base_repo }}kubespheredev/s2irun"
-s2irun_tag: "2.1.0"
-s2itemplates_tag: 2.1.0
-binary_repo: "{{ base_repo }}kubespheredev/s2i-binary"
-tomcat85_java11_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-centos7"
-tomcat85_java11_runtime_repo: "{{ base_repo }}kubespheredev/tomcat85-java11-runtime"
-tomcat85_java8_repo: "{{ base_repo }}kubespheredev/tomcat85-java8-centos7"
-tomcat85_java8_runtime_repo: "{{ base_repo }}kubespheredev/tomcat85-java8-runtime"
-java11centos7_repo: "{{ base_repo }}kubespheredev/java-11-centos7"
-java8centos7_repo: "{{ base_repo }}kubespheredev/java-8-centos7"
-java8_runtime_repo: "{{ base_repo }}kubespheredev/java-8-runtime"
-java11_runtime_repo: "{{ base_repo }}kubespheredev/java-11-runtime"
-nodejs8centos7_repo: "{{ base_repo }}kubespheredev/nodejs-8-centos7"
-nodejs6centos7_repo: "{{ base_repo }}kubespheredev/nodejs-6-centos7"
-nodejs4centos7_repo: "{{ base_repo }}kubespheredev/nodejs-4-centos7"
-python36centos7_repo: "{{ base_repo }}kubespheredev/python-36-centos7"
-python35centos7_repo: "{{ base_repo }}kubespheredev/python-35-centos7"
-python34centos7_repo: "{{ base_repo }}kubespheredev/python-34-centos7"
-python27centos7_repo: "{{ base_repo }}kubespheredev/python-27-centos7"
+s2ioperator_repo: "{{ base_repo }}kubesphere/s2ioperator"
+s2ioperator_tag: "v2.1.0"
+s2irun_repo: "{{ base_repo }}kubesphere/s2irun"
+s2irun_tag: "v2.1.0"
+s2itemplates_tag: v2.1.0
+binary_repo: "{{ base_repo }}kubesphere/s2i-binary"
+tomcat85_java11_repo: "{{ base_repo }}kubesphere/tomcat85-java11-centos7"
+tomcat85_java11_runtime_repo: "{{ base_repo }}kubesphere/tomcat85-java11-runtime"
+tomcat85_java8_repo: "{{ base_repo }}kubesphere/tomcat85-java8-centos7"
+tomcat85_java8_runtime_repo: "{{ base_repo }}kubesphere/tomcat85-java8-runtime"
+java11centos7_repo: "{{ base_repo }}kubesphere/java-11-centos7"
+java8centos7_repo: "{{ base_repo }}kubesphere/java-8-centos7"
+java8_runtime_repo: "{{ base_repo }}kubesphere/java-8-runtime"
+java11_runtime_repo: "{{ base_repo }}kubesphere/java-11-runtime"
+nodejs8centos7_repo: "{{ base_repo }}kubesphere/nodejs-8-centos7"
+nodejs6centos7_repo: "{{ base_repo }}kubesphere/nodejs-6-centos7"
+nodejs4centos7_repo: "{{ base_repo }}kubesphere/nodejs-4-centos7"
+python36centos7_repo: "{{ base_repo }}kubesphere/python-36-centos7"
+python35centos7_repo: "{{ base_repo }}kubesphere/python-35-centos7"
+python34centos7_repo: "{{ base_repo }}kubesphere/python-34-centos7"
+python27centos7_repo: "{{ base_repo }}kubesphere/python-27-centos7"
 
 #gitlab:
 gitaly_repo: "{{ base_repo }}mirrorgitlabcontainers/gitaly"
@@ -302,7 +302,7 @@ grafana_tag: 5.2.4
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ ks_image_repo }}/pires/docker-elasticsearch-curator"
 docker_elasticsearch_curator_tag: 5.5.4
-elasticsearch_oss_repo: "{{ base_repo }}kubespheredev/elasticsearch-oss"
+elasticsearch_oss_repo: "{{ base_repo }}kubesphere/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
 fluent_bit_repo: "{{ ks_image_repo }}/fluent/fluent-bit"
 fluent_bit_tag: 0.14.7
@@ -310,13 +310,13 @@ kibana_oss_repo: "{{ ks_image_repo }}/kibana/kibana-oss"
 kibana_oss_tag: 6.7.0
 testFramework_repo: "{{ base_repo }}dduportal/bats"
 testFramework_tag: 0.4.0
-fluentbit_operator_repo: "{{ base_repo }}kubespheredev/fluentbit-operator"
-fluentbit_operator_tag: "latest"
-ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
+fluentbit_operator_repo: "{{ base_repo }}kubesphere/fluentbit-operator"
+fluentbit_operator_tag: v2.1.0
+ks_fluent_bit_repo: "{{ base_repo }}kubesphere/fluent-bit"
 ks_fluent_bit_tag: "v1.3.2-reload"
 kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
 kslogging_configmap_reload_tag: "advanced-2.0.0"
-ks_log_sidecar_injector_repo: "{{ base_repo }}kubespheredev/log-sidecar-injector"
+ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.0
 
 #ingress:

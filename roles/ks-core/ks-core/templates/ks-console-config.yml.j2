@@ -6,12 +6,6 @@ data:
         url: http://ks-apigateway.kubesphere-system.svc
         wsUrl: ws://ks-apigateway.kubesphere-system.svc
 
-      extendApiServer:
-        wsUrl: ws://ks-apiserver.kubesphere-system.svc
-        
-      openpitrixServer:
-        wsUrl: ws://openpitrix-api-gateway.openpitrix-system.svc:9100
-
       http:
         hostname: localhost
         port: 8000
@@ -23,6 +17,7 @@ data:
       redis:
         port: 6379
         host: redis.kubesphere-system.svc
+      redisTimeout: 5000
       sessionTimeout: 7200000
     client:
       version:
