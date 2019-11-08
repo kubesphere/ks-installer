@@ -132,6 +132,8 @@ nfs_server: SHOULD_BE_REPLACED
 # Basepath of the mount point
 nfs_path: SHOULD_BE_REPLACED
 nfs_nfsvers3_enabled: false
+nfs_archiveOnDelete: false
+
 
 # GLUSTERFS CONFIGURATION
 # change to true to use glusterfs as backend storage service.
