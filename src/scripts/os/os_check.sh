@@ -30,3 +30,13 @@ else
     echo "It doesn't support the current operating system!"
 fi
 
+python -V
+if [[ $? -eq 0 ]]; then
+	sudo python os/get-pip.py
+
+    pip install -U --ignore-installed PyYAML
+    pip install --ignore-installed -r os/requirements.txt
+else
+	echo "please install python"
+fi
+
