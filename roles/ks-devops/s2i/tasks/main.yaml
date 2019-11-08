@@ -28,6 +28,7 @@
 
 - name: S2I | Delete S2I ValidatingWebhook
   shell: >
+    {{ bin_dir }}/kubectl delete statefulsets.apps -n kubesphere-devops-system s2ioperator &&
     {{ bin_dir }}/kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validating-webhook-configuration
   register: validatin_status
   failed_when: "validatin_status.stderr and 'NotFound' not in validatin_status.stderr"
