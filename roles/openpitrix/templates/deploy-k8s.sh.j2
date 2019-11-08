@@ -260,6 +260,8 @@ if [ $? != 0 ];then
   kubectl create namespace ${NAMESPACE}
 fi
 
+kubectl create secret generic mysql-pass --from-file=./hyperpitrix-kubernetes/password.txt -n ${NAMESPACE}
+
 #if [ "${STORAGE}" == "1" ] || [ "${ALL}" == "1" ];then
 #  kubectl create secret generic mysql-pass --from-file=./hyperpitrix-kubernetes/password.txt -n ${NAMESPACE}
 #  for FILE in `ls ./hyperpitrix-kubernetes/db/ | grep -v "\-job.yaml$"`;do
