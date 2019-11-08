@@ -315,7 +315,7 @@ fluentbit_operator_tag: v2.1.0
 ks_fluent_bit_repo: "{{ base_repo }}kubesphere/fluent-bit"
 ks_fluent_bit_tag: "v1.3.2-reload"
 kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
-kslogging_configmap_reload_tag: "advanced-2.0.0"
+kslogging_configmap_reload_tag: v0.0.1
 ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.0
 

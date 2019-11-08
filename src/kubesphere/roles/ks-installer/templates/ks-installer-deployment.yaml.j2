@@ -153,18 +153,3 @@ spec:
           hostPath:
             path: /etc/kubesphere
             type: DirectoryOrCreate
-      tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
-        - key: CriticalAddonsOnly
-          operator: Exists
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            preference:
-              matchExpressions:
-              - key: node-role.kubernetes.io/master
-                operator: In
-                values:
-                - ""
