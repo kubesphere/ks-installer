@@ -5,6 +5,15 @@
     src: "qingcloud-csi"
     dest: "{{ kube_config_dir }}/addons/"
 
+- name: QCloud-CSI | Check old csi-qingcloud
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kube-system -l  app=csi-qingcloud,csi=v0.2.1 | grep csi-qingcloud | wc -l
+  register: old_csi_qingcloud_num
+
+- name: QCloud-CSI | Set old Csi DriverName
+  set_fact:
+    oldCsiDriverName: "csi-qingcloud"
+
 - name: QCloud-CSI | Creating manifests
   template:
     src: "{{ item.file }}.j2"
@@ -15,11 +24,6 @@
     - { name: qingcloud-csi-disk-v3, file: qingcloud-csi-disk-v1.1.0-rc.3.yaml, type: workload }
    # - { name: csi-controller-sts, file: csi-controller-sts.yaml, type: sts }
    # - { name: csi-node-ds, file: csi-node-ds.yaml, type: ds }
-
-- name: QCloud-CSI | Check old csi-qingcloud
-  shell: >
-    {{ bin_dir }}/kubectl get pod -n kube-system -l  app=csi-qingcloud,csi=v0.2.1 | grep csi-qingcloud | wc -l
-  register: old_csi_qingcloud_num
 
 - name: QCloud-CSI | Delete old csi-qingcloud
   shell: >
