@@ -26,7 +26,7 @@ fi
 
 sudo apt-get update
 
-python -V
+python -V 2> /dev/null
 if [[ $? -eq 0 ]]; then
 	echo "python has exits"
 else

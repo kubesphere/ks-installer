@@ -26,7 +26,7 @@ else
 	sudo yum install epel-release -y
 fi
 
-python -V
+python -V 2> /dev/null
 if [[ $? -eq 0 ]]; then
 	echo "python is exits"
 else
