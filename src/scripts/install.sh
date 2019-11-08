@@ -175,7 +175,7 @@ function region_detection(){
 function init_env(){
 
   region_detection &> /dev/null
-  $BASE_FOLDER/os/os_check.sh 1 > /dev/null
+  $BASE_FOLDER/os/os_check.sh 1> /dev/null
 
   if [[ $? -eq 0 ]]; then
     #statements
