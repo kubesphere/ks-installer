@@ -7,10 +7,10 @@
 - name: OpenPitrix | Getting OpenPitrix installation files
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/openpitrix/{{ item.path }}/{{ item.file }}"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
-    - { path: hyperpitrix-kubernetes/scripts, file: deploy-k8s.sh }
-    - { path: hyperpitrix-kubernetes, file: version.sh }
+    - { path: openpitrix/hyperpitrix-kubernetes/scripts, file: deploy-k8s.sh }
+    - { path: openpitrix, file: version.sh }
 
 - name: OpenPitrix | Installing OpenPitrix(1)
   shell: >

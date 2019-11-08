@@ -17,3 +17,10 @@
     --set nfs.server={{ nfs_server }} 
     --set nfs.path={{ nfs_path }}
     --set storageClass.defaultClass={{ nfs_client_is_default_class }}
+    --set storageClass.archiveOnDelete={% if nfs_archiveOnDelete is defined and nfs_archiveOnDelete %}true{% else %}false{% endif %}
+
+- name: NFS-Client | Deploy set mountOptions
+  shell: >
+    {{ bin_dir }}/kubectl patch sc nfs-client -p '{"mountOptions": ["nfsvers=3"]}'
+  when:
+    - nfs_nfsvers3_enabled is defined and nfs_nfsvers3_enabled
