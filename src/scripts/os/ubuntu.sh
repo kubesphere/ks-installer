@@ -28,7 +28,7 @@ sudo apt-get update
 
 python -V 2> /dev/null
 if [[ $? -eq 0 ]]; then
-	echo "python has exits"
+	echo "python already exits"
 else
 	sudo apt-get install python-minimal -y
 fi
