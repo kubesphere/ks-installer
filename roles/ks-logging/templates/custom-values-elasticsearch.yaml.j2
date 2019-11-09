@@ -72,7 +72,7 @@ cluster:
 master:
   name: master
   exposeHttp: false
-  replicas: {{ logging.elasticsearchMasterReplica }}
+  replicas: {{ logging.elasticsearchMasterReplicas }}
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   persistence:
@@ -123,7 +123,7 @@ data:
   serviceType: ClusterIP
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
-  replicas: {{ logging.elasticsearchDataReplica }}
+  replicas: {{ logging.elasticsearchDataReplicas }}
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
   persistence:

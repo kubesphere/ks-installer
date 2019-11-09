@@ -1,8 +1,9 @@
 ---
 
 logging:
-  elasticsearchMasterReplica: 1
-  elasticsearchDataReplica: 2
+  elasticsearchMasterReplicas: 1
+  elasticsearchDataReplicas: 2
+  logsidecarReplicas: 2
   elasticsearchVolumeSize: 20Gi
   logMaxAge: 7
   elkPrefix: logstash
