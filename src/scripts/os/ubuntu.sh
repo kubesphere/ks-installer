@@ -33,7 +33,6 @@ else
 	sudo apt-get install python-minimal -y
 fi
 
+
 sudo apt-get install libssl-dev sshpass -y
-
-
 
