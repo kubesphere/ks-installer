@@ -175,7 +175,7 @@ function region_detection(){
 function init_env(){
 
   region_detection &> /dev/null
-  $BASE_FOLDER/os/os_check.sh 1> /dev/null
+  $BASE_FOLDER/os/os_check.sh 
 
   if [[ $? -eq 0 ]]; then
     #statements
@@ -205,7 +205,8 @@ function all-in-one(){
   storage_sure
 
   if [[ -f os/install.tmp ]]; then
-    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+    grep  "init_env successful" os/install.tmp > /dev/null
+    if [[ $? -ne '0' ]]; then
           init_env
     fi
   else
@@ -270,7 +271,8 @@ function multi-node(){
   storage_sure
 
   if [[ -f os/install.tmp ]]; then
-    if [[ $(grep  "init_env successful" os/install.tmp > /dev/null) -ne '0' ]]; then
+    grep  "init_env successful" os/install.tmp > /dev/null
+    if [[ $? -ne '0' ]]; then
           init_env
     fi
   else

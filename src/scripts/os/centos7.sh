@@ -17,10 +17,35 @@
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 
-sudo yum install epel-release -y  && yum install python sshpass -y
 
-sudo python os/get-pip.py
+os_info=`cat /etc/os-release`
 
-pip install -U --ignore-installed PyYAML
-pip install --ignore-installed -r os/requirements.txt
+if [[ $os_info =~ "Red Hat" ]]; then
+	sudo rpm -ivh os/epel-release-7-12.noarch.rpm
+else
+	sudo yum install epel-release -y
+fi
+
+python -V 2> /dev/null
+if [[ $? -eq 0 ]]; then
+	echo "python already exits"
+else
+	sudo yum install python -y
+	if [[ $? -eq 0 ]]; then
+		echo "python already exits"
+	else
+		sudo yum install python2 -y
+		if [[ $? -eq 0 ]]; then
+			echo "python2 already exits"
+			ln -s /usr/bin/python2 /usr/bin/python
+	    else 
+	    	echo "Yum source unavailable ,please check yum source"
+	    fi
+	fi
+
+fi
+
+sudo yum install sshpass -y
+
+
 
