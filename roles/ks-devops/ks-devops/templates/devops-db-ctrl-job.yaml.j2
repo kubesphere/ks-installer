@@ -25,7 +25,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ['sh', '-c', 'until nc -z {{ dbHost }} {{ dbPort }}; do echo "waiting for mysql"; sleep 2; done;']
       containers:
-      - command: ["flyway", "-X", "-url=jdbc:mysql://{{ dbHost }}/devops", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/devops", "migrate"]
+      - command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ dbHost }}/devops", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/devops", "migrate"]
         env:
         - name: FLYWAY_PASSWORD
           value: "password"
