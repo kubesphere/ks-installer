@@ -142,4 +142,4 @@ spec:
     {{- end }}
       resources:
         requests:
-          storage: 2Gi
+          storage: "{{ .Values.persistence.size }}"
