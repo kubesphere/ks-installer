@@ -26,12 +26,13 @@ fi
 
 sudo apt-get update
 
-sudo apt-get install python-minimal libssl-dev sshpass -y
+python -V 2> /dev/null
+if [[ $? -eq 0 ]]; then
+	echo "python already exits"
+else
+	sudo apt-get install python-minimal -y
+fi
 
-sudo python os/get-pip.py
 
-pip install pyopenssl
-pip install -U --ignore-installed PyYAML
-pip install --ignore-installed -r os/requirements.txt
-
+sudo apt-get install libssl-dev sshpass -y
 
