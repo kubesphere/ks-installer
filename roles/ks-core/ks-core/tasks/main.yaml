@@ -86,6 +86,8 @@
   command: >
     {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-account -o jsonpath='{.metadata.labels.version}'
   register: account_version
+  failed_when: "account_version.stderr and 'NotFound' not in account_version.stderr"
+  ignore_errors: True
 
 - name: KubeSphere | Update kubectl image
   shell: >
@@ -93,8 +95,8 @@
     do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl={{ ks_kubectl_repo }}:{{ ks_kubectl_tag }};
     done
   when:
-    - account_version.stdout != 'v2.1.0'
-
+    - account_version.stdout and account_version.stdout != 'v2.1.0'
+  ignore_errors: True
 
 - name: KubeSphere | Creating ks-core
   command: >
