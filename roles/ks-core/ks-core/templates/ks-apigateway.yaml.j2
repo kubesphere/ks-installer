@@ -27,15 +27,10 @@ spec:
     spec:
       containers:
       - command:
-        - ks-apigateway
-        - --conf=/etc/caddy/Caddyfile
-        - --log=stderr
+        - /bin/sh
+        - -c
+        - export KUBESPHERE_TOKEN=`cat /var/run/secrets/kubernetes.io/serviceaccount/token` && ks-apigateway --conf=/etc/caddy/Caddyfile --log=stderr
         env:
-        - name: KUBESPHERE_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: kubesphere-secret
-              key: token
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
