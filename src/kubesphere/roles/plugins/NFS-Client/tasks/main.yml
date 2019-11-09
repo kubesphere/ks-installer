@@ -11,6 +11,20 @@
   with_items:
     - { name: values, file: values.yaml, type: values }
 
+- name: NFS-Client | Get nfs archiveOnDelete
+  shell: >
+    {{ bin_dir }}/kubectl get sc nfs-client -o jsonpath='{.parameters.archiveOnDelete}'
+  when:
+    - nfsArchiveOnDelete
+  ignore_errors: True
+
+- name: NFS-Client | Set nfs archiveOnDelete
+  set_fact:
+    nfs_archiveOnDelete: {{ nfsArchiveOnDelete.stdout }}
+  when:
+    - nfsArchiveOnDelete.stdout is defined
+
+
 - name: NFS-Client | Deploy NFS-Client
   shell: >
     {{ bin_dir }}/helm upgrade --install nfs-client {{ kube_config_dir }}/addons/nfs-client-provisioner 

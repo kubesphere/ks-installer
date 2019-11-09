@@ -161,6 +161,8 @@ function config_pip(){
       cat > ~/.pip/pip.conf << EOF
 [global]
 index-url=https://pypi.tuna.tsinghua.edu.cn/simple
+
+extra-index-url=https://mirrors.aliyun.com/pypi/simple
 EOF
   fi
 }
