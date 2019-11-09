@@ -15,12 +15,20 @@ install:
 jobs:
   include:
     - stage: deploy
+      name: "allinone" 
       script: 
         - python <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/qingcloud.py) "$QC_INSTANCE_ID"
         - sleep 10
         - sshpass  -p "$QC_PASSWORD" ssh -o StrictHostKeyChecking=no root@$QC_EIP "bash <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/allinone.sh) $(env|grep -E 'QC_|_enabled'|tr "\n" " ")"
     - 
+      name: "multinode" 
       script:
         - python <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/qingcloud.py) "$QC_INSTANCE_ID_1" "$QC_INSTANCE_ID_2" "$QC_INSTANCE_ID_3" 
         - sleep 10
         - sshpass  -p "$QC_PASSWORD" ssh -o StrictHostKeyChecking=no root@$QC_EIP_1 "bash <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/multinode.sh) $(env|grep -E 'QC_|_enabled'|tr "\n" " ")"
+    - 
+      name: "ha" 
+      script:
+        - python <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/qingcloud.py) "$QC_HA_INSTANCE_IDS"
+        - sleep 10
+        - sshpass  -p "$QC_PASSWORD" ssh -o StrictHostKeyChecking=no root@$QC_HA_EIP "bash <(curl -s -L https://raw.githubusercontent.com/shaowenchen/scripts/master/kubesphere/ha.sh) $(env|grep -E 'QC_|_enabled'|tr "\n" " ")"
