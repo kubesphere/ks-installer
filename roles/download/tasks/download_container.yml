@@ -10,8 +10,6 @@
   tags:
     - facts
 
-- debug:
-    msg: "{{ pull_args }}"
 
 # FIXME(mattymo): In Ansible 2.4 omitting download delegate is broken. Move back
 #                 to one task in the future.
