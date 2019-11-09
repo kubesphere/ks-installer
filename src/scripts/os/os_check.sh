@@ -32,6 +32,7 @@ fi
 
 python -V 2> /dev/null
 if [[ $? -eq 0 ]]; then
+
     sudo python os/get-pip.py
 
     if [[ $os_info =~ "Ubuntu" || $os_info =~ "Debian" ]]; then

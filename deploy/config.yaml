@@ -38,8 +38,8 @@ data:
 
     logging:
       enabled: True
-      elasticsearchMasterReplica: 1
-      elasticsearchDataReplica: 1
+      elasticsearchMasterReplicas: 1
+      elasticsearchDataReplicas: 1
       elasticsearchVolumeSize: 20Gi
       logMaxAge: 7
       elkPrefix: logstash

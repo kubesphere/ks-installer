@@ -161,6 +161,8 @@ function config_pip(){
       cat > ~/.pip/pip.conf << EOF
 [global]
 index-url=https://pypi.tuna.tsinghua.edu.cn/simple
+
+extra-index-url=https://mirrors.aliyun.com/pypi/simple
 EOF
   fi
 }
@@ -254,7 +256,8 @@ function all-in-one(){
                    -e jenkinsJavaOpts_MaxRAM='2g' \
                    -e jenkins_memory_lim="2Gi" \
                    -e jenkins_memory_req="1500Mi" \
-                   -e elasticsearch_data_replica=1
+                   -e logsidecar_replicas=1 \
+                   -e elasticsearch_data_replicas=1
   if [[ $? -eq 0 ]]; then
     #statements
     str="successsful!"
