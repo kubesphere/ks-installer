@@ -201,3 +201,29 @@ spec:
   selector:
     app: kubesphere
     component: kubesphere-router
+
+---
+# create a seviceaccount for kubectl pod
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubesphere-cluster-admin
+  namespace: kubesphere-controls-system
+  annotations:
+    kubernetes.io/created-by: kubesphere.io/kubectl
+---
+# bind kubesphere-cluster-admin sa to clusterrole cluster-admin
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: system:kubesphere-cluster-admin
+  annotations:
+    kubernetes.io/created-by: kubesphere.io/kubectl
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: kubesphere-cluster-admin
+    namespace: kubesphere-controls-system
