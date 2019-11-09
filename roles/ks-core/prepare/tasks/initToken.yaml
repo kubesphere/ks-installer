@@ -1,15 +1,4 @@
 ---
-- name: KubeSphere | Getting K8S Token
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system get secrets $({{ bin_dir }}/kubectl -n kubesphere-system get sa kubesphere -o jsonpath='{.secrets[0].name}') -o jsonpath='{.data.token}' | base64 -d
-  register: k8s_token
-
-
-- name: KubeSphere | Setting k8s_token
-  set_fact:
-    k8s_token_str: "{{ k8s_token.stdout }}"
-
-
 - name: KubeSphere | Creating KubeSphere Secret
   shell: >
     dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=100 count=1 2>/dev/null | tr -d '\n'
