@@ -30,8 +30,8 @@ sudo apt-get install python-minimal libssl-dev sshpass -y
 
 sudo python os/get-pip.py
 
-pip install -U --ignore-installed pyopenssl PyYAML
-
+pip install pyopenssl
+pip install -U --ignore-installed PyYAML
 pip install --ignore-installed -r os/requirements.txt
 
 
