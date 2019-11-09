@@ -18,9 +18,9 @@
 os_info=`cat /etc/os-release`
 
 
-if [[ $os_info =~ "Ubuntu" || $os_info =~ "Debian" ]]; then	
+if [[ $os_info =~ "Ubuntu" || $os_info =~ "Debian" ]]; then
 
-      source ./os/ubuntu.sh
+    source ./os/ubuntu.sh
       
 elif [[ $os_info =~ "CentOS" || $os_info =~ "Red Hat" ]]; then
 
@@ -32,11 +32,19 @@ fi
 
 python -V 2> /dev/null
 if [[ $? -eq 0 ]]; then
-	sudo python os/get-pip.py
+
+    sudo python os/get-pip.py
+
+    if [[ $os_info =~ "Ubuntu" || $os_info =~ "Debian" ]]; then
+
+       pip install pyopenssl
+
+    fi
+
 
     pip install -U --ignore-installed PyYAML
     pip install --ignore-installed -r os/requirements.txt
 else
-	echo "please install python"
+    echo "please install python"
 fi
 

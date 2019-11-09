@@ -208,8 +208,6 @@ def getComponentLists():
             elif (j == 'enabled') and (value == False):
                 readyToDisableList.append(component)
                 break
-    # print(readyToEnabledList)
-    # print(readyToDisableList)
     return readyToEnabledList, readyToDisableList
 
 
@@ -218,10 +216,6 @@ def preInstallTasks():
     preInstallTasks['preInstall'] = [
         os.path.join(playbookBasePath, 'preinstall.yaml'),
         os.path.join(privateDataDir, 'preinstall')
-    ]
-    preInstallTasks['plugins'] = [
-        os.path.join(playbookBasePath, 'plugins.yaml'),
-        os.path.join(privateDataDir, 'plugins')
     ]
     preInstallTasks['common'] = [
         os.path.join(playbookBasePath, 'common.yaml'),
@@ -262,8 +256,8 @@ def resultInfo():
 
 
 def generateConfig():
-    cmd = r"kubectl get cm -n kubesphere-system ks-installer -o jsonpath='{.data}' | grep -v '\[\|\]' > /kubesphere/config/ks-config.yaml"
-    os.system(cmd)
+    cmdGetConfig = r"kubectl get cm -n kubesphere-system ks-installer -o jsonpath='{.data}' | grep -v '\[\|\]' > /kubesphere/config/ks-config.yaml"
+    os.system(cmdGetConfig)
 
 
 def main():

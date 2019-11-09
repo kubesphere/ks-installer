@@ -1,6 +1,5 @@
 ---
 
-
 - name: ks-devops | Getting harbor installation files
   copy:
     src: "harbor"
