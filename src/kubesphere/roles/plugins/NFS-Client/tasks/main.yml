@@ -20,7 +20,7 @@
 
 - name: NFS-Client | Set nfs archiveOnDelete
   set_fact:
-    nfs_archiveOnDelete: {{ nfsArchiveOnDelete.stdout }}
+    nfs_archiveOnDelete: "{{ nfsArchiveOnDelete.stdout }}"
   when:
     - nfsArchiveOnDelete.stdout is defined
 
