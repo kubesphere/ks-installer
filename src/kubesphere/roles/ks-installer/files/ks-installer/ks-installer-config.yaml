@@ -58,8 +58,8 @@ data:
 
     logging:
       enabled: {{ logging_enabled }}
-      elasticsearchMasterReplica: {{ elasticsearch_master_replica }}
-      elasticsearchDataReplica: {{ elasticsearch_data_replica }}
+      elasticsearchMasterReplicas: {{ elasticsearch_master_replicas }}
+      elasticsearchDataReplicas: {{ elasticsearch_data_replicas }}
       elasticsearchVolumeSize: {{ elasticsearch_volume_size }}
       logMaxAge: {{ log_max_age }}
       elkPrefix: {{ elk_prefix }}

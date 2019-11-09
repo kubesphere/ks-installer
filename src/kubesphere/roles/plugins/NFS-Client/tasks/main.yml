@@ -23,4 +23,4 @@
   shell: >
     {{ bin_dir }}/kubectl patch sc nfs-client -p '{"mountOptions": ["nfsvers=3"]}'
   when:
-    - nfs_nfsvers3_enabled is defined and nfs_nfsvers3_enabled
+    - nfs_vers3_enabled is defined and nfs_vers3_enabled

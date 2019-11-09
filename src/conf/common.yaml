@@ -131,7 +131,7 @@ nfs_server: SHOULD_BE_REPLACED
 
 # Basepath of the mount point
 nfs_path: SHOULD_BE_REPLACED
-nfs_nfsvers3_enabled: false
+nfs_vers3_enabled: false
 nfs_archiveOnDelete: false
 
 
@@ -203,8 +203,9 @@ grafana_enabled: false
 # Kubernetes builtin logging APIs will be used if logging_enabled is set to false. 
 # Builtin logging only provides limited functions, so recommend to enable logging.
 logging_enabled: false
-elasticsearch_master_replica: 1
-elasticsearch_data_replica: 2
+elasticsearch_master_replicas: 1
+elasticsearch_data_replicas: 2
+logsidecar_replicas: 2
 elasticsearch_volume_size: 20Gi
 log_max_age: 7
 elk_prefix: logstash
