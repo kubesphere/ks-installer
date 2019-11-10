@@ -140,11 +140,4 @@ spec:
       - name: installer
         image: {{ ks_installer_repo }}:{{ ks_installer_tag }}
         imagePullPolicy: "Always"
-        volumeMounts:
-          - name: kubesphere
-            mountPath: /etc/kubesphere
-      volumes:
-        - name: kubesphere
-          hostPath:
-            path: /etc/kubesphere
-            type: DirectoryOrCreate
+
