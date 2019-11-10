@@ -68,7 +68,7 @@ metadata:
 EOF
 ```
 
-2. 创建 Kubernetes 集群 CA 证书的 Secret。
+2. 创建 Kubernetes 集群 CA 证书的 Secret。(开启devops需设置)
 
 > 注：按照当前集群 ca.crt 和 ca.key 证书路径创建（Kubeadm 创建集群的证书路径一般为 `/etc/kubernetes/pki`）
 
@@ -78,7 +78,7 @@ $ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
 --from-file=ca.key=/etc/kubernetes/pki/ca.key 
 ```
 
-3. 创建集群 etcd 的证书 Secret。
+3. 创建集群 etcd 的证书 Secret。(开启etcd监控需设置)
 
 > 注：根据集群实际 etcd 证书位置创建；
 
@@ -111,11 +111,10 @@ $ git clone https://github.com/kubesphere/ks-installer.git -b master
 $ cd deploy
 ```
 
-编辑 config.yaml 文件，填入集群 apiserverAddr、etcd、storageClass 信息。同时，也可以选择，需要安装的组件。
+编辑 config.yaml 文件，选择需要安装的组件。
 
 ```bash
-$ kubectl apply -f config.yaml
-$ kubectl apply -f kubesphere-installer.yaml
+$ kubectl apply -f ./
 ```
 
 6. 查看部署日志。
