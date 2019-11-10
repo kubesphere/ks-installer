@@ -4,7 +4,7 @@ metadata:
   name: logsidecar-injector
   namespace: kubesphere-logging-system
 spec:
-  replicas: {{ logging.logsidecarReplicas }}
+  replicas: {{ logging.logsidecarReplicas | default(2) }}
   selector:
     matchLabels:
       app: logsidecar-injector
