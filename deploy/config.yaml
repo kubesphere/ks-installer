@@ -23,7 +23,7 @@ data:
       redisVolumSize: 2Gi
 
     metrics-server:
-      enabled: True
+      enabled: False
 
     console:
       enableMultiLogin: False  # enable/disable multi login
@@ -37,9 +37,10 @@ data:
         enabled: False
 
     logging:
-      enabled: True
+      enabled: False
       elasticsearchMasterReplicas: 1
       elasticsearchDataReplicas: 1
+      logsidecarReplicas: 2
       elasticsearchVolumeSize: 20Gi
       logMaxAge: 7
       elkPrefix: logstash
@@ -48,10 +49,10 @@ data:
         enabled: False
 
     openpitrix:
-      enabled: True
+      enabled: False
 
     devops:
-      enabled: True
+      enabled: False
       jenkinsMemoryLim: 2Gi
       jenkinsMemoryReq: 1500Mi
       jenkinsVolumeSize: 8Gi
@@ -65,10 +66,10 @@ data:
       enabled: False
 
     notification:
-      enabled: True
+      enabled: False
 
     alerting:
-      enabled: True
+      enabled: False
 
     harbor:
       enabled: False
@@ -81,3 +82,4 @@ kind: ConfigMap
 metadata:
   name: ks-installer
   namespace: kubesphere-system
+
