@@ -21,6 +21,23 @@
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
+- name: ks-logging | Checking old gitlab
+  shell: >
+    {{ bin_dir }}/helm list | grep "ks-gitlab" | grep "gitlab-1.6.1"
+  register: check_old_gitlab
+  ignore_errors: True
+
+
+- name: ks-logging | Update gitlab to v1.9.8
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-gitlab {{ kubesphere_dir }}/gitlab/gitlab-1.9.8.tgz
+    -f {{ kubesphere_dir }}/gitlab/custom-values-gitlab-v1.9.8.yaml
+    --namespace kubesphere-devops-system
+  when:
+    - check_old_gitlab.stdout
+    - check_old_gitlab.stdout.find("kubesphere-devops-system") != -1
+
+
 - name: Gitlab | Deploy Gitlab
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-gitlab {{ kubesphere_dir }}/gitlab/gitlab-2.4.5.tgz
