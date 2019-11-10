@@ -133,7 +133,7 @@ ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert_adapter"
 ks_alerting_adapter_tag: "v2.1.0"
 
 #openpitrix:
-op_version: v0.4.4
+op_version: v0.4.5
 openpitrix_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_tag: "{{ op_version }}"
 openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
