@@ -124,7 +124,7 @@ function result_cmd(){
    commandline='kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f'
    cat << eof
 
-#$(echo -e "\033[1;36mNOTES:\033[0m")
+$(echo -e "\033[1;36mNOTE:\033[0m")
 
 Verify the installation logs and result:
 
