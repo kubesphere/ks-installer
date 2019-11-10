@@ -95,7 +95,7 @@ spec:
         - --enable-multi-login={{ console.enableMultiLogin | default(false) }}
         - --token-idle-timeout=40m
         - --redis-url=redis://redis.kubesphere-system.svc:6379
-{% if devops.enabled is defined and devops.enabled == true %}
+{% if (devops.enabled is defined and devops.enabled == false) or (devops.enabled is not defined) %}
         - --generate-kubeconfig=False
 {% endif %}
         env:
