@@ -1,11 +1,7 @@
 apiVersion: v1
 data:
   kubesphere.yaml: |
-    kubernetes:
-      kubeconfig: ""
-      master: {{ kubernetes.apiserverAddr }}
-      qps: 1e+06
-      burst: 1000000
+
     ldap:
       host: openldap.kubesphere-system.svc:389
       managerDN: cn=admin,dc=kubesphere,dc=io
