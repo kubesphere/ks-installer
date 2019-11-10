@@ -1,5 +1,11 @@
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubesphere-system
+
+---
+apiVersion: v1
 data:
   ks-config.yaml: |
     ---
@@ -80,12 +86,6 @@ kind: ConfigMap
 metadata:
   name: ks-installer
   namespace: kubesphere-system
-
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kubesphere-system
 
 ---
 apiVersion: v1
