@@ -51,40 +51,25 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 
 ## 部署 KubeSphere
 
-1. 在 Kubernetes 集群中创建名为 `kubesphere-system` 和 `kubesphere-monitoring-system` 的 `namespace`。
-
-```
-$ cat <<EOF | kubectl create -f -
----
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: kubesphere-system
----
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: kubesphere-monitoring-system
-EOF
-```
-
-2. 创建 Kubernetes 集群 CA 证书的 Secret。(开启devops需设置)
+1. 创建 Kubernetes 集群 CA 证书的 Secret。(开启devops需设置)
 
 > 注：按照当前集群 ca.crt 和 ca.key 证书路径创建（Kubeadm 创建集群的证书路径一般为 `/etc/kubernetes/pki`）
 
 ```bash
+$ kubectl create ns kubesphere-system
 $ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
 --from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
 --from-file=ca.key=/etc/kubernetes/pki/ca.key 
 ```
 
-3. 创建集群 etcd 的证书 Secret。(开启etcd监控需设置)
+2. 创建集群 etcd 的证书 Secret。(开启etcd监控需设置)
 
 > 注：根据集群实际 etcd 证书位置创建；
 
    - 若 etcd 已经配置过证书，则参考如下创建（以下命令适用于 Kubeadm 创建的 Kubernetes 集群环境）：
 
 ```
+$ kubectl create ns kubesphere-monitoring-system
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
 --from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
 --from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
@@ -99,13 +84,13 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-4. 克隆 kubesphere-installer 仓库至本地。
+3. 克隆 kubesphere-installer 仓库至本地。
 
 ```
 $ git clone https://github.com/kubesphere/ks-installer.git -b master
 ```
 
-5. 进入 ks-installer，然后在 Kubernetes 集群部署 KubeSphere。
+4. 进入 ks-installer，然后在 Kubernetes 集群部署 KubeSphere。
 
 ```bash
 $ cd deploy
@@ -117,13 +102,13 @@ $ cd deploy
 $ kubectl apply -f ./
 ```
 
-6. 查看部署日志。
+5. 查看部署日志。
 
 ```
 $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-7. 查看控制台的服务端口，使用 `IP:30880` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
+6. 查看控制台的服务端口，使用 `IP:30880` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
 
 ```
 $ kubectl get svc -n kubesphere-system    
@@ -132,7 +117,7 @@ $ kubectl get svc -n kubesphere-system
 
 ![](https://pek3b.qingstor.com/kubesphere-docs/png/20190912002602.png)
 
-8. 更新 KubeSphere 安装
+7. 更新 KubeSphere 安装
 
 ```bash
 $ kubectl edit cm ks-installer -n kubesphere-system
@@ -253,5 +238,4 @@ $ kubectl edit cm ks-installer -n kubesphere-system
 
 ## 未来计划
 
-- 支持多个公有云的网络插件与存储插件；
 - 组件解耦，做成可插拔式的设计，使安装更轻量，资源消耗率更低。
