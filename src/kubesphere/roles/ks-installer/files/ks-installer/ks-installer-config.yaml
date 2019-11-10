@@ -14,26 +14,6 @@ data:
     persistence:
       storageClass: ""
 
-    plugins:
-      defaultStorage: "{{ defaultStorage | default("openebs-hostpath") }}"    # "csi-qingcloud"
-{% if defaultStorage is defined and devops.enabled == 'csi-qingcloud' %}
-      qingcloud_access_key_id: {{ qingcloud_access_key_id }}
-      qingcloud_secret_access_key: {{ qingcloud_secret_access_key }}
-      qingcloud_zone: {{ qingcloud_zone }}
-      qingcloud_host: {{ qingcloud_host }}
-      qingcloud_port: {{ qingcloud_port }}
-      qingcloud_protocol: {{ qingcloud_protocol }}
-      qingcloud_uri: {{ qingcloud_uri }}
-      qingcloud_connection_retries: {{ qingcloud_connection_retries }}
-      qingcloud_connection_timeout: {{ qingcloud_connection_timeout }}
-      qingcloud_type: {{ qingcloud_type }}
-      qingcloud_maxSize: {{ qingcloud_maxSize }}
-      qingcloud_minSize: {{ qingcloud_minSize }}
-      qingcloud_stepSize: {{ qingcloud_stepSize }}
-      qingcloud_fsType: {{ qingcloud_fsType }}
-      qingcloud_disk_replica: {{ qingcloud_disk_replica }}
-{% endif %}
-
     common:
       mysqlVolumeSize: {{ mysql_volume_size }}
       minioVolumeSize: {{ minio_volume_size }}
