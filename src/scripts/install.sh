@@ -119,6 +119,21 @@ function base_check(){
     fi
 }
 
+
+function result_cmd(){
+   commandline='kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f'
+   cat << eof
+
+#$(echo -e "\033[1;36mNOTES:\033[0m")
+
+Verify the installation logs and result:
+
+   $commandline
+
+
+eof
+}
+
 function result_notes(){
     timeout=0
     info='The ks-installer is running'
@@ -144,6 +159,7 @@ function result_notes(){
       fi
     done
     echo
+    result_cmd
 }
 
 function failed_prompt(){
