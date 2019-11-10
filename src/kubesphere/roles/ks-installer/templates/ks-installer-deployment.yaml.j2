@@ -138,7 +138,7 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: kubesphere/ks-installer:v2.1.0
+        image: {{ ks_installer_repo }}:{{ ks_installer_tag }}
         imagePullPolicy: "Always"
         volumeMounts:
           - name: kubesphere
