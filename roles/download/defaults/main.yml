@@ -240,22 +240,18 @@ python34centos7_repo: "{{ base_repo }}kubesphere/python-34-centos7"
 python27centos7_repo: "{{ base_repo }}kubesphere/python-27-centos7"
 
 #gitlab:
+gitlab_version: 12.4.1
 gitaly_repo: "{{ base_repo }}mirrorgitlabcontainers/gitaly"
 gitaly_tag: v12-3-4
 gitlab_rails_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-rails-ce"
-gitlab_rails_ce_tag: v12.4.1
 gitlab_shell_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-shell"
 gitlab_shell_tag: v12-3-4
 gitlab_sidekiq_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-sidekiq-ce"
-gitlab_sidekiq_ce_tag: v12.4.1
 gitlab_runner_repo: "{{ base_repo }}gitlab/gitlab-runner"
 gitlab_runner_tag: alpine-v10.3.0
 gitlab_task_runner_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-task-runner-ce"
-gitlab_task_runner_ce_tag: v12.4.1
 gitlab_unicorn_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-unicorn-ce"
-gitlab_unicorn_ce_tag: v12.4.1
 gitlab_workhorse_ce_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-workhorse-ce"
-gitlab_workhorse_ce_tag: v12.4.1
 gitlab_kubectl_repo: "{{ base_repo }}mirrorgitlabcontainers/kubectl"
 gitlab_kubectl_tag: v1.12.10
 gitlab_mailroom_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-mailroom"
