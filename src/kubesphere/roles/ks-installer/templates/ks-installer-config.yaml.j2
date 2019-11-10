@@ -3,17 +3,15 @@ apiVersion: v1
 data:
   ks-config.yaml: |
     ---
-    kubernetes:
-      apiserverAddr: {{ kube_apiserver_host }}      # master addr or master's lb addr
+
+    persistence:
+      storageClass: {{ storage_class }}
 
     etcd:
       monitoring: True
       endpointIps: {{ etcd_endpoint_ips }}
       port: 2379
       tlsEnable: True
-
-    persistence:
-      storageClass: {{ storage_class }}
 
     common:
       mysqlVolumeSize: {{ mysql_volume_size }}
