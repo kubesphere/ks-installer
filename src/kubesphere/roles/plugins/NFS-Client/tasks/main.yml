@@ -32,6 +32,7 @@
     --set nfs.path={{ nfs_path }}
     --set storageClass.defaultClass={{ nfs_client_is_default_class }}
     --set storageClass.archiveOnDelete={% if nfs_archiveOnDelete is defined and nfs_archiveOnDelete %}true{% else %}false{% endif %}
+    --namespace  kube-system
 
 - name: NFS-Client | Deploy set mountOptions
   shell: >
