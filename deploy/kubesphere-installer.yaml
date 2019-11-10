@@ -138,17 +138,12 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: kubespheredev/ks-installer:latest
+        image: kubesphere/ks-installer:v2.1.0
         imagePullPolicy: "Always"
         volumeMounts:
-#          - name: kubesphere-config
-#            mountPath: /kubesphere/config
           - name: kubesphere
             mountPath: /etc/kubesphere
       volumes:
-#        - name: kubesphere-config
-#          configMap:
-#            name: ks-installer
         - name: kubesphere
           hostPath:
             path: /etc/kubesphere

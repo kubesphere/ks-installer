@@ -37,12 +37,3 @@
     - persistence.storageClass is defined
     - persistence.storageClass != ""
 
-
-#- include_tasks: preCheckSize.yaml
-#  loop:
-#    - {ns: "kubesphere-system", pvc: "mysql-pvc", size: "{{ common.mysqlVolumeSize }}"}
-#    - {ns: "kubesphere-system", pvc: "ketcd-pvc", size: "{{ common.etcdVolumeSize }} "}
-#    - {ns: "kubesphere-system", pvc: "minio-pvc", size: "{{ common.minioVolumeSize }}"}
-#    - {ns: "kubesphere-system", pvc: "openldap-pvc", size: "{{ common.openldapVolumeSize }}"}
-#    - {ns: "kubesphere-system", pvc: "redis-pvc", size: "{{ common.redisVolumSize }}"}
-
