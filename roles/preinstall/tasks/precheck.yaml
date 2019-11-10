@@ -37,3 +37,15 @@
     - persistence.storageClass is defined
     - persistence.storageClass != ""
 
+- name: check default storage class
+  shell: >
+    {{ bin_dir }}/kubectl get sc
+  register: default_storage_class_check
+
+- name: Stop if defaultStorageClass was not found
+  assert:
+    that: '"(default)" in default_storage_class_check.stdout'
+    msg: "Default StorageClass was not found !"
+  when:
+    - persistence.storageClass is defined
+    - persistence.storageClass == ""
