@@ -54,7 +54,6 @@ version_file=$BASE_FOLDER/../kubesphere/version.tmp
 kube_version=$(grep -r "kube_version" $common_file | awk '{print $2}')
 etcd_version=$(grep -r "etcd_version" $common_file | awk '{print $2}')
 
-sed -i "/local_volume_enabled/s/\:.*/\: false/g" $common_file
 sed -i "/openpitrix_enabled/s/\:.*/\: true/g" $common_file
 
 function Upgrade_Confirmation(){
@@ -186,7 +185,9 @@ function update-allinone() {
 }
 
 function update-multinode() {
-    
+
+    sed -i "/local_volume_enabled/s/\:.*/\: false/g" $common_file
+
     cp -f $BASE_FOLDER/../conf/hosts.ini $multinode_hosts
     cp -f $BASE_FOLDER/../conf/*.yaml $multinode_vars_path
 
