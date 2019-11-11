@@ -52,6 +52,8 @@ version_file=$BASE_FOLDER/../kubesphere/version.tmp
 kube_version=$(grep -r "kube_version" $common_file | awk '{print $2}')
 etcd_version=$(grep -r "etcd_version" $common_file | awk '{print $2}')
 
+sed -i "/local_volume_enabled/s/\:.*/\: false/g" $common_file
+sed -i "/openpitrix_enabled/s/\:.*/\: true/g" $common_file
 
 function Upgrade_Confirmation(){
     echo ""
@@ -72,6 +74,21 @@ function check_version_file() {
     #    ansible-playbook -i $2 $BASE_FOLDER/../kubesphere/check_version.yml -b
     # fils
 
+}
+
+
+function result_cmd(){
+   commandline='kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f'
+   cat << eof
+
+$(echo -e "\033[1;36mNOTE:\033[0m")
+
+Verify the upgrade logs and result:
+
+   $commandline
+
+
+eof
 }
 
 
@@ -156,6 +173,8 @@ function update-allinone() {
         #statements
         str="successsful!"
         echo -e "\033[30;47m$str\033[0m"
+        echo
+        result_cmd
     else
         str="failed!"
         echo -e "\033[31;47m$str\033[0m"
@@ -194,6 +213,8 @@ function update-multinode() {
         #statements
         str="successsful!"
         echo -e "\033[30;47m$str\033[0m"
+        echo
+        result_cmd
     else
         str="failed!"
         echo -e "\033[31;47m$str\033[0m"
@@ -210,4 +231,3 @@ if [[ $hostname != "ks-allinone" ]]; then
 else
     update-allinone
 fi
-
