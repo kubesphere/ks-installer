@@ -210,4 +210,3 @@ if [[ $hostname != "ks-allinone" ]]; then
 else
     update-allinone
 fi
-
