@@ -24,6 +24,11 @@ data:
         kubesphere: {{ ks_version }}
         kubernetes: {{ kube_version }}
         openpitrix: {{ openpitrix_version }}
+{% if (devops.enabled is defined and devops.enabled) or (openpitrix.enabled is defined and openpitrix.enabled) %}
+      enableKubeConfig: true
+{% else %}
+      enableKubeConfig: false
+{% endif %}
 kind: ConfigMap
 metadata:
   name: ks-console-config
