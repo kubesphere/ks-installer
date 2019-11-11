@@ -54,6 +54,12 @@
   when:
     - vertical_pod_autoscaler_enable == true
 
+- name: KubeSphere | Generate kubeconfig-admin
+  shell: >
+    /bin/bash {{ kubesphere_dir }}/ks-init/generate-kubeconfig.sh
+  when:
+    - openpitrix.enabled is defined and openpitrix.enabled
+
 
 - import_tasks: ks-stop.yaml
 
