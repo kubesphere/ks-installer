@@ -66,7 +66,7 @@ spec:
           defaultMode: 420
           name: policy-rules
         name: policy-rules
-{% if devops.enabled is defined and devops.enabled == true %}
+{% if (devops.enabled is not defined or not devops.enabled) and (openpitrix.enabled is not defined or not openpitrix.enabled) %}
       - name: ca-dir
         secret:
           defaultMode: 420
@@ -98,7 +98,7 @@ spec:
         - --enable-multi-login={{ console.enableMultiLogin | default(false) }}
         - --token-idle-timeout=40m
         - --redis-url=redis://redis.kubesphere-system.svc:6379
-{% if (devops.enabled is defined and devops.enabled == false) or (devops.enabled is not defined) %}
+{% if (devops.enabled is not defined or not devops.enabled) and (openpitrix.enabled is not defined or not openpitrix.enabled) %}
         - --generate-kubeconfig=False
 {% endif %}
         env:
@@ -115,7 +115,7 @@ spec:
               key: admin-password
               name: ks-account-secret
         volumeMounts:
-{% if devops.enabled is defined and devops.enabled == true %}
+{% if (devops.enabled is not defined or not devops.enabled) and (openpitrix.enabled is not defined or not openpitrix.enabled) %}
         - mountPath: /etc/kubernetes/pki
           name: ca-dir
 {% endif %}

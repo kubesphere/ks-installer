@@ -43,6 +43,10 @@ spec:
             cpu: {{ ks_apiserver_cpu_requests }}
             memory: {{ ks_apiserver_memory_requests }}
         volumeMounts:
+{% if devops.enabled or openpitrix.enabled %}
+        - mountPath: /etc/kubernetes/pki
+          name: ca-dir
+{% endif %}
         - mountPath: /var/run/docker.sock
           name: docker-sock
         - mountPath: /etc/kubesphere/ingress-controller
@@ -88,6 +92,12 @@ spec:
             namespaces:
             - kubesphere-system
       volumes:
+{% if devops.enabled or openpitrix.enabled %}
+      - configMap:
+          name: kubesphere-ca
+          defaultMode: 420
+        name: ca-dir
+{% endif %}
       - hostPath:
           path: /var/run/docker.sock
           type: ""
