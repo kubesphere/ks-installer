@@ -25,6 +25,8 @@ fi
 
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
+
+python os/get-pip.py > /dev/null
 pip install  -r os/requirements.txt  > /dev/null
 
 LOG_FOLDER=$BASE_FOLDER/../logs
