@@ -42,7 +42,7 @@ if [[ $? -eq 0 ]]; then
     fi
 
     pip install -U --ignore-installed PyYAML
-    pip install --ignore-installed -r os/requirements.txt
+    pip install -r os/requirements.txt
 else
     echo "please install python"
 fi
