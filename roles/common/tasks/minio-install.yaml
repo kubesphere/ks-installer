@@ -22,6 +22,21 @@
     --set fullnameOverride=minio
     --namespace kubesphere-system
     --wait --timeout 1800
+  register: minio_status
+  ignore_errors: True
+
+
+- debug:
+    msg:
+     - 1. check the storage configuration and storage server
+     - 2. execute 'helm del --purge ks-minio'
+     - 3. Restart the installer pod in kubesphere-system namespace
+  when: minio_status.rc != 0
+
+
+- fail:
+    msg: "It is suggested to refer to the above methods for troubleshooting problems"
+  when: minio_status.rc != 0
 
 
 - name: Kubesphere | create minio config directory
