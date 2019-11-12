@@ -18,6 +18,7 @@ Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCom
 注意输出结果重的 `Server Version` 这行，如果显示 `GitVersion` 大于 `v1.13.0`，Kubernetes 的版本是可以安装的。如果低于 `v1.13.0` ，可以查看 [Upgrading kubeadm clusters from v1.12 to v1.13](https://v1-13.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade-1-13/) 先升级下 K8s 版本。
 
 2. 确认已安装 `Helm`，并且 `Helm` 的版本至少为 `2.10.0`。在终端执行 `helm version`，得到类似下面的输出
+>> 注: helm v2.16.0无法创建job，如果已安装该版本，建议升级或更换其他版本。
 ```bash
 root@kubernetes:~# helm version
 Client: &version.Version{SemVer:"v2.13.1", GitCommit:"618447cbf203d147601b4b9bd7f8c37a5d39fbb4", GitTreeState:"clean"}
@@ -49,7 +50,7 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 
 ## 部署 KubeSphere
 
-最小化快速部署：
+#### 最小化快速部署：
 ```bash
  $ kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
  
@@ -69,6 +70,7 @@ $ kubectl get svc -n kubesphere-system
 
 以上为最小化部署，如需开启更多功能，请参考如下步骤配置相关依赖：
 
+#### 安装功能组件:
 1. 创建 Kubernetes 集群 CA 证书的 Secret。(开启devops / openpitrix需设置)
 
 > 注：按照当前集群 ca.crt 和 ca.key 证书路径创建（Kubeadm 创建集群的证书路径一般为 `/etc/kubernetes/pki`）
