@@ -36,7 +36,7 @@ Mem:              16          4          10           0           3           2
 Swap:             0           0           0
 ```
 
-4. (非必须) KubeSphere 最好配合持久化存储使用，执行 `kubectl get sc` 看下当前是否设置了默认的 `storageclass`.
+4. KubeSphere 需配合持久化存储使用，执行`kubectl get sc` 查看当前环境中的存储类型（当使用默认存储类型时，配置文件中可以不填存储相关信息）.
 ```bash
 root@kubernetes:~$ kubectl get sc
 NAME                      PROVISIONER               AGE
@@ -49,7 +49,27 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 
 ## 部署 KubeSphere
 
-1. 创建 Kubernetes 集群 CA 证书的 Secret。(开启devops需设置)
+最小化快速部署：
+```bash
+ $ kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+ 
+ # 查看部署进度及日志
+ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+ 
+```
+
+部署完成后可查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
+
+```
+$ kubectl get svc -n kubesphere-system    
+# 查看 ks-console 服务的端口  默认为 NodePort: 30880
+```
+
+![](https://pek3b.qingstor.com/kubesphere-docs/png/20190912002602.png)
+
+以上为最小化部署，如需开启更多功能，请参考如下步骤配置相关依赖：
+
+1. 创建 Kubernetes 集群 CA 证书的 Secret。(开启devops / openpitrix需设置)
 
 > 注：按照当前集群 ca.crt 和 ca.key 证书路径创建（Kubeadm 创建集群的证书路径一般为 `/etc/kubernetes/pki`）
 
@@ -82,46 +102,16 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-3. 克隆 kubesphere-installer 仓库至本地。
-
-```
-$ git clone https://github.com/kubesphere/ks-installer.git -b master
-```
-
-4. 进入 ks-installer，然后在 Kubernetes 集群部署 KubeSphere。
-
-```bash
-$ cd deploy
-```
-
-编辑 config.yaml 文件，选择需要安装的组件。
-
-```bash
-$ kubectl apply -f ./
-```
-
-5. 查看部署日志。
-
-```
-$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
-```
-
-6. 查看控制台的服务端口，使用 `IP:30880` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
-
-```
-$ kubectl get svc -n kubesphere-system    
-# 查看 ks-console 服务的端口  默认为 NodePort: 30880
-```
-
-![](https://pek3b.qingstor.com/kubesphere-docs/png/20190912002602.png)
-
-7. 更新 KubeSphere 安装
+3. 编辑configmap开启相关功能:
 
 ```bash
 $ kubectl edit cm ks-installer -n kubesphere-system
 ```
 
-编辑之后，推出等待生效即可。
+> 按功能需求编辑配置文件之后，退出等待生效即可，如长时间未生效请使用如下命令查看相关日志:
+```bash
+$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+```
 
 ## 参数说明
 
