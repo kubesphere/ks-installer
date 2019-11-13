@@ -117,110 +117,252 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l ap
 
 ## 参数说明
 
-<table border=0 cellpadding=0 cellspacing=0 width=1364 style='border-collapse:
- collapse;table-layout:fixed;width:1023pt;font-variant-ligatures: normal;
- font-variant-caps: normal;orphans: 2;text-align:start;widows: 2;-webkit-text-stroke-width: 0px;
- text-decoration-style: initial;text-decoration-color: initial'>
- <col width=112 style='mso-width-source:userset;mso-width-alt:3982;width:84pt'>
- <col width=156 style='mso-width-source:userset;mso-width-alt:5546;width:117pt'>
- <col width=757 style='mso-width-source:userset;mso-width-alt:26908;width:568pt'>
- <col width=339 style='mso-width-source:userset;mso-width-alt:12060;width:254pt'>
+<table border=0 cellpadding=0 cellspacing=0 width=1288 style='border-collapse:
+ collapse;table-layout:fixed;width:966pt'>
+ <col width=202 style='mso-width-source:userset;mso-width-alt:7196;width:152pt'>
+ <col width=232 style='mso-width-source:userset;mso-width-alt:8248;width:174pt'>
+ <col width=595 style='mso-width-source:userset;mso-width-alt:21162;width:446pt'>
+ <col class=xl6519753 width=259 style='mso-width-source:userset;mso-width-alt:
+ 9216;width:194pt'>
  <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 class=xl67 width=268 style='height:13.8pt;width:201pt'>参数</td>
-  <td class=xl65 width=757 style='width:568pt'><span style='font-variant-ligatures: normal;
-  font-variant-caps: normal;orphans: 2;widows: 2;-webkit-text-stroke-width: 0px;
-  text-decoration-style: initial;text-decoration-color: initial'>描述</span></td>
-  <td class=xl65 width=339 style='width:254pt'><span style='font-variant-ligatures: normal;
-  font-variant-caps: normal;orphans: 2;widows: 2;-webkit-text-stroke-width: 0px;
-  text-decoration-style: initial;text-decoration-color: initial'>默认值</span></td>
+  <td colspan=2 height=18 class=xl6619753 width=434 style='height:13.8pt;
+  width:326pt'>Parameter</td>
+  <td class=xl6619753 width=595 style='width:446pt'>Description</td>
+  <td class=xl6819753 width=259 style='width:194pt'>Default</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>kube_apiserver_host</td>
-  <td>当前集群kube-apiserver地址（ip:port）</td>
-  <td class=xl69></td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>persistence</td>
+  <td class=xl6719753>storageClass</td>
+  <td class=xl1519753>存储类型，不填则使用默认存储类型(sc)</td>
+  <td class=xl6519753>“”</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>etcd_tls_enable</td>
-  <td>是否开启etcd TLS证书认证（True / False）</td>
-  <td class=xl69>True</td>
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=4 height=84 class=xl6719753 style='height:62.4pt'>etcd</td>
+  <td class=xl6719753>monitoring</td>
+  <td class=xl1519753>是否开启etcd监控</td>
+  <td class=xl6519753>False</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 class=xl66 style='height:13.8pt'>etcd_endpoint_ips</td>
-  <td>etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）</td>
-  <td class=xl69></td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>endpointIps</td>
+  <td class=xl1519753>etcd地址，如etcd为集群，地址以逗号分离（如：192.168.0.7,192.168.0.8,192.168.0.9）</td>
+  <td class=xl6519753></td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>etcd_port</td>
-  <td>etcd端口 (默认2379，如使用其它端口，请配置此参数)</td>
-  <td class=xl69>2379</td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>port</td>
+  <td class=xl1519753>etcd端口 (默认2379，如使用其它端口，请配置此参数)</td>
+  <td class=xl6519753>2379</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>disableMultiLogin<span
-  style='mso-spacerun:yes'>&nbsp;</span></td>
-  <td>是否关闭多点登录<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True / False）</td>
-  <td class=xl69>True</td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>tlsEnable</td>
+  <td class=xl1519753>是否开启etcd TLS证书认证（True / False）</td>
+  <td class=xl6519753>True</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>elk_prefix</td>
-  <td>日志索引<span style='mso-spacerun:yes'>&nbsp;</span></td>
-  <td class=xl69>logstash<span style='mso-spacerun:yes'>&nbsp;</span></td>
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=5 height=105 class=xl6719753 style='height:78.0pt'>common</td>
+  <td class=xl6719753>mysqlVolumeSize</td>
+  <td class=xl1519753>mysql存储卷大小，设置后不可修改</td>
+  <td class=xl6519753>20Gi</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>keep_log_days</td>
-  <td>日志留存时间（天）</td>
-  <td class=xl69>7</td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>minioVolumeSize</td>
+  <td class=xl1519753>minio存储卷大小，设置后不可修改</td>
+  <td class=xl6519753>20Gi</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>metrics_server_enable</td>
-  <td>是否安装metrics_server<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>etcdVolumeSize</td>
+  <td class=xl1519753>etcd存储卷大小，设置后不可修改</td>
+  <td class=xl6519753>20Gi</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>openldapVolumeSize</td>
+  <td class=xl1519753>openldap存储卷大小，设置后不可修改</td>
+  <td class=xl6519753>2Gi</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>redisVolumSize</td>
+  <td class=xl1519753>redis存储卷大小，设置后不可修改</td>
+  <td class=xl6519753>2Gi</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=2 height=42 class=xl6719753 style='height:31.2pt'>console</td>
+  <td class=xl6719753>enableMultiLogin</td>
+  <td class=xl1519753>是否启动多点登录 （True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>port</td>
+  <td class=xl1519753>console登录端口 （NodePort）</td>
+  <td class=xl6519753>30880</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=4 height=84 class=xl6719753 style='height:62.4pt'>monitoring</td>
+  <td class=xl6719753>prometheusReplicas</td>
+  <td class=xl1519753>prometheus副本数</td>
+  <td class=xl6519753>1</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>prometheusMemoryRequest</td>
+  <td class=xl1519753>prometheus内存请求空间</td>
+  <td class=xl6519753>400Mi</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>prometheusVolumeSize</td>
+  <td class=xl1519753>prometheus持久化存储空间</td>
+  <td class=xl6519753>20Gi</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>grafana.enabled</td>
+  <td class=xl1519753>是否开启grafana （True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=9 height=189 class=xl6619753 style='height:140.4pt'>logging</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否启用日志组件elasticsearch<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>elasticsearchMasterReplicas</td>
+  <td class=xl1519753>elasticsearch主节点副本数</td>
+  <td class=xl6519753>1</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>elasticsearchDataReplicas</td>
+  <td class=xl1519753>elasticsearch数据节点副本数</td>
+  <td class=xl6519753>1</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>logsidecarReplicas</td>
+  <td class=xl1519753>日志sidecar副本数</td>
+  <td class=xl6519753>2</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>elasticsearchVolumeSize</td>
+  <td class=xl1519753>elasticsearch数据盘尺寸</td>
+  <td class=xl6519753>20Gi</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>logMaxAge</td>
+  <td class=xl1519753>日志留存时间（天）</td>
+  <td class=xl6519753>7</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>elkPrefix</td>
+  <td class=xl1519753>日志索引<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl6519753>logstash<span style='mso-spacerun:yes'>&nbsp;</span></td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>containersLogMountedPath</td>
+  <td class=xl1519753>容器日志挂载路径</td>
+  <td class=xl6519753>“”</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>kibana.enabled</td>
+  <td class=xl1519753>是否启动kibana<span style='mso-spacerun:yes'>&nbsp;
   </span>（True / False）</td>
-  <td class=xl69>True</td>
+  <td class=xl6519753>False</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>istio_enable</td>
-  <td>是否安装istio<span
-  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=8 height=168 class=xl6619753 style='height:124.8pt'>devops</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否启用DevOps功能<span style='mso-spacerun:yes'>&nbsp;
   </span>（True / False）</td>
-  <td class=xl69>True</td>
+  <td class=xl6519753>False</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td rowspan=2 height=36 class=xl68 style='height:27.6pt'>persistence</td>
-  <td class=xl66>enable</td>
-  <td>是否启用持久化存储<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True /
-  False）（非测试环境建议开启数据持久化）</td>
-  <td class=xl69></td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>jenkinsMemoryLim</td>
+  <td class=xl1519753>jenkins内存限制</td>
+  <td class=xl6519753>2Gi</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td height=18 class=xl66 style='height:13.8pt'>storageClass</td>
-  <td>启用持久化存储要求环境中存在已经创建好的storageClass（默认为空，使用default storageClass）</td>
-  <td class=xl69>“”</td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>jenkinsMemoryReq</td>
+  <td class=xl1519753>jenkins内存请求</td>
+  <td class=xl6519753>1500Mi</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>containersLogMountedPath（可选）</td>
-  <td>容器日志挂载路径</td>
-  <td class=xl69>"/var/lib/docker/containers"</td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>jenkinsVolumeSize</td>
+  <td class=xl1519753>jenkins持久化存储空间</td>
+  <td class=xl6519753>8Gi</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>external_es_url（可选）</td>
-  <td>外部es地址，支持对接外部es用</td>
-  <td class=xl69></td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>jenkinsJavaOpts_Xms</td>
+  <td class=xl1519753>jenkins<span style='mso-spacerun:yes'>&nbsp;
+  </span>jvm参数（Xms）</td>
+  <td class=xl6519753>512m</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>external_es_port（可选）</td>
-  <td>外部es端口，支持对接外部es用</td>
-  <td class=xl69></td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>jenkinsJavaOpts_Xmx</td>
+  <td class=xl1519753>jenkins<span style='mso-spacerun:yes'>&nbsp;
+  </span>jvm参数（Xmx）</td>
+  <td class=xl6519753>512m</td>
  </tr>
- <tr height=18 style='height:13.8pt'>
-  <td colspan=2 height=18 style='height:13.8pt'>local_registry (离线部署使用)</td>
-  <td>离线部署时，对接本地仓库 （使用该参数需将安装镜像使用scripts/download-docker-images.sh导入本地仓库中）</td>
-  <td class=xl69></td>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>jenkinsJavaOpts_MaxRAM</td>
+  <td class=xl1519753>jenkins<span style='mso-spacerun:yes'>&nbsp;
+  </span>jvm参数（MaxRAM）</td>
+  <td class=xl6519753>2Gi</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>sonarqube.enabled</td>
+  <td class=xl1519753>是否启用sonarqube （True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>metrics-server</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否安装metrics_server<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>（True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6619753 style='height:15.6pt'>servicemesh</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否启用微服务治理功能<span style='mso-spacerun:yes'>&nbsp;
+  </span>（True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6619753 style='height:15.6pt'>notification</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否启用通知功能 （True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6619753 style='height:15.6pt'>alerting</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否启用告警功能 （True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>harbor</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否启用harbor<span style='mso-spacerun:yes'>&nbsp;
+  </span>（True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>domain</td>
+  <td class=xl1519753>harbor域名</td>
+  <td class=xl6519753>harbor.devops.kubesphere.local</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>gitlab</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>是否启用gitlab （True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>domain</td>
+  <td class=xl1519753>gitlab域名</td>
+  <td class=xl6519753>devops.kubesphere.local</td>
  </tr>
  <![if supportMisalignedColumns]>
  <tr height=0 style='display:none'>
-  <td width=112 style='width:84pt'></td>
-  <td width=156 style='width:117pt'></td>
-  <td width=757 style='width:568pt'></td>
-  <td width=339 style='width:254pt'></td>
+  <td width=202 style='width:152pt'></td>
+  <td width=232 style='width:174pt'></td>
+  <td width=595 style='width:446pt'></td>
+  <td width=259 style='width:194pt'></td>
  </tr>
  <![endif]>
 </table>
