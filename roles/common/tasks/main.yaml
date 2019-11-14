@@ -51,11 +51,11 @@
 
     - name: Getting PersistentVolumeName (mysql)
       shell: >
-        kubectl get pv | grep "mysql-pvc" | awk '{print $1}'
+        kubectl get pv | grep "kubesphere-system/mysql-pvc" | awk '{print $1}'
       register: pvName
     - name: Getting PersistentVolumeSize (mysql)
       shell: >
-        kubectl get pv | grep "mysql-pvc" | awk '{print $2}'
+        kubectl get pv | grep "kubesphere-system/mysql-pvc" | awk '{print $2}'
       register: pvSize
 
     - name: Setting PersistentVolumeName (mysql)
@@ -69,11 +69,11 @@
 
     - name: Getting PersistentVolumeName (etcd)
       shell: >
-        kubectl get pv | grep "etcd-pvc" | awk '{print $1}'
+        kubectl get pv | grep "kubesphere-system/etcd-pvc" | awk '{print $1}'
       register: pvName
     - name: Getting PersistentVolumeSize (etcd)
       shell: >
-        kubectl get pv | grep "etcd-pvc" | awk '{print $2}'
+        kubectl get pv | grep "kubesphere-system/etcd-pvc" | awk '{print $2}'
       register: pvSize
 
     - name: Setting PersistentVolumeName (etcd)
