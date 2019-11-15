@@ -60,6 +60,13 @@ base_library_repo: >-
 
   {%- endif %}
 
+# quay image repo define
+quay_image_repo: >-
+  {% if local_registry is defined -%}
+  {{ local_registry }}
+  {%- else -%}
+  quay.azk8s.cn
+  {%- endif %}
 
 # gcr and kubernetes image repo define
 gcr_image_repo: >-
@@ -367,7 +374,7 @@ openldap_repo: "{{ base_repo }}osixia/openldap"
 openldap_tag: 1.3.0
 
 #NFS:
-nfs_client_provisioner_repo: "{{ ks_image_repo }}/external_storage/nfs-client-provisioner"
+nfs_client_provisioner_repo: "{{ quay_image_repo }}/external_storage/nfs-client-provisioner"
 nfs_client_provisioner_tag: v3.1.0-k8s1.11
 nfs_server_provisioner_repo: "{{ ks_image_repo }}/kubernetes_incubator/nfs-provisioner"
 nfs_server_provisioner_tag: v1.0.9
