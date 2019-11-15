@@ -3,11 +3,11 @@
 > English | [中文](README_zh.md)
 
 In addition to supporting deploy on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises Kubernetes clusters,
- 
+
 ## Prerequisites
 
-- Kubernetes Version: >= 1.13.0, < 1.16
-- Helm Version: >= 2.10.0
+- Kubernetes Version: 1.13.x, 1.14.x, 1.15.x
+- Helm Version: `>= 2.10.0` (excluding 2.16.0)
 
 1. Make sure your Kubernetes version is greater than 1.13.0, run `kubectl version` in your cluster node. The output looks like the following:
 ```bash
@@ -37,7 +37,8 @@ Mem:              16          4          10           0           3           2
 Swap:             0           0           0
 ```
 
-4. (Optional) Check if there is default storage class in your class. This is not required, but it's highly recommended use a Persistent Volume (not local volume).
+4. Check if there is a default Storage Class in your cluster, an existing Storage Class is the prerequisite for KubeSphere installation.
+
 ```bash
 root@kubernetes:~$ kubectl get sc
 NAME                      PROVISIONER               AGE
@@ -54,40 +55,46 @@ If your Kubernetes cluster environment meets all above requirements, you are goo
 
 ## To Start Deploying KubeSphere
 
-1. First, you need to create 2 namespaces in Kubernetes cluster, named `kubesphere-system` and `kubesphere-monitoring-system`.
+### Minimal Installation
 
-```
-$ cat <<EOF | kubectl create -f -
----
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: kubesphere-system
----
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: kubesphere-monitoring-system
-EOF
+> Attention: Following section is only used for minimal installation by default, KubeSphere has decoupled some core components in v2.1.0, for more pluggable components installation, see `Enable Pluggable Components` below.
+
+
+```yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
 ```
 
-2. Create the Secret of CA certificate of your current Kubernetes cluster.
-
-> Note: Follow the certificate paths of `ca.crt` and `ca.key` of your current cluster to create this secret.
+Then inspect the logs of installation.
 
 ```bash
-kubectl -n kubesphere-system create secret generic kubesphere-ca  \
---from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
---from-file=ca.key=/etc/kubernetes/pki/ca.key 
+$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-3. Create the Secret of certificate for ETCD in your Kubernetes cluster.
+When all Pods of KubeSphere are running, it means the installation is successsful. Then you can use `http://IP:30880` to access the dashboard with default account `admin/P@88w0rd`.
 
-> Note: Create with the actual ETCD certificate location of the cluster; If the ETCD does not have a configured certificate, an empty secret is created（The following command applies to the cluster created by Kubeadm）
 
-> Note: Create the secret according to the your actual path of ETCD for the k8s cluster;
+### Enable Pluggable Components
 
-  - If the ETCD has been configured with certificates, refer to the following step:
+
+1. Create the Secret of CA certificate of your Kubernetes cluster. The CA certificate is the prerequisite of enabling DevOps and OpenPitrix components installation.
+
+> Note: To create this secret according to the certificate paths of `ca.crt` and `ca.key` of your cluster. Generally, the certificate path of cluster which is created by `kubeadm` is `/etc/kubernetes/pki`.
+
+```bash
+$ kubectl create ns kubesphere-system
+
+$ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
+--from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
+--from-file=ca.key=/etc/kubernetes/pki/ca.key
+```
+
+2. Create the Secret of certificate for etcd in your Kubernetes cluster. This step is only needed when you prefer enabling etcd monitoring.
+
+> Note: Create the secret according to the actual ETCD certificate path of your cluster; If the ETCD has not been configured certificate, an empty secret need to be created
+
+
+
+  - If the ETCD has been configured with certificates, refer to the following step （The following command is an example which is only used for the cluster created by `kubeadm`）:
 
 ```bash
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
@@ -96,55 +103,30 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
 ```
 
- - If the ETCD has been not configured with certificates.
+ - If the ETCD has not been configured with certificates.
 
 ```bash
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-4. Clone kubesphere-installer repo to local
 
-```
-$ git clone https://github.com/kubesphere/ks-installer.git -b master
-```
+3. Then we can edit the ConfigMap to enable any pluggable components that you need.
 
-5. Then we can start to install KubeSphere.
 
 ```bash
-$ cd deploy
+$ kubectl edit cm ks-installer -n kubesphere-system
 ```
+> Attention: After complete ConfigMap edit, you can exit directly then it'll  automatically trigger the installation.
 
-Edit the config.yaml file and fill in the cluster apiserverAddr, etcd, storageClass information. 
-
-At the same time, you can also choose which components need to be installed.
-
-```bash
-$ kubectl apply -f config.yaml
-$ kubectl apply -f kubesphere-installer.yaml
-```
-
-6. Inspect the logs of installation.
+4. Inspect the logs of installation.
 
 ```bash
 $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-7. Finally, you can access the Web UI via `IP:NodePort`, the default account is `admin/P@88w0rd`.
+When all Pods of KubeSphere are running, it means the installation is successsful. Then you can use `http://IP:30880` to access the dashboard with default account `admin/P@88w0rd`.
 
-```bash
-$ kubectl get svc -n kubesphere-system    
-# Inspect the NodePort of ks-console, it's 30880 by default.
-```
-
-![](https://pek3b.qingstor.com/kubesphere-docs/png/20190912020300.png)
-
-8. Update KubeSphere Installer
-
-```bash
-$ kubectl edit cm ks-installer -n kubesphere-system
-```
-
-After editing and saveing, wait for it to take effect.
+![](https://pek3b.qingstor.com/kubesphere-docs/png/20191116004533.png)
 
 ## Configuration Table
 
@@ -268,4 +250,3 @@ If you need any help with KubeSphere, please join us at [Slack Channel](https://
 
 - Support multiple public cloud and private cloud, network plug-ins and storage plug-ins.
 - All components are designed to be loosely-coupled, and all features are pluggable. Installation will become very light and fast.
-
