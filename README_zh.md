@@ -98,8 +98,6 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 
 - 若 etcd 没有配置证书，则创建空 Secret：
 
-- It will create an empty Secret if the ETCD doesn'st have a configured certificate (The following command has been tested in the Kubernetes created by Kubeadm)
-
 ```
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
