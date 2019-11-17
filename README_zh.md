@@ -1,6 +1,6 @@
 # 在 Kubernetes 集群在线部署 KubeSphere
 
-> [English](README.md) | 中文 
+> [English](README.md) | 中文
 
 KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://kubesphere.io/)。
 
@@ -53,10 +53,10 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 #### 最小化快速部署：
 ```bash
  $ kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
- 
+
  # 查看部署进度及日志
  $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
- 
+
 ```
 
 部署完成后可查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
@@ -79,7 +79,7 @@ $ kubectl get svc -n kubesphere-system
 $ kubectl create ns kubesphere-system
 $ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
 --from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
---from-file=ca.key=/etc/kubernetes/pki/ca.key 
+--from-file=ca.key=/etc/kubernetes/pki/ca.key
 ```
 
 2. 创建集群 etcd 的证书 Secret。(开启etcd监控需设置)
@@ -214,12 +214,17 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l ap
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td rowspan=9 height=189 class=xl6619753 style='height:140.4pt'>logging</td>
+  <td rowspan=9 height=189 class=xl6619753 style='height:140.4pt'>logging </br> (至少 56 M, 2.76 G)</td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否启用日志组件elasticsearch<span
   style='mso-spacerun:yes'>&nbsp;&nbsp; </span>（True / False）</td>
   <td class=xl6519753>False</td>
  </tr>
+ <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>openpitrix </br>(至少 0.3 core, 300 MiB)</td>
+  <td class=xl6719753>enable</td>
+  <td class=xl1519753>平台的应用商店与应用模板、应用管理都基于 OpenPitrix，建议开启安装（True / False）</td>
+  <td class=xl6519753>False</td>
  <tr height=21 style='height:15.6pt'>
   <td height=21 class=xl6719753 style='height:15.6pt'>elasticsearchMasterReplicas</td>
   <td class=xl1519753>elasticsearch主节点副本数</td>
@@ -262,7 +267,7 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l ap
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td rowspan=8 height=168 class=xl6619753 style='height:124.8pt'>devops</td>
+  <td rowspan=8 height=168 class=xl6619753 style='height:124.8pt'>devops </br>(集群的可用资源至少 0.47 core, 8.6 G )</td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否启用DevOps功能<span style='mso-spacerun:yes'>&nbsp;
   </span>（True / False）</td>
@@ -303,25 +308,25 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l ap
  </tr>
  <tr height=21 style='height:15.6pt'>
   <td height=21 class=xl6719753 style='height:15.6pt'>sonarqube.enabled</td>
-  <td class=xl1519753>是否启用sonarqube （True / False）</td>
+  <td class=xl1519753>是否启用 SonarQube 的安装（True / False）</td>
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>metrics-server</td>
+  <td height=21 class=xl6719753 style='height:15.6pt'>metrics-server </br>(至少 5 m, 44.35 MiB)</td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否安装metrics_server<span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>（True / False）</td>
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6619753 style='height:15.6pt'>servicemesh</td>
+  <td height=21 class=xl6619753 style='height:15.6pt'>servicemesh </br>(至少 2 core, 3.6 G)</td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否启用微服务治理功能<span style='mso-spacerun:yes'>&nbsp;
   </span>（True / False）</td>
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6619753 style='height:15.6pt'>notification</td>
+  <td height=21 class=xl6619753 style='height:15.6pt'>notification </br>(Notification 和 Alerting 一共至少需要 0.08 core, 80 M) </td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否启用通知功能 （True / False）</td>
   <td class=xl6519753>False</td>
@@ -333,7 +338,7 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l ap
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>harbor</td>
+  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>harbor </br>(Harbor 和 GitLab 一共至少需要 0.58 core, 3.57 G)</td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否启用harbor<span style='mso-spacerun:yes'>&nbsp;
   </span>（True / False）</td>
