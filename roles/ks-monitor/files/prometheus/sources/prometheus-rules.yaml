@@ -14,6 +14,9 @@ spec:
             sum((container_cpu_usage_seconds_total{job="kubelet", image!="", container_name!=""} * on(namespace) group_left(label_kubesphere_io_workspace) kube_namespace_labels{job="kube-state-metrics"} - container_cpu_usage_seconds_total{job="kubelet", image!="", container_name!=""} offset 90s * on(namespace) group_left(label_kubesphere_io_workspace) kube_namespace_labels{job="kube-state-metrics"}) / 90) by (namespace, label_kubesphere_io_workspace)
           record: namespace:container_cpu_usage_seconds_total:sum_rate
         - expr: |
+            count((container_accelerator_memory_used_bytes {job="cadvsior"}) * on(namespace) group_left(label_kubesphere_io_workspace) kube_namespace_labels{job="kube-state-metrics"}) by (namespace, label_kubesphere_io_workspace)
+          record: namespace:container_gpu_usage:count
+        - expr: |
             sum(container_memory_usage_bytes{job="kubelet", image!="", container_name!=""} * on(namespace) group_left(label_kubesphere_io_workspace) kube_namespace_labels{job="kube-state-metrics"}) by (namespace, label_kubesphere_io_workspace)
           record: namespace:container_memory_usage_bytes:sum
         - expr: |

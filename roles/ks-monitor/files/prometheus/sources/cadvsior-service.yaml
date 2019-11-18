@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: cadvsior
+  name: cadvsior
+  namespace: monitoring
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      port: 4194
+      targetPort: 4194
+  selector:
+    app: cadvsior

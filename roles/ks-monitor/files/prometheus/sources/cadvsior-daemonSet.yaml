@@ -1,0 +1,108 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    k8s-app: cadvsior
+  name: cadvsior
+  namespace: kubesphere-monitoring-system
+spec:
+  selector:
+    matchLabels:
+      k8s-app: cadvsior
+  template:
+    metadata:
+      labels:
+        k8s-app: cadvsior
+      name: cadvsior
+    spec:
+      containers:
+        - args:
+            - --profiling
+            - --housekeeping_interval=1s
+            - --port=4195
+          env:
+            - name: LD_LIBRARY_PATH
+              value: /var/lib/kubelet
+          image: google/cadvisor:v0.33.0
+          imagePullPolicy: IfNotPresent
+          name: cadvisor
+          ports:
+            - containerPort: 4195
+              hostPort: 4195
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2000Mi
+            requests:
+              cpu: 200m
+              memory: 200Mi
+          securityContext:
+            privileged: true
+            procMount: Default
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /rootfs
+              name: rootfs
+              readOnly: true
+            - mountPath: /var/run
+              name: var-run
+            - mountPath: /sys
+              name: sys
+              readOnly: true
+            - mountPath: /var/lib/docker
+              name: docker
+              readOnly: true
+            - mountPath: /var/lib/kubelet
+              name: ld-library-path
+              readOnly: true
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      tolerations:
+        - effect: NoSchedule
+          key: nvidia.com/gpu
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/controlplane
+          operator: Exists
+        - effect: NoExecute
+          key: node-role.kubernetes.io/etcd
+          operator: Exists
+        - effect: NoSchedule
+          key: vivo.com/dedicated-machine
+          operator: Exists
+        - effect: NoSchedule
+          key: vivo.com/monitoring
+          operator: Exists
+        - effect: NoSchedule
+          key: vivo.com/common-pool
+          operator: Exists
+      volumes:
+        - hostPath:
+            path: /
+            type: ""
+          name: rootfs
+        - hostPath:
+            path: /var/run
+            type: ""
+          name: var-run
+        - hostPath:
+            path: /sys
+            type: ""
+          name: sys
+        - hostPath:
+            path: /var/lib/docker
+            type: ""
+          name: docker
+        - hostPath:
+            path: /var/lib/kubelet
+            type: ""
+          name: ld-library-path
+  updateStrategy:
+    type: OnDelete

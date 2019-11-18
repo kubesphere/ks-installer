@@ -1,0 +1,50 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: cadvsior
+  name: cadvsior
+  namespace: kubesphere-monitoring-system
+spec:
+  endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      schema: http
+      port: http
+      targetPort: http
+      scrapeTimeout: 30s
+      interval: 1m
+      metricRelabelings:
+        - action: keep
+          regex: container_accelerator_.+  # 暂时只要 GPU 信息
+          sourceLabels:
+            - __name__
+        - action: replace # cadvsior 按照 prometheus-operator 生成的config是没有node的信息的，我们这里从instance中解析出来，保证有node这个指标
+          regex: (.*):(.*)
+          targetLabel: node
+          replacement: ${1}
+          sourceLabels:
+            - container_label_io_kubernetes_pod_name
+        - action: replace
+          regex: (.*)
+          sourceLabels:
+            - container_label_io_kubernetes_pod_namespace # prometheus-operator 默认会有一个relabel_configs: 将 __meta_kubernetes_namespace 命名为namespace，而且这个namespace是cadvsior的，这里覆盖为容器真正的namespace
+          targetLabel: namespace
+        - action: replace
+          regex: (.*)
+          sourceLabels:
+            - container_label_io_kubernetes_pod_name
+          targetLabel: pod_name
+        - action: replace
+          regex: (.*)
+          sourceLabels:
+            - container_label_io_kubernetes_container_name
+          targetLabel: container_name
+        - regex: container_label_annotation_.+|container_label_io_kubernetes_.+
+          action: labeldrop
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+      - monitoring
+  selector:
+    matchLabels:
+      k8s-app: cadvsior
