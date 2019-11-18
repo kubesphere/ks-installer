@@ -16,6 +16,10 @@ image:
 securityContext:
   fsGroup: 999
 
+wget:
+  repository: {{ wget_repo }}
+  tag: {{ wget_tag }}
+
 service:
   name: sonarqube
   type: NodePort
