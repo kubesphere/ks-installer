@@ -83,6 +83,9 @@ database:
     image:
       repository: {{ harbor_db_repo }}
       tag: {{ harbor_db_tag }}
+  busybox:
+    repository: {{ busybox_repo }}
+    tag: {{ busybox_tag }}
 
 redis:
   internal:

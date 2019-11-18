@@ -147,6 +147,8 @@ openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_flyway_tag: "flyway-{{ op_version }}"
 openpitrix_runtime_provider_kubernetes_repo: "{{ base_repo }}openpitrix/runtime-provider-kubernetes"
 openpitrix_runtime_provider_kubernetes_tag: v0.1.2
+release_app_repo: "{{ base_repo }}openpitrix/release-app"
+release_app_tag: v0.4.2
 minio_repo: "{{ base_repo }}minio/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
 
@@ -372,6 +374,8 @@ postgres_repo: "{{ base_library_repo }}postgres"
 postgres_tag: 9.6.8   #Notice
 openldap_repo: "{{ base_repo }}osixia/openldap"
 openldap_tag: 1.3.0
+wget_repo: "{{ base_repo }}joosthofman/wget"
+wget_tag: 1.0
 
 #NFS:
 nfs_client_provisioner_repo: "{{ quay_image_repo }}/external_storage/nfs-client-provisioner"

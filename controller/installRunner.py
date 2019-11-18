@@ -201,13 +201,14 @@ def getComponentLists():
         exit()
 
     for component, parameters in configs.items():
-        for j, value in parameters.items():
-            if (j == 'enabled') and (value):
-                readyToEnabledList.append(component)
-                break
-            elif (j == 'enabled') and (value == False):
-                readyToDisableList.append(component)
-                break
+        if type(parameters) is not str:
+            for j, value in parameters.items():
+                if (j == 'enabled') and (value):
+                    readyToEnabledList.append(component)
+                    break
+                elif (j == 'enabled') and (value == False):
+                    readyToDisableList.append(component)
+                    break
     return readyToEnabledList, readyToDisableList
 
 
