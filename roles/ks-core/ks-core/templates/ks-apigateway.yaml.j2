@@ -8,7 +8,7 @@ metadata:
   name: ks-apigateway
   namespace: kubesphere-system
 spec:
-{% if master_num is defined and master_num != 0 %}
+{% if master_num is defined and master_num != "0" %}
   replicas: {{ master_num }}
 {% else %}
   replicas: 1
