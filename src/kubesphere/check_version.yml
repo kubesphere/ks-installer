@@ -4,7 +4,7 @@
   tasks:
     - name: Getting kubernetes version
       shell: >
-        cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep 'image:' | awk -F '[:]' '{print $3}'
+        cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep 'image:' | awk -F '[:]' '{print $(NF-0)}'
       register: apiserver_version
 
     - name: Remove old tmp file
