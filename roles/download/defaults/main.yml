@@ -331,13 +331,13 @@ ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.0
 
 #ingress:
-nginx_ingress_controller_repo: "{{ ks_image_repo }}/kubernetes_ingress_controller/nginx-ingress-controller"
+nginx_ingress_controller_repo: "{{ quay_image_repo }}/kubernetes-ingress-controller/nginx-ingress-controller"
 nginx_ingress_controller_tag: 0.24.1
 defaultbackend_repo: "{{ base_repo }}mirrorgooglecontainers/defaultbackend-amd64"
 defaultbackend_tag: 1.4
 
 #metrics:
-metrics_server_repo: "{{ ks_image_repo }}/google_containers/metrics-server-amd64"
+metrics_server_repo: "{{ gcr_image_repo }}/google_containers/metrics-server-amd64"
 metrics_server_tag: v0.3.1
 
 #istio
@@ -368,7 +368,7 @@ haproxy_repo:  "{{ base_library_repo }}haproxy"
 haproxy_tag: 2.0.4
 busybox_repo: "{{ base_library_repo }}busybox"
 busybox_tag: 1.28.4
-etcd_image_repo: "{{ ks_image_repo }}/coreos/etcd"
+etcd_image_repo: "{{ quay_image_repo }}/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
 mysql_tag: 8.0.11
