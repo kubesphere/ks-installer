@@ -68,6 +68,14 @@ quay_image_repo: >-
   quay.azk8s.cn
   {%- endif %}
 
+# elastic image repo define
+elastic_image_repo: >-
+  {% if local_registry is defined -%}
+  {{ local_registry }}
+  {%- else -%}
+  docker.elastic.co
+  {%- endif %}
+
 # gcr and kubernetes image repo define
 gcr_image_repo: >-
   {% if local_registry is defined -%}
@@ -305,13 +313,11 @@ grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 5.2.4
 
 #ks-logger
-docker_elasticsearch_curator_repo: "{{ ks_image_repo }}/pires/docker-elasticsearch-curator"
+docker_elasticsearch_curator_repo: "{{ base_repo }}kubesphere/docker-elasticsearch-curator"
 docker_elasticsearch_curator_tag: 5.5.4
 elasticsearch_oss_repo: "{{ base_repo }}kubesphere/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
-fluent_bit_repo: "{{ ks_image_repo }}/fluent/fluent-bit"
-fluent_bit_tag: 0.14.7
-kibana_oss_repo: "{{ ks_image_repo }}/kibana/kibana-oss"
+kibana_oss_repo: "{{ elastic_image_repo }}/kibana/kibana-oss"
 kibana_oss_tag: 6.7.0
 testFramework_repo: "{{ base_repo }}dduportal/bats"
 testFramework_tag: 0.4.0
