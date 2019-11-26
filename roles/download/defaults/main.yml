@@ -275,6 +275,8 @@ gitlab_mailroom_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-mailroom"
 gitlab_mailroom_tag: 0.9.1
 gitlab_redis_ha_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-redis-ha"
 gitlab_redis_ha_tag: 732704f18e34ba469df34b10c3b2465e0469d484
+gitlab_exporter_repo: "{{ base_repo }}mirrorgitlabcontainers/gitlab-exporter"
+gitlab_exporter_tag: 5.0.1
 redis_exporter_repo: "{{ base_repo }}oliver006/redis_exporter"
 redis_exporter_tag: v0.34.1-alpine
 postgres_exporter_repo: "{{ base_repo }}wrouesnel/postgres_exporter"
@@ -289,6 +291,7 @@ mc_repo: "{{ base_repo }}minio/mc"
 mc_tag: RELEASE.2019-08-07T23-14-43Z
 registry_repo: "{{ base_library_repo }}registry"
 registry_tag: 2.7.1
+gitlab_busybox_tag: 1.31.1
 
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"

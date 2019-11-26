@@ -275,7 +275,7 @@ upgradeCheck:
   enabled: true
   image:
     repository: {{ busybox_repo }}
-    tag: 1.31.1
+    tag: {{ gitlab_busybox_tag }}
   securityContext:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534
@@ -476,7 +476,9 @@ gitlab:
       repository: {{ gitlab_operator_repo }}
       tag: {{ gitlab_operator_tag }}
       pullPolicy: IfNotPresent
-
+  gitlab-exporter:
+    image:
+      repository: {{ gitlab_exporter_repo }}
   ## doc/charts/gitlab/sidekiq
   sidekiq:
     init:
