@@ -37,6 +37,7 @@ spec:
       - command:
         - controller-manager
         - --logtostderr=true
+        - --leader-elect=true
         image: {{ ks_controller_manager_repo }}:{{ ks_controller_manager_tag }}
         imagePullPolicy: {{ ks_image_pull_policy }}
         name: ks-controller-manager
