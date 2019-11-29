@@ -335,3 +335,13 @@ gitlab_hosts_domain: devops.kubesphere.local
 # nvidia_accelerator_enabled: true
 # nvidia_gpu_nodes:
 #   - kube-gpu-001
+
+alicloud_disk_csi_is_default_class: false
+alicloud_disk_csi_enalbed: false
+ali_access_key_id: SHOULD_BE_REPLACED
+ali_access_key_secret: SHOULD_BE_REPLACED
+
+ali_disk_zoneId: cn-huhehaote-a
+ali_disk_regionId: cn-huhehaote
+ali_disk_fsType: ext4
+ali_disk_type: cloud_ssd

@@ -1,0 +1,54 @@
+---
+
+- name: AliCloud-Disk-CSI | Getting AliCloud-Disk-CSI installation files
+  copy:
+    src: "alicloud-disk-csi"
+    dest: "{{ kube_config_dir }}/addons/"
+
+- name: AliCloud-Disk-CSI | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kube_config_dir }}/addons/alicloud-disk-csi/{{ item.file }}"
+  with_items:
+    - { name: disk-plugin, file: disk-plugin.yaml, type: workload}
+    - { name: disk-provisioner, file: disk-provisioner.yaml, type: workload}
+    - { name: sc, file: sc.yaml, type: sc }
+
+- name: AliCloud-Disk-CSI | Creating RBAC
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/alicloud-disk-csi/rbac.yaml"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  when: inventory_hostname == groups['kube-master'][0]
+
+- name: AliCloud-Disk-CSI | Creating disk-provisioner
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/alicloud-disk-csi/disk-provisioner.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: AliCloud-Disk-CSI | Creating disk-plugin
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/alicloud-disk-csi/disk-plugin.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: AliCloud-Disk-CSI | Creating StorageClass
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/alicloud-disk-csi/sc.yaml
+  register: import 
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+- name: check csi is ok
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kube-system | grep csi-disk-provisioner | awk '{print $3}'
+  register: csi_check
+  until: csi_check.stdout.find("Running") != -1
+  retries: 20
+  delay: 10
+  ignore_errors: yes
+
+- name: csi failed and how to solve
+  fail:
+     msg: "Please follow the steps below \n kubectl describe pod -n kube-system `kubectl get pod -n kube-system |grep  csi-disk-provisioner |awk '{print $1}'` "
+  when:
+    - csi_check.stdout.find("Running") == -1
