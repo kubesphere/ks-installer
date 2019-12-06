@@ -18,7 +18,6 @@
   command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/alicloud-disk-csi/rbac.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-  when: inventory_hostname == groups['kube-master'][0]
 
 - name: AliCloud-Disk-CSI | Creating disk-provisioner
   command: >

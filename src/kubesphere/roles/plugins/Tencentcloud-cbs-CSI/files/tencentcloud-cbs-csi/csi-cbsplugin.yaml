@@ -1,0 +1,122 @@
+---
+kind: DaemonSet
+apiVersion: apps/v1beta2
+metadata:
+  name: csi-tencentcloud
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: csi-tencentcloud
+  template:
+    metadata:
+      labels:
+        app: csi-tencentcloud
+    spec:
+      serviceAccount: csi-tencentcloud
+      hostNetwork: true
+      hostPID: true
+      # to use e.g. Rook orchestrated cluster, and mons' FQDN is
+      # resolved through k8s service, set dns policy to cluster first
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: driver-registrar
+          image: quay.azk8s.cn/k8scsi/csi-node-driver-registrar:v1.0.2
+          args:
+            - "--v=5"
+            - "--csi-address=/csi/csi.sock"
+            - "--kubelet-registration-path=/var/lib/kubelet/plugins/com.tencent.cloud.csi.cbs/csi.sock"
+          lifecycle:
+            preStop:
+              exec:
+                command: [
+                  "/bin/sh", "-c",
+                  "rm -rf /registration/com.tencent.cloud.csi.cbs \
+                  /registration/com.tencent.cloud.csi.cbs-reg.sock"
+                ]
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: plugin-dir
+              mountPath: /csi
+            - name: registration-dir
+              mountPath: /registration
+        - name: csi-tencentcloud
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          image: ccr.ccs.tencentyun.com/library/csi-tencentcloud-cbs:v1.0.0
+          command:
+          - "/csi-tencentcloud-cbs"
+          args:
+          - "--v=5"
+          - "--logtostderr=true"
+          - "--endpoint=unix:///csi/csi.sock"
+          env:
+            - name: TENCENTCLOUD_CBS_API_SECRET_ID
+              valueFrom:
+                secretKeyRef:
+                  name: csi-tencentcloud
+                  key: TENCENTCLOUD_CBS_API_SECRET_ID
+            - name: TENCENTCLOUD_CBS_API_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: csi-tencentcloud
+                  key: TENCENTCLOUD_CBS_API_SECRET_KEY
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          imagePullPolicy: "IfNotPresent"
+          volumeMounts:
+            - name: plugin-dir
+              mountPath: /csi
+            - name: pods-mount-dir
+              mountPath: /var/lib/kubelet/pods
+              mountPropagation: "Bidirectional"
+            - name: plugin-mount-dir
+              mountPath: /var/lib/kubelet/plugins/kubernetes.io/csi/volumeDevices/
+              mountPropagation: "Bidirectional"
+            - mountPath: /dev
+              name: host-dev
+            - mountPath: /rootfs
+              name: host-rootfs
+            - mountPath: /sys
+              name: host-sys
+            - mountPath: /lib/modules
+              name: lib-modules
+              readOnly: true
+      volumes:
+        - name: plugin-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins/com.tencent.cloud.csi.cbs
+            type: DirectoryOrCreate
+        - name: plugin-mount-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins/kubernetes.io/csi/volumeDevices/
+            type: DirectoryOrCreate
+        - name: registration-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins_registry/
+            type: Directory
+        - name: pods-mount-dir
+          hostPath:
+            path: /var/lib/kubelet/pods
+            type: Directory
+        - name: host-dev
+          hostPath:
+            path: /dev
+        - name: host-rootfs
+          hostPath:
+            path: /
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
