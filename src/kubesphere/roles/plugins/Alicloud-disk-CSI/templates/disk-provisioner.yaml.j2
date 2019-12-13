@@ -35,7 +35,7 @@ spec:
       hostNetwork: true
       containers:
         - name: csi-provisioner
-          image: registry.cn-hangzhou.aliyuncs.com/acs/csi-provisioner:v1.2.0
+          image: {{ alicloud_csi_provisioner_repo }}:{{ alicloud_csi_provisioner_tag }}
           args:
             - "--provisioner=diskplugin.csi.alibabacloud.com"
             - "--csi-address=$(ADDRESS)"
@@ -50,7 +50,7 @@ spec:
             - name: disk-provisioner-dir
               mountPath: /socketDir
         - name: csi-diskplugin
-          image: registry.cn-hangzhou.aliyuncs.com/acs/csi-diskplugin:v1.14.5-3068245
+          image: {{ alicloud_csi_diskplugin_repo }}:{{ alicloud_csi_diskplugin_tag }}
           imagePullPolicy: "IfNotPresent"
           args :
             - "--endpoint=$(CSI_ENDPOINT)"

@@ -30,7 +30,7 @@ spec:
       serviceAccount: tencentcloud-csi-attacher
       containers:
         - name: csi-cbsplugin-attacher
-          image: quay.azk8s.cn/k8scsi/csi-attacher:v1.0.1
+          image: {{ tencentcloud_csi_attacher_repo }}:{{ tencentcloud_csi_attacher_tag }}
           args:
             - "--v=5"
             - "--csi-address=$(ADDRESS)"

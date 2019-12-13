@@ -21,7 +21,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: driver-registrar
-          image: quay.azk8s.cn/k8scsi/csi-node-driver-registrar:v1.0.2
+          image: {{ tencentcloud_csi_driver_registrar_repo }}:{{ tencentcloud_csi_driver_registrar_tag }}
           args:
             - "--v=5"
             - "--csi-address=/csi/csi.sock"
@@ -50,7 +50,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: ccr.ccs.tencentyun.com/library/csi-tencentcloud-cbs:v1.0.0
+          image: {{ tencentcloud_csi_cbs_repo }}:{{ tencentcloud_csi_cbs_tag }}
           command:
           - "/csi-tencentcloud-cbs"
           args:

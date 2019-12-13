@@ -27,7 +27,7 @@ spec:
       hostPID: true
       containers:
         - name: driver-registrar
-          image: registry.cn-hangzhou.aliyuncs.com/acs/csi-node-driver-registrar:v1.1.0
+          image: {{ alicloud_csi_driver_registrar_repo }}:{{ alicloud_csi_driver_registrar_tag }}
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
@@ -54,7 +54,7 @@ spec:
             capabilities:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
-          image: registry.cn-hangzhou.aliyuncs.com/acs/csi-diskplugin:v1.14.5-3068245
+          image: {{ alicloud_csi_diskplugin_repo }}:{{ alicloud_csi_diskplugin_tag }}
           imagePullPolicy: "IfNotPresent"
           args:
             - "--endpoint=$(CSI_ENDPOINT)"

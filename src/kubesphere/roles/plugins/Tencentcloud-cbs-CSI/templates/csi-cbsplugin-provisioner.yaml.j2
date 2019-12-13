@@ -30,7 +30,7 @@ spec:
       serviceAccount: tencentcloud-csi-provisioner
       containers:
         - name: csi-provisioner
-          image: quay.azk8s.cn/k8scsi/csi-provisioner:v1.0.1
+          image: {{ tencentcloud_csi_provisioner_repo }}:{{ tencentcloud_csi_provisioner_tag }}
           args:
             - "--csi-address=$(ADDRESS)"
             - "--v=5"
@@ -44,7 +44,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-snapshotter
-          image: quay.azk8s.cn/k8scsi/csi-snapshotter:v1.0.1
+          image: {{ tencentcloud_csi_snapshotter_repo }}:{{ tencentcloud_csi_snapshotter_tag }}
           args:
             - "--csi-address=$(ADDRESS)"
             - "--connection-timeout=15s"

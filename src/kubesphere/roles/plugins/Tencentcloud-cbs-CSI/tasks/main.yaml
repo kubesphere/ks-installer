@@ -10,6 +10,9 @@
     src: "{{ item.file }}.j2"
     dest: "{{ kube_config_dir }}/addons/tencentcloud-cbs-csi/{{ item.file }}"
   with_items:
+    - { name: csi-cbsplugin, file: csi-cbsplugin.yaml, type: workload}
+    - { name: csi-cbsplugin-attacher, file: csi-cbsplugin-attacher.yaml, type: workload}
+    - { name: csi-cbsplugin-provisioner, file: csi-cbsplugin-provisioner.yaml, type: workload}
     - { name: secret, file: secret.yaml, type: secret}
     - { name: sc, file: sc.yaml, type: sc }
 
