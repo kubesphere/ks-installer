@@ -186,6 +186,26 @@ neonsan_csi_attacher_tag: v0.4.1
 neonsan_csi_snapshotter_repo: "{{ ks_image_repo }}/k8scsi/csi-snapshotter"
 neonsan_csi_snapshotter_tag: v0.4.1
 
+#alicloud-csi
+alicloud_csi_driver_registrar_repo: registry.cn-hangzhou.aliyuncs.com/acs/csi-node-driver-registrar
+alicloud_csi_driver_registrar_tag: v1.1.0
+alicloud_csi_provisioner_repo: registry.cn-hangzhou.aliyuncs.com/acs/csi-provisioner
+alicloud_csi_provisioner_tag: v1.2.0
+alicloud_csi_diskplugin_repo: registry.cn-hangzhou.aliyuncs.com/acs/csi-diskplugin
+alicloud_csi_diskplugin_tag: v1.14.5-3068245
+
+#tencentcloud-csi
+tencentcloud_csi_driver_registrar_repo: quay.azk8s.cn/k8scsi/csi-node-driver-registrar
+tencentcloud_csi_driver_registrar_tag: v1.0.2
+tencentcloud_csi_provisioner_repo: quay.azk8s.cn/k8scsi/csi-provisioner
+tencentcloud_csi_provisioner_tag: v1.0.1
+tencentcloud_csi_attacher_repo: quay.azk8s.cn/k8scsi/csi-attacher
+tencentcloud_csi_attacher_tag: v1.0.1
+tencentcloud_csi_snapshotter_repo: quay.azk8s.cn/k8scsi/csi-snapshotter
+tencentcloud_csi_snapshotter_tag: v1.0.1
+tencentcloud_csi_cbs_repo: ccr.ccs.tencentyun.com/library/csi-tencentcloud-cbs
+tencentcloud_csi_cbs_tag: v1.0.0
+
 #harbor:
 harbor_version: "v1.9.1"
 nginx_photon_repo: "{{ base_repo }}goharbor/nginx-photon"

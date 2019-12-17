@@ -1,0 +1,77 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-cbsplugin-provisioner
+  namespace: kube-system
+  labels:
+    app: csi-cbsplugin-provisioner
+spec:
+  selector:
+    app: csi-cbsplugin-provisioner
+  ports:
+    - name: dummy
+      port: 12345
+
+---
+kind: StatefulSet
+apiVersion: apps/v1beta1
+metadata:
+  name: csi-cbsplugin-provisioner
+  namespace: kube-system
+spec:
+  serviceName: "csi-cbsplugin-provisioner"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: csi-cbsplugin-provisioner
+    spec:
+      serviceAccount: tencentcloud-csi-provisioner
+      containers:
+        - name: csi-provisioner
+          image: {{ tencentcloud_csi_provisioner_repo }}:{{ tencentcloud_csi_provisioner_tag }}
+          args:
+            - "--csi-address=$(ADDRESS)"
+            - "--v=5"
+            - "--provisioner=com.tencent.cloud.csi.cbs"
+            - "--feature-gates=Topology=True"
+          env:
+            - name: ADDRESS
+              value: unix:///csi/csi.sock
+          imagePullPolicy: "IfNotPresent"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+        - name: csi-snapshotter
+          image: {{ tencentcloud_csi_snapshotter_repo }}:{{ tencentcloud_csi_snapshotter_tag }}
+          args:
+            - "--csi-address=$(ADDRESS)"
+            - "--connection-timeout=15s"
+            - "--v=5"
+          env:
+            - name: ADDRESS
+              value: unix:///csi/csi.sock
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+      volumes:
+        - name: host-dev
+          hostPath:
+            path: /dev
+        - name: host-rootfs
+          hostPath:
+            path: /
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+        - name: socket-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins/com.tencent.cloud.csi.cbs
+            type: DirectoryOrCreate

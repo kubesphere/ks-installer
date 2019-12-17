@@ -1,0 +1,89 @@
+---
+
+- name: TencentCloud-CBS-CSI | Getting TencentCloud-CBS-CSI installation files
+  copy:
+    src: "tencentcloud-cbs-csi"
+    dest: "{{ kube_config_dir }}/addons/"
+
+- name: TencentCloud-CBS-CSI | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kube_config_dir }}/addons/tencentcloud-cbs-csi/{{ item.file }}"
+  with_items:
+    - { name: csi-cbsplugin, file: csi-cbsplugin.yaml, type: workload}
+    - { name: csi-cbsplugin-attacher, file: csi-cbsplugin-attacher.yaml, type: workload}
+    - { name: csi-cbsplugin-provisioner, file: csi-cbsplugin-provisioner.yaml, type: workload}
+    - { name: secret, file: secret.yaml, type: secret}
+    - { name: sc, file: sc.yaml, type: sc }
+
+- name: TencentCloud-CBS-CSI | Creating Secret
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/secret.yaml"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating CSINodeInfo
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csinodeinfo.yaml"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating CSIDriver
+  command: "{{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csidriver.yaml"
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating attacher RBAC
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csi-attacher-rbac.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating node plugin RBAC
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csi-nodeplugin-rbac.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating provisioner RBAC
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csi-provisioner-rbac.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating CBS plugin
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csi-cbsplugin.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating CBS plugin provisioner
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csi-cbsplugin-provisioner.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating CBS plugin attacher
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/csi-cbsplugin-attacher.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
+- name: TencentCloud-CBS-CSI | Creating StorageClass
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kube_config_dir }}/addons/tencentcloud-cbs-csi/sc.yaml
+  register: import
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+
+- name: check csi is ok
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kube-system | grep csi-cbsplugin-provisioner| awk '{print $3}'
+  register: csi_check
+  until: csi_check.stdout.find("Running") != -1
+  retries: 20
+  delay: 10
+  ignore_errors: yes
+
+- name: csi failed and how to solve
+  fail:
+    msg: "Please follow the steps below \n kubectl describe pod -n kube-system `kubectl get pod -n kube-system |grep  csi-cbsplugin-provisioner |awk '{print $1}'` "
+  when:
+    - csi_check.stdout.find("Running") == -1

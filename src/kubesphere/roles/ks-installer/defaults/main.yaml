@@ -26,4 +26,8 @@ storage_class: |
   csi-neonsan
   {% elif glusterfs_provisioner_enabled is defined and glusterfs_provisioner_enabled and glusterfs_provisioner_is_default_class is defined and glusterfs_provisioner_is_default_class %}
   {{ glusterfs_provisioner_storage_class }}
+  {% elif alicloud_disk_csi_enabled is defined and alicloud_disk_csi_enabled and alicloud_disk_csi_is_default_class is defined and alicloud_disk_csi_is_default_class %}
+  csi-alibabacloud-disk
+  {% elif tencentcloud_cbs_csi_enabled is defined and tencentcloud_cbs_csi_enabled and tencentcloud_cbs_csi_is_default_class is defined and tencentcloud_cbs_csi_is_default_class %}
+  csi-tencentcloud-cbs
   {% endif %}
