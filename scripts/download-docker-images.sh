@@ -137,8 +137,7 @@ ks_images=(kubesphere/ks-console:v2.1.0  \
   )
   
 registryurl="$1"
-qingcloudurl="dockerhub.qingcloud.com"
-dockerurl="docker.io"
+reposUrl=("dockerhub.qingcloud.com" "quay.azk8s.cn" "gcr.azk8s.cn" "docker.elastic.co")
 
 for image in ${ks_images[@]}; do
   ## download_images
@@ -147,7 +146,7 @@ for image in ${ks_images[@]}; do
     url=${image%%/*}
     ImageName=${image#*/}
     echo $image
-    if [ $url == $dockerurl ] || [ $url == $qingcloudurl ]; then
+    if echo "${reposUrl[@]}" | grep -w "$url" &>/dev/null; then
           imageurl=$registryurl"/"${image#*/}
     elif [ $url == $registryurl ]; then
         if [[ $ImageName != */* ]]; then
