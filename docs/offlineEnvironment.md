@@ -20,9 +20,14 @@ Offline environment
 
    ./download-docker-images.sh  192.168.1.2:5000
    ```
-5. 替换kubesphere-minimal.yaml中镜像
+5. 在kubesphere-minimal.yaml中添加镜像仓库地址参数
+   >注：以下命令中192.168.1.2:5000为示例仓库，执行时请替换。
+   ```
+   local_registry: "192.168.1.2:5000"
+   ```
+6. 替换kubesphere-minimal.yaml中镜像
    >注：以下命令中192.168.1.2:5000/kubesphere/ks-installer:v2.1.0为示例镜像，执行时请替换。
    ```
    sed -i 's|kubesphere/ks-installer:v2.1.0|192.168.1.2:5000/kubesphere/ks-installer:v2.1.0|g' deploy/kubesphere-minimal.yaml
    ```
-6. 按Deploy中步骤执行安装
+7. 按Deploy中步骤执行安装
