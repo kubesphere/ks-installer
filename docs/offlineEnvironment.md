@@ -29,5 +29,6 @@ Offline environment
    >注：以下命令中192.168.1.2:5000/kubesphere/ks-installer:v2.1.0为示例镜像，执行时请替换。
    ```
    sed -i 's|kubesphere/ks-installer:v2.1.0|192.168.1.2:5000/kubesphere/ks-installer:v2.1.0|g' deploy/kubesphere-minimal.yaml
+   sed -i 's|Always|IfNotPresent|g' deploy/kubesphere-minimal.yaml
    ```
 7. 按Deploy中步骤执行安装
