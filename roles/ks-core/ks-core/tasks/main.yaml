@@ -111,7 +111,6 @@
     - { path: ks-console, file: ks-console-config.yml }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }
     - { path: ks-console, file: ks-console-deployment.yml }
-    - { path: ks-console, file: ks-console-svc.yml }
 
 
 - name: KubeSphere | Check ks-console svc
