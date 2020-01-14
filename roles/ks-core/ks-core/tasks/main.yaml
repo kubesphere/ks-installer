@@ -111,5 +111,26 @@
     - { path: ks-console, file: ks-console-config.yml }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }
     - { path: ks-console, file: ks-console-deployment.yml }
-    - { path: ks-console, file: ks-console-svc.yml }
 
+
+- name: KubeSphere | Check ks-console svc
+  command: >
+    {{ bin_dir }}/kubectl get svc -n kubesphere-system
+  register: ks_svc
+
+- name: KubeSphere | Creating ks-console svc
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
+  register: source_state
+  failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
+  loop:
+    - { path: ks-console, file: ks-console-svc.yml }
+  when:
+    - ks_svc.stdout.find("ks-console") == -1
+
+- name: KubeSphere | Patch ks-console svc
+  command: >
+    {{ bin_dir }}/kubectl patch -n kubesphere-system svc ks-console -p
+    '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "v2.1.0"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "v2.1.0"}}}'
+  when:
+    - ks_svc.stdout.find("ks-console") != -1
