@@ -5,9 +5,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -79,13 +79,13 @@ $(echo -e "\033[1;36mPrerequisites:\033[0m")
 
 1. It's recommended that Your OS is clean (without any other software installed), otherwise there may be conflicts.
 
-2. OS requirements：4 Core or faster processor，8GB or more of RAM.
+2. OS requirements (For Minimal Installation only)：2 Core or faster processor, 4GB or more of RAM.
 
 3. Please make sure the storage service is available if you've configured storage parameters in the conf directory .
 
 4. Make sure the DNS address in /etc/resolv.conf is available.
 
-5. If your network configuration uses an firewall，you must ensure infrastructure components can communicate with each other through specific ports. 
+5. If your network configuration uses an firewall，you must ensure infrastructure components can communicate with each other through specific ports.
    It's recommended that you turn off the firewall or follow the link configuriation:
    $(echo -e "\033[4mhttps://github.com/kubesphere/ks-installer/blob/master/docs/NetWorkAccess.md\033[0m")
 
@@ -193,7 +193,7 @@ function region_detection(){
 function init_env(){
 
   region_detection &> /dev/null
-  $BASE_FOLDER/os/os_check.sh 
+  $BASE_FOLDER/os/os_check.sh
 
   if [[ $? -eq 0 ]]; then
     #statements
@@ -238,10 +238,10 @@ function all-in-one(){
   echo "*********************************************"
   echo "1. Initiating Environment"
   echo "*********************************************"
-  ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b 
+  ansible-playbook  -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../preinstall/init.yml -b
   if [[ $? -eq 0 ]]; then
     str="successsful!"
-    echo -e "\033[32;47m$str\033[0m"  
+    echo -e "\033[32;47m$str\033[0m"
   else
     failed_prompt
   fi
@@ -250,11 +250,11 @@ function all-in-one(){
   echo "2. Installing Kubernetes"
   echo "*********************************************"
 
-  ansible-playbook -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../k8s/cluster.yml -b 
+  ansible-playbook -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../k8s/cluster.yml -b
   if [[ $? -eq 0 ]]; then
     #statements
     str="successsful!"
-    echo -e "\033[30;47m$str\033[0m"  
+    echo -e "\033[30;47m$str\033[0m"
   else
     failed_prompt
   fi
@@ -315,7 +315,7 @@ function multi-node(){
   if [[ $? -eq 0 ]]; then
     #statements
     str="successsful!"
-    echo -e "\033[30;47m$str\033[0m"  
+    echo -e "\033[30;47m$str\033[0m"
   else
     failed_prompt
   fi
@@ -329,7 +329,7 @@ function multi-node(){
   if [[ $? -eq 0 ]]; then
     #statements
     str="successsful!"
-    echo -e "\033[30;47m$str\033[0m"  
+    echo -e "\033[30;47m$str\033[0m"
   else
     failed_prompt
   fi
@@ -339,7 +339,7 @@ function multi-node(){
   echo "*********************************************"
 
   ansible-playbook -i $BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini $BASE_FOLDER/../kubesphere/kubesphere.yml -b
-                    
+
   if [[ $? -eq 0 ]]; then
     #statements
     str="successsful!"
@@ -353,7 +353,7 @@ function multi-node(){
 
 base_check
 
-#Whether there are parameters after the script，one-node or multi-node 
+#Whether there are parameters after the script，one-node or multi-node
 if [[ 1 -le $# ]]; then
   if [[ "all-in-one" = $1 ]]; then
     all-in-one
@@ -390,7 +390,3 @@ else
       esac
   done
 fi
-
-
-
-
