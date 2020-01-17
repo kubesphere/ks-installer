@@ -168,6 +168,7 @@ function failed_prompt(){
   echo "**********************************"
   echo "please refer to https://kubesphere.io/docs/v2.1/zh-CN/faq/faq-install/"
   echo "**********************************"
+  curl -o /dev/null -s https://kubesphere.io/log
   exit
 }
 
