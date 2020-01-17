@@ -62,29 +62,5 @@
   retries: 30
   delay: 30
 
-- name: get k8s version
-  shell: >
-     {{ bin_dir }}/kubectl get nodes | awk 'NR==2{print $5}'
-  register: k8s
-  ignore_errors: true
-
-- name: get ks version
-  shell: >
-     docker images | grep "ks-installer" | awk 'NR==1{print $2}'
-  register: ks
-  ignore_errors: true
-
-- name: get nodecount
-  shell: >
-     {{ bin_dir }}kubectl get nodes | grep -v "NAME" | wc -l
-  register: number
-  ignore_errors: true
-
-- name: get version
-  uri:
-    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&count={{ number[ 'stdout' ] }}"
-    method: GET
-    validate_certs: false
-  ignore_errors: true
 
 

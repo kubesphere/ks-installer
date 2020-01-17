@@ -16,6 +16,31 @@
   shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register: ks_console_svc_port
 
+- name: get k8s version
+  shell: >
+     {{ bin_dir }}/kubectl get nodes | awk 'NR==2{print $5}'
+  register: k8s
+  ignore_errors: true
+
+- name: get ks version
+  shell: >
+     docker images | grep "ks-installer" | awk 'NR==1{print $2}'
+  register: ks
+  ignore_errors: true
+
+- name: get nodecount
+  shell: >
+     {{ bin_dir }}kubectl get nodes | grep -v "NAME" | wc -l
+  register: number
+  ignore_errors: true
+
+- name: get essential information
+  uri:
+    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}"
+    method: GET
+    validate_certs: false
+  ignore_errors: true
+
 - name: KubeSphere | Creating info_file
   template:
     src: "welcome.j2"
