@@ -101,20 +101,20 @@ hyperkube_image_repo: "{{ kube_image_repo }}/hyperkube"
 hyperkube_image_tag: "{{ kube_version }}"
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}kubesphere/ks-apiserver"
-ks_apiserver_tag: v2.1.0
-ks_account_repo: "{{ base_repo }}kubesphere/ks-account"
-ks_account_tag: v2.1.0
-ks_apigateway_repo: "{{ base_repo }}kubesphere/ks-apigateway"
-ks_apigateway_tag: v2.1.0
-ks_controller_manager_repo: "{{ base_repo }}kubesphere/ks-controller-manager"
-ks_controller_manager_tag: v2.1.0
+ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
+ks_apiserver_tag: release-2.1
+ks_account_repo: "{{ base_repo }}kubespheredev/ks-account"
+ks_account_tag: release-2.1
+ks_apigateway_repo: "{{ base_repo }}kubespheredev/ks-apigateway"
+ks_apigateway_tag: release-2.1
+ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
+ks_controller_manager_tag: release-2.1
 ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
 ks_update_tag: "advanced-2.0.0"
 ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_flyway_tag: "flyway-v2.1.0"
-ks_console_repo: "{{ base_repo }}kubesphere/ks-console"
-ks_console_tag: v2.1.0
+ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
+ks_console_tag: release-2.1
 ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
 ks_kubectl_tag: v1.0.0
 ks_docs_repo: "{{ base_repo }}kubesphere/ks-docs"
