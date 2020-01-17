@@ -133,7 +133,7 @@ ks_hostnic_tag: "v1.0.0-alpha"
 
 #ks-installer
 ks_installer_repo: "{{ base_repo }}kubespheredev/ks-installer"
-ks_installer_tag: dev
+ks_installer_tag: v2.1.1
 
 #ks-notification
 notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
