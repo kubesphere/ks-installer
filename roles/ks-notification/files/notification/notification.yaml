@@ -21,7 +21,7 @@ spec:
       port: 9200
       targetPort: 9200
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: notification-deployment
