@@ -269,7 +269,7 @@ ali_disk_fsType: ext4
 ali_disk_type: cloud_ssd
 
 tencentcloud_cbs_csi_is_default_class: false
-tencentcloud_cbs_csi_enabled: true
+tencentcloud_cbs_csi_enabled: false
 tecentcloud_cbs_api_secret_id: SHOULD_BE_REPLACED
 tecentcloud_cbs_api_secret_key: SHOULD_BE_REPLACED
 tencentcloud_disk_type: CLOUD_PREMIUM
