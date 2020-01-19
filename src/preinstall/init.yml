@@ -35,13 +35,6 @@
           {%- if 'CentOS' in os_release.stdout -%}
            centos
           {%- endif -%}
-
     - name: Add APT repositories(Ubuntu 18.04)
       raw:  "echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse' > /etc/apt/sources.list && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse' >> /etc/apt/sources.list  && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse' >> /etc/apt/sources.list  && echo 'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse' >> /etc/apt/sources.list"
       when: os_release == "ubuntu18.04"
-
-
-
-
-
-
