@@ -512,6 +512,15 @@ downloads:
     groups:
       - kube-node
 
+  metrics_server:
+    enabled: "{{ metrics_server_enabled }}"
+    container: true
+    repo: "{{ metrics_server_repo }}"
+    tag: "{{ metrics_server_tag }}"
+    sha256: "{{ metrics_server_checksum|default(None) }}"
+    groups:
+      - kube-node
+
   postgres:
     enabled: "{{ devops_enabled }}"
     container: true
