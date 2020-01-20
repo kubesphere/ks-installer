@@ -240,14 +240,14 @@ servicemesh_enabled: false
 notification_enabled: false
 alerting_enabled: false
 
-# Harbor is an optional component for KubeSphere.
-# Which could be turned on to install it before installation or later by updating its value to true
-harbor_enabled: false
-harbor_domain: harbor.devops.kubesphere.local
-# GitLab is an optional component for KubeSphere.
-# Which could be turned on to install it before installation or later by updating its value to true
-gitlab_enabled: false
-gitlab_hosts_domain: devops.kubesphere.local
+# # Harbor is an optional component for KubeSphere.
+# # Which could be turned on to install it before installation or later by updating its value to true
+# harbor_enabled: false
+# harbor_domain: harbor.devops.kubesphere.local
+# # GitLab is an optional component for KubeSphere.
+# # Which could be turned on to install it before installation or later by updating its value to true
+# gitlab_enabled: false
+# gitlab_hosts_domain: devops.kubesphere.local
 
 
 # Container Engine Acceleration
