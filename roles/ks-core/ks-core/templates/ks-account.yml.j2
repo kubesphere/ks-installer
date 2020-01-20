@@ -66,12 +66,6 @@ spec:
           defaultMode: 420
           name: policy-rules
         name: policy-rules
-{% if (devops.enabled is defined and devops.enabled) or (openpitrix.enabled is defined and openpitrix.enabled) %}
-      - name: ca-dir
-        secret:
-          defaultMode: 420
-          secretName: kubesphere-ca
-{% endif %}
       - configMap:
           defaultMode: 420
           name: user-init
@@ -98,9 +92,7 @@ spec:
         - --enable-multi-login={{ console.enableMultiLogin | default(false) }}
         - --token-idle-timeout=40m
         - --redis-url=redis://redis.kubesphere-system.svc:6379
-{% if (devops.enabled is not defined or not devops.enabled) and (openpitrix.enabled is not defined or not openpitrix.enabled) %}
-        - --generate-kubeconfig=False
-{% endif %}
+        - --generate-kubeconfig=true
         env:
         - name: KUBECTL_IMAGE
           value: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
@@ -115,10 +107,6 @@ spec:
               key: admin-password
               name: ks-account-secret
         volumeMounts:
-{% if (devops.enabled is defined and devops.enabled) or (openpitrix.enabled is defined and openpitrix.enabled) %}
-        - mountPath: /etc/kubernetes/pki
-          name: ca-dir
-{% endif %}
         - mountPath: /etc/ks-iam
           name: user-init
         - mountPath: /etc/kubesphere/rules
