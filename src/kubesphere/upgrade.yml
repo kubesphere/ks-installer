@@ -41,8 +41,8 @@
     - { role: plugins/GlusterFS, when: "glusterfs_provisioner_enabled == true" }
     - { role: plugins/CephRBD, when: "ceph_rbd_enabled == true" }
     - { role: plugins/NFS-Client, when: "nfs_client_enabled == true" }
-    - { role: plugins/Alicloud-disk-CSI, when: "alicloud_disk_csi_enabled is defined alicloud_disk_csi_enabled == true" }
-    - { role: plugins/Tencentcloud-cbs-CSI, when: "tencentcloud_cbs_csi_enabled is defined tencentcloud_cbs_csi_enabled == true" }
+    - { role: plugins/Alicloud-disk-CSI, when: "alicloud_disk_csi_enabled is defined and alicloud_disk_csi_enabled == true" }
+    - { role: plugins/Tencentcloud-cbs-CSI, when: "tencentcloud_cbs_csi_enabled is defined and tencentcloud_cbs_csi_enabled == true" }
     - { role: plugins/qingcloud_controller_manager, when: "qingcloud_lb_enabled is defined and qingcloud_lb_enabled == true" }
 #    - { role: VPA, when: "vertical_pod_autoscaler_enable == true" }
 
