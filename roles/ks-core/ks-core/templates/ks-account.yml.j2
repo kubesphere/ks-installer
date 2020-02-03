@@ -4,7 +4,7 @@ metadata:
   labels:
     app: ks-account
     tier: backend
-    version: v2.1.0
+    version: {{ ks_version }}
   name: ks-account
   namespace: kubesphere-system
 spec:
@@ -17,13 +17,13 @@ spec:
     matchLabels:
       app: ks-account
       tier: backend
-      version: v2.1.0
+      version: {{ ks_version }}
   template:
     metadata:
       labels:
         app: ks-account
         tier: backend
-        version: v2.1.0
+        version: {{ ks_version }}
     spec:
       serviceAccount: kubesphere
       serviceAccountName: kubesphere
@@ -134,7 +134,7 @@ metadata:
   labels:
     app: ks-account
     tier: backend
-    version: v2.1.0
+    version: {{ ks_version }}
   name: ks-account
   namespace: kubesphere-system
 spec:
@@ -146,7 +146,7 @@ spec:
   selector:
     app: ks-account
     tier: backend
-    version: v2.1.0
+    version: {{ ks_version }}
   sessionAffinity: None
   type: ClusterIP
 
