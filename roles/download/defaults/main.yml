@@ -389,8 +389,8 @@ redis_repo: "{{ base_library_repo }}redis"
 redis_tag: 5.0.5-alpine
 haproxy_repo:  "{{ base_library_repo }}haproxy"
 haproxy_tag: 2.0.4
-busybox_repo: "{{ base_library_repo }}busybox"
-busybox_tag: 1.28.4
+busybox_repo: "{{ base_library_repo }}alpine"
+busybox_tag: 3.10.4
 etcd_image_repo: "{{ quay_image_repo }}/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
