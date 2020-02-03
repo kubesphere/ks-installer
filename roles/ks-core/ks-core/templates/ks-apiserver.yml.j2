@@ -4,7 +4,7 @@ metadata:
   labels:
     app: ks-apiserver
     tier: backend
-    version: v2.1.0
+    version: {{ ks_version }}
   name: ks-apiserver
   namespace: kubesphere-system
 spec:
@@ -17,13 +17,13 @@ spec:
     matchLabels:
       app: ks-apiserver
       tier: backend
-      version: v2.1.0
+      version: {{ ks_version }}
   template:
     metadata:
       labels:
         app: ks-apiserver
         tier: backend
-        version: v2.1.0
+        version: {{ ks_version }}
     spec:
       containers:
       - command:
@@ -116,7 +116,7 @@ metadata:
   labels:
     app: ks-apiserver
     tier: backend
-    version: v2.1.0
+    version: {{ ks_version }}
   name: ks-apiserver
   namespace: kubesphere-system
 spec:
@@ -127,5 +127,5 @@ spec:
   selector:
     app: ks-apiserver
     tier: backend
-    version: v2.1.0
+    version: {{ ks_version }}
   type: ClusterIP

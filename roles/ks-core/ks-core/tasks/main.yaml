@@ -95,7 +95,7 @@
     do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl={{ ks_kubectl_repo }}:{{ ks_kubectl_tag }};
     done
   when:
-    - account_version.stdout and account_version.stdout != 'v2.1.0'
+    - account_version.stdout and account_version.stdout != 'v2.1.1'
   ignore_errors: True
 
 - name: KubeSphere | Creating ks-core
@@ -131,6 +131,8 @@
 - name: KubeSphere | Patch ks-console svc
   command: >
     {{ bin_dir }}/kubectl patch -n kubesphere-system svc ks-console -p
-    '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "v2.1.0"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "v2.1.0"}}}'
+    '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "v2.1.1"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "v2.1.0"}}}'
   when:
     - ks_svc.stdout.find("ks-console") != -1
+
+
