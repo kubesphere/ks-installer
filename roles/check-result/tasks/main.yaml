@@ -24,13 +24,13 @@
 
 - name: get ks version
   shell: >
-     docker images | grep "ks-installer" | awk 'NR==1{print $2}'
+     {{ bin_dir }}/kubectl get svc -n kubesphere-system ks-console -o=jsonpath='{.spec.selector.version}'
   register: ks
   ignore_errors: true
 
 - name: get nodecount
   shell: >
-     {{ bin_dir }}kubectl get nodes | grep -v "NAME" | wc -l
+     {{ bin_dir }}/kubectl get nodes | grep -v "NAME" | wc -l
   register: number
   ignore_errors: true
 
