@@ -101,6 +101,22 @@
     - etcd.monitoring is defined
     - etcd.monitoring == true
 
+- name: ks-monitor | check k8s version
+  shell: >
+    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
+  register: kubernetes_version
+
+- name: ks-monitor | Create prometheus rules
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-rules.yaml
+  when:
+    - kubernetes_version.stdout is version('v1.16.0', '<')
+
+- name: ks-monitor | Create prometheus rules (v1.16.0+)
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-rules-v1.16+.yaml
+  when:
+    - kubernetes_version.stdout is version('v1.16.0', '>=')
 
 - import_tasks: grafana.yaml
   when:
