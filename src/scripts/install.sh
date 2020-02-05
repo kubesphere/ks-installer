@@ -79,7 +79,7 @@ $(echo -e "\033[1;36mPrerequisites:\033[0m")
 
 1. It's recommended that Your OS is clean (without any other software installed), otherwise there may be conflicts.
 
-2. OS requirements (For Minimal Installation only)：2 Core or faster processor, 4GB or more of RAM.
+2. OS requirements (For Minimal Installation only)：at least 2 vCPUs and 4GB RAM.
 
 3. Please make sure the storage service is available if you've configured storage parameters in the conf directory .
 
