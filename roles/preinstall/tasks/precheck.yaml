@@ -10,7 +10,7 @@
 
 - name: Stop if kuernetes version is nonsupport
   assert:
-    that: kubernetes_version.stdout is version('v1.16.0', '<')
+    that: kubernetes_version.stdout is version('v1.18.0', '<')
     msg: The current k8s version is not supported
 
 - name: check helm status
@@ -50,18 +50,3 @@
     - persistence.storageClass is defined
     - persistence.storageClass == ""
 
-- name: check kubesphere ca secret
-  shell: >
-    {{ bin_dir }}/kubectl get secret -n kubesphere-system | awk '{if(NR>1){print $1}}'
-  register: kubesphere_ca_secret
-  when:
-    - devops.enabled is defined
-    - devops.enabled
-
-- name: Stop if kubesphere ca secret was not found
-  assert:
-    that: '"kubesphere-ca" in kubesphere_ca_secret.stdout'
-    msg: "Please create the Secret of CA certificate of your current Kubernetes cluster, if devops is enabled."
-  when:
-    - devops.enabled is defined
-    - devops.enabled

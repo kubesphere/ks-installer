@@ -101,20 +101,20 @@ hyperkube_image_repo: "{{ kube_image_repo }}/hyperkube"
 hyperkube_image_tag: "{{ kube_version }}"
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}kubesphere/ks-apiserver"
-ks_apiserver_tag: v2.1.0
-ks_account_repo: "{{ base_repo }}kubesphere/ks-account"
-ks_account_tag: v2.1.0
-ks_apigateway_repo: "{{ base_repo }}kubesphere/ks-apigateway"
-ks_apigateway_tag: v2.1.0
-ks_controller_manager_repo: "{{ base_repo }}kubesphere/ks-controller-manager"
-ks_controller_manager_tag: v2.1.0
+ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
+ks_apiserver_tag: release-2.1
+ks_account_repo: "{{ base_repo }}kubespheredev/ks-account"
+ks_account_tag: release-2.1
+ks_apigateway_repo: "{{ base_repo }}kubespheredev/ks-apigateway"
+ks_apigateway_tag: release-2.1
+ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
+ks_controller_manager_tag: release-2.1
 ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
 ks_update_tag: "advanced-2.0.0"
 ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_flyway_tag: "flyway-v2.1.0"
-ks_console_repo: "{{ base_repo }}kubesphere/ks-console"
-ks_console_tag: v2.1.0
+ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
+ks_console_tag: release-2.1
 ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
 ks_kubectl_tag: v1.0.0
 ks_docs_repo: "{{ base_repo }}kubesphere/ks-docs"
@@ -132,8 +132,8 @@ ks_hostnic_repo: "kubesphere/hostnic"
 ks_hostnic_tag: "v1.0.0-alpha"
 
 #ks-installer
-ks_installer_repo: "{{ base_repo }}kubesphere/ks-installer"
-ks_installer_tag: v2.1.0
+ks_installer_repo: "{{ base_repo }}kubespheredev/ks-installer"
+ks_installer_tag: v2.1.1
 
 #ks-notification
 notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
@@ -148,13 +148,13 @@ ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert_adapter"
 ks_alerting_adapter_tag: "v2.1.0"
 
 #openpitrix:
-op_version: v0.4.5
+op_version: latest
 openpitrix_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_tag: "{{ op_version }}"
 openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_flyway_tag: "flyway-{{ op_version }}"
 openpitrix_runtime_provider_kubernetes_repo: "{{ base_repo }}openpitrix/runtime-provider-kubernetes"
-openpitrix_runtime_provider_kubernetes_tag: v0.1.2
+openpitrix_runtime_provider_kubernetes_tag: latest
 release_app_repo: "{{ base_repo }}openpitrix/release-app"
 release_app_tag: v0.4.2
 minio_repo: "{{ base_repo }}minio/minio"
@@ -234,8 +234,8 @@ harbor_core_repo: "{{ base_repo }}goharbor/harbor-core"
 harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
-jenkins_uc_repo:  "{{ base_repo }}kubesphere/jenkins-uc"
-jenkins_uc_tag: v2.1.0
+jenkins_uc_repo:  "{{ base_repo }}kubespheredev/jenkins-uc"
+jenkins_uc_tag: v2.1.1-dev
 jenkins_repo: "{{ base_repo }}jenkins/jenkins"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
@@ -254,10 +254,11 @@ sonarqube_repo: "{{ base_library_repo }}sonarqube"
 sonarqube_tag: 7.4-community
 
 #s2i
-s2ioperator_repo: "{{ base_repo }}kubesphere/s2ioperator"
-s2ioperator_tag: "v2.1.0"
-s2irun_repo: "{{ base_repo }}kubesphere/s2irun"
-s2irun_tag: "v2.1.0"
+s2ioperator_repo: "{{ base_repo }}kubespheredev/s2ioperator"
+s2ioperator_tag: "release-2.1.1"
+s2irun_repo: "{{ base_repo }}kubespheredev/s2irun"
+s2irun_tag: "release-2.1"
+
 s2itemplates_tag: v2.1.0
 binary_repo: "{{ base_repo }}kubesphere/s2i-binary"
 tomcat85_java11_repo: "{{ base_repo }}kubesphere/tomcat85-java11-centos7"
@@ -315,17 +316,17 @@ gitlab_busybox_tag: 1.31.1
 
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
-configmap_reload_tag: v0.0.1
+configmap_reload_tag: v0.3.0
 prometheus_repo: "{{ base_repo }}kubesphere/prometheus"
 prometheus_tag: v2.5.0
 prometheus_config_reloader_repo: "{{ base_repo }}kubesphere/prometheus-config-reloader"
-prometheus_config_reloader_tag: v0.27.1
+prometheus_config_reloader_tag: v0.34.0
 prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
-prometheus_operator_tag: v0.27.1
+prometheus_operator_tag: v0.34.0
 kube_rbac_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
-kube_state_metrics_repo: "{{ base_repo }}kubesphere/kube-state-metrics"
-kube_state_metrics_tag: v1.5.2
+kube_state_metrics_repo: "{{ quay_image_repo }}/coreos/kube-state-metrics"
+kube_state_metrics_tag: v1.7.2
 node_exporter_repo: "{{ base_repo }}kubesphere/node-exporter"
 node_exporter_tag: ks-v0.16.0
 addon_resizer_repo: "{{ base_repo }}kubesphere/addon-resizer"
@@ -336,16 +337,16 @@ grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 5.2.4
 
 #ks-logger
-docker_elasticsearch_curator_repo: "{{ base_repo }}kubesphere/docker-elasticsearch-curator"
-docker_elasticsearch_curator_tag: 5.5.4
+docker_elasticsearch_curator_repo: "{{ base_repo }}kubespheredev/docker-elasticsearch-curator"
+docker_elasticsearch_curator_tag: 5.7.6
 elasticsearch_oss_repo: "{{ base_repo }}kubesphere/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
 kibana_oss_repo: "{{ elastic_image_repo }}/kibana/kibana-oss"
 kibana_oss_tag: 6.7.0
 testFramework_repo: "{{ base_repo }}dduportal/bats"
 testFramework_tag: 0.4.0
-fluentbit_operator_repo: "{{ base_repo }}kubesphere/fluentbit-operator"
-fluentbit_operator_tag: v2.1.0
+fluentbit_operator_repo: "{{ base_repo }}kubespheredev/fluentbit-operator"
+fluentbit_operator_tag: v0.1.0
 ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
 ks_fluent_bit_tag: "v1.3.5-reload"
 kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
@@ -389,8 +390,8 @@ redis_repo: "{{ base_library_repo }}redis"
 redis_tag: 5.0.5-alpine
 haproxy_repo:  "{{ base_library_repo }}haproxy"
 haproxy_tag: 2.0.4
-busybox_repo: "{{ base_library_repo }}busybox"
-busybox_tag: 1.28.4
+busybox_repo: "{{ base_library_repo }}alpine"
+busybox_tag: 3.10.4
 etcd_image_repo: "{{ quay_image_repo }}/coreos/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
@@ -509,6 +510,15 @@ downloads:
     repo: "{{ nginx_repo }}"
     tag: "{{ nginx_tag }}"
     sha256: "{{ nginx_checksum|default(None) }}"
+    groups:
+      - kube-node
+
+  metrics_server:
+    enabled: "{{ metrics_server_enabled }}"
+    container: true
+    repo: "{{ metrics_server_repo }}"
+    tag: "{{ metrics_server_tag }}"
+    sha256: "{{ metrics_server_checksum|default(None) }}"
     groups:
       - kube-node
 

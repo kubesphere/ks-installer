@@ -1,10 +1,10 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: ks-console
     tier: frontend
-    version: v2.1.0
+    version: {{ ks_version }}
   name: ks-console
   namespace: kubesphere-system
 spec:
@@ -17,13 +17,13 @@ spec:
     matchLabels:
       app: ks-console
       tier: frontend
-      version: v2.1.0
+      version: {{ ks_version }}
   template:
     metadata:
       labels:
         app: ks-console
         tier: frontend
-        version: v2.1.0
+        version: {{ ks_version }}
     spec:
       imagePullSecrets:
       - name: qingcloud     

@@ -6,7 +6,7 @@
     dest: "{{ kubesphere_dir }}/"
 
 
-- name: ks-installer | Createing system namespaces
+- name: ks-installer | Creating system namespaces
   shell: >
     {{ bin_dir }}/kubectl create ns {{ item }}
   register: import
@@ -61,4 +61,6 @@
   until: result.stdout.find("Running") != -1
   retries: 30
   delay: 30
+
+
 

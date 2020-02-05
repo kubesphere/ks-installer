@@ -22,7 +22,7 @@
 # The supported Kubernetes to install. Note: not all
 # Kubernetes versions are supported by KubeSphere, visit
 # https://kubesphere.io/docs to get full support list.
-kube_version: v1.15.5
+kube_version: v1.16.4
 
 # The supported etcd to install. Note: not all
 # etcd versions are supported by KubeSphere, visit
@@ -240,14 +240,14 @@ servicemesh_enabled: false
 notification_enabled: false
 alerting_enabled: false
 
-# Harbor is an optional component for KubeSphere.
-# Which could be turned on to install it before installation or later by updating its value to true
-harbor_enabled: false
-harbor_domain: harbor.devops.kubesphere.local
-# GitLab is an optional component for KubeSphere.
-# Which could be turned on to install it before installation or later by updating its value to true
-gitlab_enabled: false
-gitlab_hosts_domain: devops.kubesphere.local
+# # Harbor is an optional component for KubeSphere.
+# # Which could be turned on to install it before installation or later by updating its value to true
+# harbor_enabled: false
+# harbor_domain: harbor.devops.kubesphere.local
+# # GitLab is an optional component for KubeSphere.
+# # Which could be turned on to install it before installation or later by updating its value to true
+# gitlab_enabled: false
+# gitlab_hosts_domain: devops.kubesphere.local
 
 
 # Container Engine Acceleration
@@ -269,7 +269,7 @@ ali_disk_fsType: ext4
 ali_disk_type: cloud_ssd
 
 tencentcloud_cbs_csi_is_default_class: false
-tencentcloud_cbs_csi_enabled: true
+tencentcloud_cbs_csi_enabled: false
 tecentcloud_cbs_api_secret_id: SHOULD_BE_REPLACED
 tecentcloud_cbs_api_secret_key: SHOULD_BE_REPLACED
 tencentcloud_disk_type: CLOUD_PREMIUM

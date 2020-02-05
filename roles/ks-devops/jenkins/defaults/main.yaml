@@ -15,6 +15,7 @@ JavaOpts: >
   -Dhudson.model.LoadStatistics.clock=5000
   -Dhudson.model.LoadStatistics.decay=0.2
   -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000
+  -Dio.jenkins.plugins.casc.ConfigurationAsCode.initialDelay=10000
   -verbose:gc
   -Xloggc:/var/jenkins_home/gc-%t.log
   -XX:NumberOfGCLogFiles=2

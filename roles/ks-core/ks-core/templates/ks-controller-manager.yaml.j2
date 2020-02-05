@@ -1,10 +1,10 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: ks-controller-manager
     tier: backend
-    version: v2.1.0
+    version: {{ ks_version }}
   name: ks-controller-manager
   namespace: kubesphere-system
 spec:
@@ -19,7 +19,7 @@ spec:
     matchLabels:
       app: ks-controller-manager
       tier: backend
-      version: v2.1.0
+      version: {{ ks_version }}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -31,7 +31,7 @@ spec:
       labels:
         app: ks-controller-manager
         tier: backend
-        version: v2.1.0
+        version: {{ ks_version }}
     spec:
       containers:
       - command:

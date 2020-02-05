@@ -73,13 +73,6 @@ data:
     alerting:
       enabled: {{ alerting_enabled }}
 
-    harbor:
-      enabled: {{ harbor_enabled }}
-      domain: {{ harbor_domain }}
-    gitlab:
-      enabled: {{ gitlab_enabled }}
-      domain: {{ gitlab_hosts_domain }}
-
 kind: ConfigMap
 metadata:
   name: ks-installer
