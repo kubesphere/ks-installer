@@ -81,7 +81,7 @@ $(echo -e "\033[1;36mPrerequisites:\033[0m")
 
 2. OS requirements (For Minimal Installation only)：at least 2 vCPUs and 4GB RAM.
 
-3. Please make sure the storage service is available if you've configured storage parameters in the conf directory .
+3. Please make sure the storage service is available if you've configured storage parameters in the conf directory.
 
 4. Make sure the DNS address in /etc/resolv.conf is available.
 
