@@ -131,7 +131,7 @@
 - name: KubeSphere | Patch ks-console svc
   command: >
     {{ bin_dir }}/kubectl patch -n kubesphere-system svc ks-console -p
-    '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "v2.1.1"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "v2.1.0"}}}'
+    '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}}'
   when:
     - ks_svc.stdout.find("ks-console") != -1
 
