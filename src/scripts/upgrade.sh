@@ -123,6 +123,8 @@ function upgrade_k8s_version() {
          sed -i "/kube_version/s/\:.*/\: v1.14.8/g" $1/common.yaml
       elif [[ $current_k8s_version -eq 14 ]]; then
          sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $1/common.yaml
+      elif [[ $current_k8s_version -eq 15 ]]; then
+         sed -i "/kube_version/s/\:.*/\: v1.16.6/g" $1/common.yaml
       fi
 
       ansible-playbook -i $2 $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
