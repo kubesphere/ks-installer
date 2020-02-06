@@ -165,7 +165,7 @@ jwt_admin_key: SHOULD_BE_REPLACED
 ######################### KubeSphere #########################
 
 # Version of KubeSphere
-ks_version: v2.1.0
+ks_version: v2.1.1
 
 # KubeSphere console port, range 30000-32767,
 # but 30180/30280/30380 are reserved for internal service
