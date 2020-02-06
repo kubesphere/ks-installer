@@ -38,7 +38,6 @@
     - kubesphere-system
 #    - openpitrix-system
 
-
 - name: istio | Waiting for istio-init-crd-10
   shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-10 | awk '{print $3}'"
   register: result
@@ -46,6 +45,7 @@
     - result.stdout.find("Completed") != -1
   retries: 90
   delay: 10
+
 
 - name: istio | Waiting for istio-init-crd-11
   shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-11 | awk '{print $3}'"
@@ -55,6 +55,7 @@
   retries: 50
   delay: 10
 
+
 - name: istio | Waiting for istio-init-crd-12
   shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-12 | awk '{print $3}'"
   register: result
@@ -63,6 +64,29 @@
   retries: 50
   delay: 10
 
+
+- name: istio | Deploy istio
+  shell: >
+    {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
+    -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
+    --namespace istio-system
+  register: istio_result
+  ignore_errors: True
+
+
+- name: istio | Delete istio
+  shell: >
+    {{ bin_dir }}/helm del --purge istio
+  when:
+    - "istio_result.stderr and 'extensions/v1beta1' in istio_result.stderr"
+
+
+ - name: istio | Waiting for seconds
+   wait_for: timeout=10
+   when:
+     - "istio_result.stderr and 'extensions/v1beta1' in istio_result.stderr"
+
+
 - name: istio | Deploy istio
   shell: >
     {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
@@ -70,24 +94,6 @@
     --namespace istio-system
   register: istio_result
   failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
-
-
-# - name: istio | Waiting for seconds
-#   wait_for: timeout=10
-#   when:
-#     - "istio_result.stderr and 'timed out' in istio_result.stderr"
-
-# - name: istio | Deploy istio
-#   shell: >
-#     {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio-1.1.0.tgz
-#     -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml 
-#     --namespace istio-system
-#   when:
-#     - "istio_result.stderr and 'connection reset by peer' in istio_result.stderr"
-#   register: import
-#   until: import is succeeded
-#   retries: 5
-#   delay: 10
 
 
 - name: istio | Deploy jaeger-operator
