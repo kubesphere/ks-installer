@@ -337,8 +337,8 @@ grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 5.2.4
 
 #ks-logger
-docker_elasticsearch_curator_repo: "{{ base_repo }}kubespheredev/docker-elasticsearch-curator"
-docker_elasticsearch_curator_tag: 5.7.6
+docker_elasticsearch_curator_repo: "{{ base_repo }}kubespheredev/elasticsearch-curator"
+docker_elasticsearch_curator_tag: v5.7.6
 elasticsearch_oss_repo: "{{ base_repo }}kubesphere/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
 kibana_oss_repo: "{{ elastic_image_repo }}/kibana/kibana-oss"
