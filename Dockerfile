@@ -7,6 +7,8 @@ RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers pytho
     mv linux-amd64/helm /bin/helm && \
     rm -rf *linux-amd64* && \
     chmod +x /bin/helm && \
+    wget https://storage.googleapis.com/kubernetes-release/release/v1.16.6/bin/linux/amd64/kubectl -O /bin/kubectl && \
+    chmod +x /bin/kubectl && \
     curl https://rclone.org/install.sh | bash && \
     ln -s /bin/kubectl /usr/local/bin/kubectl && \
     ln -s /bin/helm /usr/local/bin/helm && \

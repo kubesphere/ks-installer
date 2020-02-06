@@ -1,0 +1,23 @@
+- name: ks-upgrade | restart ks-apiserver
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-apiserver"
+  ignore_errors: True
+
+
+- name: ks-upgrade | restart ks-apigateway
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-apigateway"
+  ignore_errors: True
+
+
+- name: ks-upgrade | restart ks-account
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-account"
+  ignore_errors: True
+
+
+- name: ks-upgrade | restart ks-console
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-console"
+  ignore_errors: True
+
+
+- name: ks-upgrade | restart ks-controller-manager
+  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-controller-manager"
+  ignore_errors: True
