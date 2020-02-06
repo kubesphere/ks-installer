@@ -78,13 +78,13 @@
   shell: >
     {{ bin_dir }}/helm del --purge istio
   when:
-    - "istio_result.stderr and 'extensions/v1beta1' in istio_result.stderr"
+    - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
 
 - name: istio | Waiting for seconds
   wait_for: timeout=10
   when:
-    - "istio_result.stderr and 'extensions/v1beta1' in istio_result.stderr"
+    - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
 
 - name: istio | Deploy istio
@@ -95,13 +95,14 @@
   register: istio_result
   failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
   when:
-    - "istio_result.stderr and 'extensions/v1beta1' in istio_result.stderr"
+    - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
 - fail:
     msg: "{{ istio_result.stderr }}"
   when:
-    - "istio_result.stderr and 'extensions/v1beta1' not in istio_result.stderr"
-    - "istio_result.stderr and 'error copying from' not in istio_result.stderr"
+    - istio_result.stderr is defined
+    - 'no matches for kind' not in istio_result.stderr
+    - 'error copying from' not in istio_result.stderr
 
 - name: istio | Deploy jaeger-operator
   shell: >
