@@ -101,8 +101,8 @@
     msg: "{{ istio_result.stderr }}"
   when:
     - istio_result.stderr is defined
-    - 'no matches for kind' not in istio_result.stderr
-    - 'error copying from' not in istio_result.stderr
+    - istio_result.stderr.find("no matches for kind") == -1
+    - istio_result.stderr.find("error copying from") == -1
 
 - name: istio | Deploy jaeger-operator
   shell: >
