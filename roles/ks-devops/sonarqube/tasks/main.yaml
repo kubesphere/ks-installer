@@ -5,14 +5,6 @@
     src: "sonarqube"
     dest: "{{ kubesphere_dir }}/"
 
-
-- name: ks-devops | Waitting apiservices/v1beta1.metrics.k8s.io
-  shell: >
-    {{ bin_dir }}/kubectl --namespace=kube-system wait --for=condition=Available --timeout=5m apiservices/v1beta1.metrics.k8s.io
-  when:
-    - metrics-server.enabled is defined
-    - metrics-server.enabled == true
-
 - name: ks-devops | Creating ks-jenkins webhook(external)
   uri:
     url: "{{ sonar_server_url }}/api/webhooks/create"

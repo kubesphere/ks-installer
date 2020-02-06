@@ -35,10 +35,3 @@
   when:
     - sts_number.stdout != "0"
     - sc_number.stdout == "0"
-
-- name: ks-logging | Waitting apiservices/v1beta1.metrics.k8s.io
-  shell: >
-    {{ bin_dir }}/kubectl --namespace=kube-system wait --for=condition=Available --timeout=5m apiservices/v1beta1.metrics.k8s.io
-  when:
-    - metrics-server.enabled is defined
-    - metrics-server.enabled == true
