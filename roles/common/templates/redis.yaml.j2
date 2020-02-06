@@ -21,6 +21,7 @@ metadata:
   labels:
     app: redis
     tier: database
+    version: redis-4.0
   name: redis
   namespace: kubesphere-system
 spec:
@@ -29,6 +30,7 @@ spec:
     matchLabels:
       app: redis
       tier: database
+      version: redis-4.0
   template:
     metadata:
       labels:
