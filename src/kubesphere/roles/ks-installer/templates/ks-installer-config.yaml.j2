@@ -8,10 +8,10 @@ data:
       storageClass: {{ storage_class }}
 
     etcd:
-      monitoring: True
+      monitoring: true
       endpointIps: {{ etcd_endpoint_ips }}
       port: 2379
-      tlsEnable: True
+      tlsEnable: true
 
     common:
       mysqlVolumeSize: {{ mysql_volume_size }}
@@ -21,10 +21,10 @@ data:
       redisVolumSize: {{ redis_volume_size }}
 
     metrics-server:
-      enabled: {{ metrics_server_enabled }}
+      enabled: {{ metrics_server_enabled | string | lower}}
 
     console:
-      enableMultiLogin: {{ enable_multi_login | default(true) }}  # enable/disable multi login
+      enableMultiLogin: {{ enable_multi_login | default(true) | string | lower }}  # enable/disable multi login
       port: {{ console_port }}
 
     monitoring:
@@ -32,10 +32,10 @@ data:
       prometheusMemoryRequest: {{ prometheus_memory_request }}
       prometheusVolumeSize: {{ prometheus_volume_size }}
       grafana:
-        enabled: {{ grafana_enabled }}
+        enabled: {{ grafana_enabled | string | lower }}
 
     logging:
-      enabled: {{ logging_enabled }}
+      enabled: {{ logging_enabled | string | lower }}
       elasticsearchMasterReplicas: {{ elasticsearch_master_replicas }}
       elasticsearchDataReplicas: {{ elasticsearch_data_replicas }}
       logsidecarReplicas: {{ logsidecar_replicas }}
@@ -48,13 +48,13 @@ data:
 {% endif %}
       containersLogMountedPath: ""
       kibana:
-        enabled: {{ kibana_enabled }}
+        enabled: {{ kibana_enabled | string | lower }}
 
     openpitrix:
-      enabled: {{ openpitrix_enabled }}
+      enabled: {{ openpitrix_enabled | string | lower }}
 
     devops:
-      enabled: {{ devops_enabled }}
+      enabled: {{ devops_enabled | string | lower }}
       jenkinsMemoryLim: {{ jenkins_memory_lim }}
       jenkinsMemoryReq: {{ jenkins_memory_req }}
       jenkinsVolumeSize: {{ jenkins_volume_size }}
@@ -62,16 +62,16 @@ data:
       jenkinsJavaOpts_Xmx: {{ jenkinsJavaOpts_Xmx }}
       jenkinsJavaOpts_MaxRAM: {{ jenkinsJavaOpts_MaxRAM }}
       sonarqube:
-        enabled: {{ sonarqube_enabled }}
+        enabled: {{ sonarqube_enabled | string | lower }}
 
     servicemesh:
-      enabled: {{ servicemesh_enabled }}
+      enabled: {{ servicemesh_enabled | string | lower }}
 
     notification:
-      enabled: {{ notification_enabled }}
+      enabled: {{ notification_enabled | string | lower }}
 
     alerting:
-      enabled: {{ alerting_enabled }}
+      enabled: {{ alerting_enabled | string | lower }}
 
 kind: ConfigMap
 metadata:
