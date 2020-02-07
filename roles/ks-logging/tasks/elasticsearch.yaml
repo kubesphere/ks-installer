@@ -49,4 +49,5 @@
     msg: "{{ es_result.stderr }}"
   when:
     - es_result.stderr is defined
+    - es_result.stderr != ""
     - es_result.stderr.find("no matches for kind") == -1

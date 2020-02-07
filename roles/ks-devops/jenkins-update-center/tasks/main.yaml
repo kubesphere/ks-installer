@@ -41,6 +41,7 @@
     msg: "{{ uc_result.stderr }}"
   when:
     - uc_result.stderr is defined
+    - uc_result.stderr != ""
     - uc_result.stderr.find("no matches for kind") == -1
 
 - name: jenkins-update-center | jenkins-update-center is ok

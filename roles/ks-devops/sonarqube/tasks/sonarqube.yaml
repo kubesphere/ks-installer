@@ -47,4 +47,5 @@
     msg: "{{ sonar_result.stderr }}"
   when:
     - sonar_result.stderr is defined
+    - sonar_result.stderr != ""
     - sonar_result.stderr.find("no matches for kind") == -1
