@@ -155,15 +155,11 @@
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") == -1
 
 
-- name: ks-logging | Deploy elasticsearch-logging
-  shell: >
-    {{ bin_dir }}/helm upgrade --install elasticsearch-logging 
-    {{ kubesphere_dir }}/logging/elasticsearch-1.22.1.tgz
-    -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch.yaml
-    --namespace kubesphere-logging-system
+- import_tasks: elasticsearch.yaml
   when:
     - logging.externalElasticsearchUrl is not defined
     - logging.externalElasticsearchPort is not defined
+
 
 
 - name: ks-logging | Deploy elasticsearch-logging-curator

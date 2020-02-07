@@ -101,6 +101,7 @@
     msg: "{{ istio_result.stderr }}"
   when:
     - istio_result.stderr is defined
+    - istio_result.stderr != ""
     - istio_result.stderr.find("no matches for kind") == -1
     - istio_result.stderr.find("error copying from") == -1
 
