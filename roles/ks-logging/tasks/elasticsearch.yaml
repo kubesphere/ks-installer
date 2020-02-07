@@ -1,0 +1,52 @@
+---
+- name: ks-logging | Deploy elasticsearch-logging
+  shell: >
+    {{ bin_dir }}/helm upgrade --install elasticsearch-logging
+    {{ kubesphere_dir }}/logging/elasticsearch-1.22.1.tgz
+    -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch.yaml
+    --namespace kubesphere-logging-system
+  register: es_result
+  ignore_errors: True
+
+
+- name: ks-logging | Get PersistentVolume Name
+  shell: >
+    kubectl get pv | grep "kubesphere-logging-system/data-elasticsearch-logging" | awk '{print $1}'
+  register: es_pv_name
+  when:
+    - "es_result.stderr and 'no matches for kind' in es_result.stderr"
+
+- name: ks-logging | Patch PersistentVolume (persistentVolumeReclaimPolicy)
+  shell: >
+    kubectl patch pv {{ item }}
+    -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
+  loop: "{{ es_pv_name.stdout_lines }}"
+  when:
+    - "es_result.stderr and 'no matches for kind' in es_result.stderr"
+
+- name: ks-logging | Delete elasticsearch
+  shell: >
+    {{ bin_dir }}/helm del --purge elasticsearch-logging
+  when:
+    - "es_result.stderr and 'no matches for kind' in es_result.stderr"
+
+- name: ks-logging | Waiting for seconds
+  wait_for: timeout=10
+  when:
+    - "es_result.stderr and 'no matches for kind' in es_result.stderr"
+
+- name: ks-logging | Deploy elasticsearch-logging
+  shell: >
+    {{ bin_dir }}/helm upgrade --install elasticsearch-logging
+    {{ kubesphere_dir }}/logging/elasticsearch-1.22.1.tgz
+    -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch.yaml
+    --namespace kubesphere-logging-system
+  register: es_result
+  when:
+    - "es_result.stderr and 'no matches for kind' in es_result.stderr"
+
+- fail:
+    msg: "{{ es_result.stderr }}"
+  when:
+    - istio_result.stderr is defined
+    - istio_result.stderr.find("no matches for kind") == -1
