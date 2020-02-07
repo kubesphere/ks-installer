@@ -22,9 +22,9 @@
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 
-- name: Sonarqube | Delete elasticsearch
+- name: Sonarqube | Delete Sonarqube
   shell: >
-    {{ bin_dir }}/helm del --purge elasticsearch-logging
+    {{ bin_dir }}/helm del --purge ks-sonarqube
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 
@@ -33,7 +33,7 @@
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 
-- name: Sonarqube | Deploy elasticsearch-logging
+- name: Sonarqube | Deploy Sonarqube
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-sonarqube
     {{ kubesphere_dir }}/sonarqube/sonarqube
