@@ -36,12 +36,7 @@
     - devops.sonarqube.externalSonarToken is not defined
 
 
-- name: Sonarqube | Deploy Sonarqube
-  shell: >
-    {{ bin_dir }}/helm upgrade --install ks-sonarqube 
-    {{ kubesphere_dir }}/sonarqube/sonarqube
-    -f {{ kubesphere_dir }}/sonarqube/custom-values-sonarqube.yaml 
-    --namespace kubesphere-devops-system
+- import_tasks: sonarqube.yaml
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true

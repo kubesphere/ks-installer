@@ -48,5 +48,5 @@
 - fail:
     msg: "{{ es_result.stderr }}"
   when:
-    - istio_result.stderr is defined
-    - istio_result.stderr.find("no matches for kind") == -1
+    - es_result.stderr is defined
+    - es_result.stderr.find("no matches for kind") == -1
