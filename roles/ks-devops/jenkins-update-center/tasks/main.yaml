@@ -16,11 +16,32 @@
 
 - name: jenkins-update-center | Start Jenkins plugins update center
   shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
-  register: result
-  until: result.rc == 0
-  retries: 20
-  delay: 30
+  register: uc_result
+  ignore_errors: True
 
+
+- name: jenkins-update-cente | Delete update-center
+  shell: >
+    {{ bin_dir }}/helm del --purge uc
+  when:
+    - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
+
+- name: jenkins-update-cente | Waiting for seconds
+  wait_for: timeout=10
+  when:
+    - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
+
+- name: jenkins-update-center | Start Jenkins plugins update center
+  shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
+  register: uc_result
+  when:
+    - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
+
+- fail:
+    msg: "{{ uc_result.stderr }}"
+  when:
+    - uc_result.stderr is defined
+    - uc_result.stderr.find("no matches for kind") == -1
 
 - name: jenkins-update-center | jenkins-update-center is ok
   shell: >
