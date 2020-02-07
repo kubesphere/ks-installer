@@ -325,7 +325,7 @@ prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
 prometheus_operator_tag: v0.34.0
 kube_rbac_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
-kube_state_metrics_repo: "{{ quay_image_repo }}/coreos/kube-state-metrics"
+kube_state_metrics_repo: "{{ base_repo }}kubesphere/kube-state-metrics"
 kube_state_metrics_tag: v1.7.2
 node_exporter_repo: "{{ base_repo }}kubesphere/node-exporter"
 node_exporter_tag: ks-v0.16.0
