@@ -31,7 +31,7 @@
     - "es_result.stderr and 'no matches for kind' in es_result.stderr"
 
 - name: ks-logging | Waiting for seconds
-  wait_for: timeout=10
+  wait_for: timeout=20
   when:
     - "es_result.stderr and 'no matches for kind' in es_result.stderr"
 
