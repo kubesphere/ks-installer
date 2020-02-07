@@ -74,6 +74,7 @@ spec:
                 operator: In
                 values:
                 - ""
+{% if master_num is defined and master_num != "1" %}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - topologyKey: kubernetes.io/hostname
@@ -85,6 +86,7 @@ spec:
                 - ks-console
             namespaces:
             - kubesphere-system
+{% endif %}
       volumes:
       # - name: ca-dir
       #   secret:
