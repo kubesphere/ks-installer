@@ -169,7 +169,8 @@ function update-allinone() {
                      -e jenkins_memory_lim="2Gi" \
                      -e jenkins_memory_req="1500Mi" \
                      -e logsidecar_replicas=1 \
-                     -e elasticsearch_data_replicas=1
+                     -e elasticsearch_data_replicas=1 \
+                     --skip-tags=apps,helm
 
 
     if [[ $? -eq 0 ]]; then
@@ -211,7 +212,8 @@ function update-multinode() {
 
     ansible-playbook -i $multinode_hosts $BASE_FOLDER/../kubesphere/upgrade.yml \
                      -b \
-                     -e local_volume_provisioner_enabled=false
+                     -e local_volume_provisioner_enabled=false \
+                     --skip-tags=apps,helm
 
 
     if [[ $? -eq 0 ]]; then
