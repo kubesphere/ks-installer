@@ -60,4 +60,4 @@
       when:
         - result.rc != 0
   when:
-    - (metrics_server_check.stdout.find("DEPLOYED") == -1) or (metrics_server_check.stdout.find("0.3.1") == -1)
+    - (metrics_server_check.stdout.find("DEPLOYED") == -1) or (metrics_server_check.stdout.find("0.3.1-0217") == -1)

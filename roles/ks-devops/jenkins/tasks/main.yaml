@@ -68,4 +68,4 @@
     -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml
     --namespace kubesphere-devops-system
   when:
-    - (jenkins_check.stdout.find("DEPLOYED") == -1) or (jenkins_check.stdout.find("2.121.3") == -1)
+    - (jenkins_check.stdout.find("DEPLOYED") == -1) or (jenkins_check.stdout.find("2.121.3-0217") == -1)

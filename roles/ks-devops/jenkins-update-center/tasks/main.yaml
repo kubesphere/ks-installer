@@ -50,7 +50,7 @@
         - uc_result.stderr != ""
         - uc_result.stderr.find("no matches for kind") == -1
   when:
-    - (uc_check.stdout.find("DEPLOYED") == -1) or (uc_check.stdout.find("1.0") == -1)
+    - (uc_check.stdout.find("DEPLOYED") == -1) or (uc_check.stdout.find("2.1.1") == -1)
 
 - name: jenkins-update-center | jenkins-update-center is ok
   shell: >

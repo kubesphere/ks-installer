@@ -49,4 +49,4 @@
     - devops.sonarqube.enabled == true
     - devops.sonarqube.externalSonarUrl is not defined
     - devops.sonarqube.externalSonarToken is not defined
-    - (sonar_check.stdout.find("DEPLOYED") == -1) or (sonar_check.stdout.find("7.6") == -1)
+    - (sonar_check.stdout.find("DEPLOYED") == -1) or (sonar_check.stdout.find("7.6-0217") == -1)
