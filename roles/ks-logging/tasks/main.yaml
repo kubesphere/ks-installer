@@ -151,7 +151,7 @@
     -f {{ kubesphere_dir }}/logging/custom-values-fluentbit-operator.yaml
     --namespace kubesphere-logging-system
   when:
-    - (fluentbit_check.stdout.find("DEPLOYED") == -1) or (fluentbit_check.stdout.find("0.1.0") == -1)
+    - (fluentbit_check.stdout.find("DEPLOYED") == -1) or (fluentbit_check.stdout.find("0.1.0-0217") == -1)
 
 - name: ks-logging | Create fluentbit-crd
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-crd.yaml"
@@ -174,7 +174,7 @@
   when:
     - logging.externalElasticsearchUrl is not defined
     - logging.externalElasticsearchPort is not defined
-    - (es_check.stdout.find("DEPLOYED") == -1) or (es_check.stdout.find("6.7.0") == -1)
+    - (es_check.stdout.find("DEPLOYED") == -1) or (es_check.stdout.find("6.7.0-0217") == -1)
 
 
 - name: ks-logging | Check elasticsearch-logging-curator
@@ -191,7 +191,7 @@
     -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch-curator.yaml
     --namespace kubesphere-logging-system
   when:
-    - (curator_check.stdout.find("DEPLOYED") == -1) or (curator_check.stdout.find("5.5.4") == -1)
+    - (curator_check.stdout.find("DEPLOYED") == -1) or (curator_check.stdout.find("5.5.4-0217") == -1)
 
 
 - block:
@@ -208,7 +208,7 @@
         -f {{ kubesphere_dir }}/logging/custom-values-kibana.yaml
         --namespace kubesphere-logging-system
       when:
-        - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0") == -1)
+        - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0-0217") == -1)
   when:
     - logging.kibana.enabled == true
 
