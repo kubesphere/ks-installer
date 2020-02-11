@@ -17,7 +17,7 @@ spec:
             sum(container_memory_usage_bytes{job="kubelet", image!="", container_name!=""} * on(namespace) group_left(label_kubesphere_io_workspace) kube_namespace_labels{job="kube-state-metrics"}) by (namespace, label_kubesphere_io_workspace)
           record: namespace:container_memory_usage_bytes:sum
         - expr: |
-            sum(container_memory_working_set_bytes{job="kubelet", image!="", container_name!=""}) * on(namespace) group_left(label_kubesphere_io_workspace) kube_namespace_labels{job="kube-state-metrics"}) by (namespace, label_kubesphere_io_workspace)
+            sum(container_memory_working_set_bytes{job="kubelet", image!="", container_name!=""} * on(namespace) group_left(label_kubesphere_io_workspace) kube_namespace_labels{job="kube-state-metrics"}) by (namespace, label_kubesphere_io_workspace)
           record: namespace:container_memory_usage_bytes_wo_cache:sum
     - name: node.rules
       rules:
