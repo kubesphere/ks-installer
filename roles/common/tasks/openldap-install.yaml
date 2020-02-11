@@ -36,6 +36,13 @@
     - old_openldap_exist.stdout != "0"
 
 
+- name: Kubesphere | Check openldap
+  shell: >
+    {{ bin_dir }}/helm list ks-openldap
+  register: openldap_check
+  ignore_errors: True
+
+
 - name: Kubesphere | Deploy openldap
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-openldap
@@ -43,7 +50,8 @@
     -f {{ kubesphere_dir }}/custom-values-openldap.yaml
     --set fullnameOverride=openldap
     --namespace kubesphere-system
-
+  when:
+    - (openldap_check.stdout.find("DEPLOYED") == -1) or (openldap_check.stdout.find("1.0") == -1)
 
 - import_tasks: openldap-migration.yaml
   when:

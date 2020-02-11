@@ -19,13 +19,6 @@
     - { path: istio, file: jaeger-production.yaml }
 
 
-- name: KubeSphere | Init istio-system
-  shell: >
-    {{ bin_dir }}/helm upgrade --install istio-init {{ kubesphere_dir }}/istio/istio-init
-    -f {{ kubesphere_dir }}/istio/custom-values-istio-init.yaml
-    --namespace istio-system
-
-
 # label istio-system with istio-injection=disabled to avoid sidecarInjector mutatingwebhookconfigurations block pod creation
 - name: istio | disable istio-injection
   shell: >
@@ -38,91 +31,106 @@
     - kubesphere-system
 #    - openpitrix-system
 
-- name: istio | Waiting for istio-init-crd-10
-  shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-10 | awk '{print $3}'"
-  register: result
-  until:
-    - result.stdout.find("Completed") != -1
-  retries: 90
-  delay: 10
-
-
-- name: istio | Waiting for istio-init-crd-11
-  shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-11 | awk '{print $3}'"
-  register: result
-  until:
-    - result.stdout.find("Completed") != -1
-  retries: 50
-  delay: 10
-
-
-- name: istio | Waiting for istio-init-crd-12
-  shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-12 | awk '{print $3}'"
-  register: result
-  until:
-    - result.stdout.find("Completed") != -1
-  retries: 50
-  delay: 10
-
-
-- name: istio | Deploy istio
+- name: istio | Check istio
   shell: >
-    {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
-    -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
-    --namespace istio-system
-  register: istio_result
+    {{ bin_dir }}/helm list istio
+  register: istio_check
   ignore_errors: True
 
+- block:
+    - name: KubeSphere | Init istio-system
+      shell: >
+        {{ bin_dir }}/helm upgrade --install istio-init {{ kubesphere_dir }}/istio/istio-init
+        -f {{ kubesphere_dir }}/istio/custom-values-istio-init.yaml
+        --namespace istio-system
 
-- name: istio | Delete istio
-  shell: >
-    {{ bin_dir }}/helm del --purge istio
+    - name: istio | Waiting for istio-init-crd-10
+      shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-10 | awk '{print $3}'"
+      register: result
+      until:
+        - result.stdout.find("Completed") != -1
+      retries: 90
+      delay: 10
+
+
+    - name: istio | Waiting for istio-init-crd-11
+      shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-11 | awk '{print $3}'"
+      register: result
+      until:
+        - result.stdout.find("Completed") != -1
+      retries: 50
+      delay: 10
+
+
+    - name: istio | Waiting for istio-init-crd-12
+      shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-12 | awk '{print $3}'"
+      register: result
+      until:
+        - result.stdout.find("Completed") != -1
+      retries: 50
+      delay: 10
+
+
+    - name: istio | Deploy istio
+      shell: >
+        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
+        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
+        --namespace istio-system
+      register: istio_result
+      ignore_errors: True
+
+
+    - name: istio | Delete istio
+      shell: >
+        {{ bin_dir }}/helm del --purge istio
+      when:
+        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
+
+
+    - name: istio | Waiting for seconds
+      wait_for: timeout=10
+      when:
+        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
+
+
+    - name: istio | Deploy istio
+      shell: >
+        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
+        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
+        --namespace istio-system
+      register: istio_result
+      failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
+      when:
+        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
+
+    - fail:
+        msg: "{{ istio_result.stderr }}"
+      when:
+        - istio_result.stderr is defined
+        - istio_result.stderr != ""
+        - istio_result.stderr.find("no matches for kind") == -1
+        - istio_result.stderr.find("error copying from") == -1
+
+    - name: istio | Deploy jaeger-operator
+      shell: >
+        {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/istio/jaeger-operator
+        -f {{ kubesphere_dir }}/istio/custom-values-jaeger.yaml
+        --namespace istio-system
+
+
+    - name: istio | Deploy jaeger-production
+      shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/istio/jaeger-production.yaml --namespace istio-system"
+      register: import
+      until: import is succeeded
+      retries: 5
+      delay: 10
+
+
+    - name: istio | Create jaeger operator service
+      shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/istio/jaeger-operator-service.yaml --namespace istio-system"
+      register: import
+      until: import is succeeded
+      retries: 5
+      delay: 10
   when:
-    - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-
-- name: istio | Waiting for seconds
-  wait_for: timeout=10
-  when:
-    - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-
-- name: istio | Deploy istio
-  shell: >
-    {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
-    -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml 
-    --namespace istio-system
-  register: istio_result
-  failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
-  when:
-    - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-- fail:
-    msg: "{{ istio_result.stderr }}"
-  when:
-    - istio_result.stderr is defined
-    - istio_result.stderr != ""
-    - istio_result.stderr.find("no matches for kind") == -1
-    - istio_result.stderr.find("error copying from") == -1
-
-- name: istio | Deploy jaeger-operator
-  shell: >
-    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/istio/jaeger-operator
-    -f {{ kubesphere_dir }}/istio/custom-values-jaeger.yaml 
-    --namespace istio-system
-
-
-- name: istio | Deploy jaeger-production
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/istio/jaeger-production.yaml --namespace istio-system"
-  register: import
-  until: import is succeeded
-  retries: 5
-  delay: 10
-
-
-- name: istio | Create jaeger operator service
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/istio/jaeger-operator-service.yaml --namespace istio-system"
-  register: import
-  until: import is succeeded
-  retries: 5
-  delay: 10
+    - (istio_check.stdout.find("DEPLOYED") == -1) or (istio_check.stdout.find("1.3.3") == -1)

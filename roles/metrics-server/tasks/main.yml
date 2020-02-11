@@ -38,17 +38,26 @@
     - { name: values, file: values.yaml, type: config }
 
 
-- name: Metrics-Server | Installing metrics-server
+- name: Metrics-Server | Check Metrics-Server
   shell: >
-    {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
-  register: result
+    {{ bin_dir }}/helm list metrics-server
+  register: metrics_server_check
   ignore_errors: True
 
+- block:
+    - name: Metrics-Server | Installing metrics-server
+      shell: >
+        {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
+      register: result
+      ignore_errors: True
 
-- name: Metrics-Server | Installing metrics-server retry
-  shell: >
-    {{ bin_dir }}/helm del --purge metrics-server &&
-    sleep 5 &&
-    {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
+
+    - name: Metrics-Server | Installing metrics-server retry
+      shell: >
+        {{ bin_dir }}/helm del --purge metrics-server &&
+        sleep 5 &&
+        {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
+      when:
+        - result.rc != 0
   when:
-    - result.rc != 0
+    - (metrics_server_check.stdout.find("DEPLOYED") == -1) or (metrics_server_check.stdout.find("0.3.1") == -1)

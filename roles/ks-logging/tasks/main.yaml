@@ -137,13 +137,21 @@
     - kubesphere_version.stdout == "2.0.0"
 
 
+- name: ks-logging | Check logging-fluentbit-operator
+  shell: >
+    {{ bin_dir }}/helm list logging-fluentbit-operator
+  register: fluentbit_check
+  ignore_errors: True
+
+
 - name: ks-logging | Deploy logging-fluentbit-operator
   shell: >
     {{ bin_dir }}/helm upgrade --install logging-fluentbit-operator 
     {{ kubesphere_dir }}/logging/fluentbit-operator-0.1.0.tgz
     -f {{ kubesphere_dir }}/logging/custom-values-fluentbit-operator.yaml
     --namespace kubesphere-logging-system
-
+  when:
+    - (fluentbit_check.stdout.find("DEPLOYED") == -1) or (fluentbit_check.stdout.find("0.1.0") == -1)
 
 - name: ks-logging | Create fluentbit-crd
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-crd.yaml"
@@ -155,11 +163,25 @@
     - check_fluent_bit_crd_result.stdout.find("fluent-bit") == -1
 
 
+- name: ks-logging | Check elasticsearch
+  shell: >
+    {{ bin_dir }}/helm list elasticsearch-logging
+  register: es_check
+  ignore_errors: True
+
+
 - import_tasks: elasticsearch.yaml
   when:
     - logging.externalElasticsearchUrl is not defined
     - logging.externalElasticsearchPort is not defined
+    - (es_check.stdout.find("DEPLOYED") == -1) or (es_check.stdout.find("6.7.0") == -1)
 
+
+- name: ks-logging | Check elasticsearch-logging-curator
+  shell: >
+    {{ bin_dir }}/helm list elasticsearch-logging-curator
+  register: curator_check
+  ignore_errors: True
 
 
 - name: ks-logging | Deploy elasticsearch-logging-curator
@@ -168,14 +190,25 @@
     {{ kubesphere_dir }}/logging/elasticsearch-curator-1.3.3.tgz  
     -f {{ kubesphere_dir }}/logging/custom-values-elasticsearch-curator.yaml
     --namespace kubesphere-logging-system
+  when:
+    - (curator_check.stdout.find("DEPLOYED") == -1) or (curator_check.stdout.find("5.5.4") == -1)
 
 
-- name: ks-logging | Deploy elasticsearch-logging-kibana
-  shell: >
-    {{ bin_dir }}/helm upgrade --install elasticsearch-logging-kibana 
-    {{ kubesphere_dir }}/logging/kibana-2.2.1.tgz  
-    -f {{ kubesphere_dir }}/logging/custom-values-kibana.yaml
-    --namespace kubesphere-logging-system
+- block:
+    - name: ks-logging | Check elasticsearch-logging-kibana
+      shell: >
+        {{ bin_dir }}/helm list elasticsearch-logging-kibana
+      register: kibana_check
+      ignore_errors: True
+
+    - name: ks-logging | Deploy elasticsearch-logging-kibana
+      shell: >
+        {{ bin_dir }}/helm upgrade --install elasticsearch-logging-kibana
+        {{ kubesphere_dir }}/logging/kibana-2.2.1.tgz
+        -f {{ kubesphere_dir }}/logging/custom-values-kibana.yaml
+        --namespace kubesphere-logging-system
+      when:
+        - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0") == -1)
   when:
     - logging.kibana.enabled == true
 

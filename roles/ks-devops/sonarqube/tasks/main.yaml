@@ -36,9 +36,17 @@
     - devops.sonarqube.externalSonarToken is not defined
 
 
+- name: Sonarqube | Check Sonarqube
+  shell: >
+    {{ bin_dir }}/helm list ks-sonarqube
+  register: sonar_check
+  ignore_errors: True
+
+
 - import_tasks: sonarqube.yaml
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
     - devops.sonarqube.externalSonarUrl is not defined
     - devops.sonarqube.externalSonarToken is not defined
+    - (sonar_check.stdout.find("DEPLOYED") == -1) or (sonar_check.stdout.find("7.6") == -1)
