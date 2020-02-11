@@ -45,8 +45,8 @@
     - fail:
         msg: "It is suggested to refer to the above methods for troubleshooting problems ."
       when: minio_status.rc != 0
- when:
-   - (minio_check.stdout.find("DEPLOYED") == -1) or (minio_check.stdout.find("RELEASE.2019-08-07T01-59-21Z") == -1)
+  when:
+    - (minio_check.stdout.find("DEPLOYED") == -1) or (minio_check.stdout.find("RELEASE.2019-08-07T01-59-21Z") == -1)
 
 - name: Kubesphere | create minio config directory
   file:
