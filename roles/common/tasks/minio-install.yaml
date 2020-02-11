@@ -14,30 +14,39 @@
     - { name: custom-values-minio, file: custom-values-minio.yaml }
 
 
-- name: Kubesphere | Deploy minio
+- name: Kubesphere | Check minio
   shell: >
-    {{ bin_dir }}/helm upgrade --install ks-minio
-    {{ kubesphere_dir }}/minio-ha
-    -f {{ kubesphere_dir }}/custom-values-minio.yaml
-    --set fullnameOverride=minio
-    --namespace kubesphere-system
-    --wait --timeout 1800
-  register: minio_status
+    {{ bin_dir }}/helm list ks-minio
+  register: minio_check
   ignore_errors: True
 
 
-- debug:
-    msg:
-     - 1. check the storage configuration and storage server
-     - 2. execute 'helm del --purge ks-minio'
-     - 3. Restart the installer pod in kubesphere-system namespace
-  when: minio_status.rc != 0
+- block:
+    - name: Kubesphere | Deploy minio
+      shell: >
+        {{ bin_dir }}/helm upgrade --install ks-minio
+        {{ kubesphere_dir }}/minio-ha
+        -f {{ kubesphere_dir }}/custom-values-minio.yaml
+        --set fullnameOverride=minio
+        --namespace kubesphere-system
+        --wait --timeout 1800
+      register: minio_status
+      ignore_errors: True
 
 
-- fail:
-    msg: "It is suggested to refer to the above methods for troubleshooting problems ."
-  when: minio_status.rc != 0
+    - debug:
+        msg:
+         - 1. check the storage configuration and storage server
+         - 2. execute 'helm del --purge ks-minio'
+         - 3. Restart the installer pod in kubesphere-system namespace
+      when: minio_status.rc != 0
 
+
+    - fail:
+        msg: "It is suggested to refer to the above methods for troubleshooting problems ."
+      when: minio_status.rc != 0
+  when:
+    - (minio_check.stdout.find("DEPLOYED") == -1) or (minio_check.stdout.find("RELEASE.2019-08-07T01-59-21Z") == -1)
 
 - name: Kubesphere | create minio config directory
   file:

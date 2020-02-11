@@ -1,3 +1,4 @@
+---
 - name: Sonarqube | Deploy Sonarqube
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-sonarqube
@@ -29,7 +30,7 @@
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 
 - name: Sonarqube | Waiting for seconds
-  wait_for: timeout=20
+  wait_for: timeout=30
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 

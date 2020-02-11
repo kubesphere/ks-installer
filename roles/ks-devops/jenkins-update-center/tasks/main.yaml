@@ -13,36 +13,44 @@
   with_items:
     - { name: values-jenkins-uc, file: values-jenkins-uc.yaml, type: values }
 
-
-- name: jenkins-update-center | Start Jenkins plugins update center
-  shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
-  register: uc_result
+- name: jenkins-update-center | Check jenkins-update-center
+  shell: >
+    {{ bin_dir }}/helm list uc
+  register: uc_check
   ignore_errors: True
 
+- block:
+    - name: jenkins-update-center | Start Jenkins plugins update center
+      shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
+      register: uc_result
+      ignore_errors: True
 
-- name: jenkins-update-cente | Delete update-center
-  shell: >
-    {{ bin_dir }}/helm del --purge uc
-  when:
-    - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
 
-- name: jenkins-update-cente | Waiting for seconds
-  wait_for: timeout=10
-  when:
-    - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
+    - name: jenkins-update-cente | Delete update-center
+      shell: >
+        {{ bin_dir }}/helm del --purge uc
+      when:
+        - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
 
-- name: jenkins-update-center | Start Jenkins plugins update center
-  shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
-  register: uc_result
-  when:
-    - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
+    - name: jenkins-update-cente | Waiting for seconds
+      wait_for: timeout=10
+      when:
+        - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
 
-- fail:
-    msg: "{{ uc_result.stderr }}"
+    - name: jenkins-update-center | Start Jenkins plugins update center
+      shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
+      register: uc_result
+      when:
+        - "uc_result.stderr and 'no matches for kind' in uc_result.stderr"
+
+    - fail:
+        msg: "{{ uc_result.stderr }}"
+      when:
+        - uc_result.stderr is defined
+        - uc_result.stderr != ""
+        - uc_result.stderr.find("no matches for kind") == -1
   when:
-    - uc_result.stderr is defined
-    - uc_result.stderr != ""
-    - uc_result.stderr.find("no matches for kind") == -1
+    - (uc_check.stdout.find("DEPLOYED") == -1) or (uc_check.stdout.find("2.1.1") == -1)
 
 - name: jenkins-update-center | jenkins-update-center is ok
   shell: >
