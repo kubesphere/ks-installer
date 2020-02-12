@@ -1,13 +1,46 @@
 ---
-- name: Kubesphere | Checking openpitrix common component
+
+- name: OpenPitrix | Delete old openpitrix
   shell: >
-    {{ bin_dir }}/kubectl get pod -n openpitrix-system | grep openpitrix-hyperpitrix
-  register: openpitrix_health_check
+    {{ bin_dir }}/kubectl delete deploy -n openpitrix-system {{ item }}
+  loop:
+    - "openpitrix-api-gateway-deployment"
+    - "openpitrix-app-manager-deployment"
+    - "openpitrix-category-manager-deployment"
+    - "openpitrix-cluster-manager-deployment"
+    - "openpitrix-dashboard-deployment"
+    - "openpitrix-iam-service-deployment"
+    - "openpitrix-job-manager-deployment"
+    - "openpitrix-pilot-deployment"
+    - "openpitrix-repo-indexer-deployment"
+    - "openpitrix-repo-manager-deployment"
+    - "openpitrix-runtime-manager-deployment"
+    - "openpitrix-task-manager-deployment"
   ignore_errors: True
 
-- import_tasks: openpitrix-install.yaml
-  when:
-    - openpitrix_health_check.stdout.find("Running") == -1
+- name: OpenPitrix | Getting OpenPitrix installation files
+  copy:
+    src: "openpitrix"
+    dest: "{{ kubesphere_dir }}/"
 
+- name: OpenPitrix | Getting OpenPitrix installation files
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: openpitrix, file: custom-values-openpitrix.yaml }
+    - { path: openpitrix, file: openpitrix-release-app-job.yaml }
 
+- name: OpenPitrix | Deploy OpenPitrix
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-openpitrix
+    {{ kubesphere_dir }}/openpitrix/openpitrix
+    -f {{ kubesphere_dir }}/openpitrix/custom-values-openpitrix.yaml
+    --namespace openpitrix-system
+    --force
 
+- name: OpenPitrix | Creating release job
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/openpitrix/openpitrix-release-app-job.yaml --force
+  register: source_state
+  failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"

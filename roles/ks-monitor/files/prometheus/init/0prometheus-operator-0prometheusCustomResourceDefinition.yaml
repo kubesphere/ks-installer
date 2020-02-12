@@ -91,9 +91,9 @@ spec:
                         node(s) with the highest sum are the most preferred.
                       items:
                         description: An empty preferred scheduling term matches all
-                          objects with implicit weight 0 (i.e. it's a no-op). A null
+                          objects with implicit weight 0 (i.e. it's a no-openpitrix). A null
                           preferred scheduling term matches no objects (i.e. is also
-                          a no-op).
+                          a no-openpitrix).
                         properties:
                           preference:
                             description: A null or empty node selector term matches

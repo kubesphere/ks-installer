@@ -40,6 +40,7 @@
     {{ kubesphere_dir }}/sonarqube/sonarqube
     -f {{ kubesphere_dir }}/sonarqube/custom-values-sonarqube.yaml
     --namespace kubesphere-devops-system
+    --force
   register: sonar_result
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"

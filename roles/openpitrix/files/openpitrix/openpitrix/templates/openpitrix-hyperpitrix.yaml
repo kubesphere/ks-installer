@@ -1,0 +1,183 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openpitrix-hyperpitrix-deployment
+  labels:
+    app: openpitrix
+    component: openpitrix-hyperpitrix
+    version: {{ .Values.version }}
+spec:
+  selector:
+    matchLabels:
+      app: openpitrix
+      component: openpitrix-hyperpitrix
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: openpitrix
+        component: openpitrix-hyperpitrix
+        version: {{ .Values.version }}
+    spec:
+      initContainers:
+        - name: wait-mysql
+          image: "{{ .Values.busybox.repository }}:{{ .Values.busybox.tag }}"
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'until nc -z {{ .Values.mysql.svc }} {{ .Values.mysql.port }}; do echo "waiting for mysql"; sleep 2; done;']
+        - name: wait-etcd
+          image: "{{ .Values.busybox.repository }}:{{ .Values.busybox.tag }}"
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'until nc -z {{ .Values.etcd.svc }} {{ .Values.etcd.port }}; do echo "waiting for etcd"; sleep 2; done;']
+        - name: openpitrix-db-init
+          command: ["/flyway/sql/ddl/ddl_init.sh", "-h{{ .Values.mysql.svc }}", "-uroot", "--connect-timeout=5"]
+          env:
+            - name: PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-app-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/app", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/app", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-attachment-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/attachment", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/attachment", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-cluster-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/cluster", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/cluster", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-isv-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/isv", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/isv", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-job-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/job", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/job", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-repo-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/repo", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/repo", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-runtime-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/runtime", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/runtime", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - name: openpitrix-task-db-ctrl
+          command: ["/flyway/flyway", "-X", "-url=jdbc:mysql://{{ .Values.mysql.svc }}/task", "-user=root", "-validateOnMigrate=false", "-locations=filesystem:/flyway/sql/task", "migrate"]
+          env:
+            - name: FLYWAY_PASSWORD
+              value: "password"
+          image: "{{ .Values.openpitrix_flyway.image.repository }}:{{ .Values.openpitrix_flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix_flyway.image.pullPolicy }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+
+      hostAliases:
+        - ip: 127.0.0.1
+          hostnames:
+            - openpitrix-task-manager
+            - openpitrix-runtime-manager
+            - openpitrix-repo-indexer
+            - openpitrix-repo-manager
+            - openpitrix-job-manager
+            - openpitrix-isv-manager
+            - openpitrix-cluster-manager
+            - openpitrix-attachment-manager
+            - openpitrix-category-manager
+            - openpitrix-app-manager
+            - openpitrix-api-gateway
+            - openpitrix-rp-manager
+      containers:
+        - name: hyperpitrix
+          image: "{{ .Values.openpitrix.image.repository }}:{{ .Values.openpitrix.image.tag }}"
+          imagePullPolicy: {{ .Values.openpitrix.image.pullPolicy }}
+          command:
+            - hyperpitrix
+          ports:
+            - containerPort: 9100
+              name: api-gateway
+            - containerPort: 9102
+              name: app-manager
+            - containerPort: 9108
+              name: cateogory-mgr
+            - containerPort: 9122
+              name: attachment-mgr
+            - containerPort: 9104
+              name: cluster-mgr
+            - containerPort: 9118
+              name: isv-mgr
+            - containerPort: 9106
+              name: job-mgr
+            - containerPort: 9101
+              name: repo-mgr
+            - containerPort: 9108
+              name: repo-indexer
+            - containerPort: 9121
+              name: rp-mgr
+            - containerPort: 9103
+              name: runtime-mgr
+            - containerPort: 9107
+              name: task-mgr
+          env:
+            - name: OPENPITRIX_GRPC_SHOW_ERROR_CAUSE
+              value: "true"
+            - name: OPENPITRIX_LOG_LEVEL
+              value: "debug"
+            - name: OPENPITRIX_ETCD_ENDPOINTS
+              value: "{{ .Values.etcd.svc }}:{{ .Values.etcd.port }}"
+            - name: OPENPITRIX_MYSQL_HOST
+              value: "{{ .Values.mysql.svc }}"
+            - name: OPENPITRIX_ATTACHMENT_ENDPOINT
+              value: 'http://{{ .Values.attachment.svc }}:{{ .Values.attachment.port }}'
+            - name: OPENPITRIX_ATTACHMENT_BUCKET_NAME
+              value: "{{ .Values.attachment.bucket }}"
+            - name: OPENPITRIX_MYSQL_PASSWORD
+              value: "password"
+          resources:
+            limits:
+              cpu: "{{ .Values.openpitrix.limits.cpu }}"
+              memory: "{{ .Values.openpitrix.limits.memory }}"
+            requests:
+              cpu: "{{ .Values.openpitrix.requests.cpu }}"
+              memory: "{{ .Values.openpitrix.requests.memory }}"
