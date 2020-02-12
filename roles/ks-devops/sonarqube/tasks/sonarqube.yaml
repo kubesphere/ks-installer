@@ -30,7 +30,7 @@
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 
 - name: Sonarqube | Waiting for seconds
-  wait_for: timeout=30
+  wait_for: timeout=60
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 
