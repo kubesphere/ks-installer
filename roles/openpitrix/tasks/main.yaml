@@ -45,6 +45,6 @@
 
 - name: OpenPitrix | Creating release job
   command: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/openpitrix/openpitrix-release-app-job.yaml --force
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/openpitrix-release-app-job.yaml --force
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
