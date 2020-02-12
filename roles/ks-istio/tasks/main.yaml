@@ -88,7 +88,7 @@
 
 
     - name: istio | Waiting for seconds
-      wait_for: timeout=10
+      wait_for: timeout=30
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
@@ -98,6 +98,7 @@
         {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
         -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
         --namespace istio-system
+        --force
       register: istio_result
       failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
       when:

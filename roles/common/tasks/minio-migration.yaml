@@ -8,7 +8,7 @@
     state: directory
     path: "/tmp/minio-backup/{{ item }}/"
 
-- name: Kubesphere | Fetch op-minio data
+- name: Kubesphere | Fetch openpitrix-minio data
   shell: >
     rclone copy
     op-minio:openpitrix-internal-repo/{{ item }}
@@ -22,7 +22,7 @@
   retries: 30
   delay: 30
 
-- name: Kubesphere | Sync op-minio data
+- name: Kubesphere | Sync openpitrix-minio data
   shell: >
     rclone copy
     /tmp/minio-backup/{{ item }}/

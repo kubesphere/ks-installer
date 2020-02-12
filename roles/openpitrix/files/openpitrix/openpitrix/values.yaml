@@ -1,0 +1,54 @@
+# Default values for openpitrix.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+version: latest
+busybox:
+  repository: alpine
+  tag: 3.10.4
+
+openpitrix:
+  image:
+    repository: openpitrix/openpitrix
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  limits:
+    cpu: 500m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+
+openpitrix_rp:
+  image:
+    repository: openpitrix/runtime-provider-kubernetes
+    tag: latest
+    pullPolicy: IfNotPresent
+  limits:
+    cpu: 500m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+openpitrix_flyway:
+  image:
+    repository: openpitrix/openpitrix
+    tag: "flyway"
+    pullPolicy: IfNotPresent
+
+
+etcd:
+  svc: "etcd.kubesphere-system.svc"
+  port: 2379
+
+mysql:
+  svc: "mysql.kubesphere-system.svc"
+  port: 3306
+
+attachment:
+  svc: "minio.kubesphere-system.svc"
+  port: 9000
+  bucket: "openpitrix-attachment"
+

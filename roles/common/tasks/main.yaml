@@ -41,7 +41,7 @@
   loop:
     - {op: "openpitrix-db", ks: "mysql-pvc"}
     - {op: "openpitrix-etcd", ks: "etcd-pvc"}
-#    - {op: "openpitrix-minio", ks: "minio-pvc"}
+#    - {openpitrix: "openpitrix-minio", ks: "minio-pvc"}
   when:
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
 
