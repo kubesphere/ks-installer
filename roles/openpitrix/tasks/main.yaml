@@ -38,6 +38,10 @@
     -f {{ kubesphere_dir }}/openpitrix/custom-values-openpitrix.yaml
     --namespace openpitrix-system
     --force
+  register: deploy_result
+  until: deploy_result is succeeded
+  retries: 3
+  delay: 10
 
 - name: OpenPitrix | Creating release job
   command: >
