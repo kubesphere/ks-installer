@@ -70,7 +70,7 @@
 
 - name: Kubesphere | Deploying redis
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
+    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }} --force
   loop:
     - "redis.yaml"
   register: import
