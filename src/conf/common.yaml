@@ -22,7 +22,7 @@
 # The supported Kubernetes to install. Note: not all
 # Kubernetes versions are supported by KubeSphere, visit
 # https://kubesphere.io/docs to get full support list.
-kube_version: v1.16.6
+kube_version: v1.16.7
 
 # The supported etcd to install. Note: not all
 # etcd versions are supported by KubeSphere, visit
