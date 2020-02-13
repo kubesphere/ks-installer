@@ -88,7 +88,7 @@
 
 
     - name: istio | Waiting for seconds
-      wait_for: timeout=30
+      wait_for: timeout=60
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
