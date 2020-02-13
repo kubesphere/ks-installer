@@ -47,7 +47,7 @@
 
     - name: Getting ks-version
       shell: >
-        {{ bin_dir }}/kubectl describe  configmap -n kubesphere-system ks-console-ae-config | grep "kubesphere:" | awk '{print $2}'
+        {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
       register: ksversion
 
     - name: Creating version.tmp
