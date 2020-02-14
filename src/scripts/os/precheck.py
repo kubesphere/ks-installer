@@ -3,7 +3,7 @@
 
 import  yaml, os
 
-storageList = ['local_volume','ceph_rbd','nfs_client','glusterfs_provisioner','qingcloud_csi','neonsan_csi', 'tencentcloud_cbs_csi', 'alicloud_disk_csi']
+storageList = ['local_volume','ceph_rbd','nfs_client','glusterfs_provisioner','qingcloud_csi','neonsan_csi','tencentcloud_cbs_csi','alicloud_disk_csi']
 def getVarsFiles():
     varsFiles = []
     varsPath = os.path.join(os.getcwd(), "../conf")
