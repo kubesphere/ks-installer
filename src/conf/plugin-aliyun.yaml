@@ -1,5 +1,6 @@
+alicloud_disk_csi_enabled: false
 alicloud_disk_csi_is_default_class: false
-alicloud_disk_csi_enalbed: false
+
 ali_access_key_id: SHOULD_BE_REPLACED
 ali_access_key_secret: SHOULD_BE_REPLACED
 
