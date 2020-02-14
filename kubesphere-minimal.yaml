@@ -75,13 +75,6 @@ data:
     alerting:
       enabled: False
 
-    harbor:
-      enabled: False
-      domain: harbor.devops.kubesphere.local
-    gitlab:
-      enabled: False
-      domain: devops.kubesphere.local
-
 kind: ConfigMap
 metadata:
   name: ks-installer
