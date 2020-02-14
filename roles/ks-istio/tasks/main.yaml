@@ -134,4 +134,4 @@
       retries: 5
       delay: 10
   when:
-    - (istio_check.stdout.find("DEPLOYED") == -1) or (istio_check.stdout.find("1.3.3-0217") == -1)
+    - (istio_check.stdout.find("DEPLOYED") == -1) or (istio_check.stdout.find("1.3.3") == -1)
