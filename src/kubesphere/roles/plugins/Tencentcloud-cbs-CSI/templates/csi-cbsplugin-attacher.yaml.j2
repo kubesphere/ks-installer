@@ -21,6 +21,9 @@ metadata:
   namespace: kube-system
 spec:
   serviceName: "csi-cbsplugin-attacher"
+  selector:
+    matchLabels:
+      app: csi-cbsplugin-attacher
   replicas: 1
   template:
     metadata:
