@@ -37,12 +37,12 @@ if [[ $? -eq 0 ]]; then
 
     if [[ $os_info =~ "Ubuntu" || $os_info =~ "Debian" ]]; then
 
-       pip install pyopenssl
+       pip install pyopenssl --ignore-installed
 
     fi
 
     pip install -U --ignore-installed PyYAML
-    pip install -r os/requirements.txt
+    pip install -r os/requirements.txt --ignore-installed
 else
     echo "please install python"
 fi
