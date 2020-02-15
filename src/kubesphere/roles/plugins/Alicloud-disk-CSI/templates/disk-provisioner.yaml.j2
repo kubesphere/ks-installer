@@ -20,6 +20,9 @@ metadata:
   namespace: kube-system
 spec:
   serviceName: "csi-disk-provisioner"
+  selector:
+    matchLabels:
+      app: csi-disk-provisioner
   replicas: 1
   template:
     metadata:
