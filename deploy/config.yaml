@@ -39,7 +39,8 @@ data:
       elasticsearchMasterReplicas: 1
       elasticsearchDataReplicas: 1
       logsidecarReplicas: 2
-      elasticsearchVolumeSize: 20Gi
+      elasticsearchMasterVolumeSize: 4Gi
+      elasticsearchDataVolumeSize: 20Gi
       logMaxAge: 7
       elkPrefix: logstash
       containersLogMountedPath: ""
@@ -68,13 +69,6 @@ data:
 
     alerting:
       enabled: False
-
-    harbor:
-      enabled: False
-      domain: harbor.devops.kubesphere.local
-    gitlab:
-      enabled: False
-      domain: devops.kubesphere.local
 
 kind: ConfigMap
 metadata:

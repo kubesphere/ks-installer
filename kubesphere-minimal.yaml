@@ -45,7 +45,8 @@ data:
       elasticsearchMasterReplicas: 1
       elasticsearchDataReplicas: 1
       logsidecarReplicas: 2
-      elasticsearchVolumeSize: 20Gi
+      elasticsearchMasterVolumeSize: 4Gi
+      elasticsearchDataVolumeSize: 20Gi
       logMaxAge: 7
       elkPrefix: logstash
       containersLogMountedPath: ""
