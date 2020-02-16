@@ -39,8 +39,8 @@ data:
       elasticsearchMasterReplicas: {{ elasticsearch_master_replicas }}
       elasticsearchDataReplicas: {{ elasticsearch_data_replicas }}
       logsidecarReplicas: {{ logsidecar_replicas }}
-      elasticsearchMasterVolumeSize: {{ elasticsearch_master_volume_size }}
-      elasticsearchDataVolumeSize: {{ elasticsearch_data_volume_size }}
+      elasticsearchMasterVolumeSize: {{ elasticsearch_master_volume_size | default("4Gi") }}
+      elasticsearchDataVolumeSize: {{ elasticsearch_data_volume_size | default("20Gi") }}
       logMaxAge: {{ log_max_age }}
       elkPrefix: {{ elk_prefix }}
 {% if external_es_url is defined and external_es_port is defined %}
