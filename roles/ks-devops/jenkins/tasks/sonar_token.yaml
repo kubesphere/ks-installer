@@ -120,6 +120,17 @@
 
 
 - name: ks-devops | Creating ks-jenkins webhook(internal)
+  shell: >
+    curl {{ sonar_server_url_internal }}/api/webhooks/list -u  {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }}
+  register: webhooks_list
+  ignore_errors: True
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Creating ks-jenkins webhook(internal)
   uri:
     url: "{{ sonar_server_url_internal }}/api/webhooks/create"
     method: POST
@@ -134,6 +145,7 @@
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
     - devops.sonarqube.externalSonarToken is not defined
+    - webhooks_list.stdout.find("ks-jenkins.kubesphere-devops-system") == -1
 
 
 - name: ks-devops | Setting ks-sonarqube token
