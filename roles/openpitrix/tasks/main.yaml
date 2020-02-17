@@ -31,6 +31,14 @@
     - { path: openpitrix, file: custom-values-openpitrix.yaml }
     - { path: openpitrix, file: openpitrix-release-app-job.yaml }
 
+
+- name: OpenPitrix | Check OpenPitrix
+  shell: >
+    {{ bin_dir }}/helm list ks-openpitrix
+  register: op_check
+  ignore_errors: True
+
+
 - name: OpenPitrix | Deploy OpenPitrix
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-openpitrix
@@ -42,9 +50,23 @@
   until: deploy_result is succeeded
   retries: 3
   delay: 10
+  when:
+    - (op_check.stdout.find("DEPLOYED") == -1) or (op_check.stdout.find("v0.4.7") == -1)
+
+
+
+
+
+- name: OpenPitrix | Checking release job
+  command: >
+    {{ bin_dir }}/kubectl get job -n openpitrix-system
+  register: op_jobs
+  ignore_errors: True
 
 - name: OpenPitrix | Creating release job
   command: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/openpitrix-release-app-job.yaml --force
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
+  when:
+    - op_jobs.stdout.find("hyperpitrix-release-app-job") == -1
