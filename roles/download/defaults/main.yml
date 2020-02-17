@@ -148,13 +148,16 @@ ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert_adapter"
 ks_alerting_adapter_tag: "v2.1.0"
 
 #openpitrix:
-op_version: latest
+# op_version: "latest"
+op_version: "v0.4.7"
 openpitrix_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_tag: "{{ op_version }}"
 openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
-openpitrix_flyway_tag: "flyway"
+# openpitrix_flyway_tag: "flyway"
+openpitrix_flyway_tag: "flyway-v0.4.7"
 openpitrix_runtime_provider_kubernetes_repo: "{{ base_repo }}openpitrix/runtime-provider-kubernetes"
-openpitrix_runtime_provider_kubernetes_tag: latest
+# openpitrix_runtime_provider_kubernetes_tag: "latest"
+openpitrix_runtime_provider_kubernetes_tag: "v0.1.3"
 release_app_repo: "{{ base_repo }}openpitrix/release-app"
 release_app_tag: v0.4.2
 minio_repo: "{{ base_repo }}minio/minio"
