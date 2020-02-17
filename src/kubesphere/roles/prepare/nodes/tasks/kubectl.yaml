@@ -11,31 +11,31 @@
     dest: "/root/.kube/config"
     mode: "0700"
 
-- name: Compare host kubectl with hyperkube container
-  command: "{{ docker_bin_dir }}/docker run --rm -v {{ bin_dir }}:/systembindir {{ hyperkube_image_repo }}:{{ hyperkube_image_tag }} /usr/bin/cmp /hyperkube /systembindir/kubectl"
-  register: kubectl_task_compare_result
-  until: kubectl_task_compare_result.rc in [0,1,2]
-  retries: 4
-  delay: "{{ retry_stagger | random + 3 }}"
-  changed_when: false
-  failed_when: "kubectl_task_compare_result.rc not in [0,1,2]"
-  tags:
-    - hyperkube
-    - kubectl
-    - upgrade
-
-- name: Copy kubectl from hyperkube container
-  command: "{{ docker_bin_dir }}/docker run --rm -v {{ bin_dir }}:/systembindir {{ hyperkube_image_repo }}:{{ hyperkube_image_tag }} /bin/cp /hyperkube /systembindir/kubectl"
-  when: kubectl_task_compare_result.rc != 0
-  register: kubectl_task_result
-  until: kubectl_task_result.rc == 0
-  retries: 4
-  delay: "{{ retry_stagger | random + 3 }}"
-  changed_when: false
-  tags:
-    - hyperkube
-    - kubectl
-    - upgrade
+#- name: Compare host kubectl with hyperkube container
+#  command: "{{ docker_bin_dir }}/docker run --rm -v {{ bin_dir }}:/systembindir {{ hyperkube_image_repo }}:{{ hyperkube_image_tag }} /usr/bin/cmp /hyperkube /systembindir/kubectl"
+#  register: kubectl_task_compare_result
+#  until: kubectl_task_compare_result.rc in [0,1,2]
+#  retries: 4
+#  delay: "{{ retry_stagger | random + 3 }}"
+#  changed_when: false
+#  failed_when: "kubectl_task_compare_result.rc not in [0,1,2]"
+#  tags:
+#    - hyperkube
+#    - kubectl
+#    - upgrade
+#
+#- name: Copy kubectl from hyperkube container
+#  command: "{{ docker_bin_dir }}/docker run --rm -v {{ bin_dir }}:/systembindir {{ hyperkube_image_repo }}:{{ hyperkube_image_tag }} /bin/cp /hyperkube /systembindir/kubectl"
+#  when: kubectl_task_compare_result.rc != 0
+#  register: kubectl_task_result
+#  until: kubectl_task_result.rc == 0
+#  retries: 4
+#  delay: "{{ retry_stagger | random + 3 }}"
+#  changed_when: false
+#  tags:
+#    - hyperkube
+#    - kubectl
+#    - upgrade
 
 - name: Install kubectl bash completion
   shell: "{{ bin_dir }}/kubectl completion bash >/etc/bash_completion.d/kubectl.sh"
