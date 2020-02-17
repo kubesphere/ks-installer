@@ -28,10 +28,10 @@
   delay: 5
   when: ansible_os_family in ["RedHat", "Centos"]
 
-- import_tasks: kubectl.yaml
-  when: inventory_hostname not in groups['kube-master']
-  tags:
-    - nodes
+#- import_tasks: kubectl.yaml
+#  when: inventory_hostname not in groups['kube-master']
+#  tags:
+#    - nodes
 
 - import_tasks: ceph-client.yaml
   tags:
