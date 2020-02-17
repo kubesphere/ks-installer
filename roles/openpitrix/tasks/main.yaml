@@ -54,9 +54,6 @@
     - (op_check.stdout.find("DEPLOYED") == -1) or (op_check.stdout.find("v0.4.7") == -1)
 
 
-
-
-
 - name: OpenPitrix | Checking release job
   command: >
     {{ bin_dir }}/kubectl get job -n openpitrix-system
