@@ -101,20 +101,20 @@ hyperkube_image_repo: "{{ kube_image_repo }}/hyperkube"
 hyperkube_image_tag: "{{ kube_version }}"
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
-ks_apiserver_tag: release-2.1
-ks_account_repo: "{{ base_repo }}kubespheredev/ks-account"
-ks_account_tag: release-2.1
-ks_apigateway_repo: "{{ base_repo }}kubespheredev/ks-apigateway"
-ks_apigateway_tag: release-2.1
-ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
-ks_controller_manager_tag: release-2.1
+ks_apiserver_repo: "{{ base_repo }}kubesphere/ks-apiserver"
+ks_apiserver_tag: v2.1.1
+ks_account_repo: "{{ base_repo }}kubesphere/ks-account"
+ks_account_tag: v2.1.1
+ks_apigateway_repo: "{{ base_repo }}kubesphere/ks-apigateway"
+ks_apigateway_tag: v2.1.1
+ks_controller_manager_repo: "{{ base_repo }}kubesphere/ks-controller-manager"
+ks_controller_manager_tag: v2.1.1
 ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
 ks_update_tag: "advanced-2.0.0"
 ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_flyway_tag: "flyway-v2.1.0"
-ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
-ks_console_tag: release-2.1
+ks_console_repo: "{{ base_repo }}kubesphere/ks-console"
+ks_console_tag: v2.1.1
 ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
 ks_kubectl_tag: v1.0.0
 ks_docs_repo: "{{ base_repo }}kubesphere/ks-docs"
@@ -124,15 +124,15 @@ ks_devops_tag: advanced-2.0.0-dev
 cloud_controller_manager_repo: "{{ base_repo }}kubesphere/cloud-controller-manager"
 cloud_controller_manager_tag: v1.4.0
 
-#ks_image_pull_policy: IfNotPresent
-ks_image_pull_policy: Always
+ks_image_pull_policy: IfNotPresent
+#ks_image_pull_policy: Always
 
 #ks-hostnic
 ks_hostnic_repo: "kubesphere/hostnic"
 ks_hostnic_tag: "v1.0.0-alpha"
 
 #ks-installer
-ks_installer_repo: "{{ base_repo }}kubespheredev/ks-installer"
+ks_installer_repo: "{{ base_repo }}kubesphere/ks-installer"
 ks_installer_tag: v2.1.1
 
 #ks-notification
@@ -237,8 +237,8 @@ harbor_core_repo: "{{ base_repo }}goharbor/harbor-core"
 harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
-jenkins_uc_repo:  "{{ base_repo }}kubespheredev/jenkins-uc"
-jenkins_uc_tag: v2.1.1-dev
+jenkins_uc_repo:  "{{ base_repo }}kubesphere/jenkins-uc"
+jenkins_uc_tag: v2.1.1
 jenkins_repo: "{{ base_repo }}jenkins/jenkins"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
@@ -257,10 +257,10 @@ sonarqube_repo: "{{ base_library_repo }}sonarqube"
 sonarqube_tag: 7.4-community
 
 #s2i
-s2ioperator_repo: "{{ base_repo }}kubespheredev/s2ioperator"
-s2ioperator_tag: "release-2.1.1"
-s2irun_repo: "{{ base_repo }}kubespheredev/s2irun"
-s2irun_tag: "release-2.1"
+s2ioperator_repo: "{{ base_repo }}kubesphere/s2ioperator"
+s2ioperator_tag: "v2.1.1"
+s2irun_repo: "{{ base_repo }}kubesphere/s2irun"
+s2irun_tag: "v2.1.1"
 
 s2itemplates_tag: v2.1.0
 binary_repo: "{{ base_repo }}kubesphere/s2i-binary"
@@ -340,7 +340,7 @@ grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 5.2.4
 
 #ks-logger
-docker_elasticsearch_curator_repo: "{{ base_repo }}kubespheredev/elasticsearch-curator"
+docker_elasticsearch_curator_repo: "{{ base_repo }}kubesphere/elasticsearch-curator"
 docker_elasticsearch_curator_tag: v5.7.6
 elasticsearch_oss_repo: "{{ base_repo }}kubesphere/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
@@ -348,9 +348,9 @@ kibana_oss_repo: "{{ elastic_image_repo }}/kibana/kibana-oss"
 kibana_oss_tag: 6.7.0
 testFramework_repo: "{{ base_repo }}dduportal/bats"
 testFramework_tag: 0.4.0
-fluentbit_operator_repo: "{{ base_repo }}kubespheredev/fluentbit-operator"
+fluentbit_operator_repo: "{{ base_repo }}kubesphere/fluentbit-operator"
 fluentbit_operator_tag: v0.1.0
-ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
+ks_fluent_bit_repo: "{{ base_repo }}kubesphere/fluent-bit"
 ks_fluent_bit_tag: "v1.3.5-reload"
 kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
 kslogging_configmap_reload_tag: v0.0.1
