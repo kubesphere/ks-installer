@@ -39,7 +39,7 @@
 
 - name: Install kubectl bash completion
   shell: "{{ bin_dir }}/kubectl completion bash >/etc/bash_completion.d/kubectl.sh"
-  when: kubectl_task_compare_result.rc != 0 and ansible_os_family in ["Debian","RedHat"]
+  when: ansible_os_family in ["Debian","RedHat"]
   tags:
     - kubectl
 
