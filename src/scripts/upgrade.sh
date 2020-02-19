@@ -57,6 +57,7 @@ etcd_version=$(grep -r "etcd_version" $common_file | awk '{print $2}')
 sed -i "/openpitrix_enabled/s/\:.*/\: true/g" $common_file
 
 function Upgrade_Confirmation(){
+
     echo ""
     read -p "The relevant information is shown above, Please confirm:  (yes/no) " ans
     while [[ "x"$ans != "xyes" && "x"$ans != "xno" ]]; do
@@ -103,6 +104,22 @@ function check_nonsupport() {
     fi
 }
 
+function notes() {
+
+    cat << eof
+
+$(echo -e "\033[1;36mNOTES:\033[0m")
+
+Before upgrading:
+
+1. Please sync your configuration changes from previous version to 2.1.1 in the conf directory.
+
+2. Please backup your configuration if you modified the configuration of KubeSphere and Kubernetes components.
+
+eof
+}
+
+
 
 function task_check() {
     if [[ $? -ne 0 ]]; then
@@ -125,6 +142,8 @@ function upgrade_k8s_version() {
          sed -i "/kube_version/s/\:.*/\: v1.15.5/g" $1/common.yaml
       elif [[ $current_k8s_version -eq 15 ]]; then
          sed -i "/kube_version/s/\:.*/\: v1.16.7/g" $1/common.yaml
+      elif [[ $current_k8s_version -eq 16 ]]; then
+         sed -i "/kube_version/s/\:.*/\: v1.17.3/g" $1/common.yaml
       fi
 
       ansible-playbook -i $2 $BASE_FOLDER/../k8s/upgrade-cluster.yml -b
@@ -152,7 +171,7 @@ function update-allinone() {
     check_version_file $version_file $allinone_hosts
 
     check_nonsupport $version_file
-
+    notes
     Upgrade_Confirmation
 
     if [[ $(grep -c "k8s" $version_file) -ne 0 ]]; then
@@ -203,7 +222,7 @@ function update-multinode() {
     check_version_file $version_file $multinode_hosts
 
     check_nonsupport $version_file
-
+    notes
     Upgrade_Confirmation
 
     if [[ $(grep -c "k8s" $version_file) -ne 0 ]]; then
