@@ -88,7 +88,7 @@
 
 
     - name: istio | Waiting for seconds
-      wait_for: timeout=60
+      wait_for: timeout=15
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
@@ -100,9 +100,32 @@
         --namespace istio-system
         --force
       register: istio_result
-      failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
+      ignore_errors: True
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
+
+
+    - name: istio | Delete istio
+      shell: >
+        {{ bin_dir }}/helm del --purge istio
+      when:
+        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
+
+    - name: istio | Waiting for seconds
+      wait_for: timeout=5
+      when:
+        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
+
+    - name: istio | Deploy istio
+      shell: >
+        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
+        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
+        --namespace istio-system
+        --force
+      register: istio_result
+      failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
+      when:
+        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
     - fail:
         msg: "{{ istio_result.stderr }}"
