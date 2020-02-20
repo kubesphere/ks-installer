@@ -64,6 +64,7 @@ data:
       jenkinsJavaOpts_MaxRAM: {{ jenkinsJavaOpts_MaxRAM }}
       sonarqube:
         enabled: {{ sonarqube_enabled | string | lower }}
+        postgresqlVolumeSize: 8Gi
 
     servicemesh:
       enabled: {{ servicemesh_enabled | string | lower }}

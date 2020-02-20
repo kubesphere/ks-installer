@@ -35,6 +35,16 @@
     dest: "{{ kubesphere_dir }}/"
 
 
+- name: Jenkins | Check jenkins status
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins
+  register: jenkins_status
+  ignore_errors: True
+
+- import_tasks: get_old_config.yaml
+  when:
+    - jenkins_status.rc == 0
+
 - name: Jenkins | Creating manifests
   template:
     src: "{{ item.file }}.j2"

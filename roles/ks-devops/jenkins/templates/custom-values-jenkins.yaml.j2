@@ -431,7 +431,7 @@ Persistence:
   StorageClass: "{{ persistence.storageClass }}"
 {% endif %}
   AccessMode: ReadWriteOnce
-  Size: {{ devops.jenkinsVolumeSize }}
+  Size: {% if jenkins_pv_size is defined %}{{ jenkins_pv_size }}{% else %}{{ devops.jenkinsVolumeSize }}{% endif %}
   
   volumes:
   - name: casc-config

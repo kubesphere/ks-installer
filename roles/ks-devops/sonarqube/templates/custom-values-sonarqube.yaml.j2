@@ -166,7 +166,7 @@ postgresql:
     enabled: true
     storageClass: "{{ persistence.storageClass }}"
     accessMode: ReadWriteOnce
-    size: 8Gi
+    size: {% if postgresql_pv_size is defined %}{{ postgresql_pv_size }}{% else %}{{ devops.sonarqube.postgresqlVolumeSize | default("8Gi") }}{% endif %}
  
 mysql:
   # Enable to deploy the mySQL chart

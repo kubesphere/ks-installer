@@ -22,6 +22,19 @@
     - devops.sonarqube.externalSonarUrl is  defined
     - devops.sonarqube.externalSonarToken is  defined
 
+- name: Sonarqube | Check sonarqube PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-devops-system ks-sonarqube-postgresql -o jsonpath='{.status.capacity.storage}'
+  register: sonarqube_pvc
+  ignore_errors: True
+
+- name: Sonarqube | Setting sonarqube pv size
+  set_fact:
+    postgresql_pv_size: "{{ sonarqube_pvc.stdout }}"
+  when:
+    - sonarqube_pvc.rc == 0
+    - sonarqube_pvc.stdout != ""
+  ignore_errors: True
 
 - name: Sonarqube | Creating manifests
   template:
