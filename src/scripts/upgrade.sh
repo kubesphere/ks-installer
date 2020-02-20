@@ -40,6 +40,7 @@ export ANSIBLE_RETRY_FILES_ENABLED=False
 export ANSIBLE_CALLBACK_WHITELIST=profile_tasks
 export ANSIBLE_TIMEOUT=300
 export ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_COMMAND_WARNINGS=False
 
 allinone_hosts=$BASE_FOLDER/../k8s/inventory/local/hosts.ini
 multinode_hosts=$BASE_FOLDER/../k8s/inventory/my_cluster/hosts.ini
