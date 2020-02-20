@@ -105,16 +105,11 @@
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
 
-    - name: istio | Delete istio
-      shell: >
-        {{ bin_dir }}/helm del --purge istio
+    - name: istio | Waiting for seconds
+      wait_for: timeout=10
       when:
         - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
-    - name: istio | Waiting for seconds
-      wait_for: timeout=5
-      when:
-        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
     - name: istio | Deploy istio
       shell: >
