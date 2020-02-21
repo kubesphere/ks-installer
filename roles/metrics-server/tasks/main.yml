@@ -56,8 +56,16 @@
       shell: >
         {{ bin_dir }}/helm del --purge metrics-server &&
         sleep 5 &&
-        {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
+        {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server --namespace kube-system
       when:
         - result.rc != 0
   when:
     - (metrics_server_check.stdout.find("DEPLOYED") == -1) or (metrics_server_check.stdout.find("0.3.1-0217") == -1)
+
+- name: Metrics-Server | Waitting for v1beta1.metrics.k8s.io ready
+  shell: >
+    {{ bin_dir }}/kubectl get apiservices v1beta1.metrics.k8s.io -o jsonpath='{.status.conditions[0].status}'
+  register: metrics_health
+  until: metrics_health.stdout.find("True") != -1
+  retries: 60
+  delay: 10

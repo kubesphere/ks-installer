@@ -1,0 +1,85 @@
+---
+
+- name: Kubesphere | Check mysql PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system mysql-pvc -o jsonpath='{.status.capacity.storage}'
+  register: mysql_db_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting mysql db pv size
+  set_fact:
+    mysql_db_pv_size: "{{ mysql_db_pvc.stdout }}"
+  when:
+    - mysql_db_pvc.rc == 0
+    - mysql_db_pvc.stdout != ""
+  ignore_errors: True
+
+- name: Kubesphere | Check redis PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system redis-pvc -o jsonpath='{.status.capacity.storage}'
+  register: redis_db_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting redis db pv size
+  set_fact:
+    redis_db_pv_size: "{{ redis_db_pvc.stdout }}"
+  when:
+    - redis_db_pvc.rc == 0
+    - redis_db_pvc.stdout != ""
+  ignore_errors: True
+
+- name: Kubesphere | Check minio PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system minio -o jsonpath='{.status.capacity.storage}'
+  register: minio_storage_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting minio pv size
+  set_fact:
+    minio_storage_pv_size: "{{ minio_storage_pvc.stdout }}"
+  when:
+    - minio_storage_pvc.rc == 0
+    - minio_storage_pvc.stdout != ""
+  ignore_errors: True
+
+- name: Kubesphere | Check openldap PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system openldap-pvc-openldap-0 -o jsonpath='{.status.capacity.storage}'
+  register: openldap_db_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting openldap pv size
+  set_fact:
+    openldap_db_pv_size: "{{ openldap_db_pvc.stdout }}"
+  when:
+    - openldap_db_pvc.rc == 0
+    - openldap_db_pvc.stdout != ""
+  ignore_errors: True
+
+- name: Kubesphere | Check etcd db PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system etcd-pvc -o jsonpath='{.status.capacity.storage}'
+  register: etcd_db_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting etcd pv size
+  set_fact:
+    etcd_db_pv_size: "{{ etcd_db_pvc.stdout }}"
+  when:
+    - etcd_db_pvc.rc == 0
+    - etcd_db_pvc.stdout != ""
+  ignore_errors: True
+
+- name: Kubesphere | Check redis ha PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system data-redis-ha-server-0 -o jsonpath='{.status.capacity.storage}'
+  register: redis_ha_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting redis ha pv size
+  set_fact:
+    redis_ha_pv_size: "{{ redis_ha_pvc.stdout }}"
+  when:
+    - redis_ha_pvc.rc == 0
+    - redis_ha_pvc.stdout != ""
+  ignore_errors: True

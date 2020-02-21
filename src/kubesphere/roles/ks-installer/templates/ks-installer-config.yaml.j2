@@ -20,7 +20,7 @@ data:
       openldapVolumeSize: {{ openldap_volume_size }}
       redisVolumSize: {{ redis_volume_size }}
 
-    metrics-server:
+    metrics_server:
       enabled: {{ metrics_server_enabled | string | lower}}
 
     console:
@@ -64,6 +64,7 @@ data:
       jenkinsJavaOpts_MaxRAM: {{ jenkinsJavaOpts_MaxRAM }}
       sonarqube:
         enabled: {{ sonarqube_enabled | string | lower }}
+        postgresqlVolumeSize: 8Gi
 
     servicemesh:
       enabled: {{ servicemesh_enabled | string | lower }}

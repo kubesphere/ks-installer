@@ -27,7 +27,7 @@ persistence:
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
   storageClass: "{{ persistence.storageClass }}"
 {% endif %}
-  size: "{{ common.openldapVolumeSize }}"
+  size: {% if openldap_db_pv_size is defined %}{{ openldap_db_pv_size }}{% else %}{{ common.openldapVolumeSize }}{% endif %}
 
 
 resources: {}

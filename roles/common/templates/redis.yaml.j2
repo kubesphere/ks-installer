@@ -12,7 +12,8 @@ spec:
 {% endif %}
   resources:
     requests:
-      storage: {{ common.redisVolumSize }}
+      storage: {% if redis_db_pv_size is defined %}{{ redis_db_pv_size }}{% else %}{{ common.redisVolumSize }}{% endif %}
+
 
 ---
 apiVersion: apps/v1

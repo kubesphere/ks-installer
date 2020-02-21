@@ -38,6 +38,7 @@
   loop:
     - "prometheus"
 
+- import_tasks: get_old_config.yaml
 
 - name: ks-monitor | Creating manifests
   template:

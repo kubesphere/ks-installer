@@ -1,0 +1,63 @@
+---
+
+- name: Jenkins | Get jenkins config
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins -o json | jq '.spec.template.spec.containers[0].env'
+  register: envs
+  ignore_errors: True
+
+- name: Jenkins | Setting jenkins configs (EMAIL_SMTP_HOST)
+  set_fact:
+    EMAIL_SMTP_HOST: "{{ item.value }}"
+  when: item.name == 'EMAIL_SMTP_HOST'
+  loop: "{{ envs.stdout }}"
+  ignore_errors: True
+
+- name: Jenkins | Setting jenkins configs (EMAIL_FROM_ADDR)
+  set_fact:
+    EMAIL_FROM_ADDR: "{{ item.value }}"
+  when: item.name == 'EMAIL_FROM_ADDR'
+  loop: "{{ envs.stdout }}"
+  ignore_errors: True
+
+- name: Jenkins | Setting jenkins configs (EMAIL_FROM_NAME)
+  set_fact:
+    EMAIL_FROM_NAME: "{{ item.value }}"
+  when: item.name == 'EMAIL_FROM_NAME'
+  loop: "{{ envs.stdout }}"
+  ignore_errors: True
+
+- name: Jenkins | Setting jenkins configs (EMAIL_USE_SSL)
+  set_fact:
+    EMAIL_USE_SSL: "{{ item.value }}"
+  when: item.name == 'EMAIL_USE_SSL'
+  loop: "{{ envs.stdout }}"
+  ignore_errors: True
+
+- name: Jenkins | Setting jenkins configs (EMAIL_SMTP_PORT)
+  set_fact:
+    EMAIL_SMTP_PORT: "{{ item.value }}"
+  when: item.name == 'EMAIL_SMTP_PORT'
+  loop: "{{ envs.stdout }}"
+  ignore_errors: True
+
+- name: Jenkins | Setting jenkins configs (EMAIL_FROM_PASS)
+  set_fact:
+    EMAIL_FROM_PASS: "{{ item.value }}"
+  when: item.name == 'EMAIL_FROM_PASS'
+  loop: "{{ envs.stdout }}"
+  ignore_errors: True
+
+- name: Jenkins | Check jenkins PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-devops-system ks-jenkins -o jsonpath='{.status.capacity.storage}'
+  register: jenkins_pvc
+  ignore_errors: True
+
+- name: Jenkins | Setting jenkins pv size
+  set_fact:
+    jenkins_pv_size: "{{ jenkins_pvc.stdout }}"
+  when:
+    - jenkins_pvc.rc == 0
+    - jenkins_pvc.stdout != ""
+  ignore_errors: True

@@ -79,6 +79,11 @@
       register: istio_result
       ignore_errors: True
 
+    - name: istio | Delete ValidatingWebhookConfiguration istio-galley
+      shell: >
+        {{ bin_dir }}/kubectl delete ValidatingWebhookConfiguration istio-galley
+      when:
+        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
     - name: istio | Delete istio
       shell: >
@@ -86,12 +91,10 @@
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
-
     - name: istio | Waiting for seconds
-      wait_for: timeout=60
+      wait_for: timeout=15
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
 
     - name: istio | Deploy istio
       shell: >
@@ -100,7 +103,6 @@
         --namespace istio-system
         --force
       register: istio_result
-      failed_when: "istio_result.stderr and 'error copying from' not in istio_result.stderr"
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 

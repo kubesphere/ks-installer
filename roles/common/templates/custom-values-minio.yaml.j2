@@ -86,7 +86,7 @@ persistence:
 {% endif %}
   # VolumeName: ""
   accessMode: ReadWriteOnce
-  size: {{ common.minioVolumeSize }}
+  size: {% if minio_storage_pv_size is defined %}{{ minio_storage_pv_size }}{% else %}{{ common.minioVolumeSize }}{% endif %}
 
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
