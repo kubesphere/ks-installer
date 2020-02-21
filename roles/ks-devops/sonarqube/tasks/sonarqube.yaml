@@ -10,14 +10,14 @@
 
 - name: Sonarqube | Get PersistentVolume Name
   shell: >
-    kubectl get pv | grep "kubesphere-devops-system/ks-sonarqube-postgresql" | awk '{print $1}'
+    {{ bin_dir }}/kubectl get pv | grep "kubesphere-devops-system/ks-sonarqube-postgresql" | awk '{print $1}'
   register: sonar_pv_name
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"
 
 - name: Sonarqube | Patch PersistentVolume (persistentVolumeReclaimPolicy)
   shell: >
-    kubectl patch pv {{ item }}
+    {{ bin_dir }}/kubectl patch pv {{ item }}
     -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
   loop: "{{ sonar_pv_name.stdout_lines }}"
   when:
