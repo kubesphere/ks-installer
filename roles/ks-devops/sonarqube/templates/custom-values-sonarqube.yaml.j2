@@ -168,10 +168,6 @@ postgresql:
     accessMode: ReadWriteOnce
     size: {% if postgresql_pv_size is defined %}{{ postgresql_pv_size }}{% else %}{{ devops.sonarqube.postgresqlVolumeSize | default("8Gi") }}{% endif %}
 
-{% if sonarqube_volume_name is defined %}
-    volumeName: {{ sonarqube_volume_name }}
-{% endif %}
-
 mysql:
   # Enable to deploy the mySQL chart
   enabled: false

@@ -18,7 +18,7 @@
 - name: Sonarqube | Patch PersistentVolume (persistentVolumeReclaimPolicy)
   shell: >
     {{ bin_dir }}/kubectl patch pv {{ item }}
-    -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
+    -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain", "claimRef": {"name": "ks-sonarqube-postgresql", "namespace": "kubesphere-devops-system", "resourceVersion": "", "uid": ""}}}'
   loop: "{{ sonar_pv_name.stdout_lines }}"
   when:
     - "sonar_result.stderr and 'no matches for kind' in sonar_result.stderr"

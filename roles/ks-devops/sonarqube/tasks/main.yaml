@@ -37,22 +37,6 @@
   ignore_errors: True
 
 
-- name: Sonarqube | Get Volume Name
-  shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-devops-system ks-sonarqube-postgresql
-    -o jsonpath='{.spec.volumeName}'
-  register: sonarqube_pv_name
-  ignore_errors: True
-
-- name: Sonarqube | Set Volume Name
-  set_fact:
-    sonarqube_volume_name: "{{ sonarqube_pv_name.stdout }}"
-  when:
-    - sonarqube_pv_name.rc == 0
-    - sonarqube_pv_name.stdout != ""
-  ignore_errors: True
-
-
 - name: Sonarqube | Creating manifests
   template:
     src: "{{ item.file }}.j2"
