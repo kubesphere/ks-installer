@@ -88,6 +88,7 @@
   when:
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
 
+- import_tasks: get_old_config.yaml
 
 - name: Kubesphere | Creating common component manifests
   template:

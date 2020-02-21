@@ -1,0 +1,29 @@
+---
+
+- name: Logging | Check prometheus PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-monitoring-system prometheus-k8s-db-prometheus-k8s-0 -o jsonpath='{.status.capacity.storage}'
+  register: prometheus_pvc
+  ignore_errors: True
+
+- name: Logging | Setting es data pv size
+  set_fact:
+    prometheus_pv_size: "{{ prometheus_pvc.stdout }}"
+  when:
+    - prometheus_pvc.rc == 0
+    - prometheus_pvc.stdout != ""
+  ignore_errors: True
+
+- name: Logging | Check prometheus system PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-monitoring-system prometheus-k8s-system-db-prometheus-k8s-system-0 -o jsonpath='{.status.capacity.storage}'
+  register: prometheus_system_pvc
+  ignore_errors: True
+
+- name: Logging | Setting es data pv size
+  set_fact:
+    prometheus_system_pv_size: "{{ prometheus_system_pvc.stdout }}"
+  when:
+    - prometheus_system_pvc.rc == 0
+    - prometheus_system_pvc.stdout != ""
+  ignore_errors: True

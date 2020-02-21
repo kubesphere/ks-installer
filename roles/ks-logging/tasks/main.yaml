@@ -6,6 +6,7 @@
     src: "logging"
     dest: "{{ kubesphere_dir }}/"
 
+- import_tasks: get_old_config.yaml
 
 - name: ks-logging | Creating manifests
   template:
