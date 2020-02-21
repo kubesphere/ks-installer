@@ -104,6 +104,20 @@
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
+    - name: istio | Waiting for seconds
+      wait_for: timeout=15
+      when:
+        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
+
+    - name: istio | Deploy istio
+      shell: >
+        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
+        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
+        --namespace istio-system
+        --force
+      register: istio_result
+      when:
+        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
     - fail:
         msg: "{{ istio_result.stderr }}"
