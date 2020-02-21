@@ -35,6 +35,7 @@ spec:
   resources:
     requests:
       storage: {% if etcd_db_pv_size is defined %}{{ etcd_db_pv_size }}{% else %}{{ common.etcdVolumeSize }}{% endif %}
+
 {% if etcd_pv_name is defined and etcd_pv_name != None %}
   volumeName: {{ etcd_pv_name }}
 {% endif %}

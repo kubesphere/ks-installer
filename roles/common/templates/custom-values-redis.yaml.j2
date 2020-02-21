@@ -241,6 +241,7 @@ persistentVolume:
   accessModes:
     - ReadWriteOnce
   size: {% if redis_ha_pv_size is defined %}{{ redis_ha_pv_size }}{% else %}{{ common.redisVolumSize }}{% endif %}
+
   annotations: {}
 init:
   resources: {}

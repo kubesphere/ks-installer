@@ -35,6 +35,7 @@ spec:
   resources:
     requests:
       storage: {% if mysql_db_pv_size is defined %}{{ mysql_db_pv_size }}{% else %}{{ common.mysqlVolumeSize }}{% endif %}
+
 {% if db_pv_name is defined and db_pv_name != None %}
   volumeName: {{ db_pv_name }}
 {% endif %}

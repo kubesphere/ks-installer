@@ -80,6 +80,7 @@ master:
     accessMode: ReadWriteOnce
     name: data
     size: {% if es_master_pv_size is defined %}{{ es_master_pv_size }}{% else %}{{ logging.elasticsearchMasterVolumeSize }}{% endif %}
+
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"
 {% endif %}
@@ -131,6 +132,7 @@ data:
     accessMode: ReadWriteOnce
     name: data
     size: {% if es_data_pv_size is defined %}{{ es_data_pv_size }}{% else %}{{ logging.elasticsearchDataVolumeSize }}{% endif %}
+
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"
 {% endif %}
