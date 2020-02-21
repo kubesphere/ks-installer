@@ -218,6 +218,10 @@ def preInstallTasks():
         os.path.join(playbookBasePath, 'preinstall.yaml'),
         os.path.join(privateDataDir, 'preinstall')
     ]
+    preInstallTasks['metrics-server'] = [
+        os.path.join(playbookBasePath, 'metrics_server.yaml'),
+        os.path.join(privateDataDir, 'metrics_server')
+    ]
     preInstallTasks['common'] = [
         os.path.join(playbookBasePath, 'common.yaml'),
         os.path.join(privateDataDir, 'common')

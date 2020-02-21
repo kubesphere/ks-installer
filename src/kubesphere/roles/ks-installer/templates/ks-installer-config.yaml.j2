@@ -20,7 +20,7 @@ data:
       openldapVolumeSize: {{ openldap_volume_size }}
       redisVolumSize: {{ redis_volume_size }}
 
-    metrics-server:
+    metrics_server:
       enabled: {{ metrics_server_enabled | string | lower}}
 
     console:

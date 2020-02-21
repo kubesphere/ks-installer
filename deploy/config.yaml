@@ -20,7 +20,7 @@ data:
       openldapVolumeSize: 2Gi
       redisVolumSize: 2Gi
 
-    metrics-server:
+    metrics_server:
       enabled: False
 
     console:
