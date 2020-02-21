@@ -46,7 +46,7 @@
 
 - name: Sonarqube | Set Volume Name
   set_fact:
-    sonarqube_volume_name: {{ sonarqube_pv_name.stdout }}
+    sonarqube_volume_name: "{{ sonarqube_pv_name.stdout }}"
   when:
     - sonarqube_pv_name.rc == 0
     - sonarqube_pv_name.stdout != ""

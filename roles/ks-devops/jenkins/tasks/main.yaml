@@ -45,6 +45,12 @@
   when:
     - jenkins_status.rc == 0
 
+#- name: Jenkins | Check Jenkins
+#  shell: >
+#    {{ bin_dir }}/helm list ks-jenkins
+#  register: jenkins_check
+#  ignore_errors: True
+
 - name: Jenkins | Creating manifests
   template:
     src: "{{ item.file }}.j2"
@@ -65,17 +71,10 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-system
 
 
-- name: Jenkins | Check Jenkins
-  shell: >
-    {{ bin_dir }}/helm list ks-jenkins
-  register: jenkins_check
-  ignore_errors: True
-
-
 - name: Jenkins | Deploy Jenkins
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-jenkins {{ kubesphere_dir }}/jenkins/jenkins
     -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml
     --namespace kubesphere-devops-system
-  when:
-    - (jenkins_check.stdout.find("DEPLOYED") == -1) or (jenkins_check.stdout.find("2.121.3-0217") == -1)
+#  when:
+#    - (jenkins_check.stdout.find("DEPLOYED") == -1) or (jenkins_check.stdout.find("2.121.3-0217") == -1)

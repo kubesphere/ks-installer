@@ -79,28 +79,15 @@
       register: istio_result
       ignore_errors: True
 
+    - name: istio | Delete ValidatingWebhookConfiguration istio-galley
+      shell: >
+        {{ bin_dir }}/kubectl delete ValidatingWebhookConfiguration istio-galley
+      when:
+        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
     - name: istio | Delete istio
       shell: >
         {{ bin_dir }}/helm del --purge istio
-      when:
-        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-
-    - name: istio | Waiting for seconds
-      wait_for: timeout=15
-      when:
-        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-
-    - name: istio | Deploy istio
-      shell: >
-        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
-        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
-        --set global.configValidation=false
-        --namespace istio-system
-        --force
-      register: istio_result
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
