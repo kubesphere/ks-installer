@@ -51,7 +51,7 @@
   retries: 3
   delay: 10
   when:
-    - (op_check.stdout.find("DEPLOYED") == -1) or (op_check.stdout.find("v0.4.7") == -1)
+    - (op_check.stdout.find("DEPLOYED") == -1) or (op_check.stdout.find("v0.4.8") == -1)
 
 
 - name: OpenPitrix | Checking release job
