@@ -216,11 +216,6 @@ $ kubectl apply -f kubesphere-minimal.yaml
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>openpitrix </br>(至少 0.3 core, 300 MiB)</td>
-  <td class=xl6719753>enable</td>
-  <td class=xl1519753>平台的应用商店与应用模板、应用管理都基于 OpenPitrix，建议开启安装（True / False）</td>
-  <td class=xl6519753>False</td>
- <tr height=21 style='height:15.6pt'>
   <td height=21 class=xl6719753 style='height:15.6pt'>elasticsearchMasterReplicas</td>
   <td class=xl1519753>elasticsearch主节点副本数</td>
   <td class=xl6519753>1</td>
@@ -304,6 +299,12 @@ $ kubectl apply -f kubesphere-minimal.yaml
  <tr height=21 style='height:15.6pt'>
   <td height=21 class=xl6719753 style='height:15.6pt'>sonarqube.enabled</td>
   <td class=xl1519753>是否启用 SonarQube 的安装（True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
+  <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6719753 style='height:15.6pt'>openpitrix </br>(至少 0.3 core, 300 MiB)</td>
+  <td class=xl6719753>enable</td>
+  <td class=xl1519753>平台的应用商店与应用模板、应用管理都基于 OpenPitrix，建议开启安装（True / False）</td>
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
