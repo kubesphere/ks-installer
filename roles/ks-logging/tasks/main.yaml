@@ -208,7 +208,33 @@
         {{ kubesphere_dir }}/logging/kibana-2.2.1.tgz
         -f {{ kubesphere_dir }}/logging/custom-values-kibana.yaml
         --namespace kubesphere-logging-system
+      register: kibana_result
+      ignore_errors: True
       when:
+        - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0-0217") == -1)
+
+    - name: ks-logging | Delete elasticsearch-logging-kibana
+      shell: >
+        {{ bin_dir }}/helm del --purge elasticsearch-logging-kibana
+      ignore_errors: True
+      when:
+        - "kibana_result.stderr and 'no matches for kind' in kibana_result.stderr"
+        - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0-0217") == -1)
+
+    - name: ks-logging | Waiting for seconds
+      wait_for: timeout=15
+      when:
+        - "kibana_result.stderr and 'no matches for kind' in kibana_result.stderr"
+        - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0-0217") == -1)
+
+    - name: ks-logging | Deploy elasticsearch-logging-kibana
+      shell: >
+        {{ bin_dir }}/helm upgrade --install elasticsearch-logging-kibana
+        {{ kubesphere_dir }}/logging/kibana-2.2.1.tgz
+        -f {{ kubesphere_dir }}/logging/custom-values-kibana.yaml
+        --namespace kubesphere-logging-system
+      when:
+        - "kibana_result.stderr and 'no matches for kind' in kibana_result.stderr"
         - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0-0217") == -1)
   when:
     - logging.kibana.enabled == true
