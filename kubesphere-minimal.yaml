@@ -26,7 +26,7 @@ data:
       openldapVolumeSize: 2Gi
       redisVolumSize: 2Gi
 
-    metrics-server:
+    metrics_server:
       enabled: False
 
     console:
@@ -66,6 +66,7 @@ data:
       jenkinsJavaOpts_MaxRAM: 2g
       sonarqube:
         enabled: False
+        postgresqlVolumeSize: 8Gi
 
     servicemesh:
       enabled: False
@@ -221,6 +222,6 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: kubesphere/ks-installer:v2.1.0
+        image: kubesphere/ks-installer:v2.1.1
         imagePullPolicy: "Always"
 

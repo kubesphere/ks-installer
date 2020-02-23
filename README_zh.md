@@ -8,14 +8,14 @@ KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://ku
 ## 准备工作
 
 
-1. 确认现有的 `Kubernetes` 版本在 `>= 1.13.0, < 1.16`，KubeSphere 需要 `K8s 1.13.0` 版本之后的新特性，可以在执行 `kubectl version` 来确认 :
+1. 确认现有的 `Kubernetes` 版本为 `1.15.x, 1.16.x, 1.17.x`，可以执行 `kubectl version` 来确认 :
 ```bash
 root@kubernetes:~# kubectl version
 Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-注意输出结果重的 `Server Version` 这行，如果显示 `GitVersion` 大于 `v1.13.0`，Kubernetes 的版本是可以安装的。如果低于 `v1.13.0` ，可以查看 [Upgrading kubeadm clusters from v1.12 to v1.13](https://v1-13.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade-1-13/) 先升级下 K8s 版本。
+注意输出结果中的 `Server Version` 这行，如果显示 `GitVersion` 大于 `v1.15.0`，Kubernetes 的版本是可以安装的。如果低于 `v1.15.0` ，可以先对 K8s 版本进行升级。
 
 2. 确认已安装 `Helm`，并且 `Helm` 的版本至少为 `2.10.0`。在终端执行 `helm version`，得到类似下面的输出
 >> 注: helm v2.16.0无法创建job，如果已安装该版本，建议升级或更换其他版本。
@@ -71,18 +71,7 @@ $ kubectl get svc -n kubesphere-system
 以上为最小化部署，如需开启更多功能，请参考如下步骤配置相关依赖：
 
 #### 安装功能组件:
-1. 创建 Kubernetes 集群 CA 证书的 Secret。(开启devops / openpitrix需设置)
-
-> 注：按照当前集群 ca.crt 和 ca.key 证书路径创建（Kubeadm 创建集群的证书路径一般为 `/etc/kubernetes/pki`）
-
-```bash
-$ kubectl create ns kubesphere-system
-$ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
---from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
---from-file=ca.key=/etc/kubernetes/pki/ca.key
-```
-
-2. 创建集群 etcd 的证书 Secret。(开启etcd监控需设置)
+1. 创建集群 etcd 的证书 Secret。(开启etcd监控需设置)
 
 > 注：根据集群实际 etcd 证书位置创建；
 
@@ -102,7 +91,7 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-3. 编辑configmap开启相关功能:
+2. 编辑configmap开启相关功能:
 
 ```bash
 $ kubectl edit cm ks-installer -n kubesphere-system
@@ -312,7 +301,7 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l ap
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>metrics-server </br>(至少 5 m, 44.35 MiB)</td>
+  <td height=21 class=xl6719753 style='height:15.6pt'>metrics_server </br>(至少 5 m, 44.35 MiB)</td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否安装metrics_server<span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>（True / False）</td>
@@ -336,29 +325,6 @@ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l ap
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>是否启用告警功能 （True / False）</td>
   <td class=xl6519753>False</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>harbor </br>(Harbor 和 GitLab 一共至少需要 0.58 core, 3.57 G)</td>
-  <td class=xl6719753>enabled</td>
-  <td class=xl1519753>是否启用harbor<span style='mso-spacerun:yes'>&nbsp;
-  </span>（True / False）</td>
-  <td class=xl6519753>False</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>domain</td>
-  <td class=xl1519753>harbor域名</td>
-  <td class=xl6519753>harbor.devops.kubesphere.local</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>gitlab</td>
-  <td class=xl6719753>enabled</td>
-  <td class=xl1519753>是否启用gitlab （True / False）</td>
-  <td class=xl6519753>False</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>domain</td>
-  <td class=xl1519753>gitlab域名</td>
-  <td class=xl6519753>devops.kubesphere.local</td>
  </tr>
  <![if supportMisalignedColumns]>
  <tr height=0 style='display:none'>

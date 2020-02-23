@@ -6,7 +6,7 @@ In addition to supporting deploy on VM and BM, KubeSphere also supports installi
 
 ## Prerequisites
 
-- Kubernetes Version: 1.13.x, 1.14.x, 1.15.x;
+- Kubernetes Version: 1.15.x, 1.16.x, 1.17.x;
 - Helm Version: `>= 2.10.0` (excluding 2.16.0), see [Install and Configure Helm in Kubernetes](https://devopscube.com/install-configure-helm-kubernetes/);
 - CPU > 1 Core, Memory > 2 G;
 - An existing Storage Class in your Kubernetes clusters.
@@ -74,19 +74,7 @@ When all Pods of KubeSphere are running, it means the installation is successsfu
 > Attention: You have to make sure there is enough and available CPU and memory in your cluster, see the Configuration Table below.
 
 
-1. Create the Secret of CA certificate of your Kubernetes cluster. The CA certificate is the prerequisite of enabling DevOps and OpenPitrix components installation.
-
-> Note: To create this secret according to the certificate paths of `ca.crt` and `ca.key` of your cluster. Generally, the certificate path of cluster which is created by `kubeadm` is `/etc/kubernetes/pki`.
-
-```bash
-$ kubectl create ns kubesphere-system
-
-$ kubectl -n kubesphere-system create secret generic kubesphere-ca  \
---from-file=ca.crt=/etc/kubernetes/pki/ca.crt  \
---from-file=ca.key=/etc/kubernetes/pki/ca.key
-```
-
-2. Create the Secret of certificate for etcd in your Kubernetes cluster. This step is only needed when you prefer enabling etcd monitoring.
+1. Create the Secret of certificate for etcd in your Kubernetes cluster. This step is only needed when you prefer enabling etcd monitoring.
 
 > Note: Create the secret according to the actual ETCD certificate path of your cluster; If the ETCD has not been configured certificate, an empty secret need to be created
 
@@ -108,7 +96,7 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 ```
 
 
-3. Then we can edit the ConfigMap to enable any pluggable components that you need.
+2. Then we can edit the ConfigMap to enable any pluggable components that you need.
 
 
 ```bash
@@ -116,7 +104,7 @@ $ kubectl edit cm ks-installer -n kubesphere-system
 ```
 > Attention: After complete ConfigMap edit, you can exit directly then it'll  automatically trigger the installation.
 
-4. Inspect the logs of installation.
+3. Inspect the logs of installation.
 
 ```bash
 $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
@@ -327,7 +315,7 @@ Pay attention to the resource request in the first column, you have to make sure
   <td class=xl6519753>False</td>
  </tr>
  <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>metrics-server </br>(at least 5 m, 44.35 MiB)</td>
+  <td height=21 class=xl6719753 style='height:15.6pt'>metrics_server </br>(at least 5 m, 44.35 MiB)</td>
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>Whether to install metrics_server<span
   style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>（True / False）</td>
@@ -351,29 +339,6 @@ Pay attention to the resource request in the first column, you have to make sure
   <td class=xl6719753>enabled</td>
   <td class=xl1519753>Whether to install Alerting sysytem （True / False）</td>
   <td class=xl6519753>False</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>harbor</br>(Harbor and Gitlab together, at least 0.58 core, 3.57 G)</td>
-  <td class=xl6719753>enabled</td>
-  <td class=xl1519753>Whether to install Harbor Registry<span style='mso-spacerun:yes'>&nbsp;
-  </span>（True / False）</td>
-  <td class=xl6519753>False</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>domain</td>
-  <td class=xl1519753>Harbor domain name</td>
-  <td class=xl6519753>harbor.devops.kubesphere.local</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td rowspan=2 height=42 class=xl6619753 style='height:31.2pt'>gitlab</td>
-  <td class=xl6719753>enabled</td>
-  <td class=xl1519753>Whether to install GitLab（True / False）</td>
-  <td class=xl6519753>False</td>
- </tr>
- <tr height=21 style='height:15.6pt'>
-  <td height=21 class=xl6719753 style='height:15.6pt'>domain</td>
-  <td class=xl1519753>GitLab domain name</td>
-  <td class=xl6519753>devops.kubesphere.local</td>
  </tr>
  <![if supportMisalignedColumns]>
  <tr height=0 style='display:none'>
