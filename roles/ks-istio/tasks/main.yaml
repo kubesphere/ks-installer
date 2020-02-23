@@ -110,23 +110,27 @@
     - name: istio | Waiting for seconds
       wait_for: timeout=30
       when:
+        - istio_result.stderr is defined
         - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
     - name: istio | Delete ValidatingWebhookConfiguration istio-galley
       shell: >
         {{ bin_dir }}/kubectl delete ValidatingWebhookConfiguration istio-galley
       when:
+        - istio_result.stderr is defined
         - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
     - name: istio | Delete istio
       shell: >
         {{ bin_dir }}/helm del --purge istio
       when:
+        - istio_result.stderr is defined
         - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
     - name: istio | Waiting for seconds
       wait_for: timeout=45
       when:
+        - istio_result.stderr is defined
         - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
     - name: istio | Deploy istio
@@ -137,6 +141,7 @@
         --force
       register: istio_result
       when:
+        - istio_result.stderr is defined
         - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
 
     - fail:
