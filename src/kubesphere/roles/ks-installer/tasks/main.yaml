@@ -37,7 +37,7 @@
 
 - name: ks-installer | Check openldap StorageClass
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system  | grep "openldap" | awk '{print $6}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system  | grep "openldap" | awk '{if(NR==1){print $6}}'
   register: openldap_stoarge_class
   ignore_errors: True
 
