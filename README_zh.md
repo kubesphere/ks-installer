@@ -101,7 +101,13 @@ $ kubectl edit cm ks-installer -n kubesphere-system
 ```bash
 $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
-
+## 升级
+```bash
+$ wget https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+# 编辑kubesphere-minimal.yaml中config部分，与旧版本存储及组件开启状态等配置保持一致
+$ kubectl apply -f kubesphere-minimal.yaml
+```
+> 不再提供Harbor、Gitlab部署，如需要相关功能，建议通过[Harbor](https://github.com/goharbor/harbor-helm)，[Gitlab](https://about.gitlab.com/install/)官方文档进行部署
 ## 参数说明
 
 <table border=0 cellpadding=0 cellspacing=0 width=1288 style='border-collapse:
