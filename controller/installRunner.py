@@ -209,6 +209,11 @@ def getComponentLists():
                 elif (j == 'enabled') and (value == False):
                     readyToDisableList.append(component)
                     break
+    try:
+        readyToEnabledList.remove("metrics_server")
+    except:
+        pass
+
     return readyToEnabledList, readyToDisableList
 
 
