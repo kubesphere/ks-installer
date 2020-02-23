@@ -37,8 +37,9 @@
     - debug:
         msg:
          - 1. check the storage configuration and storage server
-         - 2. execute 'helm del --purge ks-minio'
-         - 3. Restart the installer pod in kubesphere-system namespace
+         - 2. make sure the DNS address in /etc/resolv.conf is available.
+         - 3. execute 'helm del --purge ks-minio && kubectl delete job -n kubesphere-system ks-minio-make-bucket-job'
+         - 4. Restart the installer pod in kubesphere-system namespace
       when: minio_status.rc != 0
 
 
