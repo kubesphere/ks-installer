@@ -211,6 +211,7 @@ def getComponentLists():
                     break
     try:
         readyToEnabledList.remove("metrics_server")
+        readyToEnabledList.remove("metrics-server")
     except:
         pass
 
