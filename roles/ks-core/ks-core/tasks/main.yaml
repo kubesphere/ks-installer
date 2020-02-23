@@ -71,6 +71,10 @@
     - { path: ks-console, file: ks-docs-deployment.yaml, type: deploy }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml, type: config }
 
+- name: KubeSphere | Delete Ingress-controller configmap
+  shell: >
+    {{ bin_dir }}/kubectl delete cm -n kubesphere-system ks-router-config
+  ignore_errors: True
 
 - name: KubeSphere | Creating Ingress-controller configmap
   command: >
