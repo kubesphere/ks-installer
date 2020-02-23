@@ -21,7 +21,7 @@
 
 # The supported Kubernetes to install. Note: not all
 # Kubernetes versions are supported by KubeSphere:
-# v1.14.8,v1.15.5,v1.16.7,v1.17.3
+# v1.15.5,v1.16.7,v1.17.3
 kube_version: v1.16.7
 
 # The supported etcd to install. Note: not all
