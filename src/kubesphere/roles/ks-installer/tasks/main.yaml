@@ -35,6 +35,21 @@
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
+- name: ks-installer | Check openldap StorageClass
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system  | grep "openldap" | awk '{if(NR==1){print $6}}'
+  register: openldap_stoarge_class
+  ignore_errors: True
+
+- name: ks-installer | Setting openldap pv size
+  set_fact:
+    storage_class: "{{ openldap_stoarge_class.stdout }}"
+  when:
+    - openldap_stoarge_class.rc == 0
+    - openldap_stoarge_class.stdout != ""
+  ignore_errors: True
+
+
 - name: ks-installer | Check kubesphere configmap
   shell: >
     {{ bin_dir }}/kubectl get cm -n kubesphere-system
