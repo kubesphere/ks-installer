@@ -49,6 +49,17 @@
     - openldap_stoarge_class.stdout != ""
   ignore_errors: True
 
+
+- name: ks-installer | Check kubesphere configmap
+  shell: >
+    {{ bin_dir }}/kubectl get cm -n kubesphere-system
+  register: configmaps
+  ignore_errors: True
+
+- import_tasks: get_old_config.yaml
+  when:
+    - configmaps.stdout.find("kubesphere-config") != -1
+
 - name: ks-installer | Creating manifests
   template:
     src: "{{ item.file }}.j2"
