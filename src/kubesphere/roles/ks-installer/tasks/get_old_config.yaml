@@ -1,0 +1,69 @@
+---
+- name: ks-installer | Check kubesphere-config
+  shell: >
+    {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data}'
+  register: kubesphere-config
+  ignore_errors: True
+
+- name: ks-installer | Setting devops_enabled
+  set_fact:
+    devops_enabled: true
+  when:
+    - kubesphere-config.stdout.find("ks-jenkins.kubesphere-devops-system.svc") != -1
+  ignore_errors: True
+
+- name: ks-installer | Setting sonarqube_enabled
+  set_fact:
+    sonarqube_enabled: true
+  when:
+    - kubesphere-config.stdout.find("sonarQube:") != -1
+  ignore_errors: True
+
+- name: ks-installer | Setting servicemesh_enabled
+  set_fact:
+    servicemesh_enabled: true
+  when:
+    - kubesphere-config.stdout.find("istio-pilot.istio-system.svc") != -1
+  ignore_errors: True
+
+- name: ks-installer | Setting openpitrix_enabled
+  set_fact:
+    openpitrix_enabled: true
+  when:
+    - kubesphere-config.stdout.find("openpitrix-runtime-manager.openpitrix-system.svc") != -1
+  ignore_errors: True
+
+- name: ks-installer | Setting logging_enabled
+  set_fact:
+    logging_enabled: true
+  when:
+    - kubesphere-config.stdout.find("indexPrefix:") != -1
+  ignore_errors: True
+
+- name: ks-installer | Setting logging_enabled
+  set_fact:
+    externalElasticsearchUrl: {{ external_es_url }}
+  when:
+    - kubesphere-config.stdout.find("indexPrefix:") != -1
+    - kubesphere-config.stdout.find("elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local") == -1
+
+- name: ks-installer | Setting logging_enabled
+  set_fact:
+    externalElasticsearchPort: {{ external_es_port }}
+  when:
+    - kubesphere-config.stdout.find("indexPrefix:") != -1
+    - kubesphere-config.stdout.find("elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local") == -1
+
+- name: ks-installer | Setting alerting_enabled
+  set_fact:
+    alerting_enabled: true
+  when:
+    - kubesphere-config.stdout.find("alerting.kubesphere-alerting-system.svc") != -1
+  ignore_errors: True
+
+- name: ks-installer | Setting alerting_enabled
+  set_fact:
+    notification_enabled: true
+  when:
+    - kubesphere-config.stdout.find("notification.kubesphere-alerting-system.svc") != -1
+  ignore_errors: True
