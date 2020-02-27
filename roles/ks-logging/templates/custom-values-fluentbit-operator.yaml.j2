@@ -1,3 +1,8 @@
+initImage:
+  repository: {{ docker_repo }}
+  tag: {{ docker_tag }}
+  pullPolicy: IfNotPresent
+
 image:
   repository: {{ fluentbit_operator_repo }}
   tag: {{ fluentbit_operator_tag }}
