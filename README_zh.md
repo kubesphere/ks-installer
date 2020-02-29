@@ -46,6 +46,8 @@ csi-qingcloud (default)   disk.csi.qingcloud.com    54d
 glusterfs                 kubernetes.io/glusterfs   3d4h
 ```
 
+5. CSR signing 功能在 kube-apiserver 中被激活，参考 [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309)。
+
 如果你的 Kubernetes 环境满足以上的要求，那么可以接着执行下面的步骤了。
 
 ## 部署 KubeSphere

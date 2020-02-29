@@ -10,6 +10,7 @@ In addition to supporting deploy on VM and BM, KubeSphere also supports installi
 - Helm Version: `>= 2.10.0` (excluding 2.16.0), see [Install and Configure Helm in Kubernetes](https://devopscube.com/install-configure-helm-kubernetes/);
 - CPU > 1 Core, Memory > 2 G;
 - An existing Storage Class in your Kubernetes clusters.
+> - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309).
 
 1. Make sure your Kubernetes version is greater than 1.15.0, run `kubectl version` in your cluster node. The output looks like the following:
 ```bash
@@ -18,7 +19,7 @@ Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCom
 Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.15.0`, it's good. Otherwise you need to upgrade your kubernetes first. 
+> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.15.0`, it's good. Otherwise you need to upgrade your kubernetes first.
 
 2. Make sure you've already installed `Helm`, and it's version is greater than `2.10.0`. You can run `helm version` to check, the output looks like below:
 ```bash
