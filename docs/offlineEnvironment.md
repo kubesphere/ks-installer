@@ -2,15 +2,22 @@ Offline environment
 ------------
 1. clone 或者下载此 ks-installer 项目  
 2. 下载镜像包并解压
+   > 可按需下载对应功能镜像包，也可下载完整功能镜像包，下载连接如下（二选一）
    ```
+    下载完整镜像包（包含所有功能使用到的镜像）：
+    kubesphere-images-v2.1.1.tar.gz
+    wget https://kubesphere-installer.pek3b.qingstor.com/offline/v2.1.1/images/kubesphere-images-v2.1.1.tar.gz
+   
+   
+    按功能下载镜像包（如已下载完整镜像包，则无需重复下载）：
     ks_minimal_images.tar.gz
     wget https://kubesphere-installer.pek3b.qingstor.com/offline/v2.1.1/images/ks_minimal_images.tar.gz
 
     openpitrix_images.tar.gz
     wget https://kubesphere-installer.pek3b.qingstor.com/offline/v2.1.1/images/openpitrix_images.tar.gz
 
-    ks_logger_images.tar.gz
-    wget https://kubesphere-installer.pek3b.qingstor.com/offline/v2.1.1/images/ks_logger_images.tar.gz
+    ks_logging_images.tar.gz
+    wget https://kubesphere-installer.pek3b.qingstor.com/offline/v2.1.1/images/ks_logging_images.tar.gz
 
     ks_devops_images.tar.gz
     wget https://kubesphere-installer.pek3b.qingstor.com/offline/v2.1.1/images/ks_devops_images.tar.gz
