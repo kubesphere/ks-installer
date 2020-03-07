@@ -6,13 +6,13 @@ In addition to supporting deploy on VM and BM, KubeSphere also supports installi
 
 ## Prerequisites
 
-- Kubernetes Version: 1.15.x, 1.16.x, 1.17.x;
-- Helm Version: `>= 2.10.0` (excluding 2.16.0), see [Install and Configure Helm in Kubernetes](https://devopscube.com/install-configure-helm-kubernetes/);
-- CPU > 1 Core, Memory > 2 G;
-- An existing Storage Class in your Kubernetes clusters.
+> - Kubernetes Version: 1.15.x, 1.16.x, 1.17.x;
+> - Helm Version: `>= 2.10.0` (excluding 2.16.0) and < `3.0`, see [Install and Configure Helm in Kubernetes](https://devopscube.com/install-configure-helm-kubernetes/);
+> - CPU > 1 Core, Memory > 2 G;
+> - An existing Storage Class in your Kubernetes clusters.
 > - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309).
 
-1. Make sure your Kubernetes version is greater than 1.15.0, run `kubectl version` in your cluster node. The output looks like the following:
+1. Make sure your Kubernetes version is compatible by running `kubectl version` in your cluster node. The output looks as the following:
 ```bash
 root@kubernetes:~# kubectl version
 Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
@@ -97,13 +97,14 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 ```
 
 
-2. Then we can edit the ConfigMap to enable any pluggable components that you need.
+2. If you already have a minimal KubeSphere setup, you still can enable the pluggable components by editing the ConfigMap of ks-installer using the following command.
+
+> Note: Please make sure there is enough CPU and RAM in your cluster, see the configuration table at the bottom of this page.
 
 
 ```bash
 $ kubectl edit cm ks-installer -n kubesphere-system
 ```
-> Attention: After complete ConfigMap edit, you can exit directly then it'll  automatically trigger the installation.
 
 3. Inspect the logs of installation.
 
@@ -111,9 +112,26 @@ $ kubectl edit cm ks-installer -n kubesphere-system
 $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-When all Pods of KubeSphere are running, it means the installation is successsful. Then you can use `http://IP:30880` to access the dashboard with default account `admin/P@88w0rd`.
+Wait for a moment, when all Pods of KubeSphere are running, it means the installation is successsful. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
 
 ![](https://pek3b.qingstor.com/kubesphere-docs/png/20191116004533.png)
+
+## Upgrade
+
+1. Download the YAML file as follows:
+
+```bash
+$ wget https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+```
+
+2. Sync the changes from the old version to 2.1.1 in the config section of `kubesphere-minimal.yaml`, note the storage class and the pluggable components need to be consistent with the old version:
+
+```
+$ kubectl apply -f kubesphere-minimal.yaml
+```
+
+> Note: GitLab and Harbor are not included in 2.1.1, please refer to [Harbor Documentation](https://github.com/goharbor/harbor-helm) and [Gitlab Documentation](https://about.gitlab.com/install/) to install them if needed.
+
 
 ## Configuration Table
 
