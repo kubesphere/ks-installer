@@ -135,8 +135,6 @@ registryurl="$1"
 reposUrl=("dockerhub.qingcloud.com" "quay.azk8s.cn" "gcr.azk8s.cn" "docker.elastic.co")
 
 for image in ${ks_images[@]}; do
-  ## download_images
-  # docker pull $image
   ## retag images
     url=${image%%/*}
     ImageName=${image#*/}
