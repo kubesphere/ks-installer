@@ -17,7 +17,8 @@ Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCom
 
 注意输出结果中的 `Server Version` 这行，如果显示 `GitVersion` 大于 `v1.15.0`，Kubernetes 的版本是可以安装的。如果低于 `v1.15.0` ，可以先对 K8s 版本进行升级。
 
-2. 确认已安装 `Helm`，并且 `Helm` 的版本至少为 `2.10.0`。在终端执行 `helm version`，得到类似下面的输出
+2. 确认已安装 `Helm`，`2.10.0` ≤ Helm version < `3.0`。在终端执行 `helm version`，得到类似下面的输出：
+
 >> 注: helm v2.16.0无法创建job，如果已安装该版本，建议升级或更换其他版本。
 ```bash
 root@kubernetes:~# helm version
@@ -73,11 +74,11 @@ $ kubectl get svc -n kubesphere-system
 以上为最小化部署，如需开启更多功能，请参考如下步骤配置相关依赖：
 
 #### 安装功能组件:
-1. 创建集群 etcd 的证书 Secret。(开启etcd监控需设置)
+1. 创建集群 etcd 的证书 Secret。(可选，仅开启etcd监控需设置)
 
 > 注：根据集群实际 etcd 证书位置创建；
 
-   - 若 etcd 已经配置过证书，则参考如下创建（以下命令适用于 Kubeadm 创建的 Kubernetes 集群环境）：
+- 若 etcd 已经配置过证书，则参考如下创建（以下命令适用于 Kubeadm 创建的 Kubernetes 集群环境）：
 
 ```
 $ kubectl create ns kubesphere-monitoring-system
@@ -104,12 +105,22 @@ $ kubectl edit cm ks-installer -n kubesphere-system
 $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 ## 升级
+
+1. 获取 2.1.1 的 YAML 文件，若服务器提示无法访问 GitHub，可以将静态文件拷贝至服务器执行。
+
 ```bash
 $ wget https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
-# 编辑kubesphere-minimal.yaml中config部分，与旧版本存储及组件开启状态等配置保持一致
+```
+
+2. 编辑 `kubesphere-minimal.yaml` 中 config 部分，与旧版本的存储类型配置与组件开启状态等配置需保持一致。确认配置同步后，使用 kubectl 执行如下命令进行升级。
+
+
+```
 $ kubectl apply -f kubesphere-minimal.yaml
 ```
-> 不再提供Harbor、Gitlab部署，如需要相关功能，建议通过[Harbor](https://github.com/goharbor/harbor-helm)，[Gitlab](https://about.gitlab.com/install/)官方文档进行部署
+
+> 提示：不再提供 Harbor、Gitlab 部署，如需要相关功能，建议通过 [Harbor](https://github.com/goharbor/harbor-helm)，[Gitlab](https://about.gitlab.com/install/)官方文档进行部署。
+
 ## 参数说明
 
 <table border=0 cellpadding=0 cellspacing=0 width=1288 style='border-collapse:
