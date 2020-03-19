@@ -1,7 +1,10 @@
 #！/bin/bash
 
+#delete ks-install 
+kubectl delete deploy ks-installer -n kubesphere-system
+
 #helm delete
-helms="elasticsearch-logging elasticsearch-logging-curator istio istio-init jaeger-operator ks-jenkins ks-sonarqube logging-fluentbit-operator metrics-server uc"
+helms="ks-minio ks-openldap ks-openpitrix ks-redis  elasticsearch-logging elasticsearch-logging-curator istio istio-init jaeger-operator ks-jenkins ks-sonarqube logging-fluentbit-operator uc"
 
 for id in `helm list|awk '{print $1}'|grep -v NAME`; do
      result=$(echo $helms | grep "$id")
