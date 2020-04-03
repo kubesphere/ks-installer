@@ -97,7 +97,7 @@ ks_image_tag: "{{ dev_tag | default('latest') }}"
 # Also provide the address of your own private registry.
 # And use --insecure-registry options for docker
 
-hyperkube_image_repo: "{{ kube_image_repo }}/hyperkube"
+hyperkube_image_repo: "{{ base_repo }}kubesphere/hyperkube"
 hyperkube_image_tag: "{{ kube_version }}"
 
 #KubeSphere:
