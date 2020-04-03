@@ -360,13 +360,13 @@ ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.0
 
 #ingress:
-nginx_ingress_controller_repo: "{{ quay_image_repo }}/kubernetes-ingress-controller/nginx-ingress-controller"
+nginx_ingress_controller_repo: "{{ base_repo }}kubesphere/nginx-ingress-controller"
 nginx_ingress_controller_tag: 0.24.1
 defaultbackend_repo: "{{ base_repo }}mirrorgooglecontainers/defaultbackend-amd64"
 defaultbackend_tag: 1.4
 
 #metrics:
-metrics_server_repo: "{{ gcr_image_repo }}/google_containers/metrics-server-amd64"
+metrics_server_repo: "{{ base_repo }}kubesphere/metrics-server-amd64"
 metrics_server_tag: v0.3.1
 
 #istio
@@ -397,7 +397,7 @@ haproxy_repo:  "{{ base_library_repo }}haproxy"
 haproxy_tag: 2.0.4
 busybox_repo: "{{ base_library_repo }}alpine"
 busybox_tag: 3.10.4
-etcd_image_repo: "{{ quay_image_repo }}/coreos/etcd"
+etcd_image_repo: "{{ base_repo }}kubesphere/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
 mysql_tag: 8.0.11
@@ -413,21 +413,21 @@ wget_repo: "{{ base_repo }}joosthofman/wget"
 wget_tag: 1.0
 
 #NFS:
-nfs_client_provisioner_repo: "{{ quay_image_repo }}/external_storage/nfs-client-provisioner"
+nfs_client_provisioner_repo: "{{ base_repo }}kubesphere/nfs-client-provisioner"
 nfs_client_provisioner_tag: v3.1.0-k8s1.11
 nfs_server_provisioner_repo: "{{ ks_image_repo }}/kubernetes_incubator/nfs-provisioner"
 nfs_server_provisioner_tag: v1.0.9
 
 #openebs
-openebs_provisioner_localpv_repo: "{{ quay_image_repo }}/openebs/provisioner-localpv"
+openebs_provisioner_localpv_repo: "{{ base_repo }}kubesphere/provisioner-localpv"
 openebs_provisioner_localpv_tag: 1.1.0
-openebs_openebs_tools_repo: "{{ quay_image_repo }}/openebs/openebs-tools"
+openebs_openebs_tools_repo: "{{ base_repo }}kubesphere/openebs-tools"
 openebs_openebs_tools_tag: 3.8
-openebs_node_disk_manager_amd64_repo: "{{ quay_image_repo }}/openebs/node-disk-manager-amd64"
+openebs_node_disk_manager_amd64_repo: "{{ base_repo }}kubesphere/node-disk-manager-amd64"
 openebs_node_disk_manager_amd64_tag: v0.4.1
-openebs_node_disk_operator_amd64_repo: "{{ quay_image_repo }}/openebs/node-disk-operator-amd64"
+openebs_node_disk_operator_amd64_repo: "{{ base_repo }}kubesphere/node-disk-operator-amd64"
 openebs_node_disk_operator_amd64_tag: v0.4.1
-openebs_linux_utils_repo: "{{ quay_image_repo }}/openebs/linux-utils"
+openebs_linux_utils_repo: "{{ base_repo }}kubesphere/linux-utils"
 openebs_linux_utils_tag: 3.9
 
 #VPA:
