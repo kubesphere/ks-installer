@@ -7,7 +7,7 @@ In addition to supporting deploy on VM and BM, KubeSphere also supports installi
 ## Prerequisites
 
 > - Kubernetes Version: 1.15.x, 1.16.x, 1.17.x;
-> - Helm Version: `>= 2.10.0` (excluding 2.16.0) and < `3.0`, see [Install and Configure Helm in Kubernetes](https://devopscube.com/install-configure-helm-kubernetes/);
+> - Helm Version: `>= 2.10.0` (excluding 2.16.0 and 2.16.5) and < `3.0`, see [Install and Configure Helm in Kubernetes](https://devopscube.com/install-configure-helm-kubernetes/);
 > - CPU > 1 Core, Memory > 2 G;
 > - An existing Storage Class in your Kubernetes clusters.
 > - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309).
