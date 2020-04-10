@@ -19,7 +19,7 @@ Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCom
 
 2. 确认已安装 `Helm`，`2.10.0` ≤ Helm version < `3.0`。在终端执行 `helm version`，得到类似下面的输出：
 
->> 注: helm v2.16.0无法创建job，如果已安装该版本，建议升级或更换其他版本。
+>> 注: helm v2.16.0 以及 v2.16.5 存在已知问题，如果已安装该版本，建议升级或更换其他版本。
 ```bash
 root@kubernetes:~# helm version
 Client: &version.Version{SemVer:"v2.13.1", GitCommit:"618447cbf203d147601b4b9bd7f8c37a5d39fbb4", GitTreeState:"clean"}
