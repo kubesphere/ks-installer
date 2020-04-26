@@ -361,7 +361,7 @@ ks_log_sidecar_injector_tag: 1.0
 
 #ingress:
 nginx_ingress_controller_repo: "{{ base_repo }}kubesphere/nginx-ingress-controller"
-nginx_ingress_controller_tag: 0.25.0
+nginx_ingress_controller_tag: 0.24.1
 defaultbackend_repo: "{{ base_repo }}mirrorgooglecontainers/defaultbackend-amd64"
 defaultbackend_tag: 1.4
 
