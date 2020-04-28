@@ -2,28 +2,30 @@
 
 > English | [中文](README_zh.md)
 
-In addition to supporting deploy on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises Kubernetes clusters,
+In addition to supporting deploying on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises existing Kubernetes clusters.
 
 ## Prerequisites
 
 > - Kubernetes Version: 1.15.x, 1.16.x, 1.17.x;
 > - Helm Version: `>= 2.10.0` (excluding 2.16.0 and 2.16.5) and < `3.0`, see [Install and Configure Helm in Kubernetes](https://devopscube.com/install-configure-helm-kubernetes/);
 > - CPU > 1 Core, Memory > 2 G;
-> - An existing Storage Class in your Kubernetes clusters.
+> - An existing default Storage Class in your Kubernetes clusters.
 > - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309).
 
 1. Make sure your Kubernetes version is compatible by running `kubectl version` in your cluster node. The output looks as the following:
+
 ```bash
-root@kubernetes:~# kubectl version
+$ kubectl version
 Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.15.0`, it's good. Otherwise you need to upgrade your kubernetes first.
+> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.15.0`, it's good to go. Otherwise you need to upgrade your kubernetes first.
 
-2. Make sure you've already installed `Helm`, and it's version is greater than `2.10.0`. You can run `helm version` to check, the output looks like below:
+2. Make sure you've already installed `Helm`, and it's version is greater than `2.10.0`. You can run `helm version` to check. The output looks like below:
+
 ```bash
-root@kubernetes:~# helm version
+$ helm version
 Client: &version.Version{SemVer:"v2.13.1", GitCommit:"618447cbf203d147601b4b9bd7f8c37a5d39fbb4", GitTreeState:"clean"}
 Server: &version.Version{SemVer:"v2.13.1", GitCommit:"618447cbf203d147601b4b9bd7f8c37a5d39fbb4", GitTreeState:"clean"}
 ```
@@ -33,55 +35,49 @@ Server: &version.Version{SemVer:"v2.13.1", GitCommit:"618447cbf203d147601b4b9bd7
 3. Check if the available resources meet the minimal prerequisite in your cluster.
 
 ```bash
-root@kubernetes:~# free -g
+$ free -g
               total        used        free      shared  buff/cache   available
 Mem:              16          4          10           0           3           2
 Swap:             0           0           0
 ```
 
-4. Check if there is a default Storage Class in your cluster, an existing Storage Class is the prerequisite for KubeSphere installation.
+4. Check if there is a default Storage Class in your cluster. An existing Storage Class is the prerequisite for KubeSphere installation.
 
 ```bash
-root@kubernetes:~$ kubectl get sc
+$ kubectl get sc
 NAME                      PROVISIONER               AGE
 glusterfs (default)               kubernetes.io/glusterfs   3d4h
 ```
 
-If your Kubernetes cluster environment meets all above 4 requirements, then you can install it.
-
+If your Kubernetes cluster environment meets all requirements mentioned above, then you can start to install KubeSphere.
 
 ## To Start Deploying KubeSphere
 
 ### Minimal Installation
 
-> Attention: Following section is only used for minimal installation by default, KubeSphere has decoupled some core components in v2.1.0, for more pluggable components installation, see `Enable Pluggable Components` and `Configuration Table` below.
+> Attention: Following section is only used for minimal installation by default. KubeSphere has decoupled some core components since v2.1.0, for more pluggable components installation, see [Enable Pluggable Components](#enable-pluggable-components) and [Configuration Table](#configuration-table).
 
-
-```yaml
-$ kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
 ```
 
 Then inspect the logs of installation.
 
 ```bash
-$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-When all Pods of KubeSphere are running, it means the installation is successsful. Then you can use `http://IP:30880` to access the dashboard with default account `admin/P@88w0rd`.
-
+When all Pods of KubeSphere are running, it means the installation is successful. Then you can use `http://IP:30880` to access the dashboard with the default account `admin/P@88w0rd`.
 
 ### Enable Pluggable Components
 
-> Attention: You have to make sure there is enough and available CPU and memory in your cluster, see the Configuration Table below.
+> Attention: make sure there is enough CPU and memory available in your cluster. See the [Configuration Table](#configuration-table).
 
+1. [Optional] Create the secret of certificate for Etcd in your Kubernetes cluster. This step is only needed when you want to enable Etcd monitoring.
 
-1. Create the Secret of certificate for etcd in your Kubernetes cluster. This step is only needed when you prefer enabling etcd monitoring.
+> Note: Create the secret according to the actual Etcd certificate path of your cluster; If the Etcd has not been configured certificate, an empty secret needs to be created.
 
-> Note: Create the secret according to the actual ETCD certificate path of your cluster; If the ETCD has not been configured certificate, an empty secret need to be created
-
-
-
-  - If the ETCD has been configured with certificates, refer to the following step （The following command is an example which is only used for the cluster created by `kubeadm`）:
+- If the Etcd has been configured with certificates, refer to the following step (The following command is an example that is only used for the cluster created by `kubeadm`):
 
 ```bash
 $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
@@ -90,52 +86,53 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 --from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
 ```
 
- - If the ETCD has not been configured with certificates.
+- If the Etcd has not been configured with certificates.
 
 ```bash
-$ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
+kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
-
 
 2. If you already have a minimal KubeSphere setup, you still can enable the pluggable components by editing the ConfigMap of ks-installer using the following command.
 
-> Note: Please make sure there is enough CPU and RAM in your cluster, see the configuration table at the bottom of this page.
-
+> Note: Please make sure there is enough CPU and memory available in your cluster, see the [Configuration Table](#configuration-table) for reference.
 
 ```bash
-$ kubectl edit cm ks-installer -n kubesphere-system
+kubectl edit cm ks-installer -n kubesphere-system
 ```
 
 3. Inspect the logs of installation.
 
 ```bash
-$ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-Wait for a moment, when all Pods of KubeSphere are running, it means the installation is successsful. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
+When all Pods of KubeSphere are running, it means the installation is successful. Check the port (30880 by default) of the console service by the following command. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
 
-![](https://pek3b.qingstor.com/kubesphere-docs/png/20191116004533.png)
+```bash
+kubectl get svc/ks-console -n kubesphere-system
+```
+
+![KubeSphere Dashboard](https://pek3b.qingstor.com/kubesphere-docs/png/20191116004533.png)
 
 ## Upgrade
 
-1. Download the YAML file as follows:
+1. Download the Yaml file as follows:
 
 ```bash
-$ wget https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
 ```
 
 2. Sync the changes from the old version to 2.1.1 in the config section of `kubesphere-minimal.yaml`, note the storage class and the pluggable components need to be consistent with the old version:
 
-```
-$ kubectl apply -f kubesphere-minimal.yaml
+```bash
+kubectl apply -f kubesphere-minimal.yaml
 ```
 
 > Note: GitLab and Harbor are not included in 2.1.1, please refer to [Harbor Documentation](https://github.com/goharbor/harbor-helm) and [Gitlab Documentation](https://about.gitlab.com/install/) to install them if needed.
 
-
 ## Configuration Table
 
-Pay attention to the resource request in the first column, you have to make sure there is enough and available CPU and memory in your cluster, especially for enable Logging, DevOps, Istio, Harbor and GitLab installation.
+Pay attention to the resource request in the first column. You need to make sure there is enough CPU and memory available in your cluster, especially for enabling Logging, DevOps, Istio, Harbor and GitLab.
 
 <table border=0 cellpadding=0 cellspacing=0 width=1288 style='border-collapse:
  collapse;table-layout:fixed;width:966pt'>
@@ -368,7 +365,6 @@ Pay attention to the resource request in the first column, you have to make sure
  </tr>
  <![endif]>
 </table>
-
 
 ## Support, Discussion, and Community
 
