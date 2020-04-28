@@ -67,7 +67,13 @@ Then inspect the logs of installation.
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
-When all Pods of KubeSphere are running, it means the installation is successful. Then you can use `http://IP:30880` to access the dashboard with the default account `admin/P@88w0rd`.
+When all Pods of KubeSphere are running, it means the installation is successful. Check the port (30880 by default) of the console service by the following command. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
+
+```bash
+kubectl get svc/ks-console -n kubesphere-system
+```
+
+![KubeSphere Dashboard](https://pek3b.qingstor.com/kubesphere-docs/png/20191116004533.png)
 
 ### Enable Pluggable Components
 
@@ -105,14 +111,6 @@ kubectl edit cm ks-installer -n kubesphere-system
 ```bash
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
-
-When all Pods of KubeSphere are running, it means the installation is successful. Check the port (30880 by default) of the console service by the following command. Then you can use `http://IP:30880` to access the console with the default account `admin/P@88w0rd`.
-
-```bash
-kubectl get svc/ks-console -n kubesphere-system
-```
-
-![KubeSphere Dashboard](https://pek3b.qingstor.com/kubesphere-docs/png/20191116004533.png)
 
 ## Upgrade
 
