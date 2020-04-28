@@ -90,7 +90,7 @@ function storage_sure(){
 
 $(echo -e "\033[1;36mPrerequisites:\033[0m")
 
-1. It's recommended that Your OS is clean (without any other software installed), otherwise there may be conflicts.
+1. The OS is required to be clean (without any other software installed), otherwise there may be conflicts.
 
 2. OS requirements：4 Core or faster processor，8GB or more of RAM.
 
