@@ -63,6 +63,23 @@ spec:
         app: kubesphere
         tier: db
     spec:
+      initContainers:
+      - name: remove-lost-found
+        command:
+        - rm
+        - -fr
+        - /var/lib/mysql/lost+found
+        image: {{ busybox_repo }}:{{ busybox_tag }}
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: db-persistent-storage
       containers:
       - name: mysql
         image: {{ mysql_repo }}:{{ mysql_tag }}
