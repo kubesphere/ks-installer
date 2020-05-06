@@ -5,9 +5,9 @@ Istio does NOT support skip level upgrades.
 If you want to upgrade to 1.5.x, you need to upgrade 1.4.x firstly.
 
 
-## istio 1.4.8
+# upgrade to 1.4.8 from 1.3.3
 
-Support to upgrade to 1.4.8 from istio 1.3.3 on kubesphere platform.
+Support to ***upgrade to 1.4.8 from istio 1.3.3*** on kubesphere platform by helm2.
 
 [official upgarde notes](https://archive.istio.io/v1.4/news/releases/1.4.x/announcing-1.4/upgrade-notes/)
 
@@ -20,12 +20,12 @@ curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.4.8 sh - && cd istio-1.
 2. Get custom setting files from ks-installer
 
 ```bash
-pod=$( kubectl get po -l app=ks-install -n kubesphere-system|grep ks-installer|awk '{print $1}')
+pod=$(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath={.items[0].metadata.name})
 kubectl -n kubesphere-system exec $pod cat /etc/kubesphere/istio/custom-values-istio-init.yaml > custom-values-istio-init.yaml
 kubectl -n kubesphere-system exec $pod cat /etc/kubesphere/istio/custom-values-istio.yaml > custom-values-istio.yaml
 kubectl -n kubesphere-system exec $pod  sed -i 's/1.3.3/1.4.8/g' /kubesphere/installer/roles/download/defaults
-sed -i 's/1.3.3/1.4.8/g' custom-values-istio-init.yaml
-sed -i 's/1.3.3/1.4.8/g' custom-values-istio.yaml
+sed -i 's/tag: .*$/tag: 1.4.8/' custom-values-istio-init.yaml
+sed -i 's/tag: .*$/tag: 1.4.8/' custom-values-istio.yaml
 sed -i 's/image: proxy_init/image: proxyv2/' custom-values-istio.yaml
 ```
 
@@ -34,6 +34,7 @@ sed -i 's/image: proxy_init/image: proxyv2/' custom-values-istio.yaml
 ```bash
 helm upgrade --install istio-init ./istio-init --namespace istio-system -f ./custom-values-istio-init.yaml  --force  
 helm upgrade --install istio ./istio --namespace istio-system -f ./custom-values-istio.yaml 
+kubectl rollout restart deployment -n istio-system
 ```
 
 4. Upgrade sidecar
