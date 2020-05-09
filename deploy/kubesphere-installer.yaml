@@ -108,6 +108,30 @@ rules:
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - policy
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - autoscaling
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - config.istio.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
 
 ---
 kind: ClusterRoleBinding
