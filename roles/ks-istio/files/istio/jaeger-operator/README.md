@@ -5,7 +5,7 @@
 ## Install
 
 ```console
-$ helm install stable/jaeger-operator
+$ helm install jaegertracing/jaeger-operator
 ```
 
 ## Introduction
@@ -13,14 +13,21 @@ $ helm install stable/jaeger-operator
 This chart bootstraps a jaeger-operator deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
-  - Kubernetes 1.8+ with Beta APIs enabled
+
+- Kubernetes 1.8+ with Beta APIs enabled
 
 ## Installing the Chart
+
+Add the Jaeger Tracing Helm repository:
+
+```console
+$ helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
+```
 
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install --name my-release stable/jaeger-operator
+$ helm install --name my-release jaegertracing/jaeger-operator
 ```
 
 The command deploys jaeger-operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -42,16 +49,19 @@ The command removes all the Kubernetes components associated with the chart and 
 The following table lists the configurable parameters of the jaeger-operator chart and their default values.
 
 | Parameter               | Description                                                                                                 | Default                         |
-|:------------------------|:------------------------------------------------------------------------------------------------------------|:--------------------------------|
+| :---------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------ |
 | `image.repository`      | Controller container image repository                                                                       | `jaegertracing/jaeger-operator` |
-| `image.tag`             | Controller container image tag                                                                              | `1.13.1`                        |
+| `image.tag`             | Controller container image tag                                                                              | `1.17.1`                        |
 | `image.pullPolicy`      | Controller container image pull policy                                                                      | `IfNotPresent`                  |
+| `jaeger.create`         | Jaeger instance will be created                                                                             | `false`                         |
+| `jaeger.spec`           | Jaeger instance specification                                                                               | `{}`                            |
+| `crd.install`           | CustomResourceDefinition will be installed                                                                  | `true`                          |
 | `rbac.create`           | All required roles and rolebindings will be created                                                         | `true`                          |
 | `serviceAccount.create` | Service account to use                                                                                      | `true`                          |
 | `rbac.pspEnabled`       | Pod security policy for pod will be created and included in rbac role                                       | `false`                         |
 | `rbac.clusterRole`      | ClusterRole will be used by operator ServiceAccount                                                         | `false`                         |
-| `serviceAccount.name`   | Service account name to use. If not set and create is true, a name is generated using the fullname template | ``                              |
-| `resources`             | K8s pod resorces                                                                                            | `None`                          |
+| `serviceAccount.name`   | Service account name to use. If not set and create is true, a name is generated using the fullname template | `nil`                           |
+| `resources`             | K8s pod resources                                                                                           | `None`                          |
 | `nodeSelector`          | Node labels for pod assignment                                                                              | `{}`                            |
 | `tolerations`           | Toleration labels for pod assignment                                                                        | `[]`                            |
 | `affinity`              | Affinity settings for pod assignment                                                                        | `{}`                            |
@@ -62,13 +72,14 @@ Specify each parameter you'd like to override using a YAML file as described abo
 You can also specify any non-array parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install stable/jaeger-operator --name my-release \
+$ helm install jaegertracing/jaeger-operator --name my-release \
     --set rbac.create=false
 ```
 
 ## After the Helm Installation
 
 ### Creating a new Jaeger instance
+
 The simplest possible way to install is by creating a YAML file like the following:
 
 ```YAML
