@@ -15,5 +15,4 @@ kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -o $nam
 
 # pvc delete
 pvcs="kubesphere-system\|openpitrix-system\|kubesphere-monitoring-system\|kubesphere-devops-system\|kubesphere-logging-system"
-kubectl --no-headers=true get pvc --all-namespaces -o custom-columns=:metadata.namespace,:metadata.name | grep "demo-vol1-claim\|demo-vol2-claim" | xargs | xargs -n2 sh -c 'kubectl delete pvc -n $1 $2' sh
-
+kubectl --no-headers=true get pvc --all-namespaces -o custom-columns=:metadata.namespace,:metadata.name | grep $pvcs | xargs | xargs -n2 sh -c 'kubectl delete pvc -n $1 $2' sh
