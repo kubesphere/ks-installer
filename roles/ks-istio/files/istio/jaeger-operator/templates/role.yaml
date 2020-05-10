@@ -45,6 +45,10 @@ rules:
 - apiGroups:
   - extensions
   resources:
+  - replicasets
+  - deployments
+  - daemonsets
+  - statefulsets
   - ingresses
   verbs:
   - "*"
@@ -71,6 +75,34 @@ rules:
   - jaegertracing.io
   resources:
   - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  - extensions
+  resourceNames:
+  - jaeger-operator
+  resources:
+  - deployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - kafka.strimzi.io
+  resources:
+  - kafkas
+  - kafkausers
+  verbs:
+  - '*'
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
   verbs:
   - '*'
 {{- if .Values.rbac.pspEnabled }}

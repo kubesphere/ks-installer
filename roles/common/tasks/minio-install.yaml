@@ -29,7 +29,7 @@
         -f {{ kubesphere_dir }}/custom-values-minio.yaml
         --set fullnameOverride=minio
         --namespace kubesphere-system
-        --wait --timeout 1800
+        --wait --timeout 1800s
       register: minio_status
       ignore_errors: True
 

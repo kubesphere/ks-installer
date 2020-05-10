@@ -1,8 +1,9 @@
-# This is used to generate minimal demo mode. It is included from demo and demo-auth values.
+# This is used to generate istio.yaml for minimal, demo mode.
 # It is shipped with the release, used for bookinfo or quick installation of istio.
 # Includes components used in the demo, defaults to alpha3 rules.
-# Note: please only put common configuration for the demo profiles here.
 global:
+  controlPlaneSecurityEnabled: false
+  
   proxy:
     accessLogFile: "/dev/stdout"
     resources:
@@ -11,6 +12,11 @@ global:
         memory: 40Mi
 
   disablePolicyChecks: false
+
+  mtls:
+    # Default setting for service-to-service mtls. Can be set explicitly using
+    # destination rules or service annotations.
+    enabled: false
 
 sidecarInjectorWebhook:
   enabled: true
@@ -73,16 +79,3 @@ gateways:
       requests:
         cpu: 10m
         memory: 40Mi
-# This is used to generate istio.yaml for minimal, demo mode.
-# It is shipped with the release, used for bookinfo or quick installation of istio.
-# Includes components used in the demo, defaults to alpha3 rules.
-
-# @include <values-istio-demo-common.yaml>
-#
-global:
-  controlPlaneSecurityEnabled: false
-
-  mtls:
-    # Default setting for service-to-service mtls. Can be set explicitly using
-    # destination rules or service annotations.
-    enabled: false

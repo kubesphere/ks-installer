@@ -33,7 +33,7 @@
 
 - name: istio | Check istio
   shell: >
-    {{ bin_dir }}/helm list istio
+    {{ bin_dir }}/helm list -n istio-system | grep "istio" 
   register: istio_check
   ignore_errors: True
 
@@ -152,12 +152,26 @@
         - istio_result.stderr.find("no matches for kind") == -1
         - istio_result.stderr.find("error copying from") == -1
 
+    
+    - name: istio | Check istio
+      shell: >
+        {{ bin_dir }}/helm list -n istio-system | grep "jaeger-operator"
+      register: jaeger_check
+      ignore_errors: True
+
+    - name: istio | Delete jaeger-operator deployment
+      shell: >
+        {{ bin_dir }}/kubectl delete deploy -n istio-system jaeger-operator --cascade=false
+      when:
+        - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
+
     - name: istio | Deploy jaeger-operator
       shell: >
         {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/istio/jaeger-operator
         -f {{ kubesphere_dir }}/istio/custom-values-jaeger.yaml
         --namespace istio-system
-
+      when:
+        - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
 
     - name: istio | Deploy jaeger-production
       shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/istio/jaeger-production.yaml --namespace istio-system"
@@ -165,7 +179,8 @@
       until: import is succeeded
       retries: 5
       delay: 10
-
+      when:
+        - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
 
     - name: istio | Create jaeger operator service
       shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/istio/jaeger-operator-service.yaml --namespace istio-system"
@@ -173,5 +188,7 @@
       until: import is succeeded
       retries: 5
       delay: 10
+      when:
+        - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
   when:
-    - (istio_check.stdout.find("DEPLOYED") == -1) or (istio_check.stdout.find("1.3.3") == -1)
+    - (istio_check.stdout.find("DEPLOYED") == -1) or (istio_check.stdout.find("1.4.8") == -1)
