@@ -93,7 +93,6 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: ks-installer
 rules:
 - apiGroups:
@@ -182,6 +181,30 @@ rules:
   - '*'
 - apiGroups:
   - admissionregistration.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - policy
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - autoscaling
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - config.istio.io
   resources:
   - '*'
   verbs:

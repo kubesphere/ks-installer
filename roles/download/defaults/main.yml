@@ -382,13 +382,13 @@ istio_galleyr_image: galley
 istio_sidecar_injector_image: sidecar_injector
 istio_node_agent_image: node-agent-k8s
 jaeger_operator_repo: "{{ base_repo }}jaegertracing/jaeger-operator"
-jaeger_operator_tag: 1.13.1
+jaeger_operator_tag: 1.17.1
 jaeger_agent_repo: "{{ base_repo }}jaegertracing/jaeger-agent"
-jaeger_agent_tag: 1.13
+jaeger_agent_tag: 1.17
 jaeger_collector_repo: "{{ base_repo }}jaegertracing/jaeger-collector"
-jaeger_collector_tag: 1.13
+jaeger_collector_tag: 1.17
 jaeger_query_repo: "{{ base_repo }}jaegertracing/jaeger-query"
-jaeger_query_tag: 1.13
+jaeger_query_tag: 1.17
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
