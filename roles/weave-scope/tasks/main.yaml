@@ -1,0 +1,29 @@
+---
+
+- name: weave-scope | Getting ks-alerting installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - weave-scope
+
+
+- name: weave-scope | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/weave-scope/{{ item.file }}"
+  with_items:
+    - { type: ds, file: weave-scope.yaml }
+
+
+- name: weave-scope | Create ks-alerting rolebinding
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/weave-scope/weave-scope.yaml
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
+
+
+

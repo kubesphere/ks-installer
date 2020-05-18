@@ -453,6 +453,13 @@ bookinfo_ratings_v1_repo: "{{ base_repo }}kubesphere/examples-bookinfo-ratings-v
 bookinfo_ratings_v1_tag: "{{ examples_bookinfo_version }}"
 
 
+#wave-scope
+waveworks_scop_repo: "{{ base_repo }}weaveworks/scope"
+waveworks_scop_tag: "1.13.0"
+
+
+
+
 downloads:
 
   ks_installer:
