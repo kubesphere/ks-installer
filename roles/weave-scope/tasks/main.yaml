@@ -1,6 +1,6 @@
 ---
 
-- name: weave-scope | Getting ks-alerting installation files
+- name: weave-scope | Getting weave-scope installation files
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
@@ -16,7 +16,7 @@
     - { type: ds, file: weave-scope.yaml }
 
 
-- name: weave-scope | Create ks-alerting rolebinding
+- name: weave-scope | Deploy weave-scope
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/weave-scope/weave-scope.yaml
   register: import
