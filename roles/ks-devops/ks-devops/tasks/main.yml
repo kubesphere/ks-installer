@@ -9,44 +9,44 @@
 #  delay: 10
 
 
-- name: ks-devops | Getting ks-devops installation files
-  copy:
-    src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
-  loop:
-    - ks-devops
+# - name: ks-devops | Getting ks-devops installation files
+#   copy:
+#     src: "{{ item }}"
+#     dest: "{{ kubesphere_dir }}/"
+#   loop:
+#     - ks-devops
 
 
-- name: ks-devops | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/ks-devops/{{ item.path }}/{{ item.file }}"
-  with_items:
-    # - { path: apiserver, file: apiserver.yaml }
-    - { path: ctrl, file: devops-db-ctrl-job.yaml }
-    - { path: init, file: db-init-job.yaml }
+# - name: ks-devops | Creating manifests
+#   template:
+#     src: "{{ item.file }}.j2"
+#     dest: "{{ kubesphere_dir }}/ks-devops/{{ item.path }}/{{ item.file }}"
+#   with_items:
+#     # - { path: apiserver, file: apiserver.yaml }
+#     - { path: ctrl, file: devops-db-ctrl-job.yaml }
+#     - { path: init, file: db-init-job.yaml }
 
 
-- name: ks-devops | Checking db-ctrl-job
-  shell: "{{ bin_dir }}/kubectl get job -n kubesphere-devops-system"
-  register: result
+# - name: ks-devops | Checking db-ctrl-job
+#   shell: "{{ bin_dir }}/kubectl get job -n kubesphere-devops-system"
+#   register: result
 
 
-- name: ks-devops | Delete db-ctrl-job
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-ctrl-job"
-  when: result.stdout.find("ks-devops-db-ctrl-job") != -1
+# - name: ks-devops | Delete db-ctrl-job
+#   shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-ctrl-job"
+#   when: result.stdout.find("ks-devops-db-ctrl-job") != -1
 
 
-- name: ks-devops | Delete db-init-job
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-init-job"
-  when: result.stdout.find("ks-devops-db-init-job") != -1
+# - name: ks-devops | Delete db-init-job
+#   shell: "{{ bin_dir }}/kubectl -n kubesphere-devops-system delete jobs.batch ks-devops-db-init-job"
+#   when: result.stdout.find("ks-devops-db-init-job") != -1
 
 
-- name: ks-devops | Init ks-devops
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/init/"
+# - name: ks-devops | Init ks-devops
+#   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/init/"
 
 
-- name: ks-devops | Ctrl ks-devops
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/ctrl/"
+# - name: ks-devops | Ctrl ks-devops
+#   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops/ctrl/"
 
 
