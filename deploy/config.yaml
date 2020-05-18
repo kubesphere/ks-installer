@@ -20,9 +20,6 @@ data:
       openldapVolumeSize: 2Gi
       redisVolumSize: 2Gi
 
-    metrics_server:
-      enabled: False
-
     console:
       enableMultiLogin: False  # enable/disable multi login
       port: 30880
@@ -68,6 +65,12 @@ data:
       enabled: False
 
     alerting:
+      enabled: False
+
+    metrics_server:
+      enabled: False
+
+    weave_scope:
       enabled: False
 
 kind: ConfigMap
