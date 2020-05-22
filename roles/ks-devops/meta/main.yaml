@@ -11,7 +11,7 @@ dependencies:
       - devops.sonarqube.enabled == True
 
 
-  - role: ks-devops/ks-devops
+  # - role: ks-devops/ks-devops
 
 
   - role: ks-devops/s2i
