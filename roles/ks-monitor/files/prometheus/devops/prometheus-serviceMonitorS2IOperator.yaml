@@ -7,18 +7,18 @@ metadata:
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-    - honorLabels: true
-      interval: 1m
-      metricRelabelings:
-        - action: keep
-          regex: s2i_s2ibuilder_created
-          sourceLabels:
-            - __name__
-      port: http
+  - honorLabels: true
+    interval: 1m
+    metricRelabelings:
+    - action: keep
+      regex: s2i_s2ibuilder_created
+      sourceLabels:
+      - __name__
+    port: http
   jobLabel: k8s-app
   namespaceSelector:
     matchNames:
-      - kubesphere-devops-system
+    - kubesphere-devops-system
   selector:
     matchLabels:
       app: s2i-metrics

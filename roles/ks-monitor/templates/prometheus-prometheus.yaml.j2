@@ -6,8 +6,9 @@ metadata:
   name: k8s
   namespace: kubesphere-monitoring-system
 spec:
-  imagePullSecrets:
-  - name: qingcloud 
+  additionalScrapeConfigs:
+    key: prometheus-additional.yaml
+    name: additional-scrape-configs
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -28,44 +29,44 @@ spec:
           namespaces:
           - kubesphere-monitoring-system
           topologyKey: kubernetes.io/hostname
-        weight: 100 
-  baseImage: {{ prometheus_repo }}
+        weight: 100
+  alerting:
+    alertmanagers:
+    - name: alertmanager-main
+      namespace: kubesphere-monitoring-system
+      port: web
+  image: {{ prometheus_repo }}:{{ prometheus_tag }}
   nodeSelector:
-    beta.kubernetes.io/os: linux
+    kubernetes.io/os: linux
+  podMonitorNamespaceSelector: {}
+  podMonitorSelector: {}
   query:
     maxConcurrency: 1000
   replicas: {{ monitoring.prometheusReplicas }}
   resources:
     limits:
-      cpu: "2.5"
-      memory: 2Gi
+      cpu: {{ prometheus.limits.cpu }}
+      memory: {{ prometheus.limits.memory }}
     requests:
-      cpu: 10m
-      memory: {{ monitoring.prometheusMemoryRequest }}
+      cpu: {{ prometheus.requests.cpu }}
+      memory: {{ prometheus.requests.memory }}
   retention: 7d
   ruleSelector:
     matchLabels:
       prometheus: k8s
       role: alert-rules
   scrapeInterval: 1m
+  {% if etcd.monitoring is defined and etcd.monitoring == true %}
+  secrets:
+  - kube-etcd-client-certs
+  {% endif %}
   securityContext:
     fsGroup: 0
     runAsNonRoot: false
     runAsUser: 0
   serviceAccountName: prometheus-k8s
   serviceMonitorNamespaceSelector: {}
-  serviceMonitorSelector:
-    matchExpressions:
-    - key: k8s-app
-      operator: In
-      values:
-      - kube-state-metrics
-      - node-exporter
-      - kubelet
-      - prometheus-system
-{% if devops.enabled is defined and devops.enabled == true %}
-      - s2i-operator
-{% endif %}
+  serviceMonitorSelector: {}
   storage:
     volumeClaimTemplate:
       spec:
@@ -75,7 +76,6 @@ spec:
         resources:
           requests:
             storage: {% if prometheus_pv_size is defined %}{{ prometheus_pv_size }}{% else %}{{ monitoring.prometheusVolumeSize }}{% endif %}
-
   tolerations:
   - effect: NoSchedule
     key: dedicated

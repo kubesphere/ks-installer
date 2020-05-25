@@ -1,125 +1,28 @@
 ---
-- name: ks-monitor | Checking old installation files
-  stat:
-    path: "{{ kubesphere_dir }}/prometheus/prometheus-prometheus.yaml"
-  ignore_errors: True
-  register: prometheus_old_check
+- import_tasks: cleanup.yaml
 
+- import_tasks: generate_manifests.yaml
 
-- name: ks-monitor | deleting old prometheus-operator files
-  file:
-    path: "{{ kubesphere_dir }}/prometheus/00namespace-namespace.yaml"
-    state: absent
-  ignore_errors: True
-  when: prometheus_old_check.stat.exists
+- import_tasks: prometheus-operator.yaml
 
+- import_tasks: node-exporter.yaml
 
-- name: ks-monitor | deleting old prometheus-operator
-  shell: "{{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/prometheus/"
-  register: import
-  failed_when: "import.stderr and 'NotFound' not in import.stderr"
-  when: prometheus_old_check.stat.exists
+- import_tasks: kube-state-metrics.yaml
 
-
-- name: ks-monitor | deleting old prometheus-operator files
-  file:
-    path: "{{ kubesphere_dir }}/{{ item }}"
-    state: absent
-  ignore_errors: True
-  loop:
-    - "prometheus"
-  when: prometheus_old_check.stat.exists
-
-
-- name: ks-monitor | Getting monitor installation files
-  copy:
-    src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
-  loop:
-    - "prometheus"
-
-- import_tasks: get_old_config.yaml
-
-- name: ks-monitor | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
-  with_items:
-    - { path: prometheus/init, file: 0prometheus-operator-deployment.yaml }
-    - { path: prometheus/sources, file: kube-state-metrics-deployment.yaml }
-    - { path: prometheus/sources, file: node-exporter-daemonset.yaml }
-    - { path: prometheus/sources, file: prometheus-prometheus.yaml }
-    - { path: prometheus/sources, file: prometheus-prometheusSystem.yaml }
-    - { path: prometheus/etcd, file: prometheus-serviceMonitorEtcd.yaml }
-    - { path: prometheus/etcd, file: prometheus-endpointsEtcd.yaml }
-
-
-- name: ks-monitor | Init prometheus-operator
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/init"
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
-  retries: 5
-  delay: 3
-
-
-- name: ks-monitor | Installing prometheus-operator
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
-  loop:
-    - "sources"
-    - "sources"
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
-  retries: 5
-  delay: 3
-
-
-- name: ks-monitor | Enabled devops monitoring
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
-  loop:
-    - "devops"
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
-  retries: 5
-  delay: 3
-  when:
-    - devops.enabled is defined
-    - devops.enabled == true
-
-
-- name: ks-monitor | Enabled etcd monitoring
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
-  loop:
-    - "etcd"
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
-  retries: 5
-  delay: 3
-  when:
-    - etcd.monitoring is defined
-    - etcd.monitoring == true
-
-- name: ks-monitor | check k8s version
-  shell: >
-    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
-  register: kubernetes_version
-
-- name: ks-monitor | Create prometheus rules
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-rules.yaml
-  when:
-    - kubernetes_version.stdout is version('v1.16.0', '<')
-
-- name: ks-monitor | Create prometheus rules (v1.16.0+)
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-rules-v1.16+.yaml
-  when:
-    - kubernetes_version.stdout is version('v1.16.0', '>=')
+- import_tasks: prometheus-adapter.yaml
 
 - import_tasks: grafana.yaml
   when:
     - monitoring.grafana.enabled == true
+
+- import_tasks: prometheus.yaml
+
+- import_tasks: devops.yaml
+
+- import_tasks: etcd.yaml
+
+- import_tasks: prometheus-rules.yaml
+
+- import_tasks: alertmanager.yaml
+
   

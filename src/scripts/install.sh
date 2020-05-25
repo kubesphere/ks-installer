@@ -267,6 +267,7 @@ function all-in-one(){
   ansible-playbook -i $BASE_FOLDER/../k8s/inventory/local/hosts.ini $BASE_FOLDER/../kubesphere/kubesphere.yml \
                    -b \
                    -e prometheus_replicas=1 \
+                   -e alertmanager_replicas=1 \
                    -e ks_console_replicas=1 \
                    -e jenkinsJavaOpts_Xms='512m' \
                    -e jenkinsJavaOpts_Xmx='512m' \

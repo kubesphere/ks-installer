@@ -50,7 +50,7 @@ data:
     servicemesh:
       istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
       jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
-      servicemeshPrometheusHost: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
+      servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
 {% endif %}
 
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
@@ -66,7 +66,7 @@ data:
 
     monitoring:
       endpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
-      secondaryEndpoint: http://prometheus-k8s-system.kubesphere-monitoring-system.svc:9090
+      secondaryEndpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
 
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:

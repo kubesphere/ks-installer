@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  labels:
+    alertmanager: main
+  name: main
+  namespace: kubesphere-monitoring-system
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: alertmanager
+              operator: In
+              values:
+              - main
+          namespaces:
+          - kubesphere-monitoring-system
+          topologyKey: kubernetes.io/hostname
+        weight: 100
+  image: {{ alertmanager_repo }}:{{ alertmanager_tag }}
+  resources:
+    limits:
+      cpu: {{ alertmanager.limits.cpu }}
+      memory: {{ alertmanager.limits.memory}}
+    requests:
+      cpu: {{ alertmanager.requests.cpu }}
+      memory: {{ alertmanager.requests.memory }}
+  nodeSelector:
+    kubernetes.io/os: linux
+  replicas: {{ monitoring.alertmanagerReplicas }}
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: alertmanager-main
+  version: v0.20.0

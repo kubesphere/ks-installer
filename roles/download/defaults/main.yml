@@ -318,26 +318,26 @@ registry_tag: 2.7.1
 gitlab_busybox_tag: 1.31.1
 
 #ks-monitor:
-configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
+configmap_reload_repo: "{{ base_repo }}jimmidyson/configmap-reload"
 configmap_reload_tag: v0.3.0
 prometheus_repo: "{{ base_repo }}kubesphere/prometheus"
-prometheus_tag: v2.5.0
+prometheus_tag: v2.17.2
 prometheus_config_reloader_repo: "{{ base_repo }}kubesphere/prometheus-config-reloader"
-prometheus_config_reloader_tag: v0.34.0
+prometheus_config_reloader_tag: v0.38.1
 prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
-prometheus_operator_tag: v0.34.0
+prometheus_operator_tag: v0.38.1
 kube_rbac_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
 kube_state_metrics_repo: "{{ base_repo }}kubesphere/kube-state-metrics"
-kube_state_metrics_tag: v1.7.2
+kube_state_metrics_tag: v1.9.6
 node_exporter_repo: "{{ base_repo }}kubesphere/node-exporter"
-node_exporter_tag: ks-v0.16.0
-addon_resizer_repo: "{{ base_repo }}kubesphere/addon-resizer"
-addon_resizer_tag: 1.8.4
+node_exporter_tag: ks-v0.18.1
 prometheus_adapter_repo: "{{ base_repo }}kubesphere/k8s-prometheus-adapter-amd64"
-prometheus_adapter_tag: v0.4.1
+prometheus_adapter_tag: v0.6.0
+alertmanager_repo: "{{ base_repo }}kubesphere/alertmanager"
+alertmanager_tag: v0.20.0
 grafana_repo: "{{ base_repo }}grafana/grafana"
-grafana_tag: 5.2.4
+grafana_tag: 6.6.0
 
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ base_repo }}kubesphere/elasticsearch-curator"

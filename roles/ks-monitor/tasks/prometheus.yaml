@@ -1,0 +1,11 @@
+---
+- name: ks-monitor | Installing prometheus
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
+  loop:
+    - "prometheus"
+    - "prometheus"
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
