@@ -1,0 +1,4 @@
+---
+- name: ks-monitor | Installing prometheus-adapter 
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-adapter

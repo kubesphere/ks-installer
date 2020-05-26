@@ -2,48 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: kube-state-metrics
+    app.kubernetes.io/name: kube-state-metrics
+    app.kubernetes.io/version: 1.9.6
   name: kube-state-metrics
   namespace: kubesphere-monitoring-system
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kube-state-metrics
+      app.kubernetes.io/name: kube-state-metrics
   template:
     metadata:
       labels:
-        app: kube-state-metrics
+        app.kubernetes.io/name: kube-state-metrics
+        app.kubernetes.io/version: 1.9.6
     spec:
-      imagePullSecrets:
-      - name: qingcloud  
       containers:
-      - args:
-        - --secure-listen-address=:8443
-        - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
-        - --upstream=http://127.0.0.1:8081/
-        image: {{ kube_rbac_proxy_repo }}:{{ kube_rbac_proxy_tag }}
-        name: kube-rbac-proxy-main
-        ports:
-        - containerPort: 8443
-          name: https-main
-        resources:
-          requests:
-            cpu: 10m
-            memory: 20Mi
-      - args:
-        - --secure-listen-address=:9443
-        - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
-        - --upstream=http://127.0.0.1:8082/
-        image: {{ kube_rbac_proxy_repo }}:{{ kube_rbac_proxy_tag }}
-        name: kube-rbac-proxy-self
-        ports:
-        - containerPort: 9443
-          name: https-self
-        resources:
-          requests:
-            cpu: 10m
-            memory: 20Mi
       - args:
         - --host=127.0.0.1
         - --port=8081
@@ -53,38 +27,52 @@ spec:
         image: {{ kube_state_metrics_repo }}:{{ kube_state_metrics_tag }}
         name: kube-state-metrics
         resources:
+          limits:
+            cpu: {{ kube_state_metrics.limits.cpu }}
+            memory: {{ kube_state_metrics.limits.memory }}
           requests:
-            cpu: 10m
-            memory: 150Mi
-      - command:
-        - /pod_nanny
-        - --container=kube-state-metrics
-        - --cpu=30m
-        - --extra-cpu=2m
-        - --memory=150Mi
-        - --extra-memory=30Mi
-        - --threshold=5
-        - --deployment=kube-state-metrics
-        env:
-        - name: MY_POD_NAME
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.name
-        - name: MY_POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.namespace
-        image: {{ addon_resizer_repo }}:{{ addon_resizer_tag }}
-        name: addon-resizer
+            cpu: {{ kube_state_metrics.requests.cpu }}
+            memory: {{ kube_state_metrics.requests.memory }}
+        securityContext:
+          runAsUser: 65534
+      - args:
+        - --logtostderr
+        - --secure-listen-address=:8443
+        - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+        - --upstream=http://127.0.0.1:8081/
+        image: {{ kube_rbac_proxy_repo }}:{{ kube_rbac_proxy_tag }}
+        name: kube-rbac-proxy-main
         resources:
+          limits:
+            cpu: {{ kube_rbac_proxy.limits.cpu }}
+            memory: {{ kube_rbac_proxy.limits.memory }}
           requests:
-            cpu: 10m
-            memory: 30Mi
+            cpu: {{ kube_rbac_proxy.requests.cpu }}
+            memory: {{ kube_rbac_proxy.requests.memory }}
+        ports:
+        - containerPort: 8443
+          name: https-main
+        securityContext:
+          runAsUser: 65534
+      - args:
+        - --logtostderr
+        - --secure-listen-address=:9443
+        - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+        - --upstream=http://127.0.0.1:8082/
+        image: {{ kube_rbac_proxy_repo }}:{{ kube_rbac_proxy_tag }}
+        name: kube-rbac-proxy-self
+        resources:
+          limits:
+            cpu: {{ kube_rbac_proxy.limits.cpu }}
+            memory: {{ kube_rbac_proxy.limits.memory }}
+          requests:
+            cpu: {{ kube_rbac_proxy.requests.cpu }}
+            memory: {{ kube_rbac_proxy.requests.memory }}
+        ports:
+        - containerPort: 9443
+          name: https-self
+        securityContext:
+          runAsUser: 65534
       nodeSelector:
-        beta.kubernetes.io/os: linux
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
+        kubernetes.io/os: linux
       serviceAccountName: kube-state-metrics

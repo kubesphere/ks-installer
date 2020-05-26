@@ -28,6 +28,7 @@ data:
       prometheusReplicas: 1
       prometheusMemoryRequest: 400Mi
       prometheusVolumeSize: 20Gi
+      alertmanagerReplicas: 1
       grafana:
         enabled: False
 

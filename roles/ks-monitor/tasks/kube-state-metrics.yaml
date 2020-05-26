@@ -1,0 +1,4 @@
+---
+- name: ks-monitor | Installing kube-state-metrics 
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/kube-state-metrics

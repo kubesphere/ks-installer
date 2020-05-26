@@ -199,6 +199,9 @@ prometheus_memory_request: 400Mi
 # 20Gi means every prometheus replica consumes 20Gi storage
 prometheus_volume_size: 20Gi
 
+# alertmanager replicas numbers,
+alertmanager_replicas: 3
+
 # whether to install a grafana
 grafana_enabled: false
 

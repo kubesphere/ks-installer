@@ -1,0 +1,8 @@
+---
+- name: ks-monitor | Init prometheus-operator
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/init"
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
