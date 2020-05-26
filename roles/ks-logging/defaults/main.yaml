@@ -7,7 +7,6 @@ logging:
   elasticsearchVolumeSize: 20Gi
   logMaxAge: 7
   elkPrefix: logstash
-  containersLogMountedPath: ""
   kibana:
     enable: false
 # externalElasticsearchUrl:

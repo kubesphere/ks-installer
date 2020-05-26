@@ -13,14 +13,12 @@
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/logging/{{ item.file }}"
   with_items:
+    - { path: logging, file: custom-fluentbit-fluentBit.yaml }
+    - { path: logging, file: custom-fluentbit-operator-deployment.yaml }
+    - { path: logging, file: custom-output-elasticsearch.yaml }
     - { path: logging, file: custom-values-elasticsearch.yaml }
     - { path: logging, file: custom-values-elasticsearch-curator.yaml }
     - { path: logging, file: custom-values-kibana.yaml }
-    - { path: logging, file: custom-values-fluentbit-operator.yaml }
-    - { path: logging, file: fluentbit-crd.yaml }
-    - { path: logging, file: fluent-bit-outputs.template }
-    - { path: logging, file: FluentBitCrd.py }
-    - { path: logging, file: FluentBitOutputsConfig.py }
 
 
 - name: ks-logging | comment elasticsearch storageclass parameter
@@ -59,109 +57,31 @@
   ignore_errors: True
 
 
-- name: ks-logging | Checking fluent-bit-output-config
+- name: ks-logging | Backup old fluentbit crd
   shell: >
-    {{ bin_dir }}/kubectl get cm -n kubesphere-logging-system
-  register: check_fluent_bit_config_result
-  ignore_errors: True
-
-
-- name: ks-logging | Generate fluent-bit-output-config
-  shell: >
-    sed "s/<UPDATETIME>/`date +"%Y-%m-%dT%H:%M:%SZ"`/" {{ kubesphere_dir }}/logging/fluent-bit-outputs.template > {{ kubesphere_dir }}/logging/fluent-bit-outputs.config 
-
-
-- name: ks-logging | Fetching fluent-bit-output-config
-  shell: >
-    {{ bin_dir }}/kubectl get  cm -n kubesphere-logging-system fluent-bit-output-config -o=jsonpath='{.data.outputs}' > {{ kubesphere_dir }}/logging/fluent-bit-outputs.config.bak
+    {{ bin_dir }}/kubectl get fluentbits.logging.kubesphere.io -n kubesphere-logging-system fluent-bit -o yaml > {{ kubesphere_dir }}/logging/fluentbit-crd.yaml.bak
   when:
-    - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
-    - kubesphere_version.stdout == "2.0.0"
+    - kubesphere_version.stdout.split('.')[0] == "2"
 
 
-- name: ks-logging | Checking fluent-bit-output-config
+- name: ks-logging | Deleting old fluentbit operator
   shell: >
-    chmod +x {{ kubesphere_dir }}/logging/FluentBitOutputsConfig.py &&
-    {{ kubesphere_dir }}/logging/FluentBitOutputsConfig.py {{ kubesphere_dir }}/logging/fluent-bit-outputs.config.bak 
-    {{ kubesphere_dir }}/logging/fluent-bit-outputs.config
+    {{ bin_dir }}/kubectl delete deploy -n kubesphere-logging-system logging-fluentbit-operator
+    {{ bin_dir }}/kubectl delete fluentbits.logging.kubesphere.io -n kubesphere-logging-system fluent-bit
+    {{ bin_dir }}/kubectl delete ds -n kubesphere-logging-system fluent-bit
+    {{ bin_dir }}/kubectl delete crd fluentbits.logging.kubesphere.io
   when:
-    - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
-    - kubesphere_version.stdout == "2.0.0"
+    - kubesphere_version.stdout.split('.')[0] == "2"
 
 
-- name: ks-logging | Deleting old fluent-bit-output-config
+- name: ks-logging | Prepare fluentbit operator setup
   shell: >
-    {{ bin_dir }}/kubectl delete  cm -n kubesphere-logging-system fluent-bit-output-config
-  when:
-    - check_fluent_bit_config_result.stdout.find("fluent-bit-output-config") != -1
-    - kubesphere_version.stdout == "2.0.0"
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/init
 
 
-- name: ks-logging | Create fluentbit-config
+- name: ks-logging | Deploy new fluentbit operator
   shell: >
-    {{ bin_dir }}/kubectl create configmap fluent-bit-output-config -n kubesphere-logging-system  
-    --from-file=outputs={{ kubesphere_dir }}/logging/fluent-bit-outputs.config
-  register: import
-  failed_when: "import.stderr and 'already exists' not in import.stderr"
-
-
-- name: ks-logging | Checking fluentbit crd
-  shell: >
-    {{ bin_dir }}/kubectl get FluentBit -n kubesphere-logging-system
-  register: check_fluent_bit_crd_result
-  ignore_errors: True
-
-
-- name: ks-logging | Fetching fluent-bit-crd
-  shell: >
-    {{ bin_dir }}/kubectl get FluentBit fluent-bit -n kubesphere-logging-system --export -o json > {{ kubesphere_dir }}/logging/fluentbit-crd.json
-  when:
-    - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
-    - kubesphere_version.stdout == "2.0.0"
-
-
-- name: ks-logging | Checking fluent-bit-crd
-  shell: >
-    chmod +x {{ kubesphere_dir }}/logging/FluentBitCrd.py &&
-    {{ kubesphere_dir }}/logging/FluentBitCrd.py {{ kubesphere_dir }}/logging/fluentbit-crd.json
-    {{ kubesphere_dir }}/logging/fluentbit-crd-patch.json
-  when:
-    - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
-    - kubesphere_version.stdout == "2.0.0"
-
-
-- name: ks-logging | Patching fluent-bit-crd
-  shell: >
-    {{ bin_dir }}/kubectl patch FluentBit fluent-bit -n kubesphere-logging-system --type merge --patch "$(cat {{ kubesphere_dir }}/logging/fluentbit-crd-patch.json)"
-  when:
-    - check_fluent_bit_crd_result.stdout.find("fluent-bit") != -1
-    - kubesphere_version.stdout == "2.0.0"
-
-
-- name: ks-logging | Check logging-fluentbit-operator
-  shell: >
-    {{ bin_dir }}/helm list logging-fluentbit-operator
-  register: fluentbit_check
-  ignore_errors: True
-
-
-- name: ks-logging | Deploy logging-fluentbit-operator
-  shell: >
-    {{ bin_dir }}/helm upgrade --install logging-fluentbit-operator 
-    {{ kubesphere_dir }}/logging/fluentbit-operator-0.1.0.tgz
-    -f {{ kubesphere_dir }}/logging/custom-values-fluentbit-operator.yaml
-    --namespace kubesphere-logging-system
-  when:
-    - (fluentbit_check.stdout.find("DEPLOYED") == -1) or (fluentbit_check.stdout.find("0.1.0-0217") == -1)
-
-- name: ks-logging | Create fluentbit-crd
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-crd.yaml"
-  register: import
-  until: import is succeeded
-  retries: 5
-  delay: 10
-  when:
-    - check_fluent_bit_crd_result.stdout.find("fluent-bit") == -1
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/fluent-bit
 
 
 - name: ks-logging | Check elasticsearch

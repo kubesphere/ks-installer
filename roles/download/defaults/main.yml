@@ -348,14 +348,12 @@ kibana_oss_repo: "{{ elastic_image_repo }}/kibana/kibana-oss"
 kibana_oss_tag: 6.7.0
 testFramework_repo: "{{ base_repo }}dduportal/bats"
 testFramework_tag: 0.4.0
-fluentbit_operator_repo: "{{ base_repo }}kubesphere/fluentbit-operator"
-fluentbit_operator_tag: v0.1.0
+fluentbit_operator_repo: "{{ base_repo }}kubespheredev/fluentbit-operator"
+fluentbit_operator_tag: v0.2.0
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
-ks_fluent_bit_repo: "{{ base_repo }}kubesphere/fluent-bit"
-ks_fluent_bit_tag: "v1.3.5-reload"
-kslogging_configmap_reload_repo: "{{ base_repo }}kubesphere/configmap-reload"
-kslogging_configmap_reload_tag: v0.0.1
+ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
+ks_fluent_bit_tag: "v1.3.7"
 ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.0
 
