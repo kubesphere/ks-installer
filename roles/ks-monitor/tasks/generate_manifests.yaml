@@ -5,6 +5,7 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "prometheus"
+    - "monitoring-dashboard"
 
 - import_tasks: get_old_config.yaml
 
