@@ -8,7 +8,7 @@
   set_fact: >
      k8s_version: {{ kubernetes_version.stdout }}
 
-- name: Stop if kuernetes version is nonsupport
+- name: Stop if kubernetes version is nonsupport
   assert:
     that: kubernetes_version.stdout is version('v1.18.0', '<')
     msg: The current k8s version is not supported
