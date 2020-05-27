@@ -103,10 +103,6 @@ hyperkube_image_tag: "{{ kube_version }}"
 #KubeSphere:
 ks_apiserver_repo: "{{ base_repo }}kubesphere/ks-apiserver"
 ks_apiserver_tag: v2.1.1
-ks_account_repo: "{{ base_repo }}kubesphere/ks-account"
-ks_account_tag: v2.1.1
-ks_apigateway_repo: "{{ base_repo }}kubesphere/ks-apigateway"
-ks_apigateway_tag: v2.1.1
 ks_controller_manager_repo: "{{ base_repo }}kubesphere/ks-controller-manager"
 ks_controller_manager_tag: v2.1.1
 ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
@@ -146,6 +142,14 @@ ks_alerting_repo: "{{ base_repo }}kubesphere/alerting"
 ks_alerting_tag: "v2.1.0"
 ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert_adapter"
 ks_alerting_adapter_tag: "v2.1.0"
+
+# kubefed, kubesphere multiple cluster component
+kubefed_repo: "{{ base_repo }}kubesphere"
+kubefed_image: kubefed
+kubefed_image_tag: v0.3.0
+tower_repo: "{{ base_repo }}kubesphere"
+tower_image: tower
+tower_image_tag: latest
 
 #openpitrix:
 # op_version: "latest"

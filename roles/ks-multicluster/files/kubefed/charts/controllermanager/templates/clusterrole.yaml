@@ -1,0 +1,97 @@
+{{- if or (not .Values.global.scope) (eq .Values.global.scope "Cluster") }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    api: kubefed
+    kubebuilder.k8s.io: 1.0.0
+  name: kubefed-role
+rules:
+- apiGroups:
+  - scheduling.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+- apiGroups:
+  - multiclusterdns.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - create
+  - update
+  - delete
+- apiGroups:
+  - core.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - create
+  - update
+- apiGroups:
+  - types.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - get
+  - create
+  - update
+  - patch
+{{- end }}
+---
+# This role provides the necessary permissions to create admission reviews.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+# TODO(font) For namespace scoped deployments, create a unique cluster-scoped
+# resource name using the namespace. This is needed because helm does not
+# currently support the ability to share resources across multiple
+# installations of the same chart. Additionally, admission-webhooks do not
+# currently support the ability to have namespace-scoped RBAC permissions only.
+{{- if and .Values.global.scope (eq .Values.global.scope "Namespaced") }}
+  name: system:kubefed:{{ .Release.Namespace }}:admission-requester
+{{ else }}
+  name: system:kubefed:admission-requester
+{{ end }}
+rules:
+- apiGroups:
+  - validation.core.kubefed.io
+  resources:
+  - federatedtypeconfigs
+  - kubefedclusters
+  - kubefedconfigs
+  verbs:
+  - create
+- apiGroups:
+  - mutation.core.kubefed.io
+  resources:
+  - kubefedconfigs
+  verbs:
+  - create

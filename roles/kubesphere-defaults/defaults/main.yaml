@@ -8,14 +8,6 @@ ks_apiserver_memory_limit: 1024Mi
 ks_apiserver_cpu_limit: "1"
 ks_apiserver_memory_requests: 100Mi
 ks_apiserver_cpu_requests: 20m
-ks_account_memory_limit: 500Mi
-ks_account_cpu_limit: "1"
-ks_account_memory_requests: 100Mi
-ks_account_cpu_requests: 20m
-ks_apigateway_memory_limit: 500Mi
-ks_apigateway_cpu_limit: "1"
-ks_apigateway_memory_requests: 100Mi
-ks_apigateway_cpu_requests: 20m
 ks_console_memory_limit: 512Mi
 ks_console_cpu_limit: "1"
 ks_console_memory_requests: 100Mi
@@ -63,11 +55,6 @@ kube_apiserver_host: |-
 elk_prefix: logstash
 
 vertical_pod_autoscaler_enable: false
-
-
-
-
-
 
 #istio_enable: true
 #

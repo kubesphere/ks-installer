@@ -48,8 +48,6 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "ingress"
-    - "ks-account"
-    - "ks-apigateway"
     - "ks-apiserver"
     - "ks-console"
     - "ks-controller-manager"
@@ -61,8 +59,6 @@
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: ingress, file: ingress-controller.yaml, type: config }
-    - { path: ks-account, file: ks-account.yml, type: deployment }
-    - { path: ks-apigateway, file: ks-apigateway.yaml, type: deploy }
     - { path: ks-apiserver, file: ks-apiserver.yml, type: deploy }
     - { path: ks-controller-manager, file: ks-controller-manager.yaml, type: deploy }
     - { path: ks-console, file: ks-console-config.yml, type: config }
@@ -86,13 +82,6 @@
   failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
 
 
-- name: KubeSphere | Check ks-account version
-  command: >
-    {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-account -o jsonpath='{.metadata.labels.version}'
-  register: account_version
-  failed_when: "account_version.stderr and 'NotFound' not in account_version.stderr"
-  ignore_errors: True
-
 - name: KubeSphere | Update kubectl image
   shell: >
     for deploy in $(kubectl -n kubesphere-controls-system get deploy  | grep kubectl  | awk '{print $1}');
@@ -108,9 +97,7 @@
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
   loop:
-    - { path: ks-apigateway, file: ks-apigateway.yaml }
     - { path: ks-apiserver, file: ks-apiserver.yml }
-    - { path: ks-account, file: ks-account.yml }
     - { path: ks-controller-manager, file: ks-controller-manager.yaml }
     - { path: ks-console, file: ks-console-config.yml }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }

@@ -1,0 +1,106 @@
+{{- if and .Values.global.scope (eq .Values.global.scope "Namespaced") }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    api: kubefed
+    kubebuilder.k8s.io: 1.0.0
+  name: kubefed-role
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+  - scheduling.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+- apiGroups:
+  - multiclusterdns.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - create
+  - update
+- apiGroups:
+  - core.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - create
+  - update
+  - delete
+- apiGroups:
+  - types.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - get
+  - watch
+  - list
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - get
+  - create
+  - update
+  - patch
+{{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    api: kubefed
+    kubebuilder.k8s.io: 1.0.0
+  name: kubefed-config-role
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - create
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+---
+# Only need access to these core namespaced resources in the KubeFed system
+# namespace regardless of kubefed deployment scope.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    api: kubefed
+    kubebuilder.k8s.io: 1.0.0
+  name: kubefed-admission-webhook-role
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+  - core.kubefed.io
+  resources:
+  - federatedtypeconfigs
+  - kubefedclusters
+  - kubefedconfigs
+  verbs:
+  - get
+  - watch
+  - list

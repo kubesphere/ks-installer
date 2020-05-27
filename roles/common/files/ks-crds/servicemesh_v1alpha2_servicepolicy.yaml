@@ -83,6 +83,16 @@ spec:
                                   http:
                                     description: HTTP connection pool settings.
                                     properties:
+                                      http1MaxPendingRequests:
+                                        description: Maximum number of pending HTTP
+                                          requests to a destination. Default 1024.
+                                        format: int32
+                                        type: integer
+                                      http2MaxRequests:
+                                        description: Maximum number of requests to
+                                          a backend. Default 1024.
+                                        format: int32
+                                        type: integer
                                       maxRequestsPerConnection:
                                         description: Maximum number of requests per
                                           connection to a backend. Setting this parameter
@@ -130,8 +140,8 @@ spec:
                                               cookie.
                                             type: string
                                         required:
-                                          - name
-                                          - ttl
+                                        - name
+                                        - ttl
                                         type: object
                                       httpHeaderName:
                                         description: 'It is required to specify exactly
@@ -211,6 +221,17 @@ spec:
                                         http:
                                           description: HTTP connection pool settings.
                                           properties:
+                                            http1MaxPendingRequests:
+                                              description: Maximum number of pending
+                                                HTTP requests to a destination. Default
+                                                1024.
+                                              format: int32
+                                              type: integer
+                                            http2MaxRequests:
+                                              description: Maximum number of requests
+                                                to a backend. Default 1024.
+                                              format: int32
+                                              type: integer
                                             maxRequestsPerConnection:
                                               description: Maximum number of requests
                                                 per connection to a backend. Setting
@@ -263,8 +284,8 @@ spec:
                                                     of the cookie.
                                                   type: string
                                               required:
-                                                - name
-                                                - ttl
+                                              - name
+                                              - ttl
                                               type: object
                                             httpHeaderName:
                                               description: 'It is required to specify
@@ -396,10 +417,10 @@ spec:
                                             type: string
                                           type: array
                                       required:
-                                        - mode
+                                      - mode
                                       type: object
                                   required:
-                                    - port
+                                  - port
                                   type: object
                                 type: array
                               tls:
@@ -445,12 +466,12 @@ spec:
                                       type: string
                                     type: array
                                 required:
-                                  - mode
+                                - mode
                                 type: object
                             type: object
                         required:
-                          - name
-                          - labels
+                        - name
+                        - labels
                         type: object
                       type: array
                     trafficPolicy:
@@ -464,6 +485,16 @@ spec:
                             http:
                               description: HTTP connection pool settings.
                               properties:
+                                http1MaxPendingRequests:
+                                  description: Maximum number of pending HTTP requests
+                                    to a destination. Default 1024.
+                                  format: int32
+                                  type: integer
+                                http2MaxRequests:
+                                  description: Maximum number of requests to a backend.
+                                    Default 1024.
+                                  format: int32
+                                  type: integer
                                 maxRequestsPerConnection:
                                   description: Maximum number of requests per connection
                                     to a backend. Setting this parameter to 1 disables
@@ -509,8 +540,8 @@ spec:
                                       description: REQUIRED. Lifetime of the cookie.
                                       type: string
                                   required:
-                                    - name
-                                    - ttl
+                                  - name
+                                  - ttl
                                   type: object
                                 httpHeaderName:
                                   description: 'It is required to specify exactly
@@ -586,6 +617,16 @@ spec:
                                   http:
                                     description: HTTP connection pool settings.
                                     properties:
+                                      http1MaxPendingRequests:
+                                        description: Maximum number of pending HTTP
+                                          requests to a destination. Default 1024.
+                                        format: int32
+                                        type: integer
+                                      http2MaxRequests:
+                                        description: Maximum number of requests to
+                                          a backend. Default 1024.
+                                        format: int32
+                                        type: integer
                                       maxRequestsPerConnection:
                                         description: Maximum number of requests per
                                           connection to a backend. Setting this parameter
@@ -633,8 +674,8 @@ spec:
                                               cookie.
                                             type: string
                                         required:
-                                          - name
-                                          - ttl
+                                        - name
+                                        - ttl
                                         type: object
                                       httpHeaderName:
                                         description: 'It is required to specify exactly
@@ -757,10 +798,10 @@ spec:
                                       type: string
                                     type: array
                                 required:
-                                  - mode
+                                - mode
                                 type: object
                             required:
-                              - port
+                            - port
                             type: object
                           type: array
                         tls:
@@ -803,11 +844,11 @@ spec:
                                 type: string
                               type: array
                           required:
-                            - mode
+                          - mode
                           type: object
                       type: object
                   required:
-                    - host
+                  - host
                   type: object
               type: object
           type: object

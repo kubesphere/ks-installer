@@ -1,0 +1,7 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - {role: ks-multicluster, when: "multicluster is defined and multicluster.enabled == true"}

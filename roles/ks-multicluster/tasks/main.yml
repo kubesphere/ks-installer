@@ -1,0 +1,46 @@
+---
+
+- name: Kubefed | Getting kubefed installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "kubefed"
+
+- name: Kubefed | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: kubefed, file: custom-values-kubefed.yaml }
+    - { path: kubefed, file: tower.yaml }
+
+- name: Kubefed | Check kubefed
+  shell: >
+    {{ bin_dir }}/helm list --namespace kube-federation-system | grep "kubefed"
+  register: kubefed_check
+  ignore_errors: True
+
+- block:
+    - name: Tower | Install tower
+      shell: >
+        {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/kubefed/tower.yaml
+      register: tower_result
+      ignore_errors: False
+
+    - name: Kubefed | Init kube-federation-system
+      shell: >
+        {{ bin_dir }}/helm upgrade --install kubefed {{ kubesphere_dir }}/kubefed/kubefed
+        -f {{ kubesphere_dir }}/kubefed/custom-values-kubefed.yaml
+        --namespace kube-federation-system
+      register: kubefed_result
+      ignore_errors: True
+      when:
+        - "kubefed_result.stderr and 'no matches for kind' in kubefed_result.stderr"
+
+    - name: Kubefed | Delete kubefed
+      shell: >
+        {{ bin_dir }}/helm del --purge kubefed
+      when:
+        - kubefed_result.stderr is defined
+        - "kubefed_result.stderr and 'FATAL' in kubefed_result.stderr"
