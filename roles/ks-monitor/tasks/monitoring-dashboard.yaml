@@ -1,0 +1,4 @@
+---
+- name: ks-monitor | Installing monitoring-dashboard
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/monitoring-dashboard
