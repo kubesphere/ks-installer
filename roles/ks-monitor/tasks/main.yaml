@@ -1,4 +1,6 @@
 ---
+- import_tasks: upgrade.yaml
+
 - import_tasks: cleanup.yaml
 
 - import_tasks: generate_manifests.yaml
