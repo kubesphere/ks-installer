@@ -41,3 +41,23 @@ spec:
               memory: 256Mi
               cpu: 500m
       serviceAccountName: kubesphere
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tower
+  name: tower
+  namespace: kubesphere-system
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: tower
+  sessionAffinity: None
+  type: LoadBalancer
