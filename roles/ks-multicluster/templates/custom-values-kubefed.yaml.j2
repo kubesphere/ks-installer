@@ -1,0 +1,48 @@
+# Default values for kubefed.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## Configuration values for kubefed controllermanager deployment.
+##
+controllermanager:
+  enabled: true
+  replicaCount: 2
+  repository: {{ kubefed_repo }}
+  image: {{ kubefed_image }}
+  tag: {{ kubefed_image_tag }}
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  clusterAvailableDelay:
+  clusterUnavailableDelay:
+  leaderElectLeaseDuration:
+  leaderElectRenewDeadline:
+  leaderElectRetryPeriod:
+  clusterHealthCheckPeriod:
+  clusterHealthCheckFailureThreshold:
+  clusterHealthCheckSuccessThreshold:
+  clusterHealthCheckTimeout:
+  ## Supported options are `configmaps` and `endpoints`
+  leaderElectResourceLock:
+  syncController:
+    adoptResources:
+  ## Value of feature gates item should be either `Enabled` or `Disabled`
+  featureGates:
+    PushReconciler:
+    SchedulerPreferences:
+    CrossClusterServiceDiscovery:
+    FederatedIngress:
+
+## Configuration global values for all charts
+##
+global:
+  ## The scope of the the kubefed control plane.  Supported options
+  ## are `Cluster` (watch cluster-scoped resources and resources in
+  ## all namespaces) and `Namespaced` (only watch resources in the
+  ## kubefed system namespace). If unset, will default to `Cluster`.
+  scope: ""

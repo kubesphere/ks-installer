@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubefed-controller-manager
+  namespace: {{ .Release.Namespace }}
+  labels:
+    kubefed-control-plane: controller-manager
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      kubefed-control-plane: controller-manager
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        kubefed-control-plane: controller-manager
+    spec:
+      securityContext:
+        runAsUser: 1001
+      serviceAccountName: kubefed-controller
+      containers:
+      - command:
+        - /hyperfed/controller-manager
+        image: "{{ .Values.repository }}/{{ .Values.image }}:{{ .Values.tag }}"
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        name: controller-manager
+        ports:
+        - containerPort: 9090
+          name: metrics
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 3
+          timeoutSeconds: 3
+        resources:
+{{- if .Values.resources }}
+{{ toYaml .Values.resources | indent 12 }}
+{{- end }}
+      terminationGracePeriodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: kubefed-admission-webhook
+  labels:
+    kubefed-admission-webhook: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      kubefed-admission-webhook: "true"
+  template:
+    metadata:
+      labels:
+        kubefed-admission-webhook: "true"
+    spec:
+      securityContext:
+        runAsUser: 1001
+      serviceAccountName: kubefed-admission-webhook
+      containers:
+      - name: admission-webhook
+        image: "{{ .Values.repository }}/{{ .Values.image }}:{{ .Values.tag }}"
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        command:
+        - "/hyperfed/webhook"
+        - "--secure-port=8443"
+        - "--audit-log-path=-"
+        - "--tls-cert-file=/var/serving-cert/tls.crt"
+        - "--tls-private-key-file=/var/serving-cert/tls.key"
+        - "--v=8"
+        ports:
+        - containerPort: 8443
+        volumeMounts:
+        - mountPath: /var/serving-cert
+          name: serving-cert
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8443
+            scheme: HTTPS
+      volumes:
+      - name: serving-cert
+        secret:
+          defaultMode: 420
+          secretName: kubefed-admission-webhook-serving-cert

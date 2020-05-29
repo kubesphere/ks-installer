@@ -4,7 +4,7 @@ metadata:
   labels:
     app: ks-console
     tier: frontend
-    version: v2.1.1
+    version: v3.0.0
   name: ks-console
   namespace: kubesphere-system
 spec:
@@ -16,5 +16,5 @@ spec:
   selector:
     app: ks-console
     tier: frontend
-    version: v2.1.1
+    version: v3.0.0
   type: NodePort
