@@ -45,21 +45,21 @@ spec:
   replicas: {{ monitoring.prometheusReplicas }}
   resources:
     limits:
-      cpu: {{ prometheus.limits.cpu }}
-      memory: {{ prometheus.limits.memory }}
+      cpu: "{{ monitoring.prometheus.limits.cpu | default("4") }}"
+      memory: {{ monitoring.prometheus.limits.memory | default("16Gi") }}
     requests:
-      cpu: {{ prometheus.requests.cpu }}
-      memory: {{ prometheus.requests.memory }}
+      cpu: {{ monitoring.prometheus.requests.cpu | default("200m") }}
+      memory: {{ monitoring.prometheus.requests.memory | default("400Mi") }}
   retention: 7d
   ruleSelector:
     matchLabels:
       prometheus: k8s
       role: alert-rules
   scrapeInterval: 1m
-  {% if etcd.monitoring is defined and etcd.monitoring == true %}
+{% if etcd.monitoring is defined and etcd.monitoring == true %}
   secrets:
   - kube-etcd-client-certs
-  {% endif %}
+{% endif %}
   securityContext:
     fsGroup: 0
     runAsNonRoot: false
@@ -76,6 +76,7 @@ spec:
         resources:
           requests:
             storage: {% if prometheus_pv_size is defined %}{{ prometheus_pv_size }}{% else %}{{ monitoring.prometheusVolumeSize }}{% endif %}
+
   tolerations:
   - effect: NoSchedule
     key: dedicated

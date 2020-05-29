@@ -28,11 +28,11 @@ spec:
         name: kube-state-metrics
         resources:
           limits:
-            cpu: {{ kube_state_metrics.limits.cpu }}
-            memory: {{ kube_state_metrics.limits.memory }}
+            cpu: {{ monitoring.kube_state_metrics.limits.cpu | default("500m") }}
+            memory: {{ monitoring.kube_state_metrics.limits.memory | default("2Gi") }}
           requests:
-            cpu: {{ kube_state_metrics.requests.cpu }}
-            memory: {{ kube_state_metrics.requests.memory }}
+            cpu: {{ monitoring.kube_state_metrics.requests.cpu | default("100m") }}
+            memory: {{ monitoring.kube_state_metrics.requests.memory | default("150Mi") }}
         securityContext:
           runAsUser: 65534
       - args:
@@ -44,11 +44,11 @@ spec:
         name: kube-rbac-proxy-main
         resources:
           limits:
-            cpu: {{ kube_rbac_proxy.limits.cpu }}
-            memory: {{ kube_rbac_proxy.limits.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
+            memory: {{ monitoring.kube_rbac_proxy.limits.memory | default("100Mi") }}
           requests:
-            cpu: {{ kube_rbac_proxy.requests.cpu }}
-            memory: {{ kube_rbac_proxy.requests.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.requests.cpu | default("10m") }}
+            memory: {{ monitoring.kube_rbac_proxy.requests.memory| default("20Mi") }}
         ports:
         - containerPort: 8443
           name: https-main
@@ -63,11 +63,11 @@ spec:
         name: kube-rbac-proxy-self
         resources:
           limits:
-            cpu: {{ kube_rbac_proxy.limits.cpu }}
-            memory: {{ kube_rbac_proxy.limits.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
+            memory: {{ monitoring.kube_rbac_proxy.limits.memory | default("100Mi") }}
           requests:
-            cpu: {{ kube_rbac_proxy.requests.cpu }}
-            memory: {{ kube_rbac_proxy.requests.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.requests.cpu | default("10m") }}
+            memory: {{ monitoring.kube_rbac_proxy.requests.memory| default("20Mi") }}
         ports:
         - containerPort: 9443
           name: https-self

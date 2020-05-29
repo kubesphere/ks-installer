@@ -47,8 +47,6 @@ spec:
           name: docker-sock
         - mountPath: /etc/kubesphere/ingress-controller
           name: ks-router-config
-        - mountPath: /etc/kubesphere/rules
-          name: policy-rules
         - mountPath: /etc/kubesphere/
           name: kubesphere-config
       serviceAccount: kubesphere
@@ -98,10 +96,6 @@ spec:
           defaultMode: 420
           name: ks-router-config
         name: ks-router-config
-      - configMap:
-          defaultMode: 420
-          name: policy-rules
-        name: policy-rules
       - configMap:
           defaultMode: 420
           name: kubesphere-config

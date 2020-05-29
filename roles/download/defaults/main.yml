@@ -101,16 +101,16 @@ hyperkube_image_repo: "{{ base_repo }}kubesphere/hyperkube"
 hyperkube_image_tag: "{{ kube_version }}"
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}kubesphere/ks-apiserver"
-ks_apiserver_tag: v2.1.1
-ks_controller_manager_repo: "{{ base_repo }}kubesphere/ks-controller-manager"
-ks_controller_manager_tag: v2.1.1
+ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
+ks_apiserver_tag: latest
+ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
+ks_controller_manager_tag: latest
 ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
 ks_update_tag: "advanced-2.0.0"
 ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_flyway_tag: "flyway-v2.1.0"
-ks_console_repo: "{{ base_repo }}kubesphere/ks-console"
-ks_console_tag: v2.1.1
+ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
+ks_console_tag: dev-20200528
 ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
 ks_kubectl_tag: v1.0.0
 ks_docs_repo: "{{ base_repo }}kubesphere/ks-docs"
@@ -147,7 +147,7 @@ ks_alerting_adapter_tag: "v2.1.0"
 kubefed_repo: "{{ base_repo }}kubesphere"
 kubefed_image: kubefed
 kubefed_image_tag: v0.3.0
-tower_repo: "{{ base_repo }}kubesphere"
+tower_repo: "{{ base_repo }}kubespheredev"
 tower_image: tower
 tower_image_tag: latest
 
