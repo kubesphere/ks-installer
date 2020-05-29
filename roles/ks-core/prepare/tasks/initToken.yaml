@@ -24,10 +24,10 @@
 #    - openpitrix.enabled == True
 
 
-- name: KubeSphere | Enable Token Script
-  file:
-    path: "{{ kubesphere_dir }}/ks-init/jwt.sh"
-    mode: 0755
+# - name: KubeSphere | Enable Token Script
+#   file:
+#     path: "{{ kubesphere_dir }}/ks-init/jwt.sh"
+#     mode: 0755
 
 
 #- name: KubeSphere | Getting OP Token
@@ -38,10 +38,10 @@
 #    - openpitrix.enabled == True
 
 
-- name: KubeSphere | Getting KS Token
-  shell: >
-    /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","exp": 1816239022,"username": "admin"}'
-  register: ks_token
+# - name: KubeSphere | Getting KS Token
+#   shell: >
+#     /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","exp": 1816239022,"username": "admin"}'
+#   register: ks_token
 
 
 #- name: KubeSphere | Setting op_token
@@ -51,9 +51,9 @@
 #    - openpitrix.enabled == True
 
 
-- name: KubeSphere | Setting ks_token
-  set_fact:
-    ks_token_str: "{{ ks_token.stdout }}"
+# - name: KubeSphere | Setting ks_token
+#   set_fact:
+#     ks_token_str: "{{ ks_token.stdout }}"
 
 
 
