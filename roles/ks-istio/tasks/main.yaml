@@ -163,7 +163,7 @@
       shell: >
         {{ bin_dir }}/kubectl delete deploy -n istio-system jaeger-operator --cascade=false
       when:
-        - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
+        - (jaeger_check.stdout.find("deployed") != -1) and (jaeger_check.stdout.find("1.17.1") == -1)
 
     - name: istio | Deploy jaeger-operator
       shell: >
