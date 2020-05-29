@@ -50,11 +50,11 @@ spec:
         name: kube-rbac-proxy
         resources:
           limits:
-            cpu: {{ kube_rbac_proxy.limits.cpu }}
-            memory: {{ kube_rbac_proxy.limits.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
+            memory: {{ monitoring.kube_rbac_proxy.limits.memory | default("100Mi") }}
           requests:
-            cpu: {{ kube_rbac_proxy.requests.cpu }}
-            memory: {{ kube_rbac_proxy.requests.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.requests.cpu | default("10m") }}
+            memory: {{ monitoring.kube_rbac_proxy.requests.memory| default("20Mi") }}
         ports:
         - containerPort: 8443
           name: https

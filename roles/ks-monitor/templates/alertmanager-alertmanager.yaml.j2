@@ -23,14 +23,14 @@ spec:
   image: {{ alertmanager_repo }}:{{ alertmanager_tag }}
   resources:
     limits:
-      cpu: {{ alertmanager.limits.cpu }}
-      memory: {{ alertmanager.limits.memory}}
+      cpu: {{ monitoring.alertmanager.limits.cpu | default("200m") }}
+      memory: {{ monitoring.alertmanager.limits.memory | default("200Mi") }}
     requests:
-      cpu: {{ alertmanager.requests.cpu }}
-      memory: {{ alertmanager.requests.memory }}
+      cpu: {{ monitoring.alertmanager.requests.cpu | default("20m") }}
+      memory: {{ monitoring.alertmanager.requests.memory | default("30Mi") }}
   nodeSelector:
     kubernetes.io/os: linux
-  replicas: {{ monitoring.alertmanagerReplicas }}
+  replicas: {{ monitoring.alertmanagerReplicas | default("1") }}
   securityContext:
     fsGroup: 2000
     runAsNonRoot: true

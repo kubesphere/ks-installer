@@ -30,11 +30,11 @@ spec:
         name: node-exporter
         resources:
           limits:
-            cpu: {{ node_exporter.limits.cpu }}
-            memory: {{ node_exporter.limits.memory}}
+            cpu: {{ monitoring.node_exporter.limits.cpu | default("300m") }}
+            memory: {{ monitoring.node_exporter.limits.memory | default("400Mi") }}
           requests:
-            cpu: {{ node_exporter.requests.cpu }}
-            memory: {{ node_exporter.requests.memory }}
+            cpu: {{ monitoring.node_exporter.requests.cpu | default("102m")  }}
+            memory: {{ monitoring.node_exporter.requests.memory | default("180Mi")  }}
         volumeMounts:
         - mountPath: /host/proc
           name: proc
@@ -64,11 +64,11 @@ spec:
           name: https
         resources:
           limits:
-            cpu: {{ kube_rbac_proxy.limits.cpu }}
-            memory: {{ kube_rbac_proxy.limits.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
+            memory: {{ monitoring.kube_rbac_proxy.limits.memory | default("100Mi") }}
           requests:
-            cpu: {{ kube_rbac_proxy.requests.cpu }}
-            memory: {{ kube_rbac_proxy.requests.memory }}
+            cpu: {{ monitoring.kube_rbac_proxy.requests.cpu | default("10m") }}
+            memory: {{ monitoring.kube_rbac_proxy.requests.memory| default("20Mi") }}
       hostNetwork: true
       hostPID: true
       nodeSelector:
