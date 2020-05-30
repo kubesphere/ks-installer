@@ -10,7 +10,7 @@ helms="ks-minio ks-openldap\|ks-openpitrix\|ks-redis\|elasticsearch-logging\|ela
 helm list | grep -o $helms | sort -u | xargs -r -L1 helm delete --purge
 
 #namespace resource delete
-namespaces="kubesphere-system\|openpitrix-system\|kubesphere-monitoring-system\|kubesphere-alerting-system\|kubesphere-controls-system"
+namespaces="kubesphere-system\|openpitrix-system\|kubesphere-monitoring-system\|kubesphere-alerting-system\|kubesphere-controls-system\|kubesphere-logging-system"
 kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -o $namespaces | sort -u | xargs -r -L1 kubectl delete all --all -n
 
 # pvc delete
