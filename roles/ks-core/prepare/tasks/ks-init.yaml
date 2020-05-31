@@ -28,8 +28,8 @@
 - name: KubeSphere | Init KubeSphere
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
   loop:
-    # - "ks-account-init.yaml"
-    # - "ks-apigateway-init.yaml"
+    - "ks-init.yaml"
+    - "webhook-secret.yaml"
     - "kubesphere-config.yaml"
 #    - "alerting-db-init-job.yaml"
   register: import
