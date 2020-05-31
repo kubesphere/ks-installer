@@ -1,19 +1,18 @@
 apiVersion: logging.kubesphere.io/v1alpha2
 kind: Input
 metadata:
-  name: tail
+  name: tail-events
   namespace: kubesphere-logging-system
   labels:
     logging.kubesphere.io/enabled: "true"
+    logging.kubesphere.io/component: "events"
 spec:
   tail:
-    tag: kube.*
-    path: /var/log/containers/*.log
+    tag: kube_events
+    path: /var/log/containers/*_kubesphere-logging-system_events-exporter*.log
     parser: docker
     refreshIntervalSeconds: 10
     memBufLimit: 5MB
     skipLongLines: true
-    db: /fluent-bit/tail/pos.db
+    db: /fluent-bit/tail/pos-events.db
     dbSync: Normal
-    excludePath: /var/log/containers/*_kubesphere-logging-system_events-exporter*.log
-

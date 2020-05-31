@@ -354,6 +354,12 @@ Pay attention to the resource request in the first column. You need to make sure
   <td class=xl1519753>Whether to install Alerting sysytem （True / False）</td>
   <td class=xl6519753>False</td>
  </tr>
+  <tr height=21 style='height:15.6pt'>
+  <td height=21 class=xl6619753 style='height:15.6pt'>events</td>
+  <td class=xl6719753>enabled</td>
+  <td class=xl1519753>Whether to install events （True / False）</td>
+  <td class=xl6519753>False</td>
+ </tr>
  <![if supportMisalignedColumns]>
  <tr height=0 style='display:none'>
   <td width=202 style='width:152pt'></td>

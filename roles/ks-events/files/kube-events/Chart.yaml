@@ -1,0 +1,12 @@
+apiVersion: v2
+name: kube-events
+description: provides easy kube-events definitions for event exporting, filtering and alerting.
+icon:
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+source:
+  - https://github.com/kubesphere/kube-events
+keywords:
+  - event
+  - operator

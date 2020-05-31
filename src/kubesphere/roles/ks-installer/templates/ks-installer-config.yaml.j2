@@ -54,6 +54,9 @@ data:
       kibana:
         enabled: {{ kibana_enabled | string | lower }}
 
+    events:
+      enabled: {{ events_enabled | string | lower }}
+
     openpitrix:
       enabled: {{ openpitrix_enabled | string | lower }}
 

@@ -1,0 +1,31 @@
+{{- if .Values.ruler.enabled }}
+apiVersion: events.kubesphere.io/v1alpha1
+kind: EventsRuler
+metadata:
+  name: {{ template "kube-events.ruler.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kube-events.labels" . | indent 4 }}
+spec:
+{{- if .Values.ruler.image }}
+  image: {{ .Values.ruler.image.repository }}:{{ .Values.ruler.image.tag }}
+  imagePullPolicy: {{ .Values.ruler.image.pullPolicy }}
+{{- end }}
+  resources:
+{{ toYaml .Values.ruler.resources | indent 4 }}
+  ruleNamespaceSelector:
+{{ toYaml .Values.ruler.ruleNamespaceSelector | indent 4 }}
+  ruleSelector:
+{{ toYaml .Values.ruler.ruleSelector | indent 4 }}
+  sinks:
+    alertmanager:
+    {{- range $name, $value := .Values.ruler.sinks.alertmanager }}
+      {{ $name }}: {{ $value }}
+    {{- end }}
+    {{- if not (empty .Values.ruler.sinks.webhooks) }}
+    {{- with .Values.ruler.sinks.webhooks }}
+    webhooks:
+{{ toYaml . | indent 4 }}
+    {{- end }}
+    {{- end}}
+{{- end }}
