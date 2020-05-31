@@ -3,7 +3,7 @@
 
 - import_tasks: generate_manifests.yaml
 
-- import_tasks: upgrade.yaml
+# - import_tasks: upgrade.yaml
 
 - import_tasks: prometheus-operator.yaml
 

@@ -70,7 +70,7 @@ spec:
         - name: webhook-secret
           secret:
             defaultMode: 420
-            name: ks-controller-manager-webhook-cert
+            secretName: ks-controller-manager-webhook-cert
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
