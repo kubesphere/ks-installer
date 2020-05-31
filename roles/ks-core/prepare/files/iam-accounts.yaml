@@ -1,0 +1,102 @@
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  name: anonymous
+rules:
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - apps
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - config.kubesphere.io
+    resources:
+      - configs
+    verbs:
+      - get
+      - list
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/rego-override: |-
+      package authz
+      default allow = true
+      allow = true {
+        input.Resource == "users"
+        input.User.Name == input.Name
+      }
+  name: authenticated
+rules: []
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/aggregation-roles: '["role-template-manage-clusters","role-template-view-clusters","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-view-workspaces","role-template-manage-workspaces","role-template-manage-users","role-template-view-roles","role-template-view-users","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-platform-settings"]'
+    kubesphere.io/creator: admin
+  name: platform-admin
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - '*'
+    verbs:
+      - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: admin
+roleRef:
+  apiGroup: iam.kubesphere.io/v1alpha2
+  kind: GlobalRole
+  name: platform-admin
+subjects:
+  - apiGroup: iam.kubesphere.io/v1alpha2
+    kind: User
+    name: admin
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: anonymous
+roleRef:
+  apiGroup: iam.kubesphere.io/v1alpha2
+  kind: GlobalRole
+  name: anonymous
+subjects:
+  - apiGroup: iam.kubesphere.io/v1alpha2
+    kind: Group
+    name: system:anonymous
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: authenticated
+roleRef:
+  apiGroup: iam.kubesphere.io/v1alpha2
+  kind: GlobalRole
+  name: authenticated
+subjects:
+  - apiGroup: iam.kubesphere.io/v1alpha2
+    kind: Group
+    name: system:authenticated
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: User
+metadata:
+  name: admin
+spec:
+  email: admin@kubesphere.io
+  lang: zh
+  password: P@88w0rd
