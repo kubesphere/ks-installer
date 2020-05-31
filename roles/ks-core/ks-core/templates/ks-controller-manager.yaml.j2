@@ -54,6 +54,8 @@ spec:
         volumeMounts:
         - mountPath: /etc/kubesphere/
           name: kubesphere-config
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: webhook-secret
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -65,6 +67,10 @@ spec:
           configMap:
             name: kubesphere-config
             defaultMode: 420
+        - name: webhook-secret
+          secret:
+            defaultMode: 420
+            name: ks-controller-manager-webhook-cert
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
