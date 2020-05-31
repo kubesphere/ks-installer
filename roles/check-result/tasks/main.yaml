@@ -11,7 +11,6 @@
   retries: 30
   delay: 30
 
-
 - name: KubeSphere | Getting ks-console svc port
   shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register: ks_console_svc_port
@@ -28,15 +27,45 @@
   register: ks
   ignore_errors: true
 
+- name: get firstip os
+  shell: >
+     {{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $8}}'
+  register: firstipos
+  ignore_errors: true
+
+- name: get kube-system time
+  shell: >
+     {{ bin_dir }}/kubectl get ns | grep kube-system | awk '{print $3}'
+  register: kubetime
+  ignore_errors: true
+
+- name: get kubesphere-system time
+  shell: >
+     {{ bin_dir }}/kubectl get ns | grep kubesphere-system | awk '{print $3}'
+  register: kubespheretime
+  ignore_errors: true
+
+- name: yes/no HA
+  shell: >
+     {{ bin_dir }}/kubectl get nodes | grep "master" | wc | awk '{print $1}'
+  register: ha 
+  ignore_errors: true
+
 - name: get nodecount
   shell: >
      {{ bin_dir }}/kubectl get nodes | grep -v "NAME" | wc -l
   register: number
   ignore_errors: true
 
+- name: get clusterId
+  shell: >
+     echo -n "{{ ks_nodeIP[ 'stdout' ] }} + `date '+%s'`" | base64
+  register: clusterId
+  ignore_errors: true
+
 - name: get essential information
   uri:
-    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}"
+    url: "https://kubesphere.io/log/?k8s_ks={{ k8s[ 'stdout' ] + ks[ 'stdout' ] }}&c={{ ha[ 'stdout' ] + number[ 'stdout' ] }}&time={{ kubetime[ 'stdout' ] + kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&clusterId={{ clusterId[ 'stdout' ] }}"
     method: GET
     validate_certs: false
   ignore_errors: true
