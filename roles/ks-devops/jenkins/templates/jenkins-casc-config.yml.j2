@@ -168,12 +168,31 @@ data:
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"go\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
       securityRealm:
-        local:
-          allowsSignup: false
-          users:
-            - id: "admin"
-              password: "P@88w0rd"
+        ldap:
+          configurations:
+          - displayNameAttributeName: "uid"
+            mailAddressAttributeName: "mail"
+            inhibitInferRootDN: false
+            managerDN: "cn=admin,dc=kubesphere,dc=io"
+            managerPasswordSecret: "admin"
+            rootDN: "dc=kubesphere,dc=io"
+            userSearchBase: "ou=Users"
+            userSearch: "(&(objectClass=inetOrgPerson)(|(uid={0})(mail={0})))"
+            groupSearchBase: "ou=Groups"
+            groupSearchFilter: "(&(objectClass=posixGroup)(cn={0}))"
+            server: "ldap://openldap.kubesphere-system.svc:389"
+          disableMailAddressResolver: false
+          disableRolePrefixing: true
 
+    unclassified:
+      location:
+        url: "http://{{ JenkinsLocationUrl }}:30180/"
+      kubespheretokenauthglobalconfiguration:
+        cacheConfiguration:
+          size: 20
+          ttl: 300
+        enabled: true
+        server: "http://ks-apigateway.kubesphere-system.svc/"
     jobs:
       - script: >
           pipelineJob('init-job') {
