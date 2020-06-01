@@ -117,8 +117,18 @@ plugins:
 # A custom sonar.properties file can be provided using a multiline YAML string.
 # For example:
 sonarProperties: |
-  sonar.login=admin
-  sonar.password=admin
+  sonar.security.realm=LDAP
+  ldap.url=ldap://openldap.kubesphere-system.svc:389
+  ldap.bindDn=cn=admin,dc=kubesphere,dc=io
+  ldap.bindPassword=admin
+
+  ldap.user.baseDn=ou=Users,dc=kubesphere,dc=io
+  ldap.user.emailAttribute=mail
+  ldap.user.realNameAttribute=uid
+  ldap.user.request=(&(objectClass=inetOrgPerson)(|(uid={0})(mail={0})))
+
+  ldap.group.baseDn=ou=Groups,dc=kubesphere,dc=io
+  groupSearchFilter=(&(objectClass=posixGroup)(cn={0}))
 
 {% if is_allinone is defined and is_allinone == true %}  
   sonar.web.javaOpts=-Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError
