@@ -1,0 +1,71 @@
+
+# notification-manager-operator
+operator: 
+  containers:
+    proxy:
+      image:
+        repo: {{ notification_manager_operator_proxy_repo }}
+        tag: {{ notification_manager_operator_proxy_tag }}
+        pullPolicy: IfNotPresent
+      resources:
+        limits:
+          cpu: 50m
+          memory: 50Mi
+        requests:
+          cpu: 20m
+          memory: 20Mi
+    operator:
+      image:
+        repo: {{ notification_manager_operator_repo }}
+        tag: {{ notification_manager_operator_tag }}
+        pullPolicy: Always 
+      resources:
+        limits:
+          cpu: 50m
+          memory: 50Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+
+# value of notification-manager
+notificationmanager:
+  name: notification-manager
+  image:
+    repo: {{ notification_manager_repo }}
+    tag: {{ notification_manager_tag }}
+    pullPolicy: Always
+  replicas: 1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 50m
+      memory: 50Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  globalConfigSelector:
+    matchLabels:
+      type: default
+  receivers:
+    tenantKey: user
+    globalReceiverSelector:
+      matchLabels:
+        type: global
+    tenantReceiverSelector:
+      matchLabels:
+        type: tenant
+    options:
+      email:
+        notificationTimeout: 5
+        deliveryType: bulk
+      slack:
+        notificationTimeout: 5
+      wechat:
+        notificationTimeout: 5
+

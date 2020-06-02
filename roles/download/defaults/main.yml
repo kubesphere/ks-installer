@@ -343,6 +343,14 @@ alertmanager_tag: v0.20.0
 grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 6.6.0
 
+#notification-manager
+notification_manager_operator_proxy_repo: "{{ base_repo }}gcr.io/kubebuilder/kube-rbac-proxy"
+notification_manager_operator_proxy_tag: v0.4.1
+notification_manager_operator_repo: "{{ base_repo }}kubesphere/notification-manager-operator"
+notification_manager_operator_tag: latest
+notification_manager_repo: "{{ base_repo }}kubesphere/notification-manager"
+notification_manager_tag: latest
+
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ base_repo }}kubesphere/elasticsearch-curator"
 docker_elasticsearch_curator_tag: v5.7.6
