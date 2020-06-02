@@ -10,4 +10,5 @@ subjects:
 - kind: ServiceAccount
   name: notification-manager-sa
   namespace: {{ .Release.Namespace }}
+
   
