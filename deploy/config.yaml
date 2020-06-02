@@ -31,6 +31,8 @@ data:
       alertmanagerReplicas: 1
       grafana:
         enabled: False
+      notification:
+        enabled: False
 
     logging:
       enabled: False
