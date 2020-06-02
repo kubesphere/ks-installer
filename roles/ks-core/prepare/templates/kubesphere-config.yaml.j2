@@ -37,7 +37,7 @@ data:
     devops:
       host: http://ks-jenkins.kubesphere-devops-system.svc/
       username: admin
-      password: P@88w0rd
+      password: {{ ks_token_str }}
       maxConnections: 100
 {% if externalSonarUrl is defined and externalSonarToken is defined %}
     sonarQube:
