@@ -28,3 +28,7 @@
 - import_tasks: alertmanager.yaml
 
 - import_tasks: monitoring-dashboard.yaml
+
+- import_tasks: notification-manager.yaml
+  when:
+    - monitoring.notification.enabled == true 

@@ -34,6 +34,8 @@ data:
       alertmanagerReplicas: {{ alertmanager_replicas | default(3) }}
       grafana:
         enabled: {{ grafana_enabled | string | lower }}
+      notification:
+        enabled: {{ notification_enabled | string | lower }}      
 
     logging:
       enabled: {{ logging_enabled | string | lower }}

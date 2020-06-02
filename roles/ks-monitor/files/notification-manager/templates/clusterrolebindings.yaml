@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: notification-manager-controller-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: notification-manager-controller-role
+subjects:
+- kind: ServiceAccount
+  name: notification-manager-sa
+  namespace: {{ .Release.Namespace }}
+  
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: notification-manager-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: notification-manager-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: notification-manager-sa
+  namespace: {{ .Release.Namespace }}
+
+  

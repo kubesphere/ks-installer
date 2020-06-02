@@ -1,0 +1,5 @@
+apiVersion: v1
+appVersion: 1.0.0
+description: Notification Manager manages notifications in multi-tenant K8s environment. It receives alerts or notifications from different senders and then send notifications to various tenant receivers based on alerts/notifications' tenant label like "namespace". 
+name: notification-manager
+version: 1.0.0

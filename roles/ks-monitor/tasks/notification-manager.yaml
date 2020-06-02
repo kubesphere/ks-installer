@@ -1,0 +1,36 @@
+---
+
+- name: notification-manager | getting notification-manager installation files
+  copy:
+    src: "notification-manager"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: notification-manager | getting notification-manager installation files
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: notification-manager, file: custom-values-notification.yaml }
+
+
+- name: notification-manager | check notification-manager
+  shell: >
+    {{ bin_dir }}/helm list -f notification-manager -n kubesphere-monitoring-system
+  register: notification_check
+  ignore_errors: True
+
+
+- name: notification-manager | deploy notification-manager
+  shell: >
+    {{ bin_dir }}/helm upgrade --install notification-manager
+    {{ kubesphere_dir }}/notification-manager
+    -f {{ kubesphere_dir }}/notification-manager/custom-values-notification.yaml
+    -n kubesphere-monitoring-system
+    --force
+  register: deploy_result
+  until: deploy_result is succeeded
+  retries: 3
+  delay: 10
+  when:
+    - (notification_check.stdout.find("DEPLOYED") == -1) or (notification_check.stdout.find("v1.0.0") == -1)
+

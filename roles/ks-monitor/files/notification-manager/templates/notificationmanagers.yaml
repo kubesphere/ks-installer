@@ -1,0 +1,26 @@
+apiVersion: notification.kubesphere.io/v1alpha1
+kind: NotificationManager
+metadata:
+  labels:
+    app: notification-manager
+  name: notification-manager
+spec:
+  {{- if .Values.notificationmanager.replicas }}
+  replicas: {{ .Values.notificationmanager.replicas }}
+  {{- end}}
+  image: {{ .Values.notificationmanager.image.repo }}:{{ .Values.notificationmanager.image.tag }}
+  imagePullPolicy: {{ .Values.notificationmanager.image.pullPolicy }}
+  serviceAccountName: notification-manager-sa
+  portName: webhook
+  nodeSelector: 
+    {{- toYaml .Values.notificationmanager.nodeSelector | nindent 4 }}
+  affinity: 
+    {{- toYaml .Values.notificationmanager.affinity | nindent 4 }}
+  tolerations: 
+    {{- toYaml .Values.notificationmanager.tolerations | nindent 4 }}
+  resources: 
+    {{- toYaml .Values.notificationmanager.resources | nindent 4 }}
+  receivers: 
+    {{- toYaml .Values.notificationmanager.receivers | nindent 4 }}
+  globalConfigSelector:
+    {{- toYaml .Values.notificationmanager.globalConfigSelector | nindent 4 }}
