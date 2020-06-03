@@ -47,6 +47,9 @@ data:
       kibana:
         enabled: False
 
+    events:
+      enabled: False
+
     openpitrix:
       enabled: False
 

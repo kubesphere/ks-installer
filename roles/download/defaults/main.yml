@@ -369,6 +369,14 @@ ks_fluent_bit_tag: "v1.3.7"
 ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.0
 
+#ks-events
+kube_events_operator_repo: "{{ base_repo }}kubespheredev/kube-events-operator"
+kube_events_operator_tag: v0.1.0
+kube_events_exporter_repo: "{{ base_repo }}kubespheredev/kube-events-exporter"
+kube_events_exporter_tag: v0.1.0
+kube_events_ruler_repo: "{{ base_repo }}kubespheredev/kube-events-ruler"
+kube_events_ruler_tag: v0.1.0
+
 #ingress:
 nginx_ingress_controller_repo: "{{ base_repo }}kubesphere/nginx-ingress-controller"
 nginx_ingress_controller_tag: 0.24.1

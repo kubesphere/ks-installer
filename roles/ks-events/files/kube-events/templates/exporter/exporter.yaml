@@ -1,0 +1,33 @@
+{{- if .Values.exporter.enabled }}
+apiVersion: events.kubesphere.io/v1alpha1
+kind: EventsExporter
+metadata:
+  name: {{ template "kube-events.exporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kube-events.labels" . | indent 4 }}
+spec:
+  {{- if .Values.exporter.image }}
+  image: {{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}
+  imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
+  {{- end }}
+  resources:
+{{ toYaml .Values.exporter.resources | indent 4 }}
+  sinks:
+    {{- if .Values.exporter.sinks.stdout.enabled }}
+    stdout: {}
+    {{- end }}
+    {{- if or .Values.ruler.enabled (not (empty .Values.exporter.sinks.additionalWebhooks)) }}
+    webhooks:
+    {{- if .Values.ruler.enabled }}
+    - service:
+        namespace: {{ .Release.Namespace }}
+        name: {{ template "kube-events.ruler.fullname" . }}
+        port: 8443
+        path: /events
+    {{- end }}
+    {{- with .Values.exporter.sinks.additionalWebhooks }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+    {{- end }}
+{{- end }}

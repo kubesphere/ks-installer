@@ -1,0 +1,75 @@
+operator:
+  enabled: true
+  # just clean up cr but not crd
+  cleanupCustomResources: true
+  image:
+    repository: {{ kube_events_operator_repo }}
+    tag: {{ kube_events_operator_tag }}
+    pullPolicy: IfNotPresent
+  configReloader:
+    image: {{ configmap_reload_repo }}:{{ configmap_reload_tag }}
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 20m
+      memory: 20Mi
+  serviceAccount:
+    create: true
+    name: ""
+
+exporter:
+  enabled: true
+  image:
+    repository: {{ kube_events_exporter_repo }}
+    tag: {{ kube_events_exporter_tag }}
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 500Mi
+    requests:
+      cpu: 20m
+      memory: 50Mi
+  sinks:
+    stdout:
+      enabled: true
+    additionalWebhooks: []
+    # - url:
+    #   service:
+    #     namespace:
+    #     name:
+    #     port:
+    #     path:
+
+ruler:
+  enabled: true
+  image:
+    repository: {{ kube_events_ruler_repo }}
+    tag: {{ kube_events_ruler_tag }}
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 50m
+      memory: 50Mi
+  ruleNamespaceSelector: {}
+  ruleSelector: {}
+  sinks:
+    alertmanager:
+      namespace: kubesphere-monitoring-system
+      name: alertmanager-main
+    webhooks: []
+    # - type:
+    #   url:
+    #   service:
+    #     namespace:
+    #     name:
+    #     port:
+    #     path:
+
+defaultRules:
+  create: true

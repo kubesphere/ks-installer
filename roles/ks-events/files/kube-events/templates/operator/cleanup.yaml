@@ -1,0 +1,43 @@
+{{- if .Values.operator.enabled }}
+{{- if or .Values.operator.cleanupCustomResources (or .Values.exporter.enabled .Values.ruler.enabled) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "kube-events.operator.fullname" . }}-cleanup
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+{{ include "kube-events.labels" . | indent 4 }}
+spec:
+  template:
+    metadata:
+      name: {{ template "kube-events.operator.fullname" . }}-cleanup
+    spec:
+      serviceAccountName: {{ template "kube-events.operator.serviceAccountName" . }}
+      containers:
+        - name: kubectl
+          image: docker.io/bitnami/kubectl:1.14.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - >
+              {{- if .Values.operator.cleanupCustomResources }}
+              kubectl delete eventsexporter --all;
+              kubectl delete eventsruler --all;
+              kubectl delete eventsrule --all;
+              {{- else }}
+              {{- if .Values.exporter.enabled }}
+              kubectl delete eventsexporter {{ template "kube-events.exporter.fullname" . }} -n {{ .Release.Namespace }}
+              {{- end }}
+              {{- if .Values.ruler.enabled }}
+              kubectl delete eventsruler {{ template "kube-events.ruler.fullname" . }} -n {{ .Release.Namespace }}
+              {{- end }}
+              {{- end }}
+              sleep 10
+      restartPolicy: OnFailure
+{{- end }}
+{{- end }}
