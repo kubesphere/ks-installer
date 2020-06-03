@@ -10,20 +10,7 @@ busybox:
 openpitrix:
   image:
     repository: openpitrix/openpitrix
-    tag: "latest"
-    pullPolicy: IfNotPresent
-  limits:
-    cpu: 500m
-    memory: 500Mi
-  requests:
-    cpu: 100m
-    memory: 100Mi
-
-
-openpitrix_rp:
-  image:
-    repository: openpitrix/runtime-provider-kubernetes
-    tag: latest
+    tag: "v3beta"
     pullPolicy: IfNotPresent
   limits:
     cpu: 500m
