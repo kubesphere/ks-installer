@@ -10,7 +10,7 @@
 
 - name: Stop if kubernetes version is nonsupport
   assert:
-    that: kubernetes_version.stdout is version('v1.18.0', '<')
+    that: kubernetes_version.stdout is version('v1.15.0', '>=')
     msg: The current k8s version is not supported
 
 - name: check helm status
