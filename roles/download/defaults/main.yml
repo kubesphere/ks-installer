@@ -110,7 +110,7 @@ ks_update_tag: "advanced-2.0.0"
 ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_flyway_tag: "flyway-v2.1.0"
 ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
-ks_console_tag: dev-20200528
+ks_console_tag: dev
 ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
 ks_kubectl_tag: v1.0.0
 ks_docs_repo: "{{ base_repo }}kubesphere/ks-docs"
