@@ -1,6 +1,26 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: openpitrix-rp-kubernetes
+  labels:
+    app: openpitrix
+    component: openpitrix-hyperpitrix
+    version: {{ .Values.version }}
+spec:
+  selector:
+    app: openpitrix
+    component: openpitrix-hyperpitrix
+  ports:
+    - name: openpitrix-rp-kubernetes
+      protocol: TCP
+      port: 9123
+      targetPort: 9123
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: openpitrix-rp-manager
   labels:
     app: openpitrix

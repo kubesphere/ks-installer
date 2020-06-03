@@ -128,6 +128,7 @@ spec:
             - openpitrix-app-manager
             - openpitrix-api-gateway
             - openpitrix-rp-manager
+            - openpitrix-rp-kubernetes
       containers:
         - name: hyperpitrix
           image: "{{ .Values.openpitrix.image.repository }}:{{ .Values.openpitrix.image.tag }}"
@@ -153,6 +154,8 @@ spec:
               name: repo-mgr
             - containerPort: 9108
               name: repo-indexer
+            - containerPort: 9123
+              name: rp-helm
             - containerPort: 9121
               name: rp-mgr
             - containerPort: 9103
