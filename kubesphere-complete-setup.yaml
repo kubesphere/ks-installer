@@ -37,11 +37,8 @@ data:
       prometheusReplicas: 1
       prometheusMemoryRequest: 400Mi
       prometheusVolumeSize: 20Gi
-      alertmanagerReplicas: 1
       grafana:
         enabled: False
-      notification:
-        enabled: True
 
     logging:
       enabled: True
@@ -55,9 +52,6 @@ data:
       containersLogMountedPath: ""
       kibana:
         enabled: False
-
-    events:
-      enabled: True
 
     openpitrix:
       enabled: True
@@ -192,30 +186,6 @@ rules:
   - '*'
   verbs:
   - '*'
-- apiGroups:
-  - policy
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
-  - autoscaling
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
-  - networking.istio.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
-  - config.istio.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
 
 ---
 kind: ClusterRoleBinding
@@ -254,3 +224,4 @@ spec:
       - name: installer
         image: kubesphere/ks-installer:v2.1.1
         imagePullPolicy: "Always"
+        
