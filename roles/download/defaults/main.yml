@@ -347,9 +347,9 @@ grafana_tag: 6.6.0
 notification_manager_operator_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
 notification_manager_operator_proxy_tag: v0.4.1
 notification_manager_operator_repo: "{{ base_repo }}kubesphere/notification-manager-operator"
-notification_manager_operator_tag: latest
+notification_manager_operator_tag: v0.1.0
 notification_manager_repo: "{{ base_repo }}kubesphere/notification-manager"
-notification_manager_tag: latest
+notification_manager_tag: v0.1.0
 
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ base_repo }}kubesphere/elasticsearch-curator"
