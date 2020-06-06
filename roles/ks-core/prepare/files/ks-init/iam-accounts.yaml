@@ -25,10 +25,16 @@ metadata:
   annotations:
     iam.kubesphere.io/rego-override: |-
       package authz
-      default allow = true
+      default allow = false
       allow = true {
         input.Resource == "users"
         input.User.Name == input.Name
+      }
+      allow = true {
+        input.APIGroup == "tenant.kubesphere.io"
+        input.KubernetesRequest == false
+        allowedVerbs := ["get","list","watch"]
+        allowedVerbs[_] == input.Verb
       }
   name: authenticated
 rules: []
@@ -48,6 +54,495 @@ rules:
       - '*'
     verbs:
       - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/aggregation-roles: '[]'
+    kubesphere.io/creator: admin
+  name: platform-regular
+rules: []
+
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Clusters Management
+    iam.kubesphere.io/role-template-rules: '{"clusters": "view"}'
+    kubesphere.io/alias-name: Clusters View   
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-clusters
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - limitranges
+  - namespaces
+  - nodes
+  - persistentvolumeclaims
+  - pods
+  - podtemplates
+  - replicationcontrollers
+  - resourcequotas
+  - secrets
+  - serviceaccounts
+  - services
+  - applications
+  - controllerrevisions
+  - deployments
+  - replicasets
+  - statefulsets
+  - meshpolicies
+  - cronjobs
+  - jobs
+  - federatedservicestatuses
+  - devopsprojects
+  - devops
+  - pipelines
+  - s2ibinaries
+  - s2ibuilders
+  - s2ibuildertemplates
+  - s2iruns
+  - events
+  - ingresses
+  - filters
+  - pods
+  - namespacenetworkpolicies
+  - workspacenetworkpolicies
+  - destinationrules
+  - envoyfilters
+  - gateways
+  - serviceentries
+  - sidecars
+  - virtualservices
+  - ingresses
+  - networkpolicies
+  - podsecuritypolicies
+  - rolebindings
+  - roles
+  - servicepolicies
+  - strategies
+  - storageclasses
+  - federatedconfigmaps
+  - federateddeployments
+  - federatedingresses
+  - federatedjobs
+  - federatedlimitranges
+  - federatednamespaces
+  - federatedpersistentvolumeclaims
+  - federatedreplicasets
+  - federatedsecrets
+  - federatedserviceaccounts
+  - federatedservices
+  - federatedstatefulsets
+  - devops
+  - clusters
+  - clusterrolebindings
+  - clusterroles
+  - components
+  - nodes
+  - cluster
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Clusters Management
+    iam.kubesphere.io/role-template-rules: '{"clusters": "manage"}'
+    kubesphere.io/alias-name: Clusters Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-clusters
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - limitranges
+  - namespaces
+  - persistentvolumeclaims
+  - pods
+  - podtemplates
+  - replicationcontrollers
+  - resourcequotas
+  - secrets
+  - serviceaccounts
+  - services
+  - applications
+  - controllerrevisions
+  - deployments
+  - replicasets
+  - statefulsets
+  - meshpolicies
+  - cronjobs
+  - jobs
+  - federatedservicestatuses
+  - devopsprojects
+  - devops
+  - pipelines
+  - s2ibinaries
+  - s2ibuilders
+  - s2ibuildertemplates
+  - s2iruns
+  - events
+  - ingresses
+  - filters
+  - pods
+  - namespacenetworkpolicies
+  - workspacenetworkpolicies
+  - destinationrules
+  - envoyfilters
+  - gateways
+  - serviceentries
+  - sidecars
+  - virtualservices
+  - ingresses
+  - networkpolicies
+  - podsecuritypolicies
+  - rolebindings
+  - roles
+  - servicepolicies
+  - strategies
+  - storageclasses
+  - federatedconfigmaps
+  - federateddeployments
+  - federatedingresses
+  - federatedjobs
+  - federatedlimitranges
+  - federatednamespaces
+  - federatedpersistentvolumeclaims
+  - federatedreplicasets
+  - federatedsecrets
+  - federatedserviceaccounts
+  - federatedservices
+  - federatedstatefulsets
+  - devops
+  - clusters
+  - clusterrolebindings
+  - clusterroles
+  - components
+  - nodes
+  - cluster
+  verbs:
+  - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"workspaces": "view"}'
+    kubesphere.io/alias-name: Workspaces View
+  creationTimestamp: "2020-05-29T11:02:33Z"
+  generation: 8
+  labels:
+    iam.kubesphere.io/role-template: "true"
+    kubefed.io/managed: "true"
+  name: role-template-view-workspaces
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - limitranges
+  - namespaces
+  - persistentvolumeclaims
+  - pods
+  - podtemplates
+  - replicationcontrollers
+  - resourcequotas
+  - secrets
+  - serviceaccounts
+  - services
+  - applications
+  - controllerrevisions
+  - deployments
+  - replicasets
+  - statefulsets
+  - meshpolicies
+  - cronjobs
+  - jobs
+  - devopsprojects
+  - devops
+  - pipelines
+  - s2ibinaries
+  - s2ibuilders
+  - s2ibuildertemplates
+  - s2iruns
+  - events
+  - ingresses
+  - filters
+  - pods
+  - namespacenetworkpolicies
+  - workspacenetworkpolicies
+  - ingresses
+  - networkpolicies
+  - podsecuritypolicies
+  - rolebindings
+  - roles
+  - servicepolicies
+  - federatedconfigmaps
+  - federateddeployments
+  - federatedingresses
+  - federatedjobs
+  - federatedlimitranges
+  - federatednamespaces
+  - federatedpersistentvolumeclaims
+  - federatedreplicasets
+  - federatedsecrets
+  - federatedserviceaccounts
+  - federatedservices
+  - federatedservicestatuses
+  - federatedstatefulsets
+  - federatedworkspaces
+  - workspaces
+  - workspaceroles
+  - workspacerolebindings
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"workspaces": "manage"}'
+    kubesphere.io/alias-name: Workspaces Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-workspaces
+roles:
+- apiGroups:
+  - '*'
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - limitranges
+  - namespaces
+  - persistentvolumeclaims
+  - pods
+  - podtemplates
+  - replicationcontrollers
+  - resourcequotas
+  - secrets
+  - serviceaccounts
+  - services
+  - applications
+  - controllerrevisions
+  - deployments
+  - replicasets
+  - statefulsets
+  - meshpolicies
+  - cronjobs
+  - jobs
+  - devopsprojects
+  - devops
+  - pipelines
+  - s2ibinaries
+  - s2ibuilders
+  - s2ibuildertemplates
+  - s2iruns
+  - events
+  - ingresses
+  - filters
+  - pods
+  - namespacenetworkpolicies
+  - workspacenetworkpolicies
+  - ingresses
+  - networkpolicies
+  - podsecuritypolicies
+  - rolebindings
+  - roles
+  - servicepolicies
+  - federatedconfigmaps
+  - federateddeployments
+  - federatedingresses
+  - federatedjobs
+  - federatedlimitranges
+  - federatednamespaces
+  - federatedpersistentvolumeclaims
+  - federatedreplicasets
+  - federatedsecrets
+  - federatedserviceaccounts
+  - federatedservices
+  - federatedservicestatuses
+  - federatedstatefulsets
+  - federatedworkspaces
+  - workspaces
+  - workspaceroles
+  - workspacerolebindings
+  verbs:
+  - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"users": "view"}'
+    kubesphere.io/alias-name: Users View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-users
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - users
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
+    kubesphere.io/alias-name: Users Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-users
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - users
+  verbs:
+  - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+    kubesphere.io/alias-name: Roles View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-roles
+rules:
+- apiGroups:
+  - iam.kubesphere.io
+  resources:
+  - globalroles
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+    kubesphere.io/alias-name: Roles Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-roles
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - globalroles
+  verbs:
+  - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Apps Management
+    iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
+    kubesphere.io/alias-name: App Templates View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-app-templates
+rules:
+- apiGroups:
+  - openpitrix.io
+  resources:
+  - reviews
+  - apps
+  - apps/versions
+  - categories
+  verbs:
+  - get
+  - list
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Apps Management
+    iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
+    kubesphere.io/alias-name: App Templates Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-app-templates
+rules:
+- apiGroups:
+  - openpitrix.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Platform Settings
+    iam.kubesphere.io/role-template-rules: '{"platform-settings": "manage"}'
+    kubesphere.io/alias-name: Platform Settings Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-platform-settings
+rules:
+- apiGroups:
+  - logging.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - '*'
+  resources:
+  - pods
+  verbs:
+  - log
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
