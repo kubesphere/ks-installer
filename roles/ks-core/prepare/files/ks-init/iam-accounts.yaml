@@ -156,6 +156,7 @@ rules:
   - watch
 
 ---
+apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
