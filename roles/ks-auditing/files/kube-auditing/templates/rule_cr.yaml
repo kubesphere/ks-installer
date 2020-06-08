@@ -1,0 +1,186 @@
+apiVersion: auditing.kubesphere.io/v1alpha1
+kind: Rule
+metadata:
+  name: archiving-rule
+  labels:
+    workspace: system-workspace
+    type: archiving
+spec:
+  rules:
+    - name: ignore-action
+      type: list
+      desc: all action not need to be audit
+      list:
+        - get
+        - list
+        - watch
+    - name: archiving
+      type: rule
+      desc: All audit event except get, list, watch event
+      condition: Verb not in ${ignore-action}
+      enable: true
+      priority: DEBUG
+
+---
+apiVersion: auditing.kubesphere.io/v1alpha1
+kind: Rule
+metadata:
+  name: alerting-rule
+  labels:
+    workspace: system-workspace
+    type: alerting
+spec:
+  rules:
+    - name: resources
+      type: list
+      desc: all resources need to be audit
+      list:
+        - auditsinks
+        - certificatesigningrequests
+        - clusterrolebindings
+        - clusterroles
+        - configmaps
+        - cronjobs
+        - csidrivers
+        - csinodes
+        - customresourcedefinitions
+        - daemonsets
+        - deployments
+        - horizontalpodautoscalers
+        - ingresses
+        - jobs
+        - limitranges
+        - mutatingwebhookconfigurations
+        - namespaces
+        - networkpolicies
+        - nodes
+        - persistentvolumeclaims
+        - persistentvolumes
+        - poddisruptionbudgets
+        - pods
+        - podsecuritypolicies
+        - priorityclasses
+        - replicasets
+        - replicationcontrollers
+        - resourcequotas
+        - rolebindings
+        - roles
+        - secrets
+        - serviceaccounts
+        - services
+        - statefulsets
+        - storageclasses
+        - validatingwebhookconfigurations
+        - volumeattachments
+        - adapters
+        - alertmanagers
+        - applications
+        - attributemanifests
+        - authorizationpolicies
+        - clusterrbacconfigs
+        - destinationrules
+        - envoyfilters
+        - fluentbits
+        - gateways
+        - handlers
+        - httpapispecbindings
+        - httpapispecs
+        - instances
+        - jaegers
+        - meshpolicies
+        - natsclusters
+        - natsserviceroles
+        - natsstreamingclusters
+        - policies
+        - prometheuses
+        - prometheusrules
+        - quotaspecbindings
+        - quotaspecs
+        - rbacconfigs
+        - rules
+        - s2ibinaries
+        - s2ibuilders
+        - s2ibuildertemplates
+        - s2iruns
+        - serviceentries
+        - servicemonitors
+        - servicepolicies
+        - servicerolebindings
+        - serviceroles
+        - sidecars
+        - strategies
+        - templates
+        - virtualservices
+        - volumesnapshotclasses
+        - volumesnapshotcontents
+        - volumesnapshots
+        - workspaces
+        - webhooks
+        - rules
+    - name: action
+      type: list
+      desc: all operator need to be audit
+      list:
+        - create
+        - delete
+        - update
+        - patch
+    - name: pod
+      type: macro
+      desc: pod
+      macro: ObjectRef.Resource="pods"
+    - name: service
+      type: macro
+      desc: service
+      macro: ObjectRef.Resource="services"
+    - name: user
+      type: alias
+      desc: the alias of the user related to audit event
+      alias: User.username
+    - name: name
+      type: alias
+      desc: the alias of the resource name
+      alias: ObjectRef.Name
+    - name: namespace
+      type: alias
+      desc: the alias of the resource namespace
+      alias: ObjectRef.Namespace
+    - name: create
+      type: macro
+      desc: create operator
+      macro: Verb = "create"
+    - name: change-of-resource
+      type: rule
+      desc: audit the change of resource
+      condition: Verb in ${action} and ObjectRef.Resource in ${resources}
+      enable: true
+      priority: INFO
+    - name: create-hostnetwork-pod
+      type: rule
+      desc: Detect an attempt to start a pod using the host network
+      condition: ${pod} and ${create} and RequestObject.spec.hostNetwork = true
+      enable: true
+      output: ${user} 创建 了项目 ${namespace} 下的 HostNetwork 类型的 容器组 ${name}
+      priority: WARNING
+    - name: create-hostport-pod
+      type: rule
+      desc: Detect an attempt to start a pod mount to a host port
+      condition: ${pod} and ${create} and (RequestObject.spec.containers[*].ports[*].hostPort > 0 or RequestObject.spec.initContainers[*].ports[*].hostPort > 0)
+      enable: true
+      output: ${user} 创建 了项目 ${namespace} 下的 HostPort 类型的 容器组 ${name}
+      priority: WARNING
+    - name: create-nodeport-service
+      type: rule
+      desc: Detect an attempt to start a service with a NodePort service type
+      condition: ${service} and ${create} and RequestObject.spec.ports[*].nodePort > 0
+      enable: true
+      output: ${user} 创建 了项目 ${namespace} 下的 NodePort 类型的 服务 ${name}
+      priority: WARNING
+    - name: attachorexec-pod
+      type: rule
+      desc: Detect any attempt to attach/exec to a pod
+      condition: ${pod} and ${create} and ObjectRef.Subresource in ("exec", "attach")
+      enable: true
+      output: ${user} ${ObjectRef.Subresource} 了项目 ${namespace} 下的 容器组 ${name}
+      priority: WARNING
+

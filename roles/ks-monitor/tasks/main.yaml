@@ -31,4 +31,4 @@
 
 - import_tasks: notification-manager.yaml
   when:
-    - monitoring.notification.enabled == true 
+    - monitoring.notification.enabled is defined and  monitoring.notification.enabled == true 

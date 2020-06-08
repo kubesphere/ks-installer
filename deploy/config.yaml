@@ -49,6 +49,8 @@ data:
 
     events:
       enabled: False
+    auditing:
+      enabled: False
 
     openpitrix:
       enabled: False

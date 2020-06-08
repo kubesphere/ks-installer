@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-auditing-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: kube-auditing-operator
+  template:
+    metadata:
+      labels:
+        name: kube-auditing-operator
+    spec:
+      serviceAccountName: kube-auditing-operator
+      {{- with .Values.operator.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: kube-auditing-operator
+          image: "{{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}"
+          imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
+          command:
+            - kube-auditing-operator
+          env:
+            - name: WATCH_NAMESPACE
+              value: ""
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "kube-auditing-operator"
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            {{- toYaml .Values.operator.resources | nindent 12 }}
+      nodeSelector:
+        {{- toYaml .Values.operator.nodeSelector | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.operator.affinity | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.operator.tolerations | nindent 8 }}
+

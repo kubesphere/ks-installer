@@ -16,5 +16,5 @@ spec:
     skipLongLines: true
     db: /fluent-bit/tail/pos.db
     dbSync: Normal
-    excludePath: /var/log/containers/*_kubesphere-logging-system_events-exporter*.log
+    excludePath: /var/log/containers/*_kubesphere-logging-system_events-exporter*.log,/var/log/containers/kube-auditing-webhook*_kubesphere-logging-system_kube-auditing-webhook*.log
 

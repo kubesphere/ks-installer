@@ -88,6 +88,16 @@ data:
       indexPrefix: ks-{{ logging.elkPrefix }}-events
 {% endif %}
 
+{% if auditing.enabled is defined and auditing.enabled == true %}
+    auditing:
+{% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
+      host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
+{% else %}
+      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local:9200
+{% endif %}
+      indexPrefix: ks-{{ logging.elkPrefix }}-auditing
+{% endif %}
+
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
       endpoint: http://alerting.kubesphere-alerting-system.svc

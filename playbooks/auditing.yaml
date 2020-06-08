@@ -1,0 +1,8 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - ks-auditing
+
