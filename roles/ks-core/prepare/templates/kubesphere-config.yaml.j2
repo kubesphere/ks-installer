@@ -65,8 +65,7 @@ data:
 {% endif %}
 
     monitoring:
-      endpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
-      secondaryEndpoint: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
+      endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
 
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
