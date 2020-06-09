@@ -98,6 +98,7 @@ rules:
   - applications
   - controllerrevisions
   - deployments
+  - daemonsets
   - replicasets
   - statefulsets
   - meshpolicies
@@ -145,11 +146,27 @@ rules:
   - federatedstatefulsets
   - devops
   - clusters
+  - cluster
   - clusterrolebindings
   - clusterroles
+  - clustermembers
   - components
+  - componenthealth
+  - volumesnapshots
+  - quotas
+  - nodes/pods
+  - pods/log
   - nodes
-  - cluster
+  - abnormalworkloads
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - monitoring.kubesphere.io
+  resources:
+  - '*'
   verbs:
   - get
   - list
@@ -175,6 +192,7 @@ rules:
   - events
   - limitranges
   - namespaces
+  - nodes
   - persistentvolumeclaims
   - pods
   - podtemplates
@@ -186,6 +204,7 @@ rules:
   - applications
   - controllerrevisions
   - deployments
+  - daemonsets
   - replicasets
   - statefulsets
   - meshpolicies
@@ -233,11 +252,25 @@ rules:
   - federatedstatefulsets
   - devops
   - clusters
+  - cluster
   - clusterrolebindings
   - clusterroles
+  - clustermembers
   - components
+  - componenthealth
+  - volumesnapshots
+  - quotas
+  - nodes/pods
+  - pods/log
   - nodes
-  - cluster
+  - abnormalworkloads
+  - customresourcedefinitions
+  verbs:
+  - '*'
+- apiGroups:
+  - monitoring.kubesphere.io
+  resources:
+  - '*'
   verbs:
   - '*'
 
@@ -249,8 +282,6 @@ metadata:
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"workspaces": "view"}'
     kubesphere.io/alias-name: Workspaces View
-  creationTimestamp: "2020-05-29T11:02:33Z"
-  generation: 8
   labels:
     iam.kubesphere.io/role-template: "true"
     kubefed.io/managed: "true"
@@ -596,3 +627,13 @@ spec:
   email: admin@kubesphere.io
   lang: zh
   password: P@88w0rd
+
+---
+apiVersion: tenant.kubesphere.io/v1alpha2
+kind: WorkspaceTemplate
+metadata:
+  annotations:
+    kubesphere.io/creator: admin
+  name: system-workspace
+spec:
+  manager: admin
