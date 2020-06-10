@@ -11,7 +11,7 @@
 
 - import_tasks: kube-state-metrics.yaml
 
-- import_tasks: prometheus-adapter.yaml
+# - import_tasks: prometheus-adapter.yaml
 
 - import_tasks: grafana.yaml
   when:
