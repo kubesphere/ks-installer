@@ -1,0 +1,33 @@
+{{- $doubleLeftBrace := "{{" -}}
+{{- $doubleRightBrace := "}}" -}}
+apiVersion: v1
+kind: ConfigMap
+data:
+  filebeat.yaml: |-
+    filebeat.inputs:
+    - type: log
+      enabled: true
+      paths:
+      {{ $doubleLeftBrace }}range .Paths{{ $doubleRightBrace }}
+      - {{ $doubleLeftBrace }}.{{ $doubleRightBrace }}
+      {{ $doubleLeftBrace }}end{{ $doubleRightBrace }}
+    output.console:
+      codec.format:
+        string: '%{[log.file.path]} %{[message]}'
+    logging.level: warning
+  sidecar.yaml: |-
+    container:
+      image: {{ .Values.sidecar.container.image.repository }}:{{ .Values.sidecar.container.image.tag }}
+      imagePullPolicy: {{ .Values.sidecar.container.image.pullPolicy }}
+      resources:
+{{ toYaml .Values.sidecar.container.resources | indent 8 }}
+    initContainer:
+      image: {{ .Values.sidecar.initContainer.image.repository }}:{{ .Values.sidecar.initContainer.image.tag }}
+      imagePullPolicy: {{ .Values.sidecar.initContainer.image.pullPolicy }}
+      resources:
+{{ toYaml .Values.sidecar.initContainer.resources | indent 8 }}
+metadata:
+  name: {{ template "logsidecar-injector.fullname" . }}-configmap
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "logsidecar-injector.labels" . | indent 4 }}

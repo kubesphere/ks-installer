@@ -1,0 +1,12 @@
+apiVersion: v2
+name: logsidecar-injector
+description: A Helm chart for logsidecar-injector
+icon:
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+source:
+  - https://github.com/kubesphere/logsidecar-injector
+keywords:
+  - log
+  - sidecar

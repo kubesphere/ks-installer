@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "logsidecar-injector.deploy.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "logsidecar-injector.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      logging.kubesphere.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
+{{ include "logsidecar-injector.labels" . | indent 6 }}
+  template:
+    metadata:
+      labels:
+        logging.kubesphere.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
+{{ include "logsidecar-injector.labels" . | indent 8 }}
+    spec:
+      volumes:
+        - name: certs
+          secret:
+            secretName: {{ template "logsidecar-injector.admission.fullname" . }}-certs
+        - name: config
+          configMap:
+            name: {{ template "logsidecar-injector.fullname" . }}-configmap
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: logsidecar-injector
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+          - name: certs
+            mountPath: /etc/logsidecar-injector/certs
+          - name: config
+            mountPath: /etc/logsidecar-injector/config
+      - name: config-reloader
+        image: {{ .Values.configReloader.image.repository }}:{{ .Values.configReloader.image.tag }}
+        imagePullPolicy: {{ .Values.configReloader.image.pullPolicy }}
+        args:
+          - --volume-dir=/etc/logsidecar-injector/config
+          - --volume-dir=/etc/logsidecar-injector/certs
+          - --webhook-url=http://127.0.0.1:9443/-/reload
+        resources:
+{{ toYaml .Values.configReloader.resources | indent 10 }}
+        volumeMounts:
+          - name: certs
+            mountPath: /etc/logsidecar-injector/certs
+          - name: config
+            mountPath: /etc/logsidecar-injector/config
+
+

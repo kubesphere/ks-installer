@@ -1,0 +1,45 @@
+# Default values for logsidecar-injector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: {{ logging.logsidecarReplicas | default(2) }}
+
+image:
+  repository: {{ ks_log_sidecar_injector_repo }}
+  tag: {{ ks_log_sidecar_injector_tag }}
+  pullPolicy: IfNotPresent
+
+resources: {}
+  limits:
+    cpu: 100m
+    memory: 100Mi
+  requests:
+    cpu: 10m
+    memory: 10Mi
+
+configReloader:
+  image:
+    repository: {{ configmap_reload_repo }}
+    tag: {{ configmap_reload_tag }}
+    pullPolicy: IfNotPresent
+  resources: {}
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 10m
+      memory: 10Mi
+
+sidecar:
+  container:
+    image:
+      repository: {{ filebeat_repo }}
+      tag: {{ filebeat_tag }}
+      pullPolicy: IfNotPresent
+    resources: {}
+  initContainer:
+    image:
+      repository: {{ busybox_repo }}
+      tag: {{ busybox_tag }}
+      pullPolicy: IfNotPresent
+    resources: {}
