@@ -1,0 +1,45 @@
+# Default values for logsidecar-injector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: kubespheredev/log-sidecar-injector
+  tag: 1.1
+  pullPolicy: IfNotPresent
+
+resources: {}
+#  limits:
+#    cpu: 100m
+#    memory: 100Mi
+#  requests:
+#    cpu: 10m
+#    memory: 10Mi
+
+configReloader:
+  image:
+    repository: jimmidyson/configmap-reload
+    tag: v0.3.0
+    pullPolicy: IfNotPresent
+  resources: {}
+#    limits:
+#      cpu: 100m
+#      memory: 100Mi
+#    requests:
+#      cpu: 10m
+#      memory: 10Mi
+
+sidecar:
+  container:
+    image:
+      repository: elastic/filebeat
+      tag: 6.7.0
+      pullPolicy: IfNotPresent
+    resources: {}
+  initContainer:
+    image:
+      repository: alpine
+      tag: 3.9
+      pullPolicy: IfNotPresent
+    resources: {}
