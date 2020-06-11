@@ -77,7 +77,7 @@
   when:
     - kubesphere_version.stdout.split('.')[0] == "2"
 
-    
+
 - name: ks-logging | Prepare fluentbit operator setup
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/init
@@ -85,12 +85,12 @@
 
 - name: ks-logging | Deploy new fluentbit operator
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/{{ item }}
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}
   loop:
-    - fluent-bit
-    - custom-output-elasticsearch.yaml
-    - custom-output-elasticsearch-events.yaml
-    - custom-output-elasticsearch-auditing.yaml
+    - {path: logging/fluentbit-operator, file: fluent-bit}
+    - {path: logging, file: custom-output-elasticsearch.yaml}
+    - {path: logging, file: custom-output-elasticsearch-events.yaml}
+    - {path: logging, file: custom-output-elasticsearch-auditing.yaml}
 
 - name: ks-logging | Check elasticsearch
   shell: >
