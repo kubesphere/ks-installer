@@ -68,14 +68,16 @@
 
 - name: ks-logging | Deleting old fluentbit operator
   shell: >
-    {{ bin_dir }}/kubectl delete deploy -n kubesphere-logging-system logging-fluentbit-operator
-    {{ bin_dir }}/kubectl delete fluentbits.logging.kubesphere.io -n kubesphere-logging-system fluent-bit
-    {{ bin_dir }}/kubectl delete ds -n kubesphere-logging-system fluent-bit
-    {{ bin_dir }}/kubectl delete crd fluentbits.logging.kubesphere.io
+    {{ bin_dir }}/kubectl delete {{ item.type }} -n kubesphere-logging-system {{ item.name }}
+  loop:
+    - { type: deploy, name: logging-fluentbit-operator }
+    - { type: fluentbits.logging.kubesphere.io, name: fluent-bit }
+    - { type: ds, name: fluent-bit }
+    - { type: crd, name: fluentbits.logging.kubesphere.io }
   when:
     - kubesphere_version.stdout.split('.')[0] == "2"
 
-
+    
 - name: ks-logging | Prepare fluentbit operator setup
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/init
@@ -83,10 +85,12 @@
 
 - name: ks-logging | Deploy new fluentbit operator
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/fluent-bit;
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch.yaml;
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch-events.yaml;
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch-auditing.yaml;
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/{{ item }}
+  loop:
+    - fluent-bit
+    - custom-output-elasticsearch.yaml
+    - custom-output-elasticsearch-events.yaml
+    - custom-output-elasticsearch-auditing.yaml
 
 - name: ks-logging | Check elasticsearch
   shell: >
