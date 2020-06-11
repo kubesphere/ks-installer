@@ -11,6 +11,7 @@ spec:
   es:
     host: "{% if logging.externalElasticsearchUrl is defined %}{{ logging.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
     port: {% if logging.externalElasticsearchPort is defined %}{{ logging.externalElasticsearchPort }}{% else %}9200{% endif %}
+    
     logstashPrefix: "ks-{{ logging.elkPrefix }}-log"
     logstashFormat: true
     timeKey: "@timestamp"
