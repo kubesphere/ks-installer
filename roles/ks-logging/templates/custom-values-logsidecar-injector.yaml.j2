@@ -9,7 +9,7 @@ image:
   tag: {{ ks_log_sidecar_injector_tag }}
   pullPolicy: IfNotPresent
 
-resources: {}
+resources:
   limits:
     cpu: 100m
     memory: 100Mi
@@ -22,7 +22,7 @@ configReloader:
     repository: {{ configmap_reload_repo }}
     tag: {{ configmap_reload_tag }}
     pullPolicy: IfNotPresent
-  resources: {}
+  resources:
     limits:
       cpu: 100m
       memory: 100Mi
