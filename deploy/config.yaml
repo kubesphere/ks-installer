@@ -49,6 +49,7 @@ data:
 
     events:
       enabled: False
+      
     auditing:
       enabled: False
 
