@@ -20,18 +20,6 @@ openpitrix:
     memory: 100Mi
 
 
-openpitrix_rp:
-  image:
-    repository: {{ openpitrix_runtime_provider_kubernetes_repo }}
-    tag: {{ openpitrix_runtime_provider_kubernetes_tag }}
-    pullPolicy: {{ ks_image_pull_policy }}
-  limits:
-    cpu: 500m
-    memory: 500Mi
-  requests:
-    cpu: 100m
-    memory: 100Mi
-
 openpitrix_flyway:
   image:
     repository: {{ openpitrix_flyway_repo }}
