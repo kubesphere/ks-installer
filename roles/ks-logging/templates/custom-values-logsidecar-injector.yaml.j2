@@ -23,6 +23,7 @@ configReloader:
     tag: {{ configmap_reload_tag }}
     pullPolicy: IfNotPresent
   resources:
+    limits:
       cpu: 100m
       memory: 100Mi
     requests:
