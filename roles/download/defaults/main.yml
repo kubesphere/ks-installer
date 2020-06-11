@@ -393,7 +393,7 @@ defaultbackend_tag: 1.4
 
 #metrics:
 metrics_server_repo: "{{ base_repo }}kubesphere/metrics-server-amd64"
-metrics_server_tag: v0.3.1
+metrics_server_tag: v0.3.6
 
 #istio
 istio_hub: "{{ base_repo }}istio"

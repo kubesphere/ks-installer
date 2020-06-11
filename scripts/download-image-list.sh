@@ -28,17 +28,16 @@ ks_images=(kubesphere/ks-console:v2.1.1                                         
    kubesphere/ks-installer:v2.1.1                                                \
    quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1   \
    mirrorgooglecontainers/defaultbackend-amd64:1.4                               \
-   gcr.azk8s.cn/google_containers/metrics-server-amd64:v0.3.1                    \
+   kubesphere/metrics-server-amd64:v0.3.6                    \
    kubesphere/configmap-reload:v0.3.0                                            \
-   kubesphere/prometheus:v2.5.0                                                  \
-   kubesphere/prometheus-config-reloader:v0.34.0                                 \
-   kubesphere/prometheus-operator:v0.34.0                                        \
+   kubesphere/prometheus:v2.17.2                                                  \
+   kubesphere/prometheus-config-reloader:v0.38.1                                 \
+   kubesphere/prometheus-operator:v0.38.1                                        \
    kubesphere/kube-rbac-proxy:v0.4.1                                             \
-   kubesphere/kube-state-metrics:v1.7.2                                          \
-   kubesphere/node-exporter:ks-v0.16.0                                           \
-   kubesphere/addon-resizer:1.8.4                                                \
-   kubesphere/k8s-prometheus-adapter-amd64:v0.4.1                                \
-   grafana/grafana:5.2.4                                                         \
+   kubesphere/kube-state-metrics:v1.9.6                                          \
+   kubesphere/node-exporter:ks-v0.18.1                                          \
+   kubesphere/k8s-prometheus-adapter-amd64:v0.6.0                                \
+   grafana/grafana:6.6.0                                                         \
    redis:5.0.5-alpine                                                            \
    haproxy:2.0.4                                                                 \
    alpine:3.10.4                                                                 \
