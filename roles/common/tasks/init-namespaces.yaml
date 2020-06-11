@@ -16,7 +16,7 @@
       {%- if kube_node_lease is defined and kube_node_lease.stdout != "0" %}
       kube-node-lease
       {%- endif %}
-      {%- if (logging.enabled is defined and logging.enabled) or (events.enabled is defined and events.enabled) %}
+      {%- if (logging.enabled is defined and logging.enabled) or (events.enabled is defined and events.enabled) or (auditing.enabled is defined and auditing.enabled) %}
       kubesphere-logging-system
       {%- endif %}
       {%- if openpitrix.enabled is defined and openpitrix.enabled %}

@@ -9,7 +9,7 @@ metadata:
 spec:
   match: kube_events
   es:
-    host: "{% if logging.externalElasticsearchUrl is defined %}{{ logging.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
-    port: "{% if logging.externalElasticsearchPort is defined %}{{ logging.externalElasticsearchPort }}{% else %}9200{% endif %}"
-    logstashPrefix: "ks-{{ logging.elkPrefix }}-events"
     logstashFormat: true
+    host: "{% if logging.externalElasticsearchUrl is defined %}{{ logging.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
+    logstashPrefix: "ks-{{ logging.elkPrefix }}-events"
+    port: {% if logging.externalElasticsearchPort is defined %}{{ logging.externalElasticsearchPort }}{% else %}9200{% endif %}

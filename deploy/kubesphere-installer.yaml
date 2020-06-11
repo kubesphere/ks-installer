@@ -144,6 +144,12 @@ rules:
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - auditing.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
 
 ---
 kind: ClusterRoleBinding

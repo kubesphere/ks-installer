@@ -1,0 +1,36 @@
+---
+
+- name: ks-auditing | getting ks-auditing installation files
+  copy:
+    src: "kube-auditing"
+    dest: "{{ kubesphere_dir }}/ks-auditing/"
+
+- name: ks-auditing | getting ks-auditing installation files
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: ks-auditing, file: custom-values.yaml }
+
+
+- name: ks-auditing | check ks-auditing
+  shell: >
+    {{ bin_dir }}/helm list -f kube-auditing -n kubesphere-logging-system
+  register: auditing_check
+  ignore_errors: True
+
+
+- name: ks-auditing | deploy kube-auditing
+  shell: >
+    {{ bin_dir }}/helm upgrade --install kube-auditing
+    {{ kubesphere_dir }}/ks-auditing/kube-auditing
+    -f {{ kubesphere_dir }}/ks-auditing/custom-values.yaml
+    -n kubesphere-logging-system
+    --force
+  register: deploy_result
+  until: deploy_result is succeeded
+  retries: 3
+  delay: 10
+  when:
+    - (auditing_check.stdout.find("DEPLOYED") == -1) or (auditing_check.stdout.find("v0.1.0") == -1)
+

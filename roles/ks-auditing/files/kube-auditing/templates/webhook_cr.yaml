@@ -1,0 +1,29 @@
+apiVersion: auditing.kubesphere.io/v1alpha1
+kind: Webhook
+metadata:
+  name: kube-auditing-webhook
+spec:
+  {{- if .Values.webhook.replicas }}
+  replicas: {{ .Values.webhook.replicas }}
+  {{- end}}
+  image: "{{ .Values.webhook.image.repository }}:{{ .Values.webhook.image.tag }}"
+  imagePullPolicy: {{ .Values.webhook.image.pullPolicy }}
+  imagePullSecrets:
+    {{- toYaml .Values.webhook.imagePullSecrets | nindent 4 }}
+  args:
+    {{- toYaml .Values.webhook.args | nindent 4 }}
+  nodeSelector:
+    {{- toYaml .Values.webhook.nodeSelector | nindent 4 }}
+  affinity:
+    {{- toYaml .Values.webhook.affinity | nindent 4 }}
+  tolerations:
+    {{- toYaml .Values.webhook.tolerations | nindent 4 }}
+  resources:
+    {{- toYaml .Values.webhook.resources | nindent 4 }}
+  receivers:
+    {{- toYaml .Values.webhook.receivers | nindent 4 }}
+  priority: {{ .Values.webhook.priority }}
+  auditType: {{ .Values.webhook.auditType }}
+  auditLevel: {{ .Values.webhook.auditLevel }}
+  k8sAuditingEnable: {{ .Values.webhook.k8sAuditingEnable }}
+

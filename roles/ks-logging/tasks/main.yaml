@@ -20,6 +20,7 @@
     - { path: logging, file: custom-values-elasticsearch-curator.yaml }
     - { path: logging, file: custom-values-kibana.yaml }
     - { path: logging, file: custom-output-elasticsearch-events.yaml }
+    - { path: logging, file: custom-output-elasticsearch-auditing.yaml }
 
 
 - name: ks-logging | comment elasticsearch storageclass parameter
@@ -82,10 +83,10 @@
 
 - name: ks-logging | Deploy new fluentbit operator
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/fluent-bit
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch.yaml
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch-events.yaml
-
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/fluent-bit;
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch.yaml;
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch-events.yaml;
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/custom-output-elasticsearch-auditing.yaml;
 
 - name: ks-logging | Check elasticsearch
   shell: >
