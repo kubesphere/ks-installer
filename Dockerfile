@@ -2,8 +2,8 @@ FROM flant/shell-operator:v1.0.0-beta.5-alpine3.9
 
 RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers python2-dev py-pip make openssl curl unzip git && \
     pip install --no-cache-dir psutil ansible_runner ansible==2.8.6 redis && \
-    wget https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz && \
-    tar -zxf helm-v3.2.1-linux-amd64.tar.gz && \
+    wget https://get.helm.sh/helm-v3.2.3-linux-amd64.tar.gz && \
+    tar -zxf helm-v3.2.3-linux-amd64.tar.gz && \
     mv linux-amd64/helm /bin/helm && \
     rm -rf *linux-amd64* && \
     chmod +x /bin/helm && \
