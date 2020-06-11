@@ -221,6 +221,11 @@ kibana_enabled: false
 #external_es_url: SHOULD_BE_REPLACED
 #external_es_port: SHOULD_BE_REPLACED
 
+# EVENTS CONFIGURATION
+events_enabled: false
+events_ruler_enabled: false
+events_ruler_replicas: 2
+
 # DEVOPS CONFIGURATION
 # Devops is an optional component for KubeSphere.
 devops_enabled: false

@@ -1,11 +1,15 @@
-{{- if .Values.defaultRules.create }}
+{{- if .Values.rule.createDefaults }}
 apiVersion: events.kubesphere.io/v1alpha1
-kind: EventsRule
+kind: Rule
 metadata:
   name: {{ template "kube-events.cluster-rules-default.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
     kubesphere.io/rule-scope: cluster
+{{ include "kube-events.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install{{- if .Values.rule.overrideDefaults }},pre-upgrade{{- end }}
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   rules:
     - name: ContainerCreated

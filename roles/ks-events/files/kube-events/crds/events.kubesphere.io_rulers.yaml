@@ -6,18 +6,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.2.5
   creationTimestamp: null
-  name: eventsrulers.events.kubesphere.io
+  name: rulers.events.kubesphere.io
 spec:
   group: events.kubesphere.io
   names:
-    kind: EventsRuler
-    listKind: EventsRulerList
-    plural: eventsrulers
-    singular: eventsruler
+    kind: Ruler
+    listKind: RulerList
+    plural: rulers
+    shortNames:
+    - erl
+    singular: ruler
   scope: Namespaced
   validation:
     openAPIV3Schema:
-      description: EventsRuler is the Schema for the eventsrulers API
+      description: Ruler is the Schema for the ruler API
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -33,10 +35,10 @@ spec:
           type: object
         spec:
           description: Spec defines the specification of the desired behavior of the
-            EventsRuler.
+            Ruler.
           properties:
             image:
-              description: Docker image of events-ruler
+              description: Docker image of events ruler
               type: string
             imagePullPolicy:
               description: Image pull policy. One of Always, Never, IfNotPresent.
@@ -73,8 +75,8 @@ spec:
                   type: object
               type: object
             ruleNamespaceSelector:
-              description: Namespaces to be selected for EventsRules discovery. If
-                unspecified, discover EventsRule instances from all namespaces.
+              description: Namespaces to be selected for Rules discovery. If unspecified,
+                discover Rule instances from all namespaces.
               properties:
                 matchExpressions:
                   description: matchExpressions is a list of label selector requirements.
@@ -117,7 +119,7 @@ spec:
                   type: object
               type: object
             ruleSelector:
-              description: A selector to select EventsRules instances.
+              description: A selector to select Rules instances.
               properties:
                 matchExpressions:
                   description: matchExpressions is a list of label selector requirements.
@@ -247,7 +249,7 @@ spec:
           - image
           type: object
         status:
-          description: EventsRulerStatus defines the observed state of EventsRuler
+          description: RulerStatus defines the observed state of Ruler
           type: object
       required:
       - spec

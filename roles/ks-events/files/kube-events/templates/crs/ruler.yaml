@@ -1,6 +1,6 @@
 {{- if .Values.ruler.enabled }}
 apiVersion: events.kubesphere.io/v1alpha1
-kind: EventsRuler
+kind: Ruler
 metadata:
   name: {{ template "kube-events.ruler.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -11,6 +11,7 @@ spec:
   image: {{ .Values.ruler.image.repository }}:{{ .Values.ruler.image.tag }}
   imagePullPolicy: {{ .Values.ruler.image.pullPolicy }}
 {{- end }}
+  replicas: {{ .Values.ruler.replicas }}
   resources:
 {{ toYaml .Values.ruler.resources | indent 4 }}
   ruleNamespaceSelector:

@@ -32,7 +32,9 @@ spec:
         name: alerting-adapter
         env:
         - name: ADAPTER_APP_MONITORING_HOST
-          value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha2"
+          value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha3"
+        - name: ADAPTER_KS_API_SERVER_TOKEN
+          value: {{ ks_token_str }}
         resources:
           limits:
             cpu: "1"
@@ -53,7 +55,7 @@ spec:
         - name: ALERT_ETCD_ENDPOINTS
           value: "{{ etcdEndpoint }}"
         - name: ALERT_APP_MONITORING_HOST
-          value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha2"
+          value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha3"
         - name: ALERT_QUEUE_TYPE
           value: "redis"
         - name: ALERT_QUEUE_ADDR

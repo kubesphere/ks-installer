@@ -6,18 +6,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.2.5
   creationTimestamp: null
-  name: eventsexporters.events.kubesphere.io
+  name: exporters.events.kubesphere.io
 spec:
   group: events.kubesphere.io
   names:
-    kind: EventsExporter
-    listKind: EventsExporterList
-    plural: eventsexporters
-    singular: eventsexporter
+    kind: Exporter
+    listKind: ExporterList
+    plural: exporters
+    shortNames:
+    - ex
+    singular: exporter
   scope: Namespaced
   validation:
     openAPIV3Schema:
-      description: EventsExporter is the Schema for the eventsexporters API
+      description: Exporter is the Schema for the exporter API
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -33,10 +35,10 @@ spec:
           type: object
         spec:
           description: Spec defines the specification of the desired behavior of the
-            EventsExporter.
+            Exporter.
           properties:
             image:
-              description: Docker image of events-exporter
+              description: Docker image of events exporter
               type: string
             imagePullPolicy:
               description: Image pull policy. One of Always, Never, IfNotPresent.
@@ -118,7 +120,7 @@ spec:
           - image
           type: object
         status:
-          description: EventsExporterStatus defines the observed state of EventsExporter
+          description: ExporterStatus defines the observed state of Exporter
           type: object
       required:
       - spec

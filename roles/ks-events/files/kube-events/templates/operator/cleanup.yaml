@@ -1,5 +1,5 @@
 {{- if .Values.operator.enabled }}
-{{- if or .Values.operator.cleanupCustomResources (or .Values.exporter.enabled .Values.ruler.enabled) }}
+{{- if or .Values.operator.cleanupAllCustomResources (or .Values.exporter.enabled .Values.ruler.enabled) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -19,25 +19,25 @@ spec:
       serviceAccountName: {{ template "kube-events.operator.serviceAccountName" . }}
       containers:
         - name: kubectl
-          image: docker.io/bitnami/kubectl:1.14.1
+          image: {{ .Values.operator.kubectlImage }}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
             - -c
             - >
-              {{- if .Values.operator.cleanupCustomResources }}
-              kubectl delete eventsexporter --all;
-              kubectl delete eventsruler --all;
-              kubectl delete eventsrule --all;
+              {{- if .Values.operator.cleanupAllCustomResources }}
+              kubectl delete exporter.events.kubesphere.io --all ;
+              kubectl delete ruler.events.kubesphere.io --all ;
+              kubectl delete rule.events.kubesphere.io --all ;
               {{- else }}
               {{- if .Values.exporter.enabled }}
-              kubectl delete eventsexporter {{ template "kube-events.exporter.fullname" . }} -n {{ .Release.Namespace }}
+              kubectl delete exporter.events.kubesphere.io {{ template "kube-events.exporter.fullname" . }} -n {{ .Release.Namespace }} ;
               {{- end }}
               {{- if .Values.ruler.enabled }}
-              kubectl delete eventsruler {{ template "kube-events.ruler.fullname" . }} -n {{ .Release.Namespace }}
+              kubectl delete ruler.events.kubesphere.io {{ template "kube-events.ruler.fullname" . }} -n {{ .Release.Namespace }} ;
               {{- end }}
               {{- end }}
-              sleep 10
+              sleep 10 ;
       restartPolicy: OnFailure
 {{- end }}
 {{- end }}

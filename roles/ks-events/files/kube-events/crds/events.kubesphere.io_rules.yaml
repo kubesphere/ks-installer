@@ -6,18 +6,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.2.5
   creationTimestamp: null
-  name: eventsrules.events.kubesphere.io
+  name: rules.events.kubesphere.io
 spec:
   group: events.kubesphere.io
   names:
-    kind: EventsRule
-    listKind: EventsRuleList
-    plural: eventsrules
-    singular: eventsrule
+    kind: Rule
+    listKind: RuleList
+    plural: rules
+    shortNames:
+    - er
+    singular: rule
   scope: Namespaced
   validation:
     openAPIV3Schema:
-      description: EventsRule is the Schema for the eventsrules API
+      description: Rule is the Schema for the Rule API
       properties:
         apiVersion:
           description: 'APIVersion defines the versioned schema of this representation
@@ -32,11 +34,11 @@ spec:
         metadata:
           type: object
         spec:
-          description: EventsRuleSpec defines the desired state of EventsRule
+          description: RuleSpec defines the desired state of Rule
           properties:
             rules:
               items:
-                description: Rule describes a notification or alert rule
+                description: EventRule describes a notification or alert rule
                 properties:
                   annotations:
                     additionalProperties:
@@ -69,7 +71,7 @@ spec:
               type: array
           type: object
         status:
-          description: EventsRuleStatus defines the observed state of EventsRule
+          description: RuleStatus defines the observed state of Rule
           type: object
       required:
       - spec

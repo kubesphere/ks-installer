@@ -18,6 +18,8 @@ If release name contains chart name it will be used as a full name.
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 26 | trimSuffix "-" -}}
+{{- else if contains "event" .Release.Name -}}
+{{- .Release.Name | trunc 26 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 26 | trimSuffix "-" -}}
 {{- end -}}
