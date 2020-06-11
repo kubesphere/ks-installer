@@ -1,7 +1,5 @@
 operator:
   enabled: true
-  # just clean up cr but not crd
-  cleanupCustomResources: true
   image:
     repository: {{ kube_events_operator_repo }}
     tag: {{ kube_events_operator_tag }}
@@ -18,6 +16,9 @@ operator:
   serviceAccount:
     create: true
     name: ""
+  # If true, just clean up cr but not crd
+  cleanupAllCustomResources: false
+  kubectlImage: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
 
 exporter:
   enabled: true
@@ -44,7 +45,8 @@ exporter:
     #     path:
 
 ruler:
-  enabled: true
+  enabled: {{ events.ruler.enabled }}
+  relicas: {{ events.ruler.replicas | default(2) }}
   image:
     repository: {{ kube_events_ruler_repo }}
     tag: {{ kube_events_ruler_tag }}
@@ -71,5 +73,6 @@ ruler:
     #     port:
     #     path:
 
-defaultRules:
-  create: true
+rule:
+  createDefaults: true
+  overrideDefaults: false

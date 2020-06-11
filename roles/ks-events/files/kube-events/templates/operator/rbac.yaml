@@ -95,7 +95,7 @@ rules:
   - apiGroups:
       - events.kubesphere.io
     resources:
-      - eventsexporters
+      - exporters
     verbs:
       - create
       - delete
@@ -107,7 +107,7 @@ rules:
   - apiGroups:
       - events.kubesphere.io
     resources:
-      - eventsexporters/status
+      - exporters/status
     verbs:
       - get
       - patch
@@ -115,27 +115,7 @@ rules:
   - apiGroups:
       - events.kubesphere.io
     resources:
-      - eventsrulers
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - events.kubesphere.io
-    resources:
-      - eventsrulers/status
-    verbs:
-      - get
-      - patch
-      - update
-  - apiGroups:
-      - events.kubesphere.io
-    resources:
-      - eventsrules
+      - rulers
     verbs:
       - create
       - delete
@@ -147,7 +127,27 @@ rules:
   - apiGroups:
       - events.kubesphere.io
     resources:
-      - eventsrules/status
+      - rulers/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - events.kubesphere.io
+    resources:
+      - rules
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - events.kubesphere.io
+    resources:
+      - rules/status
     verbs:
       - get
       - patch

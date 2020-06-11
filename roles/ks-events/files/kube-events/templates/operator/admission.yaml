@@ -1,32 +1,21 @@
 {{- if .Values.operator.enabled }}
-{{- $cn := printf "%s.%s.svc" ( include "kube-events.admission.fullname" . ) .Release.Namespace }}
-{{- $ca := genCA "kube-events-admission-ca" 3650 -}}
-{{- $cert := genSignedCert $cn nil nil 3650 $ca -}}
-apiVersion: admissionregistration.k8s.io/v1beta1
-kind: ValidatingWebhookConfiguration
+{{- $ca := genCA "kube-events-admission-ca" 3650 }}
+{{- $cn := ( include "kube-events.admission.fullname" . ) }}
+{{- $altName1 := printf "%s.%s" ( include "kube-events.admission.fullname" . ) .Release.Namespace }}
+{{- $altName2 := printf "%s.%s.svc" ( include "kube-events.admission.fullname" . ) .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca -}}
+---
+apiVersion: v1
+kind: Secret
 metadata:
-  name: {{ template "kube-events.admission.fullname" . }}-validate
+  name: {{ template "kube-events.admission.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kube-events.labels" . | indent 4 }}
-webhooks:
-  - clientConfig:
-      caBundle: {{ b64enc $ca.Cert }}
-      service:
-        name: {{ template "kube-events.admission.fullname" . }}
-        namespace: {{ .Release.Namespace }}
-        path: /validate-events-kubesphere-io-v1alpha1-eventsrule
-    failurePolicy: Fail
-    name: veventsrule.kb.io
-    rules:
-      - apiGroups:
-          - events.kubesphere.io
-        apiVersions:
-          - v1alpha1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - eventsrules
+type: Opaque
+data:
+  tls.crt: {{ b64enc $cert.Cert }}
+  tls.key: {{ b64enc $cert.Key }}
 ---
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
@@ -40,9 +29,9 @@ webhooks:
       service:
         name: {{ template "kube-events.admission.fullname" . }}
         namespace: {{ .Release.Namespace }}
-        path: /mutate-events-kubesphere-io-v1alpha1-eventsrule
+        path: /mutate-events-kubesphere-io-v1alpha1-rule
     failurePolicy: Fail
-    name: meventsrule.kb.io
+    name: mrule.kb.io
     rules:
       - apiGroups:
           - events.kubesphere.io
@@ -52,7 +41,33 @@ webhooks:
           - CREATE
           - UPDATE
         resources:
-          - eventsrules
+          - rules
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ template "kube-events.admission.fullname" . }}-validate
+  labels:
+{{ include "kube-events.labels" . | indent 4 }}
+webhooks:
+  - clientConfig:
+      caBundle: {{ b64enc $ca.Cert }}
+      service:
+        name: {{ template "kube-events.admission.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: /validate-events-kubesphere-io-v1alpha1-rule
+    failurePolicy: Fail
+    name: vrule.kb.io
+    rules:
+      - apiGroups:
+          - events.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - rules
 ---
 apiVersion: v1
 kind: Service
@@ -68,16 +83,5 @@ spec:
   selector:
     app: {{ template "kube-events.operator.fullname" . }}
 {{ include "kube-events.labels" . | indent 4 }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ template "kube-events.admission.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels:
-{{ include "kube-events.labels" . | indent 4 }}
-type: Opaque
-data:
-  tls.crt: {{ b64enc $cert.Cert }}
-  tls.key: {{ b64enc $cert.Key }}
+
 {{- end }}
