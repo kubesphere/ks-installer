@@ -25,5 +25,5 @@ spec:
   priority: {{ .Values.webhook.priority }}
   auditType: {{ .Values.webhook.auditType }}
   auditLevel: {{ .Values.webhook.auditLevel }}
-  k8sAuditingEnable: {{ .Values.webhook.k8sAuditingEnable }}
+  k8sAuditingEnabled: {{ .Values.webhook.k8sAuditingEnabled }}
 
