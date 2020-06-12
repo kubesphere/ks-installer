@@ -60,7 +60,7 @@ ks_images=(kubesphere/ks-console:v2.1.1                                         
    openpitrix/openpitrix:v0.4.8                                                  \
    openpitrix/runtime-provider-kubernetes:v0.1.3                                 \
                                                                                  \
-   kubesphere/jenkins-uc:v2.1.1                                                  \
+   kubespheredev/jenkins-uc:v3.0.0                                                  \
    jenkins/jenkins:2.176.2                                                       \
    jenkins/jnlp-slave:3.27-1                                                     \
    kubesphere/builder-base:v2.1.0                                                \
