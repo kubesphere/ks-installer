@@ -203,7 +203,7 @@ def getComponentLists():
     for component, parameters in configs.items():
         if type(parameters) is not str:
             for j, value in parameters.items():
-                if (j == 'enabled') and (value):
+                if (j == 'enabled') and (value == True):
                     readyToEnabledList.append(component)
                     break
                 elif (j == 'enabled') and (value == False):
@@ -211,7 +211,7 @@ def getComponentLists():
                     break
     try:
         readyToEnabledList.remove("metrics_server")
-        readyToEnabledList.remove("metrics-server")
+        readyToDisableList.remove("metrics-server")
     except:
         pass
 
