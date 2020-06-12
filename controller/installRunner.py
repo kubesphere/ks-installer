@@ -208,16 +208,7 @@ def getComponentLists():
                     break
                 elif (j == 'enabled') and (value == False):
                     readyToDisableList.append(component)
-                    break
-                    
-    for component1, parameters1 in configs.items():
-        if (type(parameters1.get('grafana')) is dict) and (parameters1.get('grafana').get('enabled') == True):
-            readyToEnabledList.append('grafana')
-        elif (type(parameters1.get('kibana')) is dict) and (parameters1.get('kibana').get('enabled') == True):
-            readyToEnabledList.append('kibana')
-        elif (type(parameters1.get('sonarqube')) is dict) and (parameters1.get('sonarqube').get('enabled') == True):
-            readyToEnabledList.append('sonarqube')
-            break    
+                    break  
     try:
         readyToEnabledList.remove("metrics_server")
         readyToDisableList.remove("metrics-server")
