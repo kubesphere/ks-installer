@@ -56,6 +56,8 @@ spec:
           name: kubesphere-config
         - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: webhook-secret
+        - mountPath: /var/lib/kubelet/plugins/
+          name: kubelet-plugin
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -71,6 +73,10 @@ spec:
           secret:
             defaultMode: 420
             secretName: ks-controller-manager-webhook-cert
+        - name: kubelet-plugin
+          hostPath:
+            path: /var/lib/kubelet/plugins/
+            type: DirectoryOrCreate
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
