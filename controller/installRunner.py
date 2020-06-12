@@ -208,7 +208,7 @@ def getComponentLists():
                     break
                 elif (j == 'enabled') and (value == False):
                     readyToDisableList.append(component)
-                    break  
+                    break
     try:
         readyToEnabledList.remove("metrics_server")
         readyToDisableList.remove("metrics-server")
