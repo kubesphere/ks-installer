@@ -325,7 +325,7 @@ gitlab_busybox_tag: 1.31.1
 configmap_reload_repo: "{{ base_repo }}jimmidyson/configmap-reload"
 configmap_reload_tag: v0.3.0
 prometheus_repo: "{{ base_repo }}kubesphere/prometheus"
-prometheus_tag: v2.17.2
+prometheus_tag: v2.19.0
 prometheus_config_reloader_repo: "{{ base_repo }}kubesphere/prometheus-config-reloader"
 prometheus_config_reloader_tag: v0.38.1
 prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
