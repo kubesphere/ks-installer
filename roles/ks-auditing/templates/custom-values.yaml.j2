@@ -36,7 +36,14 @@ webhook:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  receivers: []
+  receivers:
+    - name: alert
+      type: alertmanager
+      config:
+        service:
+          namespace: kubesphere-monitoring-system
+          name: alertmanager-main
+          port: 9093
   priority: DEBUG
   auditType: dynamic
   auditLevel: Metadata
