@@ -79,6 +79,9 @@ data:
     alerting:
       enabled: False
 
+    multicluster:
+      enabled: False
+ 
     metrics_server:
       enabled: False
 
