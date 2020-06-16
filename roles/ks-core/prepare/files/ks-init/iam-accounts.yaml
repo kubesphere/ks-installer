@@ -652,7 +652,6 @@ metadata:
 spec:
   manager: admin
 
----
 ---  
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
@@ -1028,7 +1027,7 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'users'
+  - 'workspacemembers'
   verbs:
   - 'get'
   - 'list'
@@ -1051,7 +1050,7 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'users'
+  - 'workspacemembers'
   verbs:
   - '*'
 - apiGroups:
@@ -1062,3 +1061,211 @@ rules:
   - 'list'
   - 'get'
   - 'watch'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: workspace-admin
+role:
+  apiVersion: iam.kubesphere.io/v1alpha2
+  kind: WorkspaceRole
+  metadata:
+    annotations:
+      iam.kubesphere.io/aggregation-roles: '["role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-users","role-template-manage-users","role-template-manage-roles","role-template-view-roles"]'
+      kubesphere.io/creator: system
+    name: admin
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - '*'
+    verbs:
+    - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: workspace-viewer
+role:
+  apiVersion: iam.kubesphere.io/v1alpha2
+  kind: WorkspaceRole
+  metadata:
+    annotations:
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-users","role-template-view-roles"]'
+      kubesphere.io/creator: system
+    name: viewer
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - '*'
+    verbs:
+    - 'get'
+    - 'list'
+    - 'watch'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: workspace-regular
+role:
+  apiVersion: iam.kubesphere.io/v1alpha2
+  kind: WorkspaceRole
+  metadata:
+    annotations:
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-users"]'
+      kubesphere.io/creator: system
+    name: regular
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - workspaces
+    - workspacemembers
+    verbs:
+    - get
+    - list
+    - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: workspace-self-provisioner
+role:
+  apiVersion: iam.kubesphere.io/v1alpha2
+  kind: WorkspaceRole
+  metadata:
+    annotations:
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-create-projects","role-template-create-devops"]'
+      kubesphere.io/creator: system
+    name: self-provisioner
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - workspaces
+    - workspacemembers
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - '*'
+    resources:
+    - namespaces
+    - devops
+    verbs:
+    - create
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: project-admin
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings","role-template-manage-network-policies"]'
+      kubesphere.io/creator: system
+      kubesphere.io/description: Allows admin access to perform any action on any resource, it gives full control over every resource in the namespace.
+    name: admin
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - '*'
+    verbs:
+    - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: project-operator
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-alerting-messages","role-template-view-roles","role-template-view-members","role-template-view-roles"]'
+      kubesphere.io/creator: system
+      kubesphere.io/description: The maintainer of the namespace who can manage resources other than users and roles in the namespace.
+    name: operator
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - '*'
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - apps
+    - extensions
+    - batch
+    - logging.kubesphere.io
+    - monitoring.kubesphere.io
+    - iam.kubesphere.io
+    - autoscaling
+    - alerting.kubesphere.io
+    - openpitrix.io
+    - app.k8s.io
+    - servicemesh.kubesphere.io
+    - operations.kubesphere.io
+    - devops.kubesphere.io
+    resources:
+    - '*'
+    verbs:
+    - '*'
+  - apiGroups:
+    - ""
+    - resources.kubesphere.io
+    resources:
+    - jobs
+    - cronjobs
+    - daemonsets
+    - deployments
+    - horizontalpodautoscalers
+    - ingresses
+    - endpoints
+    - configmaps
+    - events
+    - persistentvolumeclaims
+    - pods
+    - podtemplates
+    - pods
+    - secrets
+    - services
+    verbs:
+    - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: project-viewer
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      kubesphere.io/creator: system
+      kubesphere.io/description: Allows viewer access to view all resources in the namespace.
+    name: viewer
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - '*'
+    verbs:
+    - get
+    - list
+    - watch
+
