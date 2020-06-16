@@ -28,9 +28,9 @@ spec:
       containers:
       - command:
         - ks-apiserver
-        {% if network is defined and network.enableNetworkPolicy is defined and network.enableNetworkPolicy %}
+{% if network is defined and network.enableNetworkPolicy is defined and network.enableNetworkPolicy %}
         - --enable-network-policy
-        {% endif %}
+{% endif %}
         - --logtostderr=true
         image: {{ ks_apiserver_repo }}:{{ ks_apiserver_tag }}
         imagePullPolicy: {{ ks_image_pull_policy }}
