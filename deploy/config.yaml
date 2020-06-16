@@ -13,6 +13,9 @@ data:
       port: 2379
       tlsEnable: True
 
+    network:
+      enableNetworkPolicy: false
+
     common:
       mysqlVolumeSize: 20Gi
       minioVolumeSize: 20Gi
@@ -49,7 +52,7 @@ data:
 
     events:
       enabled: False
-      
+    
     auditing:
       enabled: False
 
@@ -77,9 +80,6 @@ data:
       enabled: False
 
     metrics_server:
-      enabled: False
-
-    weave_scope:
       enabled: False
 
 kind: ConfigMap
