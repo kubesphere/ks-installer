@@ -55,13 +55,20 @@ data:
 
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     openpitrix:
-      runtimeManagerEndpoint:    "openpitrix-runtime-manager.openpitrix-system.svc:9103"
-      clusterManagerEndpoint:    "openpitrix-cluster-manager.openpitrix-system.svc:9104"
-      repoManagerEndpoint:       "openpitrix-repo-manager.openpitrix-system.svc:9101"
-      appManagerEndpoint:        "openpitrix-app-manager.openpitrix-system.svc:9102"
-      categoryManagerEndpoint:   "openpitrix-category-manager.openpitrix-system.svc:9113"
-      attachmentManagerEndpoint: "openpitrix-attachment-manager.openpitrix-system.svc:9122"
-      repoIndexerEndpoint:       "openpitrix-repo-indexer.openpitrix-system.svc:9108"
+      runtimeManagerEndpoint:    "hyperpitrix.openpitrix-system.svc:9103"
+      clusterManagerEndpoint:    "hyperpitrix.openpitrix-system.svc:9104"
+      repoManagerEndpoint:       "hyperpitrix.openpitrix-system.svc:9101"
+      appManagerEndpoint:        "hyperpitrix.openpitrix-system.svc:9102"
+      categoryManagerEndpoint:   "hyperpitrix.openpitrix-system.svc:9113"
+      attachmentManagerEndpoint: "hyperpitrix.openpitrix-system.svc:9122"
+      repoIndexerEndpoint:       "hyperpitrix.openpitrix-system.svc:9108"
+{% endif %}
+
+{% if multicluster.enabled is defined and multicluster.enabled == true %}
+    multicluster:
+      enable: true
+      agentImage: {{ tower_repo }}/{{ tower_image }}:{{ tower_image_tag }}
+      proxyPublishService: tower.kubesphere-system.svc
 {% endif %}
 
     monitoring:
