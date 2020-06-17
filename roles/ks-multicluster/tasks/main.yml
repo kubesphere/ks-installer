@@ -43,6 +43,6 @@
         - "kubefed_result.stderr and 'FATAL' in kubefed_result.stderr"
 
 - name: Kubefed | Create MultiCluster crds
-  shell: "{{ bin_dir }}/kubectl create -f {{ kubesphere_dir }}/kubefed/federatedcrds"
+  shell: "{{ bin_dir }}/kubectl create -f {{ kubesphere_dir }}/kubefed/federatedcrds -n kube-federation-system"
   register: crds_result
   failed_when: "crds_result.stderr and 'AlreadyExists' not in crds_result.stderr and 'Warning' not in crds_result.stderr"
