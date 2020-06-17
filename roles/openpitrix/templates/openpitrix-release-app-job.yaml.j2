@@ -23,11 +23,11 @@ spec:
       - name: wait-app-manager
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-app-manager.openpitrix-system.svc 9102; do echo "waiting for app-manager"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z hyperpitrix.openpitrix-system.svc 9102; do echo "waiting for app-manager"; sleep 2; done;']
       - name: wait-attachment-manager
         image: {{ busybox_repo }}:{{ busybox_tag }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'until nc -z openpitrix-attachment-manager.openpitrix-system.svc 9122; do echo "waiting for attachment-manager"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z hyperpitrix.openpitrix-system.svc 9122; do echo "waiting for attachment-manager"; sleep 2; done;']
       containers:
       - command: ["release-app","-path","/data/helm-pkg/"]
         name: hyperpitrix-release-app-job
