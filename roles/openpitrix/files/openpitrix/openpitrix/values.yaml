@@ -10,7 +10,7 @@ busybox:
 openpitrix:
   image:
     repository: openpitrix/openpitrix
-    tag: "v3beta"
+    tag: "latest"
     pullPolicy: IfNotPresent
   limits:
     cpu: 500m
