@@ -1,7 +1,12 @@
 apiVersion: v1
 data:
   kubesphere.yaml: |
-
+    authentication:
+      authenticateRateLimiterMaxTries: 5
+      authenticationRateLimiterDuration: 30m0s
+      maxAuthenticateRetries: 6
+      multipleLogin: false
+      jwtSecret: "Kub3sp83r3!"
     ldap:
       host: openldap.kubesphere-system.svc:389
       managerDN: cn=admin,dc=kubesphere,dc=io
