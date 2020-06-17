@@ -35,12 +35,9 @@
         --namespace kube-federation-system
       register: kubefed_result
       ignore_errors: True
-      when:
-        - "kubefed_result.stderr and 'no matches for kind' in kubefed_result.stderr"
 
     - name: Kubefed | Delete kubefed
       shell: >
         {{ bin_dir }}/helm del --purge kubefed
       when:
-        - kubefed_result.stderr is defined
         - "kubefed_result.stderr and 'FATAL' in kubefed_result.stderr"
