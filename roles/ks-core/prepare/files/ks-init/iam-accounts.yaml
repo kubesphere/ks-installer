@@ -53,6 +53,18 @@ rules:
     verbs:
       - get
       - list
+  - apiGroups:
+      - iam.kubesphere.io
+    resources:
+      - users
+    verbs:
+      - list
+  - apiGroups:
+      - resources.kubesphere.io
+    resources:
+      - registry
+    verbs:
+      - get
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -760,7 +772,12 @@ metadata:
     kubesphere.io/creator: admin
   name: system-workspace
 spec:
-  manager: admin
+  placement:
+    clusterSelector: {}
+  template:
+    spec:
+      manager: admin
+      networkIsolation: false
 
 ---  
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1233,7 +1250,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-users"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-view-projects"]'
       kubesphere.io/creator: system
     name: regular
   rules:
@@ -1257,7 +1274,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-create-projects","role-template-create-devops"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-view-projects","role-template-create-projects","role-template-create-devops"]'
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
