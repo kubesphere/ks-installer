@@ -339,7 +339,7 @@ node_exporter_tag: ks-v0.18.1
 prometheus_adapter_repo: "{{ base_repo }}kubesphere/k8s-prometheus-adapter-amd64"
 prometheus_adapter_tag: v0.6.0
 alertmanager_repo: "{{ base_repo }}kubesphere/alertmanager"
-alertmanager_tag: v0.20.0
+alertmanager_tag: v0.21.0
 grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 6.6.0
 
