@@ -40,6 +40,9 @@
       {%- if servicemesh.enabled is defined and servicemesh.enabled %}
       istio-system
       {%- endif %}
+      {%- if multicluster.enabled is defined and multicluster.enabled %}
+      kube-federation-system
+      {%- endif %}
 
 
 - set_fact:
