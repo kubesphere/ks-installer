@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fluentbit-operator-migrator
+  namespace: kubesphere-logging-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrator
+          image: kubespheredev/fluentbit-operator:migrator
+      restartPolicy: Never
+      serviceAccountName: fluentbit-operator-migrator

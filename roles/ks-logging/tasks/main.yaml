@@ -15,6 +15,7 @@
   with_items:
     - { path: logging, file: custom-fluentbit-fluentBit.yaml }
     - { path: logging, file: custom-fluentbit-operator-deployment.yaml }
+    - { path: logging, file: custom-migrator-job.yaml }
     - { path: logging, file: custom-output-elasticsearch.yaml }
     - { path: logging, file: custom-values-elasticsearch.yaml }
     - { path: logging, file: custom-values-elasticsearch-curator.yaml }
@@ -81,6 +82,16 @@
 - name: ks-logging | Prepare fluentbit operator setup
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/logging/fluentbit-operator/init
+
+
+- name: ks-logging | Migrate fluentbit operator old config
+  shell: >
+    {{ bin_dir }}/kubectl apply -f  {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}
+  loop:
+    - {path: logging/fluentbit-operator/migrator, file: migrator-rbac.yaml}
+    - {path: logging, file: custom-migrator-job.yaml}
+  when:
+    - kubesphere_version.stdout.split('.')[0] == "2"
 
 
 - name: ks-logging | Deploy new fluentbit operator
