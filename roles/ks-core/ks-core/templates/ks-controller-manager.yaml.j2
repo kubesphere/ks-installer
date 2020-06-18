@@ -36,9 +36,6 @@ spec:
       containers:
       - command:
         - controller-manager
-{% if network is defined and network.enableNetworkPolicy is defined and network.enableNetworkPolicy %}
-        - --enable-network-policy
-{% endif %}
         - --logtostderr=true
         - --leader-elect=true
         image: {{ ks_controller_manager_repo }}:{{ ks_controller_manager_tag }}
