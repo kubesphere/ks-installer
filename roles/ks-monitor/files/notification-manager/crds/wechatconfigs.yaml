@@ -1,4 +1,4 @@
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: wechatconfigs.notification.kubesphere.io
@@ -11,63 +11,63 @@ spec:
     listKind: WechatConfigList
     plural: wechatconfigs
     singular: wechatconfig
-  scope: Namespaced
-  versions:
-  - name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: WechatConfig is the Schema for the wechatconfigs API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
+  validation:
+    openAPIV3Schema:
+      description: WechatConfig is the Schema for the wechatconfigs API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
               of an object. Servers should convert recognized schemas to the latest
               internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
               object represents. Servers may infer this from the endpoint the client
               submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: WechatConfigSpec defines the desired state of WechatConfig
-            properties:
-              wechatApiAgentId:
-                description: The id of the application which sending message.
-                type: string
-              wechatApiCorpId:
-                description: The corp id for authentication.
-                type: string
-              wechatApiSecret:
-                description: The API key to use when talking to the WeChat API.
-                properties:
-                  key:
-                    description: The key of the secret to select from.  Must be a
-                      valid secret key.
-                    type: string
-                  name:
-                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: WechatConfigSpec defines the desired state of WechatConfig
+          properties:
+            wechatApiAgentId:
+              description: The id of the application which sending message.
+              type: string
+            wechatApiCorpId:
+              description: The corp id for authentication.
+              type: string
+            wechatApiSecret:
+              description: The API key to use when talking to the WeChat API.
+              properties:
+                key:
+                  description: The key of the secret to select from.  Must be a valid
+                    secret key.
+                  type: string
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                       TODO: Add other useful fields. apiVersion, kind, uid?'
-                    type: string
-                  optional:
-                    description: Specify whether the Secret or its key must be defined
-                    type: boolean
-                required:
+                  type: string
+                optional:
+                  description: Specify whether the Secret or its key must be defined
+                  type: boolean
+              required:
                 - key
-                type: object
-              wechatApiUrl:
-                description: The WeChat API URL.
-                type: string
-            required:
+              type: object
+            wechatApiUrl:
+              description: The WeChat API URL.
+              type: string
+          required:
             - wechatApiAgentId
             - wechatApiCorpId
             - wechatApiSecret
             - wechatApiUrl
-            type: object
-          status:
-            description: WechatConfigStatus defines the observed state of WechatConfig
-            type: object
-        type: object
+          type: object
+        status:
+          description: WechatConfigStatus defines the observed state of WechatConfig
+          type: object
+      type: object
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
     served: true
     storage: true
