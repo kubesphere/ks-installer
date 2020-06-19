@@ -65,6 +65,13 @@ rules:
       - registry
     verbs:
       - get
+  - apiGroups:
+      - resources.kubesphere.io
+    resources:
+      - clusters
+    verbs:
+      - get
+
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -81,6 +88,10 @@ rules:
       - '*'
     verbs:
       - '*'
+  - nonResourceURLs:
+    - '*'
+    verbs:
+    - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -753,16 +764,6 @@ subjects:
   - apiGroup: iam.kubesphere.io/v1alpha2
     kind: Group
     name: system:authenticated
-
----
-apiVersion: iam.kubesphere.io/v1alpha2
-kind: User
-metadata:
-  name: admin
-spec:
-  email: admin@kubesphere.io
-  lang: zh
-  password: P@88w0rd
 
 ---
 apiVersion: tenant.kubesphere.io/v1alpha2
