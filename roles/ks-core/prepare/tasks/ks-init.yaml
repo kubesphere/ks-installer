@@ -23,6 +23,18 @@
 #- name: KubeSphere | Delete ks-alerting db-init-job
 #  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch alerting-db-init-job"
 #  when: result.stdout.find("alerting-db-init-job") != -1
+- name: Kubesphere | Checking account init
+  shell: >
+    {{ bin_dir }}/kubectl get users admin
+  register: kubesphere_user_check
+  failed_when: "kubesphere_user_check.stderr and 'NotFound' not in kubesphere_user_check.stderr"
+
+- name: Kubesphere | Init account
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/admin.yaml
+  when:
+    - kubesphere_user_check.stderr is defined
+    - kubesphere_user_check.stderr.find("NotFound") != -1
 
 
 - name: KubeSphere | Init KubeSphere
