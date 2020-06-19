@@ -22,5 +22,5 @@ spec:
     {{- toYaml .Values.notificationmanager.resources | nindent 4 }}
   receivers: 
     {{- toYaml .Values.notificationmanager.receivers | nindent 4 }}
-  globalConfigSelector:
-    {{- toYaml .Values.notificationmanager.globalConfigSelector | nindent 4 }}
+  defaultConfigSelector:
+    {{- toYaml .Values.notificationmanager.defaultConfigSelector | nindent 4 }}
