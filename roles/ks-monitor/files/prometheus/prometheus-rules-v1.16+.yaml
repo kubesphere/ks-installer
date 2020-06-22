@@ -503,7 +503,7 @@ spec:
   - name: node.rules
     rules:
     - expr: |
-        max(kube_pod_info{job="kube-state-metrics"} * on(node) group_left(role) kube_node_role{job="kube-state-metrics"}) by (node, namespace, host_ip, role, pod)
+        max(kube_pod_info{job="kube-state-metrics"} * on(node) group_left(role) kube_node_role{job="kube-state-metrics", role="master"} or on(pod, namespace) kube_pod_info{job="kube-state-metrics"}) by (node, namespace, host_ip, role, pod)
       record: 'node_namespace_pod:kube_pod_info:'
     - expr: |
         count by (node, host_ip, role) (sum by (node, cpu, host_ip, role) (
