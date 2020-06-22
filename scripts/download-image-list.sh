@@ -30,9 +30,10 @@ ks_images=(kubesphere/ks-console:v2.1.1                                         
    mirrorgooglecontainers/defaultbackend-amd64:1.4                               \
    kubesphere/metrics-server-amd64:v0.3.6                    \
    kubesphere/configmap-reload:v0.3.0                                            \
-   kubesphere/prometheus:v2.19.0                                                  \
-   kubesphere/prometheus-config-reloader:v0.38.1                                 \
-   kubesphere/prometheus-operator:v0.38.1                                        \
+   kubesphere/prometheus:v2.19.1                                                 \
+   kubesphere/alertmanager:v0.21.0                                               \
+   kubesphere/prometheus-config-reloader:v0.38.2                                 \
+   kubesphere/prometheus-operator:v0.38.2                                        \
    kubesphere/kube-rbac-proxy:v0.4.1                                             \
    kubesphere/kube-state-metrics:v1.9.6                                          \
    kubesphere/node-exporter:ks-v0.18.1                                          \

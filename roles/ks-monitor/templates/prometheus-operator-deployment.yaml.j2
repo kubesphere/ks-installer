@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: prometheus-operator
-    app.kubernetes.io/version: v0.38.1
+    app.kubernetes.io/version: {{ prometheus_operator_tag }}
   name: prometheus-operator
   namespace: kubesphere-monitoring-system
 spec:
@@ -18,7 +18,7 @@ spec:
       labels:
         app.kubernetes.io/component: controller
         app.kubernetes.io/name: prometheus-operator
-        app.kubernetes.io/version: v0.38.1
+        app.kubernetes.io/version: {{ prometheus_operator_tag }}
     spec:
       containers:
       - args:
