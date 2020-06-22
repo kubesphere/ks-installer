@@ -59,13 +59,13 @@
 
 - name: get clusterId
   shell: >
-     echo -n "{{ ks_nodeIP[ 'stdout' ] }} + `date '+%s'`" | base64
+     echo -n "{{ ks_nodeIP[ 'stdout' ] }} + `date '+%s'`" | xxd -ps -u
   register: clusterId
   ignore_errors: true
 
 - name: get essential information
   uri:
-    url: "https://kubesphere.io/log/?k8s_ks={{ k8s[ 'stdout' ] + ks[ 'stdout' ] }}&c={{ ha[ 'stdout' ] + number[ 'stdout' ] }}&time={{ kubetime[ 'stdout' ] + kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&clusterId={{ clusterId[ 'stdout' ] }}"
+    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&time={{ kubetime[ 'stdout' ] + kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&clusterId={{ clusterId[ 'stdout' ] }}"
     method: GET
     validate_certs: false
   ignore_errors: true
