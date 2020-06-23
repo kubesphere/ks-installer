@@ -208,6 +208,13 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - '*'
+  resources:
+  - clusters
+  verbs:
+  - list
+
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -416,6 +423,14 @@ rules:
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - '*'
+  resources:
+  - 'workspaces'
+  verbs:
+  - 'patch'
+  - 'update'
+  - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -573,6 +588,12 @@ roles:
   - workspacerolebindings
   verbs:
   - '*'
+- apiGroups:
+  - '*'
+  resources:
+  - clusters
+  verbs:
+  - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2

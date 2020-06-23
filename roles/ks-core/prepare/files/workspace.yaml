@@ -1,7 +1,0 @@
----
-apiVersion: tenant.kubesphere.io/v1alpha1
-kind: Workspace
-metadata:
-  name: system-workspace
-spec:
-  manager: admin
