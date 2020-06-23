@@ -78,7 +78,6 @@ spec:
               type: object
           required:
             - channel
-            - slackConfigSelector
           type: object
         status:
           description: SlackReceiverStatus defines the observed state of SlackReceiver
