@@ -59,7 +59,7 @@
 
 - name: get clusterId
   shell: >
-     echo -n "{{ ks_nodeIP[ 'stdout' ] }} + `date '+%s'`" | xxd -ps -u
+     echo -n "{{ ks_nodeIP[ 'stdout' ] }} + `date '+%s'`" | xxd -p
   register: clusterId
   ignore_errors: true
 
