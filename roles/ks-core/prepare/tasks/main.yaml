@@ -36,12 +36,12 @@
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
-- name: KubeSphere | Create KubeSphere workspace
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/workspace.yaml"
-  register: result
-  until: result is succeeded
-  retries: 5
-  delay: 3
+# - name: KubeSphere | Create KubeSphere workspace
+#   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/workspace.yaml"
+#   register: result
+#   until: result is succeeded
+#   retries: 5
+#   delay: 3
 
 - name: KubeSphere | Create KubeSphere vpa
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml"
