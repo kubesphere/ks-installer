@@ -67,3 +67,17 @@
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
   when:
     - op_jobs.stdout.find("hyperpitrix-release-app-job") == -1
+
+- name: OpenPitrix | Checking generate job
+  command: >
+    {{ bin_dir }}/kubectl get job -n openpitrix-system
+  register: op_jobs
+  ignore_errors: True
+
+- name: OpenPitrix | Creating generate job
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/hyperpitrix-generate-kubeconfig-job.yaml --force
+  register: source_state
+  failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
+  when:
+    - op_jobs.stdout.find("hyperpitrix-generate-kubeconfig-job") == -1
