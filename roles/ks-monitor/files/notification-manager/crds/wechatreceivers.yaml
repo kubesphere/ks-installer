@@ -79,8 +79,6 @@ spec:
                     are ANDed.
                   type: object
               type: object
-          required:
-            - wechatConfigSelector
           type: object
         status:
           description: WechatReceiverStatus defines the observed state of WechatReceiver
