@@ -30,6 +30,7 @@
   with_items:
     - { path: openpitrix, file: custom-values-openpitrix.yaml }
     - { path: openpitrix, file: openpitrix-release-app-job.yaml }
+    - { path: openpitrix, file: hyperpitrix-generate-kubeconfig-job.yaml }
 
 
 - name: OpenPitrix | Check OpenPitrix
