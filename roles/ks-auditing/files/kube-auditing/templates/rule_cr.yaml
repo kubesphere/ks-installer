@@ -63,34 +63,34 @@ spec:
       type: macro
       desc: create operator
       macro: Verb = "create"
-    - name: change-of-resource
+    - name: ResourceChange
       type: rule
       desc: audit the change of resource
       condition: Verb in ${action}
       enable: true
       priority: INFO
-    - name: create-hostnetwork-pod
+    - name: CreateHostnetworkPod
       type: rule
       desc: Detect an attempt to start a pod using the host network
       condition: ${pod} and ${create} and RequestObject.spec.hostNetwork = true
       enable: true
       output: ${user} ${Verb} HostNetwork Pod ${name} in Namespace ${namespace}.
       priority: WARNING
-    - name: create-hostport-pod
+    - name: CreateHostportPod
       type: rule
       desc: Detect an attempt to start a pod mount to a host port
       condition: ${pod} and ${create} and (RequestObject.spec.containers[*].ports[*].hostPort > 0 or RequestObject.spec.initContainers[*].ports[*].hostPort > 0)
       enable: true
       output: ${user} ${Verb} HostNetPort Pod ${name} in Namespace ${namespace}.
       priority: WARNING
-    - name: create-nodeport-service
+    - name: CreateNodeportService
       type: rule
       desc: Detect an attempt to start a service with a NodePort service type
       condition: ${service} and ${create} and RequestObject.spec.ports[*].nodePort > 0
       enable: true
       output: ${user} ${Verb} NodePort Service ${name} in Namespace ${namespace}.
       priority: WARNING
-    - name: attachorexec-pod
+    - name: AttachOrExecPod
       type: rule
       desc: Detect any attempt to attach/exec to a pod
       condition: ${pod} and ${create} and ObjectRef.Subresource in ("exec", "attach")
