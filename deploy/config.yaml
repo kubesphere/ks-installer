@@ -8,13 +8,10 @@ data:
       storageClass: ""
 
     etcd:
-      monitoring: False
+      monitoring: false
       endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
       port: 2379
-      tlsEnable: True
-
-    network:
-      enableNetworkPolicy: false
+      tlsEnable: true
 
     common:
       mysqlVolumeSize: 20Gi
@@ -24,21 +21,25 @@ data:
       redisVolumSize: 2Gi
 
     console:
-      enableMultiLogin: False  # enable/disable multi login
+      enableMultiLogin: false  # enable/disable multi login
       port: 30880
 
-    monitoring:
-      prometheusReplicas: 1
-      prometheusMemoryRequest: 400Mi
-      prometheusVolumeSize: 20Gi
-      alertmanagerReplicas: 1
-      grafana:
-        enabled: False
-      notification:
-        enabled: False
-
+    alerting:
+      enabled: false
+    auditing:
+      enabled: false
+    devops:
+      enabled: false
+      jenkinsMemoryLim: 2Gi
+      jenkinsMemoryReq: 1500Mi
+      jenkinsVolumeSize: 8Gi
+      jenkinsJavaOpts_Xms: 512m
+      jenkinsJavaOpts_Xmx: 512m
+      jenkinsJavaOpts_MaxRAM: 2g
+    events:
+      enabled: false
     logging:
-      enabled: False
+      enabled: false
       elasticsearchMasterReplicas: 1
       elasticsearchDataReplicas: 1
       logsidecarReplicas: 2
@@ -46,44 +47,25 @@ data:
       elasticsearchDataVolumeSize: 20Gi
       logMaxAge: 7
       elkPrefix: logstash
-      containersLogMountedPath: ""
-      kibana:
-        enabled: False
-
-    events:
-      enabled: False
-    
-    auditing:
-      enabled: False
-
-    openpitrix:
-      enabled: False
-
-    devops:
-      enabled: False
-      jenkinsMemoryLim: 2Gi
-      jenkinsMemoryReq: 1500Mi
-      jenkinsVolumeSize: 8Gi
-      jenkinsJavaOpts_Xms: 512m
-      jenkinsJavaOpts_Xmx: 512m
-      jenkinsJavaOpts_MaxRAM: 2g
-      sonarqube:
-        enabled: False
-
-    servicemesh:
-      enabled: False
-
-    notification:
-      enabled: False
-
-    alerting:
-      enabled: False
-
-    multicluster:
-      enabled: False
- 
     metrics_server:
-      enabled: False
+      enabled: false
+    monitoring:
+      prometheusReplicas: 1
+      prometheusMemoryRequest: 400Mi
+      prometheusVolumeSize: 20Gi
+      alertmanagerReplicas: 1
+      notification:
+        enabled: false
+    multicluster:
+      enabled: false
+    network:
+      enableNetworkPolicy: false
+    notification:
+      enabled: false
+    openpitrix:
+      enabled: false
+    servicemesh:
+      enabled: false
 
 kind: ConfigMap
 metadata:
