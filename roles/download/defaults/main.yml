@@ -136,11 +136,11 @@ notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
 notification_flyway_tag: "flyway_v2.1.0"
 notification_repo: "{{ base_repo }}kubesphere/notification"
 notification_tag: "v2.1.0"
-alerting_dbinit_repo: "{{ base_repo }}kubesphere/alerting-dbinit"
+alerting_dbinit_repo: "{{ base_repo }}kubespheredev/alerting-dbinit"
 alerting_dbinit_tag: "v3.0.0"
 ks_alerting_repo: "{{ base_repo }}kubesphere/alerting"
 ks_alerting_tag: "v2.1.0"
-ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert_adapter"
+ks_alerting_adapter_repo: "{{ base_repo }}kubespheredev/alert_adapter"
 ks_alerting_adapter_tag: "v3.0.0"
 
 # kubefed, kubesphere multiple cluster component

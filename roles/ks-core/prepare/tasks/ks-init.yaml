@@ -1,28 +1,28 @@
 ---
+- name: Kubesphere | Checking kubesphere secrets
+  shell: >
+    {{ bin_dir }}/kubectl get secrets -n kubesphere-system
+  register: kubesphere_secrets
 
 - import_tasks: initToken.yaml
+  when:
+    - kubesphere_secrets.stdout.find("ks-components-token") == -1
+    
 
+- name: KubeSphere | Getting ks-components-token
+  shell: >
+    {{ bin_dir }}/kubectl get secret ks-components-token -o jsonpath='{.data.ks-token}' | base64 -d
+  register: ks_token_str
 
 - name: KubeSphere | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/ks-init/{{ item.file }}"
   with_items:
-    # - { name: ks-account-init, file: ks-account-init.yaml, type: init }
-    # - { name: ks-apigateway-init, file: ks-apigateway-init.yaml, type: init }
-#    - { name: alerting-db-init-job, file: alerting-db-init-job.yaml, type: init }
     - { name: custom-values-istio-init, file: custom-values-istio-init.yaml, type: values }
     - { name: kubesphere-config, file: kubesphere-config.yaml, type: cm }
 
 
-#- name: KubeSphere | Checking ks-alerting db-init-job
-#  shell: "{{ bin_dir }}/kubectl get job -n kubesphere-alerting-system"
-#  register: result
-
-
-#- name: KubeSphere | Delete ks-alerting db-init-job
-#  shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch alerting-db-init-job"
-#  when: result.stdout.find("alerting-db-init-job") != -1
 - name: Kubesphere | Checking account init
   shell: >
     {{ bin_dir }}/kubectl get users admin
@@ -43,15 +43,5 @@
     - "iam-accounts.yaml"
     - "webhook-secret.yaml"
     - "kubesphere-config.yaml"
-#    - "alerting-db-init-job.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-
-
-#- name: KubeSphere | Init istio-system
-#  shell: >
-#    {{ bin_dir }}/helm upgrade --install istio-init {{ kubesphere_dir }}/ks-init/istio-init-1.1.0.tgz
-#    -f {{ kubesphere_dir }}/ks-init/custom-values-istio-init.yaml
-#    --namespace istio-system
-#  when:
-#    - istio_enable == true

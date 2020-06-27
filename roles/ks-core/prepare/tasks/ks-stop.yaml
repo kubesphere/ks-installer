@@ -3,16 +3,6 @@
   ignore_errors: True
 
 
-- name: ks-upgrade | disable ks-apigateway
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-apigateway --replicas=0"
-  ignore_errors: True
-
-
-- name: ks-upgrade | disable ks-account
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-account --replicas=0"
-  ignore_errors: True
-
-
 - name: ks-upgrade | disable ks-console
   shell: "{{ bin_dir }}/kubectl -n kubesphere-system scale deployment ks-console --replicas=0"
   ignore_errors: True
