@@ -176,6 +176,8 @@
         - (kibana_check.stdout.find("DEPLOYED") == -1) or (kibana_check.stdout.find("6.7.0-0217") == -1)
         - "kibana_result.stderr and 'no matches for kind' in kibana_result.stderr"
   when:
+    - logging.kibana is defined
+    - logging.kibana.enabled is defined
     - logging.kibana.enabled == true
 
 
