@@ -10,32 +10,10 @@
     ks_secret_str: "{{ ks_secret.stdout }}"
 
 
-#- name: KubeSphere | Getting OP Secret
-#  shell: "cat {{ kubesphere_dir }}/openpitrix/kubernetes/iam-config/secret-key.txt"
-#  register: op_secret
-#  when:
-#    - openpitrix.enabled == True
-#
-#
-#- name: KubeSphere | Setting op_secret
-#  set_fact:
-#    op_secret_str: "{{ op_secret.stdout }}"
-#  when:
-#    - openpitrix.enabled == True
-
-
 - name: KubeSphere | Enable Token Script
   file:
     path: "{{ kubesphere_dir }}/ks-init/jwt.sh"
     mode: 0755
-
-
-#- name: KubeSphere | Getting OP Token
-#  shell: >
-#    /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ op_secret_str }} '{"sub": "system","role": "global_admin","iat": 1516239022,"exp": 1816239022}'
-#  register: op_token
-#  when:
-#    - openpitrix.enabled == True
 
 
 - name: KubeSphere | Getting KS Token
@@ -44,16 +22,11 @@
   register: ks_token
 
 
-#- name: KubeSphere | Setting op_token
-#  set_fact:
-#    op_token_str: "{{ op_token.stdout }}"
-#  when:
-#    - openpitrix.enabled == True
-
-
-- name: KubeSphere | Setting ks_token
-  set_fact:
-    ks_token_str: "{{ ks_token.stdout }}"
-
+- name: KubeSphere | Create components token
+  shell: >
+    echo -n "{{ ks_token.stdout }}" > {{ kubesphere_dir }}/ks-token &&
+    {{ bin_dir }}/kubectl create secret generic ks-components-token 
+    --from-file={{ kubesphere_dir }}/ks-token
+    -n kubesphere-system
 
 

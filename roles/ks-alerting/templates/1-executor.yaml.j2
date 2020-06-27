@@ -34,7 +34,7 @@ spec:
         - name: ADAPTER_APP_MONITORING_HOST
           value: "http://ks-apiserver.kubesphere-system.svc/kapis/monitoring.kubesphere.io/v1alpha3"
         - name: ADAPTER_KS_API_SERVER_TOKEN
-          value: {{ ks_token_str }}
+          value: {{ ks_token_str.stdout }}
         resources:
           limits:
             cpu: "1"
