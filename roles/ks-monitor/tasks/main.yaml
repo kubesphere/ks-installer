@@ -15,6 +15,8 @@
 
 - import_tasks: grafana.yaml
   when:
+    - monitoring.grafana is defined
+    - monitoring.grafana.enabled is defined
     - monitoring.grafana.enabled == true
 
 - import_tasks: prometheus.yaml
@@ -31,4 +33,6 @@
 
 - import_tasks: notification-manager.yaml
   when:
-    - monitoring.notification.enabled is defined and  monitoring.notification.enabled == true 
+    - monitoring.notification is defined
+    - monitoring.notification.enabled is defined 
+    - monitoring.notification.enabled == true 

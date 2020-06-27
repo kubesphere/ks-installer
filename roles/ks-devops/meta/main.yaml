@@ -20,5 +20,8 @@ dependencies:
   - role: ks-devops/jenkins
 
 
-  - { role: ks-core, when: sonar_health is defined and sonar_health == true }
+  - role: ks-core
+    when: 
+      - sonar_health is defined
+      - sonar_health == true
 
