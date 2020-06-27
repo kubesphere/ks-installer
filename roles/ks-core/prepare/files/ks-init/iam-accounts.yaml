@@ -42,10 +42,9 @@ rules:
   - apiGroups:
       - openpitrix.io
     resources:
-      - apps
+      - clusters/namespaces
     verbs:
-      - get
-      - list
+      - '*'
   - apiGroups:
       - config.kubesphere.io
     resources:
@@ -71,6 +70,12 @@ rules:
       - clusters
     verbs:
       - get
+  - apiGroups:
+      - types.kubefed.io
+    resources:
+      - 'federatednamespaces'
+    verbs:
+      - list
 
 
 ---
@@ -98,10 +103,19 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '[]'
+    iam.kubesphere.io/aggregation-roles: '["role-template-view-app-templates"]'
     kubesphere.io/creator: admin
   name: platform-regular
-rules: []
+rules:
+- apiGroups:
+  - openpitrix.io
+  resources:
+  - apps
+  - apps/versions
+  - categories
+  verbs:
+  - get
+  - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -692,7 +706,6 @@ rules:
 - apiGroups:
   - openpitrix.io
   resources:
-  - reviews
   - apps
   - apps/versions
   - categories
@@ -816,6 +829,7 @@ rules:
 - apiGroups:
   - '*'
   resources:
+  - namespaces
   - configmaps
   - endpoints
   - events
@@ -886,6 +900,7 @@ rules:
   - '*'
   resources:
   - 'namespaces'
+  - 'federatednamespaces'
   verbs:
   - 'create'
 
@@ -905,6 +920,7 @@ rules:
 - apiGroups:
   - '*'
   resources:
+  - namespaces
   - configmaps
   - endpoints
   - events
