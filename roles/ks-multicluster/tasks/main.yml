@@ -33,16 +33,21 @@
         {{ bin_dir }}/helm upgrade --install kubefed {{ kubesphere_dir }}/kubefed/kubefed
         -f {{ kubesphere_dir }}/kubefed/custom-values-kubefed.yaml
         --namespace kube-federation-system
-      register: kubefed_result
-      ignore_errors: True
-
-    - name: Kubefed | Delete kubefed
-      shell: >
-        {{ bin_dir }}/helm del --purge kubefed
-      when:
-        - "kubefed_result.stderr and 'FATAL' in kubefed_result.stderr"
 
 - name: Kubefed | Create MultiCluster crds
   shell: "{{ bin_dir }}/kubectl create -f {{ kubesphere_dir }}/kubefed/federatedcrds -n kube-federation-system"
   register: crds_result
   failed_when: "crds_result.stderr and 'AlreadyExists' not in crds_result.stderr and 'Warning' not in crds_result.stderr"
+
+
+- name: Kubefed | import multicluster status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"multicluster": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3

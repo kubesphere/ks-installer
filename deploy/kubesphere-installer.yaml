@@ -206,4 +206,11 @@ spec:
       - name: installer
         image: kubespheredev/ks-installer:v3.0.0-dev
         imagePullPolicy: "Always"
-
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: host-time
+      volumes:
+      - hostPath:
+          path: /etc/localtime
+          type: ""
+        name: host-time

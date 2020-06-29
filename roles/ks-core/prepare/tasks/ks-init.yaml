@@ -7,21 +7,6 @@
 - import_tasks: initToken.yaml
   when:
     - kubesphere_secrets.stdout.find("ks-components-token") == -1
-    
-
-- name: KubeSphere | Getting ks-components-token
-  shell: >
-    {{ bin_dir }}/kubectl get secret ks-components-token -o jsonpath='{.data.ks-token}' | base64 -d
-  register: ks_token_str
-
-- name: KubeSphere | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/ks-init/{{ item.file }}"
-  with_items:
-    - { name: custom-values-istio-init, file: custom-values-istio-init.yaml, type: values }
-    - { name: kubesphere-config, file: kubesphere-config.yaml, type: cm }
-
 
 - name: Kubesphere | Checking account init
   shell: >
@@ -42,6 +27,5 @@
   loop:
     - "iam-accounts.yaml"
     - "webhook-secret.yaml"
-    - "kubesphere-config.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"

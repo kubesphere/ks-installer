@@ -1,16 +1,20 @@
 - import_tasks: redis-install.yaml
-
+  when:
+    - "status.redis is not defined or status.redis.status is not defined or status.redis.status != 'enabled'"
 
 - import_tasks: openldap-install.yaml
-
+  when:
+    - "status.openldap is not defined or status.openldap.status is not defined or status.openldap.status != 'enabled'"
 
 - import_tasks: minio-install.yaml
-  when: devops.enabled or openpitrix.enabled
-
+  when: 
+    - devops.enabled or openpitrix.enabled
+    - "status.minio is not defined or status.minio.status is not defined or status.minio.status != 'enabled'"
 
 - import_tasks: mysql-install.yaml
-  when: devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled
-
+  when: 
+    - devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled
+    - "status.mysql is not defined or status.mysql.status is not defined or status.mysql.status != 'enabled'"
 
 - name: Kubesphere | Deploying common component
   shell: >
@@ -21,4 +25,6 @@
   failed_when:
     - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
     - "import.stderr and 'is forbidden' not in import.stderr"
-  when: openpitrix.enabled or notification.enabled or alerting.enabled
+  when: 
+    - openpitrix.enabled or notification.enabled or alerting.enabled
+    - "status.etcd is not defined or status.etcd.status is not defined or status.etcd.status != 'enabled'"

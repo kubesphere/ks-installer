@@ -75,13 +75,16 @@ spec:
     notification:
       enabled: false
   multicluster:
+    clusterRole: member  # host or member
+    proxyPublishAddress: ""
+  networkpolicy:
     enabled: false
-  network:
-    enableNetworkPolicy: false
   notification:
     enabled: false
   openpitrix:
     enabled: false
   servicemesh:
     enabled: false
+
+
 
