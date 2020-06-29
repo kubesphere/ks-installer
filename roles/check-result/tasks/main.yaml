@@ -59,7 +59,7 @@
 
 - name: get clusterId by cm of kubesphere-config
   shell: >
-     {{ bin_dir }}/kubectl get cm kubesphere-config -n kubesphere-system -o yaml | grep "clusterId"
+     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId"
   register: check
   ignore_errors: true
 
@@ -72,7 +72,7 @@
 
 - name: clusterId patch to cm of kubesphere-config
   shell: >
-     {{ bin_dir }}/kubectl patch cm kubesphere-config -n kubesphere-system -p '{"data": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
+     {{ bin_dir }}/kubectl patch cc ks-installer -n kubesphere-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
   when: check.stdout.find('clusterId') == -1
   ignore_errors: true
 
@@ -83,7 +83,7 @@
 
 - name: get clusterId
   shell: >
-     {{ bin_dir }}/kubectl get cm kubesphere-config -n kubesphere-system -o yaml | grep "clusterId" | awk '{print $2}'
+     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId" | awk '{print $2}'
   register: cluster
   when: check.stdout.find('clusterId') != -1
   ignore_errors: true
