@@ -1,6 +1,6 @@
 - name: Kubesphere | Check ha-redis
   shell: >
-    {{ bin_dir }}/helm list ks-redis
+    {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-redis"
   register: redis_check
   ignore_errors: True
 
@@ -65,7 +65,7 @@
 
   when:
     - enableHA is defined and enableHA
-    - (redis_check.stdout.find("DEPLOYED") == -1) or (redis_check.stdout.find("5.0.5") == -1)
+    - (redis_check.stdout.find("deployed") == -1) or (redis_check.stdout.find("5.0.5") == -1)
 
 
 - name: Kubesphere | Deploying redis

@@ -161,6 +161,12 @@ rules:
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - installer.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
 
 
 ---
@@ -198,6 +204,6 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: kubesphere/ks-installer:v2.1.1
+        image: kubespheredev/ks-installer:v3.0.0-dev
         imagePullPolicy: "Always"
 

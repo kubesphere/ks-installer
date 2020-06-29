@@ -1,36 +1,32 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 
 import os
 import sys
 import time
 import shutil
-import yaml
 import json
 import datetime
 import ansible_runner
 import collections
-
-
-# playbookBasePath = '/root/ks-installer/playbooks'
-# privateDataDir = '/etc/kubesphere/results'
-# configFile = '/root/ks-installer/controller/config.yaml'
+from kubernetes import client, config
 
 playbookBasePath = '/kubesphere/playbooks'
 privateDataDir = '/kubesphere/results'
-configFile = '/kubesphere/config/ks-config.yaml'
+configFile = '/kubesphere/config/ks-config.json'
+statusFile = '/kubesphere/config/ks-status.json'
 
 ks_hook = '''
 {
 	"onKubernetesEvent": [{
-		"name": "Monitor configmap",
-		"kind": "ConfigMap",
+		"name": "Monitor clusterconfiguration",
+		"kind": "ClusterConfiguration",
 		"event": [ "add", "update" ],
 		"objectName": "ks-installer",
 		"namespaceSelector": {
 			"matchNames": ["kubesphere-system"]
 		},
-		"jqFilter": ".data",
+		"jqFilter": ".spec",
 		"allowFailure": false
 	}]
 }
@@ -84,8 +80,8 @@ def getResultInfo():
     resultsList = checkExecuteResult()
     # print(resultsList)
     for taskResult in resultsList:
-        taskName = taskResult.keys()[0]
-        taskRC = taskResult.values()[0]
+        taskName = list(taskResult.keys())[0]
+        taskRC = list(taskResult.values())[0]
 
         if taskRC != 0:
             resultInfoPath = os.path.join(
@@ -125,7 +121,7 @@ def checkExecuteResult(interval=5):
         completedTasks = []
 
         for taskProcess in taskProcessList:
-            taskName = taskProcess.keys()[0]
+            taskName = list(taskProcess.keys())[0]
             result = taskProcess[taskName].rc
             if result is not None:
                 print(
@@ -194,7 +190,7 @@ def getComponentLists():
 
     if os.path.exists(configFile):
         with open(configFile, 'r') as f:
-            configs = yaml.load(f.read(), Loader=yaml.FullLoader)
+            configs = json.load(f)
         f.close()
     else:
         print("The configuration file does not exist !  {}".format(configFile))
@@ -267,19 +263,44 @@ def resultInfo():
 
 
 def generateConfig():
-    cmdGetConfig = r"kubectl get cm -n kubesphere-system ks-installer -o jsonpath='{.data}' | grep -v '\[\|\]' > /kubesphere/config/ks-config.yaml"
-    os.system(cmdGetConfig)
+    config.load_incluster_config()
+    api = client.CustomObjectsApi()
+
+    resource = api.get_namespaced_custom_object(
+        group="installer.kubesphere.io",
+        version="v1alpha1",
+        name="ks-installer",
+        namespace="kubesphere-system",
+        plural="clusterconfigurations",
+    )
+    try:
+      with open(configFile, 'w', encoding='utf-8') as f:
+        json.dump(resource['spec'], f, ensure_ascii=False, indent=4)
+    except:
+      with open(configFile, 'w', encoding='utf-8') as f:
+        json.dump({"config": "new"}, f, ensure_ascii=False, indent=4)
+
+    try:
+      with open(statusFile, 'w', encoding='utf-8') as f:
+        json.dump({"status": resource['status']}, f, ensure_ascii=False, indent=4)
+    except:
+      with open(statusFile, 'w', encoding='utf-8') as f:
+        json.dump({"status": "new"}, f, ensure_ascii=False, indent=4)
+
+
+    # cmdGetConfig = r"kubectl get cm -n kubesphere-system ks-installer -o jsonpath='{.data}' | grep -v '\[\|\]' > /kubesphere/config/ks-config.yaml"
+    # os.system(cmdGetConfig)
 
 
 def main():
     if not os.path.exists(privateDataDir):
         os.makedirs(privateDataDir)
 
-    tagDate = (datetime.date.today() +
-               datetime.timedelta(-1)).strftime("%Y%m%d")
-    cmd = 'sed -i "/ks_image_tag/s/\:.*/\: dev-{}/g" /kubesphere/installer/roles/download/defaults/main.yml'.format(
-        tagDate)
-    os.system(cmd)
+    # tagDate = (datetime.date.today() +
+    #            datetime.timedelta(-1)).strftime("%Y%m%d")
+    # cmd = 'sed -i "/ks_image_tag/s/\:.*/\: dev-{}/g" /kubesphere/installer/roles/download/defaults/main.yml'.format(
+    #     tagDate)
+    # os.system(cmd)
 
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)

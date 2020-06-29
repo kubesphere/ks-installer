@@ -16,7 +16,7 @@
 
 - name: Kubesphere | Check minio
   shell: >
-    {{ bin_dir }}/helm list ks-minio
+    {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-minio"
   register: minio_check
   ignore_errors: True
 
@@ -47,7 +47,7 @@
         msg: "It is suggested to refer to the above methods for troubleshooting problems ."
       when: minio_status.rc != 0
   when:
-    - (minio_check.stdout.find("DEPLOYED") == -1) or (minio_check.stdout.find("RELEASE.2019-08-07T01-59-21Z") == -1)
+    - (minio_check.stdout.find("deployed") == -1) or (minio_check.stdout.find("RELEASE.2019-08-07T01-59-21Z") == -1)
 
 - name: Kubesphere | create minio config directory
   file:
