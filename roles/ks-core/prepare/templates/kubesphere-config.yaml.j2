@@ -47,8 +47,6 @@ data:
     network:
       enableNetworkPolicy: true
 {% endif %}
-
-
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
       host: http://ks-jenkins.kubesphere-devops-system.svc/
@@ -62,14 +60,12 @@ data:
 {% endif %}
 {% endif %}
 
-
 {% if servicemesh.enabled is defined and servicemesh.enabled == true %}
     servicemesh:
       istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
       jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
       servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
 {% endif %}
-
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     openpitrix:
       runtimeManagerEndpoint:    "hyperpitrix.openpitrix-system.svc:9103"
@@ -90,10 +86,8 @@ data:
       proxyPublishAddress: {{ multicluster.proxyPublishAddress }}
 {% endif %}
 {% endif %}
-
     monitoring:
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
-
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
@@ -103,7 +97,6 @@ data:
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-log
 {% endif %}
-
 {% if events.enabled is defined and events.enabled == true %}
     events:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
@@ -113,7 +106,6 @@ data:
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-events
 {% endif %}
-
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
@@ -123,17 +115,14 @@ data:
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-auditing
 {% endif %}
-
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
       endpoint: http://alerting.kubesphere-alerting-system.svc
 {% endif %}
-
 {% if notification.enabled is defined and notification.enabled == true %}
     notification:
       endpoint: http://notification.kubesphere-alerting-system.svc
 {% endif %}
-
 kind: ConfigMap
 metadata:
   name: kubesphere-config
