@@ -57,11 +57,48 @@
   register: number
   ignore_errors: true
 
+- name: get clusterId by cm of kubesphere-config
+  shell: >
+     {{ bin_dir }}/kubectl get cm kubesphere-config -n kubesphere-system -o yaml | grep "clusterId"
+  register: check
+  ignore_errors: true
+
+- name: KubeSphere | Creating KubeSphere clusterId
+  shell: >
+    uuidgen -r -t
+  register: cluster
+  when: check.stdout.find('clusterId') == -1
+  ignore_errors: true
+
+- name: clusterId patch to cm of kubesphere-config
+  shell: >
+     {{ bin_dir }}/kubectl patch cm kubesphere-config -n kubesphere-system -p '{"data": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
+  when: check.stdout.find('clusterId') == -1
+  ignore_errors: true
+
+- name: KubeSphere | KubeSphere clusterId
+  set_fact:
+    cluster_str: "{{ cluster.stdout}}"
+  when: check.stdout.find('clusterId') == -1
+
 - name: get clusterId
   shell: >
-     echo -n "{{ ks_nodeIP[ 'stdout' ] }} + `date '+%s'`" | xxd -p
+     {{ bin_dir }}/kubectl get cm kubesphere-config -n kubesphere-system -o yaml | grep "clusterId" | awk '{print $2}'
+  register: cluster
+  when: check.stdout.find('clusterId') != -1
+  ignore_errors: true
+
+- name: KubeSphere | KubeSphere clusterId
+  set_fact:
+    cluster_str: "{{ cluster.stdout}}"
+  when: check.stdout.find('clusterId') != -1
+
+- name: clusterId add ks
+  shell: >
+    echo "{{ cluster_str }}"
   register: clusterId
   ignore_errors: true
+
 
 - name: get essential information
   uri:

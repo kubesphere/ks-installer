@@ -1,6 +1,6 @@
 FROM flant/shell-operator:v1.0.0-beta.5-alpine3.9
 
-RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers python3-dev py3-pip make openssl curl unzip git && \
+RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers python3-dev py3-pip make openssl curl unzip git util-linux && \
     pip3 install --no-cache-dir psutil ansible_runner ansible==2.8.12 redis kubernetes && \
     wget https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz && \
     tar -zxf helm-v3.2.1-linux-amd64.tar.gz && \
@@ -18,6 +18,7 @@ RUN apk --no-cache add  gcc  musl-dev libffi-dev openssl-dev linux-headers pytho
 
 ENV  ANSIBLE_ROLES_PATH /kubesphere/installer/roles
 
+ADD controller/schedule.py /hooks/kubesphere
 ADD controller/installRunner.py /hooks/kubesphere
 ADD roles /kubesphere/installer/roles
 ADD env /kubesphere/results/env
