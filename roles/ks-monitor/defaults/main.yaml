@@ -9,14 +9,14 @@ monitoring:
       cpu: 4 
       memory: 16Gi 
     requests:
-      cpu: 200m
+      cpu: 100m
       memory: 400Mi
   node_exporter:
     limits:
       cpu: 300m
       memory: 400Mi
     requests:
-      cpu: 102m
+      cpu: 51m
       memory: 180Mi
   kube_rbac_proxy:
     limits:
@@ -30,7 +30,7 @@ monitoring:
       cpu: 500m
       memory: 2Gi
     requests:
-      cpu: 100m
+      cpu: 50m
       memory: 150Mi 
   prometheus_adapter:
     limits:
