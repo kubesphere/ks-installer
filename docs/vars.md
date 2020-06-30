@@ -56,7 +56,7 @@ multicluster:
   # member: means installer will install current cluster as a Member Cluster
   # none: means install current cluster as a standalone cluster
   clusterRole: none  # host | member | none
-  # proxyPublishAddress: proxy public address for member clusters using proxy connection with host cluster. You can ignore it in most cases.
+  # proxyPublishAddress: proxy public address for member clusters to use proxy connection with host cluster. It is the external address access to the tower service of host cluster.
   proxyPublishAddress: ""
 networkpolicy:
   enabled: false
