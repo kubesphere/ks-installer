@@ -4,5 +4,7 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
-    - ks-auditing
+    - role: ks-auditing
+      when:
+        - "status.auditing is not defined or status.auditing.status is not defined or status.auditing.status != 'enabled'"
 

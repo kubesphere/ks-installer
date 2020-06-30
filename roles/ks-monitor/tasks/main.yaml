@@ -6,10 +6,16 @@
 # - import_tasks: upgrade.yaml
 
 - import_tasks: prometheus-operator.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: node-exporter.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: kube-state-metrics.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 # - import_tasks: prometheus-adapter.yaml
 
@@ -20,19 +26,42 @@
     - monitoring.grafana.enabled == true
 
 - import_tasks: prometheus.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: devops.yaml
 
 - import_tasks: etcd.yaml
 
 - import_tasks: prometheus-rules.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: alertmanager.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: monitoring-dashboard.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
+
+- name: ks-monitor | import monitor status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"monitoring": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: notification-manager.yaml
   when:
     - monitoring.notification is defined
     - monitoring.notification.enabled is defined 
     - monitoring.notification.enabled == true 
+    - "status.monitoring.notification is not defined or status.monitoring.notification.status is not defined or status.monitoring.notification.status != 'enabled'"

@@ -11,6 +11,13 @@
   retries: 30
   delay: 30
 
+- name: KubeSphere | Waiting for ks-apiserver
+  shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-apiserver | awk '{print $3}'"
+  register: result
+  until: result.stdout.find("Running") != -1
+  retries: 30
+  delay: 30
+
 - name: KubeSphere | Getting ks-console svc port
   shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register: ks_console_svc_port

@@ -184,7 +184,7 @@ def generateTaskLists():
 
 
 def getComponentLists():
-    readyToEnabledList = ['monitoring']
+    readyToEnabledList = ['monitoring', 'multicluster']
     readyToDisableList = []
     global configFile
 
@@ -207,7 +207,9 @@ def getComponentLists():
                     break
     try:
         readyToEnabledList.remove("metrics_server")
+        readyToEnabledList.remove("networkpolicy")
         readyToDisableList.remove("metrics-server")
+        readyToEnabledList.remove("networkpolicy")
     except:
         pass
 
@@ -285,7 +287,7 @@ def generateConfig():
         json.dump({"status": resource['status']}, f, ensure_ascii=False, indent=4)
     except:
       with open(statusFile, 'w', encoding='utf-8') as f:
-        json.dump({"status": "new"}, f, ensure_ascii=False, indent=4)
+        json.dump({"status": {"enabledComponents": []}}, f, ensure_ascii=False, indent=4)
 
 
     # cmdGetConfig = r"kubectl get cm -n kubesphere-system ks-installer -o jsonpath='{.data}' | grep -v '\[\|\]' > /kubesphere/config/ks-config.yaml"

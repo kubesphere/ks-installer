@@ -40,7 +40,7 @@
       {%- if servicemesh.enabled is defined and servicemesh.enabled %}
       istio-system
       {%- endif %}
-      {%- if multicluster.enabled is defined and multicluster.enabled %}
+      {%- if multicluster is defined and multicluster.clusterRole is defined and multicluster.clusterRole == 'host' %}
       kube-federation-system
       {%- endif %}
 

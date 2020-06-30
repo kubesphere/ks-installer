@@ -2,11 +2,16 @@ apiVersion: v1
 data:
   kubesphere.yaml: |
     authentication:
-      authenticateRateLimiterMaxTries: 5
-      authenticationRateLimiterDuration: 30m0s
-      maxAuthenticateRetries: 6
-      multipleLogin: false
+      authenticateRateLimiterMaxTries: {{ common.authenticateRateLimiterMaxTries | default(5) }}
+      authenticationRateLimiterDuration: {{ common.authenticationRateLimiterDuration | default("30m0s") }}
+      maxAuthenticateRetries: {{ common.maxAuthenticateRetries | default(6) }}
+      multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
       jwtSecret: "Kub3sp83r3!"
+{% if multicluster.clusterRole is defined and multicluster.clusterRole != "host" %}
+      oauthOptions:
+        accessTokenMaxAge: 0
+{% endif %}
+
     ldap:
       host: openldap.kubesphere-system.svc:389
       managerDN: cn=admin,dc=kubesphere,dc=io
@@ -16,7 +21,7 @@ data:
     redis:
       host: redis.kubesphere-system.svc
       port: 6379
-      password: ""
+      password: {{ common.redisPasswd | default('""') }}
       db: 0
 {% if devops.enabled or openpitrix.enabled %}
     s3:
@@ -31,16 +36,19 @@ data:
 {% if devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled %}
     mysql:
       host: mysql.kubesphere-system.svc:3306
-      username: root
-      password: password
+      username: {{ common.mysqlUsername | default("root") }}
+      password: {{ common.mysqlPassword | default("password") }}
       maxIdleConnections: 100
       maxOpenConnections: 100
       maxConnectionLifeTime: 10s
 {% endif %}
-{% if network is defined and network.enableNetworkPolicy is defined and network.enableNetworkPolicy %}
-      network:
-        enableNetworkPolicy: true
+
+{% if networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled %}
+    network:
+      enableNetworkPolicy: true
 {% endif %}
+
+
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
       host: http://ks-jenkins.kubesphere-devops-system.svc/
@@ -53,12 +61,15 @@ data:
       token: {{ externalSonarToken }}
 {% endif %}
 {% endif %}
+
+
 {% if servicemesh.enabled is defined and servicemesh.enabled == true %}
     servicemesh:
       istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
       jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
       servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
 {% endif %}
+
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     openpitrix:
       runtimeManagerEndpoint:    "hyperpitrix.openpitrix-system.svc:9103"
@@ -69,14 +80,20 @@ data:
       attachmentManagerEndpoint: "hyperpitrix.openpitrix-system.svc:9122"
       repoIndexerEndpoint:       "hyperpitrix.openpitrix-system.svc:9108"
 {% endif %}
-{% if multicluster.enabled is defined and multicluster.enabled == true %}
+
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
     multicluster:
       enable: true
       agentImage: {{ tower_repo }}/{{ tower_image }}:{{ tower_image_tag }}
       proxyPublishService: tower.kubesphere-system.svc
+{% if multicluster.proxyPublishAddress is defined and multicluster.proxyPublishAddress != "" %}
+      proxyPublishAddress: {{ multicluster.proxyPublishAddress }}
 {% endif %}
+{% endif %}
+
     monitoring:
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
@@ -86,6 +103,7 @@ data:
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-log
 {% endif %}
+
 {% if events.enabled is defined and events.enabled == true %}
     events:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
@@ -95,6 +113,7 @@ data:
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-events
 {% endif %}
+
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
@@ -104,14 +123,17 @@ data:
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-auditing
 {% endif %}
+
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
       endpoint: http://alerting.kubesphere-alerting-system.svc
 {% endif %}
+
 {% if notification.enabled is defined and notification.enabled == true %}
     notification:
       endpoint: http://notification.kubesphere-alerting-system.svc
 {% endif %}
+
 kind: ConfigMap
 metadata:
   name: kubesphere-config

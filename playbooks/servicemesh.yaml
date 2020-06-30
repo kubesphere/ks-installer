@@ -4,4 +4,6 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
-    - ks-istio
+    - role: ks-istio
+      when:
+        - "status.servicemesh is not defined or status.servicemesh.status is not defined or status.servicemesh.status != 'enabled'"

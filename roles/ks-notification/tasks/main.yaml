@@ -68,3 +68,16 @@
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification.yaml"
   tags:
     - upgrade
+
+
+- name: ks-notification | import ks-notification status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"notification": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3

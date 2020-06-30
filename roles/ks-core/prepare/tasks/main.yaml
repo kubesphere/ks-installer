@@ -66,7 +66,3 @@
 - import_tasks: ks-stop.yaml
   when:
     - console_version.stdout and console_version.stdout != ks_version
-
-- import_tasks: ks-restart.yaml
-  when:
-    - console_version.stdout and console_version.stdout == ks_version

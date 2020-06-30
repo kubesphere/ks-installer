@@ -4,4 +4,5 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
+    - ks-core/config
     - check-result
