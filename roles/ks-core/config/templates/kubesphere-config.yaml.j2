@@ -7,7 +7,7 @@ data:
       maxAuthenticateRetries: {{ common.maxAuthenticateRetries | default(6) }}
       multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
       jwtSecret: "Kub3sp83r3!"
-{% if multicluster.clusterRole is defined and multicluster.clusterRole != "host" %}
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
       oauthOptions:
         accessTokenMaxAge: 0
 {% endif %}
