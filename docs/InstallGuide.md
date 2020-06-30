@@ -58,3 +58,39 @@ When all Pods of KubeSphere are running, it means the installation is successful
 ```bash
 kubectl get svc/ks-console -n kubesphere-system
 ```
+### Enable Pluggable Components
+
+> Attention: make sure there is enough CPU and memory available in your cluster.
+
+1. [Optional] Create the secret of certificate for Etcd in your Kubernetes cluster. This step is only needed when you want to enable Etcd monitoring.
+
+> Note: Create the secret according to the actual Etcd certificate path of your cluster; If the Etcd has not been configured certificate, an empty secret needs to be created.
+
+- If the Etcd has been configured with certificates, refer to the following step (The following command is an example that is only used for the cluster created by `kubeadm`):
+
+```bash
+$ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs  \
+--from-file=etcd-client-ca.crt=/etc/kubernetes/pki/etcd/ca.crt  \
+--from-file=etcd-client.crt=/etc/kubernetes/pki/etcd/healthcheck-client.crt  \
+--from-file=etcd-client.key=/etc/kubernetes/pki/etcd/healthcheck-client.key
+```
+
+- If the Etcd has not been configured with certificates.
+
+```bash
+kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
+```
+
+2. If you already have a minimal KubeSphere setup, you still can enable the pluggable components by editing the ClusterConfiguration of ks-installer using the following command.
+
+> Note: Please make sure there is enough CPU and memory available in your cluster.
+
+```bash
+kubectl edit cc ks-installer -n kubesphere-system
+```
+
+3. Inspect the logs of installation.
+
+```bash
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+```
