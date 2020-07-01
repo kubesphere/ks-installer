@@ -14,14 +14,6 @@
     - "ks-init"
 
 
-- name: KubeSphere | Init KubeSphere system
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-init.yaml"
-  ignore_errors: true
-
-
-- import_tasks: ks-init.yaml
-
-
 - name: KubeSphere | Getting controls-system file
   template:
     src: "{{ item.file }}.j2"
