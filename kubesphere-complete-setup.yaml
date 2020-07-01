@@ -15,7 +15,7 @@ data:
 
     etcd:
       monitoring: False
-      endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
+      endpointIps: localhost
       port: 2379
       tlsEnable: True
 
