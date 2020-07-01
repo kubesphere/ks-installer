@@ -7,7 +7,7 @@ persistence:
   storageClass: ""
 etcd:
   monitoring: false
-  endpointIps: 192.168.0.7,192.168.0.8,192.168.0.9
+  endpointIps: localhost
   port: 2379
   tlsEnable: true
 common:
