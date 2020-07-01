@@ -116,6 +116,7 @@ data:
 
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
+      enable: true
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
       host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
 {% else %}
