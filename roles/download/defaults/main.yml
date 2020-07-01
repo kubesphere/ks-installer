@@ -329,9 +329,9 @@ configmap_reload_tag: v0.3.0
 prometheus_repo: "{{ base_repo }}kubesphere/prometheus"
 prometheus_tag: v2.19.2
 prometheus_config_reloader_repo: "{{ base_repo }}kubesphere/prometheus-config-reloader"
-prometheus_config_reloader_tag: v0.38.2
+prometheus_config_reloader_tag: v0.38.3
 prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
-prometheus_operator_tag: v0.38.2
+prometheus_operator_tag: v0.38.3
 kube_rbac_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
 kube_state_metrics_repo: "{{ base_repo }}kubesphere/kube-state-metrics"
