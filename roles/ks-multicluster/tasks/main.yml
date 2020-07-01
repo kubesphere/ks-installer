@@ -34,6 +34,10 @@
         -f {{ kubesphere_dir }}/kubefed/custom-values-kubefed.yaml
         --namespace kube-federation-system
 
+    - name: Kubfed | Label kube-federation-system namespace
+      shell: >
+        {{ bin_dir }}/kubectl label namespace kube-federation-system kubesphere.io/workspace=system-workspace --overwrite
+
 
 - name: Kubesphere | Check kubefed-admission-webhook status
   shell: >
