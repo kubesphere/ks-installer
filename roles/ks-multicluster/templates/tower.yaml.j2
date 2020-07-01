@@ -29,7 +29,6 @@ spec:
             - --ca-cert=/ca.crt
             - --ca-key=/ca.key
             - --v=2
-            - --publish-service-address=10.233.23.255
           image: {{ tower_repo }}/{{ tower_image }}:{{ tower_image_tag }}
           imagePullPolicy: IfNotPresent
           name: tower
