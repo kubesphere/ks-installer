@@ -40,13 +40,11 @@
 
 
 - name: Kubesphere | Check kubefed-admission-webhook status
-  shell: >
-    {{ bin_dir }}/kubectl get pod -n kube-federation-system
-    -l kubefed-admission-webhook=true | awk '{if(NR>1){print}}' | grep -v '1/1' | wc -l
-  register: webhook_status
-  until: webhook_status.stdout == "0"
-  retries: 30
-  delay: 30
+  wait_for:
+    host: "kubefed-admission-webhook.kube-federation-system.svc"
+    port: 443
+    delay: 3
+    timeout: 1800
 
 
 - name: Kubefed | Create MultiCluster crds
