@@ -102,6 +102,10 @@
     - {path: logging, file: custom-output-elasticsearch.yaml}
     - {path: logging, file: custom-output-elasticsearch-events.yaml}
     - {path: logging, file: custom-output-elasticsearch-auditing.yaml}
+  register: import
+  until: import is succeeded
+  retries: 5
+  delay: 3
 
 - name: ks-logging | Check elasticsearch
   shell: >
