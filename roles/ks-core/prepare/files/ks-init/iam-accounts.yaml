@@ -1,3 +1,66 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubesphere
+  namespace: kubesphere-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubesphere
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: kubesphere
+    namespace: kubesphere-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    kubesphere.io/creator: system
+  name: cluster-admin
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - nonResourceURLs:
+      - '*'
+    verbs:
+      - '*'
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    kubesphere.io/creator: system
+  name: cluster-viewer
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - '*'
+    verbs:
+      - 'get'
+      - 'list'
+      - 'watch'
+  - nonResourceURLs:
+      - '*'
+    verbs:
+      - 'get'
+      - 'list'
+      - 'watch'
+
+---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
@@ -76,6 +139,12 @@ rules:
       - 'federatednamespaces'
     verbs:
       - list
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - get
 
 
 ---
@@ -130,16 +199,9 @@ rules:
   - '*'
   resources:
   - users
-  verbs:
-  - '*'
-- apiGroups:
-  - iam.kubesphere.io
-  resources:
   - globalroles
   verbs:
-  - get
-  - list
-  - watch
+  - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -462,6 +524,11 @@ rules:
 - apiGroups:
   - '*'
   resources:
+  - abnormalworkloads
+  - quotas
+  - workloads
+  - volumesnapshots
+  - dashboards
   - configmaps
   - endpoints
   - events
@@ -480,6 +547,7 @@ rules:
   - deployments
   - replicasets
   - statefulsets
+  - daemonsets
   - meshpolicies
   - cronjobs
   - jobs
@@ -541,6 +609,11 @@ roles:
 - apiGroups:
   - '*'
   resources:
+  - abnormalworkloads
+  - quotas
+  - workloads
+  - volumesnapshots
+  - dashboards
   - configmaps
   - endpoints
   - events
@@ -559,6 +632,7 @@ roles:
   - deployments
   - replicasets
   - statefulsets
+  - daemonsets
   - meshpolicies
   - cronjobs
   - jobs
