@@ -13,6 +13,8 @@
   loop:
     - "ks-init"
 
+- import_tasks: ks-init.yaml
+
 
 - name: KubeSphere | Getting controls-system file
   template:
