@@ -28,4 +28,4 @@
     - "iam-accounts.yaml"
     - "webhook-secret.yaml"
   register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
