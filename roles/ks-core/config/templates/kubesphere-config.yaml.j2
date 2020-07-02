@@ -127,12 +127,12 @@ data:
 
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
-      endpoint: http://alerting.kubesphere-alerting-system.svc
+      endpoint: http://alerting-client-server.kubesphere-alerting-system.svc:9200/api/
 {% endif %}
 
 {% if notification.enabled is defined and notification.enabled == true %}
     notification:
-      endpoint: http://notification.kubesphere-alerting-system.svc
+      endpoint: http://notification.kubesphere-alerting-system.svc:9201
 {% endif %}
 
 kind: ConfigMap
