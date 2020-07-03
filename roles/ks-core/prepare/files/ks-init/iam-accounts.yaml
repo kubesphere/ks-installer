@@ -24,6 +24,7 @@ kind: ClusterRole
 metadata:
   annotations:
     kubesphere.io/creator: system
+    iam.kubesphere.io/aggregation-roles: '["role-template-manage-alerting-messages","role-template-manage-alerting-policies","role-template-manage-app-workloads","role-template-manage-cluster-settings","role-template-manage-components","role-template-manage-crds","role-template-manage-members","role-template-manage-network-policies","role-template-manage-nodes","role-template-manage-projects","role-template-manage-roles","role-template-manage-storageclasses","role-template-manage-volume-snapshots","role-template-manage-volumes","role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
   name: cluster-admin
 rules:
   - apiGroups:
@@ -43,6 +44,7 @@ kind: ClusterRole
 metadata:
   annotations:
     kubesphere.io/creator: system
+    iam.kubesphere.io/aggregation-roles: '["role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
   name: cluster-viewer
 rules:
   - apiGroups:
@@ -193,7 +195,7 @@ metadata:
   annotations:
     iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-manage-users","role-template-view-roles"]'
     kubesphere.io/creator: admin
-  name: user-manager
+  name: users-manager
 rules:
 - apiGroups:
   - '*'
@@ -210,7 +212,7 @@ metadata:
   annotations:
     iam.kubesphere.io/aggregation-roles: '["role-template-view-workspaces","role-template-manage-workspaces","role-template-view-users"]'
     kubesphere.io/creator: admin
-  name: workspace-manager
+  name: workspaces-manager
 rules:
 - apiGroups:
   - '*'
@@ -1307,6 +1309,359 @@ rules:
   - 'list'
   - 'get'
   - 'watch'
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Cluster Resources Management
+    kubesphere.io/alias-name: CRD Management
+    iam.kubesphere.io/role-template-rules: '{"customresources": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-crds
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '[role-template-view-alerting-messages"]'
+    iam.kubesphere.io/module: Monitoring & Alerting
+    kubesphere.io/alias-name: Alerting Messages Management
+    iam.kubesphere.io/role-template-rules: '{"alert-messages": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-alerting-messages
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
+    iam.kubesphere.io/module: Monitoring & Alerting
+    kubesphere.io/alias-name: Alerting Policies Management
+    iam.kubesphere.io/role-template-rules: '{"alert-policies": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-alerting-policies
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-app-workloads", "role-template-view-projects"]'
+    iam.kubesphere.io/module: Project Resources Management
+    kubesphere.io/alias-name: Application Workloads Management
+    iam.kubesphere.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-app-workloads
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Cluster Settings
+    kubesphere.io/alias-name: Cluster Settings
+    iam.kubesphere.io/role-template-rules: '{"cluster-settings": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-cluster-settings
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Cluster Resources Management
+    kubesphere.io/alias-name: Components Management
+    iam.kubesphere.io/role-template-rules: '{"components": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-components
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-roles", "role-template-view-members"]'
+    iam.kubesphere.io/module: Access Control
+    kubesphere.io/alias-name: Cluster Members Management
+    iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-members
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-network-policies"]'
+    iam.kubesphere.io/module: Network Management
+    kubesphere.io/alias-name: Network Policies Management
+    iam.kubesphere.io/role-template-rules: '{"networkpolicies": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-network-policies
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-nodes"]'
+    iam.kubesphere.io/module: Cluster Resources Management
+    kubesphere.io/alias-name: Nodes Management
+    iam.kubesphere.io/role-template-rules: '{"nodes": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-nodes
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
+    iam.kubesphere.io/module: Project Resources Management
+    kubesphere.io/alias-name: Projects Management
+    iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-projects
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/module: Access Control
+    kubesphere.io/alias-name: Cluster Roles Management
+    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-roles
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+    iam.kubesphere.io/module: Storage Management
+    kubesphere.io/alias-name: StorageClasses Management
+    iam.kubesphere.io/role-template-rules: '{"storageclasses": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-storageclasses
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-volume-snapshots"]'
+    iam.kubesphere.io/module: Storage Management
+    kubesphere.io/alias-name: Volume Snapshots Management
+    iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-volume-snapshots
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+    iam.kubesphere.io/module: Storage Management
+    kubesphere.io/alias-name: Volumes Management
+    iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-volumes
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Monitoring & Alerting
+    kubesphere.io/alias-name: Alerting Messages View
+    iam.kubesphere.io/role-template-rules: '{"alert-messages": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-alerting-messages
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
+    iam.kubesphere.io/module: Monitoring & Alerting
+    kubesphere.io/alias-name: Alerting Policies View
+    iam.kubesphere.io/role-template-rules: '{"alert-policies": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-alerting-policies
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
+    iam.kubesphere.io/module: Project Resources Management
+    kubesphere.io/alias-name: Application Workloads View
+    iam.kubesphere.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-app-workloads
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Monitoring & Alerting
+    kubesphere.io/alias-name: Cluster Monitoring View
+    iam.kubesphere.io/role-template-rules: '{"monitoring": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-cluster-monitoring
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    kubesphere.io/alias-name: Cluster Members View
+    iam.kubesphere.io/role-template-rules: '{"members": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-members
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Network Management
+    kubesphere.io/alias-name: Network Policies View
+    iam.kubesphere.io/role-template-rules: '{"networkpolicies": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-network-policies
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Cluster Resources Management
+    kubesphere.io/alias-name: Nodes View
+    iam.kubesphere.io/role-template-rules: '{"nodes": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-nodes
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Project Resources Management
+    kubesphere.io/alias-name: Projects View
+    iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-projects
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    kubesphere.io/alias-name: Cluster Roles View
+    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-roles
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
+    iam.kubesphere.io/module: Storage Management
+    kubesphere.io/alias-name: StorageClasses View
+    iam.kubesphere.io/role-template-rules: '{"storageclasses": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-storageclasses
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
+    iam.kubesphere.io/module: Storage Management
+    kubesphere.io/alias-name: Volume Snapshots View
+    iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-volume-snapshots
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Storage Management
+    kubesphere.io/alias-name: Volumes View
+    iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-volumes
+rules: []
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
