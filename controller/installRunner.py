@@ -207,11 +207,16 @@ def getComponentLists():
                     break
     try:
         readyToEnabledList.remove("metrics_server")
+        readyToDisableList.remove("metrics_server")
+    except:
+        pass
+
+    try:
         readyToEnabledList.remove("networkpolicy")
-        readyToDisableList.remove("metrics-server")
         readyToEnabledList.remove("networkpolicy")
     except:
         pass
+
 
     return readyToEnabledList, readyToDisableList
 
