@@ -1762,6 +1762,12 @@ role:
     - get
     - list
     - watch
+  - apiGroups:
+    - monitoring.kubesphere.io
+    resources:
+    - namespaces
+    verbs:
+    - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1793,6 +1799,12 @@ role:
     - devops
     verbs:
     - create
+  - apiGroups:
+    - monitoring.kubesphere.io
+    resources:
+    - namespaces
+    verbs:
+    - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
