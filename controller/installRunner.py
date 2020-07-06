@@ -248,6 +248,17 @@ def preInstallTasks():
 
 
 def resultInfo():
+    config = ansible_runner.run(
+        playbook=os.path.join(playbookBasePath, 'ks-config.yaml'),
+        private_data_dir=privateDataDir,
+        artifact_dir=os.path.join(privateDataDir, 'ks-config'),
+        ident='ks-config',
+        quiet=True
+    )
+
+    if config.rc != 0:
+        exit()
+
     result = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'result-info.yaml'),
         private_data_dir=privateDataDir,
