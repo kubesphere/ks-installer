@@ -1343,6 +1343,25 @@ rules:
   - 'watch'
 
 ---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Workspace Settings
+    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "manage"}'
+    kubesphere.io/alias-name: Workspace Settings
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-workspace-settings
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - 'workspaces'
+  verbs:
+  - '*'
+
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -1705,7 +1724,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-manage-federatedprojects","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-users","role-template-manage-users","role-template-manage-roles","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-manage-federatedprojects","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-users","role-template-manage-users","role-template-manage-roles","role-template-view-roles"]'
       kubesphere.io/creator: system
     name: admin
   rules:
