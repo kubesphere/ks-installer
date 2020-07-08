@@ -21,7 +21,7 @@ spec:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
         server-urls: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
 {% else %}
-        server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local:9200
+        server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
     type: elasticsearch
   strategy: production

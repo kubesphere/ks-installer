@@ -99,7 +99,7 @@ data:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
       host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local:9200
+      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-log
 {% endif %}
@@ -109,7 +109,7 @@ data:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
       host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local:9200
+      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-events
 {% endif %}
@@ -120,7 +120,7 @@ data:
 {% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
       host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local:9200
+      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
       indexPrefix: ks-{{ logging.elkPrefix }}-auditing
 {% endif %}
