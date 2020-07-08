@@ -13,6 +13,6 @@ spec:
   storage:
     options:
       es:
-        server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local:9200
+        server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
     type: elasticsearch
   strategy: production

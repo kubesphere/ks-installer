@@ -45,14 +45,14 @@
     externalElasticsearchUrl: "{{ external_es_url }}"
   when:
     - kubesphere_config.stdout.find("indexPrefix:") != -1
-    - kubesphere_config.stdout.find("elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local") == -1
+    - kubesphere_config.stdout.find("elasticsearch-logging-data.kubesphere-logging-system.svc") == -1
 
 - name: ks-installer | Setting logging_enabled
   set_fact:
     externalElasticsearchPort: "{{ external_es_port }}"
   when:
     - kubesphere_config.stdout.find("indexPrefix:") != -1
-    - kubesphere_config.stdout.find("elasticsearch-logging-data.kubesphere-logging-system.svc.cluster.local") == -1
+    - kubesphere_config.stdout.find("elasticsearch-logging-data.kubesphere-logging-system.svc") == -1
 
 - name: ks-installer | Setting alerting_enabled
   set_fact:
