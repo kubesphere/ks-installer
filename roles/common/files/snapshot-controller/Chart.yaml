@@ -1,0 +1,17 @@
+apiVersion: v2
+
+appVersion: 2.1.1
+name: snapshot-controller
+description: A Helm chart for snapshot-controller
+version: 0.1.0
+kubeVersion: ">=1.17.0-0"
+home: https://github.com/kubernetes-csi/external-snapshotter
+sources:
+  - https://github.com/kubesphere/helm-charts
+keywords:
+  - snapshot
+  - controller
+  - csi
+maintainers:
+  - name: Min Zhang
+    email: arminzhang@yunify.com

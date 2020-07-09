@@ -169,6 +169,10 @@ generate_kubeconfig_tag: latest
 minio_repo: "{{ base_repo }}minio/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
 
+#ks-hostnic
+snapshot_controller_repo: "{{ base_repo }}csiplugin/snapshot-controller"
+snapshot_controller_tag: "v2.0.1"
+
 #qingcloud-csi:
 csi_provisioner_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-provisioner"
 csi_provisioner_tag: v1.4.0
