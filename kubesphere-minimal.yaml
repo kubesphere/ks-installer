@@ -27,7 +27,7 @@ data:
       redisVolumSize: 2Gi
 
     metrics_server:
-      enabled: False
+      enabled: True
 
     console:
       enableMultiLogin: False  # enable/disable multi login

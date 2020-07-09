@@ -242,7 +242,7 @@ sonarqube_enabled: false
 # Following components are all optional for KubeSphere,
 # Which could be turned on to install it before installation or later by updating its value to true
 openpitrix_enabled: false
-metrics_server_enabled: false
+metrics_server_enabled: true
 servicemesh_enabled: false
 notification_enabled: false
 alerting_enabled: false
