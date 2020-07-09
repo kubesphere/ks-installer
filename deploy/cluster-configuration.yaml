@@ -23,11 +23,11 @@ spec:
   console:
     enableMultiLogin: false  # enable/disable multi login
     port: 30880
-  alerting:
+  alerting: # Users can customize alerting policies to send messages to users in time with different time intervals and alerting levels to choose from. 
     enabled: false
   auditing:
     enabled: false
-  devops:
+  devops:  # A one-stop DevOps console is provided to enable developers to create, build, test and release their applications in an automated way.
     enabled: false
     jenkinsMemoryLim: 2Gi
     jenkinsMemoryReq: 1500Mi
@@ -35,9 +35,9 @@ spec:
     jenkinsJavaOpts_Xms: 512m
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
-  events:
+  events:  # Events that happen inside a cluster are recorded, such as container running status, image pulling failures and node scheduling activities.
     enabled: false
-  logging:
+  logging:  # Flexible logging functions are provided for query, collection and management. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false
     elasticsearchMasterReplicas: 1
     elasticsearchDataReplicas: 1
@@ -46,18 +46,18 @@ spec:
     elasticsearchDataVolumeSize: 20Gi
     logMaxAge: 7
     elkPrefix: logstash
-  metrics_server:
+  metrics_server:  # Users can install metrics-server to enable HPA (Horizontal Pod Autoscaler) which automatically scales the number of pods, deployments, or statefulsets based on observed CPU utilization.
     enabled: false
-  monitoring:
+  monitoring:  # This feature gives visibility into the amount of compute resources (e.g. CPU and memory utilization) available in the workspace and allow you to track usage at different levels.
     prometheusReplicas: 1
     prometheusMemoryRequest: 400Mi
     prometheusVolumeSize: 20Gi
     alertmanagerReplicas: 1
-    notification:
+    notification: # Email notifications are supported, and users can customize the sender email address and test the email server before it is put into use.
       enabled: false
-  multicluster:
+  multicluster:  # Users can create projects to run across clusters, building a container environment for rapid iteration of applications and achieve high availability.
     clusterRole: none  # host | member | none
-  networkpolicy:
+  networkpolicy:  # Network policies allow network isolation within the same cluster, which means firewalls can be set up between certain instances (Pods).
     enabled: false
   notification:
     enabled: false
