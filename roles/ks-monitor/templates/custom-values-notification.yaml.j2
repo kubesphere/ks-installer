@@ -12,8 +12,8 @@ operator:
           cpu: 50m
           memory: 50Mi
         requests:
-          cpu: 20m
-          memory: 20Mi
+          cpu: 5m
+          memory: 10Mi
     operator:
       image:
         repo: {{ notification_manager_operator_repo }}
@@ -24,8 +24,8 @@ operator:
           cpu: 50m
           memory: 50Mi
         requests:
-          cpu: 50m
-          memory: 50Mi
+          cpu: 5m
+          memory: 20Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -44,8 +44,8 @@ notificationmanager:
       cpu: 500m
       memory: 500Mi
     requests:
-      cpu: 50m
-      memory: 50Mi
+      cpu: 5m
+      memory: 20Mi
   nodeSelector: {}
   tolerations: []
   affinity: {}
