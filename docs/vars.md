@@ -43,7 +43,7 @@ logging:
   logMaxAge: 7
   elkPrefix: logstash
 metrics_server:
-  enabled: false
+  enabled: true
 monitoring:
   prometheusReplicas: 1
   prometheusMemoryRequest: 400Mi
