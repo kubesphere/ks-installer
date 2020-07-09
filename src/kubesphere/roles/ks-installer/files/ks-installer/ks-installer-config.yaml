@@ -35,8 +35,6 @@ data:
       prometheusVolumeSize: {{ prometheus_volume_size }}
       grafana:
         enabled: {{ grafana_enabled }}
-      notification:
-        enabled: {{ notification_enabled  }}
 
     logging:
       enabled: {{ logging_enabled }}

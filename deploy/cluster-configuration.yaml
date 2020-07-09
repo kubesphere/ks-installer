@@ -53,8 +53,6 @@ spec:
     prometheusMemoryRequest: 400Mi
     prometheusVolumeSize: 20Gi
     alertmanagerReplicas: 1
-    notification:
-      enabled: false
   multicluster:
     clusterRole: none  # host | member | none
   networkpolicy:

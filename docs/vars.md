@@ -49,8 +49,6 @@ monitoring:
   prometheusMemoryRequest: 400Mi
   prometheusVolumeSize: 20Gi
   alertmanagerReplicas: 1
-  notification:
-    enabled: false
 multicluster:
   # host: means installer will install current cluster as a Host Cluster. There should be only one HOST CLUSTER in KubeSphere multicluster.
   # member: means installer will install current cluster as a Member Cluster

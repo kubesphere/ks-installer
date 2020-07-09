@@ -33,15 +33,3 @@
   delay: 10
   when:
     - (notification_check.stdout.find("DEPLOYED") == -1) or (notification_check.stdout.find("v1.0.0") == -1)
-
-- name: notification-manager | import notification-manager status
-  shell: >
-    {{ bin_dir }}/kubectl patch cc ks-installer
-    --type merge
-    -p '{"status": {"monitoring": {"notification": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}}'
-    -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr"
-  until: import is succeeded
-  retries: 5
-  delay: 3

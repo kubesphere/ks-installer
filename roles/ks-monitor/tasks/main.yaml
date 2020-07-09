@@ -41,6 +41,8 @@
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
+- import_tasks: notification-manager.yaml
+
 - import_tasks: monitoring-dashboard.yaml
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
@@ -58,10 +60,3 @@
   delay: 3
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
-
-- import_tasks: notification-manager.yaml
-  when:
-    - monitoring.notification is defined
-    - monitoring.notification.enabled is defined 
-    - monitoring.notification.enabled == true 
-    - "status.monitoring.notification is not defined or status.monitoring.notification.status is not defined or status.monitoring.notification.status != 'enabled'"
