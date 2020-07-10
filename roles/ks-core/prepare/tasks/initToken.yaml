@@ -24,9 +24,9 @@
 
 - name: KubeSphere | Create components token
   shell: >
-    echo -n "{{ ks_token.stdout }}" > {{ kubesphere_dir }}/ks-token &&
     {{ bin_dir }}/kubectl create secret generic ks-components-token 
-    --from-file={{ kubesphere_dir }}/ks-token
+    --from-literal=ks-token={{ ks_token.stdout }}
+    --from-literal=ks-secret={{ ks_secret_str }}
     -n kubesphere-system
 
 
