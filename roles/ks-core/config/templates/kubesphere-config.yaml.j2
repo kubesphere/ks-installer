@@ -6,7 +6,7 @@ data:
       authenticationRateLimiterDuration: {{ common.authenticationRateLimiterDuration | default("30m0s") }}
       maxAuthenticateRetries: {{ common.maxAuthenticateRetries | default(6) }}
       multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
-      jwtSecret: "Kub3sp83r3!"
+      jwtSecret: "{{ ks_secret_str.stdout }}"
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
       oauthOptions:
         accessTokenMaxAge: 0
