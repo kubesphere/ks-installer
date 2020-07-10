@@ -23,11 +23,11 @@ spec:
   console:
     enableMultiLogin: false  # enable/disable multi login
     port: 30880
-  alerting:
+  alerting: # Users can customize alerting policies to send messages to users in time with different time intervals and alerting levels to choose from. 
     enabled: false
   auditing:
     enabled: false
-  devops:
+  devops:  # A one-stop DevOps console with Jenkins as its engine is provided to enable developers to create, build, test and release their applications in an automated way.
     enabled: false
     jenkinsMemoryLim: 2Gi
     jenkinsMemoryReq: 1500Mi
@@ -35,9 +35,9 @@ spec:
     jenkinsJavaOpts_Xms: 512m
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
-  events:
+  events:  # It provides a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false
-  logging:
+  logging:  # Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false
     elasticsearchMasterReplicas: 1
     elasticsearchDataReplicas: 1
@@ -46,18 +46,18 @@ spec:
     elasticsearchDataVolumeSize: 20Gi
     logMaxAge: 7
     elkPrefix: logstash
-  metrics_server:
+  metrics_server:  # Users can install metrics-server to enable HPA (Horizontal Pod Autoscaler) which automatically scales the number of pods, deployments, or statefulsets based on observed CPU utilization.
     enabled: true
-  monitoring:
+  monitoring:  # With multi-dimensional monitoring metrics, the built-in monitoring dashboard gives visibility into compute resources ranging from infrastructure to applications.
     prometheusReplicas: 1
     prometheusMemoryRequest: 400Mi
     prometheusVolumeSize: 20Gi
     alertmanagerReplicas: 1
-  multicluster:
+  multicluster:  # A multi-cluster control plane provides unified management of multiple K8s clusters from different cloud providers. It supports app distribution across multiple clusters and cloud providers.
     clusterRole: none  # host | member | none
-  networkpolicy:
+  networkpolicy:  # Network policies allow network isolation within the same cluster, which means firewalls can be set up between certain instances (Pods).
     enabled: false
-  notification:
+  notification:  # It supports notification management in multi-tenant Kubernetes clusters. The email server will be notified once alerts are triggered when the threshold is reached for different resources. After that, the server will send notifications to various tenant receivers.
     enabled: false
   openpitrix:
     enabled: false
