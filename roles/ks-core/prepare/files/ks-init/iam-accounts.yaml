@@ -1819,6 +1819,7 @@ role:
     - devops
     verbs:
     - create
+    - watch
   - apiGroups:
     - monitoring.kubesphere.io
     resources:
