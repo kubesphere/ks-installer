@@ -49,6 +49,14 @@ spec:
           name: ks-router-config
         - mountPath: /etc/kubesphere/
           name: kubesphere-config
+        livenessProbe:
+          failureThreshold: 8
+          httpGet:
+            path: /kapis/version
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 15
+          timeoutSeconds: 15
       serviceAccount: kubesphere
       serviceAccountName: kubesphere
       tolerations:

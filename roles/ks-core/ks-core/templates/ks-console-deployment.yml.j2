@@ -39,16 +39,19 @@ spec:
             cpu: {{ ks_console_cpu_requests }}
             memory: {{ ks_console_memory_requests }}
         volumeMounts:
-        # - mountPath: /etc/kubernetes/pki
-        #   name: ca-dir
         - mountPath: /root/KubeSphereUI/server/local_config.yaml
           name: ks-console-config
           subPath: local_config.yaml
         - mountPath: /root/KubeSphereUI/server/sample
           name: sample-bookinfo
-      # - image: {{ redis_repo }}:{{ redis_tag }}
-      #   imagePullPolicy: IfNotPresent
-      #   name: redis
+        livenessProbe:
+          failureThreshold: 8
+          httpGet:
+            path: /
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 15
+          timeoutSeconds: 15
       serviceAccount: kubesphere
       serviceAccountName: kubesphere
       tolerations:
@@ -88,10 +91,6 @@ spec:
             - kubesphere-system
 {% endif %}
       volumes:
-      # - name: ca-dir
-      #   secret:
-      #     defaultMode: 420
-      #     secretName: front-proxy-client
       - configMap:
           defaultMode: 420
           name: ks-console-config
