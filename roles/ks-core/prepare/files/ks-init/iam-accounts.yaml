@@ -142,11 +142,21 @@ rules:
     verbs:
       - list
   - apiGroups:
-      - storage.k8s.io
+      - '*'
     resources:
       - storageclasses
     verbs:
       - get
+      - list
+  - apiGroups:
+    - openpitrix.io
+    resources:
+    - apps
+    - apps/versions
+    - categories
+    verbs:
+    - get
+    - list
 
 
 ---
@@ -177,16 +187,7 @@ metadata:
     iam.kubesphere.io/aggregation-roles: '["role-template-view-app-templates"]'
     kubesphere.io/creator: admin
   name: platform-regular
-rules:
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - apps
-  - apps/versions
-  - categories
-  verbs:
-  - get
-  - list
+rules: []
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1818,6 +1819,7 @@ role:
     - devops
     verbs:
     - create
+    - watch
   - apiGroups:
     - monitoring.kubesphere.io
     resources:
