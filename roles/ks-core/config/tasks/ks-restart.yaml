@@ -3,9 +3,9 @@
   ignore_errors: True
 
 
-- name: ks-upgrade | restart ks-console
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-console"
-  ignore_errors: True
+# - name: ks-upgrade | restart ks-console
+#   shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-console"
+#   ignore_errors: True
 
 
 - name: ks-upgrade | restart ks-controller-manager
