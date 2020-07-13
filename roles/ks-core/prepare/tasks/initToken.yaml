@@ -8,7 +8,14 @@
 - name: KubeSphere | Creating KubeSphere Secret
   set_fact:
     ks_secret_str: "{{ ks_secret.stdout }}"
+  when:
+    - authentication is not defined and authentication.jwtSecret is not defined
 
+- name: KubeSphere | Creating KubeSphere Secret
+  set_fact:
+    ks_secret_str: "{{ authentication.jwtSecret }}"
+  when:
+    - authentication is defined and authentication.jwtSecret is defined
 
 - name: KubeSphere | Enable Token Script
   file:
@@ -24,9 +31,9 @@
 
 - name: KubeSphere | Create components token
   shell: >
-    {{ bin_dir }}/kubectl create secret generic ks-components-token 
-    --from-literal=ks-token={{ ks_token.stdout }}
-    --from-literal=ks-secret={{ ks_secret_str }}
+    {{ bin_dir }}/kubectl create secret generic kubesphere-secret
+    --from-literal=token={{ ks_token.stdout }}
+    --from-literal=secret={{ ks_secret_str }}
     -n kubesphere-system
 
 

@@ -6,7 +6,7 @@
 
 - import_tasks: initToken.yaml
   when:
-    - kubesphere_secrets.stdout.find("ks-components-token") == -1
+    - kubesphere_secrets.stdout.find("kubesphere-secret") == -1
 
 - name: Kubesphere | Checking account init
   shell: >
