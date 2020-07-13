@@ -1,13 +1,13 @@
 ---
 
-- name: KubeSphere | Getting ks-token
+- name: KubeSphere | Getting token
   shell: >
-    {{ bin_dir }}/kubectl get secret ks-components-token -o jsonpath='{.data.ks-token}' | base64 -d
+    {{ bin_dir }}/kubectl get secret kubesphere-secret -o jsonpath='{.data.token}' | base64 -d
   register: ks_token_str
 
 - name: KubeSphere | Getting ks-secret
   shell: >
-    {{ bin_dir }}/kubectl get secret ks-components-token -o jsonpath='{.data.ks-secret}' | base64 -d
+    {{ bin_dir }}/kubectl get secret kubesphere-secret -o jsonpath='{.data.secret}' | base64 -d
   register: ks_secret_str
 
 - name: KubeSphere | Creating manifests

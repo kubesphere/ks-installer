@@ -7,9 +7,9 @@
   loop:
     - alerting
 
-- name: ks-alerting | Getting ks-components-token
+- name: ks-alerting | Getting kubesphere-secret
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-system get secret ks-components-token -o jsonpath='{.data.ks-token}' | base64 -d
+    {{ bin_dir }}/kubectl -n kubesphere-system get secret kubesphere-secret -o jsonpath='{.data.token}' | base64 -d
   register: ks_token_str
 
 - name: ks-alerting | Creating manifests
