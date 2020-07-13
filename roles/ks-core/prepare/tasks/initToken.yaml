@@ -1,7 +1,7 @@
 ---
 - name: KubeSphere | Creating KubeSphere Secret
   shell: >
-    dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=100 count=1 2>/dev/null | tr -d '\n'
+    dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=32 count=1 2>/dev/null | tr -d '\n'
   register: ks_secret
 
 
@@ -9,13 +9,13 @@
   set_fact:
     ks_secret_str: "{{ ks_secret.stdout }}"
   when:
-    - authentication is not defined and authentication.jwtSecret is not defined
+    - (authentication is not defined and authentication.jwtSecret is not defined) or authentication.jwtSecret == ""
 
 - name: KubeSphere | Creating KubeSphere Secret
   set_fact:
     ks_secret_str: "{{ authentication.jwtSecret }}"
   when:
-    - authentication is defined and authentication.jwtSecret is defined
+    - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
 
 - name: KubeSphere | Enable Token Script
   file:

@@ -9,6 +9,8 @@ metadata:
 spec:
   persistence:
     storageClass: ""
+  authentication:
+    jwtSecret: ""
   etcd:
     monitoring: false
     endpointIps: localhost
