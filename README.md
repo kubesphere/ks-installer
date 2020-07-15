@@ -88,7 +88,7 @@ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-c
 > Note: Please make sure there is enough CPU and memory available in your cluster.
 
 ```bash
-kubectl edit cm ks-installer -n kubesphere-system
+kubectl edit cc ks-installer -n kubesphere-system
 ```
 
 3. Inspect the logs of installation.
