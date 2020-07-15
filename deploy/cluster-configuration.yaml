@@ -39,6 +39,9 @@ spec:
     jenkinsJavaOpts_MaxRAM: 2g
   events:  # It provides a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false
+    ruler:
+      enabled: false
+      replicas: 2
   logging:  # Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false
     elasticsearchMasterReplicas: 1

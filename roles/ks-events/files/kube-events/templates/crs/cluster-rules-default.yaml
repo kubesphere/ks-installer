@@ -50,7 +50,7 @@ spec:
       type: alert
     - name: ContainerBackoff
       condition: |
-        event.type="Warning" and event.involvedObject.kind="Pod" and reason="BackOff" and not event.involvedObject.fieldPath="" and event.count>3
+        event.type="Warning" and event.involvedObject.kind="Pod" and event.reason="BackOff" and not event.involvedObject.fieldPath="" and event.count>3
       labels:
         severity: warning
       annotations:
@@ -379,7 +379,7 @@ spec:
       type: alert
     - name: DiskSpaceFreeFailed
       condition: |
-        type="Warning" and reason="FreeDiskSpaceFailed"
+        event.type="Warning" and event.reason="FreeDiskSpaceFailed"
       labels:
         severity: warning
       annotations:
@@ -602,7 +602,7 @@ spec:
         severity: warning
       annotations:
         message: '%event.message'
-        summary: Failed to provision volume
+        summary: Failed to clean up provision volume
         summaryCn: 清理存储失败
       enable: true
       type: alert
