@@ -49,6 +49,7 @@ spec:
     logMaxAge: 7                     # Log retention time in built-in Elasticsearch, it is 7 days by default.
     elkPrefix: logstash              # The string making up index names. The index name will be formatted as ks-<elk_prefix>-log.
   metrics_server:                    # (CPU: 56 m, Memory: 44.35 MiB) Whether to install metrics-server. IT enables HPA (Horizontal Pod Autoscaler).
+    enabled: false
   monitoring:
     prometheusReplicas: 1            # Prometheus replicas are responsible for monitoring different segments of data source and provide high availability as well.
     prometheusMemoryRequest: 400Mi   # Prometheus request memory.
