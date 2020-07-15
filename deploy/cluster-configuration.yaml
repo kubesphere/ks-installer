@@ -8,63 +8,59 @@ metadata:
     version: v3.0.0
 spec:
   persistence:
-    storageClass: ""
+    storageClass: ""        # If there is not a default StorageClass in your cluster, you need to specify an existing StorageClass here.
   authentication:
-    jwtSecret: ""
+    jwtSecret: ""           # Keep the jwtSecret consistent with the host cluster. Retrive the jwtSecret by executing "kubectl -n kubesphere-system get cm kubesphere-config -o yaml | grep -v "apiVersion" | grep jwtSecret" on the host cluster.
   etcd:
-    monitoring: false
-    endpointIps: localhost
-    port: 2379
+    monitoring: false       # Whether to enable etcd monitoring dashboard installation. You have to create a secret for etcd before you enable it.
+    endpointIps: localhost  # etcd cluster EndpointIps, it can be a bunch of IPs here.
+    port: 2379              # etcd port
     tlsEnable: true
   common:
-    mysqlVolumeSize: 20Gi
-    minioVolumeSize: 20Gi
-    etcdVolumeSize: 20Gi
-    openldapVolumeSize: 2Gi
-    redisVolumSize: 2Gi
+    mysqlVolumeSize: 20Gi # MySQL PVC size.
+    minioVolumeSize: 20Gi # Minio PVC size.
+    etcdVolumeSize: 20Gi  # etcd PVC size.
+    openldapVolumeSize: 2Gi   # openldap PVC size.
+    redisVolumSize: 2Gi # Redis PVC size.
   console:
-    enableMultiLogin: false  # enable/disable multi login
+    enableMultiLogin: false  # enable/disable multiple sing on, it allows an account can be used by different users at the same time.
     port: 30880
-  alerting: # Users can customize alerting policies to send messages to users in time with different time intervals and alerting levels to choose from. 
+  alerting:                # (CPU: 0.3 Core, Memory: 300 MiB) Whether to install KubeSphere alerting system. It enables Users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false
-  auditing:
+  auditing:                # Whether to install KubeSphere audit log system. It provides a security-relevant chronological set of records，recording the sequence of activities happened in platform, initiated by different tenants.
     enabled: false
-  devops:  # A one-stop DevOps console with Jenkins as its engine is provided to enable developers to create, build, test and release their applications in an automated way.
+  devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Whether to install KubeSphere DevOps System. It provides out-of-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
     enabled: false
-    jenkinsMemoryLim: 2Gi
-    jenkinsMemoryReq: 1500Mi
-    jenkinsVolumeSize: 8Gi
-    jenkinsJavaOpts_Xms: 512m
+    jenkinsMemoryLim: 2Gi      # Jenkins memory limit.
+    jenkinsMemoryReq: 1500Mi   # Jenkins memory request.
+    jenkinsVolumeSize: 8Gi     # Jenkins volume size.
+    jenkinsJavaOpts_Xms: 512m  # The following three fields are JVM parameters.
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
-  events:  # It provides a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
+  events:                  # Whether to install KubeSphere events system. It provides a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false
-  logging:  # Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
+  logging:                 # (CPU: 57 m, Memory: 2.76 G) Whether to install KubeSphere logging system. Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false
-    elasticsearchMasterReplicas: 1
-    elasticsearchDataReplicas: 1
+    elasticsearchMasterReplicas: 1   # total number of master nodes, it's not allowed to use even number
+    elasticsearchDataReplicas: 1     # total number of data nodes.
     logsidecarReplicas: 2
-    elasticsearchMasterVolumeSize: 4Gi
-    elasticsearchDataVolumeSize: 20Gi
-    logMaxAge: 7
-    elkPrefix: logstash
-  metrics_server:  # Users can install metrics-server to enable HPA (Horizontal Pod Autoscaler) which automatically scales the number of pods, deployments, or statefulsets based on observed CPU utilization.
-    enabled: true
-  monitoring:  # With multi-dimensional monitoring metrics, the built-in monitoring dashboard gives visibility into compute resources ranging from infrastructure to applications.
-    prometheusReplicas: 1
-    prometheusMemoryRequest: 400Mi
-    prometheusVolumeSize: 20Gi
-    alertmanagerReplicas: 1
-  multicluster:  # A multi-cluster control plane provides unified management of multiple K8s clusters from different cloud providers. It supports app distribution across multiple clusters and cloud providers.
-    clusterRole: none  # host | member | none
-  networkpolicy:  # Network policies allow network isolation within the same cluster, which means firewalls can be set up between certain instances (Pods).
+    elasticsearchMasterVolumeSize: 4Gi   # Volume size of Elasticsearch master nodes.
+    elasticsearchDataVolumeSize: 20Gi    # Volume size of Elasticsearch data nodes.
+    logMaxAge: 7                     # Log retention time in built-in Elasticsearch, it is 7 days by default.
+    elkPrefix: logstash              # The string making up index names. The index name will be formatted as ks-<elk_prefix>-log.
+  metrics_server:                    # (CPU: 56 m, Memory: 44.35 MiB) Whether to install metrics-server. IT enables HPA (Horizontal Pod Autoscaler).
+  monitoring:
+    prometheusReplicas: 1            # Prometheus replicas are responsible for monitoring different segments of data source and provide high availability as well.
+    prometheusMemoryRequest: 400Mi   # Prometheus request memory.
+    prometheusVolumeSize: 20Gi       # Prometheus PVC size.
+    alertmanagerReplicas: 1          # AlertManager Replicas.
+  multicluster:
+    clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the role of host or member cluster.
+  networkpolicy:       # Network policies allow network isolation within the same cluster, which means firewalls can be set up between certain instances (Pods).
     enabled: false
-  notification:  # It supports notification management in multi-tenant Kubernetes clusters. The email server will be notified once alerts are triggered when the threshold is reached for different resources. After that, the server will send notifications to various tenant receivers.
+  notification:        # It supports notification management in multi-tenant Kubernetes clusters. It allows you to set AlertManager as its sender, and receivers include Email, Wechat Work, and Slack.
     enabled: false
-  openpitrix:
+  openpitrix:          # (2 Core, 3.6 G) Whether to install KubeSphere Application Store. It provides an application store for Helm-based applications, and offer application lifecycle management.
     enabled: false
-  servicemesh:
+  servicemesh:         # (0.3 Core, 300 MiB) Whether to install KubeSphere Service Mesh (Istio-based). It provides fine-grained traffic management, observability and tracing, and offer visualization for traffic topology.
     enabled: false
-
-
-

@@ -62,7 +62,9 @@ kubectl get svc/ks-console -n kubesphere-system
 ```
 ### Enable Pluggable Components
 
-> Attention: make sure there is enough CPU and memory available in your cluster.
+> Attention:
+> - KubeSphere supports enable the pluggable components before or after the installation, you can refer to the [cluster-configuration.yaml](deploy/cluster-configuration.yaml) for more details.
+> - Make sure there is enough CPU and memory available in your cluster.
 
 1. [Optional] Create the secret of certificate for Etcd in your Kubernetes cluster. This step is only needed when you want to enable Etcd monitoring.
 
