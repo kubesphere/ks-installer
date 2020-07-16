@@ -1,4 +1,19 @@
 ---
+- name: KubeSphere | Create KubeSphere dir
+  file:
+    path: "{{ kubesphere_dir }}"
+    state: directory
+    mode: 0755
+
+
+- name: KubeSphere | Getting installation init files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "jwt-script"
+
+
 - name: KubeSphere | Creating KubeSphere Secret
   shell: >
     dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=32 count=1 2>/dev/null | tr -d '\n'
@@ -11,29 +26,43 @@
   when:
     - (authentication is not defined and authentication.jwtSecret is not defined) or authentication.jwtSecret == ""
 
+
 - name: KubeSphere | Creating KubeSphere Secret
   set_fact:
     ks_secret_str: "{{ authentication.jwtSecret }}"
   when:
     - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
 
+
 - name: KubeSphere | Enable Token Script
   file:
-    path: "{{ kubesphere_dir }}/ks-init/jwt.sh"
+    path: "{{ kubesphere_dir }}/jwt-script/jwt.sh"
     mode: 0755
 
 
 - name: KubeSphere | Getting KS Token
   shell: >
-    /bin/bash {{ kubesphere_dir }}/ks-init/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","username": "admin"}'
+    /bin/bash {{ kubesphere_dir }}/jwt-script/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","username": "admin"}'
   register: ks_token
 
 
+- name: Kubesphere | Checking kubesphere secrets
+  shell: >
+    {{ bin_dir }}/kubectl get secrets -n kubesphere-system
+  register: kubesphere_secrets
+
+- name: Kubesphere | Delete kubesphere secret
+  shell: >
+    {{ bin_dir }}/kubectl delete secrets -n kubesphere-system kubesphere-secret
+  when:
+    - kubesphere_secrets.stdout.find("kubesphere-secret") != -1
+    - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
+    
 - name: KubeSphere | Create components token
   shell: >
     {{ bin_dir }}/kubectl create secret generic kubesphere-secret
     --from-literal=token={{ ks_token.stdout }}
     --from-literal=secret={{ ks_secret_str }}
     -n kubesphere-system
-
-
+  register: secret_status
+  failed_when: "secret_status.stderr and 'AlreadyExists' not in secret_status.stderr"

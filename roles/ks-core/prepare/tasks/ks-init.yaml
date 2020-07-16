@@ -1,13 +1,4 @@
 ---
-- name: Kubesphere | Checking kubesphere secrets
-  shell: >
-    {{ bin_dir }}/kubectl get secrets -n kubesphere-system
-  register: kubesphere_secrets
-
-- import_tasks: initToken.yaml
-  when:
-    - kubesphere_secrets.stdout.find("kubesphere-secret") == -1
-
 - name: Kubesphere | Checking account init
   shell: >
     {{ bin_dir }}/kubectl get users admin

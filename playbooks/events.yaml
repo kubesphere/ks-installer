@@ -5,5 +5,7 @@
   roles:
     - kubesphere-defaults
     - role: ks-events
-      when:
-        - "status.events is not defined or status.events.status is not defined or status.events.status != 'enabled'"
+      when: >
+        status.events is not defined or status.events.status is not defined or status.events.status != 'enabled'
+        or
+        (events.ruler.enabled is defined and events.ruler.enabled == True and status.events.ruler is not defined)

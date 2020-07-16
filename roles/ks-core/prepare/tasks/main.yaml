@@ -30,14 +30,14 @@
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
-- name: KubeSphere | Create KubeSphere vpa
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml"
-  register: result
-  until: result is succeeded
-  retries: 5
-  delay: 3
-  when:
-    - vertical_pod_autoscaler_enable == true
+# - name: KubeSphere | Create KubeSphere vpa
+#   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml"
+#   register: result
+#   until: result is succeeded
+#   retries: 5
+#   delay: 3
+#   when:
+#     - vertical_pod_autoscaler_enable == true
 
 - name: KubeSphere | Generate kubeconfig-admin
   shell: >
@@ -45,18 +45,18 @@
   when:
     - openpitrix.enabled is defined and openpitrix.enabled
 
-- name: Kubesphere | Checking kubesphere component
-  shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-system
-  register: kubesphere_component_pod
+# - name: Kubesphere | Checking kubesphere component
+#   shell: >
+#     {{ bin_dir }}/kubectl get deploy -n kubesphere-system
+#   register: kubesphere_component_pod
 
-- name: Kubesphere | Get kubesphere component version
-  shell: >
-    {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
-  register: console_version
-  when:
-    - kubesphere_component_pod.stdout.find("ks-console") != -1
+# - name: Kubesphere | Get kubesphere component version
+#   shell: >
+#     {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
+#   register: console_version
+#   when:
+#     - kubesphere_component_pod.stdout.find("ks-console") != -1
 
-- import_tasks: ks-stop.yaml
-  when:
-    - console_version.stdout and console_version.stdout != ks_version
+# - import_tasks: ks-stop.yaml
+#   when:
+#     - console_version.stdout and console_version.stdout != ks_version
