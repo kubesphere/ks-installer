@@ -60,7 +60,11 @@ kubectl get svc/ks-console -n kubesphere-system
 
 以上为最小化部署，如需开启更多功能，请参考如下步骤配置相关依赖：
 
-### 安装功能组件
+### 安装可插拔功能组件
+
+> 注意：
+> - KubeSphere 支持在安装前或完成后开启可插拔功能组件的安装，各功能组件的介绍请参考 [cluster-configuration.yaml](deploy/cluster-configuration.yaml)；
+> - 在开启可插拔功能组件之前，请确保您的集群可用 CPU 与内存满足其可插拔功能组件所需的 CPU 和内存要求。
 
 1. [可选项] 创建集群 Etcd 的证书 Secret。(仅开启 Etcd 监控需要设置)
 
@@ -82,10 +86,10 @@ $ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client
 kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-certs
 ```
 
-2. 编辑 configmap 开启相关功能:
+2. 编辑 ClusterConfiguration 开启可插拔的功能组件:
 
 ```bash
-kubectl edit cm ks-installer -n kubesphere-system
+kubectl edit cc ks-installer -n kubesphere-system
 ```
 
 > 按功能需求编辑配置文件之后，退出等待生效即可，如长时间未生效请使用如下命令查看相关日志:
