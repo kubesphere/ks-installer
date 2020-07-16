@@ -197,14 +197,17 @@ def getComponentLists():
         exit()
 
     for component, parameters in configs.items():
-        if type(parameters) is not str:
-            for j, value in parameters.items():
-                if (j == 'enabled') and (value == True):
-                    readyToEnabledList.append(component)
-                    break
-                elif (j == 'enabled') and (value == False):
-                    readyToDisableList.append(component)
-                    break
+        if (type(parameters) is not str) or (type(parameters) is not int):
+            try: 
+                for j, value in parameters.items():
+                    if (j == 'enabled') and (value == True):
+                        readyToEnabledList.append(component)
+                        break
+                    elif (j == 'enabled') and (value == False):
+                        readyToDisableList.append(component)
+                        break
+            except:
+                pass
     try:
         readyToEnabledList.remove("metrics_server")
         readyToDisableList.remove("metrics_server")
@@ -291,9 +294,17 @@ def generateConfig():
         namespace="kubesphere-system",
         plural="clusterconfigurations",
     )
+     
+    cluster_config = resource['spec']
+    
+    api = client.CoreV1Api()
+    nodes = api.list_node().items
+    
+    cluster_config['nodeNum'] = len(nodes)
+
     try:
       with open(configFile, 'w', encoding='utf-8') as f:
-        json.dump(resource['spec'], f, ensure_ascii=False, indent=4)
+        json.dump(cluster_config, f, ensure_ascii=False, indent=4)
     except:
       with open(configFile, 'w', encoding='utf-8') as f:
         json.dump({"config": "new"}, f, ensure_ascii=False, indent=4)
@@ -304,11 +315,6 @@ def generateConfig():
     except:
       with open(statusFile, 'w', encoding='utf-8') as f:
         json.dump({"status": {"enabledComponents": []}}, f, ensure_ascii=False, indent=4)
-
-
-    # cmdGetConfig = r"kubectl get cm -n kubesphere-system ks-installer -o jsonpath='{.data}' | grep -v '\[\|\]' > /kubesphere/config/ks-config.yaml"
-    # os.system(cmdGetConfig)
-
 
 def main():
     if not os.path.exists(privateDataDir):
