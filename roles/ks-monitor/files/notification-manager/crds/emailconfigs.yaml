@@ -39,29 +39,35 @@ spec:
                 authentications.
               properties:
                 key:
+                  description: The key of the secret to select from.  Must be a valid
+                    secret key.
                   type: string
                 name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                            TODO: Add other useful fields. apiVersion, kind, uid?'
                   type: string
-                namespace:
-                  type: string
+                optional:
+                  description: Specify whether the Secret or its key must be defined
+                  type: boolean
               required:
                 - key
-                - name
-                - namespace
               type: object
             authSecret:
               description: The secret contains the SMTP secret for CRAM-MD5 authentication.
               properties:
                 key:
+                  description: The key of the secret to select from.  Must be a valid
+                    secret key.
                   type: string
                 name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                            TODO: Add other useful fields. apiVersion, kind, uid?'
                   type: string
-                namespace:
-                  type: string
+                optional:
+                  description: Specify whether the Secret or its key must be defined
+                  type: boolean
               required:
                 - key
-                - name
-                - namespace
               type: object
             authUsername:
               description: The username for CRAM-MD5, LOGIN and PLAIN authentications.
