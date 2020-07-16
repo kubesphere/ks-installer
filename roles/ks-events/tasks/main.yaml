@@ -46,3 +46,21 @@
   until: import is succeeded
   retries: 5
   delay: 3
+
+
+- name: ks-events | import ks-events status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"events": {"ruler": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
+  when:
+    - events is defined 
+    - events.ruler is defined 
+    - events.ruler.enabled is defined
+    - events.ruler.enabled == True
