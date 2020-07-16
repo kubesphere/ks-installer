@@ -158,6 +158,12 @@ rules:
     verbs:
     - get
     - list
+  - apiGroups:
+    - openpitrix.io
+    resources:
+    - repos
+    verbs:
+    - create
 
 
 ---
