@@ -372,7 +372,7 @@ fluentbit_operator_migrator_tag: migrator
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
 ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
-ks_fluent_bit_tag: "v1.3.7"
+ks_fluent_bit_tag: "v1.5.0"
 ks_log_sidecar_injector_repo: "{{ base_repo }}kubespheredev/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.1
 filebeat_repo: "{{ base_repo }}elastic/filebeat"
