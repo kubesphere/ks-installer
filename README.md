@@ -1,8 +1,10 @@
-# Install KubeSphere on Existing Kubernetes Cluster
+# Install KubeSphere v3.0.0-dev on Existing Kubernetes Cluster
 
 > English | [中文](README_zh.md)
 
 In addition to supporting deploying on VM and BM, KubeSphere also supports installing on cloud-hosted and on-premises existing Kubernetes clusters.
+
+> Important: The master branch is used for v3.0.0-dev installation. The latest stable release is v2.1.1, please go to [branch: v2.1.1](https://github.com/kubesphere/ks-installer/tree/v2.1.1) for more information.
 
 ## Prerequisites
 
