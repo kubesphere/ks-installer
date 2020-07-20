@@ -17,9 +17,9 @@ spec:
       enabled: true
     options:
       es:
-        index-prefix: {{ logging.elkPrefix }}
-{% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
-        server-urls: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
+        index-prefix: {{ common.es.elkPrefix }}
+{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
+        server-urls: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
         server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}

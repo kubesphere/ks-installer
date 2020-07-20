@@ -72,14 +72,14 @@ cluster:
 master:
   name: master
   exposeHttp: false
-  replicas: {{ logging.elasticsearchMasterReplicas }}
+  replicas: {{ common.es.elasticsearchMasterReplicas }}
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: {% if es_master_pv_size is defined %}{{ es_master_pv_size }}{% else %}{{ logging.elasticsearchMasterVolumeSize }}{% endif %}
+    size: {% if es_master_pv_size is defined %}{{ es_master_pv_size }}{% else %}{{ common.es.elasticsearchMasterVolumeSize }}{% endif %}
 
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"
@@ -124,14 +124,14 @@ data:
   serviceType: ClusterIP
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
-  replicas: {{ logging.elasticsearchDataReplicas }}
+  replicas: {{ common.es.elasticsearchDataReplicas }}
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: {% if es_data_pv_size is defined %}{{ es_data_pv_size }}{% else %}{{ logging.elasticsearchDataVolumeSize }}{% endif %}
+    size: {% if es_data_pv_size is defined %}{{ es_data_pv_size }}{% else %}{{ common.es.elasticsearchDataVolumeSize }}{% endif %}
 
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"

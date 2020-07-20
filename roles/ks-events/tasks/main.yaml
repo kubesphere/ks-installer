@@ -35,6 +35,9 @@
     - (events_check.stdout.find("DEPLOYED") == -1) or (events_check.stdout.find("v0.1.0") == -1)
 
 
+- import_tasks: fluentbit-operator.yaml
+
+
 - name: ks-events | import ks-events status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer

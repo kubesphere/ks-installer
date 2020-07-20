@@ -1,0 +1,16 @@
+- name: ks-auditing | Getting logging installation files
+  copy:
+    src: "fluentbit-operator"
+    dest: "{{ kubesphere_dir }}/"
+
+
+- name: ks-auditing | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
+  with_items:
+    - { name: custom-output-elasticsearch-auditing, file: custom-output-elasticsearch-auditing.yaml }
+
+- name: ks-auditing | Apply fluentbit operator custom resources
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator
