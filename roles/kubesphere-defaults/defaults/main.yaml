@@ -27,7 +27,7 @@ kube_dns_servers:
 
 dns_servers: "{{kube_dns_servers[dns_mode]}}"
 
-kubesphere_dir: /etc/kubesphere
+kubesphere_dir: /kubesphere/kubesphere
 kube_config_dir: /etc/kubernetes
 kube_cert_dir: "{{ kube_config_dir }}/ssl"
 kube_addons_dir: "{{ kube_config_dir }}/addons"
