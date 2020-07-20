@@ -132,14 +132,14 @@ ks_installer_repo: "{{ base_repo }}kubesphere/ks-installer"
 ks_installer_tag: v2.1.1
 
 #ks-notification
-notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
-notification_flyway_tag: "flyway_v2.1.0"
-notification_repo: "{{ base_repo }}kubesphere/notification"
-notification_tag: "v2.1.0"
+notification_flyway_repo: "{{ base_repo }}kubespheredev/notification"
+notification_flyway_tag: "flyway_v2.1.2"
+notification_repo: "{{ base_repo }}kubespheredev/notification"
+notification_tag: "v2.1.2"
 alerting_dbinit_repo: "{{ base_repo }}kubespheredev/alerting-dbinit"
 alerting_dbinit_tag: "v3.0.0"
-ks_alerting_repo: "{{ base_repo }}kubesphere/alerting"
-ks_alerting_tag: "v2.1.0"
+ks_alerting_repo: "{{ base_repo }}kubespheredev/alerting"
+ks_alerting_tag: "v2.1.2"
 ks_alerting_adapter_repo: "{{ base_repo }}kubespheredev/alert_adapter"
 ks_alerting_adapter_tag: "v3.0.0"
 
