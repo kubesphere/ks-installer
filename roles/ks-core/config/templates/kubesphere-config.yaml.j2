@@ -96,33 +96,33 @@ data:
 
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
-{% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
-      host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
+      host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
-      indexPrefix: ks-{{ logging.elkPrefix }}-log
+      indexPrefix: ks-{{ common.es.elkPrefix }}-log
 {% endif %}
 
 {% if events.enabled is defined and events.enabled == true %}
     events:
-{% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
-      host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
+      host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
-      indexPrefix: ks-{{ logging.elkPrefix }}-events
+      indexPrefix: ks-{{ common.es.elkPrefix }}-events
 {% endif %}
 
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
       enable: true
-{% if logging.externalElasticsearchUrl is defined and logging.externalElasticsearchPort is defined %}
-      host: http://{{ logging.externalElasticsearchUrl }}:{{ logging.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
+      host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
-      indexPrefix: ks-{{ logging.elkPrefix }}-auditing
+      indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
 
 {% if alerting.enabled is defined and alerting.enabled == true %}

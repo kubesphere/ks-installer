@@ -1,17 +1,16 @@
 apiVersion: logging.kubesphere.io/v1alpha2
 kind: Output
 metadata:
-  name: es
+  name: es-auditing
   namespace: kubesphere-logging-system
   labels:
     logging.kubesphere.io/enabled: "true"
-    logging.kubesphere.io/component: "logging"
+    logging.kubesphere.io/component: "auditing"
 spec:
-  match: kube.*
+  match: kube_auditing
   es:
-    host: "{% if common.es.externalElasticsearchUrl is defined %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
-    port: {% if common.es.externalElasticsearchPort is defined %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
-    
-    logstashPrefix: "ks-{{ common.es.elkPrefix }}-log"
     logstashFormat: true
-    timeKey: "@timestamp"
+    host: "{% if common.es.externalElasticsearchUrl is defined %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
+    logstashPrefix: "ks-{{ common.es.elkPrefix }}-auditing"
+    port: {% if common.es.externalElasticsearchPort is defined %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
+

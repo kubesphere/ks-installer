@@ -28,3 +28,13 @@
   when: 
     - openpitrix.enabled or notification.enabled or alerting.enabled
     - "status.etcd is not defined or status.etcd.status is not defined or status.etcd.status != 'enabled'"
+
+- import_tasks: es-install.yaml
+  when:
+    - logging.enabled or events.enabled or auditing.enabled or servicemesh.enabled
+    - "status.es is not defined or status.es.status is not defined or status.es.status != 'enabled'"
+
+- import_tasks: fluentbit-install.yaml
+  when:
+    - logging.enabled or events.enabled or auditing.enabled
+    - "status.fluentbit is not defined or status.fluentbit.status is not defined or status.fluentbit.status != 'enabled'"

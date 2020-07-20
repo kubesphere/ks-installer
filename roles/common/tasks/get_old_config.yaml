@@ -83,3 +83,31 @@
     - redis_ha_pvc.rc == 0
     - redis_ha_pvc.stdout != ""
   ignore_errors: True
+
+- name: Kubesphere | Check es-master PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.status.capacity.storage}'
+  register: es_master_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting es master pv size
+  set_fact:
+    es_master_pv_size: "{{ es_master_pvc.stdout }}"
+  when:
+    - es_master_pvc.rc == 0
+    - es_master_pvc.stdout != ""
+  ignore_errors: True
+
+- name: Kubesphere | Check es data PersistentVolumeClaim
+  shell: >
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.status.capacity.storage}'
+  register: es_data_pvc
+  ignore_errors: True
+
+- name: Kubesphere | Setting es data pv size
+  set_fact:
+    es_data_pv_size: "{{ es_data_pvc.stdout }}"
+  when:
+    - es_data_pvc.rc == 0
+    - es_data_pvc.stdout != ""
+  ignore_errors: True
