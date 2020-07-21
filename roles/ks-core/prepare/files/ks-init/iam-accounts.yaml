@@ -82,6 +82,12 @@ rules:
     verbs:
       - get
       - list
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - s2ibinaries/file
+    verbs:
+      - get
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
