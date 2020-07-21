@@ -41,6 +41,14 @@ spec:
         name: notification-manager-operator
         resources: 
         {{- toYaml .Values.operator.containers.operator.resources | nindent 10 }}
+        volumeMounts:
+          - mountPath: /etc/localtime
+            name: host-time
+      volumes:
+        - hostPath:
+            path: /etc/localtime
+            type: ""
+          name: host-time
       serviceAccount: notification-manager-sa
       serviceAccountName: notification-manager-sa
       nodeSelector: 
