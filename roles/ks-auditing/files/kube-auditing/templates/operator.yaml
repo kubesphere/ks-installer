@@ -38,6 +38,14 @@ spec:
                   fieldPath: metadata.namespace
           resources:
             {{- toYaml .Values.operator.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: host-time
+      volumes:
+        - hostPath:
+            path: /etc/localtime
+            type: ""
+          name: host-time
       nodeSelector:
         {{- toYaml .Values.operator.nodeSelector | nindent 8 }}
       affinity:
