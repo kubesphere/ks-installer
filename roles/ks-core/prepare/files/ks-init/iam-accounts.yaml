@@ -231,6 +231,11 @@ rules:
 - apiGroups:
   - '*'
   resources:
+  - abnormalworkloads
+  - quotas
+  - workloads
+  - volumesnapshots
+  - dashboards
   - configmaps
   - endpoints
   - events
@@ -249,6 +254,7 @@ rules:
   - deployments
   - replicasets
   - statefulsets
+  - daemonsets
   - meshpolicies
   - cronjobs
   - jobs
