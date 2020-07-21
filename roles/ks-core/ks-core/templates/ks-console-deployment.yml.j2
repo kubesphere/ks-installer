@@ -39,10 +39,10 @@ spec:
             cpu: {{ ks_console_cpu_requests }}
             memory: {{ ks_console_memory_requests }}
         volumeMounts:
-        - mountPath: /root/KubeSphereUI/server/local_config.yaml
+        - mountPath: /opt/kubesphere/console/server/local_config.yaml
           name: ks-console-config
           subPath: local_config.yaml
-        - mountPath: /root/KubeSphereUI/server/sample
+        - mountPath: /opt/kubesphere/console/server/sample
           name: sample-bookinfo
         livenessProbe:
           failureThreshold: 8
