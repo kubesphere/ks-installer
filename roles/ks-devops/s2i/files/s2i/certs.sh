@@ -109,7 +109,7 @@ for x in $(seq 10); do
     if [[ ${serverCert} != '' ]]; then
         break
     fi
-    sleep 1
+    sleep 3
 done
 if [[ ${serverCert} == '' ]]; then
     echo "ERROR: After approving csr ${csrName}, the signed certificate did not appear on the resource. Giving up after 10 attempts." >&2
