@@ -47,8 +47,8 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 ### Minimal Installation
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0-alpha.1/deploy/kubesphere-installer.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0-alpha.1/deploy/cluster-configuration.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0-alpha.2/deploy/kubesphere-installer.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0-alpha.2/deploy/cluster-configuration.yaml
 ```
 
 Then inspect the logs of installation.
