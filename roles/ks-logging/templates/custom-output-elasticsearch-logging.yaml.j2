@@ -1,0 +1,17 @@
+apiVersion: logging.kubesphere.io/v1alpha2
+kind: Output
+metadata:
+  name: es
+  namespace: kubesphere-logging-system
+  labels:
+    logging.kubesphere.io/enabled: "true"
+    logging.kubesphere.io/component: "logging"
+spec:
+  match: kube.*
+  es:
+    host: "{% if common.es.externalElasticsearchUrl is defined %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
+    port: {% if common.es.externalElasticsearchPort is defined %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
+    
+    logstashPrefix: "ks-{{ common.es.elkPrefix }}-log"
+    logstashFormat: true
+    timeKey: "@timestamp"
