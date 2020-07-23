@@ -1944,6 +1944,7 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-view-roles","role-template-view-roles"]'
       kubesphere.io/creator: system
       kubesphere.io/description: Allows viewer access to view all resources in the namespace.
     name: viewer
