@@ -49,6 +49,8 @@ spec:
           name: ks-router-config
         - mountPath: /etc/kubesphere/
           name: kubesphere-config
+        - mountPath: /etc/localtime
+          name: host-time
         livenessProbe:
           failureThreshold: 8
           httpGet:
@@ -108,7 +110,10 @@ spec:
           defaultMode: 420
           name: kubesphere-config
         name: kubesphere-config
-
+      - hostPath:
+          path: /etc/localtime
+          type: ""
+        name: host-time
 
 ---
 
