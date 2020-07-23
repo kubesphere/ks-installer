@@ -29,6 +29,7 @@
     - istio-system
     - kube-system
     - kubesphere-system
+    - kubesphere-devops-system
 #    - openpitrix-system
 
 - name: istio | Check istio
