@@ -999,6 +999,7 @@ rules:
   - 'federatednamespaces'
   verbs:
   - 'create'
+  - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1153,6 +1154,7 @@ rules:
   - 'devopsprojects'
   verbs:
   - 'create'
+  - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1835,6 +1837,7 @@ role:
     - '*'
     resources:
     - namespaces
+    - federatednamespaces
     - devops
     verbs:
     - create
