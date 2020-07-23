@@ -46,7 +46,7 @@ exporter:
 
 ruler:
   enabled: {{ events.ruler.enabled | default(false) }}
-  relicas: {{ events.ruler.replicas | default(2) }}
+  replicas: {{ events.ruler.replicas | default(2) }}
   image:
     repository: {{ kube_events_ruler_repo }}
     tag: {{ kube_events_ruler_tag }}

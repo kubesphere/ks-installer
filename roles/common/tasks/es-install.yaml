@@ -27,7 +27,7 @@
 
   - name: Kubesphere | Comment elasticsearch storageclass parameter
     shell: >
-      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/custom-values-elasticsearch.yaml
+      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/elasticsearch/custom-values-elasticsearch.yaml
     when:
       - sts_number.stdout != "0"
       - sc_number.stdout == "0"
