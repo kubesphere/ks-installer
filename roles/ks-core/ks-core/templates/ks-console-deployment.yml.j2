@@ -44,6 +44,8 @@ spec:
           subPath: local_config.yaml
         - mountPath: /opt/kubesphere/console/server/sample
           name: sample-bookinfo
+        - mountPath: /etc/localtime
+          name: host-time
         livenessProbe:
           failureThreshold: 8
           httpGet:
@@ -102,4 +104,7 @@ spec:
           defaultMode: 420
           name: sample-bookinfo
         name: sample-bookinfo
-        
+      - hostPath:
+          path: /etc/localtime
+          type: ""
+        name: host-time        

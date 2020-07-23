@@ -58,6 +58,8 @@ spec:
           name: webhook-secret
         - mountPath: /var/lib/kubelet/plugins/
           name: kubelet-plugin
+        - mountPath: /etc/localtime
+          name: host-time
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -77,6 +79,10 @@ spec:
           hostPath:
             path: /var/lib/kubelet/plugins/
             type: DirectoryOrCreate
+        - hostPath:
+            path: /etc/localtime
+            type: ""
+          name: host-time
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
