@@ -164,12 +164,6 @@ rules:
     verbs:
     - get
     - list
-  - apiGroups:
-    - openpitrix.io
-    resources:
-    - repos
-    verbs:
-    - create
 
 
 ---
@@ -975,6 +969,10 @@ rules:
   - federatedservices
   - federatedservicestatuses
   - federatedstatefulsets
+  - workspaces
+  - quotas
+  - abnormalworkloads
+  - workloads
   verbs:
   - get
   - list
@@ -1117,14 +1115,13 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'piplines'
-  - 'piplines/runs'
-  - 'piplines/branches'
-  - 'piplines/checkScriptCompile'
-  - 'piplines/consolelog'
-  - 'piplines/scan'
-  - 'piplines/sonarstatus'
-  - 'users'
+  - 'pipelines'
+  - 'pipelines/runs'
+  - 'pipelines/branches'
+  - 'pipelines/checkScriptCompile'
+  - 'pipelines/consolelog'
+  - 'pipelines/scan'
+  - 'pipelines/sonarstatus'
   - 'checkCron'
   - 'credentials'
   - 'credentials/usage'
@@ -1172,13 +1169,13 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'piplines'
-  - 'piplines/runs'
-  - 'piplines/branches'
-  - 'piplines/checkScriptCompile'
-  - 'piplines/consolelog'
-  - 'piplines/scan'
-  - 'piplines/sonarstatus'
+  - 'pipelines'
+  - 'pipelines/runs'
+  - 'pipelines/branches'
+  - 'pipelines/checkScriptCompile'
+  - 'pipelines/consolelog'
+  - 'pipelines/scan'
+  - 'pipelines/sonarstatus'
   - 'users'
   - 'checkCron'
   - 'credentials'
@@ -1228,6 +1225,7 @@ rules:
   - '*'
   verbs:
   - 'repos'
+  - 'repos/action'
 
 
 ---  
@@ -1829,6 +1827,8 @@ role:
     resources:
     - workspaces
     - workspacemembers
+    - quotas
+    - abnormalworkloads
     verbs:
     - get
     - list
@@ -1846,7 +1846,9 @@ role:
     - monitoring.kubesphere.io
     resources:
     - namespaces
+    - workloads
     verbs:
+    - get
     - list
 
 ---
