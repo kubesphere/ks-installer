@@ -1367,6 +1367,17 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
+    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-basic
+rules: []
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
     iam.kubesphere.io/module: Workspace Settings
     iam.kubesphere.io/role-template-rules: '{"workspace-settings": "manage"}'
     kubesphere.io/alias-name: Workspace Settings
@@ -2166,6 +2177,23 @@ role:
     - 'rolebindings'
     verbs:
     - '*'
+
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-view-basic
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-view-basic
+  rules: []
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
