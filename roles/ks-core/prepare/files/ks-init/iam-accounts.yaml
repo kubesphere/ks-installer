@@ -283,6 +283,7 @@ rules:
   - roles
   - members
   - servicepolicies
+  - federatedapplications
   - federatedconfigmaps
   - federateddeployments
   - federatedingresses
@@ -301,8 +302,19 @@ rules:
   - workspaceroles
   - workspacemembers
   - workspacerolebindings
+  - repos
+  - repos/action
+  - apps
+  - apps/versions
+  - s2ibinaries/file
   verbs:
   - '*'
+- apiGroups:
+  - '*'
+  resources:
+  - clusters
+  verbs:
+  - list
 - apiGroups:
   - '*'
   resources:
@@ -311,12 +323,6 @@ rules:
   - get
   - list
   - watch
-- apiGroups:
-  - '*'
-  resources:
-  - clusters
-  verbs:
-  - list
 
 
 ---
@@ -632,7 +638,7 @@ metadata:
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-workspaces
-roles:
+rules:
 - apiGroups:
   - '*'
   resources:
@@ -683,6 +689,7 @@ roles:
   - roles
   - members
   - servicepolicies
+  - federatedapplications
   - federatedconfigmaps
   - federateddeployments
   - federatedingresses
@@ -701,6 +708,11 @@ roles:
   - workspaceroles
   - workspacemembers
   - workspacerolebindings
+  - repos
+  - repos/action
+  - apps
+  - apps/versions
+  - s2ibinaries/file
   verbs:
   - '*'
 - apiGroups:
@@ -709,6 +721,7 @@ roles:
   - clusters
   verbs:
   - list
+
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1403,6 +1416,12 @@ rules:
     verbs:
     - get
     - list
+  - apiGroups:
+    - '*'
+    resources:
+    - namespaces
+    verbs:
+    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
