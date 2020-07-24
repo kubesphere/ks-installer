@@ -1,0 +1,36 @@
+name: Docker
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE_NAME: ks-installer
+  IMAGE_REPO: kubespheredev
+  IMAGE_VERSION: latest
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - name: Log into registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=$IMAGE_REPO/$IMAGE_NAME
+
+          echo IMAGE_ID=$IMAGE_ID
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$IMAGE_VERSION
+          docker push $IMAGE_ID:$IMAGE_VERSION
