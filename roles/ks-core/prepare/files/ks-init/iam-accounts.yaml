@@ -993,6 +993,18 @@ rules:
 - apiGroups:
   - '*'
   resources:
+  - workspaces
+  - workspacemembers
+  - quotas
+  - abnormalworkloads
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - '*'
+  resources:
   - 'namespaces'
   - 'federatednamespaces'
   verbs:
@@ -1840,6 +1852,7 @@ role:
     - workspacemembers
     - quotas
     - abnormalworkloads
+    - pods
     verbs:
     - get
     - list
