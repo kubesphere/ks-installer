@@ -69,29 +69,11 @@ spec:
         status:
           description: UserStatus defines the observed state of User
           properties:
-            conditions:
-              description: Represents the latest available observations of a user's
-                current state.
-              items:
-                properties:
-                  lastTransitionTime:
-                    format: date-time
-                    type: string
-                  message:
-                    type: string
-                  reason:
-                    type: string
-                  status:
-                    description: Status of the condition, one of True, False, Unknown.
-                    type: string
-                  type:
-                    description: Type of user controller condition.
-                    type: string
-                required:
-                - status
-                - type
-                type: object
-              type: array
+            lastTransitionTime:
+              format: date-time
+              type: string
+            reason:
+              type: string
             state:
               description: The user status
               type: string
