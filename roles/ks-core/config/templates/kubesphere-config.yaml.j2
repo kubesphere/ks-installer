@@ -2,8 +2,8 @@ apiVersion: v1
 data:
   kubesphere.yaml: |
     authentication:
-      authenticateRateLimiterMaxTries: {{ common.authenticateRateLimiterMaxTries | default(5) }}
-      authenticationRateLimiterDuration: {{ common.authenticationRateLimiterDuration | default("30m0s") }}
+      authenticateRateLimiterMaxTries: {{ common.authenticateRateLimiterMaxTries | default(10) }}
+      authenticateRateLimiterDuration: {{ common.authenticationRateLimiterDuration | default("10m0s") }}
       maxAuthenticateRetries: {{ common.maxAuthenticateRetries | default(6) }}
       multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
       jwtSecret: "{{ ks_secret_str.stdout }}"
@@ -11,7 +11,6 @@ data:
       oauthOptions:
         accessTokenMaxAge: 0
 {% endif %}
-
     ldap:
       host: openldap.kubesphere-system.svc:389
       managerDN: cn=admin,dc=kubesphere,dc=io
@@ -42,13 +41,10 @@ data:
       maxOpenConnections: 100
       maxConnectionLifeTime: 10s
 {% endif %}
-
 {% if networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled %}
     network:
       enableNetworkPolicy: true
 {% endif %}
-
-
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
       host: http://ks-jenkins.kubesphere-devops-system.svc/
@@ -61,15 +57,12 @@ data:
       token: {{ externalSonarToken }}
 {% endif %}
 {% endif %}
-
-
 {% if servicemesh.enabled is defined and servicemesh.enabled == true %}
     servicemesh:
       istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
       jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
       servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
 {% endif %}
-
 {% if openpitrix.enabled is defined and openpitrix.enabled == true %}
     openpitrix:
       runtimeManagerEndpoint:    "hyperpitrix.openpitrix-system.svc:9103"
@@ -80,7 +73,6 @@ data:
       attachmentManagerEndpoint: "hyperpitrix.openpitrix-system.svc:9122"
       repoIndexerEndpoint:       "hyperpitrix.openpitrix-system.svc:9108"
 {% endif %}
-
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
     multicluster:
       enable: true
@@ -90,10 +82,8 @@ data:
       proxyPublishAddress: {{ multicluster.proxyPublishAddress }}
 {% endif %}
 {% endif %}
-
     monitoring:
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
-
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
@@ -103,7 +93,6 @@ data:
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-log
 {% endif %}
-
 {% if events.enabled is defined and events.enabled == true %}
     events:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
@@ -113,7 +102,6 @@ data:
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-events
 {% endif %}
-
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
       enable: true
@@ -124,17 +112,14 @@ data:
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
-
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
       endpoint: http://alerting-client-server.kubesphere-alerting-system.svc:9200/api/
 {% endif %}
-
 {% if notification.enabled is defined and notification.enabled == true %}
     notification:
       endpoint: http://notification.kubesphere-alerting-system.svc:9200
 {% endif %}
-
 kind: ConfigMap
 metadata:
   name: kubesphere-config
