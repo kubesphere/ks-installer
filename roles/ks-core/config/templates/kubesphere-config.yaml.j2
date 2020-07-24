@@ -4,7 +4,8 @@ data:
     authentication:
       authenticateRateLimiterMaxTries: {{ common.authenticateRateLimiterMaxTries | default(10) }}
       authenticateRateLimiterDuration: {{ common.authenticationRateLimiterDuration | default("10m0s") }}
-      maxAuthenticateRetries: {{ common.maxAuthenticateRetries | default(6) }}
+      recordRetentionPeriod: {{ common.recordRetentionPeriod | default("168h") }}
+      maximumClockSkew: {{ common.maximumClockSkew | default("10s") }}
       multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
       jwtSecret: "{{ ks_secret_str.stdout }}"
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
