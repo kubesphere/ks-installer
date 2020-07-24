@@ -42,7 +42,7 @@
 
 - name: KubeSphere | Getting KS Token
   shell: >
-    /bin/bash {{ kubesphere_dir }}/jwt-script/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","username": "admin"}'
+    /bin/bash {{ kubesphere_dir }}/jwt-script/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","username": "admin","token_type": "static_token"}'
   register: ks_token
 
 
