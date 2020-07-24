@@ -2206,7 +2206,18 @@ role:
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-basic
-  rules: []
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - 'namespaces'
+    - 'quotas'
+    - 'abnormalworkloads'
+    - 'workloads'
+    verbs:
+    - 'get'
+    - 'list'
+    - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
