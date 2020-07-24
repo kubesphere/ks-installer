@@ -201,6 +201,17 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-basic
+rules: []
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
     iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-manage-users","role-template-view-roles"]'
     kubesphere.io/creator: admin
   name: users-manager
@@ -1117,9 +1128,9 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Devops Management
+    iam.kubesphere.io/module: DevOps Management
     iam.kubesphere.io/role-template-rules: '{"devops": "view"}'
-    kubesphere.io/alias-name: Devops View
+    kubesphere.io/alias-name: DevOps View
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-devops
@@ -1149,9 +1160,9 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Devops Management
+    iam.kubesphere.io/module: DevOps Management
     iam.kubesphere.io/role-template-rules: '{"devops": "create"}'
-    kubesphere.io/alias-name: Devops Create
+    kubesphere.io/alias-name: DevOps Create
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-create-devops
@@ -1171,9 +1182,9 @@ kind: WorkspaceRole
 metadata:
   annotations:
     iam.kubesphere.io/dependencies: '["role-template-view-devops"]'
-    iam.kubesphere.io/module: Devops Management
+    iam.kubesphere.io/module: DevOps Management
     iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
-    kubesphere.io/alias-name: Devops Management
+    kubesphere.io/alias-name: DevOps Management
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-devops
@@ -1383,7 +1394,15 @@ metadata:
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-basic
-rules: []
+rules:
+  - apiGroups:
+    - monitoring.kubesphere.io
+    resources:
+    - namespaces
+    - workloads
+    verbs:
+    - get
+    - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
