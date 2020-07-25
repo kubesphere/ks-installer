@@ -133,6 +133,7 @@ rules:
       - resources.kubesphere.io
     resources:
       - registry
+      - git
     verbs:
       - get
   - apiGroups:
@@ -212,7 +213,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-manage-users","role-template-view-roles"]'
+    iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-manage-users","role-template-view-roles","role-template-manage-roles"]'
     kubesphere.io/creator: admin
   name: users-manager
 rules:
@@ -302,19 +303,9 @@ rules:
   - workspaceroles
   - workspacemembers
   - workspacerolebindings
-  - repos
-  - repos/action
-  - apps
-  - apps/versions
   - s2ibinaries/file
   verbs:
   - '*'
-- apiGroups:
-  - '*'
-  resources:
-  - clusters
-  verbs:
-  - list
 - apiGroups:
   - '*'
   resources:
@@ -323,6 +314,23 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - openpitrix.io
+  resources:
+  - repos
+  - apps
+  - apps/versions
+  - categories
+  - apps/audits
+  verbs:
+  - '*'
+- apiGroups:
+  - '*'
+  resources:
+  - clusters
+  - cluster
+  verbs:
+  - list
 
 
 ---
@@ -533,13 +541,18 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - '*'
+  - 'resources.kubesphere.io'
+  resources:
+  - 'workspaces'
+  verbs:
+  - 'list'
+- apiGroups:
+  - 'tenant.kubesphere.io'
   resources:
   - 'workspaces'
   verbs:
   - 'patch'
   - 'update'
-  - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -626,6 +639,24 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - openpitrix.io
+  resources:
+  - repos
+  - apps
+  - apps/versions
+  - categories
+  - apps/audits
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - '*'
+  resources:
+  - clusters
+  - cluster
+  verbs:
+  - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -708,10 +739,6 @@ rules:
   - workspaceroles
   - workspacemembers
   - workspacerolebindings
-  - repos
-  - repos/action
-  - apps
-  - apps/versions
   - s2ibinaries/file
   verbs:
   - '*'
@@ -721,7 +748,6 @@ rules:
   - clusters
   verbs:
   - list
-
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -897,7 +923,7 @@ roleRef:
 subjects:
   - apiGroup: iam.kubesphere.io/v1alpha2
     kind: Group
-    name: system:anonymous
+    name: system:unauthenticated
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1923,7 +1949,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings","role-template-manage-network-policies"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings"]'
       kubesphere.io/creator: system
       kubesphere.io/description: Allows admin access to perform any action on any resource, it gives full control over every resource in the namespace.
     name: admin
@@ -2555,9 +2581,3 @@ role:
     - get
     - list
     - watch
-
-
-
-
-
-
