@@ -2,10 +2,10 @@ apiVersion: v1
 data:
   kubesphere.yaml: |
     authentication:
-      authenticateRateLimiterMaxTries: {{ common.authenticateRateLimiterMaxTries | default(10) }}
-      authenticateRateLimiterDuration: {{ common.authenticationRateLimiterDuration | default("10m0s") }}
-      recordRetentionPeriod: {{ common.recordRetentionPeriod | default("168h") }}
-      maximumClockSkew: {{ common.maximumClockSkew | default("10s") }}
+      authenticateRateLimiterMaxTries: {{ authentication.authenticateRateLimiterMaxTries | default(10) }}
+      authenticateRateLimiterDuration: {{ authentication.authenticationRateLimiterDuration | default("10m0s") }}
+      recordRetentionPeriod: {{ authentication.recordRetentionPeriod | default("168h") }}
+      maximumClockSkew: {{ authentication.maximumClockSkew | default("10s") }}
       multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
       jwtSecret: "{{ ks_secret_str.stdout }}"
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
