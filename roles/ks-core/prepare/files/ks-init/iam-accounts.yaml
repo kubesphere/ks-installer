@@ -2233,6 +2233,7 @@ role:
     - 'quotas'
     - 'abnormalworkloads'
     - 'workloads'
+    - 'limitranges'
     verbs:
     - 'get'
     - 'list'
@@ -2349,7 +2350,10 @@ role:
     - services
     - ingresses
     - configmaps
+    - s2ibinaries
     - s2ibuilders
+    - s2ibuildertemplates
+    - s2iruns
     verbs:
     - get
     - list
@@ -2370,7 +2374,7 @@ role:
       iam.kubesphere.io/role-template-rules: '{"applications": "manage", "deployments":
         "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage",
         "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses":
-        "manage", "configmaps": "manage", "s2ibuilders": "manage"}'
+        "manage", "configmaps": "manage", "s2ibuilders": "manage", "secrets":"view"}'
       kubesphere.io/alias-name: Application Workloads Management
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2392,10 +2396,18 @@ role:
     - services
     - ingresses
     - configmaps
+    - s2ibinaries
     - s2ibuilders
+    - s2ibuildertemplates
+    - s2iruns
     verbs:
     - '*'
-
+  - apiGroups:
+    - '*'
+    resources:
+    - 'secrets'
+    verbs:
+    - 'list'
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
