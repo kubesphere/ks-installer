@@ -173,6 +173,12 @@ rules:
       - cluster
     verbs:
       - list
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - s2ibuildertemplates
+    verbs:
+      - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
