@@ -143,12 +143,6 @@ rules:
     verbs:
       - get
   - apiGroups:
-      - types.kubefed.io
-    resources:
-      - 'federatednamespaces'
-    verbs:
-      - list
-  - apiGroups:
       - '*'
     resources:
       - storageclasses
@@ -157,15 +151,28 @@ rules:
       - get
       - list
   - apiGroups:
-    - openpitrix.io
+      - openpitrix.io
     resources:
-    - apps
-    - apps/versions
-    - categories
+      - apps
+      - categories
+      - attachments
+      - applications
     verbs:
-    - get
-    - list
-
+      - get
+      - list
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - apps/versions
+      - apps
+    verbs:
+      - '*'
+  - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - cluster
+    verbs:
+      - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -987,6 +994,7 @@ rules:
   - deployments
   - replicasets
   - statefulsets
+  - daemonsets
   - meshpolicies
   - cronjobs
   - jobs
@@ -1006,6 +1014,7 @@ rules:
   - roles
   - members
   - servicepolicies
+  - federatedapplications
   - federatedconfigmaps
   - federateddeployments
   - federatedingresses
@@ -1023,6 +1032,10 @@ rules:
   - quotas
   - abnormalworkloads
   - workloads
+  - router
+  - dashboards
+  - strategies
+  - volumesnapshots
   verbs:
   - get
   - list
@@ -1095,6 +1108,7 @@ rules:
   - deployments
   - replicasets
   - statefulsets
+  - daemonsets
   - meshpolicies
   - cronjobs
   - jobs
@@ -1114,6 +1128,7 @@ rules:
   - roles
   - members
   - servicepolicies
+  - federatedapplications
   - federatedconfigmaps
   - federateddeployments
   - federatedingresses
@@ -1127,38 +1142,14 @@ rules:
   - federatedservices
   - federatedservicestatuses
   - federatedstatefulsets
-  verbs:
-  - '*'
-
----
-apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
-metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-users","role-template-create-projects","role-template-manage-projects"]'
-    iam.kubesphere.io/module: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"federatedprojects": "manage"}'
-    kubesphere.io/alias-name: Federated Projects Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-manage-federatedprojects
-rules:
-- apiGroups:
-  - '*'
-  resources:
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedservicestatuses
-  - federatedstatefulsets
+  - workspaces
+  - quotas
+  - abnormalworkloads
+  - workloads
+  - router
+  - dashboards
+  - strategies
+  - volumesnapshots
   verbs:
   - '*'
 
@@ -1305,7 +1296,7 @@ rules:
 - apiGroups:
   - 'openpitrix.io'
   resources:
-  - 'apps'
+  - '*'
   verbs:
   - 'get'
   - 'list'
@@ -1327,7 +1318,7 @@ rules:
 - apiGroups:
   - 'openpitrix.io'
   resources:
-  - 'apps'
+  - '*'
   verbs:
   - '*'
 
