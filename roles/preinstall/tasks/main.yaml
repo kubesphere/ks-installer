@@ -1,3 +1,20 @@
 ---
 
 - import_tasks: precheck.yaml
+
+- name: Kubesphere | Checking kubesphere component
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system
+  register: kubesphere_component_pod
+
+- name: Kubesphere | Get kubesphere component version
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
+  register: console_version
+  when:
+    - kubesphere_component_pod.stdout.find("ks-console") != -1
+
+- import_tasks: helm-migrate.yaml
+  when: 
+    - kubesphere_component_pod.stdout.find("ks-console") != -1
+    - console_version.stdout is version('v3.0.0', '<')
