@@ -289,6 +289,7 @@ rules:
   - ingresses
   - filters
   - pods
+  - pods/log
   - namespacenetworkpolicies
   - workspacenetworkpolicies
   - ingresses
