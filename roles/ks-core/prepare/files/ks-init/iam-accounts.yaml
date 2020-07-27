@@ -154,6 +154,7 @@ rules:
       - openpitrix.io
     resources:
       - apps
+      - apps/audits
       - categories
       - attachments
       - applications
@@ -164,7 +165,6 @@ rules:
       - openpitrix.io
     resources:
       - apps/versions
-      - apps
       - repos
     verbs:
       - '*'
@@ -178,6 +178,13 @@ rules:
       - devops.kubesphere.io
     resources:
       - s2ibuildertemplates
+      - search
+    verbs:
+      - list
+  - apiGroups:
+      - resources.kubesphere.io
+    resources:
+      - namespaces
     verbs:
       - list
 
@@ -1221,7 +1228,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-devops"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-create-devops"]'
     iam.kubesphere.io/module: DevOps Management
     iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
     kubesphere.io/alias-name: DevOps Management
