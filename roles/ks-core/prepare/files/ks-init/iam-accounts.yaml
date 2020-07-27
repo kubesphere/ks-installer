@@ -623,6 +623,7 @@ rules:
   - ingresses
   - filters
   - pods
+  - pods/log
   - namespacenetworkpolicies
   - workspacenetworkpolicies
   - ingresses
@@ -726,6 +727,7 @@ rules:
   - ingresses
   - filters
   - pods
+  - pods/log
   - namespacenetworkpolicies
   - workspacenetworkpolicies
   - ingresses
