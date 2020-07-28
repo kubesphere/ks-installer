@@ -1839,7 +1839,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-manage-federatedprojects","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-users","role-template-manage-users","role-template-manage-roles","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-users","role-template-manage-users","role-template-manage-roles","role-template-view-roles"]'
       kubesphere.io/creator: system
     name: admin
   rules:
@@ -1913,7 +1913,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-create-projects","role-template-create-devops"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-create-projects","role-template-create-devops","role-template-manage-app-templates"]'
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
@@ -1946,6 +1946,12 @@ role:
     verbs:
     - get
     - list
+  - apiGroups:
+    - 'openpitrix.io'
+    resources:
+    - '*'
+    verbs:
+    - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
