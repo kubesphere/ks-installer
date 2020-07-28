@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: prometheus-pvc-cleanup
-            image: kubesphere/ks-installer:v2.1.1
+            image: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
             command: ['sh', '-c', 'kubectl -n kubesphere-monitoring-system delete pvc prometheus-k8s-system-db-prometheus-k8s-system-0 prometheus-k8s-system-db-prometheus-k8s-system-1']
           restartPolicy: OnFailure
           serviceAccountName: prometheus-operator
