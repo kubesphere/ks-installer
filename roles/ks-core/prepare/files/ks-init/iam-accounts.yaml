@@ -2595,3 +2595,138 @@ role:
     - get
     - list
     - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-manage-credentials
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
+      iam.kubesphere.io/module: Pipelines Management
+      kubesphere.io/alias-name: Credentials Management
+      iam.kubesphere.io/role-template-rules: '{"credentials": "manage"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-manage-credentials
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - credentials
+    verbs:
+    - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-manage-pipelines
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-credentials"]'
+      iam.kubesphere.io/module: Pipelines Management
+      kubesphere.io/alias-name: Pipelines Management
+      iam.kubesphere.io/role-template-rules: '{"pipelines": "manage"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-manage-pipelines
+  rules:
+  - apiGroups:
+    - '*'
+    resources:
+    - pipelines
+    verbs:
+    - '*'
+  - apiGroups:
+    - '*'
+    resources:
+    - credentials
+    verbs:
+    - 'get'
+    - 'list'
+    - 'watch'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-view-credentials
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/module: Pipelines Management
+      kubesphere.io/alias-name: Credentials View
+      iam.kubesphere.io/role-template-rules: '{"credentials": "view"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-view-credentials
+  rules: 
+  - apiGroups:
+    - '*'
+    resources:
+    - credentials
+    verbs:
+    - 'get'
+    - 'list'
+    - 'watch'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-view-pipelines
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/module: Pipelines Management
+      kubesphere.io/alias-name: Pipelines View
+      iam.kubesphere.io/role-template-rules: '{"pipelines": "view"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-view-pipelines
+  rules: 
+  - apiGroups:
+    - '*'
+    resources:
+    - pipelines
+    verbs:
+    - 'get'
+    - 'list'
+    - 'watch'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-manage-devops-settings
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/module: DevOps Settings
+      kubesphere.io/alias-name: DevOps Settings
+      iam.kubesphere.io/role-template-rules: '{"devops-settings": "manage"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-manage-devops-settings
+  rules: 
+  - apiGroups:
+    - '*'
+    resources:
+    - 'devops'
+    - 'devopsprojects'
+    verbs:
+    - '*'    
