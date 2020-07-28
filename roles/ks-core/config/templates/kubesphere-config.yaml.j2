@@ -4,7 +4,7 @@ data:
     authentication:
       authenticateRateLimiterMaxTries: {{ authentication.authenticateRateLimiterMaxTries | default(10) }}
       authenticateRateLimiterDuration: {{ authentication.authenticationRateLimiterDuration | default("10m0s") }}
-      loginHistoryRetentionPeriod: {{ authentication.loginHistoryRetentionPeriod | default("7d") }}
+      loginHistoryRetentionPeriod: {{ authentication.loginHistoryRetentionPeriod | default("168h") }}
       maximumClockSkew: {{ authentication.maximumClockSkew | default("10s") }}
       multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
       kubectlImage: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
