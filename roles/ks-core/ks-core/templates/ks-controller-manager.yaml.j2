@@ -27,7 +27,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: ks-controller-manager
         tier: backend
@@ -44,10 +43,12 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
         resources:
           limits:
-            cpu: 500m
-            memory: 500Mi
+            cpu: 1000m
+            memory: 1000Mi
           requests:
             cpu: 30m
             memory: 50Mi
@@ -335,3 +336,26 @@ subjects:
 - kind: ServiceAccount
   name: ks-controller-manager
   namespace: kubesphere-system
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ks-controller-manager
+    tier: backend
+    version: v3.0.0
+  name: ks-controller-manager
+  namespace: kubesphere-system
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 8443
+  selector:
+    app: ks-controller-manager
+    tier: backend
+    version: {{ ks_version }}
+  sessionAffinity: None
+  type: ClusterIP
