@@ -1965,7 +1965,6 @@ role:
     annotations:
       iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings"]'
       kubesphere.io/creator: system
-      kubesphere.io/description: Allows admin access to perform any action on any resource, it gives full control over every resource in the namespace.
     name: admin
   rules:
   - apiGroups:
@@ -1985,9 +1984,8 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-alerting-messages","role-template-view-roles","role-template-view-members","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-alerting-messages","role-template-view-roles","role-template-view-members","role-template-view-roles","role-template-manage-pipelines", "role-template-manage-credentials"]'
       kubesphere.io/creator: system
-      kubesphere.io/description: The maintainer of the namespace who can manage resources other than users and roles in the namespace.
     name: operator
   rules:
   - apiGroups:
@@ -2048,9 +2046,8 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-view-roles","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-view-roles","role-template-view-roles","role-template-view-pipelines", "role-template-view-credentials"]'
       kubesphere.io/creator: system
-      kubesphere.io/description: Allows viewer access to view all resources in the namespace.
     name: viewer
   rules:
   - apiGroups:
