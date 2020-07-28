@@ -2607,7 +2607,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
-      iam.kubesphere.io/module: Pipelines Management
+      iam.kubesphere.io/module: Credentials Management
       kubesphere.io/alias-name: Credentials Management
       iam.kubesphere.io/role-template-rules: '{"credentials": "manage"}'
     labels:
@@ -2664,7 +2664,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Pipelines Management
+      iam.kubesphere.io/module: Credentials Management
       kubesphere.io/alias-name: Credentials View
       iam.kubesphere.io/role-template-rules: '{"credentials": "view"}'
     labels:
