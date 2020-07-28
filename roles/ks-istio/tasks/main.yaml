@@ -30,7 +30,7 @@
     - kube-system
     - kubesphere-system
     - kubesphere-devops-system
-#    - openpitrix-system
+  ignore_errors: True
 
 - name: istio | Check istio
   shell: >
