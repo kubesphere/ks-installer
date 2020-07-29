@@ -24,7 +24,7 @@ kind: ClusterRole
 metadata:
   annotations:
     kubesphere.io/creator: system
-    iam.kubesphere.io/aggregation-roles: '["role-template-manage-alerting-messages","role-template-manage-alerting-policies","role-template-manage-app-workloads","role-template-manage-cluster-settings","role-template-manage-components","role-template-manage-crds","role-template-manage-members","role-template-manage-network-policies","role-template-manage-nodes","role-template-manage-projects","role-template-manage-roles","role-template-manage-storageclasses","role-template-manage-volume-snapshots","role-template-manage-volumes","role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
+    iam.kubesphere.io/aggregation-roles: '["role-template-manage-alerting-messages","role-template-manage-alerting-policies","role-template-manage-app-workloads","role-template-manage-cluster-settings","role-template-manage-components","role-template-manage-crds","role-template-manage-members","role-template-manage-network-policies","role-template-manage-nodes","role-template-manage-projects","role-template-manage-roles","role-template-manage-storageclasses","role-template-manage-volumes","role-template-view-alerting-messages","role-template-view-alerting-policies","role-template-view-app-workloads","role-template-view-cluster-monitoring","role-template-view-members","role-template-view-network-policies","role-template-view-nodes","role-template-view-projects","role-template-view-roles","role-template-view-storageclasses","role-template-view-volume-snapshots","role-template-view-volumes"]'
   name: cluster-admin
 rules:
   - apiGroups:
@@ -52,15 +52,15 @@ rules:
     resources:
       - '*'
     verbs:
-      - 'get'
-      - 'list'
-      - 'watch'
+      - get
+      - list
+      - watch
   - nonResourceURLs:
       - '*'
     verbs:
-      - 'get'
-      - 'list'
-      - 'watch'
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -187,6 +187,24 @@ rules:
       - namespaces
     verbs:
       - list
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - tojenkinsfile
+    verbs:
+      - create
+  - apiGroups:
+      - alerting.kubesphere.io
+    resources:
+      - comment
+    verbs:
+      - list
+  - apiGroups:
+      - notification.kubesphere.io
+    resources:
+      - addresses
+    verbs:
+      - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -242,6 +260,7 @@ rules:
   - '*'
   resources:
   - users
+  - users/loginrecords
   - globalroles
   verbs:
   - '*'
@@ -324,6 +343,8 @@ rules:
   - workspaces
   - workspaceroles
   - workspacemembers
+  - workspacemembers/namespaces
+  - workspacemembers/devops
   - workspacerolebindings
   - s2ibinaries/file
   verbs:
@@ -332,6 +353,7 @@ rules:
   - '*'
   resources:
   - users
+  - users/loginrecords
   verbs:
   - get
   - list
@@ -567,7 +589,7 @@ rules:
   resources:
   - 'workspaces'
   verbs:
-  - 'list'
+  - list
 - apiGroups:
   - 'tenant.kubesphere.io'
   resources:
@@ -657,6 +679,8 @@ rules:
   - workspaces
   - workspaceroles
   - workspacemembers
+  - workspacemembers/namespaces
+  - workspacemembers/devops
   - workspacerolebindings
   verbs:
   - get
@@ -762,6 +786,8 @@ rules:
   - workspaces
   - workspaceroles
   - workspacemembers
+  - workspacemembers/namespaces
+  - workspacemembers/devops
   - workspacerolebindings
   - s2ibinaries/file
   verbs:
@@ -789,6 +815,7 @@ rules:
   - '*'
   resources:
   - users
+  - users/loginrecords
   verbs:
   - get
   - list
@@ -1088,8 +1115,8 @@ rules:
   - 'namespaces'
   - 'federatednamespaces'
   verbs:
-  - 'create'
-  - 'watch'
+  - create
+  - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1198,9 +1225,9 @@ rules:
   - 'roles'
   - 'members'
   verbs:
-  - 'get'
-  - 'list'
-  - 'watch'
+  - get
+  - list
+  - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1220,8 +1247,8 @@ rules:
   - 'devops'
   - 'devopsprojects'
   verbs:
-  - 'create'
-  - 'watch'
+  - create
+  - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1272,9 +1299,9 @@ rules:
   resources:
   - 'repos'
   verbs:
-  - 'get'
-  - 'list'
-  - 'watch'
+  - get
+  - list
+  - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1315,9 +1342,9 @@ rules:
   resources:
   - '*'
   verbs:
-  - 'get'
-  - 'list'
-  - 'watch'
+  - get
+  - list
+  - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1355,11 +1382,11 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'workspaceroles'
+  - workspaceroles
   verbs:
-  - 'get'
-  - 'list'
-  - 'watch'
+  - get
+  - list
+  - watch
 
 
 ---
@@ -1378,7 +1405,7 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'workspaceroles'
+  - workspaceroles
   verbs:
   - '*'
 
@@ -1399,9 +1426,9 @@ rules:
   resources:
   - 'workspacemembers'
   verbs:
-  - 'get'
-  - 'list'
-  - 'watch'
+  - get
+  - list
+  - watch
 
 
 ---
@@ -1426,11 +1453,11 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'workspaceroles'
+  - workspaceroles
   verbs:
-  - 'list'
-  - 'get'
-  - 'watch'
+  - list
+  - get
+  - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1472,7 +1499,7 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - 'workspaces'
+  - '*'
   verbs:
   - '*'
 
@@ -1639,20 +1666,6 @@ metadata:
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-storageclasses
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-volume-snapshots"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volume Snapshots Management
-    iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-manage-volume-snapshots
 rules: []
 
 ---
@@ -1869,9 +1882,9 @@ role:
     resources:
     - '*'
     verbs:
-    - 'get'
-    - 'list'
-    - 'watch'
+    - get
+    - list
+    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1883,7 +1896,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-users"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-view-roles"]'
       kubesphere.io/creator: system
     name: regular
   rules:
@@ -1892,6 +1905,8 @@ role:
     resources:
     - workspaces
     - workspacemembers
+    - workspacemembers/namespaces
+    - workspacemembers/devops
     verbs:
     - get
     - list
@@ -1902,6 +1917,14 @@ role:
     - namespaces
     verbs:
     - list
+  - apiGroups:
+    - '*'
+    resources:
+    - workspaceroles
+    verbs:
+    - get
+    - list
+    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1913,7 +1936,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-create-projects","role-template-create-devops","role-template-manage-app-templates"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-create-projects","role-template-create-devops","role-template-manage-app-templates","role-template-view-roles"]'
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
@@ -1922,6 +1945,8 @@ role:
     resources:
     - workspaces
     - workspacemembers
+    - workspacemembers/namespaces
+    - workspacemembers/devops
     - quotas
     - abnormalworkloads
     - pods
@@ -1952,6 +1977,14 @@ role:
     - '*'
     verbs:
     - '*'
+  - apiGroups:
+    - '*'
+    resources:
+    - workspaceroles
+    verbs:
+    - get
+    - list
+    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1963,7 +1996,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-manage-app-workloads","role-template-view-app-workloads","role-template-manage-volumes","role-template-view-volumes","role-template-manage-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings"]'
       kubesphere.io/creator: system
     name: admin
   rules:
@@ -1984,7 +2017,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-management-app-workloads","role-template-view-app-workloads","role-template-management-volumes","role-template-view-volumes","role-template-management-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-alerting-messages","role-template-view-roles","role-template-view-members","role-template-view-roles","role-template-manage-pipelines", "role-template-manage-credentials"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-app-workloads","role-template-view-app-workloads","role-template-manage-volumes","role-template-view-volumes","role-template-manage-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-alerting-messages","role-template-view-roles","role-template-view-members","role-template-view-roles","role-template-manage-pipelines", "role-template-manage-credentials"]'
       kubesphere.io/creator: system
     name: operator
   rules:
@@ -2028,6 +2061,7 @@ role:
     - configmaps
     - events
     - persistentvolumeclaims
+    - volumesnapshots
     - pods
     - podtemplates
     - pods
@@ -2136,6 +2170,12 @@ role:
     - get
     - list
     - watch
+  - apiGroups:
+    - 'resources.kubesphere.io'
+    resources:
+    - '*'
+    verbs:
+    - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2290,10 +2330,11 @@ role:
     - 'abnormalworkloads'
     - 'workloads'
     - 'limitranges'
+    - 'events'
     verbs:
-    - 'get'
-    - 'list'
-    - 'watch'
+    - get
+    - list
+    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2315,7 +2356,7 @@ role:
   - apiGroups:
     - '*'
     resources:
-    - 'namespaces'
+    - '*'
     verbs:
     - '*'
 
@@ -2419,7 +2460,7 @@ role:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
 metadata:
-  name: role-template-management-app-workloads
+  name: role-template-manage-app-workloads
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
@@ -2434,7 +2475,7 @@ role:
       kubesphere.io/alias-name: Application Workloads Management
     labels:
       iam.kubesphere.io/role-template: "true"
-    name: role-template-management-app-workloads
+    name: role-template-manage-app-workloads
   rules:
   - apiGroups:
     - '*'
@@ -2463,7 +2504,7 @@ role:
     resources:
     - 'secrets'
     verbs:
-    - 'list'
+    - list
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
@@ -2495,7 +2536,7 @@ role:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
 metadata:
-  name: role-template-management-secrets
+  name: role-template-manage-secrets
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
@@ -2507,7 +2548,7 @@ role:
       kubesphere.io/alias-name: Secrets Management
     labels:
       iam.kubesphere.io/role-template: "true"
-    name: role-template-management-secrets
+    name: role-template-manage-secrets
   rules: 
   - apiGroups:
     - '*'
@@ -2537,16 +2578,23 @@ role:
     - '*'
     resources:
     - 'persistentvolumeclaims'
+    - 'volumesnapshots'
     verbs:
     - get
     - list
     - watch
+  - apiGroups:
+    - '*'
+    resources:
+    - 'pods'
+    verbs:
+    - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
 metadata:
-  name: role-template-management-volumes
+  name: role-template-manage-volumes
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
@@ -2558,14 +2606,21 @@ role:
       kubesphere.io/alias-name: Volumes Management
     labels:
       iam.kubesphere.io/role-template: "true"
-    name: role-template-management-volumes
+    name: role-template-manage-volumes
   rules:
   - apiGroups:
     - '*'
     resources:
     - 'persistentvolumeclaims'
+    - 'volumesnapshots'
     verbs:
     - '*'
+  - apiGroups:
+    - '*'
+    resources:
+    - 'pods'
+    verbs:
+    - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2647,9 +2702,9 @@ role:
     resources:
     - credentials
     verbs:
-    - 'get'
-    - 'list'
-    - 'watch'
+    - get
+    - list
+    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
