@@ -24,6 +24,9 @@ spec:
         - name: config
           configMap:
             name: {{ template "logsidecar-injector.fullname" . }}-configmap
+        - hostPath:
+            path: /etc/localtime
+          name: host-time
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -35,6 +38,8 @@ spec:
             mountPath: /etc/logsidecar-injector/certs
           - name: config
             mountPath: /etc/logsidecar-injector/config
+          - mountPath: /etc/localtime
+            name: host-time
       - name: config-reloader
         image: {{ .Values.configReloader.image.repository }}:{{ .Values.configReloader.image.tag }}
         imagePullPolicy: {{ .Values.configReloader.image.pullPolicy }}
@@ -49,5 +54,5 @@ spec:
             mountPath: /etc/logsidecar-injector/certs
           - name: config
             mountPath: /etc/logsidecar-injector/config
-
-
+          - mountPath: /etc/localtime
+            name: host-time
