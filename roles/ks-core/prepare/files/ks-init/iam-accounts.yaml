@@ -1921,7 +1921,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-manage-app-templates"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-view-app-templates","role-template-manage-app-templates"]'
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
