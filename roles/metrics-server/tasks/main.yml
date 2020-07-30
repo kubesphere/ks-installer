@@ -54,7 +54,7 @@
 
     - name: Metrics-Server | Installing metrics-server retry
       shell: >
-        {{ bin_dir }}/helm del --purge metrics-server &&
+        {{ bin_dir }}/helm del metrics-server -n kube-system &&
         sleep 5 &&
         {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server --namespace kube-system
       when:
