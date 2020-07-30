@@ -17,4 +17,5 @@
     - "ks-sonarqube"
     - "logging-fluentbit-operator"
     - "uc"
+    - "metrics-server"
   ignore_errors: True
