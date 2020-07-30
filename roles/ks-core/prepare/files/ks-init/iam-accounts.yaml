@@ -109,7 +109,7 @@ metadata:
         allowedVerbs[_] == input.Verb
       }
   name: authenticated
-rules: 
+rules:
   - apiGroups:
       - openpitrix.io
     resources:
@@ -192,8 +192,15 @@ rules:
       - devops.kubesphere.io
     resources:
       - tojenkinsfile
+      - tojson
     verbs:
       - create
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - crumbissuer
+    verbs:
+      - list
   - apiGroups:
       - alerting.kubesphere.io
     resources:
@@ -223,9 +230,9 @@ rules:
     verbs:
       - '*'
   - nonResourceURLs:
-    - '*'
+      - '*'
     verbs:
-    - '*'
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -257,14 +264,14 @@ metadata:
     kubesphere.io/creator: admin
   name: users-manager
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - users
-  - users/loginrecords
-  - globalroles
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - users
+      - users/loginrecords
+      - globalroles
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -275,107 +282,107 @@ metadata:
     kubesphere.io/creator: admin
   name: workspaces-manager
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - abnormalworkloads
-  - quotas
-  - workloads
-  - volumesnapshots
-  - dashboards
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - namespaces
-  - persistentvolumeclaims
-  - pods
-  - podtemplates
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - serviceaccounts
-  - services
-  - applications
-  - controllerrevisions
-  - deployments
-  - replicasets
-  - statefulsets
-  - daemonsets
-  - meshpolicies
-  - cronjobs
-  - jobs
-  - devopsprojects
-  - devops
-  - pipelines
-  - s2ibinaries
-  - s2ibuilders
-  - s2ibuildertemplates
-  - s2iruns
-  - events
-  - ingresses
-  - router
-  - filters
-  - pods
-  - pods/log
-  - namespacenetworkpolicies
-  - workspacenetworkpolicies
-  - networkpolicies
-  - podsecuritypolicies
-  - rolebindings
-  - roles
-  - members
-  - servicepolicies
-  - federatedapplications
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedservicestatuses
-  - federatedstatefulsets
-  - federatedworkspaces
-  - workspaces
-  - workspaceroles
-  - workspacemembers
-  - workspacemembers/namespaces
-  - workspacemembers/devops
-  - workspacerolebindings
-  - s2ibinaries/file
-  verbs:
-  - '*'
-- apiGroups:
-  - '*'
-  resources:
-  - users
-  - users/loginrecords
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - repos
-  - apps
-  - apps/versions
-  - categories
-  - apps/audits
-  verbs:
-  - '*'
-- apiGroups:
-  - '*'
-  resources:
-  - clusters
-  - cluster
-  verbs:
-  - list
+  - apiGroups:
+      - '*'
+    resources:
+      - abnormalworkloads
+      - quotas
+      - workloads
+      - volumesnapshots
+      - dashboards
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - namespaces
+      - persistentvolumeclaims
+      - pods
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - devopsprojects
+      - devops
+      - pipelines
+      - s2ibinaries
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - filters
+      - pods
+      - pods/log
+      - namespacenetworkpolicies
+      - workspacenetworkpolicies
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - members
+      - servicepolicies
+      - federatedapplications
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedservicestatuses
+      - federatedstatefulsets
+      - federatedworkspaces
+      - workspaces
+      - workspaceroles
+      - workspacemembers
+      - workspacemembers/namespaces
+      - workspacemembers/devops
+      - workspacerolebindings
+      - s2ibinaries/file
+    verbs:
+      - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - users
+      - users/loginrecords
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - repos
+      - apps
+      - apps/versions
+      - categories
+      - apps/audits
+    verbs:
+      - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - clusters
+      - cluster
+    verbs:
+      - list
 
 
 ---
@@ -385,104 +392,105 @@ metadata:
   annotations:
     iam.kubesphere.io/module: Clusters Management
     iam.kubesphere.io/role-template-rules: '{"clusters": "view"}'
-    kubesphere.io/alias-name: Clusters View   
+    kubesphere.io/alias-name: Clusters View
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-clusters
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - namespaces
-  - nodes
-  - persistentvolumeclaims
-  - pods
-  - podtemplates
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - serviceaccounts
-  - services
-  - applications
-  - controllerrevisions
-  - deployments
-  - daemonsets
-  - replicasets
-  - statefulsets
-  - meshpolicies
-  - cronjobs
-  - jobs
-  - federatedservicestatuses
-  - devopsprojects
-  - devops
-  - pipelines
-  - s2ibinaries
-  - s2ibuilders
-  - s2ibuildertemplates
-  - s2iruns
-  - events
-  - ingresses
-  - router
-  - filters
-  - pods
-  - namespacenetworkpolicies
-  - workspacenetworkpolicies
-  - destinationrules
-  - envoyfilters
-  - gateways
-  - serviceentries
-  - sidecars
-  - virtualservices
-  - networkpolicies
-  - podsecuritypolicies
-  - rolebindings
-  - roles
-  - servicepolicies
-  - strategies
-  - storageclasses
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedstatefulsets
-  - devops
-  - clusters
-  - cluster
-  - clusterrolebindings
-  - clusterroles
-  - clustermembers
-  - components
-  - componenthealth
-  - volumesnapshots
-  - quotas
-  - nodes/pods
-  - pods/log
-  - nodes
-  - abnormalworkloads
-  - customresourcedefinitions
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - monitoring.kubesphere.io
-  resources:
-  - '*'
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - namespaces
+      - nodes
+      - persistentvolumeclaims
+      - pods
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - federatedservicestatuses
+      - devopsprojects
+      - devops
+      - pipelines
+      - s2ibinaries
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - filters
+      - pods
+      - namespacenetworkpolicies
+      - workspacenetworkpolicies
+      - destinationrules
+      - envoyfilters
+      - gateways
+      - serviceentries
+      - sidecars
+      - virtualservices
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - servicepolicies
+      - strategies
+      - storageclasses
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedstatefulsets
+      - devops
+      - devopsprojects
+      - clusters
+      - cluster
+      - clusterrolebindings
+      - clusterroles
+      - clustermembers
+      - components
+      - componenthealth
+      - volumesnapshots
+      - quotas
+      - nodes/pods
+      - pods/log
+      - nodes
+      - abnormalworkloads
+      - customresourcedefinitions
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -496,108 +504,109 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-clusters
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - namespaces
-  - nodes
-  - persistentvolumeclaims
-  - pods
-  - podtemplates
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - serviceaccounts
-  - services
-  - applications
-  - controllerrevisions
-  - deployments
-  - daemonsets
-  - replicasets
-  - statefulsets
-  - meshpolicies
-  - cronjobs
-  - jobs
-  - federatedservicestatuses
-  - devopsprojects
-  - devops
-  - pipelines
-  - s2ibinaries
-  - s2ibuilders
-  - s2ibuildertemplates
-  - s2iruns
-  - events
-  - ingresses
-  - router
-  - filters
-  - pods
-  - namespacenetworkpolicies
-  - workspacenetworkpolicies
-  - destinationrules
-  - envoyfilters
-  - gateways
-  - serviceentries
-  - sidecars
-  - virtualservices
-  - networkpolicies
-  - podsecuritypolicies
-  - rolebindings
-  - roles
-  - servicepolicies
-  - strategies
-  - storageclasses
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedstatefulsets
-  - devops
-  - clusters
-  - cluster
-  - clusterrolebindings
-  - clusterroles
-  - clustermembers
-  - components
-  - componenthealth
-  - volumesnapshots
-  - quotas
-  - nodes/pods
-  - pods/log
-  - nodes
-  - abnormalworkloads
-  - customresourcedefinitions
-  verbs:
-  - '*'
-- apiGroups:
-  - monitoring.kubesphere.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
-  - 'resources.kubesphere.io'
-  resources:
-  - 'workspaces'
-  verbs:
-  - list
-- apiGroups:
-  - 'tenant.kubesphere.io'
-  resources:
-  - 'workspaces'
-  verbs:
-  - 'patch'
-  - 'update'
+  - apiGroups:
+      - '*'
+    resources:
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - namespaces
+      - nodes
+      - persistentvolumeclaims
+      - pods
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - federatedservicestatuses
+      - devopsprojects
+      - devops
+      - pipelines
+      - s2ibinaries
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - filters
+      - pods
+      - namespacenetworkpolicies
+      - workspacenetworkpolicies
+      - destinationrules
+      - envoyfilters
+      - gateways
+      - serviceentries
+      - sidecars
+      - virtualservices
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - servicepolicies
+      - strategies
+      - storageclasses
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedstatefulsets
+      - devops
+      - devopsprojects
+      - clusters
+      - cluster
+      - clusterrolebindings
+      - clusterroles
+      - clustermembers
+      - components
+      - componenthealth
+      - volumesnapshots
+      - quotas
+      - nodes/pods
+      - pods/log
+      - nodes
+      - abnormalworkloads
+      - customresourcedefinitions
+    verbs:
+      - '*'
+  - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - apiGroups:
+      - 'resources.kubesphere.io'
+    resources:
+      - 'workspaces'
+    verbs:
+      - list
+  - apiGroups:
+      - 'tenant.kubesphere.io'
+    resources:
+      - 'workspaces'
+    verbs:
+      - 'patch'
+      - 'update'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -612,99 +621,99 @@ metadata:
     kubefed.io/managed: "true"
   name: role-template-view-workspaces
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - abnormalworkloads
-  - quotas
-  - workloads
-  - volumesnapshots
-  - dashboards
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - namespaces
-  - persistentvolumeclaims
-  - pods
-  - podtemplates
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - serviceaccounts
-  - services
-  - applications
-  - controllerrevisions
-  - deployments
-  - replicasets
-  - statefulsets
-  - daemonsets
-  - meshpolicies
-  - cronjobs
-  - jobs
-  - devopsprojects
-  - devops
-  - pipelines
-  - s2ibinaries
-  - s2ibuilders
-  - s2ibuildertemplates
-  - s2iruns
-  - events
-  - ingresses
-  - router
-  - filters
-  - pods
-  - pods/log
-  - namespacenetworkpolicies
-  - workspacenetworkpolicies
-  - networkpolicies
-  - podsecuritypolicies
-  - rolebindings
-  - roles
-  - members
-  - servicepolicies
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedservicestatuses
-  - federatedstatefulsets
-  - federatedworkspaces
-  - workspaces
-  - workspaceroles
-  - workspacemembers
-  - workspacemembers/namespaces
-  - workspacemembers/devops
-  - workspacerolebindings
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - repos
-  - apps
-  - apps/versions
-  - categories
-  - apps/audits
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - '*'
-  resources:
-  - clusters
-  - cluster
-  verbs:
-  - list
+  - apiGroups:
+      - '*'
+    resources:
+      - abnormalworkloads
+      - quotas
+      - workloads
+      - volumesnapshots
+      - dashboards
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - namespaces
+      - persistentvolumeclaims
+      - pods
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - devopsprojects
+      - devops
+      - pipelines
+      - s2ibinaries
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - filters
+      - pods
+      - pods/log
+      - namespacenetworkpolicies
+      - workspacenetworkpolicies
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - members
+      - servicepolicies
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedservicestatuses
+      - federatedstatefulsets
+      - federatedworkspaces
+      - workspaces
+      - workspaceroles
+      - workspacemembers
+      - workspacemembers/namespaces
+      - workspacemembers/devops
+      - workspacerolebindings
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - repos
+      - apps
+      - apps/versions
+      - categories
+      - apps/audits
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - '*'
+    resources:
+      - clusters
+      - cluster
+    verbs:
+      - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -718,86 +727,86 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-workspaces
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - abnormalworkloads
-  - quotas
-  - workloads
-  - volumesnapshots
-  - dashboards
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - namespaces
-  - persistentvolumeclaims
-  - podtemplates
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - serviceaccounts
-  - services
-  - applications
-  - controllerrevisions
-  - deployments
-  - replicasets
-  - statefulsets
-  - daemonsets
-  - meshpolicies
-  - cronjobs
-  - jobs
-  - devopsprojects
-  - devops
-  - pipelines
-  - s2ibinaries
-  - s2ibuilders
-  - s2ibuildertemplates
-  - s2iruns
-  - events
-  - ingresses
-  - router
-  - filters
-  - pods
-  - pods/log
-  - namespacenetworkpolicies
-  - workspacenetworkpolicies
-  - networkpolicies
-  - podsecuritypolicies
-  - rolebindings
-  - roles
-  - members
-  - servicepolicies
-  - federatedapplications
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedservicestatuses
-  - federatedstatefulsets
-  - federatedworkspaces
-  - workspaces
-  - workspaceroles
-  - workspacemembers
-  - workspacemembers/namespaces
-  - workspacemembers/devops
-  - workspacerolebindings
-  - s2ibinaries/file
-  verbs:
-  - '*'
-- apiGroups:
-  - '*'
-  resources:
-  - clusters
-  verbs:
-  - list
+  - apiGroups:
+      - '*'
+    resources:
+      - abnormalworkloads
+      - quotas
+      - workloads
+      - volumesnapshots
+      - dashboards
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - namespaces
+      - persistentvolumeclaims
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - devopsprojects
+      - devops
+      - pipelines
+      - s2ibinaries
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - filters
+      - pods
+      - pods/log
+      - namespacenetworkpolicies
+      - workspacenetworkpolicies
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - members
+      - servicepolicies
+      - federatedapplications
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedservicestatuses
+      - federatedstatefulsets
+      - federatedworkspaces
+      - workspaces
+      - workspaceroles
+      - workspacemembers
+      - workspacemembers/namespaces
+      - workspacemembers/devops
+      - workspacerolebindings
+      - s2ibinaries/file
+    verbs:
+      - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - clusters
+    verbs:
+      - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -811,15 +820,15 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-users
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - users
-  - users/loginrecords
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - users
+      - users/loginrecords
+    verbs:
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -834,12 +843,12 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-users
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - users
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - users
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -853,14 +862,14 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-roles
 rules:
-- apiGroups:
-  - iam.kubesphere.io
-  resources:
-  - globalroles
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - iam.kubesphere.io
+    resources:
+      - globalroles
+    verbs:
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -875,12 +884,12 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-roles
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - globalroles
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - globalroles
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -894,15 +903,15 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-app-templates
 rules:
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - apps
-  - apps/versions
-  - categories
-  verbs:
-  - get
-  - list
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - apps
+      - apps/versions
+      - categories
+    verbs:
+      - get
+      - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -916,12 +925,12 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-app-templates
 rules:
-- apiGroups:
-  - openpitrix.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -935,12 +944,12 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-platform-settings
 rules:
-- apiGroups:
-  - logging.kubesphere.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
+  - apiGroups:
+      - logging.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -999,7 +1008,7 @@ spec:
       manager: admin
       networkIsolation: false
 
----  
+---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
@@ -1011,72 +1020,72 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-projects
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - namespaces
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - persistentvolumeclaims
-  - podtemplates
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - serviceaccounts
-  - services
-  - applications
-  - controllerrevisions
-  - deployments
-  - replicasets
-  - statefulsets
-  - daemonsets
-  - meshpolicies
-  - cronjobs
-  - jobs
-  - s2ibinaries
-  - s2ibuilders
-  - s2ibuildertemplates
-  - s2iruns
-  - events
-  - ingresses
-  - router
-  - pods
-  - pods/log
-  - namespacenetworkpolicies
-  - networkpolicies
-  - podsecuritypolicies
-  - rolebindings
-  - roles
-  - members
-  - servicepolicies
-  - federatedapplications
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedservicestatuses
-  - federatedstatefulsets
-  - workspaces
-  - quotas
-  - abnormalworkloads
-  - workloads
-  - router
-  - dashboards
-  - strategies
-  - volumesnapshots
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - persistentvolumeclaims
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - s2ibinaries
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - pods
+      - pods/log
+      - namespacenetworkpolicies
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - members
+      - servicepolicies
+      - federatedapplications
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedservicestatuses
+      - federatedstatefulsets
+      - workspaces
+      - quotas
+      - abnormalworkloads
+      - workloads
+      - router
+      - dashboards
+      - strategies
+      - volumesnapshots
+    verbs:
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1090,26 +1099,26 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-create-projects
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - workspaces
-  - workspacemembers
-  - quotas
-  - abnormalworkloads
-  - pods
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - '*'
-  resources:
-  - 'namespaces'
-  - 'federatednamespaces'
-  verbs:
-  - create
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaces
+      - workspacemembers
+      - quotas
+      - abnormalworkloads
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - 'namespaces'
+      - 'federatednamespaces'
+    verbs:
+      - create
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1124,72 +1133,72 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-projects
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - namespaces
-  - configmaps
-  - endpoints
-  - events
-  - limitranges
-  - persistentvolumeclaims
-  - podtemplates
-  - replicationcontrollers
-  - resourcequotas
-  - secrets
-  - serviceaccounts
-  - services
-  - applications
-  - controllerrevisions
-  - deployments
-  - replicasets
-  - statefulsets
-  - daemonsets
-  - meshpolicies
-  - cronjobs
-  - jobs
-  - s2ibinaries
-  - s2ibuilders
-  - s2ibuildertemplates
-  - s2iruns
-  - events
-  - ingresses
-  - router
-  - pods
-  - pods/log
-  - namespacenetworkpolicies
-  - networkpolicies
-  - podsecuritypolicies
-  - rolebindings
-  - roles
-  - members
-  - servicepolicies
-  - federatedapplications
-  - federatedconfigmaps
-  - federateddeployments
-  - federatedingresses
-  - federatedjobs
-  - federatedlimitranges
-  - federatednamespaces
-  - federatedpersistentvolumeclaims
-  - federatedreplicasets
-  - federatedsecrets
-  - federatedserviceaccounts
-  - federatedservices
-  - federatedservicestatuses
-  - federatedstatefulsets
-  - workspaces
-  - quotas
-  - abnormalworkloads
-  - workloads
-  - router
-  - dashboards
-  - strategies
-  - volumesnapshots
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - persistentvolumeclaims
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - s2ibinaries
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - pods
+      - pods/log
+      - namespacenetworkpolicies
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - members
+      - servicepolicies
+      - federatedapplications
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedservicestatuses
+      - federatedstatefulsets
+      - workspaces
+      - quotas
+      - abnormalworkloads
+      - workloads
+      - router
+      - dashboards
+      - strategies
+      - volumesnapshots
+    verbs:
+      - '*'
 
----  
+---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
@@ -1201,25 +1210,27 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-devops
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - 'pipelines'
-  - 'pipelines/runs'
-  - 'pipelines/branches'
-  - 'pipelines/checkScriptCompile'
-  - 'pipelines/consolelog'
-  - 'pipelines/scan'
-  - 'pipelines/sonarstatus'
-  - 'checkCron'
-  - 'credentials'
-  - 'credentials/usage'
-  - 'roles'
-  - 'members'
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
+      - 'roles'
+      - 'members'
+      - 'devops'
+      - 'devopsprojects'
+    verbs:
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1233,14 +1244,14 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-create-devops
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - 'devops'
-  - 'devopsprojects'
-  verbs:
-  - create
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - 'devops'
+      - 'devopsprojects'
+    verbs:
+      - create
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1255,24 +1266,24 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-devops
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - 'pipelines'
-  - 'pipelines/runs'
-  - 'pipelines/branches'
-  - 'pipelines/checkScriptCompile'
-  - 'pipelines/consolelog'
-  - 'pipelines/scan'
-  - 'pipelines/sonarstatus'
-  - 'users'
-  - 'checkCron'
-  - 'credentials'
-  - 'credentials/usage'
-  - 'roles'
-  - 'members'
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'users'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
+      - 'roles'
+      - 'members'
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1286,15 +1297,15 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-app-repos
 rules:
-- apiGroups:
-  - 'openpitrix.io'
-  resources:
-  - 'repos'
-  - 'repos/events'
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - 'openpitrix.io'
+    resources:
+      - 'repos'
+      - 'repos/events'
+    verbs:
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1309,18 +1320,18 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-app-repos
 rules:
-- apiGroups:
-  - 'openpitrix.io'
-  resources:
-  - 'repos'
-  - 'repos/events'
-  - 'repos/action'
-  verbs:
-  - '*'
+  - apiGroups:
+      - 'openpitrix.io'
+    resources:
+      - 'repos'
+      - 'repos/events'
+      - 'repos/action'
+    verbs:
+      - '*'
 
 
 
----  
+---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
@@ -1332,14 +1343,14 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-app-templates
 rules:
-- apiGroups:
-  - 'openpitrix.io'
-  resources:
-  - '*'
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - 'openpitrix.io'
+    resources:
+      - '*'
+    verbs:
+      - get
+      - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1354,14 +1365,14 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-app-templates
 rules:
-- apiGroups:
-  - 'openpitrix.io'
-  resources:
-  - '*'
-  verbs:
-  - '*'
+  - apiGroups:
+      - 'openpitrix.io'
+    resources:
+      - '*'
+    verbs:
+      - '*'
 
----  
+---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
@@ -1374,14 +1385,14 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-roles
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - workspaceroles
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaceroles
+    verbs:
+      - get
+      - list
+      - watch
 
 
 ---
@@ -1397,12 +1408,12 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-roles
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - workspaceroles
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaceroles
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1416,14 +1427,14 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-users
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - 'workspacemembers'
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspacemembers'
+    verbs:
+      - get
+      - list
+      - watch
 
 
 ---
@@ -1439,20 +1450,20 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-users
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - 'workspacemembers'
-  verbs:
-  - '*'
-- apiGroups:
-  - '*'
-  resources:
-  - workspaceroles
-  verbs:
-  - list
-  - get
-  - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspacemembers'
+    verbs:
+      - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaceroles
+    verbs:
+      - list
+      - get
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1465,19 +1476,25 @@ metadata:
   name: role-template-view-basic
 rules:
   - apiGroups:
-    - monitoring.kubesphere.io
+      - monitoring.kubesphere.io
     resources:
-    - namespaces
-    - workloads
+      - namespaces
+      - workloads
     verbs:
-    - get
-    - list
+      - get
+      - list
   - apiGroups:
-    - '*'
+      - '*'
     resources:
-    - namespaces
+      - namespaces
     verbs:
-    - watch
+      - watch
+  - apiGroups:
+      - iam.kubesphere.io
+    resources:
+      - workspacemembers
+    verbs:
+      - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1491,12 +1508,12 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-workspace-settings
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - 'workspaces'
-  verbs:
-  - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspaces'
+    verbs:
+      - '*'
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1851,12 +1868,12 @@ role:
       kubesphere.io/creator: system
     name: admin
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - '*'
-    verbs:
-    - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1872,14 +1889,14 @@ role:
       kubesphere.io/creator: system
     name: viewer
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - '*'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1895,21 +1912,21 @@ role:
       kubesphere.io/creator: system
     name: regular
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - workspaces
-    - workspacemembers
-    verbs:
-    - get
-    - list
-    - watch
-  - apiGroups:
-    - monitoring.kubesphere.io
-    resources:
-    - namespaces
-    verbs:
-    - list
+    - apiGroups:
+        - '*'
+      resources:
+        - workspaces
+        - workspacemembers
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - monitoring.kubesphere.io
+      resources:
+        - namespaces
+      verbs:
+        - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1925,41 +1942,42 @@ role:
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - workspaces
-    - workspacemembers
-    - quotas
-    - abnormalworkloads
-    - pods
-    verbs:
-    - get
-    - list
-    - watch
-  - apiGroups:
-    - '*'
-    resources:
-    - namespaces
-    - federatednamespaces
-    - devops
-    verbs:
-    - create
-    - watch
-  - apiGroups:
-    - monitoring.kubesphere.io
-    resources:
-    - namespaces
-    - workloads
-    verbs:
-    - get
-    - list
-  - apiGroups:
-    - 'openpitrix.io'
-    resources:
-    - '*'
-    verbs:
-    - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - workspaces
+        - workspacemembers
+        - quotas
+        - abnormalworkloads
+        - pods
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - namespaces
+        - federatednamespaces
+        - devops
+        - devopsprojects
+      verbs:
+        - create
+        - watch
+    - apiGroups:
+        - monitoring.kubesphere.io
+      resources:
+        - namespaces
+        - workloads
+      verbs:
+        - get
+        - list
+    - apiGroups:
+        - 'openpitrix.io'
+      resources:
+        - '*'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1971,16 +1989,16 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-manage-app-workloads","role-template-view-app-workloads","role-template-manage-volumes","role-template-view-volumes","role-template-manage-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-manage-app-workloads","role-template-view-app-workloads","role-template-manage-volumes","role-template-view-volumes","role-template-manage-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-roles","role-template-manage-roles","role-template-view-roles","role-template-manage-project-settings","role-template-manage-pipelines","role-template-manage-credentials","role-template-manage-devops-settings"]'
       kubesphere.io/creator: system
     name: admin
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - '*'
-    verbs:
-    - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1996,55 +2014,55 @@ role:
       kubesphere.io/creator: system
     name: operator
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - '*'
-    verbs:
-    - get
-    - list
-    - watch
-  - apiGroups:
-    - apps
-    - extensions
-    - batch
-    - logging.kubesphere.io
-    - monitoring.kubesphere.io
-    - iam.kubesphere.io
-    - autoscaling
-    - alerting.kubesphere.io
-    - openpitrix.io
-    - app.k8s.io
-    - servicemesh.kubesphere.io
-    - operations.kubesphere.io
-    - devops.kubesphere.io
-    resources:
-    - '*'
-    verbs:
-    - '*'
-  - apiGroups:
-    - ""
-    - resources.kubesphere.io
-    resources:
-    - jobs
-    - cronjobs
-    - daemonsets
-    - deployments
-    - horizontalpodautoscalers
-    - ingresses
-    - router
-    - endpoints
-    - configmaps
-    - events
-    - persistentvolumeclaims
-    - volumesnapshots
-    - pods
-    - podtemplates
-    - pods
-    - secrets
-    - services
-    verbs:
-    - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - apps
+        - extensions
+        - batch
+        - logging.kubesphere.io
+        - monitoring.kubesphere.io
+        - iam.kubesphere.io
+        - autoscaling
+        - alerting.kubesphere.io
+        - openpitrix.io
+        - app.k8s.io
+        - servicemesh.kubesphere.io
+        - operations.kubesphere.io
+        - devops.kubesphere.io
+      resources:
+        - '*'
+      verbs:
+        - '*'
+    - apiGroups:
+        - ""
+        - resources.kubesphere.io
+      resources:
+        - jobs
+        - cronjobs
+        - daemonsets
+        - deployments
+        - horizontalpodautoscalers
+        - ingresses
+        - router
+        - endpoints
+        - configmaps
+        - events
+        - persistentvolumeclaims
+        - volumesnapshots
+        - pods
+        - podtemplates
+        - pods
+        - secrets
+        - services
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2060,14 +2078,14 @@ role:
       kubesphere.io/creator: system
     name: viewer
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - '*'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - list
+        - watch
 
 
 ---
@@ -2087,14 +2105,14 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-alerting-messages
   rules:
-  - apiGroups:
-    - 'alerting.kubesphere.io'
-    resources:
-    - '*'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - 'alerting.kubesphere.io'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2113,13 +2131,13 @@ role:
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-alerting-messages
-  rules: 
-  - apiGroups:
-    - 'alerting.kubesphere.io'
-    resources:
-    - '*'
-    verbs:
-    - '*'
+  rules:
+    - apiGroups:
+        - 'alerting.kubesphere.io'
+      resources:
+        - '*'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2138,20 +2156,20 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-alerting-policies
   rules:
-  - apiGroups:
-    - 'alerting.kubesphere.io'
-    resources:
-    - '*'
-    verbs:
-    - get
-    - list
-    - watch
-  - apiGroups:
-    - 'resources.kubesphere.io'
-    resources:
-    - '*'
-    verbs:
-    - list
+    - apiGroups:
+        - 'alerting.kubesphere.io'
+      resources:
+        - '*'
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - 'resources.kubesphere.io'
+      resources:
+        - '*'
+      verbs:
+        - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2170,13 +2188,13 @@ role:
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-alerting-policies
-  rules: 
-  - apiGroups:
-    - 'alerting.kubesphere.io'
-    resources:
-    - '*'
-    verbs:
-    - '*'
+  rules:
+    - apiGroups:
+        - 'alerting.kubesphere.io'
+      resources:
+        - '*'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2195,12 +2213,12 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-custom-monitoring
   rules:
-  - apiGroups:
-    - 'monitoring.kubesphere.io'
-    resources:
-    - '*'
-    verbs:
-    - '*'
+    - apiGroups:
+        - 'monitoring.kubesphere.io'
+      resources:
+        - '*'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2219,15 +2237,15 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-members
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'members'
-    - 'rolebindings'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - 'members'
+        - 'rolebindings'
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2246,15 +2264,15 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-members
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'members'
-    - 'rolebindings'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - 'members'
+        - 'rolebindings'
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2274,13 +2292,13 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-members
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'members'
-    - 'rolebindings'
-    verbs:
-    - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - 'members'
+        - 'rolebindings'
+      verbs:
+        - '*'
 
 
 ---
@@ -2298,19 +2316,19 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-basic
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'namespaces'
-    - 'quotas'
-    - 'abnormalworkloads'
-    - 'workloads'
-    - 'limitranges'
-    - 'events'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - 'namespaces'
+        - 'quotas'
+        - 'abnormalworkloads'
+        - 'workloads'
+        - 'limitranges'
+        - 'events'
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2329,12 +2347,12 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-project-settings
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - '*'
-    verbs:
-    - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - '*'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2353,14 +2371,14 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-roles
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'roles'
-    verbs:
-    - get
-    - list
-    - watch 
+    - apiGroups:
+        - '*'
+      resources:
+        - 'roles'
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2380,12 +2398,12 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-roles
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'roles'
-    verbs:
-    - '*' 
+    - apiGroups:
+        - '*'
+      resources:
+        - 'roles'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2407,32 +2425,32 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-app-workloads
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - services
-    - applications
-    - controllerrevisions
-    - deployments
-    - replicasets
-    - statefulsets
-    - daemonsets
-    - jobs
-    - cronjobs
-    - pods
-    - pods/log
-    - services
-    - ingresses
-    - router
-    - configmaps
-    - s2ibinaries
-    - s2ibuilders
-    - s2ibuildertemplates
-    - s2iruns
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - services
+        - applications
+        - controllerrevisions
+        - deployments
+        - replicasets
+        - statefulsets
+        - daemonsets
+        - jobs
+        - cronjobs
+        - pods
+        - pods/log
+        - services
+        - ingresses
+        - router
+        - configmaps
+        - s2ibinaries
+        - s2ibuilders
+        - s2ibuildertemplates
+        - s2iruns
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2453,38 +2471,39 @@ role:
       kubesphere.io/alias-name: Application Workloads Management
     labels:
       iam.kubesphere.io/role-template: "true"
+      iam.kubesphere.io/role-template-scope: "devops"
     name: role-template-manage-app-workloads
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - services
-    - applications
-    - controllerrevisions
-    - deployments
-    - replicasets
-    - statefulsets
-    - daemonsets
-    - jobs
-    - cronjobs
-    - pods
-    - pods/log
-    - services
-    - ingresses
-    - router
-    - configmaps
-    - s2ibinaries
-    - s2ibuilders
-    - s2ibuildertemplates
-    - s2iruns
-    verbs:
-    - '*'
-  - apiGroups:
-    - '*'
-    resources:
-    - 'secrets'
-    verbs:
-    - list
+    - apiGroups:
+        - '*'
+      resources:
+        - services
+        - applications
+        - controllerrevisions
+        - deployments
+        - replicasets
+        - statefulsets
+        - daemonsets
+        - jobs
+        - cronjobs
+        - pods
+        - pods/log
+        - services
+        - ingresses
+        - router
+        - configmaps
+        - s2ibinaries
+        - s2ibuilders
+        - s2ibuildertemplates
+        - s2iruns
+      verbs:
+        - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - 'secrets'
+      verbs:
+        - list
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
@@ -2502,14 +2521,14 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-secrets
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'secrets'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - 'secrets'
+      verbs:
+        - get
+        - list
+        - watch
 
 
 ---
@@ -2529,13 +2548,13 @@ role:
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-secrets
-  rules: 
-  - apiGroups:
-    - '*'
-    resources:
-    - 'secrets'
-    verbs:
-    - '*'
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'secrets'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2554,21 +2573,21 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-volumes
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'persistentvolumeclaims'
-    - 'volumesnapshots'
-    verbs:
-    - get
-    - list
-    - watch
-  - apiGroups:
-    - '*'
-    resources:
-    - 'pods'
-    verbs:
-    - 'list'
+    - apiGroups:
+        - '*'
+      resources:
+        - 'persistentvolumeclaims'
+        - 'volumesnapshots'
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - 'pods'
+      verbs:
+        - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2588,19 +2607,19 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-volumes
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'persistentvolumeclaims'
-    - 'volumesnapshots'
-    verbs:
-    - '*'
-  - apiGroups:
-    - '*'
-    resources:
-    - 'pods'
-    verbs:
-    - 'list'
+    - apiGroups:
+        - '*'
+      resources:
+        - 'persistentvolumeclaims'
+        - 'volumesnapshots'
+      verbs:
+        - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - 'pods'
+      verbs:
+        - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2619,14 +2638,14 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-secrets
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - 'secrets'
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - 'secrets'
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2646,12 +2665,12 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-credentials
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - credentials
-    verbs:
-    - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - credentials
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2671,20 +2690,20 @@ role:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-pipelines
   rules:
-  - apiGroups:
-    - '*'
-    resources:
-    - pipelines
-    verbs:
-    - '*'
-  - apiGroups:
-    - '*'
-    resources:
-    - credentials
-    verbs:
-    - get
-    - list
-    - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - pipelines
+      verbs:
+        - '*'
+    - apiGroups:
+        - '*'
+      resources:
+        - credentials
+      verbs:
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2702,15 +2721,15 @@ role:
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-credentials
-  rules: 
-  - apiGroups:
-    - '*'
-    resources:
-    - credentials
-    verbs:
-    - 'get'
-    - 'list'
-    - 'watch'
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - credentials
+      verbs:
+        - 'get'
+        - 'list'
+        - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2728,15 +2747,15 @@ role:
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-pipelines
-  rules: 
-  - apiGroups:
-    - '*'
-    resources:
-    - pipelines
-    verbs:
-    - 'get'
-    - 'list'
-    - 'watch'
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - pipelines
+      verbs:
+        - 'get'
+        - 'list'
+        - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2754,11 +2773,11 @@ role:
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-devops-settings
-  rules: 
-  - apiGroups:
-    - '*'
-    resources:
-    - 'devops'
-    - 'devopsprojects'
-    verbs:
-    - '*'    
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'devops'
+        - 'devopsprojects'
+      verbs:
+        - '*'
