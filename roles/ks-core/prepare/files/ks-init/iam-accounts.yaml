@@ -164,6 +164,7 @@ rules:
   - apiGroups:
       - openpitrix.io
     resources:
+      - apps
       - apps/versions
       - repos
     verbs:
@@ -313,12 +314,12 @@ rules:
   - s2iruns
   - events
   - ingresses
+  - router
   - filters
   - pods
   - pods/log
   - namespacenetworkpolicies
   - workspacenetworkpolicies
-  - ingresses
   - networkpolicies
   - podsecuritypolicies
   - rolebindings
@@ -425,6 +426,7 @@ rules:
   - s2iruns
   - events
   - ingresses
+  - router
   - filters
   - pods
   - namespacenetworkpolicies
@@ -435,7 +437,6 @@ rules:
   - serviceentries
   - sidecars
   - virtualservices
-  - ingresses
   - networkpolicies
   - podsecuritypolicies
   - rolebindings
@@ -531,6 +532,7 @@ rules:
   - s2iruns
   - events
   - ingresses
+  - router
   - filters
   - pods
   - namespacenetworkpolicies
@@ -541,7 +543,6 @@ rules:
   - serviceentries
   - sidecars
   - virtualservices
-  - ingresses
   - networkpolicies
   - podsecuritypolicies
   - rolebindings
@@ -650,12 +651,12 @@ rules:
   - s2iruns
   - events
   - ingresses
+  - router
   - filters
   - pods
   - pods/log
   - namespacenetworkpolicies
   - workspacenetworkpolicies
-  - ingresses
   - networkpolicies
   - podsecuritypolicies
   - rolebindings
@@ -731,7 +732,6 @@ rules:
   - limitranges
   - namespaces
   - persistentvolumeclaims
-  - pods
   - podtemplates
   - replicationcontrollers
   - resourcequotas
@@ -756,12 +756,12 @@ rules:
   - s2iruns
   - events
   - ingresses
+  - router
   - filters
   - pods
   - pods/log
   - namespacenetworkpolicies
   - workspacenetworkpolicies
-  - ingresses
   - networkpolicies
   - podsecuritypolicies
   - rolebindings
@@ -941,12 +941,6 @@ rules:
   - '*'
   verbs:
   - '*'
-- apiGroups:
-  - '*'
-  resources:
-  - pods
-  verbs:
-  - log
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1026,7 +1020,6 @@ rules:
   - events
   - limitranges
   - persistentvolumeclaims
-  - pods
   - podtemplates
   - replicationcontrollers
   - resourcequotas
@@ -1048,10 +1041,10 @@ rules:
   - s2iruns
   - events
   - ingresses
+  - router
   - pods
   - pods/log
   - namespacenetworkpolicies
-  - ingresses
   - networkpolicies
   - podsecuritypolicies
   - rolebindings
@@ -1140,7 +1133,6 @@ rules:
   - events
   - limitranges
   - persistentvolumeclaims
-  - pods
   - podtemplates
   - replicationcontrollers
   - resourcequotas
@@ -1162,10 +1154,10 @@ rules:
   - s2iruns
   - events
   - ingresses
+  - router
   - pods
   - pods/log
   - namespacenetworkpolicies
-  - ingresses
   - networkpolicies
   - podsecuritypolicies
   - rolebindings
@@ -1298,6 +1290,7 @@ rules:
   - 'openpitrix.io'
   resources:
   - 'repos'
+  - 'repos/events'
   verbs:
   - get
   - list
@@ -1319,10 +1312,12 @@ rules:
 - apiGroups:
   - 'openpitrix.io'
   resources:
-  - '*'
-  verbs:
   - 'repos'
+  - 'repos/events'
   - 'repos/action'
+  verbs:
+  - '*'
+
 
 
 ---  
@@ -1499,7 +1494,7 @@ rules:
 - apiGroups:
   - '*'
   resources:
-  - '*'
+  - 'workspaces'
   verbs:
   - '*'
 
@@ -1896,7 +1891,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '[]'
       kubesphere.io/creator: system
     name: regular
   rules:
@@ -1905,8 +1900,6 @@ role:
     resources:
     - workspaces
     - workspacemembers
-    - workspacemembers/namespaces
-    - workspacemembers/devops
     verbs:
     - get
     - list
@@ -1917,14 +1910,6 @@ role:
     - namespaces
     verbs:
     - list
-  - apiGroups:
-    - '*'
-    resources:
-    - workspaceroles
-    verbs:
-    - get
-    - list
-    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1936,7 +1921,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-create-projects","role-template-create-devops","role-template-manage-app-templates","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-manage-app-templates"]'
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
@@ -1945,8 +1930,6 @@ role:
     resources:
     - workspaces
     - workspacemembers
-    - workspacemembers/namespaces
-    - workspacemembers/devops
     - quotas
     - abnormalworkloads
     - pods
@@ -1977,14 +1960,6 @@ role:
     - '*'
     verbs:
     - '*'
-  - apiGroups:
-    - '*'
-    resources:
-    - workspaceroles
-    verbs:
-    - get
-    - list
-    - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2057,6 +2032,7 @@ role:
     - deployments
     - horizontalpodautoscalers
     - ingresses
+    - router
     - endpoints
     - configmaps
     - events
@@ -2444,8 +2420,10 @@ role:
     - jobs
     - cronjobs
     - pods
+    - pods/log
     - services
     - ingresses
+    - router
     - configmaps
     - s2ibinaries
     - s2ibuilders
@@ -2490,8 +2468,10 @@ role:
     - jobs
     - cronjobs
     - pods
+    - pods/log
     - services
     - ingresses
+    - router
     - configmaps
     - s2ibinaries
     - s2ibuilders
