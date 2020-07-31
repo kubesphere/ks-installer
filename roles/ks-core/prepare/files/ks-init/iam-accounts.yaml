@@ -193,8 +193,13 @@ rules:
     resources:
       - tojenkinsfile
       - tojson
+      - scms/verify
+      - scms/server
+      - scms/organizations
     verbs:
       - create
+      - list
+      - get
   - apiGroups:
       - devops.kubesphere.io
     resources:
