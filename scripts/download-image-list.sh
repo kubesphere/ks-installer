@@ -28,7 +28,7 @@ ks_images=(kubesphere/ks-console:v2.1.1                                         
    kubesphere/ks-installer:v2.1.1                                                \
    quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1   \
    mirrorgooglecontainers/defaultbackend-amd64:1.4                               \
-   kubesphere/metrics-server-amd64:v0.3.6                    \
+   kubesphere/metrics-server:v0.3.7                                        \
    kubesphere/configmap-reload:v0.3.0                                            \
    kubesphere/prometheus:v2.19.3                                                 \
    kubesphere/alertmanager:v0.21.0                                               \
