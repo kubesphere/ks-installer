@@ -10,22 +10,36 @@
     src: "custom-values-logsidecar-injector.yaml.j2"
     dest: "{{ kubesphere_dir }}/logsidecar-injector/custom-values-logsidecar-injector.yaml"
 
-- name: logsidecar-injector | check logsidecar-injector
-  shell: >
-    {{ bin_dir }}/helm list -f logsidecar-injector -n kubesphere-logging-system
-  register: logsidecar_injector_check
-  ignore_errors: True
+# - name: logsidecar-injector | check logsidecar-injector
+#   shell: >
+#     {{ bin_dir }}/helm list -f logsidecar-injector -n kubesphere-logging-system
+#   register: logsidecar_injector_check
+#   ignore_errors: True
 
-- name: logsidecar-injector | Deploy logsidecar-injector
-  shell: >
-    {{ bin_dir }}/helm upgrade --install logsidecar-injector
-    {{ kubesphere_dir }}/logsidecar-injector
-    -f {{ kubesphere_dir }}/logsidecar-injector/custom-values-logsidecar-injector.yaml
-    -n kubesphere-logging-system
-    --force
-  register: deploy_result
-  until: deploy_result is succeeded
-  retries: 3
-  delay: 10
-  when:
-    - (logsidecar_injector_check.stdout.find("DEPLOYED") == -1) or (logsidecar_injector_check.stdout.find("v0.1.0") == -1)
+- block:
+  - name: logsidecar-injector | Deploy logsidecar-injector
+    shell: >
+      {{ bin_dir }}/helm upgrade --install logsidecar-injector
+      {{ kubesphere_dir }}/logsidecar-injector
+      -f {{ kubesphere_dir }}/logsidecar-injector/custom-values-logsidecar-injector.yaml
+      -n kubesphere-logging-system
+      --force
+    register: deploy_result
+    ignore_errors: True
+
+  - name: logsidecar-injector | Delete logsidecar-injector configmap
+    shell: >
+      {{ bin_dir }}/kubectl delete cm -n  kubesphere-logging-system  logsidecar-injector-configmap
+    when:
+      - "deploy_result.stderr and 'missing key' in deploy_result.stderr"
+
+  - name: logsidecar-injector | Deploy logsidecar-injector
+    shell: >
+      {{ bin_dir }}/helm upgrade --install logsidecar-injector
+      {{ kubesphere_dir }}/logsidecar-injector
+      -f {{ kubesphere_dir }}/logsidecar-injector/custom-values-logsidecar-injector.yaml
+      -n kubesphere-logging-system
+      --force
+    when:
+      - "deploy_result.stderr and 'missing key' in deploy_result.stderr"
+
