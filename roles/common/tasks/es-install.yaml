@@ -61,7 +61,7 @@
 
   - name: Kubesphere | Delete elasticsearch
     shell: >
-      {{ bin_dir }}/helm del --purge elasticsearch-logging
+      {{ bin_dir }}/helm del elasticsearch-logging -n kubesphere-logging-system
     when:
       - "es_result.stderr and 'no matches for kind' in es_result.stderr"
 
