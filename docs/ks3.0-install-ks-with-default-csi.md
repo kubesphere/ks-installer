@@ -41,6 +41,8 @@ csi-qingcloud (default)   disk.csi.qingcloud.com   Delete          Immediate    
 
 ```bash
 kubectl apply -f https://github.com/kubesphere/ks-installer/blob/master/deploy/kubesphere-installer.yaml
+# If you use muti etcd nodes, you should down this yaml locally, and modify the etcd addresses.
+# Also you can switch plugins on
 kubectl apply -f https://github.com/kubesphere/ks-installer/blob/master/deploy/cluster-configuration.yaml
 ```
 
