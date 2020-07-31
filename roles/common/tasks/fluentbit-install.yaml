@@ -15,10 +15,10 @@
 
 
 # Upgrade or install fluent bit operator
-- name: Kubesphere | Checking kubesphere-version
+- name: Kubesphere | Checking fluentbit-version
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
-  register: kubesphere_version
+    {{ bin_dir }}/kubectl get crd fluentbits.logging.kubesphere.io -o jsonpath='{.spec.versions[0].name}'
+  register: fluentbit_version
   ignore_errors: True
 
 
@@ -26,7 +26,8 @@
   shell: >
     {{ bin_dir }}/kubectl get fluentbits.logging.kubesphere.io -n kubesphere-logging-system fluent-bit -o yaml > {{ kubesphere_dir }}/fluentbit-crd.yaml.bak
   when:
-    - kubesphere_version.stdout is version('v3.0.0', '<')
+    - fluentbit_version.rc == 0
+    - fluentbit_version.stdout.find("v1alpha1") != -1
 
 
 - name: Kubesphere | Deleting old fluentbit operator
@@ -38,7 +39,8 @@
     - { type: ds, name: fluent-bit }
     - { type: crd, name: fluentbits.logging.kubesphere.io }
   when:
-    - kubesphere_version.stdout is version('v3.0.0', '<')
+    - fluentbit_version.rc == 0
+    - fluentbit_version.stdout.find("v1alpha1") != -1
 
 
 - name: Kubesphere | Prepare fluentbit operator setup
@@ -50,7 +52,8 @@
   shell: >
     {{ bin_dir }}/kubectl apply -f  {{ kubesphere_dir }}/fluentbit-operator/migrator
   when:
-    - kubesphere_version.stdout is version('v3.0.0', '<')
+    - fluentbit_version.rc == 0
+    - fluentbit_version.stdout.find("v1alpha1") != -1
 
 
 - name: Kubesphere | Deploy new fluentbit operator
