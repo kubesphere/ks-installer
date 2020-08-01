@@ -2493,8 +2493,8 @@ role:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
       iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications": "view", "deployments":"view", "statefulsets":"view",
-        "daemonsets":"view","jobs":"view","cronjobs":"view","pods":"view","services":"view","ingresses":"view","configmaps":"view"}'
+      iam.kubesphere.io/role-template-rules: '{"applications":"view","deployments":"view","statefulsets":"view",
+        "daemonsets":"view","jobs":"view","cronjobs":"view","pods":"view","services":"view","ingresses":"view"}'
       kubesphere.io/alias-name: Application Workloads View
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2517,7 +2517,6 @@ role:
         - services
         - ingresses
         - router
-        - configmaps
       verbs:
         - get
         - list
@@ -2537,9 +2536,8 @@ role:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
       iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications": "manage", "deployments":"manage","statefulsets": "manage",
-        "daemonsets": "manage", "jobs": "manage","cronjobs": "manage", "pods": "manage", "services": "manage",
-        "ingresses":"manage", "configmaps": "manage"}'
+      iam.kubesphere.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
+        "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage"}'
       kubesphere.io/alias-name: Application Workloads Management
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2563,7 +2561,6 @@ role:
         - services
         - ingresses
         - router
-        - configmaps
       verbs:
         - '*'
     - apiGroups:
