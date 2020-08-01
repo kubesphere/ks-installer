@@ -59,9 +59,7 @@ rules:
   - nonResourceURLs:
       - '*'
     verbs:
-      - get
-      - list
-      - watch
+      - 'GET'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -320,7 +318,16 @@ rules:
       - jobs
       - devopsprojects
       - devops
-      - pipelines
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
       - s2ibinaries
       - s2ibinaries/file
       - s2ibuilders
@@ -432,7 +439,16 @@ rules:
       - federatedservicestatuses
       - devopsprojects
       - devops
-      - pipelines
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
       - s2ibinaries
       - s2ibinaries/file
       - s2ibuilders
@@ -486,18 +502,25 @@ rules:
       - nodes
       - abnormalworkloads
       - customresourcedefinitions
+      - workspaces
     verbs:
       - get
       - list
       - watch
   - apiGroups:
       - monitoring.kubesphere.io
+      - notification.kubesphere.io
+      - logging.kubesphere.io
     resources:
       - '*'
     verbs:
       - get
       - list
       - watch
+  - nonResourceURLs:
+      - '*'
+    verbs:
+      - 'GET'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -540,7 +563,6 @@ rules:
       - federatedservicestatuses
       - devopsprojects
       - devops
-      - pipelines
       - s2ibinaries
       - s2ibinaries/file
       - s2ibuilders
@@ -598,6 +620,8 @@ rules:
       - '*'
   - apiGroups:
       - monitoring.kubesphere.io
+      - notification.kubesphere.io
+      - logging.kubesphere.io
     resources:
       - '*'
     verbs:
@@ -615,6 +639,10 @@ rules:
     verbs:
       - 'patch'
       - 'update'
+  - nonResourceURLs:
+      - '*'
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -661,7 +689,16 @@ rules:
       - jobs
       - devopsprojects
       - devops
-      - pipelines
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
       - s2ibinaries
       - s2ibinaries/file
       - s2ibuilders
@@ -709,6 +746,8 @@ rules:
       - openpitrix.io
     resources:
       - repos
+      - repos/action
+      - repos/events
       - apps
       - apps/versions
       - categories
@@ -767,7 +806,16 @@ rules:
       - jobs
       - devopsprojects
       - devops
-      - pipelines
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
       - s2ibinaries
       - s2ibinaries/file
       - s2ibuilders
@@ -808,6 +856,13 @@ rules:
       - workspacemembers/namespaces
       - workspacemembers/devops
       - workspacerolebindings
+      - repos
+      - repos/action
+      - repos/events
+      - apps
+      - apps/versions
+      - categories
+      - apps/audits
     verbs:
       - '*'
   - apiGroups:
@@ -816,6 +871,7 @@ rules:
       - clusters
     verbs:
       - list
+
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -856,6 +912,7 @@ rules:
       - '*'
     resources:
       - users
+      - users/loginrecords
     verbs:
       - '*'
 
@@ -1287,7 +1344,6 @@ rules:
       - 'pipelines/consolelog'
       - 'pipelines/scan'
       - 'pipelines/sonarstatus'
-      - 'users'
       - 'checkCron'
       - 'credentials'
       - 'credentials/usage'
@@ -1309,10 +1365,10 @@ metadata:
   name: role-template-view-app-repos
 rules:
   - apiGroups:
-      - 'openpitrix.io'
+      - openpitrix.io
     resources:
-      - 'repos'
-      - 'repos/events'
+      - repos
+      - repos/events
     verbs:
       - get
       - list
@@ -2007,6 +2063,7 @@ role:
         "role-template-view-roles","role-template-manage-roles",
         "role-template-view-app-workloads","role-template-manage-app-workloads",
         "role-template-view-volumes","role-template-manage-volumes",
+        "role-template-view-snapshots","role-template-manage-snapshots",
         "role-template-view-secrets","role-template-manage-secrets",
         "role-template-view-configmaps","role-template-manage-configmaps",
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
@@ -2042,6 +2099,7 @@ role:
       iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-view-roles",
         "role-template-view-app-workloads",
         "role-template-view-volumes","role-template-manage-volumes",
+        "role-template-view-snapshots","role-template-manage-snapshots",
         "role-template-view-secrets","role-template-manage-secrets",
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
@@ -2264,6 +2322,7 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-custom-monitoring"]'
       iam.kubesphere.io/module: Monitoring & Alerting
       iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "manage"}'
       kubesphere.io/alias-name: Custom Monitoring Management
@@ -2534,14 +2593,13 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads"]'
       iam.kubesphere.io/module: Application Workloads
       iam.kubesphere.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
         "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage"}'
       kubesphere.io/alias-name: Application Workloads Management
     labels:
       iam.kubesphere.io/role-template: "true"
-      iam.kubesphere.io/role-template-scope: "devops"
     name: role-template-manage-app-workloads
   rules:
     - apiGroups:
@@ -2582,8 +2640,8 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads","role-template-manage-app-workloads"]'
-      iam.kubesphere.io/module: Grayscale Release
+      iam.kubesphere.io/dependencies: '["role-template-manage-app-workloads"]'
+      iam.kubesphere.io/module: Application Workloads
       iam.kubesphere.io/role-template-rules: '{"grayscale-release": "manage"}'
       kubesphere.io/alias-name: Grayscale Release
     labels:
@@ -2609,8 +2667,8 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads","role-template-manage-app-workloads"]'
-      iam.kubesphere.io/module: Image Builder
+      iam.kubesphere.io/dependencies: '["role-template-manage-app-workloads"]'
+      iam.kubesphere.io/module: Application Workloads
       iam.kubesphere.io/role-template-rules: '{"image-builder": "manage"}'
       kubesphere.io/alias-name: Image Builder
     labels:
@@ -2752,7 +2810,8 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Volumes Management
+      iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
+      iam.kubesphere.io/module: Storage Management
       iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
       kubesphere.io/alias-name: Volumes View
     labels:
@@ -2763,7 +2822,6 @@ role:
         - '*'
       resources:
         - 'persistentvolumeclaims'
-        - 'volumesnapshots'
       verbs:
         - get
         - list
@@ -2787,8 +2845,8 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
-      iam.kubesphere.io/module: Volumes Management
+      iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-manage-snapshots"]'
+      iam.kubesphere.io/module: Storage Management
       iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
       kubesphere.io/alias-name: Volumes Management
     labels:
@@ -2799,7 +2857,6 @@ role:
         - '*'
       resources:
         - 'persistentvolumeclaims'
-        - 'volumesnapshots'
       verbs:
         - '*'
     - apiGroups:
@@ -2808,6 +2865,61 @@ role:
         - 'pods'
       verbs:
         - 'list'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-view-snapshots
+  labels:
+    scope.kubesphere.io/namespace: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/module: Storage Management
+      iam.kubesphere.io/role-template-rules: '{"snapshots": "view"}'
+      kubesphere.io/alias-name: Volume Snapshots View
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-view-snapshots
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'volumesnapshots'
+      verbs:
+        - get
+        - list
+        - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-manage-snapshots
+  labels:
+    scope.kubesphere.io/namespace: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
+      iam.kubesphere.io/module: Storage Management
+      iam.kubesphere.io/role-template-rules: '{"snapshots": "manage"}'
+      kubesphere.io/alias-name: Volume Snapshots Management
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-manage-snapshots
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'volumesnapshots'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2859,7 +2971,13 @@ role:
     - apiGroups:
         - '*'
       resources:
-        - pipelines
+        - 'pipelines'
+        - 'pipelines/runs'
+        - 'pipelines/branches'
+        - 'pipelines/checkScriptCompile'
+        - 'pipelines/consolelog'
+        - 'pipelines/scan'
+        - 'pipelines/sonarstatus'
       verbs:
         - '*'
     - apiGroups:
@@ -2921,7 +3039,16 @@ role:
     - apiGroups:
         - '*'
       resources:
-        - pipelines
+        - 'pipelines'
+        - 'pipelines/runs'
+        - 'pipelines/branches'
+        - 'pipelines/checkScriptCompile'
+        - 'pipelines/consolelog'
+        - 'pipelines/scan'
+        - 'pipelines/sonarstatus'
+        - 'checkCron'
+        - 'credentials'
+        - 'credentials/usage'
       verbs:
         - 'get'
         - 'list'
