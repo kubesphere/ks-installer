@@ -2288,6 +2288,9 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
 metadata:
   name: role-template-manage-members
+  labels:
+    scope.kubesphere.io/namespace: ""
+    scope.kubesphere.io/devops: ""
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
