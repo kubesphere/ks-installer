@@ -2003,7 +2003,19 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members","role-template-view-roles","role-template-manage-roles","role-template-view-app-workloads","role-template-manage-app-workloads","role-template-view-volumes","role-template-manage-volumes","role-template-view-secrets","role-template-manage-secrets","role-template-view-alerting-policies","role-template-manage-alerting-policies","role-template-view-alerting-messages","role-template-manage-alerting-messages","role-template-view-custom-monitoring","role-template-manage-custom-monitoring","role-template-manage-project-settings","role-template-view-pipelines","role-template-manage-pipelines","role-template-view-credentials","role-template-manage-credentials","role-template-manage-devops-settings"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members",
+        "role-template-view-roles","role-template-manage-roles",
+        "role-template-view-app-workloads","role-template-manage-app-workloads",
+        "role-template-view-volumes","role-template-manage-volumes",
+        "role-template-view-secrets","role-template-manage-secrets",
+        "role-template-view-configmaps","role-template-manage-configmaps",
+        "role-template-view-alerting-policies","role-template-manage-alerting-policies",
+        "role-template-view-alerting-messages","role-template-manage-alerting-messages",
+        "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
+        "role-template-grayscale-release","role-template-image-builder",
+        "role-template-view-pipelines","role-template-manage-pipelines",
+        "role-template-view-credentials","role-template-manage-credentials",
+        "role-template-manage-project-settings","role-template-manage-devops-settings"]'
       kubesphere.io/creator: system
     name: admin
   rules:
@@ -2027,7 +2039,15 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-app-workloads","role-template-view-app-workloads","role-template-manage-volumes","role-template-view-volumes","role-template-manage-secrets","role-template-view-secrets","role-template-manage-alerting-policies","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-manage-custom-monitoring","role-template-manage-alerting-messages","role-template-view-alerting-messages","role-template-view-roles","role-template-view-members","role-template-view-roles","role-template-view-pipelines","role-template-manage-pipelines","role-template-view-credentials","role-template-manage-credentials"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-view-roles",
+        "role-template-view-app-workloads",
+        "role-template-view-volumes","role-template-manage-volumes",
+        "role-template-view-secrets","role-template-manage-secrets",
+        "role-template-view-alerting-policies","role-template-manage-alerting-policies",
+        "role-template-view-alerting-messages","role-template-manage-alerting-messages",
+        "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
+        "role-template-view-pipelines","role-template-manage-pipelines",
+        "role-template-view-credentials","role-template-manage-credentials"]'
       kubesphere.io/creator: system
     name: operator
   rules:
@@ -2071,7 +2091,10 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles","role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets","role-template-view-alerting-policies","role-template-view-alerting-messages","role-template-view-pipelines","role-template-view-credentials"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
+        "role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets",
+        "role-template-view-alerting-configmaps","role-template-view-alerting-policies","role-template-view-custom-monitoring",
+        "role-template-view-alerting-messages","role-template-view-pipelines","role-template-view-credentials"]'
       kubesphere.io/creator: system
     name: viewer
   rules:
@@ -2215,7 +2238,7 @@ role:
     annotations:
       iam.kubesphere.io/module: Monitoring & Alerting
       iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "view"}'
-      kubesphere.io/alias-name: Custom Monitoring
+      kubesphere.io/alias-name: Custom Monitoring View
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-custom-monitoring
@@ -2225,7 +2248,9 @@ role:
       resources:
         - '*'
       verbs:
-        - '*'
+        - get
+        - list
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2241,7 +2266,7 @@ role:
     annotations:
       iam.kubesphere.io/module: Monitoring & Alerting
       iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "manage"}'
-      kubesphere.io/alias-name: Custom Monitoring
+      kubesphere.io/alias-name: Custom Monitoring Management
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-custom-monitoring
@@ -2466,11 +2491,10 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
       iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications": "view", "deployments":
-        "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs":
-        "view", "pods": "view", "services": "view", "ingresses": "view", "configmaps":
-        "view", "s2ibuilders": "view"}'
+      iam.kubesphere.io/role-template-rules: '{"applications": "view", "deployments":"view", "statefulsets":"view",
+        "daemonsets":"view","jobs":"view","cronjobs":"view","pods":"view","services":"view","ingresses":"view","configmaps":"view"}'
       kubesphere.io/alias-name: Application Workloads View
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2494,11 +2518,6 @@ role:
         - ingresses
         - router
         - configmaps
-        - s2ibinaries
-        - s2ibinaries/file
-        - s2ibuilders
-        - s2ibuildertemplates
-        - s2iruns
       verbs:
         - get
         - list
@@ -2516,12 +2535,11 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
       iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications": "manage", "deployments":
-        "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage",
-        "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses":
-        "manage", "configmaps": "manage", "s2ibuilders": "manage", "secrets":"view"}'
+      iam.kubesphere.io/role-template-rules: '{"applications": "manage", "deployments":"manage","statefulsets": "manage",
+        "daemonsets": "manage", "jobs": "manage","cronjobs": "manage", "pods": "manage", "services": "manage",
+        "ingresses":"manage", "configmaps": "manage"}'
       kubesphere.io/alias-name: Application Workloads Management
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2546,10 +2564,6 @@ role:
         - ingresses
         - router
         - configmaps
-        - s2ibinaries
-        - s2ibuilders
-        - s2ibuildertemplates
-        - s2iruns
       verbs:
         - '*'
     - apiGroups:
@@ -2621,6 +2635,62 @@ role:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
 metadata:
+  name: role-template-view-configmaps
+  labels:
+    scope.kubesphere.io/namespace: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/module: Configuration Center
+      iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
+      kubesphere.io/alias-name: ConfigMaps View
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-view-configmaps
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'configmaps'
+      verbs:
+        - get
+        - list
+        - watch
+
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-manage-configmaps
+  labels:
+    scope.kubesphere.io/namespace: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
+      iam.kubesphere.io/module: Configuration Center
+      iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
+      kubesphere.io/alias-name: ConfigMaps Management
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-manage-configmaps
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'configmaps'
+      verbs:
+        - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
   name: role-template-view-secrets
   labels:
     scope.kubesphere.io/namespace: ""
@@ -2629,7 +2699,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: Secrets Management
+      iam.kubesphere.io/module: Configuration Center
       iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
       kubesphere.io/alias-name: Secrets View
     labels:
@@ -2659,7 +2729,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
-      iam.kubesphere.io/module: Secrets Management
+      iam.kubesphere.io/module: Configuration Center
       iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
       kubesphere.io/alias-name: Secrets Management
     labels:
