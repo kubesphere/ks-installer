@@ -704,7 +704,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
     kubesphere.io/alias-name: Users Management
@@ -746,7 +746,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Roles Management
@@ -1248,7 +1248,6 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
     kubesphere.io/alias-name: Workspace Roles View
@@ -1271,7 +1270,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users", "role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-members", "role-template-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Workspace Roles Management
@@ -1296,7 +1295,7 @@ metadata:
     kubesphere.io/alias-name: Workspace Members View
   labels:
     iam.kubesphere.io/role-template: "true"
-  name: role-template-view-users
+  name: role-template-view-members
 rules:
   - apiGroups:
       - '*'
@@ -1313,13 +1312,13 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
     kubesphere.io/alias-name: Workspace Members Management
   labels:
     iam.kubesphere.io/role-template: "true"
-  name: role-template-manage-users
+  name: role-template-manage-members
 rules:
   - apiGroups:
       - '*'
@@ -2184,7 +2183,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-roles", "role-template-view-members"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
       iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
       kubesphere.io/alias-name: Project Members Management
@@ -2327,7 +2326,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
       iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
       kubesphere.io/alias-name: Project Roles Management
@@ -2692,7 +2691,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"snapshots": "view"}'
+      iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
       kubesphere.io/alias-name: Volume Snapshots View
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2721,7 +2720,7 @@ role:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
       iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"snapshots": "manage"}'
+      iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
       kubesphere.io/alias-name: Volume Snapshots Management
     labels:
       iam.kubesphere.io/role-template: "true"
