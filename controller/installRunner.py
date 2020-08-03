@@ -267,6 +267,17 @@ def resultInfo():
     if config.rc != 0:
         exit()
 
+    telemeter = ansible_runner.run(
+        playbook=os.path.join(playbookBasePath, 'telemetry.yaml'),
+        private_data_dir=privateDataDir,
+        artifact_dir=os.path.join(privateDataDir, 'telemetry'),
+        ident='telemetry',
+        quiet=True
+    )
+
+    if telemeter.rc != 0:
+        exit()
+
     result = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'result-info.yaml'),
         private_data_dir=privateDataDir,
