@@ -1,0 +1,9 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: telemetry
+      when:
+        - "status.telemetry is not defined or status.telemetry.status is not defined or status.telemetry.status != 'enabled'"
