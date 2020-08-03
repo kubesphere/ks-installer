@@ -30,8 +30,6 @@ spec:
           volumeMounts:
             - name: webroot
               mountPath: "/jenkins-plugins"
-      imagePullSecrets:
-      - name: qingcloud 
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

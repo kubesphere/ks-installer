@@ -20,8 +20,6 @@ spec:
         prometheus.io/scrape: 'true'
     spec:
       serviceAccountName: kubesphere-router-serviceaccount
-      imagePullSecrets:
-      - name: qingcloud
       containers:
         - name: nginx-ingress-controller
           image: {{ nginx_ingress_controller_repo }}:{{ nginx_ingress_controller_tag }}

@@ -63,8 +63,6 @@ spec:
         app: kubesphere
         tier: etcd
     spec:
-      imagePullSecrets:
-      - name: qingcloud
       containers:
       - name: etcd
         image: {{ etcd_image_repo }}:{{ etcd_image_tag }}
