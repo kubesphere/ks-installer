@@ -24,9 +24,7 @@ spec:
         app: ks-console
         tier: frontend
         version: {{ ks_version }}
-    spec:
-      imagePullSecrets:
-      - name: qingcloud     
+    spec:   
       containers:
       - image: {{ ks_console_repo }}:{{ ks_console_tag }}
         imagePullPolicy: {{ ks_image_pull_policy }}
