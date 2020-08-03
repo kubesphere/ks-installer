@@ -37,7 +37,7 @@ notificationmanager:
   image:
     repo: {{ notification_manager_repo }}
     tag: {{ notification_manager_tag }}
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
