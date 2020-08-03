@@ -210,16 +210,18 @@ def getComponentLists():
                 pass
     try:
         readyToEnabledList.remove("metrics_server")
-        readyToDisableList.remove("metrics_server")
     except:
         pass
 
     try:
         readyToEnabledList.remove("networkpolicy")
-        readyToEnabledList.remove("networkpolicy")
     except:
         pass
 
+    try:
+        readyToEnabledList.remove("telemetry")
+    except:
+        pass
 
     return readyToEnabledList, readyToDisableList
 
@@ -267,17 +269,6 @@ def resultInfo():
     if config.rc != 0:
         exit()
 
-    telemeter = ansible_runner.run(
-        playbook=os.path.join(playbookBasePath, 'telemetry.yaml'),
-        private_data_dir=privateDataDir,
-        artifact_dir=os.path.join(privateDataDir, 'telemetry'),
-        ident='telemetry',
-        quiet=True
-    )
-
-    if telemeter.rc != 0:
-        exit()
-
     result = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'result-info.yaml'),
         private_data_dir=privateDataDir,
@@ -293,6 +284,16 @@ def resultInfo():
         info = f.read()
         print(info)
 
+    telemeter = ansible_runner.run(
+        playbook=os.path.join(playbookBasePath, 'telemetry.yaml'),
+        private_data_dir=privateDataDir,
+        artifact_dir=os.path.join(privateDataDir, 'telemetry'),
+        ident='telemetry',
+        quiet=True
+    )
+
+    if telemeter.rc != 0:
+        exit()
 
 def generateConfig():
     config.load_incluster_config()

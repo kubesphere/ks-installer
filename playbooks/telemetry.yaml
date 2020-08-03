@@ -7,3 +7,6 @@
     - role: telemetry
       when:
         - "status.telemetry is not defined or status.telemetry.status is not defined or status.telemetry.status != 'enabled'"
+        - "telemetry is defined"
+        - "telemetry.enabled is defined"
+        - "telemetry.enabled"
