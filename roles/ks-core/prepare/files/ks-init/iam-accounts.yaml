@@ -996,7 +996,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-users","role-template-create-projects"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-members","role-template-create-projects"]'
     iam.kubesphere.io/module: Projects Management
     iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
     kubesphere.io/alias-name: Projects Management
@@ -1130,7 +1130,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-create-devops"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-view-members","role-template-create-devops"]'
     iam.kubesphere.io/module: DevOps Management
     iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
     kubesphere.io/alias-name: DevOps Management
@@ -1734,7 +1734,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-users","role-template-manage-users","role-template-manage-roles","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-members","role-template-manage-members","role-template-manage-roles","role-template-view-roles"]'
       kubesphere.io/creator: system
     name: admin
   rules:
@@ -1755,7 +1755,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-users","role-template-view-roles"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-members","role-template-view-roles"]'
       kubesphere.io/creator: system
     name: viewer
   rules:
