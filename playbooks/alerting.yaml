@@ -4,6 +4,4 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
-    - role: ks-alerting
-      when:
-        - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
+    - ks-alerting
