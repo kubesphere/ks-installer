@@ -725,6 +725,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-users"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
     kubesphere.io/alias-name: Roles View
@@ -746,7 +747,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Roles Management
@@ -1248,6 +1249,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
     kubesphere.io/alias-name: Workspace Roles View
@@ -1270,7 +1272,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members", "role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Workspace Roles Management
@@ -1675,6 +1677,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
     iam.kubesphere.io/module: Access Control
     kubesphere.io/alias-name: Cluster Roles View
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
@@ -2297,6 +2300,7 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-members"]'
       iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
       kubesphere.io/alias-name: Project Roles View
@@ -2326,7 +2330,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
       iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
       kubesphere.io/alias-name: Project Roles Management
@@ -2481,7 +2485,7 @@ role:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-manage-app-workloads"]'
       iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"image-builder": "manage"}'
+      iam.kubesphere.io/role-template-rules: '{"s2ibuilders": "manage"}'
       kubesphere.io/alias-name: Image Builder
     labels:
       iam.kubesphere.io/role-template: "true"
