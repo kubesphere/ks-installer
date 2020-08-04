@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright 2018 The KubeSphere Authors.
 #
@@ -18,42 +18,42 @@ url="http://192.168.6.2"
 user="admin"
 passwd="Harbor12345"
 
-harbor_projects=(library                        \
-                 kubesphere                     \
-                 csiplugin                      \
-                 openpitrix                     \
-                 mirrorgitlabcontainers         \
-                 google-containers              \
-                 istio                          \
-                 k8scsi                         \
-                 osixia                         \
-                 goharbor                       \
-                 minio                          \
-                 openebs                        \
-                 kubernetes-helm                \
-                 coredns                        \
-                 jenkins                        \
-                 jaegertracing                  \
-                 calico                         \
-                 oliver006                      \
-                 fluent                         \
-                 kubernetes_ingress_controller  \
-                 kibana                         \
-                 gitlab_org                     \
-                 coreos                         \
-                 google_containers              \
-                 grafana                        \
-                 external_storage               \
-                 pires                          \
-                 nginxdemos                     \
-                 gitlab                         \
-                 joosthofman                    \
-                 mirrorgooglecontainers         \
-                 wrouesnel                      \
-                 dduportal                      \
+harbor_projects=(library
+    kubesphere
+    csiplugin
+    openpitrix
+    mirrorgitlabcontainers
+    google-containers
+    istio
+    k8scsi
+    osixia
+    goharbor
+    minio
+    openebs
+    kubernetes-helm
+    coredns
+    jenkins
+    jaegertracing
+    calico
+    oliver006
+    fluent
+    kubernetes_ingress_controller
+    kibana
+    gitlab_org
+    coreos
+    google_containers
+    grafana
+    external_storage
+    pires
+    nginxdemos
+    gitlab
+    joosthofman
+    mirrorgooglecontainers
+    wrouesnel
+    dduportal
 )
 
-for project in ${harbor_projects[@]} ; do
+for project in "${harbor_projects[@]}"; do
     echo "creating $project"
     curl -u "${user}:${passwd}" -X POST -H "Content-Type: application/json" "${url}/api/projects" -d "{ \"project_name\": \"${project}\", \"public\": 1}"
 done
