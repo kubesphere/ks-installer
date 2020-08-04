@@ -211,6 +211,8 @@ rules:
       - alerting.kubesphere.io
     resources:
       - comment
+      - metric
+      - resource_type
     verbs:
       - list
   - apiGroups:
@@ -219,6 +221,13 @@ rules:
       - addresses
     verbs:
       - list
+      - create
+  - apiGroups:
+      - notification.kubesphere.io
+    resources:
+      - addresslists
+    verbs:
+      - create
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
