@@ -648,6 +648,13 @@ rules:
       - list
       - watch
   - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - list
+      - get
+  - apiGroups:
       - '*'
     resources:
       - clusters
