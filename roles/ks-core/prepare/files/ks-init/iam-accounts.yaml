@@ -766,9 +766,17 @@ rules:
     verbs:
       - '*'
   - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - list
+      - get
+  - apiGroups:
       - '*'
     resources:
       - clusters
+      - cluster
     verbs:
       - list
 
