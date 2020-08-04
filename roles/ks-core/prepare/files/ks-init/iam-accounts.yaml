@@ -137,6 +137,7 @@ rules:
       - git
     verbs:
       - get
+      - create
   - apiGroups:
       - resources.kubesphere.io
     resources:
@@ -422,9 +423,51 @@ metadata:
   name: role-template-view-clusters
 rules:
   - apiGroups:
-      - '*'
+      - ""
+      - apiextensions.k8s.io
+      - app.k8s.io
+      - apps
+      - autoscaling
+      - batch
+      - config.istio.io
+      - devops.kubesphere.io
+      - devops.kubesphere.io
+      - events.k8s.io
+      - events.kubesphere.io
+      - extensions
+      - istio.kubesphere.io
+      - jaegertracing.io
+      - logging.kubesphere.io
+      - metrics.k8s.io
+      - monitoring.coreos.com
+      - monitoring.kubesphere.io
+      - network.kubesphere.io
+      - networking.istio.io
+      - networking.k8s.io
+      - node.k8s.io
+      - rbac.istio.io
+      - scheduling.k8s.io
+      - security.istio.io
+      - servicemesh.kubesphere.io
+      - snapshot.storage.k8s.io
+      - storage.k8s.io
+      - storage.k8s.io
+      - storage.kubesphere.io
+      - resources.kubesphere.io
+      - notification.kubesphere.io
+      - alerting.kubesphere.io
+      - cluster.kubesphere.io
     resources:
       - '*'
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - tenant.kubesphere.io
+    resources:
+      - workspaces
+      - workspacetemplates
     verbs:
       - get
       - list
@@ -447,15 +490,56 @@ metadata:
   name: role-template-manage-clusters
 rules:
   - apiGroups:
-      - '*'
+      - ""
+      - apiextensions.k8s.io
+      - app.k8s.io
+      - apps
+      - autoscaling
+      - batch
+      - config.istio.io
+      - devops.kubesphere.io
+      - devops.kubesphere.io
+      - events.k8s.io
+      - events.kubesphere.io
+      - extensions
+      - istio.kubesphere.io
+      - jaegertracing.io
+      - logging.kubesphere.io
+      - metrics.k8s.io
+      - monitoring.coreos.com
+      - monitoring.kubesphere.io
+      - network.kubesphere.io
+      - networking.istio.io
+      - networking.k8s.io
+      - node.k8s.io
+      - rbac.istio.io
+      - scheduling.k8s.io
+      - security.istio.io
+      - servicemesh.kubesphere.io
+      - snapshot.storage.k8s.io
+      - storage.k8s.io
+      - storage.k8s.io
+      - storage.kubesphere.io
+      - resources.kubesphere.io
+      - notification.kubesphere.io
+      - alerting.kubesphere.io
+      - cluster.kubesphere.io
     resources:
       - '*'
     verbs:
       - '*'
+  - apiGroups:
+      - tenant.kubesphere.io
+    resources:
+      - workspaces
+      - workspacetemplates
+    verbs:
+      - update
+      - patch
   - nonResourceURLs:
       - '*'
     verbs:
-      - '*'
+      - 'GET'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -502,16 +586,16 @@ rules:
       - jobs
       - devopsprojects
       - devops
-      - 'pipelines'
-      - 'pipelines/runs'
-      - 'pipelines/branches'
-      - 'pipelines/checkScriptCompile'
-      - 'pipelines/consolelog'
-      - 'pipelines/scan'
-      - 'pipelines/sonarstatus'
-      - 'checkCron'
-      - 'credentials'
-      - 'credentials/usage'
+      - pipelines
+      - pipelines/runs
+      - pipelines/branches
+      - pipelines/checkScriptCompile
+      - pipelines/consolelog
+      - pipelines/scan
+      - pipelines/sonarstatus
+      - checkCron
+      - credentials
+      - credentials/usage'
       - s2ibinaries
       - s2ibinaries/file
       - s2ibuilders
@@ -551,13 +635,6 @@ rules:
       - workspacemembers/namespaces
       - workspacemembers/devops
       - workspacerolebindings
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - openpitrix.io
-    resources:
       - repos
       - repos/action
       - repos/events
@@ -565,9 +642,11 @@ rules:
       - apps/versions
       - categories
       - apps/audits
+      - workloads
     verbs:
       - get
       - list
+      - watch
   - apiGroups:
       - '*'
     resources:
@@ -619,16 +698,16 @@ rules:
       - jobs
       - devopsprojects
       - devops
-      - 'pipelines'
-      - 'pipelines/runs'
-      - 'pipelines/branches'
-      - 'pipelines/checkScriptCompile'
-      - 'pipelines/consolelog'
-      - 'pipelines/scan'
-      - 'pipelines/sonarstatus'
-      - 'checkCron'
-      - 'credentials'
-      - 'credentials/usage'
+      - pipelines
+      - pipelines/runs
+      - pipelines/branches
+      - pipelines/checkScriptCompile
+      - pipelines/consolelog
+      - pipelines/scan
+      - pipelines/sonarstatus
+      - checkCron
+      - credentials
+      - credentials/usage
       - s2ibinaries
       - s2ibinaries/file
       - s2ibuilders
@@ -676,6 +755,7 @@ rules:
       - apps/versions
       - categories
       - apps/audits
+      - workloads
     verbs:
       - '*'
   - apiGroups:
