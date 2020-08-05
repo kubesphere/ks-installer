@@ -40,21 +40,21 @@ kube_version: v1.15.5
 etcd_version: v3.2.18
 # kube image repo define
 ks_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   dockerhub.qingcloud.com
   {%- endif %}
 
 base_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}/
   {%- else -%}
 
   {%- endif %}
 
 base_library_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}/library/
   {%- else -%}
 
@@ -62,7 +62,7 @@ base_library_repo: >-
 
 # quay image repo define
 quay_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   quay.azk8s.cn
@@ -70,7 +70,7 @@ quay_image_repo: >-
 
 # elastic image repo define
 elastic_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   docker.elastic.co
@@ -78,7 +78,7 @@ elastic_image_repo: >-
 
 # gcr and kubernetes image repo define
 gcr_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   gcr.azk8s.cn
