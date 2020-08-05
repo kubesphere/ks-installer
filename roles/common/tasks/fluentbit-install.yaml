@@ -48,14 +48,6 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/init
 
 
-- name: Kubesphere | Migrate fluentbit operator old config
-  shell: >
-    {{ bin_dir }}/kubectl apply -f  {{ kubesphere_dir }}/fluentbit-operator/migrator
-  when:
-    - fluentbit_version.rc == 0
-    - fluentbit_version.stdout.find("v1alpha1") != -1
-
-
 - name: Kubesphere | Deploy new fluentbit operator
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/fluentbit

@@ -5,16 +5,34 @@
     dest: "{{ kubesphere_dir }}/"
 
 
+- name: Kubesphere | Checking fluentbit-version
+  shell: >
+    {{ bin_dir }}/kubectl get crd fluentbits.logging.kubesphere.io -o jsonpath='{.spec.versions[0].name}'
+  register: fluentbit_version
+  ignore_errors: True
+
+
+- name: Kubesphere | Migrate fluentbit operator old config
+  shell: >
+    {{ bin_dir }}/kubectl apply -f  {{ kubesphere_dir }}/fluentbit-operator/migrator
+  when:
+    - fluentbit_version.rc == 0
+    - fluentbit_version.stdout.find("v1alpha1") != -1
+
+
 - name: ks-logging | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
   with_items:
     - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
+  when: fluentbit_version.rc != 0 or fluentbit_version.stdout.find("v1alpha1") == -1
+
 
 - name: ks-logging | Apply fluentbit operator custom resources
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator
+  when: fluentbit_version.rc != 0 or fluentbit_version.stdout.find("v1alpha1") == -1
 
 
 - import_tasks: logsidecar.yaml
