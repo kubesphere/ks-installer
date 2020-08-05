@@ -78,12 +78,13 @@ class component():
 
 def getResultInfo():
     resultsList = checkExecuteResult()
-    # print(resultsList)
+    resultState = False
     for taskResult in resultsList:
         taskName = list(taskResult.keys())[0]
         taskRC = list(taskResult.values())[0]
 
         if taskRC != 0:
+            resultState = resultState or True
             resultInfoPath = os.path.join(
                 privateDataDir,
                 str(taskName),
@@ -105,7 +106,7 @@ def getResultInfo():
                 print('*' * 150)
                 print(json.dumps(failedEvent, sort_keys=True, indent=2))
                 print('*' * 150)
-
+    return resultState
 # Operation result check
 
 
@@ -257,7 +258,7 @@ def preInstallTasks():
             exit()
 
 
-def resultInfo():
+def resultInfo(resultState=False):
     config = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'ks-config.yaml'),
         private_data_dir=privateDataDir,
@@ -279,10 +280,12 @@ def resultInfo():
 
     if result.rc != 0:
         exit()
+    
+    if resultState == False:
+        with open('/kubesphere/playbooks/kubesphere_running', 'r') as f:
+            info = f.read()
+            print(info)        
 
-    with open('/kubesphere/playbooks/kubesphere_running', 'r') as f:
-        info = f.read()
-        print(info)
 
     telemeter = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'telemetry.yaml'),
@@ -332,20 +335,14 @@ def main():
     if not os.path.exists(privateDataDir):
         os.makedirs(privateDataDir)
 
-    # tagDate = (datetime.date.today() +
-    #            datetime.timedelta(-1)).strftime("%Y%m%d")
-    # cmd = 'sed -i "/ks_image_tag/s/\:.*/\: dev-{}/g" /kubesphere/installer/roles/download/defaults/main.yml'.format(
-    #     tagDate)
-    # os.system(cmd)
-
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
     else:
         generateConfig()
         # execute preInstall tasks
         preInstallTasks()
-        getResultInfo()
-        resultInfo()
+        resultState = getResultInfo()
+        resultInfo(resultState)
 
 
 if __name__ == '__main__':
