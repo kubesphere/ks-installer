@@ -5,12 +5,21 @@
     dest: "{{ kubesphere_dir }}/"
 
 
+- name: ks-logging | Checking fluent bit migrating
+  shell: >
+    {{ bin_dir }}/kubectl get outputs.logging.kubesphere.io -n kubesphere-logging-system es -o jsonpath='{.metadata.name}'
+  register: migrating_completed
+  ignore_errors: True
+
+
 - name: ks-logging | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
   with_items:
     - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
+  when: migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
+
 
 - name: ks-logging | Apply fluentbit operator custom resources
   shell: >

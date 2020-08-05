@@ -482,6 +482,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-clusters"]'
     iam.kubesphere.io/module: Clusters Management
     iam.kubesphere.io/role-template-rules: '{"clusters": "manage"}'
     kubesphere.io/alias-name: Clusters Management
@@ -648,6 +649,13 @@ rules:
       - list
       - watch
   - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - list
+      - get
+  - apiGroups:
       - '*'
     resources:
       - clusters
@@ -660,6 +668,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-workspaces"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"workspaces": "manage"}'
     kubesphere.io/alias-name: Workspaces Management
@@ -878,6 +887,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
     iam.kubesphere.io/module: Apps Management
     iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
     kubesphere.io/alias-name: App Templates Management
@@ -1047,6 +1057,13 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - list
+      - get
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2

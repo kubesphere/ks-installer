@@ -40,21 +40,21 @@ kube_version: v1.15.5
 etcd_version: v3.2.18
 # kube image repo define
 ks_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   dockerhub.qingcloud.com
   {%- endif %}
 
 base_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}/
   {%- else -%}
 
   {%- endif %}
 
 base_library_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}/library/
   {%- else -%}
 
@@ -62,7 +62,7 @@ base_library_repo: >-
 
 # quay image repo define
 quay_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   quay.azk8s.cn
@@ -70,7 +70,7 @@ quay_image_repo: >-
 
 # elastic image repo define
 elastic_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   docker.elastic.co
@@ -78,7 +78,7 @@ elastic_image_repo: >-
 
 # gcr and kubernetes image repo define
 gcr_image_repo: >-
-  {% if local_registry is defined -%}
+  {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
   gcr.azk8s.cn
@@ -330,8 +330,8 @@ gitlab_busybox_tag: 1.31.1
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}jimmidyson/configmap-reload"
 configmap_reload_tag: v0.3.0
-prometheus_repo: "{{ base_repo }}kubesphere/prometheus"
-prometheus_tag: v2.19.3
+prometheus_repo: "{{ base_repo }}prom/prometheus"
+prometheus_tag: v2.20.0
 prometheus_config_reloader_repo: "{{ base_repo }}kubesphere/prometheus-config-reloader"
 prometheus_config_reloader_tag: v0.38.3
 prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
@@ -344,7 +344,7 @@ node_exporter_repo: "{{ base_repo }}kubesphere/node-exporter"
 node_exporter_tag: ks-v0.18.1
 prometheus_adapter_repo: "{{ base_repo }}kubesphere/k8s-prometheus-adapter-amd64"
 prometheus_adapter_tag: v0.6.0
-alertmanager_repo: "{{ base_repo }}kubesphere/alertmanager"
+alertmanager_repo: "{{ base_repo }}prom/alertmanager"
 alertmanager_tag: v0.21.0
 grafana_repo: "{{ base_repo }}grafana/grafana"
 grafana_tag: 6.6.0
