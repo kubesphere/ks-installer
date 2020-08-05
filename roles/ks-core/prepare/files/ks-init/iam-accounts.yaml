@@ -2474,6 +2474,7 @@ role:
   rules:
     - apiGroups:
         - 'monitoring.kubesphere.io'
+        - 'servicemesh.kubesphere.io'
       resources:
         - '*'
       verbs:
@@ -2497,6 +2498,11 @@ role:
         - services
         - ingresses
         - router
+        - s2ibinaries
+        - s2ibinaries/file
+        - s2ibuilders
+        - s2ibuildertemplates
+        - s2iruns
       verbs:
         - get
         - list
@@ -2517,7 +2523,8 @@ role:
       iam.kubesphere.io/dependencies: '["role-template-view-app-workloads"]'
       iam.kubesphere.io/module: Application Workloads
       iam.kubesphere.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
-        "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage"}'
+        "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage",
+        "s2ibuilders":"manage","grayscale-release": "manage"}'
       kubesphere.io/alias-name: Application Workloads Management
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2541,6 +2548,11 @@ role:
         - ingresses
         - router
         - workloads
+        - s2ibinaries
+        - s2ibinaries/file
+        - s2ibuilders
+        - s2ibuildertemplates
+        - s2iruns
       verbs:
         - '*'
     - apiGroups:
@@ -2549,62 +2561,10 @@ role:
         - 'secrets'
       verbs:
         - list
-
----
-apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
-metadata:
-  name: role-template-grayscale-release
-  labels:
-    scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-manage-app-workloads"]'
-      iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"grayscale-release": "manage"}'
-      kubesphere.io/alias-name: Grayscale Release
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-grayscale-release
-  rules:
     - apiGroups:
         - 'servicemesh.kubesphere.io'
       resources:
         - '*'
-      verbs:
-        - '*'
-
----
-apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
-metadata:
-  name: role-template-image-builder
-  labels:
-    scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-manage-app-workloads"]'
-      iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"s2ibuilders": "manage"}'
-      kubesphere.io/alias-name: Image Builder
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-image-builder
-  rules:
-    - apiGroups:
-        - 'devops.kubesphere.io'
-      resources:
-        - s2ibinaries
-        - s2ibinaries/file
-        - s2ibuilders
-        - s2ibuildertemplates
-        - s2iruns
       verbs:
         - '*'
 
@@ -2902,14 +2862,7 @@ role:
         - 'pipelines/sonarstatus'
       verbs:
         - '*'
-    - apiGroups:
-        - '*'
-      resources:
-        - credentials
-      verbs:
-        - get
-        - list
-        - watch
+
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2968,9 +2921,6 @@ role:
         - 'pipelines/consolelog'
         - 'pipelines/scan'
         - 'pipelines/sonarstatus'
-        - 'checkCron'
-        - 'credentials'
-        - 'credentials/usage'
       verbs:
         - 'get'
         - 'list'
