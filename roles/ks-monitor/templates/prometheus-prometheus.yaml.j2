@@ -37,7 +37,11 @@ spec:
       port: web
   image: {{ prometheus_repo }}:{{ prometheus_tag }}
   nodeSelector:
+{% if prometheus_node_selector_map is defined %}
+{{ prometheus_node_selector_map }}
+{% else %}
     kubernetes.io/os: linux
+{% endif %}
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
   query:
@@ -50,7 +54,8 @@ spec:
     requests:
       cpu: {{ monitoring.prometheus.requests.cpu | default("200m") }}
       memory: {{ monitoring.prometheus.requests.memory | default("400Mi") }}
-  retention: 7d
+  retention: {% if prometheus_retention_duration is defined %}{{ prometheus_retention_duration }}{% else %}7d{% endif %}
+
   ruleSelector:
     matchLabels:
       prometheus: k8s
