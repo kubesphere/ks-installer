@@ -88,7 +88,6 @@ def getResultInfo():
             resultInfoPath = os.path.join(
                 privateDataDir,
                 str(taskName),
-                # 'artifacts/',
                 str(taskName),
                 'job_events'
             )
@@ -110,7 +109,7 @@ def getResultInfo():
 # Operation result check
 
 
-def checkExecuteResult(interval=5):
+def checkExecuteResult(interval=10):
     '''
     :param interval: Result inspection cycle. Unit: second(s)
     '''
@@ -120,23 +119,25 @@ def checkExecuteResult(interval=5):
     while True:
         time.sleep(interval)
         completedTasks = []
-
+        statusInfo = []
         for taskProcess in taskProcessList:
             taskName = list(taskProcess.keys())[0]
             result = taskProcess[taskName].rc
             if result is not None:
-                print(
-                    "task {} status is {}".format(
+                statusInfo.append("task {} status is {}".format(
                         taskName,
                         taskProcess[taskName].status))
                 completedTasks.append({taskName: result})
+            else:
+                statusInfo.append("task {} status is running".format(taskName))
 
         if len(completedTasks) != 0:
-            print(
-                "total: {}     completed:{}".format(
+            statusInfo.append("total: {}     completed:{}".format(
                     taskProcessListLen,
                     len(completedTasks)))
-            print('*' * 50)
+            statusInfo.append('*' * 50)
+
+            print("\n".join(statusInfo))
 
         if len(completedTasks) == taskProcessListLen:
             break
