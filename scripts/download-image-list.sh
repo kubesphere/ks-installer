@@ -29,7 +29,7 @@ ks_images=(kubesphere/ks-console:v2.1.1
     mirrorgooglecontainers/defaultbackend-amd64:1.4
     kubesphere/metrics-server:v0.3.7
     kubesphere/configmap-reload:v0.3.0
-    prom/prometheus:v2.20.0
+    prom/prometheus:v2.20.1
     prom/alertmanager:v0.21.0
     kubesphere/prometheus-config-reloader:v0.38.3
     kubesphere/prometheus-operator:v0.38.3
