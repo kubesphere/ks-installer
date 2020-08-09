@@ -1262,6 +1262,8 @@ rules:
       - 'credentials/usage'
       - 'roles'
       - 'members'
+      - 'devops'
+      - 'devopsprojects'
     verbs:
       - '*'
 
