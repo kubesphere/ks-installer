@@ -19,7 +19,7 @@ To install the chart with the release name `kube-events` into the namespace `kub
 helm install kube-events ./ --namespace kubesphere-logging-system
 ```
 
-The command deploys kube-events on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys kube-events on the Kubernetes cluster with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 The default installation includes kube-events-operator, kube-events-exporter, kube-events-ruler, and default rules in cluster scope.
 
