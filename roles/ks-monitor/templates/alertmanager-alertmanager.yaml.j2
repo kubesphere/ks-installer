@@ -30,7 +30,12 @@ spec:
       memory: {{ monitoring.alertmanager.requests.memory | default("30Mi") }}
   nodeSelector:
     kubernetes.io/os: linux
-  replicas: {{ monitoring.alertmanagerReplicas | default("1") }}
+
+{% if nodeNum is defined and nodeNum < 3 %}
+  replicas: {{ monitoring.alertmanagerReplicas | default(1) }}
+{% else %}
+  replicas: {{ monitoring.alertmanagerReplicas | default(3) }}
+{% endif %}
   securityContext:
     fsGroup: 2000
     runAsNonRoot: true

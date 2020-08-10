@@ -38,7 +38,11 @@ notificationmanager:
     repo: {{ notification_manager_repo }}
     tag: {{ notification_manager_tag }}
     pullPolicy: IfNotPresent
+{% if nodeNum is defined and nodeNum < 3 %}
   replicas: 1
+{% else %}
+  replicas: 2
+{% endif %}
   resources:
     limits:
       cpu: 500m
