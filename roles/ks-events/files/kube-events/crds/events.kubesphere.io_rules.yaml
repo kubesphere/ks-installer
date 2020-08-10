@@ -44,16 +44,17 @@ spec:
                     additionalProperties:
                       type: string
                     description: 'Values of Annotations can use format string with
-                      the fields of the event. For example: `{"message": "%event.message"}`'
+                      the fields of the event. For example: `{"message": "%message"}`'
                     type: object
                   condition:
                     description: 'Condition is a string similar with the where part
-                      of sql (please use double quotation to mark a string). For example:
-                      `event.type="Warning" and event.involvedObject.kind="Pod" and
-                      event.reason="FailedMount"`'
+                      of sql. See supported grammar details on https://github.com/kubesphere/event-rule-engine#supported-grammer
+                      . For example: `type="Warning" and involvedObject.kind="Pod"
+                      and reason="FailedMount"`'
                     type: string
                   enable:
-                    description: Enable is whether to enable the rule
+                    description: Enable is whether to enable the rule, default to
+                      `false`
                     type: boolean
                   labels:
                     additionalProperties:
