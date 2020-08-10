@@ -72,7 +72,11 @@ cluster:
 master:
   name: master
   exposeHttp: false
-  replicas: {{ common.es.elasticsearchMasterReplicas }}
+{% if nodeNum is defined and nodeNum < 5 %}
+  replicas: {{ common.es.elasticsearchMasterReplicas | default(1) }}
+{% else %}
+  replicas: {{ common.es.elasticsearchMasterReplicas | default(3) }}
+{% endif %}
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   persistence:
@@ -124,7 +128,11 @@ data:
   serviceType: ClusterIP
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
-  replicas: {{ common.es.elasticsearchDataReplicas }}
+{% if nodeNum is defined and nodeNum < 5 %}
+  replicas: {{ common.es.elasticsearchDataReplicas | default(1) }}
+{% else %}
+  replicas: {{ common.es.elasticsearchDataReplicas | default(3) }}
+{% endif %}
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
   persistence:

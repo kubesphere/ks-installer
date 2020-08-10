@@ -6,7 +6,11 @@
 ##
 controllermanager:
   enabled: true
+{% if nodeNum is defined and nodeNum < 3 %}
+  replicaCount: 1
+{% else %}
   replicaCount: 2
+{% endif %}
   repository: {{ kubefed_repo }}
   image: {{ kubefed_image }}
   tag: {{ kubefed_image_tag }}

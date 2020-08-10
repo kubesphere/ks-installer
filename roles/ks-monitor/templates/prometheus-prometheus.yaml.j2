@@ -46,7 +46,11 @@ spec:
   podMonitorSelector: {}
   query:
     maxConcurrency: 1000
-  replicas: {{ monitoring.prometheusReplicas }}
+{% if nodeNum is defined and nodeNum < 3 %}
+  replicas: {{ monitoring.prometheusReplicas | default(1) }}
+{% else %}
+  replicas: {{ monitoring.prometheusReplicas | default(2) }}
+{% endif %}
   resources:
     limits:
       cpu: "{{ monitoring.prometheus.limits.cpu | default("4") }}"
