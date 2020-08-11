@@ -182,6 +182,7 @@ rules:
     resources:
       - s2ibuildertemplates
       - search
+      - crumbissuer
     verbs:
       - list
   - apiGroups:
@@ -203,12 +204,6 @@ rules:
       - list
       - get
   - apiGroups:
-      - devops.kubesphere.io
-    resources:
-      - crumbissuer
-    verbs:
-      - list
-  - apiGroups:
       - alerting.kubesphere.io
     resources:
       - comment
@@ -218,16 +213,13 @@ rules:
       - list
   - apiGroups:
       - notification.kubesphere.io
+      - alerting.kubesphere.io
     resources:
       - addresses
+      - addresslists
+      - comment
     verbs:
       - list
-      - create
-  - apiGroups:
-      - notification.kubesphere.io
-    resources:
-      - addresslists
-    verbs:
       - create
 
 ---
@@ -603,6 +595,7 @@ rules:
       - s2ibuilders
       - s2ibuildertemplates
       - s2iruns
+      - horizontalpodautoscalers
       - events
       - ingresses
       - router
@@ -723,6 +716,7 @@ rules:
       - s2ibuilders
       - s2ibuildertemplates
       - s2iruns
+      - horizontalpodautoscalers
       - events
       - ingresses
       - router
@@ -2507,6 +2501,7 @@ role:
         - s2ibuilders
         - s2ibuildertemplates
         - s2iruns
+        - horizontalpodautoscalers
       verbs:
         - get
         - list
@@ -2557,6 +2552,7 @@ role:
         - s2ibuilders
         - s2ibuildertemplates
         - s2iruns
+        - horizontalpodautoscalers
       verbs:
         - '*'
     - apiGroups:
