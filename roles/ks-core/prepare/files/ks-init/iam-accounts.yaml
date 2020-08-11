@@ -2013,7 +2013,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-view-roles",
-        "role-template-view-app-workloads","role-template-view-manage-workloads",
+        "role-template-view-app-workloads","role-template-manage-app-workloads",
         "role-template-view-volumes","role-template-manage-volumes",
         "role-template-view-snapshots","role-template-manage-snapshots",
         "role-template-view-secrets","role-template-manage-secrets",
