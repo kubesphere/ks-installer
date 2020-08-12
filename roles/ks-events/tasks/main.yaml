@@ -32,7 +32,7 @@
   retries: 3
   delay: 10
   when:
-    - (events_check.stdout.find("DEPLOYED") == -1) or (events_check.stdout.find("v0.1.0") == -1)
+    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.1.0") == -1)
 
 
 - import_tasks: fluentbit-operator.yaml
