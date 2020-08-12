@@ -1055,11 +1055,22 @@ rules:
       - watch
   - apiGroups:
       - monitoring.kubesphere.io
+      - apps
+      - extensions
+      - batch
+      - logging.kubesphere.io
+      - monitoring.kubesphere.io
+      - autoscaling
+      - app.k8s.io
+      - servicemesh.kubesphere.io
+      - operations.kubesphere.io
+      - resources.kubesphere.io
     resources:
       - '*'
     verbs:
       - list
       - get
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1107,6 +1118,21 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-projects
 rules:
+  - apiGroups:
+      - apps
+      - extensions
+      - batch
+      - logging.kubesphere.io
+      - monitoring.kubesphere.io
+      - autoscaling
+      - app.k8s.io
+      - servicemesh.kubesphere.io
+      - operations.kubesphere.io
+      - resources.kubesphere.io
+    resources:
+      - "*"
+    verbs:
+      - '*'
   - apiGroups:
       - '*'
     resources:
@@ -2040,7 +2066,7 @@ role:
         - servicemesh.kubesphere.io
         - operations.kubesphere.io
         - devops.kubesphere.io
-        - resources
+        - resources.kubesphere.io
       resources:
         - '*'
       verbs:
