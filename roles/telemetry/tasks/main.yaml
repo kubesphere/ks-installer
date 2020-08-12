@@ -110,10 +110,15 @@
   register: clusterId
   ignore_errors: true
 
+- name: get multicluster status
+  shell: >
+    cat /kubesphere/config/ks-config.json | grep clusterRole | awk '{print $2}'
+  register: multi
+  ignore_errors: true 
 
 - name: get essential information
   uri:
-    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ clusterId[ 'stdout' ] }}&mod={{ mod[ 'stdout' ] }}"
+    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ clusterId[ 'stdout' ] }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
     method: GET
     validate_certs: false
   ignore_errors: true
