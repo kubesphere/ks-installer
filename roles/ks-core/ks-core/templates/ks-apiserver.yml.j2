@@ -8,6 +8,10 @@ metadata:
   name: ks-apiserver
   namespace: kubesphere-system
 spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+    type: RollingUpdate
 {% if master_num is defined and master_num != "0" %}
   replicas: {{ master_num }}
 {% else %}
