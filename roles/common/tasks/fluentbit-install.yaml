@@ -38,10 +38,12 @@
     - { type: fluentbits.logging.kubesphere.io, name: fluent-bit }
     - { type: ds, name: fluent-bit }
     - { type: crd, name: fluentbits.logging.kubesphere.io }
+  register: result_check
+  failed_when: "result_check.stderr and 'NotFound' not in result_check.stderr"
   when:
     - fluentbit_version.rc == 0
     - fluentbit_version.stdout.find("v1alpha1") != -1
-
+  
 
 - name: Kubesphere | Prepare fluentbit operator setup
   shell: >
