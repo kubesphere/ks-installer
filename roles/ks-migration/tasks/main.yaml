@@ -33,14 +33,19 @@
       src: "{{ item.file }}.j2"
       dest: "{{ kubesphere_dir }}/{{ item.file }}"
     with_items:
-      - { path: migration, file: ks-upgrade.yaml }
-
+    - { path: migration, file: ks-upgrade.yaml }
+    - { path: migration, file: ks-devops-migration.yaml }
 
   - name: ks-migration | Create migration job
     shell: >
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-upgrade.yaml
 
-
+  - name: ks-migration | Create devops migration job
+    shell: >
+      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops-migration.yaml
+    when:
+      - devops.enabled
+      
   - name: ks-migration | Get migration job status
     shell: >
       {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-upgrade --no-headers | awk '{print $3}'
@@ -48,6 +53,16 @@
     until: job_status.stdout.find('Completed') != -1
     retries: 90
     delay: 20
+
+  - name: ks-migration | Get devops migration job status
+    shell: >
+      {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-devops-migration --no-headers | awk '{print $3}'
+    register: job_status
+    until: job_status.stdout.find('Completed') != -1
+    retries: 90
+    delay: 20
+    when:
+      - devops.enabled
 
   - name: ks-migration | Stop ks-account
     shell: >
