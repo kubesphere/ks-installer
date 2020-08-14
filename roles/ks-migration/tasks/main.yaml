@@ -1,17 +1,17 @@
 ---
-- name: ks-migration | Check core components (1)
+- name: KubeSphere | Check core components (1)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account
   register: check_account
   failed_when: "check_account.stderr and 'NotFound' not in check_account.stderr"
 
-- name: ks-migration | Check core components (2)
+- name: KubeSphere | Check core components (2)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway
   register: check_apigateway
   failed_when: "check_apigateway.stderr and 'NotFound' not in check_apigateway.stderr"
 
-- name: ks-migration | Check core components (3)
+- name: KubeSphere | Check core components (3)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account -o jsonpath='{.spec.replicas}'
   register: check_account_replicas
@@ -19,7 +19,7 @@
   when:
     - check_account.rc == 0
 
-- name: ks-migration | Check core components (4)
+- name: KubeSphere | Check core components (4)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway -o jsonpath='{.spec.replicas}'
   register: check_apigateway_replicas
@@ -28,7 +28,7 @@
     - check_apigateway.rc == 0
 
 - block:
-  - name: ks-migration | Creating manifests
+  - name: KubeSphere | Creating manifests
     template:
       src: "{{ item.file }}.j2"
       dest: "{{ kubesphere_dir }}/{{ item.file }}"
@@ -36,17 +36,22 @@
     - { path: migration, file: ks-upgrade.yaml }
     - { path: migration, file: ks-devops-migration.yaml }
 
-  - name: ks-migration | Create migration job
+  - name: KubeSphere | Create migration job
     shell: >
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-upgrade.yaml
 
-  - name: ks-migration | Create devops migration job
+  - name: KubeSphere | Check devops status
+    shell: >
+      {{ bin_dir }}/kubectl get pod -n kubesphere-devops-system | grep "ks-jenkins" | wc -l
+    register: devops_check
+
+  - name: KubeSphere | Create devops migration job
     shell: >
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops-migration.yaml
     when:
-      - devops.enabled
+      - devops_check.stdout != "0"
       
-  - name: ks-migration | Get migration job status
+  - name: KubeSphere | Get migration job status
     shell: >
       {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-upgrade --no-headers | awk '{print $3}'
     register: job_status
@@ -54,7 +59,7 @@
     retries: 90
     delay: 20
 
-  - name: ks-migration | Get devops migration job status
+  - name: KubeSphere | Get devops migration job status
     shell: >
       {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-devops-migration --no-headers | awk '{print $3}'
     register: job_status
@@ -62,15 +67,27 @@
     retries: 90
     delay: 20
     when:
-      - devops.enabled
+      - devops_check.stdout != "0"
 
-  - name: ks-migration | Stop ks-account
+  - name: KubeSphere | Stop ks-account
     shell: >
       {{ bin_dir }}/kubectl scale deploy -n kubesphere-system ks-account --replicas=0
 
-  - name: ks-migration | Stop ks-apigateway
+  - name: KubeSphere | Stop ks-apigateway
     shell: >
       {{ bin_dir }}/kubectl scale deploy -n kubesphere-system ks-apigateway --replicas=0
+
+  - name: KubeSphere | Update ks-core status
+    shell: >
+      {{ bin_dir }}/kubectl patch cc ks-installer
+      --type merge
+      -p '{"status": {"core": {"migration": null}}}'
+      -n kubesphere-system
+    register: import
+    failed_when: "import.stderr and 'Warning' not in import.stderr"
+    until: import is succeeded
+    retries: 5
+    delay: 3
   when:
     - check_account.rc == 0
     - check_apigateway.rc == 0

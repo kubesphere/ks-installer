@@ -260,7 +260,7 @@ def preInstallTasks():
 
 
 def resultInfo(resultState=False):
-    config = ansible_runner.run(
+    ks_config = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'ks-config.yaml'),
         private_data_dir=privateDataDir,
         artifact_dir=os.path.join(privateDataDir, 'ks-config'),
@@ -268,18 +268,8 @@ def resultInfo(resultState=False):
         quiet=True
     )
 
-    if config.rc != 0:
+    if ks_config.rc != 0:
         exit()
-
-    migration = ansible_runner.run(
-        playbook=os.path.join(playbookBasePath, 'ks-migration.yaml'),
-        private_data_dir=privateDataDir,
-        artifact_dir=os.path.join(privateDataDir, 'ks-migration'),
-        ident='ks-migration',
-        quiet=False
-    )    
-
-
 
     result = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'result-info.yaml'),
@@ -292,6 +282,28 @@ def resultInfo(resultState=False):
     if result.rc != 0:
         exit()
     
+    config.load_incluster_config()
+    api = client.CustomObjectsApi()
+
+    resource = api.get_namespaced_custom_object(
+        group="installer.kubesphere.io",
+        version="v1alpha1",
+        name="ks-installer",
+        namespace="kubesphere-system",
+        plural="clusterconfigurations",
+    )
+     
+    if "migration" in resource['status']['core'] and resource['status']['core']['migration'] and resultState == False:
+        migration = ansible_runner.run(
+            playbook=os.path.join(playbookBasePath, 'ks-migration.yaml'),
+            private_data_dir=privateDataDir,
+            artifact_dir=os.path.join(privateDataDir, 'ks-migration'),
+            ident='ks-migration',
+            quiet=False
+        )    
+        if migration.rc != 0:
+            exit()
+
     if resultState == False:
         with open('/kubesphere/playbooks/kubesphere_running', 'r') as f:
             info = f.read()
