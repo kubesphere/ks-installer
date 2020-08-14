@@ -1,0 +1,67 @@
+---
+- name: ks-migration | Check core components (1)
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account
+  register: check_account
+  failed_when: "check_account.stderr and 'NotFound' not in check_account.stderr"
+
+- name: ks-migration | Check core components (2)
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway
+  register: check_apigateway
+  failed_when: "check_apigateway.stderr and 'NotFound' not in check_apigateway.stderr"
+
+- name: ks-migration | Check core components (3)
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account -o jsonpath='{.spec.replicas}'
+  register: check_account_replicas
+  failed_when: "check_account_replicas.stderr and 'NotFound' not in check_account_replicas.stderr"
+  when:
+    - check_account.rc == 0
+
+- name: ks-migration | Check core components (4)
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway -o jsonpath='{.spec.replicas}'
+  register: check_apigateway_replicas
+  failed_when: "check_apigateway_replicas.stderr and 'NotFound' not in check_apigateway_replicas.stderr"
+  when:
+    - check_apigateway.rc == 0
+
+- block:
+  - name: ks-migration | Creating manifests
+    template:
+      src: "{{ item.file }}.j2"
+      dest: "{{ kubesphere_dir }}/{{ item.file }}"
+    with_items:
+      - { path: migration, file: ks-upgrade.yaml }
+
+
+  - name: ks-migration | Create migration job
+    shell: >
+      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-upgrade.yaml
+
+
+  - name: ks-migration | Get migration job status
+    shell: >
+      {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-upgrade --no-headers | awk '{print $3}'
+    register: job_status
+    until: job_status.stdout.find('Completed') != -1
+    retries: 90
+    delay: 20
+
+  - name: ks-migration | Stop ks-account
+    shell: >
+      {{ bin_dir }}/kubectl scale deploy -n kubesphere-system ks-account --replicas=0
+
+  - name: ks-migration | Stop ks-apigateway
+    shell: >
+      {{ bin_dir }}/kubectl scale deploy -n kubesphere-system ks-apigateway --replicas=0
+  when:
+    - check_account.rc == 0
+    - check_apigateway.rc == 0
+    - check_account_replicas.stdout != "0"
+    - check_apigateway_replicas.stdout != "0"
+    - "'NotFound' not in check_account.stderr"
+    - "'NotFound' not in check_apigateway.stderr"
+    - "'NotFound' not in check_account_replicas.stderr"
+    - "'NotFound' not in check_apigateway_replicas.stderr"

@@ -271,6 +271,16 @@ def resultInfo(resultState=False):
     if config.rc != 0:
         exit()
 
+    migration = ansible_runner.run(
+        playbook=os.path.join(playbookBasePath, 'ks-migration.yaml'),
+        private_data_dir=privateDataDir,
+        artifact_dir=os.path.join(privateDataDir, 'ks-migration'),
+        ident='ks-migration',
+        quiet=False
+    )    
+
+
+
     result = ansible_runner.run(
         playbook=os.path.join(playbookBasePath, 'result-info.yaml'),
         private_data_dir=privateDataDir,
