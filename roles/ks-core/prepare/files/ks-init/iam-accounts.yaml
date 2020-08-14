@@ -450,6 +450,7 @@ rules:
       - notification.kubesphere.io
       - alerting.kubesphere.io
       - cluster.kubesphere.io
+      - types.kubefed.io
     resources:
       - '*'
     verbs:
@@ -518,6 +519,7 @@ rules:
       - notification.kubesphere.io
       - alerting.kubesphere.io
       - cluster.kubesphere.io
+      - types.kubefed.io
     resources:
       - '*'
     verbs:
