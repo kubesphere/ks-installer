@@ -43,7 +43,8 @@
   when:
     - fluentbit_version.rc == 0
     - fluentbit_version.stdout.find("v1alpha1") != -1
-  
+  ignore_errors: True
+
 
 - name: Kubesphere | Prepare fluentbit operator setup
   shell: >
