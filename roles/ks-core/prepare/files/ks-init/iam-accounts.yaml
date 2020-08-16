@@ -450,6 +450,7 @@ rules:
       - notification.kubesphere.io
       - alerting.kubesphere.io
       - cluster.kubesphere.io
+      - types.kubefed.io
     resources:
       - '*'
     verbs:
@@ -518,6 +519,7 @@ rules:
       - notification.kubesphere.io
       - alerting.kubesphere.io
       - cluster.kubesphere.io
+      - types.kubefed.io
     resources:
       - '*'
     verbs:
@@ -2037,9 +2039,11 @@ role:
         "role-template-view-volumes","role-template-manage-volumes",
         "role-template-view-snapshots","role-template-manage-snapshots",
         "role-template-view-secrets","role-template-manage-secrets",
+        "role-template-view-configmaps","role-template-manage-configmaps",
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
+        "role-template-grayscale-release","role-template-image-builder",
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-credentials","role-template-manage-credentials"]'
       kubesphere.io/creator: system
@@ -2085,10 +2089,12 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
-        "role-template-view-app-workloads","role-template-view-volumes","role-template-view-secrets",
-        "role-template-view-alerting-configmaps","role-template-view-alerting-policies","role-template-view-custom-monitoring",
-        "role-template-view-alerting-messages","role-template-view-pipelines","role-template-view-credentials"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-view-roles",
+        "role-template-view-app-workloads","role-template-view-custom-monitoring",
+        "role-template-view-volumes","role-template-view-snapshots",
+        "role-template-view-secrets","role-template-view-configmaps",
+        "role-template-view-alerting-policies","role-template-view-alerting-messages",
+        "role-template-view-pipelines","role-template-view-credentials"]'
       kubesphere.io/creator: system
     name: viewer
   rules:

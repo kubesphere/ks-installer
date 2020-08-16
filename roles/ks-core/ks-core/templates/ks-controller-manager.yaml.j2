@@ -8,6 +8,10 @@ metadata:
   name: ks-controller-manager
   namespace: kubesphere-system
 spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+    type: RollingUpdate
   progressDeadlineSeconds: 600
 {% if master_num is defined and master_num != "0" %}
   replicas: {{ master_num }}

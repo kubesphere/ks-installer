@@ -105,10 +105,10 @@ ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
 ks_apiserver_tag: latest
 ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
 ks_controller_manager_tag: latest
-ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
-ks_update_tag: "advanced-2.0.0"
-ks_devops_flyway_repo: "{{ base_repo }}kubesphere/ks-devops"
-ks_devops_flyway_tag: "flyway-v2.1.0"
+ks_update_repo: "{{ base_repo }}kubespheredev/ks-upgrade"
+ks_update_tag: latest
+ks_devops_migration_repo: "{{ base_repo }}kubespheredev/ks-devops"
+ks_devops_migration_tag: "flyway-v3.0.0"
 ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
 ks_console_tag: latest
 ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
