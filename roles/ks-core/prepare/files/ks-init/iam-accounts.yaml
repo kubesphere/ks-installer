@@ -197,7 +197,7 @@ rules:
       - tojenkinsfile
       - tojson
       - scms/verify
-      - scms/server
+      - scms/servers
       - scms/organizations
     verbs:
       - create
