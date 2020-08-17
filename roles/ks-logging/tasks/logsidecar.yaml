@@ -17,6 +17,14 @@
 #   ignore_errors: True
 
 - block:
+  - name: logsidecar-injector | Delete old version logsidecar injector
+    shell: >
+      kubectl -n kubesphere-logging-system delete deploy logsidecar-injector ;
+      kubectl -n kubesphere-logging-system delete service logsidecar-injector ;
+      kubectl -n kubesphere-logging-system delete secret logsidecar-injector-service-certs ;
+      kubectl delete mutatingwebhookconfiguration logsidecar-injector
+    ignore_errors: True
+
   - name: logsidecar-injector | Deploy logsidecar-injector
     shell: >
       {{ bin_dir }}/helm upgrade --install logsidecar-injector
