@@ -40,7 +40,7 @@
 
 - name: Metrics-Server | Check Metrics-Server
   shell: >
-    {{ bin_dir }}/helm list metrics-server
+    {{ bin_dir }}/helm list metrics-server -n kube-system
   register: metrics_server_check
   ignore_errors: True
 

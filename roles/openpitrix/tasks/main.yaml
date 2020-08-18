@@ -34,7 +34,7 @@
 
 - name: OpenPitrix | Check OpenPitrix
   shell: >
-    {{ bin_dir }}/helm list ks-openpitrix
+    {{ bin_dir }}/helm list ks-openpitrix -n openpitrix-system
   register: op_check
   ignore_errors: True
 
