@@ -13,11 +13,4 @@
     - kubesphere_user_check.stderr.find("NotFound") != -1
 
 
-- name: KubeSphere | Init KubeSphere
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
-  loop:
-    - "iam-accounts.yaml"
-    - "webhook-secret.yaml"
-    - "users.iam.kubesphere.io.yaml"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+
