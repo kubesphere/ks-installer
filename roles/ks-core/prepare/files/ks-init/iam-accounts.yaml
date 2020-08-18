@@ -2058,11 +2058,13 @@ role:
         - list
         - watch
     - apiGroups:
+        - ""
         - apps
         - extensions
         - batch
         - logging.kubesphere.io
         - monitoring.kubesphere.io
+        - notification.kubesphere.io
         - autoscaling
         - alerting.kubesphere.io
         - openpitrix.io
@@ -2071,6 +2073,10 @@ role:
         - operations.kubesphere.io
         - devops.kubesphere.io
         - resources.kubesphere.io
+        - config.istio.io
+        - events.k8s.io
+        - events.kubesphere.io
+        - snapshot.storage.k8s.io
       resources:
         - '*'
       verbs:
