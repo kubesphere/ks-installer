@@ -24,6 +24,7 @@ rules:
   verbs:
   - list
   - watch
+  - delete
 - apiGroups:
   - extensions
   resources:
