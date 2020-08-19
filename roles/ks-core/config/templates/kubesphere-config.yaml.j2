@@ -53,10 +53,10 @@ data:
       username: admin
       password: {{ ks_token_str.stdout }}
       maxConnections: 100
-{% if devops.sonarqube is defined and devops.sonarqube.externalSonarUrl is defined and devops.sonarqube.externalSonarToken is defined %}
+{% if sonarQubeHost is defined and sonarQubeToken is defined %}
     sonarQube:
-      host: {{ devops.sonarqube.externalSonarUrl }}
-      token: {{ devops.sonarqube.externalSonarToken }}
+      host: {{ sonarQubeHost }}
+      token: {{ sonarQubeToken }}
 {% endif %}
 {% endif %}
 {% if servicemesh.enabled is defined and servicemesh.enabled == true %}
