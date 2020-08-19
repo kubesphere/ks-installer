@@ -53,13 +53,6 @@
   when:
     - (op_check.stdout.find("DEPLOYED") == -1) or (op_check.stdout.find("v0.4.8") == -1)
 
-
-- name: OpenPitrix | Checking release job
-  command: >
-    {{ bin_dir }}/kubectl get job -n openpitrix-system
-  register: op_jobs
-  ignore_errors: True
-
 - name: OpenPitrix | Checking migration status
   command: >
     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o jsonpath='{.status.core.migration}'
@@ -71,9 +64,14 @@
     {{ bin_dir }}/kubectl delete job -n openpitrix-system hyperpitrix-release-app-job
   ignore_errors: True
   when:
-    - op_jobs.stdout.find("hyperpitrix-release-app-job") != -1
     - migration_status.stdout is defined
     - migration_status.stdout == "true"
+
+- name: OpenPitrix | Checking release job
+  command: >
+    {{ bin_dir }}/kubectl get job -n openpitrix-system
+  register: op_jobs
+  ignore_errors: True
 
 - name: OpenPitrix | Creating release job
   command: >
