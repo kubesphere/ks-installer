@@ -60,6 +60,21 @@
   register: op_jobs
   ignore_errors: True
 
+- name: OpenPitrix | Checking migration status
+  command: >
+    {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o jsonpath='{.status.core.migration}'
+  register: migration_status
+  ignore_errors: True
+
+- name: OpenPitrix | Remove old release-app-job
+  command: >
+    {{ bin_dir }}/kubectl delete job -n openpitrix-system hyperpitrix-release-app-job
+  ignore_errors: True
+  when:
+    - op_jobs.stdout.find("hyperpitrix-release-app-job") != -1
+    - migration_status.stdout is defined
+    - migration_status.stdout == "true"
+
 - name: OpenPitrix | Creating release job
   command: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/openpitrix-release-app-job.yaml --force
