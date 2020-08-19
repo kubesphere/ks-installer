@@ -52,6 +52,11 @@
       with_items:
         - { name: custom-values-snapshot-controller, file: custom-values-snapshot-controller.yaml }
 
+    - name: Kubesphere | Remove old snapshot crd
+      command: >
+        {{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml
+      ignore_errors: True
+
     - name: Kubesphere | Deploy snapshot controller
       shell: >
         {{ bin_dir }}/helm upgrade --install snapshot-controller
