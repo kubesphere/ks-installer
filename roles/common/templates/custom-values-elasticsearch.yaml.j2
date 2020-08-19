@@ -129,7 +129,7 @@ data:
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
 {% if nodeNum is defined and nodeNum < 5 %}
-  replicas: {{ common.es.elasticsearchDataReplicas | default(1) }}
+  replicas: {{ common.es.elasticsearchDataReplicas | default(2) }}
 {% else %}
   replicas: {{ common.es.elasticsearchDataReplicas | default(3) }}
 {% endif %}
