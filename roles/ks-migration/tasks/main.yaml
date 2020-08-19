@@ -71,11 +71,11 @@
 
   - name: KubeSphere | Stop ks-account
     shell: >
-      {{ bin_dir }}/kubectl scale deploy -n kubesphere-system ks-account --replicas=0
+      {{ bin_dir }}/kubectl delete deploy -n kubesphere-system ks-account
 
   - name: KubeSphere | Stop ks-apigateway
     shell: >
-      {{ bin_dir }}/kubectl scale deploy -n kubesphere-system ks-apigateway --replicas=0
+      {{ bin_dir }}/kubectl delete deploy -n kubesphere-system ks-apigateway
 
   - name: KubeSphere | Update ks-core status
     shell: >
