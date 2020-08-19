@@ -1,4 +1,31 @@
 ---
+- block:
+  - name: KubeSphere | Getting sonarqube host
+    shell: >
+      {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "host" | awk '{print $2}'
+    register: sonarqube_host
+
+  - name: KubeSphere | Getting sonarqube token
+    shell: >
+      {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "token" | awk '{print $2}'
+    register: sonarqube_token
+  when:
+    - devops.sonarqube is not defined
+
+- set_fact:
+    sonarQubeHost: "{{ sonarqube_host.stdout }}"
+    sonarQubeToken: "{{ sonarqube_token.stdout }}"
+  when: 
+    - sonarqube_host is defined and sonarqube_host.stdout is defined and sonarqube_host.stdout != ""
+    - sonarqube_token is defined and sonarqube_token.stdout is defined and sonarqube_token.stdout != ""
+
+- set_fact:
+    sonarQubeHost: "{{ devops.sonarqube.externalSonarUrl }}"
+    sonarQubeToken: "{{ devops.sonarqube.externalSonarToken }}"
+  when: 
+    - devops.sonarqube is defined
+    - devops.sonarqube.externalSonarUrl is defined
+    - devops.sonarqube.externalSonarToken is defined
 
 - name: KubeSphere | Getting token
   shell: >
