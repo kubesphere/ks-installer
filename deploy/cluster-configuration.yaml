@@ -62,6 +62,7 @@ spec:
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the role of host or member cluster.
   networkpolicy:       # Network policies allow network isolation within the same cluster, which means firewalls can be set up between certain instances (Pods).
+    # Make sure that the CNI network plugin used by the cluster supports NetworkPolicy. There are a number of CNI network plugins that support NetworkPolicy, including Calico, Cilium, Kube-router, Romana and Weave Net.
     enabled: false
   notification:        # It supports notification management in multi-tenant Kubernetes clusters. It allows you to set AlertManager as its sender, and receivers include Email, Wechat Work, and Slack.
     enabled: false
