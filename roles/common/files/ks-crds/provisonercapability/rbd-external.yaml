@@ -1,0 +1,20 @@
+apiVersion: storage.kubesphere.io/v1alpha1
+kind: ProvisionerCapability
+metadata:
+  name: ceph-com-rbd
+spec:
+  pluginInfo:
+    name: ceph.com/rbd
+    version: ""
+  features:
+    topology: false
+    volume:
+      create: true
+      attach: true
+      clone: false
+      list: false
+      stats: false
+      expandMode: UNKNOWN
+    snapshot:
+      create: false
+      list: false
