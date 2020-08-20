@@ -34,6 +34,12 @@
 
 
 # Deploy elasticsearch
+- name: KubeSphere | Check internal es
+  shell: >
+    {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "logging:" -A 2 | grep "host" | awk '{print $2}'
+  register: es_host
+  ignore_errors: True
+
 - block:
   - name: Kubesphere | Deploy elasticsearch-logging
     shell: >
@@ -90,6 +96,7 @@
   when:
     - common.es.externalElasticsearchUrl is not defined
     - common.es.externalElasticsearchPort is not defined
+    - es_host.stdout is defined and es_host.stdout == "http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200"
 
 
 # Deploy elasticsearch curator

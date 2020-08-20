@@ -88,12 +88,18 @@ data:
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
-{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
+{% if esHost is defined %}
+      host: {{ esHost }}
+{% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
+{% if esIndexPrefix is defined %}
+      indexPrefix: {{ esIndexPrefix }}
+{% else %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-log
+{% endif %}
 {% endif %}
 {% if events.enabled is defined and events.enabled == true %}
     events:
