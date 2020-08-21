@@ -2007,7 +2007,6 @@ role:
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
-        "role-template-grayscale-release","role-template-image-builder",
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-credentials","role-template-manage-credentials",
         "role-template-manage-project-settings","role-template-manage-devops-settings"]'
@@ -2043,7 +2042,6 @@ role:
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
-        "role-template-grayscale-release","role-template-image-builder",
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-credentials","role-template-manage-credentials"]'
       kubesphere.io/creator: system
