@@ -54,7 +54,7 @@
 
     - name: Kubesphere | Remove old snapshot crd
       command: >
-        {{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml
+        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml --force
       ignore_errors: True
 
     - name: Kubesphere | Deploy snapshot controller
