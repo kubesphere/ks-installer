@@ -86,12 +86,18 @@
     when:
       - "es_result.stderr and 'no matches for kind' in es_result.stderr"
 
-  - fail:
-      msg: "{{ es_result.stderr }}"
-    when:
-      - es_result.stderr is defined
-      - es_result.stderr != ""
-      - es_result.stderr.find("no matches for kind") == -1
+  # Update clusterconfig (cc) status
+  - name: Kubesphere | import es status
+    shell: >
+      {{ bin_dir }}/kubectl patch cc ks-installer
+      --type merge
+      -p '{"status": {"es": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+      -n kubesphere-system
+    register: import
+    failed_when: "import.stderr and 'Warning' not in import.stderr"
+    until: import is succeeded
+    retries: 5
+    delay: 3
 
   when:
     - common.es.externalElasticsearchUrl is not defined
@@ -117,17 +123,3 @@
       --namespace kubesphere-logging-system
     # when:
     #   - (curator_check.stdout.find("DEPLOYED") == -1) or (curator_check.stdout.find("5.5.4-0217") == -1)
-
-
-# Update clusterconfig (cc) status
-- name: Kubesphere | import es status
-  shell: >
-    {{ bin_dir }}/kubectl patch cc ks-installer
-    --type merge
-    -p '{"status": {"es": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr"
-  until: import is succeeded
-  retries: 5
-  delay: 3
