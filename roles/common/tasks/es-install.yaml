@@ -96,7 +96,7 @@
   when:
     - common.es.externalElasticsearchUrl is not defined
     - common.es.externalElasticsearchPort is not defined
-    - es_host.stdout is defined and es_host.stdout == "http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200"
+    - (es_host.stdout is not defined) or (es_host.stdout is defined and es_host.stdout == "http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200")
 
 
 # Deploy elasticsearch curator
