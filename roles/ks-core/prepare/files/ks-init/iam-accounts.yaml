@@ -89,6 +89,13 @@ rules:
       - s2ibinaries/file
     verbs:
       - get
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - webhook
+    verbs:
+      - get
+      - create
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
