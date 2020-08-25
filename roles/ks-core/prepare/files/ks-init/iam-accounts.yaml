@@ -199,6 +199,7 @@ rules:
       - scms/verify
       - scms/servers
       - scms/organizations
+      - webhook
     verbs:
       - create
       - list
@@ -344,6 +345,7 @@ rules:
       - filters
       - pods
       - pods/log
+      - pods/containers
       - namespacenetworkpolicies
       - workspacenetworkpolicies
       - networkpolicies
@@ -604,6 +606,7 @@ rules:
       - filters
       - pods
       - pods/log
+      - pods/containers
       - namespacenetworkpolicies
       - workspacenetworkpolicies
       - networkpolicies
@@ -725,6 +728,7 @@ rules:
       - filters
       - pods
       - pods/log
+      - pods/containers
       - namespacenetworkpolicies
       - workspacenetworkpolicies
       - networkpolicies
@@ -1022,6 +1026,7 @@ rules:
       - router
       - pods
       - pods/log
+      - pods/containers
       - namespacenetworkpolicies
       - networkpolicies
       - podsecuritypolicies
@@ -1169,6 +1174,7 @@ rules:
       - router
       - pods
       - pods/log
+      - pods/containers
       - namespacenetworkpolicies
       - networkpolicies
       - podsecuritypolicies
@@ -2529,6 +2535,7 @@ role:
         - cronjobs
         - pods
         - pods/log
+        - pods/containers
         - services
         - ingresses
         - router
@@ -2579,6 +2586,7 @@ role:
         - cronjobs
         - pods
         - pods/log
+        - pods/containers
         - services
         - ingresses
         - router
