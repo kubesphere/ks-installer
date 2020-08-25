@@ -80,3 +80,8 @@
       type: kubernetes.io/dockerconfigjson
     EOF
   loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
+
+- name: Kubesphere | Label namespace for network policy
+  shell: >
+    for ns in `kubectl get ns -o jsonpath="{.items[*].metadata.name}"`; do kubectl label  ns $ns kubesphere.io/namespace=$ns --overwrite; done
+  ignore_errors: True
