@@ -6,7 +6,7 @@ data:
       authenticateRateLimiterDuration: {{ authentication.authenticationRateLimiterDuration | default("10m0s") }}
       loginHistoryRetentionPeriod: {{ authentication.loginHistoryRetentionPeriod | default("168h") }}
       maximumClockSkew: {{ authentication.maximumClockSkew | default("10s") }}
-      multipleLogin: {{ console.enable_multi_login | default(true) | string | lower }}
+      multipleLogin: {{ console.enableMultiLogin | default(true) }}
       kubectlImage: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
       jwtSecret: "{{ ks_secret_str.stdout }}"
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
