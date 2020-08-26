@@ -1,5 +1,0 @@
-apiVersion: v1
-appVersion: "2.1.1"
-description: A Helm chart for Kubernetes
-name: jenkins-update-center
-version: 0.8.0

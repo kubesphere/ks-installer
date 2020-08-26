@@ -1,6 +1,0 @@
-tencentcloud_cbs_csi_enabled: false
-tencentcloud_cbs_csi_is_default_class: false
-
-tecentcloud_cbs_api_secret_id: SHOULD_BE_REPLACED
-tecentcloud_cbs_api_secret_key: SHOULD_BE_REPLACED
-tencentcloud_disk_type: CLOUD_PREMIUM

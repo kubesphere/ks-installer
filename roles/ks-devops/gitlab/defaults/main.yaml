@@ -1,8 +1,0 @@
----
-
-gitlab:
-  enabled: False
-  domain: devops.kubesphere.local
-  externalIP: "{{ kubeApiserver.split(':')[0] }}"
-
-#GitlaExternalIP: "{{ hostvars[groups['kube-master'][0]]['access_ip'] | default(hostvars[groups['kube-master'][0]]['ip'] | default(hostvars[groups['kube-master'][0]]['ansible_default_ipv4']['address'])) }}"
