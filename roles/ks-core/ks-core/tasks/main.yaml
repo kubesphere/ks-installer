@@ -64,7 +64,6 @@
     - { path: ks-console, file: ks-console-config.yml, type: config }
     - { path: ks-console, file: ks-console-deployment.yml, type: deploy }
     - { path: ks-console, file: ks-console-svc.yml, type: svc }
-    - { path: ks-console, file: ks-docs-deployment.yaml, type: deploy }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml, type: config }
 
 - name: KubeSphere | Delete Ingress-controller configmap

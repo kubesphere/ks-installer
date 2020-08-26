@@ -168,6 +168,8 @@ generate_kubeconfig_repo: "{{ base_repo }}openpitrix/generate-kubeconfig"
 generate_kubeconfig_tag: "{{ op_version }}"
 minio_repo: "{{ base_repo }}minio/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
+mc_repo: "{{ base_repo }}minio/mc"
+mc_tag: RELEASE.2019-08-07T23-14-43Z
 
 #ks-hostnic
 snapshot_controller_repo: "{{ base_repo }}csiplugin/snapshot-controller"
