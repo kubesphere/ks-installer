@@ -132,7 +132,7 @@ alerting_dbinit_repo: "{{ base_repo }}kubesphere/alerting-dbinit"
 alerting_dbinit_tag: "v3.0.0"
 ks_alerting_repo: "{{ base_repo }}kubesphere/alerting"
 ks_alerting_tag: "v2.1.2"
-ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert-dapter"
+ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert-adapter"
 ks_alerting_adapter_tag: "v3.0.0"
 
 # kubefed, kubesphere multiple cluster component
