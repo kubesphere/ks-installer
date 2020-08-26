@@ -1,5 +1,0 @@
----
-
-harbor:
-  enabled: False
-  domain: harbor.devops.kubesphere.local

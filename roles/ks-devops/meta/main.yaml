@@ -3,25 +3,8 @@
 dependencies:
   - role: ks-devops/jenkins-update-center
 
-
-  - role: ks-devops/sonarqube
-    when:
-      - devops.sonarqube is defined
-      - devops.sonarqube.enabled is defined
-      - devops.sonarqube.enabled == True
-
-
-  # - role: ks-devops/ks-devops
-
-
   - role: ks-devops/s2i
-
 
   - role: ks-devops/jenkins
 
-
-  - role: ks-core
-    when: 
-      - sonar_health is defined
-      - sonar_health == true
 

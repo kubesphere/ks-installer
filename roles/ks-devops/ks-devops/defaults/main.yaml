@@ -1,4 +1,0 @@
----
-
-dbHost: mysql.kubesphere-system.svc
-dbPort: 3306
