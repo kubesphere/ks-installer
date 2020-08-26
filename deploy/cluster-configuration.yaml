@@ -30,7 +30,7 @@ spec:
       logMaxAge: 7                     # Log retention time in built-in Elasticsearch, it is 7 days by default.
       elkPrefix: logstash              # The string making up index names. The index name will be formatted as ks-<elk_prefix>-log.
   console:
-    enableMultiLogin: false  # enable/disable multiple sing on, it allows an account can be used by different users at the same time.
+    enableMultiLogin: true  # enable/disable multiple sing on, it allows an account can be used by different users at the same time.
     port: 30880
   alerting:                # (CPU: 0.3 Core, Memory: 300 MiB) Whether to install KubeSphere alerting system. It enables Users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false
