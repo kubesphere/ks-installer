@@ -196,6 +196,7 @@ rules:
       - resources.kubesphere.io
     resources:
       - namespaces
+      - services
     verbs:
       - list
   - apiGroups:
