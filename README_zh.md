@@ -97,3 +97,20 @@ kubectl edit cc ks-installer -n kubesphere-system
 ```bash
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
+## 升级
+
+1. 下载v3.0.0部署文件:
+
+```bash
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
+```
+
+2. 同步v2.1.1配置到`cluster-configuration.yaml`中, 持久化存储及可插拔组件相关配置要与v2.1.1中配置保持一致:
+
+```bash
+kubectl apply -f kubesphere-installer.yaml
+kubectl apply -f cluster-configuration.yaml
+```
+
+> 注意: 如果当前集群中部署的KubeSphere版本是v2.1.0或更早的版本，请先升级到v2.1.1.
