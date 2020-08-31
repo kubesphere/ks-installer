@@ -102,8 +102,8 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 1. 下载v3.0.0部署文件:
 
 ```bash
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/kubesphere-installer.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/cluster-configuration.yaml
 ```
 
 2. 同步v2.1.1配置到`cluster-configuration.yaml`中, 持久化存储及可插拔组件相关配置要与v2.1.1中配置保持一致:

@@ -106,8 +106,8 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 1. Download the Yaml file as follows:
 
 ```bash
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/kubesphere-installer.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/cluster-configuration.yaml
 ```
 
 2. Sync the changes from the v2.1.1 to v3.0.0 in the config section of `cluster-configuration.yaml`, note the storage class and the pluggable components need to be consistent with the v2.1.1:
