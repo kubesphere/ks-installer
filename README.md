@@ -47,8 +47,8 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 ### Minimal Installation
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/kubesphere-installer.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/cluster-configuration.yaml
 ```
 
 Then inspect the logs of installation.
@@ -100,3 +100,21 @@ kubectl edit cc ks-installer -n kubesphere-system
 ```bash
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
+
+## Upgrade
+
+1. Download the Yaml file as follows:
+
+```bash
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/kubesphere-installer.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/cluster-configuration.yaml
+```
+
+2. Sync the changes from the v2.1.1 to v3.0.0 in the config section of `cluster-configuration.yaml`, note the storage class and the pluggable components need to be consistent with the v2.1.1:
+
+```bash
+kubectl apply -f kubesphere-installer.yaml
+kubectl apply -f cluster-configuration.yaml
+```
+
+> Note: If your KubeSphere version is v2.1.0 or eariler, please upgrade to v2.1.1 first.
