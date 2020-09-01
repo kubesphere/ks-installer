@@ -45,8 +45,8 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 ### 最小化快速部署
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/kubesphere-installer.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/cluster-configuration.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
 
  # 查看部署进度及日志
  $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
@@ -97,14 +97,13 @@ kubectl edit cc ks-installer -n kubesphere-system
 ```bash
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
-
 ## 升级
 
 1. 下载v3.0.0部署文件:
 
 ```bash
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/kubesphere-installer.yaml
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/release-3.0/deploy/cluster-configuration.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
 ```
 
 2. 同步v2.1.1配置到`cluster-configuration.yaml`中, 持久化存储及可插拔组件相关配置要与v2.1.1中配置保持一致:

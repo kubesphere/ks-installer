@@ -269,6 +269,7 @@ def resultInfo(resultState=False):
     )
 
     if ks_config.rc != 0:
+        print("Failed to ansible-playbook ks-config.yaml")
         exit()
 
     result = ansible_runner.run(
@@ -280,6 +281,7 @@ def resultInfo(resultState=False):
     )
 
     if result.rc != 0:
+        print("Failed to ansible-playbook result-info.yaml")
         exit()
     
     config.load_incluster_config()
