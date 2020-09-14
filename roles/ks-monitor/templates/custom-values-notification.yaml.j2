@@ -18,7 +18,7 @@ operator:
       image:
         repo: {{ notification_manager_operator_repo }}
         tag: {{ notification_manager_operator_tag }}
-        pullPolicy: Always 
+        pullPolicy: IfNotPresent 
       resources:
         limits:
           cpu: 50m

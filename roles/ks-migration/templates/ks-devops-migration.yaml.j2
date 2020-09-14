@@ -37,7 +37,7 @@ spec:
         - command:
           - ks-upgrade
           image: {{ ks_devops_migration_repo }}:{{ ks_devops_migration_tag }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: ks-devops-upgrade
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
