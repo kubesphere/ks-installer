@@ -18,5 +18,5 @@ spec:
             - --logtostderr
             - --v=4
           image: {{ ks_update_repo }}:{{ ks_update_tag }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: ks-upgrade
