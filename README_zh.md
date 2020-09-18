@@ -17,7 +17,7 @@ Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCom
 注意输出结果中的 `Server Version` 这行，如果显示 `GitVersion` 大于 `v1.15.0`，Kubernetes 的版本是可以安装的。如果低于 `v1.15.0`，可以先对 K8s 版本进行升级。
 
 
-2. 集群现有的可用内存至少在 `10G` 以上。 如果是执行的 `allinone` 安装，那么执行 `free -g` 可以看下可用资源
+2. 集群现有的可用内存至少在 `2G` 以上。 如果是执行的 `allinone` 安装，那么执行 `free -g` 可以看下可用资源
 
 ```bash
 $ free -g
