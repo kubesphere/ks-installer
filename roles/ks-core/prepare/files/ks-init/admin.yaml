@@ -5,5 +5,4 @@ metadata:
   name: admin
 spec:
   email: admin@kubesphere.io
-  lang: zh
   password: P@88w0rd
