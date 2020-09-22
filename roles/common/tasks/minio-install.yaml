@@ -50,31 +50,6 @@
   when:
     - (minio_check.stdout.find("deployed") == -1) or (minio_check.stdout.find("RELEASE.2019-08-07T01-59-21Z") == -1)
 
-- name: Kubesphere | create minio config directory
-  file:
-    state: directory
-    path: "/root/.config/rclone/"
-  when:
-    - openpitrix_component_pod.stdout.find("openpitrix-minio-deployment") != -1
-
-
-- name: Kubesphere | Creating common component manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "/root/.config/rclone/{{ item.file }}"
-  with_items:
-    - { path: /root/.config/rclone, file: rclone.conf }
-  when:
-    - openpitrix_component_pod.stdout.find("openpitrix-minio-deployment") != -1
-
-
-- include_tasks: minio-migration.yaml
-  loop:
-    - helm
-    - vmbased
-  when:
-    - openpitrix_component_pod.stdout.find("openpitrix-minio-deployment") != -1
-
 
 - name: Kubesphere | import minio status
   shell: >
