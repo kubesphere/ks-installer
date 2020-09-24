@@ -2,14 +2,14 @@
 - name: ks-monitor | Checking old installation files
   stat:
     path: "{{ kubesphere_dir }}/prometheus/prometheus-prometheus.yaml"
-  ignore_errors: True
+  failed_when: false
   register: prometheus_old_check
 
 - name: ks-monitor | deleting old prometheus-operator files
   file:
     path: "{{ kubesphere_dir }}/prometheus/00namespace-namespace.yaml"
     state: absent
-  ignore_errors: True
+  failed_when: false
   when: prometheus_old_check.stat.exists
 
 - name: ks-monitor | deleting old prometheus-operator
@@ -22,7 +22,7 @@
   file:
     path: "{{ kubesphere_dir }}/{{ item }}"
     state: absent
-  ignore_errors: True
+  failed_when: false
   loop:
     - "prometheus"
   when: prometheus_old_check.stat.exists

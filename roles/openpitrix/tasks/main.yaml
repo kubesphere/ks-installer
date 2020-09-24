@@ -16,7 +16,7 @@
     - "openpitrix-repo-manager-deployment"
     - "openpitrix-runtime-manager-deployment"
     - "openpitrix-task-manager-deployment"
-  ignore_errors: True
+  failed_when: false
 
 - name: OpenPitrix | Getting OpenPitrix installation files
   copy:
@@ -36,7 +36,7 @@
   shell: >
     {{ bin_dir }}/helm list ks-openpitrix -n openpitrix-system
   register: op_check
-  ignore_errors: True
+  failed_when: false
 
 
 - name: OpenPitrix | Deploy OpenPitrix
@@ -57,12 +57,12 @@
   command: >
     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o jsonpath='{.status.core.migration}'
   register: migration_status
-  ignore_errors: True
+  failed_when: false
 
 - name: OpenPitrix | Remove old release-app-job
   command: >
     {{ bin_dir }}/kubectl delete job -n openpitrix-system hyperpitrix-release-app-job
-  ignore_errors: True
+  failed_when: false
   when:
     - migration_status.stdout is defined
     - migration_status.stdout == "true"
@@ -71,7 +71,7 @@
   command: >
     {{ bin_dir }}/kubectl get job -n openpitrix-system
   register: op_jobs
-  ignore_errors: True
+  failed_when: false
 
 - name: OpenPitrix | Creating release job
   command: >
@@ -85,7 +85,7 @@
   command: >
     {{ bin_dir }}/kubectl get job -n openpitrix-system
   register: op_jobs
-  ignore_errors: True
+  failed_when: false
 
 - name: OpenPitrix | Creating generate job
   command: >

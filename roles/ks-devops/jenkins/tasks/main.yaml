@@ -9,7 +9,7 @@
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins
   register: jenkins_status
-  ignore_errors: True
+  failed_when: false
 
 - import_tasks: get_old_config.yaml
   when:

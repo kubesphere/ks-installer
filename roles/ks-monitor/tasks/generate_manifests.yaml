@@ -4,7 +4,7 @@
 - name: ks-monitor | calc prometheus system cleanup schedule 
   shell: >
     {{ bin_dir }}/kubectl delete prometheuses -n kubesphere-monitoring-system k8s-system
-  ignore_errors: True
+  failed_when: false
 
 - name: ks-monitor | calc prometheus system pvc cleanup schedule 
   shell: |

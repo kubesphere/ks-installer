@@ -30,13 +30,13 @@
     - kube-system
     - kubesphere-system
     - kubesphere-devops-system
-  ignore_errors: True
+  failed_when: false
 
 - name: istio | Check istio
   shell: >
     {{ bin_dir }}/helm list -n istio-system | grep "istio" 
   register: istio_check
-  ignore_errors: True
+  failed_when: false
 
 - block:
     - name: KubeSphere | Init istio-system
@@ -78,7 +78,7 @@
         -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
         --namespace istio-system
       register: istio_result
-      ignore_errors: True
+      failed_when: false
 
     - name: istio | Delete ValidatingWebhookConfiguration istio-galley
       shell: >
@@ -104,7 +104,7 @@
         --namespace istio-system
         --force
       register: istio_result
-      ignore_errors: True
+      failed_when: false
       when:
         - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
 
@@ -158,7 +158,7 @@
       shell: >
         {{ bin_dir }}/helm list -n istio-system | grep "jaeger-operator"
       register: jaeger_check
-      ignore_errors: True
+      failed_when: false
 
     - name: istio | Delete jaeger-operator deployment
       shell: >

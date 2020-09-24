@@ -17,7 +17,7 @@
   shell: >
     {{ bin_dir }}/helm list -f ks-events -n kubesphere-logging-system
   register: events_check
-  ignore_errors: True
+  failed_when: false
 
 
 - name: ks-events | deploy ks-events

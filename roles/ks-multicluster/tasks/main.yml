@@ -19,14 +19,14 @@
   shell: >
     {{ bin_dir }}/helm list --namespace kube-federation-system | grep "kubefed"
   register: kubefed_check
-  ignore_errors: True
+  failed_when: false
 
 - block:
     - name: Tower | Install tower
       shell: >
         {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/kubefed/tower.yaml
       register: tower_result
-      ignore_errors: False
+      failed_when: false
 
     - name: Kubefed | Init kube-federation-system
       shell: >
