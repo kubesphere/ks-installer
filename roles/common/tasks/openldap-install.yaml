@@ -40,7 +40,7 @@
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-openldap"
   register: openldap_check
-  ignore_errors: True
+  failed_when: false
 
 
 - name: Kubesphere | Deploy openldap

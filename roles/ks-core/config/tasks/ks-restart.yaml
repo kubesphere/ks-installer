@@ -1,6 +1,6 @@
 - name: ks-upgrade | restart ks-apiserver
   shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-apiserver"
-  ignore_errors: True
+  failed_when: false
 
 
 # - name: ks-upgrade | restart ks-console
@@ -10,4 +10,4 @@
 
 - name: ks-upgrade | restart ks-controller-manager
   shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-controller-manager"
-  ignore_errors: True
+  failed_when: false

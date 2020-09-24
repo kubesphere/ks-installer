@@ -17,7 +17,7 @@
   shell: >
     {{ bin_dir }}/helm list -f notification-manager -n kubesphere-monitoring-system
   register: notification_check
-  ignore_errors: True
+  failed_when: false
 
 
 - name: notification-manager | deploy notification-manager

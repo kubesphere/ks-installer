@@ -13,14 +13,14 @@
   shell: >
     {{ bin_dir }}/kubectl get svc -n kubesphere-alerting-system
   register: notification_svc
-  ignore_errors: True
+  failed_when: false
 
 - name: ks-notification | Checking notification image version
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system notification-deployment 
     -o=jsonpath='{.spec.template.spec.containers[0].image}'
   register: notification_image
-  ignore_errors: True
+  failed_when: false
 
 - import_tasks: save-config.yaml
   when:

@@ -18,4 +18,4 @@
     - "logging-fluentbit-operator"
     - "uc"
     - "metrics-server"
-  ignore_errors: True
+  failed_when: false

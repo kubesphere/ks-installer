@@ -4,7 +4,7 @@
   shell: >
     {{ bin_dir }}/kubectl get ns | grep 'kube-node-lease' | wc -l
   register: kube_node_lease
-  ignore_errors: True
+  failed_when: false
 
 
 - name: KubeSphere | Get system namespaces
@@ -84,4 +84,4 @@
 - name: Kubesphere | Label namespace for network policy
   shell: >
     for ns in `kubectl get ns -o jsonpath="{.items[*].metadata.name}"`; do kubectl label  ns $ns kubesphere.io/namespace=$ns --overwrite; done
-  ignore_errors: True
+  failed_when: false

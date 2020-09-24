@@ -38,7 +38,7 @@
   shell: >
     {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "logging:" -A 2 | grep "host" | awk '{print $2}'
   register: es_host
-  ignore_errors: True
+  failed_when: false
 
 - block:
   - name: Kubesphere | Deploy elasticsearch-logging
@@ -48,7 +48,7 @@
       -f {{ kubesphere_dir }}/elasticsearch/custom-values-elasticsearch.yaml
       --namespace kubesphere-logging-system
     register: es_result
-    ignore_errors: True
+    failed_when: false
 
   - name: Kubesphere | Get PersistentVolume Name
     shell: >

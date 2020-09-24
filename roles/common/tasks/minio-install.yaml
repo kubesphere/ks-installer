@@ -18,7 +18,7 @@
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-minio"
   register: minio_check
-  ignore_errors: True
+  failed_when: false
 
 
 - block:
@@ -31,7 +31,7 @@
         --namespace kubesphere-system
         --wait --timeout 1800s
       register: minio_status
-      ignore_errors: True
+      failed_when: false
 
 
     - debug:

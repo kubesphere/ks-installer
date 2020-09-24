@@ -3,7 +3,7 @@
 - name: Metrics-Server | Checking old installation files
   stat:
     path: "{{ kubesphere_dir }}/metrics-server/auth-reader.yaml"
-  ignore_errors: True
+  failed_when: false
   register: metrics_server_old_check
 
 
@@ -18,7 +18,7 @@
   file:
     path: "{{ kubesphere_dir }}/{{ item }}"
     state: absent
-  ignore_errors: True
+  failed_when: false
   loop:
     - "metrics-server"
   when: metrics_server_old_check
@@ -42,14 +42,14 @@
   shell: >
     {{ bin_dir }}/helm list metrics-server -n kube-system
   register: metrics_server_check
-  ignore_errors: True
+  failed_when: false
 
 - block:
     - name: Metrics-Server | Installing metrics-server
       shell: >
         {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
       register: result
-      ignore_errors: True
+      failed_when: false
 
 
     - name: Metrics-Server | Installing metrics-server retry
