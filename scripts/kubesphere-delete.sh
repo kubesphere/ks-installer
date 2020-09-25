@@ -9,12 +9,12 @@
 kubectl delete deploy ks-installer -n kubesphere-system
 
 # helm delete
-helms="ks-minio|ks-openldap|ks-openpitrix|ks-redis|elasticsearch-logging|elasticsearch-logging-curator|istio|istio-init|jaeger-operator|ks-jenkins|ks-sonarqube|logging-fluentbit-operator|uc"
-helm list | grep -E -o $helms | sort -u | xargs -r -L1 helm delete --purge
+helms="ks-minio|ks-openldap|ks-openpitrix|elasticsearch-logging|elasticsearch-logging-curator|istio|istio-init|jaeger-operator|ks-events|ks-jenkins|kube-auditing|kubefed|logsidecar-injector|metrics-server|notification-manager|uc"
+helm list --all-namespaces | grep -E -o $helms | sort -u | xargs -r -L1 helm delete --purge
 
 # namespace resource delete
-namespaces="kubesphere-system|openpitrix-system|kubesphere-monitoring-system|kubesphere-alerting-system|kubesphere-controls-system|kubesphere-logging-system"
-kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -E -o $namespaces | sort -u | xargs -r -L1 kubectl delete all --all -n
+namespaces="kubesphere-system|openpitrix-system|kubesphere-monitoring-system|kubesphere-alerting-system|kubesphere-controls-system|kubesphere-logging-system|istio-system|kube-federation-system|kubesphere-alerting-system"
+#kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -E -o $namespaces | sort -u | xargs -r -L1 kubectl delete all --all -n
 
 # pvc delete
 pvcs="kubesphere-system|openpitrix-system|kubesphere-monitoring-system|kubesphere-devops-system|kubesphere-logging-system"
@@ -88,4 +88,4 @@ do
 done
 
 # delete namespaces
-kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -E -o $namespaces | sort -u | xargs -r -L1 kubectl delete ns
+#kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -E -o $namespaces | sort -u | xargs -r -L1 kubectl delete ns
