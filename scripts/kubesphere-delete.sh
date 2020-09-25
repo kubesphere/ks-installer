@@ -17,7 +17,7 @@ done
 # delete kubesphere deployment
 kubectl delete deployment -n kubesphere-system `kubectl get deployment -n kubesphere-system -o jsonpath="{.items[*].metadata.name}"`
 
-# delete 
+# delete monitor statefulset
 kubectl delete statefulset -n kubesphere-monitoring-system `kubectl get statefulset -n kubesphere-monitoring-system -o jsonpath="{.items[*].metadata.name}"`
 
 # delete pvc
@@ -97,3 +97,4 @@ for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devop
 do
   kubectl delete ns $ns
 done
+
