@@ -1,160 +1,41 @@
 ---
 
-- name: istio | Getting istio installation files
-  copy:
-    src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
-  loop:
-    - "istio"
-
-
-- name: istio | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
-  with_items:
-    - { path: istio, file: custom-values-istio-init.yaml }
-    - { path: istio, file: custom-values-istio.yaml }
-    - { path: istio, file: custom-values-jaeger.yaml }
-    - { path: istio, file: jaeger-production.yaml }
-
-
-# label istio-system with istio-injection=disabled to avoid sidecarInjector mutatingwebhookconfigurations block pod creation
-- name: istio | disable istio-injection
-  shell: >
-    {{ bin_dir }}/kubectl label ns {{ item }} istio-injection=disabled
-  register: import
-  failed_when: "import.stderr and 'already' not in import.stderr"
-  loop:
-    - istio-system
-    - kube-system
-    - kubesphere-system
-    - kubesphere-devops-system
-  failed_when: false
-
 - name: istio | Check istio
   shell: >
-    {{ bin_dir }}/helm list -n istio-system | grep "istio" 
+    {{ bin_dir }}/kubectl get pods -n istio-system | grep "istiod"
   register: istio_check
   failed_when: false
 
 - block:
-    - name: KubeSphere | Init istio-system
+    - name: istio | Getting istio installation files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ kubesphere_dir }}/"
+      loop:
+        - "istio"
+
+    # label istio-system with istio-injection=disabled to avoid sidecarInjector mutatingwebhookconfigurations block pod creation
+    - name: istio | disable istio-injection
       shell: >
-        {{ bin_dir }}/helm upgrade --install istio-init {{ kubesphere_dir }}/istio/istio-init
-        -f {{ kubesphere_dir }}/istio/custom-values-istio-init.yaml
-        --namespace istio-system
+        {{ bin_dir }}/kubectl label ns {{ item }} istio-injection=disabled --overwrite
+      loop:
+        - istio-system
+        - kube-system
+        - kubesphere-system
+        - kubesphere-devops-system
+      ignore_errors: True
 
-    - name: istio | Waiting for istio-init-crd-10
-      shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-10 | awk '{print $3}'"
-      register: result
-      until:
-        - result.stdout.find("Completed") != -1
-      retries: 90
-      delay: 10
-
-
-    - name: istio | Waiting for istio-init-crd-11
-      shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-11 | awk '{print $3}'"
-      register: result
-      until:
-        - result.stdout.find("Completed") != -1
-      retries: 50
-      delay: 10
-
-
-    - name: istio | Waiting for istio-init-crd-12
-      shell: "{{ bin_dir }}/kubectl -n istio-system get pod | grep istio-init-crd-12 | awk '{print $3}'"
-      register: result
-      until:
-        - result.stdout.find("Completed") != -1
-      retries: 50
-      delay: 10
-
+    - name: istio | Unarchive istio files
+      shell: >
+        tar -zxf {{ kubesphere_dir }}/istio/istio-1.6.10-linux-amd64.tar.gz -C {{ kubesphere_dir }}/istio/
 
     - name: istio | Deploy istio
       shell: >
-        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
-        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
-        --namespace istio-system
+        {{ kubesphere_dir }}/istio/istio-1.6.10/bin/istioctl install -f {{ kubesphere_dir }}/istio/istio-profile-1.6.10.yaml
       register: istio_result
-      failed_when: false
+      failed_when: "'errors occurred during operation' in istio_result.stderr"
 
-    - name: istio | Delete ValidatingWebhookConfiguration istio-galley
-      shell: >
-        {{ bin_dir }}/kubectl delete ValidatingWebhookConfiguration istio-galley
-      when:
-        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-    - name: istio | Delete istio
-      shell: >
-        {{ bin_dir }}/helm del --purge istio
-      when:
-        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-    - name: istio | Waiting for seconds
-      wait_for: timeout=45
-      when:
-        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-    - name: istio | Deploy istio
-      shell: >
-        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
-        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
-        --namespace istio-system
-        --force
-      register: istio_result
-      failed_when: false
-      when:
-        - "istio_result.stderr and 'no matches for kind' in istio_result.stderr"
-
-    - name: istio | Waiting for seconds
-      wait_for: timeout=30
-      when:
-        - istio_result.stderr is defined
-        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
-
-    - name: istio | Delete ValidatingWebhookConfiguration istio-galley
-      shell: >
-        {{ bin_dir }}/kubectl delete ValidatingWebhookConfiguration istio-galley
-      when:
-        - istio_result.stderr is defined
-        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
-
-    - name: istio | Delete istio
-      shell: >
-        {{ bin_dir }}/helm del --purge istio
-      when:
-        - istio_result.stderr is defined
-        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
-
-    - name: istio | Waiting for seconds
-      wait_for: timeout=45
-      when:
-        - istio_result.stderr is defined
-        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
-
-    - name: istio | Deploy istio
-      shell: >
-        {{ bin_dir }}/helm upgrade --install istio {{ kubesphere_dir }}/istio/istio
-        -f {{ kubesphere_dir }}/istio/custom-values-istio.yaml
-        --namespace istio-system
-        --force
-      register: istio_result
-      when:
-        - istio_result.stderr is defined
-        - "istio_result.stderr and 'admitpilot?timeout' in istio_result.stderr"
-
-    - fail:
-        msg: "{{ istio_result.stderr }}"
-      when:
-        - istio_result.stderr is defined
-        - istio_result.stderr != ""
-        - istio_result.stderr.find("no matches for kind") == -1
-        - istio_result.stderr.find("error copying from") == -1
-
-    
-    - name: istio | Check istio
+    - name: istio | Check jaeger-operator
       shell: >
         {{ bin_dir }}/helm list -n istio-system | grep "jaeger-operator"
       register: jaeger_check
@@ -165,6 +46,14 @@
         {{ bin_dir }}/kubectl delete deploy -n istio-system jaeger-operator
       when:
         - (jaeger_check.stdout.find("deployed") != -1) and (jaeger_check.stdout.find("1.17.1") == -1)
+
+    - name: istio | Creating jaeger manifests
+      template:
+        src: "{{ item.file }}.j2"
+        dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+      with_items:
+        - { path: istio, file: custom-values-jaeger.yaml }
+        - { path: istio, file: jaeger-production.yaml }
 
     - name: istio | Deploy jaeger-operator
       shell: >
@@ -192,7 +81,7 @@
       when:
         - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
   when:
-    - (istio_check.stdout.find("DEPLOYED") == -1) or (istio_check.stdout.find("1.4.8") == -1)
+    - (istio_check.stdout.find("Running") == -1)
 
 - name: servicemesh | import servicemesh status
   shell: >
@@ -205,5 +94,3 @@
   until: import is succeeded
   retries: 5
   delay: 3
-
-
