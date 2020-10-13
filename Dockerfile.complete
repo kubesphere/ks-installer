@@ -1,0 +1,60 @@
+FROM golang:1.14-alpine3.12
+
+ARG appVersion=latest
+
+RUN apk --no-cache add git ca-certificates && \
+    git clone --branch v1.0.0-beta.5 https://github.com/flant/shell-operator.git /go/src/github.com/flant/shell-operator
+
+RUN go get -d github.com/flant/shell-operator/...
+
+WORKDIR /go/src/github.com/flant/shell-operator
+
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w -X 'github.com/flant/shell-operator/pkg/app.Version=$appVersion'" -o shell-operator ./cmd/shell-operator
+
+
+FROM alpine:3.12
+
+RUN apk --no-cache add ca-certificates jq bash gcc  musl-dev libffi-dev openssl-dev linux-headers python3-dev py3-pip make openssl curl unzip git util-linux && \
+    pip3 install --no-cache-dir psutil ansible_runner ansible==2.8.12 redis kubernetes && \
+    wget https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz && \
+    tar -zxf helm-v3.2.1-linux-amd64.tar.gz && \
+    mv linux-amd64/helm /bin/helm && \
+    rm -rf *linux-amd64* && \
+    chmod +x /bin/helm && \
+    helm plugin install https://github.com/helm/helm-2to3.git && \
+    wget https://storage.googleapis.com/kubernetes-release/release/v1.16.9/bin/linux/amd64/kubectl -O /bin/kubectl && \
+    chmod +x /bin/kubectl && \
+    curl https://rclone.org/install.sh | bash && \
+    ln -s /bin/kubectl /usr/local/bin/kubectl && \
+    ln -s /bin/helm /usr/local/bin/helm && \
+    mkdir -p /hooks/kubesphere /kubesphere/installer/roles /kubesphere/results/env /kubesphere/playbooks /kubesphere/config &&\
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    adduser -D -g kubesphere -u 1002 kubesphere
+
+COPY --from=0 /go/src/github.com/flant/shell-operator/shell-operator /
+
+RUN chown -R kubesphere:kubesphere /shell-operator && \
+    chown -R kubesphere:kubesphere /hooks && \
+    chown -R kubesphere:kubesphere /kubesphere && \
+    chown -R kubesphere:kubesphere /usr/bin/2to3-3.8
+
+USER kubesphere
+
+ENV SHELL_OPERATOR_WORKING_DIR /hooks
+ENV ANSIBLE_ROLES_PATH /kubesphere/installer/roles
+
+WORKDIR /kubesphere
+
+ADD controller/* /hooks/kubesphere/
+RUN chmod +x -R /hooks/kubesphere
+
+ADD roles /kubesphere/installer/roles
+
+ADD env /kubesphere/results/env
+
+ADD playbooks /kubesphere/playbooks
+
+ENTRYPOINT ["/shell-operator"]
+
+CMD ["start"]
+
