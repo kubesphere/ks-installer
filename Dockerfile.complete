@@ -38,15 +38,15 @@ RUN chown -R kubesphere:kubesphere /shell-operator && \
     chown -R kubesphere:kubesphere /kubesphere && \
     chown -R kubesphere:kubesphere /usr/bin/2to3-3.8
 
+ADD controller/* /hooks/kubesphere/
+RUN chmod +x -R /hooks/kubesphere
+
 USER kubesphere
 
 ENV SHELL_OPERATOR_WORKING_DIR /hooks
 ENV ANSIBLE_ROLES_PATH /kubesphere/installer/roles
 
 WORKDIR /kubesphere
-
-ADD controller/* /hooks/kubesphere/
-RUN chmod +x -R /hooks/kubesphere
 
 ADD roles /kubesphere/installer/roles
 
