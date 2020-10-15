@@ -79,6 +79,7 @@ jaegertracing/jaeger-agent:1.17
 jaegertracing/jaeger-collector:1.17         
 jaegertracing/jaeger-operator:1.17.1        
 jaegertracing/jaeger-query:1.17
+jaegertracing/jaeger-es-index-cleaner:1.17.1
 jenkins/jenkins:2.176.2                     
 jenkins/jnlp-slave:3.27-1                   
 kubesphere/jenkins-uc:v3.0.0                
