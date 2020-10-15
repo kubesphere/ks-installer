@@ -378,6 +378,8 @@ jaeger_collector_repo: "{{ base_repo }}jaegertracing/jaeger-collector"
 jaeger_collector_tag: 1.17
 jaeger_query_repo: "{{ base_repo }}jaegertracing/jaeger-query"
 jaeger_query_tag: 1.17
+jaeger_es_cleaner_repo: "{{ base_repo }}jaegertracing/jaeger-es-index-cleaner"
+jaeger_es_cleaner_tag: 1.17
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
