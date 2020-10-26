@@ -782,6 +782,13 @@ spec:
     - expr: |
         sum(rate(prometheus_tsdb_head_samples_appended_total{job="prometheus-k8s",namespace="kubesphere-monitoring-system"} [5m])) by (job, pod)
       record: prometheus:prometheus_tsdb_head_samples_appended:sum_rate
+  - name: metering.rules
+    rules:
+      - expr: |
+          sum (label_replace(label_join(sum(kube_pod_container_resource_requests) by (namespace, node, pod, resource, unit) * on (pod, namespace)group_left(owner_kind,owner_name)label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment",
+          "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind, node, pod, resource, unit) * on(namespace) group_left(workspace) kube_namespace_labels{job="kube-state-metrics"}
+        record: metering:kube_pod_resource_requests
+
   - name: kube-state-metrics
     rules:
     - alert: KubeStateMetricsListErrors
