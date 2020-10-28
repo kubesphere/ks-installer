@@ -1,3 +1,4 @@
+library/docker:19.03
 kubesphere/kube-apiserver:v1.17.9          
 kubesphere/kube-scheduler:v1.17.9          
 kubesphere/kube-proxy:v1.17.9              
