@@ -60,9 +60,9 @@ kubesphere/metrics-server:v0.3.7
 kubesphere/kube-rbac-proxy:v0.4.1               
 kubesphere/kube-state-metrics:v1.9.6                 
 kubesphere/elasticsearch-oss:6.7.0-1       
-kubesphere/fluentbit-operator:v0.2.0       
+kubespheredev/fluentbit-operator:v0.3.0
 kubesphere/fluentbit-operator:migrator     
-kubesphere/fluent-bit:v1.4.6               
+kubespheredev/fluent-bit:v1.6.2
 kubesphere/kube-auditing-operator:v0.1.0   
 kubesphere/kube-auditing-webhook:v0.1.0    
 kubesphere/kube-events-exporter:v0.1.0     
