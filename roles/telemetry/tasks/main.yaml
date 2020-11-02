@@ -18,74 +18,74 @@
   shell: >
      {{ bin_dir }}/kubectl get nodes | awk 'NR==2{print $5}'
   register: k8s
-  failed_when: false
+  ignore_errors: true
 
 - name: get ks version
   shell: >
      {{ bin_dir }}/kubectl get svc -n kubesphere-system ks-console -o=jsonpath='{.spec.selector.version}'
   register: ks
-  failed_when: false
+  ignore_errors: true
 
 - name: get firstip os
   shell: >
      {{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $8}}'
   register: firstipos
-  failed_when: false
+  ignore_errors: true
 
 - name: get machineID
   shell: >
     {{ bin_dir }}/kubectl get nodes `{{ bin_dir }}/kubectl get nodes | awk 'NR==2{print$1}'` -o=jsonpath='{.status.nodeInfo.machineID}'
   register: mID
-  failed_when: false
+  ignore_errors: true
 
 - name: get module
   shell: >
     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o json | jq '.status' | jq 'keys' | grep -v "clusterId" | jq 'join("-")'
   register: mod
-  failed_when: false
+  ignore_errors: true
 
 - name: get kube-system time
   shell: >
      {{ bin_dir }}/kubectl get ns | grep kube-system | awk '{print $3}'
   register: kubetime
-  failed_when: false
+  ignore_errors: true
 
 - name: get kubesphere-system time
   shell: >
      {{ bin_dir }}/kubectl get ns | grep kubesphere-system | awk '{print $3}'
   register: kubespheretime
-  failed_when: false
+  ignore_errors: true
 
 - name: yes/no HA
   shell: >
      {{ bin_dir }}/kubectl get nodes | grep "master" | wc | awk '{print $1}'
   register: ha
-  failed_when: false
+  ignore_errors: true
 
 - name: get nodecount
   shell: >
      {{ bin_dir }}/kubectl get nodes | grep -v "NAME" | wc -l
   register: number
-  failed_when: false
+  ignore_errors: true
 
 - name: get clusterId by cm of kubesphere-config
   shell: >
      {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId"
   register: check
-  failed_when: false
+  ignore_errors: true
 
 - name: KubeSphere | Creating KubeSphere clusterId
   shell: >
     uuidgen -r -t
   register: cluster
   when: check.stdout.find('clusterId') == -1
-  failed_when: false
+  ignore_errors: true
 
 - name: clusterId patch to cm of kubesphere-config
   shell: >
      {{ bin_dir }}/kubectl patch cc ks-installer -n kubesphere-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
   when: check.stdout.find('clusterId') == -1
-  failed_when: false
+  ignore_errors: true
 
 - name: KubeSphere | KubeSphere clusterId
   set_fact:
@@ -94,10 +94,10 @@
 
 - name: get clusterId
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId" | awk '{print $2}'
+     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
   register: cluster
   when: check.stdout.find('clusterId') != -1
-  failed_when: false
+  ignore_errors: true
 
 - name: KubeSphere | KubeSphere clusterId
   set_fact:
@@ -108,17 +108,17 @@
   shell: >
     echo "{{ cluster_str }}"
   register: clusterId
-  failed_when: false
+  ignore_errors: true
 
 - name: get multicluster status
   shell: >
     cat /kubesphere/config/ks-config.json | grep clusterRole | awk '{print $2}'
   register: multi
-  failed_when: false 
+  ignore_errors: true 
 
 - name: get essential information
   uri:
     url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ clusterId[ 'stdout' ] }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
     method: GET
     validate_certs: false
-  failed_when: false
+  ignore_errors: true
