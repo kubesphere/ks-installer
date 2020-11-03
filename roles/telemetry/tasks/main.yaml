@@ -70,7 +70,7 @@
 
 - name: get clusterId by cm of kubesphere-config
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId"
+     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
   register: check
   ignore_errors: true
 
