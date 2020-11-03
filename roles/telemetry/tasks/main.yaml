@@ -16,19 +16,19 @@
 
 - name: get k8s version
   shell: >
-     {{ bin_dir }}/kubectl get nodes | awk 'NR==2{print $5}'
+    {{ bin_dir }}/kubectl get nodes | awk 'NR==2{print $5}'
   register: k8s
   ignore_errors: true
 
 - name: get ks version
   shell: >
-     {{ bin_dir }}/kubectl get svc -n kubesphere-system ks-console -o=jsonpath='{.spec.selector.version}'
+    {{ bin_dir }}/kubectl get svc -n kubesphere-system ks-console -o=jsonpath='{.spec.selector.version}'
   register: ks
   ignore_errors: true
 
 - name: get firstip os
   shell: >
-     {{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $8}}'
+    {{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $8}}'
   register: firstipos
   ignore_errors: true
 
@@ -46,31 +46,31 @@
 
 - name: get kube-system time
   shell: >
-     {{ bin_dir }}/kubectl get ns | grep kube-system | awk '{print $3}'
+    {{ bin_dir }}/kubectl get ns | grep kube-system | awk '{print $3}'
   register: kubetime
   ignore_errors: true
 
 - name: get kubesphere-system time
   shell: >
-     {{ bin_dir }}/kubectl get ns | grep kubesphere-system | awk '{print $3}'
+    {{ bin_dir }}/kubectl get ns | grep kubesphere-system | awk '{print $3}'
   register: kubespheretime
   ignore_errors: true
 
 - name: yes/no HA
   shell: >
-     {{ bin_dir }}/kubectl get nodes | grep "master" | wc | awk '{print $1}'
+    {{ bin_dir }}/kubectl get nodes | grep "master" | wc | awk '{print $1}'
   register: ha
   ignore_errors: true
 
 - name: get nodecount
   shell: >
-     {{ bin_dir }}/kubectl get nodes | grep -v "NAME" | wc -l
+    {{ bin_dir }}/kubectl get nodes | grep -v "NAME" | wc -l
   register: number
   ignore_errors: true
 
 - name: get clusterId by cm of kubesphere-config
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
+    {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId"
   register: check
   ignore_errors: true
 
@@ -83,7 +83,7 @@
 
 - name: clusterId patch to cm of kubesphere-config
   shell: >
-     {{ bin_dir }}/kubectl patch cc ks-installer -n kubesphere-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
+    {{ bin_dir }}/kubectl patch cc ks-installer -n kubesphere-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
   when: check.stdout.find('clusterId') == -1
   ignore_errors: true
 
@@ -94,7 +94,7 @@
 
 - name: get clusterId
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId" | awk '{print $2}'
+    {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
   register: cluster
   when: check.stdout.find('clusterId') != -1
   ignore_errors: true
