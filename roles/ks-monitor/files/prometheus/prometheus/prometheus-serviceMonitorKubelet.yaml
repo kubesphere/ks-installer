@@ -3,6 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: kubelet
+    app.kubernetes.io/vendor: kubesphere
   name: kubelet
   namespace: kubesphere-monitoring-system
 spec:

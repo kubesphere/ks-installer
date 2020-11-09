@@ -3,6 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: s2i-operator
+    app.kubernetes.io/vendor: kubesphere
   name: s2i-operator
   namespace: kubesphere-monitoring-system
 spec:

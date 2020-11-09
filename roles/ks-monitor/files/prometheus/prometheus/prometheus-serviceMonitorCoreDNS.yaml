@@ -3,6 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: coredns
+    app.kubernetes.io/vendor: kubesphere
   name: coredns
   namespace: kubesphere-monitoring-system
 spec:

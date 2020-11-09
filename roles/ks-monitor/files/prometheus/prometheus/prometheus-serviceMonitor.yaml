@@ -3,6 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: prometheus
+    app.kubernetes.io/vendor: kubesphere
   name: prometheus
   namespace: kubesphere-monitoring-system
 spec:

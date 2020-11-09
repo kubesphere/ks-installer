@@ -3,6 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: kube-scheduler
+    app.kubernetes.io/vendor: kubesphere
   name: kube-scheduler
   namespace: kubesphere-monitoring-system
 spec:
