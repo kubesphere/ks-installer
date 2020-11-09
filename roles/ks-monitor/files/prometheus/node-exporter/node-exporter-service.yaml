@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: node-exporter
-    app.kubernetes.io/version: ks-v0.18.1
+    app.kubernetes.io/version: v0.18.1
   name: node-exporter
   namespace: kubesphere-monitoring-system
 spec:
