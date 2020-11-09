@@ -322,13 +322,13 @@ kibana_oss_repo: "{{ elastic_image_repo }}/kibana/kibana-oss"
 kibana_oss_tag: 6.7.0
 testFramework_repo: "{{ base_repo }}dduportal/bats"
 testFramework_tag: 0.4.0
-fluentbit_operator_repo: "{{ base_repo }}kubesphere/fluentbit-operator"
-fluentbit_operator_tag: v0.2.0
+fluentbit_operator_repo: "{{ base_repo }}kubespheredev/fluentbit-operator"
+fluentbit_operator_tag: v0.3.0
 fluentbit_operator_migrator_tag: migrator
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
-ks_fluent_bit_repo: "{{ base_repo }}kubesphere/fluent-bit"
-ks_fluent_bit_tag: "v1.4.6"
+ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
+ks_fluent_bit_tag: "v1.6.2"
 ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.1
 filebeat_repo: "{{ base_repo }}elastic/filebeat"
@@ -360,14 +360,12 @@ metrics_server_tag: v0.3.7
 
 #istio
 istio_hub: "{{ base_repo }}istio"
-istio_tag: 1.4.8
-istio_kubectl_image: kubectl
+istio_tag: 1.6.10
+istio_proxy_image: proxyv2
 istio_proxy_init_image: proxyv2
-istio_proxyv2_image: proxyv2
-istio_security_image: citadel
 istio_pilot_image: pilot
-istio_mixer_image: mixer
-istio_galleyr_image: galley
+istio_telemetry_image: mixer
+istio_policy_image: mixer
 istio_sidecar_injector_image: sidecar_injector
 istio_node_agent_image: node-agent-k8s
 jaeger_operator_repo: "{{ base_repo }}jaegertracing/jaeger-operator"
@@ -378,6 +376,8 @@ jaeger_collector_repo: "{{ base_repo }}jaegertracing/jaeger-collector"
 jaeger_collector_tag: 1.17
 jaeger_query_repo: "{{ base_repo }}jaegertracing/jaeger-query"
 jaeger_query_tag: 1.17
+jaeger_es_cleaner_repo: "{{ base_repo }}jaegertracing/jaeger-es-index-cleaner"
+jaeger_es_cleaner_tag: 1.17
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"

@@ -15,6 +15,7 @@ spec:
       enabled: false
     esIndexCleaner:
       enabled: true
+      image: {{ jaeger_es_cleaner_repo }}:{{ jaeger_es_cleaner_tag }}
     options:
       es:
         index-prefix: {{ common.es.elkPrefix }}

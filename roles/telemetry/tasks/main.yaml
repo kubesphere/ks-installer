@@ -94,7 +94,7 @@
 
 - name: get clusterId
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId" | awk '{print $2}'
+     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
   register: cluster
   when: check.stdout.find('clusterId') != -1
   ignore_errors: true

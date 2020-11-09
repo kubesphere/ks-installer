@@ -23,7 +23,7 @@
       kubectl -n kubesphere-logging-system delete service logsidecar-injector ;
       kubectl -n kubesphere-logging-system delete secret logsidecar-injector-service-certs ;
       kubectl delete mutatingwebhookconfiguration logsidecar-injector
-    ignore_errors: True
+    failed_when: false
 
   - name: logsidecar-injector | Deploy logsidecar-injector
     shell: >
@@ -33,7 +33,7 @@
       -n kubesphere-logging-system
       --force
     register: deploy_result
-    ignore_errors: True
+    failed_when: false
 
   - name: logsidecar-injector | Delete logsidecar-injector configmap
     shell: >

@@ -3,7 +3,7 @@
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-monitoring-system prometheus-k8s-db-prometheus-k8s-0 -o jsonpath='{.status.capacity.storage}'
   register: prometheus_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Logging | Setting prometheus data pv size
   set_fact:
@@ -11,13 +11,13 @@
   when:
     - prometheus_pvc.rc == 0
     - prometheus_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Logging | Check prometheus retention days
   shell: >
     {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n kubesphere-monitoring-system k8s -o jsonpath='{.spec.retention}'
   register: prometheus_retention
-  ignore_errors: True
+  failed_when: false
 
 - name: Logging | Setting prometheus retention days
   set_fact:
@@ -25,14 +25,14 @@
   when:
     - prometheus_retention.rc == 0
     - prometheus_retention.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Logging | Check prometheus node selector
   shell: |
     {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n kubesphere-monitoring-system k8s -o go-template --template="{{ '{{' }}range \$key, \$value := .spec.nodeSelector{{ '}}' }}    {{ '{{' }}\$key{{ '}}' }}: {{ '{{' }}\$value{{ '}}' }}
     {{ '{{' }}end{{ '}}' }}"
   register: prometheus_node_selector
-  ignore_errors: True
+  failed_when: false
 
 - name: Logging | Setting prometheus node selector
   set_fact:
@@ -40,4 +40,4 @@
   when:
     - prometheus_node_selector.rc == 0
     - prometheus_node_selector.stdout != ""
-  ignore_errors: True
+  failed_when: false

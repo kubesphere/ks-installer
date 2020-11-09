@@ -17,7 +17,7 @@
   shell: >
     {{ bin_dir }}/helm list -f kube-auditing -n kubesphere-logging-system
   register: auditing_check
-  ignore_errors: True
+  failed_when: false
 
 
 - name: ks-auditing | deploy kube-auditing

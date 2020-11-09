@@ -49,7 +49,7 @@
     - devops.sonarqube.externalSonarUrl is not defined
     - devops.sonarqube.externalSonarToken is not defined
   register: sonarqube_health
-  ignore_errors: True
+  failed_when: false
 
 - name: ks-devops | Setting sonarqube heaalth status
   set_fact:

@@ -61,7 +61,7 @@ data:
 {% endif %}
 {% if servicemesh.enabled is defined and servicemesh.enabled == true %}
     servicemesh:
-      istioPilotHost: http://istio-pilot.istio-system.svc:8080/version
+      istioPilotHost: http://istiod.istio-system.svc:8080/version
       jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
       servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
 {% endif %}

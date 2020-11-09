@@ -8,17 +8,22 @@
 # delete ks-install
 kubectl delete deploy ks-installer -n kubesphere-system
 
-# helm delete
-helms="ks-minio|ks-openldap|ks-openpitrix|ks-redis|elasticsearch-logging|elasticsearch-logging-curator|istio|istio-init|jaeger-operator|ks-jenkins|ks-sonarqube|logging-fluentbit-operator|uc"
-helm list | grep -E -o $helms | sort -u | xargs -r -L1 helm delete --purge
+# delete helm
+for namespaces in kubesphere-system kubesphere-devops-system kubesphere-monitoring-system kubesphere-logging-system istio-system kube-federation-system kube-system openpitrix-system
+do
+  helm list -n $namespaces | grep -v NAME | awk '{print $1}' | sort -u | xargs -r -L1 helm uninstall -n $namespaces
+done
 
-# namespace resource delete
-namespaces="kubesphere-system|openpitrix-system|kubesphere-monitoring-system|kubesphere-alerting-system|kubesphere-controls-system|kubesphere-logging-system"
-kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -E -o $namespaces | sort -u | xargs -r -L1 kubectl delete all --all -n
+# delete kubesphere deployment
+kubectl delete deployment -n kubesphere-system `kubectl get deployment -n kubesphere-system -o jsonpath="{.items[*].metadata.name}"`
 
-# pvc delete
+# delete monitor statefulset
+kubectl delete statefulset -n kubesphere-monitoring-system `kubectl get statefulset -n kubesphere-monitoring-system -o jsonpath="{.items[*].metadata.name}"`
+
+# delete pvc
 pvcs="kubesphere-system|openpitrix-system|kubesphere-monitoring-system|kubesphere-devops-system|kubesphere-logging-system"
 kubectl --no-headers=true get pvc --all-namespaces -o custom-columns=:metadata.namespace,:metadata.name | grep -E $pvcs | xargs -n2 kubectl delete pvc -n
+
 
 # delete rolebindings
 delete_role_bindings() {
@@ -87,5 +92,9 @@ do
   if [[ $crd == *kubesphere.io ]]; then kubectl delete crd $crd; fi
 done
 
-# delete namespaces
-kubectl get ns --no-headers=true -o custom-columns=:metadata.name | grep -E -o $namespaces | sort -u | xargs -r -L1 kubectl delete ns
+# delete relevance ns
+for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devops-system kubesphere-logging-system kubesphere-monitoring-system openpitrix-system istio-system
+do
+  kubectl delete ns $ns
+done
+

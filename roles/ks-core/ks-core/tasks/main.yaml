@@ -3,26 +3,26 @@
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
-  ignore_errors: True
+  failed_when: false
 
 
 - name: KubeSphere | Setting kubernetes version
   set_fact:
     kube_version: "{{ kubernetes_version.stdout }}"
-  ignore_errors: True
+  failed_when: false
 
 
 - name: KubeSphere | Getting kubernetes master num
   shell: >
     {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master |wc -l
   register: masters
-  ignore_errors: True
+  failed_when: false
 
 
 - name: KubeSphere | Setting master num
   set_fact:
     master_num: "{{ masters.stdout }}"
-  ignore_errors: True
+  failed_when: false
 
 
 - name: ks-console | Checking ks-console svc
@@ -69,7 +69,7 @@
 - name: KubeSphere | Delete Ingress-controller configmap
   shell: >
     {{ bin_dir }}/kubectl delete cm -n kubesphere-system ks-router-config
-  ignore_errors: True
+  failed_when: false
 
 - name: KubeSphere | Creating Ingress-controller configmap
   command: >

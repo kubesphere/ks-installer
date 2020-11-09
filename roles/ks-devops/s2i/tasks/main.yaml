@@ -32,7 +32,7 @@
     {{ bin_dir }}/kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validating-webhook-configuration
   register: validatin_status
   failed_when: "validatin_status.stderr and 'NotFound' not in validatin_status.stderr"
-  ignore_errors: True
+  failed_when: false
 
 - name: S2I | Deploy S2I template&&operator
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/{{ item }}"
@@ -47,4 +47,4 @@
   until: import is succeeded
   retries: 3
   delay: 3
-  ignore_errors: True
+  failed_when: false

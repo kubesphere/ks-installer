@@ -192,7 +192,12 @@ rules:
   - '*'
   verbs:
   - '*'
-
+- apiGroups:
+  - security.istio.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -230,6 +235,13 @@ spec:
       - name: installer
         image: kubespheredev/ks-installer:latest
         imagePullPolicy: "Always"
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 20m
+            memory: 100Mi
         volumeMounts:
         - mountPath: /etc/localtime
           name: host-time

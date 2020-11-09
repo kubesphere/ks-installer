@@ -17,13 +17,13 @@
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-devops-system | grep "uc"
   register: uc_check
-  ignore_errors: True
+  failed_when: false
 
 - block:
     - name: jenkins-update-center | Start Jenkins plugins update center
       shell: "{{ bin_dir }}/helm upgrade --install uc {{ kubesphere_dir }}/jenkins-update-center --namespace kubesphere-devops-system"
       register: uc_result
-      ignore_errors: True
+      failed_when: false
 
 
     - name: jenkins-update-cente | Delete update-center
@@ -59,6 +59,6 @@
   until: result.stdout.find("Running") != -1
   retries: 30
   delay: 20
-  ignore_errors: True
+  failed_when: false
 
 

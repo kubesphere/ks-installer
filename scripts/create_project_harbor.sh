@@ -19,6 +19,7 @@ user="admin"
 passwd="Harbor12345"
 
 harbor_projects=(library
+    jimmidyson
     kubesphere
     csiplugin
     openpitrix

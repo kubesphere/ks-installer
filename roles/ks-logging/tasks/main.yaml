@@ -9,7 +9,7 @@
   shell: >
     {{ bin_dir }}/kubectl get outputs.logging.kubesphere.io -n kubesphere-logging-system es -o jsonpath='{.metadata.name}'
   register: migrating_completed
-  ignore_errors: True
+  failed_when: false
 
 
 - name: ks-logging | Creating manifests

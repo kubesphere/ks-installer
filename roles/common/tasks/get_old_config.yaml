@@ -4,7 +4,7 @@
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system mysql-pvc -o jsonpath='{.status.capacity.storage}'
   register: mysql_db_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting mysql db pv size
   set_fact:
@@ -12,13 +12,13 @@
   when:
     - mysql_db_pvc.rc == 0
     - mysql_db_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Check redis PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system redis-pvc -o jsonpath='{.status.capacity.storage}'
   register: redis_db_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting redis db pv size
   set_fact:
@@ -26,13 +26,13 @@
   when:
     - redis_db_pvc.rc == 0
     - redis_db_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Check minio PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system minio -o jsonpath='{.status.capacity.storage}'
   register: minio_storage_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting minio pv size
   set_fact:
@@ -40,13 +40,13 @@
   when:
     - minio_storage_pvc.rc == 0
     - minio_storage_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Check openldap PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system openldap-pvc-openldap-0 -o jsonpath='{.status.capacity.storage}'
   register: openldap_db_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting openldap pv size
   set_fact:
@@ -54,13 +54,13 @@
   when:
     - openldap_db_pvc.rc == 0
     - openldap_db_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Check etcd db PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system etcd-pvc -o jsonpath='{.status.capacity.storage}'
   register: etcd_db_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting etcd pv size
   set_fact:
@@ -68,13 +68,13 @@
   when:
     - etcd_db_pvc.rc == 0
     - etcd_db_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Check redis ha PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system data-redis-ha-server-0 -o jsonpath='{.status.capacity.storage}'
   register: redis_ha_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting redis ha pv size
   set_fact:
@@ -82,13 +82,13 @@
   when:
     - redis_ha_pvc.rc == 0
     - redis_ha_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Check es-master PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.status.capacity.storage}'
   register: es_master_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting es master pv size
   set_fact:
@@ -96,13 +96,13 @@
   when:
     - es_master_pvc.rc == 0
     - es_master_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Check es data PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.status.capacity.storage}'
   register: es_data_pvc
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Setting es data pv size
   set_fact:
@@ -110,4 +110,4 @@
   when:
     - es_data_pvc.rc == 0
     - es_data_pvc.stdout != ""
-  ignore_errors: True
+  failed_when: false

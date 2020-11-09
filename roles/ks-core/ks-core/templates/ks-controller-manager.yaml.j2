@@ -24,11 +24,6 @@ spec:
       app: ks-controller-manager
       tier: backend
       version: {{ ks_version }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:

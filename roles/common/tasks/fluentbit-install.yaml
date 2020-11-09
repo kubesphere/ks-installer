@@ -19,7 +19,7 @@
   shell: >
     {{ bin_dir }}/kubectl get crd fluentbits.logging.kubesphere.io -o jsonpath='{.spec.versions[0].name}'
   register: fluentbit_version
-  ignore_errors: True
+  failed_when: false
 
 
 - name: Kubesphere | Backup old fluentbit crd
@@ -28,7 +28,7 @@
   when:
     - fluentbit_version.rc == 0
     - fluentbit_version.stdout.find("v1alpha1") != -1
-  ignore_errors: True
+  failed_when: false
 
 - name: Kubesphere | Deleting old fluentbit operator
   shell: >
@@ -43,7 +43,7 @@
   when:
     - fluentbit_version.rc == 0
     - fluentbit_version.stdout.find("v1alpha1") != -1
-  ignore_errors: True
+  failed_when: false
 
 
 - name: Kubesphere | Prepare fluentbit operator setup
