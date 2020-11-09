@@ -35,6 +35,7 @@ spec:
     - name: alertmanager-main
       namespace: kubesphere-monitoring-system
       port: web
+  evaluationInterval: 1m
   image: {{ prometheus_repo }}:{{ prometheus_tag }}
   nodeSelector:
 {% if prometheus_node_selector_map is defined %}
