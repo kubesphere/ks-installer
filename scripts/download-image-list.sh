@@ -35,7 +35,7 @@ ks_images=(kubesphere/ks-console:v2.1.1
     kubesphere/prometheus-operator:v0.38.3
     kubesphere/kube-rbac-proxy:v0.4.1
     kubesphere/kube-state-metrics:v1.9.6
-    kubesphere/node-exporter:ks-v0.18.1
+    prom/node-exporter:v0.18.1
     kubesphere/k8s-prometheus-adapter-amd64:v0.6.0
     grafana/grafana:6.6.0
     redis:5.0.5-alpine
