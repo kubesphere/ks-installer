@@ -1,9 +1,0 @@
----
-
-devops:
-  sonarqube:
-    enabled: True
-
-
-sonarqube_user_name: sonarqube
-sonarqube_user_passwd: sonarqube
