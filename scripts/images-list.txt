@@ -65,7 +65,7 @@ kubesphere/prometheus-config-reloader:v0.38.3
 kubesphere/prometheus-operator:v0.38.3          
 prom/alertmanager:v0.21.0                       
 prom/prometheus:v2.20.1                         
-kubesphere/node-exporter:ks-v0.18.1             
+prom/node-exporter:v0.18.1
 jimmidyson/configmap-reload:v0.3.0              
 kubesphere/notification-manager-operator:v0.1.0 
 kubesphere/notification-manager:v0.1.0          

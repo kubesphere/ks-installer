@@ -506,6 +506,9 @@ spec:
   - name: node.rules
     rules:
     - expr: |
+        sum (node_cpu_seconds_total{job="node-exporter", mode=~"user|nice|system|iowait|irq|softirq|steal"}) by (cpu, instance, job, namespace, pod)
+      record: node_cpu_used_seconds_total
+    - expr: |
         max(kube_pod_info{job="kube-state-metrics"} * on(node) group_left(role) kube_node_role{job="kube-state-metrics", role="master"} or on(pod, namespace) kube_pod_info{job="kube-state-metrics"}) by (node, namespace, host_ip, role, pod)
       record: 'node_namespace_pod:kube_pod_info:'
     - expr: |
@@ -516,11 +519,11 @@ spec:
         ))
       record: node:node_num_cpu:sum
     - expr: |
-        avg(irate(node_cpu_seconds_total{job="node-exporter",mode="used"}[5m]))
+        avg(irate(node_cpu_used_seconds_total{job="node-exporter"}[5m]))
       record: :node_cpu_utilisation:avg1m
     - expr: |
         avg by (node, host_ip, role) (
-          irate(node_cpu_seconds_total{job="node-exporter",mode="used"}[5m])
+          irate(node_cpu_used_seconds_total{job="node-exporter"}[5m])
         * on (namespace, pod) group_left(node, host_ip, role)
           node_namespace_pod:kube_pod_info:)
       record: node:node_cpu_utilisation:avg1m
@@ -699,13 +702,13 @@ spec:
         sum (label_replace(label_join(sum(irate(container_network_transmit_bytes_total{pod_name!="", interface!~"^(cali.+|tunl.+|dummy.+|kube.+|flannel.+|cni.+|docker.+|veth.+|lo.*)", job="kubelet"}[5m])) by (namespace, pod_name) * on (pod_name, namespace) group_left(owner_kind,owner_name) label_join(label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "pod_name", "", "pod", "_name"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind)
       record: namespace:workload_net_bytes_transmitted:sum_irate
     - expr: |
-        sum (label_replace(label_join(sum(container_network_transmit_bytes_total{pod!="", interface!~"^(cali.+|tunl.+|dummy.+|kube.+|flannel.+|cni.+|docker.+|veth.+|lo.*)", job="kubelet"}) by (namespace, pod) * on (pod, namespace) group_left(owner_kind,owner_name) label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind)
+        sum (label_replace(label_join(sum(container_network_transmit_bytes_total{pod_name!="", interface!~"^(cali.+|tunl.+|dummy.+|kube.+|flannel.+|cni.+|docker.+|veth.+|lo.*)", job="kubelet"}[5m]) by (namespace, pod_name) * on (pod_name, namespace) group_left(owner_kind,owner_name) label_join(label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "pod_name", "", "pod", "_name"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind)
       record: namespace:workload_net_bytes_transmitted:sum
     - expr: |
         sum (label_replace(label_join(sum(irate(container_network_receive_bytes_total{pod_name!="", interface!~"^(cali.+|tunl.+|dummy.+|kube.+|flannel.+|cni.+|docker.+|veth.+|lo.*)", job="kubelet"}[5m])) by (namespace, pod_name) * on (pod_name, namespace) group_left(owner_kind,owner_name) label_join(label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "pod_name", "", "pod", "_name"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind)
       record: namespace:workload_net_bytes_received:sum_irate
     - expr: |
-        sum (label_replace(label_join(sum(container_network_receive_bytes_total{pod!="", interface!~"^(cali.+|tunl.+|dummy.+|kube.+|flannel.+|cni.+|docker.+|veth.+|lo.*)", job="kubelet"}) by (namespace, pod) * on (pod, namespace) group_left(owner_kind,owner_name) label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind)
+        sum (label_replace(label_join(sum(container_network_receive_bytes_total{pod_name!="", interface!~"^(cali.+|tunl.+|dummy.+|kube.+|flannel.+|cni.+|docker.+|veth.+|lo.*)", job="kubelet"}[5m]) by (namespace, pod_name) * on (pod_name, namespace) group_left(owner_kind,owner_name) label_join(label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "pod_name", "", "pod", "_name"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind)
       record: namespace:workload_net_bytes_received:sum
     - expr: |
         label_replace(label_replace(sum(kube_deployment_status_replicas_unavailable{job="kube-state-metrics"}) by (deployment, namespace) / sum(kube_deployment_spec_replicas{job="kube-state-metrics"}) by (deployment, namespace) * on (namespace) group_left(workspace)(kube_namespace_labels{job="kube-state-metrics"}), "workload","Deployment:$1", "deployment", "(.*)"), "owner_kind","Deployment", "", "")
@@ -782,13 +785,6 @@ spec:
     - expr: |
         sum(rate(prometheus_tsdb_head_samples_appended_total{job="prometheus-k8s",namespace="kubesphere-monitoring-system"} [5m])) by (job, pod)
       record: prometheus:prometheus_tsdb_head_samples_appended:sum_rate
-  - name: metering.rules
-    rules:
-      - expr: |
-          sum (label_replace(label_join(sum(kube_pod_container_resource_requests) by (namespace, node, pod, resource, unit) * on (pod, namespace)group_left(owner_kind,owner_name)label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment",
-          "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind, node, pod, resource, unit) * on(namespace) group_left(workspace) kube_namespace_labels{job="kube-state-metrics"}
-        record: metering:kube_pod_resource_requests
-
   - name: kube-state-metrics
     rules:
     - alert: KubeStateMetricsListErrors
