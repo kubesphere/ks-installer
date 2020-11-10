@@ -3,6 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     k8s-app: alertmanager
+    app.kubernetes.io/vendor: kubesphere
   name: alertmanager
   namespace: kubesphere-monitoring-system
 spec:

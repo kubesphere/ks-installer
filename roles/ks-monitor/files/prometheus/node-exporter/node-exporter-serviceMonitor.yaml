@@ -4,6 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/name: node-exporter
     app.kubernetes.io/version: v0.18.1
+    app.kubernetes.io/vendor: kubesphere
   name: node-exporter
   namespace: kubesphere-monitoring-system
 spec:

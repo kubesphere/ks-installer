@@ -5,6 +5,7 @@ metadata:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: prometheus-operator
     app.kubernetes.io/version: v0.38.3
+    app.kubernetes.io/vendor: kubesphere
   name: prometheus-operator
   namespace: kubesphere-monitoring-system
 spec:
