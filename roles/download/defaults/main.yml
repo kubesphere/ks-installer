@@ -144,12 +144,11 @@ tower_image: tower
 tower_image_tag: v0.1.0
 
 #openpitrix:
-op_version: "v0.5.0"
+op_version: "v0.5.1"
 openpitrix_repo: "{{ base_repo }}openpitrix/openpitrix"
 openpitrix_tag: "{{ op_version }}"
-openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix"
-# openpitrix_flyway_tag: "flyway"
-openpitrix_flyway_tag: "flyway-{{ op_version }}"
+openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix-flyway"
+openpitrix_flyway_tag: "{{ op_version }}"
 # openpitrix_runtime_provider_kubernetes_repo: "{{ base_repo }}openpitrix/runtime-provider-kubernetes"
 # openpitrix_runtime_provider_kubernetes_tag: "latest"
 # openpitrix_runtime_provider_kubernetes_tag: "v0.1.3"
