@@ -338,9 +338,12 @@ def generateConfig():
     cluster_config = resource['spec']
     
     api = client.CoreV1Api()
-    nodes = api.list_node().items
-    
-    cluster_config['nodeNum'] = len(nodes)
+    nodes = api.list_node(_preload_content=False)
+    nodesStr = nodes.read().decode('utf-8')
+    nodesObj = json.loads(nodesStr)
+                 
+    cluster_config['nodeNum'] = len(nodesObj["items"])
+
 
     try:
       with open(configFile, 'w', encoding='utf-8') as f:
