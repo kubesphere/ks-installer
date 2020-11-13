@@ -85,7 +85,6 @@ gcr_image_repo: >-
   {%- endif %}
 kube_image_repo: "{{ gcr_image_repo }}/google-containers"
 
-
 ks_image_tag: "{{ dev_tag | default('latest') }}"
 
 # Containers
@@ -239,9 +238,9 @@ harbor_core_repo: "{{ base_repo }}goharbor/harbor-core"
 harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
-jenkins_uc_repo:  "{{ base_repo }}kubesphere/jenkins-uc"
+jenkins_uc_repo: "{{ base_repo }}kubesphere/jenkins-uc"
 jenkins_uc_tag: v3.0.0
-jenkins_repo: "{{ base_repo }}jenkins/jenkins"
+jenkins_repo: "{{ base_repo }}kubesphere/jenkins-ks"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
 jnlp_slave_tag: 3.27-1
@@ -381,7 +380,7 @@ jaeger_es_cleaner_tag: 1.17
 #base:
 redis_repo: "{{ base_library_repo }}redis"
 redis_tag: 5.0.5-alpine
-haproxy_repo:  "{{ base_library_repo }}haproxy"
+haproxy_repo: "{{ base_library_repo }}haproxy"
 haproxy_tag: 2.0.4
 busybox_repo: "{{ base_library_repo }}alpine"
 busybox_tag: 3.10.4
@@ -394,7 +393,7 @@ xtrabackup_tag: 1.0
 nginx_repo: "{{ base_library_repo }}nginx"
 nginx_tag: 1.14-alpine
 postgres_repo: "{{ base_library_repo }}postgres"
-postgres_tag: 9.6.8   #Notice
+postgres_tag: 9.6.8 #Notice
 openldap_repo: "{{ base_repo }}osixia/openldap"
 openldap_tag: 1.3.0
 wget_repo: "{{ base_repo }}joosthofman/wget"
@@ -440,14 +439,11 @@ bookinfo_details_v1_tag: "{{ examples_bookinfo_version }}"
 bookinfo_ratings_v1_repo: "{{ base_repo }}kubesphere/examples-bookinfo-ratings-v1"
 bookinfo_ratings_v1_tag: "{{ examples_bookinfo_version }}"
 
-
 #wave-scope
 waveworks_scop_repo: "{{ base_repo }}weaveworks/scope"
 waveworks_scop_tag: "1.13.0"
 
-
 downloads:
-
   ks_installer:
     enabled: true
     container: true
@@ -475,14 +471,14 @@ downloads:
     groups:
       - k8s-cluster
 
-#  xtrabackup:
-#    enabled: true
-#    container: true
-#    repo: "{{ xtrabackup_repo }}"
-#    tag: "{{ xtrabackup_tag }}"
-#    sha256: "{{ xtrabackup_checksum|default(None) }}"
-#    groups:
-#      - k8s-cluster
+  #  xtrabackup:
+  #    enabled: true
+  #    container: true
+  #    repo: "{{ xtrabackup_repo }}"
+  #    tag: "{{ xtrabackup_tag }}"
+  #    sha256: "{{ xtrabackup_checksum|default(None) }}"
+  #    groups:
+  #      - k8s-cluster
 
   redis:
     enabled: true
@@ -969,8 +965,6 @@ downloads:
     sha256: "{{ harbor_core|default(None) }}"
     groups:
       - kube-node
-      
-
 
 download_defaults:
   container: false

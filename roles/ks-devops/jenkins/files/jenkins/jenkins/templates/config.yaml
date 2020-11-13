@@ -201,18 +201,6 @@ data:
     cp --no-clobber /var/jenkins_config/jenkins.CLI.xml /var/jenkins_home;
     cp --no-clobber /var/jenkins_config/jenkins.model.JenkinsLocationConfiguration.xml /var/jenkins_home;
 {{- end }}
-{{- if .Values.Master.InstallPlugins }}
-    # Install missing plugins
-    cp /var/jenkins_config/plugins.txt /var/jenkins_home;
-    rm -rf /usr/share/jenkins/ref/plugins/*.lock
-    /usr/local/bin/install-plugins.sh `echo $(cat /var/jenkins_home/plugins.txt)`;
-    if [ $? != 0 ]; then
-      echo "exit beacause install plugin failed"
-      exit 1
-    fi
-    # Copy plugins to shared volume
-    cp -n /usr/share/jenkins/ref/plugins/* /var/jenkins_plugins;
-{{- end }}
 {{- if .Values.Master.ScriptApproval }}
     cp -n /var/jenkins_config/scriptapproval.xml /var/jenkins_home/scriptApproval.xml;
 {{- end }}
@@ -232,16 +220,3 @@ data:
       cp -n /var/jenkins_jobs/$job /var/jenkins_home/jobs/$job/config.xml
     done
 {{- end }}
-{{- range $key, $val := .Values.Master.InitScripts }}
-  init{{ $key }}.groovy: |-
-{{ $val | indent 4 }}
-{{- end }}
-  plugins.txt: |-
-{{- if .Values.Master.InstallPlugins }}
-{{- range $index, $val := .Values.Master.InstallPlugins }}
-{{ $val | indent 4 }}
-{{- end }}
-{{- end }}
-{{ else }}
-{{ include "override_config_map" . }}
-{{- end -}}
