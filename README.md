@@ -58,7 +58,7 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 > Attention: Following section is only used for minimal installation by default. KubeSphere has decoupled some core components since v2.1.0, for more pluggable components installation, see [Enable Pluggable Components](#enable-pluggable-components) and [Configuration Table](#configuration-table).
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v2.1.1/kubesphere-minimal.yaml
 ```
 
 Then inspect the logs of installation.
@@ -117,7 +117,7 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 1. Download the Yaml file as follows:
 
 ```bash
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/v2.1.1/kubesphere-minimal.yaml
 ```
 
 2. Sync the changes from the old version to 2.1.1 in the config section of `kubesphere-minimal.yaml`, note the storage class and the pluggable components need to be consistent with the old version:
