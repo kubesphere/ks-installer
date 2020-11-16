@@ -55,6 +55,26 @@
     {{ bin_dir }}/kubectl get secret kubesphere-secret -o jsonpath='{.data.secret}' | base64 -d
   register: ks_secret_str
 
+- name: KubeSphere | check k8s version
+  shell: >
+    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
+  register: kubernetes_version
+
+- debug:
+    msg: Current Kubernetes version is {{kubernetes_version.stdout}}
+
+# Get the matched kubectl image
+- name: KubeSphere | Set Kubectl Image version
+  set_fact: 
+    ks_kubectl_tag: "{{item.value}}"
+    kubectl_break: true
+  loop:  "{{ query('dict', ks_kubectl_versions) }}"
+  when:
+    - kubectl_break is undefined and kubernetes_version is defined and kubernetes_version.stdout is version(item.key, '>=')
+
+- debug:
+    msg: Current kubectl image version is {{ks_kubectl_tag}}
+
 - name: KubeSphere | Creating manifests
   template:
     src: "{{ item.file }}.j2"
