@@ -220,3 +220,4 @@ data:
       cp -n /var/jenkins_jobs/$job /var/jenkins_home/jobs/$job/config.xml
     done
 {{- end }}
+{{- end }}
