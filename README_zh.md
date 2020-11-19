@@ -58,7 +58,7 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 ### 最小化快速部署
 
 ```bash
- $ kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+ $ kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/v2.1.1/kubesphere-minimal.yaml
 
  # 查看部署进度及日志
  $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
@@ -113,7 +113,7 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 1. 获取 2.1.1 的 Yaml 文件，若服务器提示无法访问 GitHub，可以将静态文件拷贝至服务器执行。
 
 ```bash
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/master/kubesphere-minimal.yaml
+wget https://raw.githubusercontent.com/kubesphere/ks-installer/v2.1.1/kubesphere-minimal.yaml
 ```
 
 2. 编辑 `kubesphere-minimal.yaml` 中 config 部分，与旧版本的存储类型配置与组件开启状态等配置需保持一致。确认配置同步后，使用 kubectl 执行如下命令进行升级。
