@@ -26,7 +26,7 @@ data:
       <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
       <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
       <clouds>
-        <org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud plugin="kubernetes@{{ template "jenkins.kubernetes-version" . }}">
+        <org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud plugin="kubernetes@1.19.2">
           <name>kubernetes</name>
           <templates>
 {{- if .Values.Agent.Enabled }}
@@ -219,4 +219,5 @@ data:
       mkdir -p /var/jenkins_home/jobs/$job
       cp -n /var/jenkins_jobs/$job /var/jenkins_home/jobs/$job/config.xml
     done
+{{- end }}
 {{- end }}
