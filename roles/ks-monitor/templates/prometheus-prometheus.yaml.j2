@@ -77,7 +77,8 @@ spec:
   serviceAccountName: prometheus-k8s
   serviceMonitorNamespaceSelector: {}
   serviceMonitorSelector:
-    app.kubernetes.io/vendor: kubesphere
+    matchLabels:
+      app.kubernetes.io/vendor: kubesphere
   storage:
     volumeClaimTemplate:
       spec:
