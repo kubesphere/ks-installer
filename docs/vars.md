@@ -16,6 +16,8 @@ common:
   etcdVolumeSize: 20Gi
   openldapVolumeSize: 2Gi
   redisVolumSize: 2Gi
+  monitoring:
+    endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
 console:
   enableMultiLogin: false  # enable/disable multi login
   port: 30880

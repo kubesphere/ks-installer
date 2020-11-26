@@ -22,6 +22,8 @@ spec:
     etcdVolumeSize: 20Gi  # etcd PVC size.
     openldapVolumeSize: 2Gi   # openldap PVC size.
     redisVolumSize: 2Gi # Redis PVC size.
+    monitoring:
+      endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data
     es:   # Storage backend for logging, events and auditing.
       # elasticsearchMasterReplicas: 1   # total number of master nodes, it's not allowed to use even number
       # elasticsearchDataReplicas: 1     # total number of data nodes.

@@ -85,7 +85,11 @@ data:
 {% endif %}
 {% endif %}
     monitoring:
+{% if common.monitoring is defined and common.monitoring.endpoint is defined %}
+      endpoint: {{ common.monitoring.endpoint }}
+{% else %}
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+{% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if esHost is defined %}
