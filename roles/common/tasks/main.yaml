@@ -69,6 +69,8 @@
         {{ kubesphere_dir }}/snapshot-controller
         -f {{ kubesphere_dir }}/custom-values-snapshot-controller.yaml
         --namespace kube-system
+      failed_when: false
+
   when:
     - kubernetes_version.stdout is version('v1.17.0', '>=')
 
