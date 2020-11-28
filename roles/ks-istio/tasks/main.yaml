@@ -1,17 +1,19 @@
 ---
-- name: istio | Getting istio installation files
+- name: servicemesh | Getting istio installation files
   copy:
     src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
+    dest: "{{ kubesphere_dir }}/servicemesh"
   loop:
     - "istio"
+    - "kiali"
+    - "jaeger"
 
-- name: istio | Unarchive istio files
+- name: servicemesh | Unarchive istio files
   shell: >
-    tar -zxf {{ kubesphere_dir }}/istio/istio-1.6.10-linux-amd64.tar.gz -C {{ kubesphere_dir }}/istio/
+    tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.6.10-linux-amd64.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
 
 # label istio-system with istio-injection=disabled to avoid sidecarInjector mutatingwebhookconfigurations block pod creation
-- name: istio | disable istio-injection
+- name: servicemesh | disable istio-injection
   shell: >
     {{ bin_dir }}/kubectl label ns {{ item }} istio-injection=disabled --overwrite
   loop:
@@ -21,22 +23,23 @@
     - kubesphere-devops-system
   ignore_errors: True
 
-- name: istio | Creating manifests
+- name: servicemesh | Creating manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+    dest: "{{ kubesphere_dir }}/servicemesh/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: istio, file: istio-profile.yaml }
-    - { path: istio, file: custom-values-jaeger.yaml }
-    - { path: istio, file: jaeger-production.yaml }
+    - { path: jaeger, file: custom-values-jaeger.yaml }
+    - { path: jaeger, file: jaeger-production.yaml }
+    - { path: kiali, file: custom-values-kiali.yaml }
 
-- name: istio | Check istiod
+- name: servicemesh | Check istiod
   shell: >
     {{ bin_dir }}/kubectl -n istio-system get pods -lapp=istiod
   register: istiod_check
   failed_when: false
 
-- name: istio | Check istio old version
+- name: servicemesh | Check istio old version
   shell: helm -n istio-system list | grep "istio-1.4.8"
   register: istio_old_version_check
   failed_when: false
@@ -46,9 +49,9 @@
     - istiod_check.stdout.find("istiod") == -1
     - istio_old_version_check.stdout.find('deployed') != -1
 
-- name: istio | Install istiod-1.6.10
+- name: servicemesh | Install istiod-1.6.10
   shell: >
-    {{ kubesphere_dir }}/istio/istio-1.6.10/bin/istioctl install -f {{ kubesphere_dir }}/istio/istio-profile.yaml --set revision=1-6-10
+    {{ kubesphere_dir }}/servicemesh/istio/istio-1.6.10/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/istio-profile.yaml --set revision=1-6-10
   register: istio_result
   failed_when: false
   retries: 3
@@ -56,7 +59,7 @@
   when: istiod_check.stdout.find("istiod") == -1
 
 # when install istiod-1.6.10 failed, disable injector
-- name: istio | Disable istiod-1.6.10 injector
+- name: servicemesh | Disable istiod-1.6.10 injector
   ignore_errors: true
   shell: >
     {{ bin_dir }}/kubectl delete mutatingwebhookconfigurations istio-sidecar-injector-1-6-10
@@ -64,7 +67,7 @@
     - (istiod_check.stdout.find("istiod") == -1) and ('errors occurred during operation' in istio_result.stderr)
 
 # when install istiod failed, delete deploy istiod
-- name: istio | Delete istiod deployment
+- name: servicemesh | Delete istiod deployment
   ignore_errors: true
   shell: >
     {{ bin_dir }}/kubectl -n istio-system delete deploy istiod-1-6-10
@@ -73,17 +76,19 @@
 
 - import_tasks: jaeger-install.yaml
 
-# New prometheus config is compatible for istio-1.4.8 and istio-1.6.10
-- name: istio | Delete prometheus config
+- import_tasks: kiali-install.yaml
+
+# new prometheus config is compatible for istio-1.4.8 and istio-1.6.10
+- name: servicemesh | Delete prometheus config
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-monitoring-system delete secret additional-scrape-configs
   ignore_errors: true
 
-- name: istio | Create prometheus config
+- name: servicemesh | Create prometheus config
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic additional-scrape-configs --from-file={{ kubesphere_dir }}/istio/prometheus-additional.yaml
+    {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic additional-scrape-configs --from-file={{ kubesphere_dir }}/servicemesh/istio/prometheus-additional.yaml
 
-- name: istio | Show istiod installation logs
+- name: servicemesh | Show istiod installation logs
   debug:
     var: istio_result
 

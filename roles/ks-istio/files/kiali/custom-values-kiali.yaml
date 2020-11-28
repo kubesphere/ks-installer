@@ -1,0 +1,63 @@
+nameOverride: "kiali"
+fullnameOverride: "kiali"
+
+istio_namespace: "istio-system" # default is where Kiali is installed
+
+auth:
+  strategy: "anonymous"
+
+deployment:
+  accessible_namespaces:
+  - "**"
+  additional_service_yaml: {}
+  affinity:
+    node: {}
+    pod: {}
+    pod_anti: {}
+  custom_dashboards:
+    excludes: ['']
+    includes: ['*']
+  image_name: quay.io/kiali/kiali
+  image_pull_policy: "Always"
+  image_pull_secrets: []
+  image_version: v1.26.1
+  ingress_enabled: true
+  logger:
+    log_format: "text"
+    log_level: "info"
+    time_field_format: "2006-01-02T15:04:05Z07:00"
+    sampler_rate: "1"
+  node_selector: {}
+  override_ingress_yaml:
+    metadata: {}
+  pod_annotations: {}
+  pod_labels: {}
+  priority_class_name: ""
+  replicas: 1
+  resources: {}
+  secret_name: "kiali"
+  service_annotations: {}
+  service_type: ""
+  tolerations: []
+  version_label: v1.26.1
+  view_only_mode: false
+
+external_services:
+  prometheus:
+    url: http://prometheus-k8s.kubesphere-monitoring-system:9090
+  tracing:
+    in_cluster_url: http://jaeger-query.istio-system.svc:16686
+  custom_dashboards:
+    enabled: true
+
+server:
+  port: 20001
+  metrics_enabled: true
+  metrics_port: 9090
+  web_root: ""
+
+api:
+  namespaces:
+    exclude:
+      - "kube-.*"
+      - "kubesphere-system"
