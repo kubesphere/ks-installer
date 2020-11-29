@@ -198,6 +198,18 @@ rules:
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - monitoring.kiali.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1

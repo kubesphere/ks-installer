@@ -1,0 +1,20 @@
+- name: servicemesh | Check kiali
+  shell: >
+    {{ bin_dir }}/helm list -n istio-system | grep "kiali-server"
+  register: kiali_check
+  failed_when: false
+
+- name: servicemesh | Delete kiali deployment
+  shell: >
+    {{ bin_dir }}/kubectl -n istio-system delete deployment kiali
+  when:
+    - (kiali_check.stdout.find("deployed") != -1) and (kiali_check.stdout.find("v1.26.1") == -1)
+  ignore_errors: True
+
+- name: servicemesh | Deploy kiali-server
+  shell: >
+    {{ bin_dir }}/helm upgrade --install kiali {{ kubesphere_dir }}/servicemesh/kiali/kiali-server-1.26.1.tgz
+    -f {{ kubesphere_dir }}/servicemesh/kiali/custom-values-kiali.yaml
+    --namespace istio-system
+  when:
+    - (kiali_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("v1.26.1") == -1)

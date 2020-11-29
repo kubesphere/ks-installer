@@ -1,16 +1,16 @@
-- name: upgrade-pre | Check galley validation
+- name: servicemesh | upgrade-pre | Check galley validation
   shell: >
     {{ bin_dir }}/kubectl get ValidatingWebhookConfiguration istio-galley
   register: galley_check
   failed_when: false
 
-- name: upgrade-pre | Disable galley validation
+- name: servicemesh | upgrade-pre | Disable galley validation
   shell: >
-    {{ bin_dir }}/kubectl -n istio-system patch deployment istio-galley --patch "$(cat {{ kubesphere_dir }}/istio/istio-galley-patch.yaml)" --type=merge
+    {{ bin_dir }}/kubectl -n istio-system patch deployment istio-galley --patch "$(cat {{ kubesphere_dir }}/servicemesh/istio/istio-galley-patch.yaml)" --type=merge
   when:
     - (galley_check.stdout.find("istio-galley") != -1) and (galley_check.stderr == "")
 
-- name: upgrade-pre | wait until galley webhook not exists
+- name: servicemesh | upgrade-pre | wait until galley webhook not exists
   shell: >
     {{ bin_dir }}/kubectl get ValidatingWebhookConfiguration istio-galley
   register: galley_check

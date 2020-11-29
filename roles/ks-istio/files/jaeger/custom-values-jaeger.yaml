@@ -5,15 +5,6 @@ image:
   repository: jaegertracing/jaeger-operator
   tag: 1.17.1
   pullPolicy: IfNotPresent
-  imagePullSecrets: []
-
-crd:
-  install: true
-
-jaeger:
-  # Specifies whether Jaeger instance should be created
-  create: false
-  spec: {}
 
 rbac:
   # Specifies whether RBAC resources should be created
@@ -28,13 +19,13 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
-resources: {}
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+resources:
+   limits:
+    cpu: 100m
+    memory: 128Mi
+   requests:
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector: {}
 
