@@ -381,7 +381,7 @@ jaeger_query_repo: "{{ base_repo }}jaegertracing/jaeger-query"
 jaeger_query_tag: 1.17
 jaeger_es_cleaner_repo: "{{ base_repo }}jaegertracing/jaeger-es-index-cleaner"
 jaeger_es_cleaner_tag: 1.17
-kiali_reop: "{{ quay_image_repo }}/kiali/kiali"
+kiali_reop: "{{ base_repo }}kubespheredev/kiali"
 kiali_tag: v1.26.1
 
 #base:
