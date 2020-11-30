@@ -263,10 +263,10 @@ sonarqube_repo: "{{ base_library_repo }}sonarqube"
 sonarqube_tag: 7.4-community
 
 #s2i
-s2ioperator_repo: "{{ base_repo }}kubesphere/s2ioperator"
-s2ioperator_tag: "v2.1.1"
-s2irun_repo: "{{ base_repo }}kubesphere/s2irun"
-s2irun_tag: "v2.1.1"
+s2ioperator_repo: "{{ base_repo }}kubespheredev/s2ioperator"
+s2ioperator_tag: "latest"
+s2irun_repo: "{{ base_repo }}kubespheredev/s2irun"
+s2irun_tag: "latest"
 
 s2itemplates_tag: v2.1.0
 binary_repo: "{{ base_repo }}kubesphere/s2i-binary"
