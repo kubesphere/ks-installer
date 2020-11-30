@@ -12,7 +12,11 @@
   shell: >
     tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.6.10-linux-amd64.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
 
-# label istio-system with istio-injection=disabled to avoid sidecarInjector mutatingwebhookconfigurations block pod creation
+- name: servicemesh | Grant privileges to ks-installer
+  shell: >
+    {{ bin_dir }}/kubectl get clusterrole ks-installer -o yaml > {{ kubesphere_dir }}/servicemesh/istio/clusterroles-all.yaml && \
+    cat {{ kubesphere_dir }}/servicemesh/istio/clusterroles.yaml >> {{ kubesphere_dir }}/servicemesh/istio/clusterroles-all.yaml && \
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/istio/clusterroles-all.yaml
 - name: servicemesh | disable istio-injection
   shell: >
     {{ bin_dir }}/kubectl label ns {{ item }} istio-injection=disabled --overwrite
