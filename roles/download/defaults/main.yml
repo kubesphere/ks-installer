@@ -245,7 +245,7 @@ harbor_core_repo: "{{ base_repo }}goharbor/harbor-core"
 harbor_core_tag: "{{ harbor_version }}"
 
 #jenkins:
-jenkins_repo: "{{ base_repo }}kubesphere/jenkins-ks"
+jenkins_repo: "{{ base_repo }}kubespheredev/ks-jenkins"
 jenkins_tag: 2.176.2
 jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
 jnlp_slave_tag: 3.27-1
