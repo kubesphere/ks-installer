@@ -262,7 +262,7 @@ subjects:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: webhook-server-secret
+  name: s2i-webhook-server-cert
   namespace: kubesphere-devops-system
 ---
 apiVersion: v1
@@ -302,6 +302,24 @@ spec:
     control-plane: s2i-controller-manager
     controller-tools.k8s.io: "1.0"
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: s2i-trigger-service
+    control-plane: s2i-controller-manager
+    controller-tools.k8s.io: "1.0"
+  name: s2ioperator-trigger-service
+  namespace: kubesphere-devops-system
+spec:
+  ports:
+  - name: http
+    port: 8081
+    targetPort: 8081
+  selector:
+    control-plane: s2i-controller-manager
+    controller-tools.k8s.io: "1.0"
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -333,7 +351,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: SECRET_NAME
-          value: webhook-server-secret
+          value: s2i-webhook-server-cert
         - name: S2IIMAGENAME
           value: "{{ s2irun_repo }}:{{ s2irun_tag }}"
         image: "{{ s2ioperator_repo }}:{{ s2ioperator_tag }}"
@@ -343,8 +361,8 @@ spec:
         - containerPort: 8080
           name: metrics
           protocol: TCP
-        - containerPort: 9876
-          name: webhook-server
+        - containerPort: 8081
+          name: trigger
           protocol: TCP
         resources:
           limits:
@@ -354,7 +372,7 @@ spec:
             cpu: 100m
             memory: 20Mi
         volumeMounts:
-        - mountPath: /tmp/cert
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: cert
           readOnly: true
       terminationGracePeriodSeconds: 10
@@ -362,4 +380,4 @@ spec:
       - name: cert
         secret:
           defaultMode: 420
-          secretName: webhook-server-secret
+          secretName: s2i-webhook-server-cert
