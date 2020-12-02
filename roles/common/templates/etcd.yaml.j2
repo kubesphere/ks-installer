@@ -71,11 +71,11 @@ spec:
         ports:
         - containerPort: 2379
           name: etcd
-{% if ansible_architecture == "aarch64" -%}
+{% if ansible_architecture == "aarch64" %}
         env:
         - name: ETCD_UNSUPPORTED_ARCH
           value: arm64
-{%- endif %}
+{% endif %}
         volumeMounts:
         - name: etcd-persistent-storage
           mountPath: /data
