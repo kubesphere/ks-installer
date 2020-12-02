@@ -71,6 +71,11 @@ spec:
         ports:
         - containerPort: 2379
           name: etcd
+{% if host_architecture != "amd64" -%}
+        env:
+        - name: ETCD_UNSUPPORTED_ARCH
+          value: {{host_architecture}}
+{%- endif %}
         volumeMounts:
         - name: etcd-persistent-storage
           mountPath: /data
