@@ -1,0 +1,41 @@
+name: Auto Deploy Test
+
+on:
+  push:
+    branches: master
+ 
+  schedule:
+    # run every beijing time 9:00
+    - cron:  '0 1 * * *'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      working-directory: ./.github/workflows/deploy
+    steps:
+    - uses: actions/checkout@v2.1.1
+
+    - name: setup terraform
+      working-directory: ${{env.working-directory}}
+      run: |
+        wget https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_linux_amd64.zip
+        unzip terraform_0.13.0_linux_amd64.zip
+
+    - name: setup secret
+      working-directory: ${{env.working-directory}}
+      run: |
+        sed -i 's/yourID/${{ secrets.QINGCLOUD_ACCESS_KEY }}/' var.tf
+        sed -i 's/yourSecret/${{ secrets.QINGCLOUD_SECRET_KEY }}/' var.tf
+    
+    - name: install kubesphere
+      working-directory: ${{env.working-directory}}
+      run: |
+        terraform init
+        terraform apply -input=false -auto-approve
+    
+    - name: destory
+      working-directory: ${{env.working-directory}}
+      run: |
+        echo 'yes' | terraform destroy
