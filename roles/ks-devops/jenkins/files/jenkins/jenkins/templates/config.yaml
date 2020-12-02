@@ -223,7 +223,7 @@ data:
 {{- range $key, $val := .Values.Master.InitScripts }}
   init{{ $key }}.groovy: |-
 {{ $val | indent 4 }}
-{{- end }}	{{- end }}
-{{ else }}
+{{- end }}
+{{- else }}
 {{ include "override_config_map" . }}
 {{- end -}}
