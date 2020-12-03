@@ -220,4 +220,10 @@ data:
       cp -n /var/jenkins_jobs/$job /var/jenkins_home/jobs/$job/config.xml
     done
 {{- end }}
+{{- range $key, $val := .Values.Master.InitScripts }}
+  init{{ $key }}.groovy: |-
+{{ $val | indent 4 }}
 {{- end }}
+{{- else }}
+{{ include "override_config_map" . }}
+{{- end -}}

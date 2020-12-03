@@ -100,7 +100,7 @@ jaegertracing/jaeger-operator:1.17.1
 jaegertracing/jaeger-query:1.17
 jaegertracing/jaeger-es-index-cleaner:1.17.1
 ##ks-devops-images
-jenkins/jenkins:2.176.2                     
+kubesphere/ks-jenkins:2.176.2                     
 jenkins/jnlp-slave:3.27-1
 kubesphere/s2ioperator:v2.1.1               
 kubesphere/s2irun:v2.1.1                    
