@@ -30,13 +30,20 @@ spec:
         - /bin/sh
         - '-c'
         - set -ex;
+{% if containersLogMountedPath is defined and containersLogMountedPath != "" %}
+          echo DOCKER_ROOT_DIR={{ containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
+{% else %}
           echo DOCKER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
+{% endif %}
         volumeMounts:
         - name: env
           mountPath: /fluentbit-operator
+{% if containersLogMountedPath is defined and containersLogMountedPath != "" %}
+{% else %}
         - name: dockersock
           readOnly: true
           mountPath: /var/run/docker.sock
+{% endif %}
       containers:
       - name: fluentbit-operator
         image: {{ fluentbit_operator_repo }}:{{ fluentbit_operator_tag }}
