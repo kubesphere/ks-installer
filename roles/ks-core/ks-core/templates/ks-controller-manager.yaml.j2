@@ -10,7 +10,7 @@ metadata:
 spec:
   strategy:
     rollingUpdate:
-      maxSurge: 0
+      maxSurge: 25%
     type: RollingUpdate
   progressDeadlineSeconds: 600
 {% if master_num is defined and master_num != "0" %}
