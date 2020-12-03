@@ -107,7 +107,7 @@ ks_devops_migration_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_migration_tag: "flyway-v3.0.0"
 ks_console_repo: "{{ base_repo }}kubesphere/ks-console"
 ks_console_tag: v3.0.0
-ks_kubectl_repo: "{{ base_repo }}kubesphere/kubectl"
+ks_kubectl_repo: "{{ base_repo }}kubespheredev/kubectl"
 ks_kubectl_tag: v1.0.0
 # kubectl versions
 ks_kubectl_versions:
