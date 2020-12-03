@@ -20,9 +20,12 @@ spec:
       volumes:
       - name: env
         emptyDir: {}
+{% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
+{% else %}
       - name: dockersock
         hostPath:
           path: /var/run/docker.sock
+{% endif %}
       initContainers:
       - name: setenv
         image: {{ docker_repo }}:{{ docker_tag }}
