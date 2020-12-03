@@ -9,11 +9,12 @@ on:
     - cron:  '0 1 * * *'
 
 jobs:
-  deploy:
+  AutoDeployTest:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
       working-directory: ./.github/workflows/deploy
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
     - uses: actions/checkout@v2.1.1
 
@@ -34,8 +35,15 @@ jobs:
       run: |
         terraform init
         terraform apply -input=false -auto-approve
-    
+
     - name: destory
       working-directory: ${{env.working-directory}}
       run: |
         echo 'yes' | terraform destroy
+
+    - name: slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+      if: always()
