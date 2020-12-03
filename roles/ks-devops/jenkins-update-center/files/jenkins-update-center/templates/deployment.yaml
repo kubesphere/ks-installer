@@ -32,9 +32,6 @@ spec:
           volumeMounts:
             - name: webroot
               mountPath: "/jenkins-plugins"
-            - name: nginx-conf
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -46,6 +43,9 @@ spec:
           volumeMounts:
             - name: webroot
               mountPath: /usr/share/nginx/html
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
           # livenessProbe:
           #   httpGet:
           #     path: /
