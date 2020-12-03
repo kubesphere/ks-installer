@@ -1,12 +1,10 @@
 name: Auto Deploy Test
 
 on:
-  push:
-    branches: master
- 
+  # push:
+  #   branches: master
   schedule:
-    # run every beijing time 9:00
-    - cron:  '0 1 * * *'
+  - cron: 0 1 * * *
 
 jobs:
   AutoDeployTest:
@@ -40,6 +38,7 @@ jobs:
       working-directory: ${{env.working-directory}}
       run: |
         echo 'yes' | terraform destroy
+      if: always()
 
     - name: slack
       uses: 8398a7/action-slack@v3
