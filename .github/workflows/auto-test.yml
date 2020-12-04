@@ -1,15 +1,16 @@
 name: Auto Deploy Test
 
 on:
-  # push:
-  #   branches: master
+  push:
+    branches: master
+ 
   schedule:
-  - cron: 0 1 * * *
+    - cron:  '0 1 * * *'
 
 jobs:
   AutoDeployTest:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 150
     env:
       working-directory: ./.github/workflows/deploy
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -30,6 +31,7 @@ jobs:
     
     - name: install kubesphere
       working-directory: ${{env.working-directory}}
+      timeout-minutes: 90
       run: |
         terraform init
         terraform apply -input=false -auto-approve

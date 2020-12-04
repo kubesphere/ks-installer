@@ -11,6 +11,7 @@ function wait_status_ok(){
             n=0
         fi
         sleep 10
+        kubectl get all -A
     done
 }
 
@@ -28,9 +29,10 @@ kubectl patch storageclass openebs-hostpath -p '{"metadata": {"annotations":{"st
 kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/kubesphere-installer.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/cluster-configuration.yaml
 
-kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"devops":{"enabled":true}}}'
-kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"logging":{"enabled":true}}}'
-kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"metrics_server":{"enabled":true}}}'
+kubectl -n kubesphere-system get cc ks-installer -o yaml | sed "s/false/true/g" | kubectl replace -n kubesphere-system cc -f -
+
+kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"monitoring":false}}}'
+kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
 
 kubectl -n kubesphere-system rollout restart deploy ks-installer
 wait_status_ok
