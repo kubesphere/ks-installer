@@ -3,7 +3,7 @@ resource "qingcloud_eip" "init"{
   name = "tf_eip"
   description = ""
   billing_mode = "traffic"
-  bandwidth = 100
+  bandwidth = 50
   need_icp = 0
 }
 
@@ -26,8 +26,8 @@ resource "qingcloud_instance" "init"{
   count = 1
   name = "master-${count.index}"
   image_id = "centos76x64a"
-  cpu = "16"
-  memory = "32768"
+  cpu = "8"
+  memory = "16384"
   instance_class = "0"
   managed_vxnet_id="vxnet-0"
   login_passwd = "Qcloud@123"
