@@ -17,4 +17,4 @@
     -f {{ kubesphere_dir }}/servicemesh/kiali/custom-values-kiali.yaml
     --namespace istio-system
   when:
-    - (kiali_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("v1.26.1") == -1)
+    - (kiali_check.stdout.find("deployed") == -1) or (kiali_check.stdout.find("v1.26.1") == -1)

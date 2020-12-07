@@ -2,13 +2,14 @@
   shell: >
     {{ bin_dir }}/kubectl get ValidatingWebhookConfiguration istio-galley
   register: galley_check
-  failed_when: false
+  ignore_errors: true
 
 - name: servicemesh | upgrade-pre | Disable galley validation
   shell: >
     {{ bin_dir }}/kubectl -n istio-system patch deployment istio-galley --patch "$(cat {{ kubesphere_dir }}/servicemesh/istio/istio-galley-patch.yaml)" --type=merge
   when:
     - (galley_check.stdout.find("istio-galley") != -1) and (galley_check.stderr == "")
+  ignore_errors: true
 
 - name: servicemesh | upgrade-pre | wait until galley webhook not exists
   shell: >
