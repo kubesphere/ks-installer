@@ -7,7 +7,7 @@
 
 - name: Kubesphere | Init account
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/admin.yaml
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/initial-account.yaml
   when:
     - kubesphere_user_check.stderr is defined
     - kubesphere_user_check.stderr.find("NotFound") != -1

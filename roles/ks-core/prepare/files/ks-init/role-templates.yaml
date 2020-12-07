@@ -1,25 +1,4 @@
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: kubesphere
-  namespace: kubesphere-system
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: kubesphere
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: kubesphere
-    namespace: kubesphere-system
-
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -96,6 +75,21 @@ rules:
     verbs:
       - get
       - create
+
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  name: pre-registration
+rules:
+- apiGroups:
+  - iam.kubesphere.io
+  resources:
+  - users
+  verbs:
+  - create
+  - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2

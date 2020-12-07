@@ -73,7 +73,7 @@
 - name: KubeSphere | Init KubeSphere
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
   loop:
-    - "iam-accounts.yaml"
+    - "role-templates.yaml"
     - "webhook-secret.yaml"
     - "users.iam.kubesphere.io.yaml"
   register: import
