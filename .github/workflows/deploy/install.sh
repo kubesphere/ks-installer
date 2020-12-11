@@ -20,7 +20,7 @@ wget https://github.com/kubesphere/kubekey/releases/download/v1.0.0/kubekey-v1.0
 tar xvf kubekey-v1.0.0-linux-amd64.tar.gz
 ls -al
 chmod +x ./kk
-echo -e 'yes\n' | ./kk create cluster --with-kubernetes v1.17.9
+./kk create cluster --with-kubernetes v1.17.9 -y
 
 kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
 wait_status_ok
