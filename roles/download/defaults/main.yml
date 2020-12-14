@@ -97,16 +97,16 @@ ks_image_tag: "{{ dev_tag | default('latest') }}"
 # And use --insecure-registry options for docker
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}kubesphere/ks-apiserver"
-ks_apiserver_tag: v3.0.0
-ks_controller_manager_repo: "{{ base_repo }}kubesphere/ks-controller-manager"
-ks_controller_manager_tag: v3.0.0
+ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
+ks_apiserver_tag: latest
+ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
+ks_controller_manager_tag: latest
 ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
 ks_update_tag: v3.0.0
 ks_devops_migration_repo: "{{ base_repo }}kubesphere/ks-devops"
 ks_devops_migration_tag: "flyway-v3.0.0"
-ks_console_repo: "{{ base_repo }}kubesphere/ks-console"
-ks_console_tag: v3.0.0
+ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
+ks_console_tag: latest
 ks_kubectl_repo: "{{ base_repo }}kubespheredev/kubectl"
 ks_kubectl_tag: v1.0.0
 # kubectl versions
