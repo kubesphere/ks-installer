@@ -7,6 +7,7 @@
     - "istio"
     - "kiali"
     - "jaeger"
+    - "prometheus"
 
 - name: servicemesh | Unarchive istio files
   shell: >
@@ -90,7 +91,7 @@
 
 - name: servicemesh | Create prometheus config
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic additional-scrape-configs --from-file={{ kubesphere_dir }}/servicemesh/istio/prometheus-additional.yaml
+    {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic additional-scrape-configs --from-file={{ kubesphere_dir }}/servicemesh/prometheus/prometheus-additional.yaml
 
 - name: servicemesh | Show istiod installation logs
   debug:
