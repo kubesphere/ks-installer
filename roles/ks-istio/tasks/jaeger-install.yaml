@@ -27,12 +27,3 @@
   delay: 10
   when:
     - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
-
-- name: servicemesh | Create jaeger operator service
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-operator-service.yaml --namespace istio-system"
-  register: import
-  until: import is succeeded
-  retries: 5
-  delay: 10
-  when:
-    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
