@@ -8,6 +8,7 @@ spec:
     image: {{ jaeger_agent_repo }}:{{ jaeger_agent_tag }}
   collector:
     image: {{ jaeger_collector_repo }}:{{ jaeger_collector_tag }}
+    maxReplicas: 5
   query:
     image: {{ jaeger_query_repo }}:{{ jaeger_query_tag }}
   storage:
