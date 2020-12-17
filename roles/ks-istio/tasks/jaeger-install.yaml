@@ -19,8 +19,8 @@
   when:
     - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
 
-- name: servicemesh | Deploy jaeger-production
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-production.yaml --namespace istio-system"
+- name: servicemesh | Deploy jaeger-cr
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"
   register: import
   until: import is succeeded
   retries: 5

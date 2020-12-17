@@ -18,6 +18,7 @@
     {{ bin_dir }}/kubectl get clusterrole ks-installer -o yaml > {{ kubesphere_dir }}/servicemesh/istio/clusterroles-all.yaml && \
     cat {{ kubesphere_dir }}/servicemesh/istio/clusterroles.yaml >> {{ kubesphere_dir }}/servicemesh/istio/clusterroles-all.yaml && \
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/istio/clusterroles-all.yaml
+
 - name: servicemesh | disable istio-injection
   shell: >
     {{ bin_dir }}/kubectl label ns {{ item }} istio-injection=disabled --overwrite
@@ -35,8 +36,9 @@
   with_items:
     - { path: istio, file: istio-profile.yaml }
     - { path: jaeger, file: custom-values-jaeger.yaml }
-    - { path: jaeger, file: jaeger-production.yaml }
+    - { path: jaeger, file: jaeger-cr.yaml }
     - { path: kiali, file: custom-values-kiali.yaml }
+    - { path: kiali, file: kiali-cr.yaml }
 
 - name: servicemesh | Check istiod
   shell: >
@@ -56,7 +58,7 @@
 
 - name: servicemesh | Install istiod-1.6.10
   shell: >
-    {{ kubesphere_dir }}/servicemesh/istio/istio-1.6.10/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/istio-profile.yaml --set revision=1-6-10
+    {{ kubesphere_dir }}/servicemesh/istio/istio-1.6.10/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/istio-profile.yaml
   register: istio_result
   failed_when: false
   retries: 3

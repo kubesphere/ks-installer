@@ -1,5 +1,11 @@
-# deploy kiali
+# deploy kiali-operator
 
 ```bash
-helm upgrade --install kiali kiali-server-1.26.1.tgz custom-values-kiali.yaml -n istio-system
+helm upgrade --install kiali-operator kiali-operator-1.26.1.tgz -n istio-system -f custom-values-kiali.yaml -n istio-system
+```
+
+# create kiali-cr
+
+```bash
+kubectl apply -f kiali-cr.yaml -n istio-system
 ```

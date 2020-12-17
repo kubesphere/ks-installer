@@ -4,7 +4,7 @@
 image:
   repository: {{ jaeger_operator_repo }}
   tag: {{ jaeger_operator_tag }}
-  pullPolicy: IfNotPresent
+  pullPolicy: {{ ks_image_pull_policy }}
 
 rbac:
   # Specifies whether RBAC resources should be created

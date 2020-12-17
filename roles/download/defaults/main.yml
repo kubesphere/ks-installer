@@ -364,13 +364,6 @@ metrics_server_tag: v0.3.7
 #istio
 istio_hub: "{{ base_repo }}istio"
 istio_tag: 1.6.10
-istio_proxy_image: proxyv2
-istio_proxy_init_image: proxyv2
-istio_pilot_image: pilot
-istio_telemetry_image: mixer
-istio_policy_image: mixer
-istio_sidecar_injector_image: sidecar_injector
-istio_node_agent_image: node-agent-k8s
 jaeger_operator_repo: "{{ base_repo }}jaegertracing/jaeger-operator"
 jaeger_operator_tag: 1.17.1
 jaeger_agent_repo: "{{ base_repo }}jaegertracing/jaeger-agent"
@@ -381,7 +374,9 @@ jaeger_query_repo: "{{ base_repo }}jaegertracing/jaeger-query"
 jaeger_query_tag: 1.17
 jaeger_es_cleaner_repo: "{{ base_repo }}jaegertracing/jaeger-es-index-cleaner"
 jaeger_es_cleaner_tag: 1.17
-kiali_reop: "{{ base_repo }}kubespheredev/kiali"
+kiali_operator_repo: "{{ base_repo }}kubespheredev/kiali-operator"
+kiali_operator_tag: v1.26.1
+kiali_repo: "{{ base_repo }}kubespheredev/kiali"
 kiali_tag: v1.26.1
 
 #base:

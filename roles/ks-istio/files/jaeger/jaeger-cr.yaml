@@ -1,0 +1,19 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: jaeger
+  namespace: istio-system
+spec:
+  agent:
+    image: jaegertracing/jaeger-agent:1.17
+  collector:
+    image: jaegertracing/jaeger-collector:1.17
+    maxReplicas: 5
+  query:
+    image: jaegertracing/jaeger-query:1.17
+  storage:
+    options:
+      es:
+        server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+    type: elasticsearch
+  strategy: production

@@ -16,3 +16,9 @@
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - kiali.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
