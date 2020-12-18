@@ -38,52 +38,26 @@ image_arch: "{{host_architecture | default('amd64')}}"
 ks_version: 2.1.0
 kube_version: v1.15.5
 etcd_version: v3.2.18
-# kube image repo define
-ks_image_repo: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
-  {%- else -%}
-  dockerhub.qingcloud.com
-  {%- endif %}
 
 base_repo: >-
-  {% if local_registry is defined and local_registry != "" -%}
+  {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
+  registry.cn-beijing.aliyuncs.com/
+  {%- elif local_registry is defined and local_registry != "" -%}
   {{ local_registry }}/
   {%- else -%}
 
   {%- endif %}
 
+
 base_library_repo: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}/library/
+  {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
+  {{ base_repo }}{{ namespace_override | default('kubesphereio') }}/
+  {%- elif local_registry is defined and local_registry != "" -%}
+  {{ base_repo }}library/
   {%- else -%}
 
   {%- endif %}
 
-# quay image repo define
-quay_image_repo: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
-  {%- else -%}
-  quay.azk8s.cn
-  {%- endif %}
-
-# elastic image repo define
-elastic_image_repo: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
-  {%- else -%}
-  docker.elastic.co
-  {%- endif %}
-
-# gcr and kubernetes image repo define
-gcr_image_repo: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
-  {%- else -%}
-  gcr.azk8s.cn
-  {%- endif %}
-kube_image_repo: "{{ gcr_image_repo }}/google-containers"
 
 ks_image_tag: "{{ dev_tag | default('latest') }}"
 
@@ -97,17 +71,17 @@ ks_image_tag: "{{ dev_tag | default('latest') }}"
 # And use --insecure-registry options for docker
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}kubespheredev/ks-apiserver"
+ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-apiserver"
 ks_apiserver_tag: latest
-ks_controller_manager_repo: "{{ base_repo }}kubespheredev/ks-controller-manager"
+ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-controller-manager"
 ks_controller_manager_tag: latest
-ks_update_repo: "{{ base_repo }}kubesphere/ks-upgrade"
+ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
-ks_devops_migration_repo: "{{ base_repo }}kubesphere/ks-devops"
+ks_devops_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-devops"
 ks_devops_migration_tag: "flyway-v3.0.0"
-ks_console_repo: "{{ base_repo }}kubespheredev/ks-console"
+ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-console"
 ks_console_tag: latest
-ks_kubectl_repo: "{{ base_repo }}kubespheredev/kubectl"
+ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/kubectl"
 ks_kubectl_tag: v1.0.0
 # kubectl versions
 ks_kubectl_versions:
@@ -116,272 +90,172 @@ ks_kubectl_versions:
   v1.17.0: v1.17.0
   v1.16.0: v1.16.0
   v1.15.0: v1.0.0
-cloud_controller_manager_repo: "{{ base_repo }}kubesphere/cloud-controller-manager"
-cloud_controller_manager_tag: v1.4.0
 
-ks_image_pull_policy: IfNotPresent
-
-#ks-hostnic
-ks_hostnic_repo: "kubesphere/hostnic"
-ks_hostnic_tag: "v1.0.0-alpha"
-
-#ks-installer
-ks_installer_repo: "{{ base_repo }}kubesphere/ks-installer"
-ks_installer_tag: v2.1.1
+ks_image_pull_policy: Always
+# ks_image_pull_policy: IfNotPresent
 
 #ks-notification
-notification_flyway_repo: "{{ base_repo }}kubesphere/notification"
+notification_flyway_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification"
 notification_flyway_tag: "flyway_v2.1.2"
-notification_repo: "{{ base_repo }}kubesphere/notification"
+notification_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification"
 notification_tag: "v2.1.2"
-alerting_dbinit_repo: "{{ base_repo }}kubesphere/alerting-dbinit"
+alerting_dbinit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/alerting-dbinit"
 alerting_dbinit_tag: "v3.0.0"
-ks_alerting_repo: "{{ base_repo }}kubesphere/alerting"
+ks_alerting_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/alerting"
 ks_alerting_tag: "v2.1.2"
-ks_alerting_adapter_repo: "{{ base_repo }}kubesphere/alert-adapter"
+ks_alerting_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/alert-adapter"
 ks_alerting_adapter_tag: "v3.0.0"
 
 # kubefed, kubesphere multiple cluster component
-kubefed_repo: "{{ base_repo }}kubesphere"
+kubefed_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 kubefed_image: kubefed
 kubefed_image_tag: v0.3.0
-tower_repo: "{{ base_repo }}kubesphere"
+tower_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 tower_image: tower
 tower_image_tag: v0.1.0
 
 #openpitrix:
 op_version: "v0.5.1"
-openpitrix_repo: "{{ base_repo }}openpitrix/openpitrix"
+openpitrix_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/openpitrix"
 openpitrix_tag: "{{ op_version }}"
-openpitrix_flyway_repo: "{{ base_repo }}openpitrix/openpitrix-flyway"
+openpitrix_flyway_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/openpitrix-flyway"
 openpitrix_flyway_tag: "{{ op_version }}"
-# openpitrix_runtime_provider_kubernetes_repo: "{{ base_repo }}openpitrix/runtime-provider-kubernetes"
-# openpitrix_runtime_provider_kubernetes_tag: "latest"
-# openpitrix_runtime_provider_kubernetes_tag: "v0.1.3"
-release_app_repo: "{{ base_repo }}openpitrix/release-app"
+release_app_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/release-app"
 release_app_tag: "{{ op_version }}"
-generate_kubeconfig_repo: "{{ base_repo }}openpitrix/generate-kubeconfig"
+generate_kubeconfig_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/generate-kubeconfig"
 generate_kubeconfig_tag: "{{ op_version }}"
-minio_repo: "{{ base_repo }}minio/minio"
+minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
-mc_repo: "{{ base_repo }}minio/mc"
+mc_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/mc"
 mc_tag: RELEASE.2019-08-07T23-14-43Z
 
 #ks-hostnic
-snapshot_controller_repo: "{{ base_repo }}csiplugin/snapshot-controller"
+snapshot_controller_repo: "{{ base_repo }}{{ namespace_override | default('csiplugin') }}/snapshot-controller"
 snapshot_controller_tag: "v2.0.1"
 
-#qingcloud-csi:
-csi_provisioner_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-provisioner"
-csi_provisioner_tag: v1.4.0
-csi_attacher_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-attacher"
-csi_attacher_tag: v2.0.0
-csi_qingcloud_repo: "{{ base_repo }}csiplugin/csi-qingcloud"
-csi_qingcloud_tag: v1.1.0
-driver_registrar_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-node-driver-registrar"
-driver_registrar_tag: v1.2.0
-csi_snapshotter_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-snapshotter"
-csi_snapshotter_tag: v1.2.2
-csi_resizer_repo: "{{ base_repo }}quay.azk8s.cn/k8scsi/csi-resizer"
-csi_resizer_tag: v0.2.0
-
-#neonsan-csi
-neonsan_driver_registrar_repo: "{{ ks_image_repo }}/k8scsi/driver-registrar"
-neonsan_driver_registrar_tag: v0.4.1
-csi_neonsan_repo: "{{ ks_image_repo }}/csiplugin/csi-neonsan"
-csi_neonsan_tag: v0.3.0
-neonsan_csi_provisioner_repo: "{{ ks_image_repo }}/k8scsi/csi-provisioner"
-neonsan_csi_provisioner_tag: v0.4.1
-neonsan_csi_attacher_repo: "{{ ks_image_repo }}/k8scsi/csi-attacher"
-neonsan_csi_attacher_tag: v0.4.1
-neonsan_csi_snapshotter_repo: "{{ ks_image_repo }}/k8scsi/csi-snapshotter"
-neonsan_csi_snapshotter_tag: v0.4.1
-
-#alicloud-csi
-alicloud_csi_driver_registrar_repo: registry.cn-hangzhou.aliyuncs.com/acs/csi-node-driver-registrar
-alicloud_csi_driver_registrar_tag: v1.1.0
-alicloud_csi_provisioner_repo: registry.cn-hangzhou.aliyuncs.com/acs/csi-provisioner
-alicloud_csi_provisioner_tag: v1.2.0
-alicloud_csi_diskplugin_repo: registry.cn-hangzhou.aliyuncs.com/acs/csi-diskplugin
-alicloud_csi_diskplugin_tag: v1.14.5-3068245
-
-#tencentcloud-csi
-tencentcloud_csi_driver_registrar_repo: quay.azk8s.cn/k8scsi/csi-node-driver-registrar
-tencentcloud_csi_driver_registrar_tag: v1.0.2
-tencentcloud_csi_provisioner_repo: quay.azk8s.cn/k8scsi/csi-provisioner
-tencentcloud_csi_provisioner_tag: v1.0.1
-tencentcloud_csi_attacher_repo: quay.azk8s.cn/k8scsi/csi-attacher
-tencentcloud_csi_attacher_tag: v1.0.1
-tencentcloud_csi_snapshotter_repo: quay.azk8s.cn/k8scsi/csi-snapshotter
-tencentcloud_csi_snapshotter_tag: v1.0.1
-tencentcloud_csi_cbs_repo: ccr.ccs.tencentyun.com/library/csi-tencentcloud-cbs
-tencentcloud_csi_cbs_tag: v1.0.0
-
-#harbor:
-harbor_version: "v1.9.1"
-nginx_photon_repo: "{{ base_repo }}goharbor/nginx-photon"
-nginx_photon_tag: "{{ harbor_version }}"
-chartmuseum_photon_repo: "{{ base_repo }}goharbor/chartmuseum-photon"
-chartmuseum_photon_tag: "v0.9.0-{{ harbor_version }}"
-notary_server_photon_repo: "{{ base_repo }}goharbor/notary-server-photon"
-notary_server_photon_tag: "v0.6.1-{{ harbor_version }}"
-harbor_registryctl_repo: "{{ base_repo }}goharbor/harbor-registryctl"
-harbor_registryctl_tag: "{{ harbor_version }}"
-registry_photon_repo: "{{ base_repo }}goharbor/registry-photon"
-registry_photon_tag: "v2.7.1-patch-2819-2553-{{ harbor_version }}"
-harbor_jobservice_repo: "{{ base_repo }}goharbor/harbor-jobservice"
-harbor_jobservice_tag: "{{ harbor_version }}"
-harbor_portal_repo: "{{ base_repo }}goharbor/harbor-portal"
-harbor_portal_tag: "{{ harbor_version }}"
-harbor_db_repo: "{{ base_repo }}goharbor/harbor-db"
-harbor_db_tag: "{{ harbor_version }}"
-clair_photon_repo: "{{ base_repo }}goharbor/clair-photon"
-clair_photon_tag: "v2.0.9-{{ harbor_version }}"
-notary_signer_photon_repo: "{{ base_repo }}goharbor/notary-signer-photon"
-notary_signer_photon_tag: "v0.6.1-{{ harbor_version }}"
-redis_photon_repo: "{{ base_repo }}goharbor/redis-photon"
-redis_photon_tag: "{{ harbor_version }}"
-harbor_core_repo: "{{ base_repo }}goharbor/harbor-core"
-harbor_core_tag: "{{ harbor_version }}"
-
 #jenkins:
-jenkins_repo: "{{ base_repo }}kubespheredev/ks-jenkins"
+jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-jenkins"
 jenkins_tag: 2.176.2
-jnlp_slave_repo: "{{ base_repo }}jenkins/jnlp-slave"
+jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/jnlp-slave"
 jnlp_slave_tag: 3.27-1
-builder_base_repo: "{{ base_repo }}kubesphere/builder-base"
+builder_base_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-base"
 builder_base_tag: v2.1.0
-builder_nodejs_repo: "{{ base_repo }}kubesphere/builder-nodejs"
+builder_nodejs_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-nodejs"
 builder_nodejs_tag: v2.1.0
-builder_maven_repo: "{{ base_repo }}kubesphere/builder-maven"
+builder_maven_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-maven"
 builder_maven_tag: v2.1.0
-builder_go_repo: "{{ base_repo }}kubesphere/builder-go"
+builder_go_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-go"
 builder_go_tag: v2.1.0
 
-#sonarqube:
-sonarqube_repo: "{{ base_library_repo }}sonarqube"
-sonarqube_tag: 7.4-community
-
 #s2i
-s2ioperator_repo: "{{ base_repo }}kubespheredev/s2ioperator"
+s2ioperator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/s2ioperator"
 s2ioperator_tag: "latest"
-s2irun_repo: "{{ base_repo }}kubespheredev/s2irun"
+s2irun_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/s2irun"
 s2irun_tag: "latest"
 
 s2itemplates_tag: v2.1.0
-binary_repo: "{{ base_repo }}kubesphere/s2i-binary"
-tomcat85_java11_repo: "{{ base_repo }}kubesphere/tomcat85-java11-centos7"
-tomcat85_java11_runtime_repo: "{{ base_repo }}kubesphere/tomcat85-java11-runtime"
-tomcat85_java8_repo: "{{ base_repo }}kubesphere/tomcat85-java8-centos7"
-tomcat85_java8_runtime_repo: "{{ base_repo }}kubesphere/tomcat85-java8-runtime"
-java11centos7_repo: "{{ base_repo }}kubesphere/java-11-centos7"
-java8centos7_repo: "{{ base_repo }}kubesphere/java-8-centos7"
-java8_runtime_repo: "{{ base_repo }}kubesphere/java-8-runtime"
-java11_runtime_repo: "{{ base_repo }}kubesphere/java-11-runtime"
-nodejs8centos7_repo: "{{ base_repo }}kubesphere/nodejs-8-centos7"
-nodejs6centos7_repo: "{{ base_repo }}kubesphere/nodejs-6-centos7"
-nodejs4centos7_repo: "{{ base_repo }}kubesphere/nodejs-4-centos7"
-python36centos7_repo: "{{ base_repo }}kubesphere/python-36-centos7"
-python35centos7_repo: "{{ base_repo }}kubesphere/python-35-centos7"
-python34centos7_repo: "{{ base_repo }}kubesphere/python-34-centos7"
-python27centos7_repo: "{{ base_repo }}kubesphere/python-27-centos7"
+binary_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2i-binary"
+tomcat85_java11_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java11-centos7"
+tomcat85_java11_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java11-runtime"
+tomcat85_java8_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java8-centos7"
+tomcat85_java8_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java8-runtime"
+java11centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-11-centos7"
+java8centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-8-centos7"
+java8_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-8-runtime"
+java11_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-11-runtime"
+nodejs8centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-8-centos7"
+nodejs6centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-6-centos7"
+nodejs4centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-4-centos7"
+python36centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-36-centos7"
+python35centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-35-centos7"
+python34centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-34-centos7"
+python27centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-27-centos7"
 
 #ks-monitor:
-configmap_reload_repo: "{{ base_repo }}jimmidyson/configmap-reload"
+configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
 configmap_reload_tag: v0.3.0
-prometheus_repo: "{{ base_repo }}prom/prometheus"
+prometheus_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/prometheus"
 prometheus_tag: v2.20.1
-prometheus_config_reloader_repo: "{{ base_repo }}kubesphere/prometheus-config-reloader"
+prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-config-reloader"
 prometheus_config_reloader_tag: v0.38.3
-prometheus_operator_repo: "{{ base_repo }}kubesphere/prometheus-operator"
+prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-operator"
 prometheus_operator_tag: v0.38.3
-kube_rbac_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
+kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
-kube_state_metrics_repo: "{{ base_repo }}kubesphere/kube-state-metrics"
+kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
 kube_state_metrics_tag: v1.9.6
-node_exporter_repo: "{{ base_repo }}prom/node-exporter"
+node_exporter_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/node-exporter"
 node_exporter_tag: v0.18.1
-prometheus_adapter_repo: "{{ base_repo }}kubesphere/k8s-prometheus-adapter-amd64"
+prometheus_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/k8s-prometheus-adapter-amd64"
 prometheus_adapter_tag: v0.6.0
-alertmanager_repo: "{{ base_repo }}prom/alertmanager"
+alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
 alertmanager_tag: v0.21.0
-grafana_repo: "{{ base_repo }}grafana/grafana"
-grafana_tag: 6.6.0
 
 #notification-manager
-notification_manager_operator_proxy_repo: "{{ base_repo }}kubesphere/kube-rbac-proxy"
+notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 notification_manager_operator_proxy_tag: v0.4.1
-notification_manager_operator_repo: "{{ base_repo }}kubesphere/notification-manager-operator"
+notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager-operator"
 notification_manager_operator_tag: v0.1.0
-notification_manager_repo: "{{ base_repo }}kubesphere/notification-manager"
+notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager"
 notification_manager_tag: v0.1.0
 
 #ks-logger
-docker_elasticsearch_curator_repo: "{{ base_repo }}kubesphere/elasticsearch-curator"
+docker_elasticsearch_curator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-curator"
 docker_elasticsearch_curator_tag: v5.7.6
-elasticsearch_oss_repo: "{{ base_repo }}kubesphere/elasticsearch-oss"
+elasticsearch_oss_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
-kibana_oss_repo: "{{ elastic_image_repo }}/kibana/kibana-oss"
-kibana_oss_tag: 6.7.0
-testFramework_repo: "{{ base_repo }}dduportal/bats"
-testFramework_tag: 0.4.0
-fluentbit_operator_repo: "{{ base_repo }}kubespheredev/fluentbit-operator"
+fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/fluentbit-operator"
 fluentbit_operator_tag: v0.3.0
 fluentbit_operator_migrator_tag: migrator
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
-ks_fluent_bit_repo: "{{ base_repo }}kubespheredev/fluent-bit"
+ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/fluent-bit"
 ks_fluent_bit_tag: "v1.6.2"
-ks_log_sidecar_injector_repo: "{{ base_repo }}kubesphere/log-sidecar-injector"
+ks_log_sidecar_injector_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.1
-filebeat_repo: "{{ base_repo }}elastic/filebeat"
+filebeat_repo: "{{ base_repo }}{{ namespace_override | default('elastic') }}/filebeat"
 filebeat_tag: 6.7.0
 
 #ks-events
-kube_events_operator_repo: "{{ base_repo }}kubesphere/kube-events-operator"
+kube_events_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-operator"
 kube_events_operator_tag: v0.1.0
-kube_events_exporter_repo: "{{ base_repo }}kubesphere/kube-events-exporter"
+kube_events_exporter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-exporter"
 kube_events_exporter_tag: v0.1.0
-kube_events_ruler_repo: "{{ base_repo }}kubesphere/kube-events-ruler"
+kube_events_ruler_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-ruler"
 kube_events_ruler_tag: v0.1.0
 
 #ks-auditing
-auditing_operator_repo: "{{ base_repo }}kubesphere/kube-auditing-operator"
+auditing_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-auditing-operator"
 auditing_operator_tag: v0.1.0
-auditing_webhook_repo: "{{ base_repo }}kubesphere/kube-auditing-webhook"
+auditing_webhook_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-auditing-webhook"
 auditing_webhook_tag: v0.1.0
 
 #ingress:
-nginx_ingress_controller_repo: "{{ base_repo }}kubesphere/nginx-ingress-controller"
+nginx_ingress_controller_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nginx-ingress-controller"
 nginx_ingress_controller_tag: 0.24.1
-defaultbackend_repo: "{{ base_repo }}mirrorgooglecontainers/defaultbackend-amd64"
+defaultbackend_repo: "{{ base_repo }}{{ namespace_override | default('mirrorgooglecontainers') }}/defaultbackend-amd64"
 defaultbackend_tag: 1.4
 
 #metrics:
-metrics_server_repo: "{{ base_repo }}kubesphere/metrics-server"
+metrics_server_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/metrics-server"
 metrics_server_tag: v0.3.7
 
 #istio
-istio_hub: "{{ base_repo }}istio"
+istio_hub: "{{ base_repo }}{{ namespace_override | default('istio') }}"
 istio_tag: 1.6.10
 istio_proxy_image: proxyv2
-istio_proxy_init_image: proxyv2
 istio_pilot_image: pilot
-istio_telemetry_image: mixer
-istio_policy_image: mixer
-istio_sidecar_injector_image: sidecar_injector
-istio_node_agent_image: node-agent-k8s
-jaeger_operator_repo: "{{ base_repo }}jaegertracing/jaeger-operator"
+jaeger_operator_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-operator"
 jaeger_operator_tag: 1.17.1
-jaeger_agent_repo: "{{ base_repo }}jaegertracing/jaeger-agent"
+jaeger_agent_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-agent"
 jaeger_agent_tag: 1.17
-jaeger_collector_repo: "{{ base_repo }}jaegertracing/jaeger-collector"
+jaeger_collector_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-collector"
 jaeger_collector_tag: 1.17
-jaeger_query_repo: "{{ base_repo }}jaegertracing/jaeger-query"
+jaeger_query_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-query"
 jaeger_query_tag: 1.17
-jaeger_es_cleaner_repo: "{{ base_repo }}jaegertracing/jaeger-es-index-cleaner"
+jaeger_es_cleaner_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-es-index-cleaner"
 jaeger_es_cleaner_tag: 1.17
-kiali_reop: "{{ base_repo }}kubespheredev/kiali"
+kiali_reop: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/kiali"
 kiali_tag: v1.26.1
 
 #base:
@@ -391,38 +265,20 @@ haproxy_repo: "{{ base_library_repo }}haproxy"
 haproxy_tag: 2.0.4
 busybox_repo: "{{ base_library_repo }}alpine"
 busybox_tag: 3.10.4
-etcd_image_repo: "{{ base_repo }}kubesphere/etcd"
+etcd_image_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/etcd"
 etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
 mysql_repo: "{{ base_library_repo }}mysql"
 mysql_tag: 8.0.11
-xtrabackup_repo: "{{ base_repo }}googlecontainer/xtrabackup"
+xtrabackup_repo: "{{ base_repo }}{{ namespace_override | default('googlecontainer') }}/xtrabackup"
 xtrabackup_tag: 1.0
 nginx_repo: "{{ base_library_repo }}nginx"
 nginx_tag: 1.14-alpine
 postgres_repo: "{{ base_library_repo }}postgres"
 postgres_tag: 9.6.8 #Notice
-openldap_repo: "{{ base_repo }}osixia/openldap"
+openldap_repo: "{{ base_repo }}{{ namespace_override | default('osixia') }}/openldap"
 openldap_tag: 1.3.0
-wget_repo: "{{ base_repo }}joosthofman/wget"
+wget_repo: "{{ base_repo }}{{ namespace_override | default('joosthofman') }}/wget"
 wget_tag: 1.0
-
-#NFS:
-nfs_client_provisioner_repo: "{{ base_repo }}kubesphere/nfs-client-provisioner"
-nfs_client_provisioner_tag: v3.1.0-k8s1.11
-nfs_server_provisioner_repo: "{{ ks_image_repo }}/kubernetes_incubator/nfs-provisioner"
-nfs_server_provisioner_tag: v1.0.9
-
-#openebs
-openebs_provisioner_localpv_repo: "{{ base_repo }}kubesphere/provisioner-localpv"
-openebs_provisioner_localpv_tag: 1.1.0
-openebs_openebs_tools_repo: "{{ base_repo }}kubesphere/openebs-tools"
-openebs_openebs_tools_tag: 3.8
-openebs_node_disk_manager_amd64_repo: "{{ base_repo }}kubesphere/node-disk-manager-amd64"
-openebs_node_disk_manager_amd64_tag: v0.4.1
-openebs_node_disk_operator_amd64_repo: "{{ base_repo }}kubesphere/node-disk-operator-amd64"
-openebs_node_disk_operator_amd64_tag: v0.4.1
-openebs_linux_utils_repo: "{{ base_repo }}kubesphere/linux-utils"
-openebs_linux_utils_tag: 3.9
 
 #VPA:
 vpa_version: 0.5.0
@@ -435,19 +291,19 @@ vpa_updater_tag: "{{ vpa_version }}"
 
 #examples-bookinfo
 examples_bookinfo_version: 1.13.0
-bookinfo_productpage_v1_repo: "{{ base_repo }}kubesphere/examples-bookinfo-productpage-v1"
+bookinfo_productpage_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-productpage-v1"
 bookinfo_productpage_v1_tag: "{{ examples_bookinfo_version }}"
-bookinfo_reviews_v1_repo: "{{ base_repo }}kubesphere/examples-bookinfo-reviews-v1"
+bookinfo_reviews_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-reviews-v1"
 bookinfo_reviews_v1_tag: "{{ examples_bookinfo_version }}"
-bookinfo_reviews_v2_repo: "{{ base_repo }}kubesphere/examples-bookinfo-reviews-v2"
+bookinfo_reviews_v2_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-reviews-v2"
 bookinfo_reviews_v2_tag: "{{ examples_bookinfo_version }}"
-bookinfo_details_v1_repo: "{{ base_repo }}kubesphere/examples-bookinfo-details-v1"
+bookinfo_details_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-details-v1"
 bookinfo_details_v1_tag: "{{ examples_bookinfo_version }}"
-bookinfo_ratings_v1_repo: "{{ base_repo }}kubesphere/examples-bookinfo-ratings-v1"
+bookinfo_ratings_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-ratings-v1"
 bookinfo_ratings_v1_tag: "{{ examples_bookinfo_version }}"
 
 #wave-scope
-waveworks_scop_repo: "{{ base_repo }}weaveworks/scope"
+waveworks_scop_repo: "{{ base_repo }}{{ namespace_override | default('weaveworks') }}/scope"
 waveworks_scop_tag: "1.13.0"
 
 downloads:
