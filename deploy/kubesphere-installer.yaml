@@ -205,6 +205,12 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - kiali.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- apiGroups:
   - networking.k8s.io
   resources:
   - '*'

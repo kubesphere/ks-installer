@@ -1,0 +1,30 @@
+apiVersion: kiali.io/v1alpha1
+kind: Kiali
+metadata:
+  name: kiali
+  annotations:
+    ansible.operator-sdk/verbosity: "1"
+spec:
+  istio_namespace: istio-system
+  auth:
+    strategy: "anonymous"
+  deployment:
+    accessible_namespaces: [ "**" ]
+    image_name: "{{ kiali_repo }}"
+    image_pull_policy: "{{ ks_image_pull_policy }}"
+    image_version: "{{ kiali_tag }}"
+    namespace: "istio-system"
+    service_type: "ClusterIP"
+  external_services:
+    prometheus:
+      url: http://prometheus-k8s.kubesphere-monitoring-system:9090
+    tracing:
+      enabled: true
+      url: http://jaeger-query.istio-system.svc:16686
+  api:
+    namespaces:
+      exclude:
+        - "kube-.*"
+        - "kubesphere-.*system"
+        - "istio-system"
+        - "openpitrix-system"

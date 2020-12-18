@@ -5,7 +5,7 @@ metadata:
 spec:
   hub: istio
   tag: 1.6.10
-
+  revision: 1-6-10
   # You may override parts of meshconfig by uncommenting the following lines.
   meshConfig:
     defaultConfig:

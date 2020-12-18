@@ -1,63 +1,55 @@
-nameOverride: "kiali"
-fullnameOverride: "kiali"
+nameOverride: "istio-system"
+fullnameOverride: "kiali-operator"
 
-istio_namespace: "istio-system" # default is where Kiali is installed
+image:
+  repo: quay.io/kiali/kiali-operator
+  tag: v1.26.1
+  pullPolicy: Always
+  pullSecrets: []
 
-auth:
-  strategy: "anonymous"
+# Deployment options for the operator pod.
+nodeSelector: {}
+podAnnotations: {}
+env: []
+tolerations: []
+resources: {}
+affinity: {}
+replicaCount: 1
+priorityClassName: ""
 
-deployment:
-  accessible_namespaces:
-  - "**"
-  additional_service_yaml: {}
-  affinity:
-    node: {}
-    pod: {}
-    pod_anti: {}
-  custom_dashboards:
-    excludes: ['']
-    includes: ['*']
-  image_name: quay.io/kiali/kiali
-  image_pull_policy: "Always"
-  image_pull_secrets: []
-  image_version: v1.26.1
-  ingress_enabled: true
-  logger:
-    log_format: "text"
-    log_level: "info"
-    time_field_format: "2006-01-02T15:04:05Z07:00"
-    sampler_rate: "1"
-  node_selector: {}
-  override_ingress_yaml:
-    metadata: {}
-  pod_annotations: {}
-  pod_labels: {}
-  priority_class_name: ""
-  replicas: 1
-  resources: {}
-  secret_name: "kiali"
-  service_annotations: {}
-  service_type: ""
-  tolerations: []
-  version_label: v1.26.1
-  view_only_mode: false
+# metrics.enabled: set to true if you want Prometheus to collect metrics from the operator
+metrics:
+  enabled: true
 
-external_services:
-  prometheus:
-    url: http://prometheus-k8s.kubesphere-monitoring-system:9090
-  tracing:
-    in_cluster_url: http://jaeger-query.istio-system.svc:16686
-  custom_dashboards:
-    enabled: true
+# debug.enabled: when true the full ansible logs are dumped after each reconciliation run
+# debug.verbosity: defines the amount of details the operator will log (higher numbers are more noisy)
+debug:
+  enabled: true
+  verbosity: "1"
 
-server:
-  port: 20001
-  metrics_enabled: true
-  metrics_port: 9090
-  web_root: ""
+# Defines where the operator will look for Kial CR resources. "" means "all namespaces".
+watchNamespace: ""
 
-api:
-  namespaces:
-    exclude:
-      - "kube-.*"
-      - "kubesphere-system"
+# Set to true if you want the operator to be able to create cluster roles. This is necessary
+# if you want to support Kiali CRs with spec.deployment.accessible_namespaces of '**'.
+# Note that this will be overriden to "true" if cr.create is true and cr.spec.deployment.accessible_namespaces is ['**'].
+clusterRoleCreator: true
+
+# Set to true if you want to allow the operator to only be able to install Kiali in view-only-mode.
+# The purpose for this setting is to allow you to restrict the permissions given to the operator itself.
+onlyViewOnlyMode: false
+
+# For what a Kiali CR spec can look like, see:
+# https://github.com/kiali/kiali-operator/blob/master/deploy/kiali/kiali_cr.yaml
+cr:
+  create: false
+  name: kiali
+  # If you elect to create a Kiali CR (--set cr.create=true)
+  # and the operator is watching all namespaces (--set watchNamespace="")
+  # then this is the namespace where the CR will be created (the default will be the operator namespace).
+  namespace: ""
+
+  spec:
+    deployment:
+      accessible_namespaces:
+      - '**'
