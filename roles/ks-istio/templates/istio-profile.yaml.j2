@@ -6,6 +6,7 @@ spec:
   hub: {{ istio_hub }}
   tag: {{ istio_tag }}
 
+  revision: 1-6-10
   # You may override parts of meshconfig by uncommenting the following lines.
   meshConfig:
     defaultConfig:
@@ -121,7 +122,11 @@ spec:
     # Istio Gateway feature
     ingressGateways:
     - name: istio-ingressgateway
+{% if servicemesh.ingressGateways.enabled is defined and servicemesh.ingressGateways.enabled == true %}
+      enabled: true
+{% else %}
       enabled: false
+{% endif %}
       k8s:
         env:
           - name: ISTIO_META_ROUTER_MODE

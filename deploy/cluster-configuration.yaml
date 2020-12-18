@@ -71,5 +71,6 @@ spec:
   openpitrix:          # (2 Core, 3.6 G) Whether to install KubeSphere Application Store. It provides an application store for Helm-based applications, and offer application lifecycle management.
     enabled: false
   servicemesh:         # (0.3 Core, 300 MiB) Whether to install KubeSphere Service Mesh (Istio-based). It provides fine-grained traffic management, observability and tracing, and offer visualization for traffic topology.
-    enabled: false
-  
+    enabled: false     # base component (pilot)
+    # ingressGateway:   # install ingressGateway deployment
+    #   enabled: true
