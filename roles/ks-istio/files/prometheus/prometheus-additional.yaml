@@ -1,6 +1,6 @@
 # Mixer scrapping. Defaults to Prometheus and mixer on same namespace.
 - job_name: 'istio-mesh'
-  scrape_interval: 15s
+  scrape_interval: 1m
   kubernetes_sd_configs:
   - role: endpoints
     namespaces:
@@ -37,7 +37,7 @@
     target_label: pod_name
 
 - job_name: 'istio-policy'
-  scrape_interval: 15s
+  scrape_interval: 1m
   kubernetes_sd_configs:
   - role: endpoints
     namespaces:
@@ -50,7 +50,7 @@
     regex: istio-policy;http-policy-monitoring
 
 - job_name: 'istio-telemetry'
-  scrape_interval: 15s
+  scrape_interval: 1m
   kubernetes_sd_configs:
   - role: endpoints
     namespaces:
@@ -63,7 +63,7 @@
     regex: istio-telemetry;http-monitoring
 
 - job_name: 'pilot'
-  scrape_interval: 15s
+  scrape_interval: 1m
   kubernetes_sd_configs:
   - role: endpoints
     namespaces:
@@ -76,8 +76,9 @@
     regex: istiod;http-monitoring
   - source_labels: [__meta_kubernetes_service_label_app]
     target_label: app
+
 - job_name: 'galley'
-  scrape_interval: 15s
+  scrape_interval: 1m
   kubernetes_sd_configs:
   - role: endpoints
     namespaces:
@@ -90,7 +91,7 @@
     regex: istio-galley;http-monitoring
 
 - job_name: 'citadel'
-  scrape_interval: 15s
+  scrape_interval: 1m
   kubernetes_sd_configs:
   - role: endpoints
     namespaces:
@@ -103,7 +104,7 @@
     regex: istio-citadel;http-monitoring
 
 - job_name: 'sidecar-injector'
-  scrape_interval: 15s
+  scrape_interval: 1m
 
   kubernetes_sd_configs:
   - role: endpoints
@@ -115,3 +116,31 @@
   - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
     action: keep
     regex: istio-sidecar-injector;http-monitoring
+
+- job_name: 'ingress-nginx-endpoints'
+  scrape_interval: 15s
+  kubernetes_sd_configs:
+  - role: pod
+    namespaces:
+      names:
+      - kubesphere-controls-system
+  relabel_configs:
+  - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+    action: keep
+    regex: true
+  - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+    action: replace
+    target_label: __scheme__
+    regex: (https?)
+  - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+    action: replace
+    target_label: __metrics_path__
+    regex: (.+)
+  - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+    action: replace
+    target_label: __address__
+    regex: ([^:]+)(?::\d+)?;(\d+)
+    replacement: $1:$2
+  - source_labels: [__meta_kubernetes_service_name]
+    regex: prometheus-server
+    action: drop
