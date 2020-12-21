@@ -344,9 +344,9 @@ kube_events_ruler_tag: v0.1.0
 
 #ks-auditing
 auditing_operator_repo: "{{ base_repo }}kubesphere/kube-auditing-operator"
-auditing_operator_tag: v0.1.0
+auditing_operator_tag: v0.1.2
 auditing_webhook_repo: "{{ base_repo }}kubesphere/kube-auditing-webhook"
-auditing_webhook_tag: v0.1.0
+auditing_webhook_tag: v0.1.2
 
 #ingress:
 nginx_ingress_controller_repo: "{{ base_repo }}kubesphere/nginx-ingress-controller"
