@@ -135,7 +135,7 @@ snapshot_controller_tag: "v2.0.1"
 
 #jenkins:
 jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-jenkins"
-jenkins_tag: 2.176.2
+jenkins_tag: 2.249.1
 jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/jnlp-slave"
 jnlp_slave_tag: 3.27-1
 builder_base_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-base"
