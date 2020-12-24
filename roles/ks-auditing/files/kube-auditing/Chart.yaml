@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: 0.1.0
 description: A audit tool for kubesphere
 name: kube-auditing
-version: 0.1.0
+version: 0.1.1
