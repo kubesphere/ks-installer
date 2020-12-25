@@ -506,7 +506,7 @@ spec:
   - name: node.rules
     rules:
     - expr: |
-        sum (node_cpu_seconds_total{job="node-exporter", mode=~"user|nice|system|iowait|irq|softirq|steal"}) by (cpu, instance, job, namespace, pod)
+        sum (node_cpu_seconds_total{job="node-exporter", mode=~"user|nice|system|iowait|irq|softirq"}) by (cpu, instance, job, namespace, pod)
       record: node_cpu_used_seconds_total
     - expr: |
         max(kube_pod_info{job="kube-state-metrics"} * on(node) group_left(role) kube_node_role{job="kube-state-metrics", role="master"} or on(pod, namespace) kube_pod_info{job="kube-state-metrics"}) by (node, namespace, host_ip, role, pod)
