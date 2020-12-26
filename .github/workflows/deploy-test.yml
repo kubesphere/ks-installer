@@ -1,4 +1,4 @@
-name: Auto Deploy Test
+name: Deploy-Test
 
 on:
   push:
@@ -8,8 +8,9 @@ on:
     - cron:  '0 1 * * *'
 
 jobs:
-  AutoDeployTest:
+  Deploy-Test:
     runs-on: ubuntu-latest
+    if: github.repository	== 'kubesphere/ks-installer'
     timeout-minutes: 150
     env:
       working-directory: ./.github/workflows/deploy
