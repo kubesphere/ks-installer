@@ -2,7 +2,8 @@ name: Deploy-Weekly
 
 on:
   schedule:
-    - cron:  '0 16 * * *'
+    - cron:  '0 20 * * 6'
+  workflow_dispatch:
 
 jobs:
   Deploy-Weekly:
@@ -48,3 +49,12 @@ jobs:
       timeout-minutes: 90
       run: |
         terraform apply -input=false -auto-approve
+
+    - name: slack
+      uses: 8398a7/action-slack@v3
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+      if: always()  
