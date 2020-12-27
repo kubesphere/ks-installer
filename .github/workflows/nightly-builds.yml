@@ -16,7 +16,7 @@ env:
 jobs:
   push:
     runs-on: ubuntu-latest
-
+    if: github.repository	== 'kubesphere/ks-installer'
     steps:
       - uses: actions/checkout@v2
 
@@ -44,7 +44,7 @@ jobs:
       - name: slack
         uses: 8398a7/action-slack@v3
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_NIGHTLY }}
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
