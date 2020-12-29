@@ -26,16 +26,16 @@
 
 
 - name: KubeSphere | Create KubeSphere crds
-  shell: "{{ bin_dir }}/kubectl create -R -f {{ kubesphere_dir }}/ks-crds/"
+  shell: "{{ bin_dir }}/kubectl apply -R -f {{ item }}"
   register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  with_fileglob:
+    - "{{ kubesphere_dir }}/ks-crds/*.yaml"
+  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
 
-
-- name: KubeSphere | Recreate KubeSphere crds 
-  shell: "{{ bin_dir }}/kubectl create -R -f {{ kubesphere_dir }}/ks-crds/"
+- name: KubeSphere | Create Storage ProvisionerCapability
+  shell: "{{ bin_dir }}/kubectl apply -R -f {{ kubesphere_dir }}/ks-crds/provisonercapability"
   register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-
+  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
 
 - name: KubeSphere | check k8s version
   shell: >
