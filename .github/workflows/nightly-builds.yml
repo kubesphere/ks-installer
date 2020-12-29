@@ -32,9 +32,6 @@ jobs:
       - name: Push image
         run: |
           IMAGE_ID=$IMAGE_REPO/$IMAGE_NAME
-
-          docker tag $IMAGE_NAME $IMAGE_ID:$IMAGE_VERSION
-          docker push $IMAGE_ID:$IMAGE_VERSION
           
           tag=nightly-$(date '+%Y%m%d')
 
