@@ -193,10 +193,10 @@ data:
           ttl: 300
         enabled: true
         server: "http://ks-apiserver.kubesphere-system.svc/"
-        gitLabServers:
-      servers:
-      - name: "default"
-        serverUrl: "https://gitlab.com"
+      gitLabServers:
+        servers:
+        - name: "default"
+          serverUrl: "https://gitlab.com"
     jobs:
       - script: >
           pipelineJob('init-job') {
