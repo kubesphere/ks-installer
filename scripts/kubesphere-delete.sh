@@ -9,19 +9,23 @@
 kubectl delete deploy ks-installer -n kubesphere-system
 
 # delete helm
-for namespaces in kubesphere-system kubesphere-devops-system kubesphere-monitoring-system kubesphere-logging-system istio-system kube-federation-system kube-system openpitrix-system
+for namespaces in kubesphere-system kubesphere-devops-system kubesphere-monitoring-system kubesphere-logging-system openpitrix-system
 do
   helm list -n $namespaces | grep -v NAME | awk '{print $1}' | sort -u | xargs -r -L1 helm uninstall -n $namespaces
 done
+
+helm uninstall -n kube-system snapshot-controller
 
 # delete kubesphere deployment
 kubectl delete deployment -n kubesphere-system `kubectl get deployment -n kubesphere-system -o jsonpath="{.items[*].metadata.name}"`
 
 # delete monitor statefulset
+kubectl delete prometheus -n kubesphere-monitoring-system k8s
 kubectl delete statefulset -n kubesphere-monitoring-system `kubectl get statefulset -n kubesphere-monitoring-system -o jsonpath="{.items[*].metadata.name}"`
+kubectl --no-headers=true get pvc -n kubesphere-monitoring-system -o custom-columns=:metadata.namespace,:metadata.name | grep -E kubesphere-monitoring-system | xargs -n2 kubectl delete pvc -n
 
 # delete pvc
-pvcs="kubesphere-system|openpitrix-system|kubesphere-monitoring-system|kubesphere-devops-system|kubesphere-logging-system"
+pvcs="kubesphere-system|openpitrix-system|kubesphere-devops-system|kubesphere-logging-system"
 kubectl --no-headers=true get pvc --all-namespaces -o custom-columns=:metadata.namespace,:metadata.name | grep -E $pvcs | xargs -n2 kubectl delete pvc -n
 
 
@@ -61,6 +65,19 @@ do
 done
 kubectl delete workspaces --all
 
+# delete devopsprojects
+for devopsproject in `kubectl get devopsprojects -o jsonpath="{.items[*].metadata.name}"`
+do
+  kubectl patch devopsprojects $devopsproject -p '{"metadata":{"finalizers":null}}' --type=merge
+done
+
+for pip in `kubectl get pipeline -A -o jsonpath="{.items[*].metadata.name}"`
+do
+  kubectl patch pipeline $pip -n `kubectl get pipeline -A | grep $pip | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
+done
+
+kubectl delete devopsprojects --all
+
 # delete clusters
 for cluster in `kubectl get clusters -o jsonpath="{.items[*].metadata.name}"`
 do
@@ -93,7 +110,7 @@ do
 done
 
 # delete relevance ns
-for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devops-system kubesphere-logging-system kubesphere-monitoring-system openpitrix-system istio-system
+for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devops-system kubesphere-logging-system kubesphere-monitoring-system openpitrix-system kubesphere-system
 do
   kubectl delete ns $ns
 done
