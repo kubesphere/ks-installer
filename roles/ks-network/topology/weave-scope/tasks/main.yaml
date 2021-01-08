@@ -25,5 +25,17 @@
   retries: 5
   delay: 3
 
+- name: weave-scope | import weave-scope status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"network": {"topology": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
+
 
 

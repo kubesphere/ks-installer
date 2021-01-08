@@ -85,7 +85,7 @@ do
 done
 
 # delete validatingwebhookconfigurations
-for webhook in ks-events-admission-validate users.iam.kubesphere.io validating-webhook-configuration
+for webhook in ks-events-admission-validate users.iam.kubesphere.io network.kubesphere.io validating-webhook-configuration
 do
   kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io $webhook
 done

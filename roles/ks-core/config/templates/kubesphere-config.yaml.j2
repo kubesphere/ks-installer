@@ -43,9 +43,17 @@ data:
       maxOpenConnections: 100
       maxConnectionLifeTime: 10s
 {% endif %}
-{% if networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled %}
+{% if network is defined or networkpolicy is defined %}
     network:
+{% if networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled %}
       enableNetworkPolicy: true
+{% endif %}
+{% if network.ippool is defined and network.ippool.type is defined %}
+      ippoolType: {{ network.ippool.type }}
+{% endif %}
+{% if network.topology is defined and network.topology.type is defined and network.topology.type == "weave-scope"  %}
+      weaveScopeHost: weave-scope-app.weave
+{% endif %}
 {% endif %}
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
