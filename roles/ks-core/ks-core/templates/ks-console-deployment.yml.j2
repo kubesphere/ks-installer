@@ -49,13 +49,13 @@ spec:
         - mountPath: /etc/localtime
           name: host-time
         livenessProbe:
-          failureThreshold: 8
-          httpGet:
-            path: /
+          tcpSocket:
             port: 8000
-            scheme: HTTP
           initialDelaySeconds: 15
           timeoutSeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 8
       serviceAccount: kubesphere
       serviceAccountName: kubesphere
       tolerations:
