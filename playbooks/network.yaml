@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: ks-network/topology/weave-scope
+      when:
+        - "network is defined and network.topology is defined and network.topology.type == 'weave-scope'"
+        - "status.network is not defined or status.network.topology is not defined or status.network.topology.status != 'enabled' "

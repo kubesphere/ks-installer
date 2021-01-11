@@ -1,0 +1,36 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: network.kubesphere.io
+webhooks:
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURDakNDQWZJQ0NRQ3NJZ1N5bFRIMTNUQU5CZ2txaGtpRzl3MEJBUXNGQURCSE1Rc3dDUVlEVlFRR0V3SkQKVGpFTE1Ba0dBMVVFQ0F3Q1NFSXhDekFKQmdOVkJBb01BbEZETVI0d0hBWURWUVFEREJWcmN5MWpiMjUwY205cwpiR1Z5TFcxaGJtRm5aWEl3SGhjTk1qQXdOekkzTVRRek5UVTRXaGNOTkRjeE1qRXpNVFF6TlRVNFdqQkhNUXN3CkNRWURWUVFHRXdKRFRqRUxNQWtHQTFVRUNBd0NTRUl4Q3pBSkJnTlZCQW9NQWxGRE1SNHdIQVlEVlFRRERCVnIKY3kxamIyNTBjbTlzYkdWeUxXMWhibUZuWlhJd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFSwpBb0lCQVFERDc0OUlHUGp2MmhHTDNKOE4wMWMzcWphZ0w4QnlVK1NjZGVjMnhhM2wrcEs3eDd1czlxMml3UVdnCkJSMDV6NkdjempSWkh0ajYwSEk1QVNMUG9aSU9SOGVZTUNvcFZ0dTFwNjZGS2hMYU8wR0JhOTREMTJCSDJLdXAKWjlEajQ1VVVwQkQyc3lZdGZLWEtQMUJkOE41dFRJUGNaNHVaUS9LeU9GME5Xay9FK2lvWCs1SHlQQTh3b3hTdQpNaXM0Y2UwbGJRNHc0R0svNHJKSmZPU2t1alByWXNHdVlBKzJwMGhzNnBqZGdsS3ZucGRIc2dsUlhPVjBkSDViCjV0OGRnQ2RvUms0c3d3N3p1KzlyRG5FRGpxK2xSZWJmQlZDV0FPR3luQXBDamxqTnhveUJiMW1vSUtGVHFSQVYKMVN6RWVZMHlYY0ZGMHphc0krSDFaaURSVHc1bkFnTUJBQUV3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQURjdgplckVSc2l3dGpzTVZuZWtzcFNpSnlSb0JUOElXb3NkbXRjb2RWVmV6a3VTTjcxQXlnU1BRTUFyRk9sbkpuTkNZCnk0WUhOVFdCelFiUjh5UFdZUzVXWEFyVTVSbE03MktBNzBIZ2J2SEk0bEZxREQ0MGcrV2s3NjlsUTZ1Sm5QRngKVHg5TEg5dzlZZHJuaUdSRlNiNTZlaUhFWmVIWnQ4dHZrNFcrV3I3TDNpSmRIbFJNbnFWMG9ERk1RTWhlOW1vVAowc2p2djB4R25VVlhXNUVMNmxETE5NVVcvWGprNm4wSVRTcmxab05VeTJRRklkYVB6TlZ2SExlT2RnSUwvaDFqCldmdlhmeWtuYTRtSTJ6VStpblVZeFlpQUFtN29HdmFvbVBvMWpDMmdPWGtzMHN1SWhHVmk4QjFEK0xGRVVqb3IKcnUzMHN3OUJEQXE4SHNaMzZPRT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      service:
+        name: ks-controller-manager
+        namespace: kubesphere-system
+        path: /validate-network-kubesphere-io-v1alpha1
+        port: 443
+    failurePolicy: Fail
+    matchPolicy: Exact
+    name: validating-network.kubesphere.io
+    namespaceSelector:
+      matchExpressions:
+        - key: control-plane
+          operator: DoesNotExist
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - network.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+          - DELETE
+        resources:
+          - ippools
+        scope: '*'
+    sideEffects: None
+    timeoutSeconds: 30

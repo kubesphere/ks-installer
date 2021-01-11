@@ -1,7 +1,0 @@
----
-
-- hosts: localhost
-  gather_facts: false
-  roles:
-    - kubesphere-defaults
-    - {role: weave-scope, when: "weave_scope is defined and weave_scope.enabled == true"}
