@@ -126,14 +126,14 @@ if [[ ${save} == "true" ]] && [[ -n "${ImagesList}" ]]; then
     index=0
     for image in $(<${ImagesList}); do
         if [[ ${image} =~ ^\#\#.* ]]; then
+           images=""
+           name=$(echo "${image}" | sed 's/#//g' | sed -e 's/[[:space:]]//g')
            if [[ -n ${images} ]]; then
               echo ""
               echo "Save images: "${name}" to "${ImagesDir}"/"${name}".tar.gz  <<<"
               docker save ${images} | gzip -c > ${ImagesDir}"/"${name}.tar.gz
               echo ""
            fi
-           images=""
-           name=$(echo "${image}" | sed 's/#//g' | sed -e 's/[[:space:]]//g')
            ((index++))
            continue
         fi
