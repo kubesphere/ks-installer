@@ -14,6 +14,14 @@ do
   helm list -n $namespaces | grep -v NAME | awk '{print $1}' | sort -u | xargs -r -L1 helm uninstall -n $namespaces
 done
 
+# delete kubefed
+kubectl get cc -n kubesphere-system ks-installer -o jsonpath="{.status.multicluster}" | grep enable
+if [[ $? -eq 0 ]]; then
+  helm uninstall -n kube-federation-system kubefed
+  kubectl delete ns kube-federation-system
+fi
+
+
 helm uninstall -n kube-system snapshot-controller
 
 # delete kubesphere deployment
@@ -58,6 +66,13 @@ do
   delete_roles $ns
 done
 
+# delete clusters
+for cluster in `kubectl get clusters -o jsonpath="{.items[*].metadata.name}"`
+do
+  kubectl patch cluster $cluster -p '{"metadata":{"finalizers":null}}' --type=merge
+done
+kubectl delete clusters --all
+
 # delete workspaces
 for ws in `kubectl get workspaces -o jsonpath="{.items[*].metadata.name}"`
 do
@@ -78,11 +93,6 @@ done
 
 kubectl delete devopsprojects --all
 
-# delete clusters
-for cluster in `kubectl get clusters -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch cluster $cluster -p '{"metadata":{"finalizers":null}}' --type=merge
-done
 
 # delete validatingwebhookconfigurations
 for webhook in ks-events-admission-validate users.iam.kubesphere.io validating-webhook-configuration
