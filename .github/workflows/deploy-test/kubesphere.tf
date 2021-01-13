@@ -33,6 +33,7 @@ resource "qingcloud_instance" "init"{
   login_passwd = "Qcloud@123"
   security_group_id ="${qingcloud_security_group.basic.id}"
   eip_id = "${qingcloud_eip.init.id}"
+  os_disk_size = "50"
 }
 
 resource "null_resource" "install_kubesphere" {
