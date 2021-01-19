@@ -1,9 +1,9 @@
-- name: empty backup directory
+- name: Empty backup directory
   file:
     state: absent
     path: "/tmp/minio-backup/{{ item }}/"
 
-- name: recreate backup directory
+- name: Recreate backup directory
   file:
     state: directory
     path: "/tmp/minio-backup/{{ item }}/"
