@@ -122,11 +122,7 @@ spec:
     # Istio Gateway feature
     ingressGateways:
     - name: istio-ingressgateway
-{% if servicemesh.ingressGateways.enabled is defined and servicemesh.ingressGateways.enabled == true %}
       enabled: true
-{% else %}
-      enabled: false
-{% endif %}
       k8s:
         env:
           - name: ISTIO_META_ROUTER_MODE
