@@ -33,7 +33,7 @@ done
 kubectl get cc -n kubesphere-system ks-installer -o jsonpath="{.status.multicluster}" | grep enable
 if [[ $? -eq 0 ]]; then
   helm uninstall -n kube-federation-system kubefed 2>/dev/null
-  kubectl delete ns kube-federation-system 2>/dev/null
+  #kubectl delete ns kube-federation-system 2>/dev/null
 fi
 
 
