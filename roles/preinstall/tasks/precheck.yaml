@@ -1,10 +1,10 @@
 ---
-- name: check k8s version
+- name: Check k8s version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
 
-- name: init k8s version
+- name: Init k8s version
   set_fact: >
      k8s_version: {{ kubernetes_version.stdout }}
 
@@ -13,7 +13,7 @@
     that: kubernetes_version.stdout is version('v1.15.0', '>=')
     msg: The current k8s version is not supported
 
-- name: check storage class
+- name: Check storage class
   shell: >
     {{ bin_dir }}/kubectl get sc | awk '{if(NR>1){print $1}}'
   register: storage_class_check
@@ -26,7 +26,7 @@
     - persistence.storageClass is defined
     - persistence.storageClass != ""
 
-- name: check default storage class
+- name: Check default storage class
   shell: >
     {{ bin_dir }}/kubectl get sc
   register: default_storage_class_check

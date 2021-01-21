@@ -5,7 +5,7 @@
 
 - name: KubeSphere | Getting kubernetes master num
   shell: >
-    {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master |wc -l
+    {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master | wc -l
   register: masters
   failed_when: false
 
@@ -37,7 +37,7 @@
   register: import
   failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
 
-- name: KubeSphere | check k8s version
+- name: KubeSphere | Check k8s version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
