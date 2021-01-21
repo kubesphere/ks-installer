@@ -34,9 +34,6 @@
       {%- if servicemesh.enabled is defined and servicemesh.enabled %}
       istio-system
       {%- endif %}
-      {%- if (notification.enabled is defined and notification.enabled) or (alerting.enabled is defined and alerting.enabled) %}
-      kubesphere-alerting-system
-      {%- endif %}
       {%- if servicemesh.enabled is defined and servicemesh.enabled %}
       istio-system
       {%- endif %}

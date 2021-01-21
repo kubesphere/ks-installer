@@ -4,4 +4,4 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
-    - ks-alerting
+#    - ks-alerting

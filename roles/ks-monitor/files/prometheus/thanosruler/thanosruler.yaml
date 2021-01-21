@@ -1,0 +1,37 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ThanosRuler
+metadata:
+  name: k8s
+  namespace: kubesphere-monitoring-system
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: thanosruler
+              operator: In
+              values:
+              - k8s
+          namespaces:
+          - kubesphere-monitoring-system
+          topologyKey: kubernetes.io/hostname
+        weight: 100
+  alertmanagersUrl:
+  - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
+  image: thanosio/thanos:v0.18.0
+  queryEndpoints:
+  - prometheus-operated.kubesphere-monitoring-system.svc:9090
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  ruleNamespaceSelector: {}
+  ruleSelector:
+    matchLabels:
+      role: thanos-alerting-rules
+      thanosruler: thanos-ruler

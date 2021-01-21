@@ -135,7 +135,9 @@ data:
 {% endif %}
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
-      endpoint: http://alerting-client-server.kubesphere-alerting-system.svc:9200/api/
+      prometheusEndpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+      thanosRulerEndpoint: http://thanos-ruler-operated.kubesphere-monitoring-system.svc:10902
+      thanosRuleResourceLabels: thanosruler=thanos-ruler,role=thanos-alerting-rules
 {% endif %}
 {% if notification.enabled is defined and notification.enabled == true %}
     notification:

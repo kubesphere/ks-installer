@@ -34,8 +34,11 @@ spec:
   console:
     enableMultiLogin: true  # enable/disable multiple sing on, it allows an account can be used by different users at the same time.
     port: 30880
-  alerting:                # (CPU: 0.3 Core, Memory: 300 MiB) Whether to install KubeSphere alerting system. It enables Users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
+  alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) Whether to install KubeSphere alerting system. It enables Users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false
+    # thanosruler:
+    #   replicas: 1
+    #   resources: {}
   auditing:                # Whether to install KubeSphere audit log system. It provides a security-relevant chronological set of records，recording the sequence of activities happened in platform, initiated by different tenants.
     enabled: false
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Whether to install KubeSphere DevOps System. It provides out-of-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
