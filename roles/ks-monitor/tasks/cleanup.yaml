@@ -5,20 +5,20 @@
   failed_when: false
   register: prometheus_old_check
 
-- name: ks-monitor | deleting old prometheus-operator files
+- name: ks-monitor | Deleting old prometheus-operator files
   file:
     path: "{{ kubesphere_dir }}/prometheus/00namespace-namespace.yaml"
     state: absent
   failed_when: false
   when: prometheus_old_check.stat.exists
 
-- name: ks-monitor | deleting old prometheus-operator
+- name: ks-monitor | Deleting old prometheus-operator
   shell: "{{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/prometheus/"
   register: import
   failed_when: "import.stderr and 'NotFound' not in import.stderr"
   when: prometheus_old_check.stat.exists
 
-- name: ks-monitor | deleting old prometheus-operator files
+- name: ks-monitor | Deleting old prometheus-operator files
   file:
     path: "{{ kubesphere_dir }}/{{ item }}"
     state: absent

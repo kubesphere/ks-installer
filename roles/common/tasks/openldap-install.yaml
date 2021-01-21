@@ -65,7 +65,7 @@
     - old_openldap_exist.stdout != "0"
 
 
-- name: Kubesphere | import openldap status
+- name: Kubesphere | Import openldap status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

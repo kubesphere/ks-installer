@@ -26,7 +26,7 @@ Mem:              16          4          10           0           3           2
 Swap:             0           0           0
 ```
 
-3. KubeSphere 需配合持久化存储使用，执行`kubectl get sc` 查看当前环境中的存储类型 (当使用默认存储类型时，配置文件中可以不填存储相关信息).
+3. KubeSphere 需配合持久化存储使用，执行`kubectl get sc` 查看当前环境中的存储类型 (当使用默认存储类型时，配置文件中可以不填存储相关信息)。
 
 ```bash
 $ kubectl get sc
@@ -99,18 +99,18 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 ```
 ## 升级
 
-1. 下载v3.0.0部署文件:
+1. 下载 v3.0.0 部署文件:
 
 ```bash
 wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
 wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
 ```
 
-2. 同步v2.1.1配置到`cluster-configuration.yaml`中, 持久化存储及可插拔组件相关配置要与v2.1.1中配置保持一致:
+2. 同步 v2.1.1 配置到`cluster-configuration.yaml`中, 持久化存储及可插拔组件相关配置要与 v2.1.1 中配置保持一致:
 
 ```bash
 kubectl apply -f kubesphere-installer.yaml
 kubectl apply -f cluster-configuration.yaml
 ```
 
-> 注意: 如果当前集群中部署的KubeSphere版本是v2.1.0或更早的版本，请先升级到v2.1.1.
+> 注意: 如果当前集群中部署的 KubeSphere 版本是 v2.1.0 或更早的版本，请先升级到 v2.1.1。
