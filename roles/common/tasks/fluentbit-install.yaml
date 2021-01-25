@@ -1,4 +1,4 @@
-- name: Kubesphere | Getting elasticsearch and curator installation files
+- name: Kubesphere | Getting fluentbit installation files
   copy:
     src: "fluentbit-operator"
     dest: "{{ kubesphere_dir }}/"
@@ -14,7 +14,7 @@
     - { path: migrator, file: custom-migrator-job.yaml }
 
 
-# Upgrade or install fluent bit operator
+# Upgrade or install fluentbit operator
 - name: Kubesphere | Checking fluentbit-version
   shell: >
     {{ bin_dir }}/kubectl get crd fluentbits.logging.kubesphere.io -o jsonpath='{.spec.versions[0].name}'
