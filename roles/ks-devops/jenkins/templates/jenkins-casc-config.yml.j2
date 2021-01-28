@@ -53,7 +53,7 @@ data:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
                 - hostPathVolume:
-                    hostPath: "sonar_cache"
+                    hostPath: "/var/data/jenkins_sonar_cache"
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"base\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
               - name: "nodejs"
@@ -86,13 +86,13 @@ data:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
                 - hostPathVolume:
-                    hostPath: "jenkins_nodejs_yarn_cache"
+                    hostPath: "/var/data/jenkins_nodejs_yarn_cache"
                     mountPath: "/root/.yarn"
                 - hostPathVolume:
-                    hostPath: "jenkins_nodejs_npm_cache"
+                    hostPath: "/var/data/jenkins_nodejs_npm_cache"
                     mountPath: "/root/.npm"
                 - hostPathVolume:
-                    hostPath: "sonar_cache"
+                    hostPath: "/var/data/jenkins_sonar_cache"
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"nodejs\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
               - name: "maven"
@@ -125,10 +125,10 @@ data:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
                 - hostPathVolume:
-                    hostPath: "jenkins_maven_cache"
+                    hostPath: "/var/data/jenkins_maven_cache"
                     mountPath: "/root/.m2"
                 - hostPathVolume:
-                    hostPath: "sonar_cache"
+                    hostPath: "/var/data/jenkins_sonar_cache"
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"maven\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n    volumeMounts:\r\n    - name: config-volume\r\n      mountPath: /opt/apache-maven-3.5.3/conf/settings.xml\r\n      subPath: settings.xml\r\n  volumes:\r\n    - name: config-volume\r\n      configMap:\r\n        name: ks-devops-agent\r\n        items:\r\n        - key: MavenSetting\r\n          path: settings.xml\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
               - name: "go"
@@ -161,10 +161,10 @@ data:
                     hostPath: "/var/run/docker.sock"
                     mountPath: "/var/run/docker.sock"
                 - hostPathVolume:
-                    hostPath: "jenkins_go_cache"
+                    hostPath: "/var/data/jenkins_go_cache"
                     mountPath: "/home/jenkins/go/pkg"
                 - hostPathVolume:
-                    hostPath: "sonar_cache"
+                    hostPath: "/var/data/jenkins_sonar_cache"
                     mountPath: "/root/.sonar/cache"
                 yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"go\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
       securityRealm:
