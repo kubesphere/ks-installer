@@ -24,7 +24,7 @@ If you've installed other plugins by yourself, or you've upgraded some plugins. 
 
 Before you do that, please install and config the [Jenkins CLI](https://github.com/jenkins-zh/jenkins-cli).
 
-You can get the token of Jenkins via: `kubectl get cm kubesphere-config -o jsonpath={.data.kubesphere\\.yaml} | grep devops -A 2 | grep password`.
+You can get the token of Jenkins via: `kubectl get cm kubesphere-config -n kubesphere-system -o jsonpath={.data.kubesphere\\.yaml} | grep devops -A 2 | grep password`.
 
 Then export the plugins list via: `jcli plugin formula > jenkins.yaml`. This file is similar to [formula.yaml](https://github.com/kubesphere/ks-jenkins/blob/master/formula.yaml) which comes from [ks-jenkins](https://github.com/kubesphere/ks-jenkins).
 
