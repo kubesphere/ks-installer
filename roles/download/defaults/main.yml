@@ -190,6 +190,8 @@ prometheus_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesp
 prometheus_adapter_tag: v0.6.0
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
 alertmanager_tag: v0.21.0
+thanos_repo: "{{ base_repo }}{{ namespace_override | default('thanosio') }}/thanos"
+thanos_tag: v0.18.0
 
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
