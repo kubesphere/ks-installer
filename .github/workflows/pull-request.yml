@@ -1,0 +1,63 @@
+name: e2e Test
+
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: ks-installer
+  IMAGE_REPO: kubespheredev
+  IMAGE_VERSION: latest
+
+jobs:
+  TestInKind:
+    runs-on: ubuntu-latest
+    if: github.repository	== 'kubesphere/ks-installer'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: |
+          tag=nightly-$(date '+%Y%m%d')
+          sed -i "/ks_image_tag/s/\:.*/\: $tag/g" roles/download/defaults/main.yml
+
+          # in order to avoid pull images in kind
+          sed -i "/Always/s/Always/IfNotPresent/g" deploy/kubesphere-installer.yaml
+          docker build . --file Dockerfile --tag $IMAGE_NAME
+      - name: Creating kind cluster
+        uses: helm/kind-action@v1.0.0-rc.1
+      - name: Installation Test
+        run: |
+          kubectl cluster-info --context kind-chart-testing
+          kubectl get ns
+          kind load docker-image $IMAGE_NAME --name chart-testing
+
+          sed -i "/image:/s/\:.*/\: $IMAGE_NAME/g" deploy/kubesphere-installer.yaml
+          kubectl apply -f deploy/kubesphere-installer.yaml
+          kubectl apply -f deploy/cluster-configuration.yaml
+
+          counter=0
+          while [  $counter -lt 60 ]
+          do
+            log=$(kubectl -n kubesphere-system get pod | grep ks-installer)
+            if [[ $log =~ "Running" ]]
+            then
+              break
+            fi
+            echo "waiting ks-installer pod for ready"
+            sleep 1
+          done
+
+          counter=0
+          while [  $counter -lt 300 ]
+          do
+            log=$(kubectl logs -n kubesphere-system deploy/ks-installer --tail=50)
+            if [[ $log =~ "Welcome to KubeSphere" ]]
+            then
+              exit 0
+            fi
+            echo "wait for ready"
+            echo $log
+            sleep 1
+          done
+          exit 1
