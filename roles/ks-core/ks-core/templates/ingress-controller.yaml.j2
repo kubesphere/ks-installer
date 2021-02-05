@@ -27,7 +27,6 @@ spec:
             - /nginx-ingress-controller
             - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
             - --annotations-prefix=nginx.ingress.kubernetes.io
-            - --force-namespace-isolation
             - --update-status
             - --update-status-on-shutdown
           env:
