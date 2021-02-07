@@ -95,7 +95,7 @@
   when:
     - op_jobs.stdout.find("hyperpitrix-generate-kubeconfig-job") == -1
 
-- name: OpenPitrix | import openpitrix status
+- name: OpenPitrix | Import openpitrix status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

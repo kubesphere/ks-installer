@@ -47,7 +47,7 @@
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
-- name: ks-monitor | import monitor status
+- name: ks-monitor | Import monitor status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

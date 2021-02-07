@@ -1,11 +1,11 @@
 ---
 
-- name: ks-events | getting ks-events installation files
+- name: ks-events | Getting ks-events installation files
   copy:
     src: "kube-events"
     dest: "{{ kubesphere_dir }}/ks-events/"
 
-- name: ks-events | getting ks-events installation files
+- name: ks-events | Getting ks-events installation files
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
@@ -13,14 +13,14 @@
     - { path: ks-events, file: custom-values-events.yaml }
 
 
-- name: ks-events | check ks-events
+- name: ks-events | Checking ks-events
   shell: >
     {{ bin_dir }}/helm list -f ks-events -n kubesphere-logging-system
   register: events_check
   failed_when: false
 
 
-- name: ks-events | deploy ks-events
+- name: ks-events | Deploying ks-events
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-events
     {{ kubesphere_dir }}/ks-events/kube-events
@@ -38,7 +38,7 @@
 - import_tasks: fluentbit-operator.yaml
 
 
-- name: ks-events | import ks-events status
+- name: ks-events | Import ks-events status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
@@ -51,7 +51,7 @@
   delay: 3
 
 
-- name: ks-events | import ks-events status
+- name: ks-events | Import ks-events status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

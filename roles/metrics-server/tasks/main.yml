@@ -7,14 +7,14 @@
   register: metrics_server_old_check
 
 
-- name: Metrics-Server | deleting old metrics-server
+- name: Metrics-Server | Deleting old metrics-server
   shell: "{{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/metrics-server/"
   register: import
   failed_when: "import.stderr and 'NotFound' not in import.stderr"
   when: metrics_server_old_check.stat.exists
 
 
-- name: Metrics-Server | deleting old metrics-server files
+- name: Metrics-Server | Deleting old metrics-server files
   file:
     path: "{{ kubesphere_dir }}/{{ item }}"
     state: absent
@@ -38,7 +38,7 @@
     - { name: values, file: values.yaml, type: config }
 
 
-- name: Metrics-Server | Check Metrics-Server
+- name: Metrics-Server | Checking Metrics-Server
   shell: >
     {{ bin_dir }}/helm list -f metrics-server -n kube-system
   register: metrics_server_check
@@ -71,7 +71,7 @@
   delay: 10
 
 
-- name: Metrics-Server | import metrics-server status
+- name: Metrics-Server | Import metrics-server status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

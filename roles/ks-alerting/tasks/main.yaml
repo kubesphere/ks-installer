@@ -81,7 +81,7 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/1-executor.yaml
 
 
-- name: ks-alerting | import ks-alerting status
+- name: ks-alerting | Import ks-alerting status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
