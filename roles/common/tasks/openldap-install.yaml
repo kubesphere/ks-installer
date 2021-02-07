@@ -1,4 +1,4 @@
-- name: Kubesphere | Getting openldap installation files
+- name: KubeSphere | Getting openldap installation files
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
@@ -6,7 +6,7 @@
     - "openldap-ha"
 
 
-- name: Kubesphere | Creating manifests
+- name: KubeSphere | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.file }}"
@@ -14,7 +14,7 @@
     - { name: custom-values-openldap, file: custom-values-openldap.yaml }
 
 
-- name: Kubesphere | Check old openldap status
+- name: KubeSphere | Check old openldap status
   shell: >
     {{ bin_dir }}/kubectl get pod
     -n kubesphere-system
@@ -27,7 +27,7 @@
   when:
     - old_openldap_exist.stdout != "0"
 
-- name: Kubesphere | Delete and backup old openldap svc
+- name: KubeSphere | Delete and backup old openldap svc
   shell: >
     {{ bin_dir }}/kubectl get svc -n kubesphere-system openldap -o yaml > {{ kubesphere_dir }}/openldap-svc-backup.yaml
     &&
@@ -36,14 +36,14 @@
     - old_openldap_exist.stdout != "0"
 
 
-- name: Kubesphere | Check openldap
+- name: KubeSphere | Check openldap
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-openldap"
   register: openldap_check
   failed_when: false
 
 
-- name: Kubesphere | Deploy openldap
+- name: KubeSphere | Deploy openldap
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-openldap
     {{ kubesphere_dir }}/openldap-ha
@@ -65,7 +65,7 @@
     - old_openldap_exist.stdout != "0"
 
 
-- name: Kubesphere | Import openldap status
+- name: KubeSphere | Import openldap status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

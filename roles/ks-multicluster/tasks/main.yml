@@ -39,7 +39,7 @@
         {{ bin_dir }}/kubectl label namespace kube-federation-system kubesphere.io/workspace=system-workspace --overwrite
 
 
-- name: Kubesphere | Check kubefed-admission-webhook status
+- name: KubeSphere | Check kubefed-admission-webhook status
   wait_for:
     host: "kubefed-admission-webhook.kube-federation-system.svc"
     port: 443

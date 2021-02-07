@@ -1,11 +1,11 @@
 ---
-- name: Kubesphere | Checking account init
+- name: KubeSphere | Checking account init
   shell: >
     {{ bin_dir }}/kubectl get users admin
   register: kubesphere_user_check
   failed_when: "kubesphere_user_check.stderr and 'NotFound' not in kubesphere_user_check.stderr"
 
-- name: Kubesphere | Init account
+- name: KubeSphere | Init account
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/initial-account.yaml
   when:

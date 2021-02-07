@@ -16,7 +16,7 @@
     - devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled
     - "status.mysql is not defined or status.mysql.status is not defined or status.mysql.status != 'enabled'"
 
-- name: Kubesphere | Deploying common component
+- name: KubeSphere | Deploying common component
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
   loop:

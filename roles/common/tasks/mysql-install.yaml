@@ -1,5 +1,5 @@
 
-- name: Kubesphere | Deploying common component
+- name: KubeSphere | Deploying common component
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
   loop:
@@ -10,7 +10,7 @@
     - "import.stderr and 'is forbidden' not in import.stderr"
 #  when: devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled
 
-- name: Kubesphere | import mysql status
+- name: KubeSphere | import mysql status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

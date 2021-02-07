@@ -16,7 +16,7 @@
       {% if masters is defined and masters.stdout is defined and masters.stdout != "0" and masters.stdout != "1" %}true{% else %}false{% endif %}
 
 
-- name: Kubesphere | Getting common component installation files
+- name: KubeSphere | Getting common component installation files
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
@@ -42,28 +42,28 @@
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
 
-- name: Kubesphere | Deploy snapshot controller
+- name: KubeSphere | Deploy snapshot controller
   block:
-    - name: Kubesphere | Getting common component installation files
+    - name: KubeSphere | Getting common component installation files
       copy:
         src: "{{ item }}"
         dest: "{{ kubesphere_dir }}/"
       loop:
         - "snapshot-controller"
 
-    - name: Kubesphere | Creating snapshot controller values
+    - name: KubeSphere | Creating snapshot controller values
       template:
         src: "{{ item.file }}.j2"
         dest: "{{ kubesphere_dir }}/{{ item.file }}"
       with_items:
         - { name: custom-values-snapshot-controller, file: custom-values-snapshot-controller.yaml }
 
-    - name: Kubesphere | Remove old snapshot crd
+    - name: KubeSphere | Remove old snapshot crd
       command: >
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml --force
       failed_when: false
 
-    - name: Kubesphere | Deploy snapshot controller
+    - name: KubeSphere | Deploy snapshot controller
       shell: >
         {{ bin_dir }}/helm upgrade --install snapshot-controller
         {{ kubesphere_dir }}/snapshot-controller
@@ -75,7 +75,7 @@
     - kubernetes_version.stdout is version('v1.17.0', '>=')
 
 
-- name: Kubesphere | Checking openpitrix common component
+- name: KubeSphere | Checking openpitrix common component
   shell: >
     {{ bin_dir }}/kubectl get pod -n openpitrix-system
   register: openpitrix_component_pod
@@ -90,7 +90,7 @@
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") != -1
 
 
-- name: Kubesphere | Getting PersistentVolumeName (mysql/etcd/minio)
+- name: KubeSphere | Getting PersistentVolumeName (mysql/etcd/minio)
   block:
 
     - name: Getting PersistentVolumeName (mysql)
@@ -134,7 +134,7 @@
 
 - import_tasks: get_old_config.yaml
 
-- name: Kubesphere | Creating common component manifests
+- name: KubeSphere | Creating common component manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/common/{{ item.file }}"
@@ -144,7 +144,7 @@
     - { path: redis, file: redis.yaml }
 
 
-- name: Kubesphere | Creating mysql sercet
+- name: KubeSphere | Creating mysql sercet
   shell: >
     {{ bin_dir }}/kubectl create secret generic mysql-pass
     --from-file={{ kubesphere_dir }}/common/password.txt
@@ -152,9 +152,9 @@
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
-- name: Kubesphere | Deploying common component
+- name: KubeSphere | Deploying common component
   block:
-    - name: Kubesphere | Deploying etcd and mysql
+    - name: KubeSphere | Deploying etcd and mysql
       shell: >
         {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
       loop:
@@ -183,7 +183,7 @@
     - openpitrix_component_pod.stdout.find("openpitrix-db-deployment") == -1
 
 
-- name: Kubesphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
+- name: KubeSphere | Setting persistentVolumeReclaimPolicy (mysql/etcd/minio)
   block:
 
     - name: Setting persistentVolumeReclaimPolicy (mysql)
