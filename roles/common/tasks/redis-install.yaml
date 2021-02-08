@@ -1,14 +1,14 @@
-- name: Kubesphere | Check ha-redis
+- name: KubeSphere | Check ha-redis
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-redis"
   register: redis_check
   failed_when: false
 
 
-- name: Kubesphere | Deploying ha redis
+- name: KubeSphere | Deploying ha redis
   block:
 
-    - name: Kubesphere | Getting redis installation files
+    - name: KubeSphere | Getting redis installation files
       copy:
         src: "{{ item }}"
         dest: "{{ kubesphere_dir }}/"
@@ -16,7 +16,7 @@
         - "redis-ha"
 
 
-    - name: Kubesphere | Creating manifests
+    - name: KubeSphere | Creating manifests
       template:
         src: "{{ item.file }}.j2"
         dest: "{{ kubesphere_dir }}/{{ item.file }}"
@@ -24,13 +24,13 @@
         - { name: custom-values-redis, file: custom-values-redis.yaml }
 
 
-    - name: Kubesphere | Check old redis status
+    - name: KubeSphere | Check old redis status
       shell: >
         {{ bin_dir }}/kubectl get pod -n kubesphere-system  -l app=redis,tier=database,version=redis-4.0 | wc -l
       register: old_redis_exist
 
 
-    - name: Kubesphere | Delete and backup old redis svc
+    - name: KubeSphere | Delete and backup old redis svc
       shell: >
         {{ bin_dir }}/kubectl get svc -n kubesphere-system redis -o yaml > {{ kubesphere_dir }}/redis-svc-backup.yaml
         &&
@@ -39,7 +39,7 @@
         - old_redis_exist.stdout != "0"
 
 
-    - name: Kubesphere | Deploying redis
+    - name: KubeSphere | Deploying redis
       shell: >
         {{ bin_dir }}/helm upgrade --install ks-redis
         {{ kubesphere_dir }}/redis-ha
@@ -48,7 +48,7 @@
         --namespace kubesphere-system
 
 
-    - name: Kubesphere | Getting redis PodIp
+    - name: KubeSphere | Getting redis PodIp
       shell: >
         {{ bin_dir }}/kubectl get pod
         -n kubesphere-system
@@ -68,7 +68,7 @@
     - (redis_check.stdout.find("deployed") == -1) or (redis_check.stdout.find("5.0.5") == -1)
 
 
-- name: Kubesphere | Deploying redis
+- name: KubeSphere | Deploying redis
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }} 
   loop:
@@ -81,7 +81,7 @@
     - (enableHA is defined and not enableHA) or (enableHA is not defined)
 
 
-- name: Kubesphere | Import redis status
+- name: KubeSphere | Import redis status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

@@ -8,13 +8,13 @@
     state: directory
     path: "/tmp/minio-backup/{{ item }}/"
 
-- name: Kubesphere | Fetch openpitrix-minio data
+- name: KubeSphere | Fetch openpitrix-minio data
   shell: >
     rclone copy
     op-minio:openpitrix-internal-repo/{{ item }}
     /tmp/minio-backup/{{ item }}/
 
-- name: Kubesphere | Check minio status
+- name: KubeSphere | Check minio status
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system | grep 'minio' | grep -v 'Running' | wc -l
   register: import
@@ -22,7 +22,7 @@
   retries: 30
   delay: 30
 
-- name: Kubesphere | Sync openpitrix-minio data
+- name: KubeSphere | Sync openpitrix-minio data
   shell: >
     rclone copy
     /tmp/minio-backup/{{ item }}/

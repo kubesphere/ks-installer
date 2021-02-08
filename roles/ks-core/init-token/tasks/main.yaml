@@ -46,12 +46,12 @@
   register: ks_token
 
 
-- name: Kubesphere | Checking kubesphere secrets
+- name: KubeSphere | Checking kubesphere secrets
   shell: >
     {{ bin_dir }}/kubectl get secrets -n kubesphere-system
   register: kubesphere_secrets
 
-- name: Kubesphere | Delete kubesphere secret
+- name: KubeSphere | Delete kubesphere secret
   shell: >
     {{ bin_dir }}/kubectl delete secrets -n kubesphere-system kubesphere-secret
   when:

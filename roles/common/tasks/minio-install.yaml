@@ -1,4 +1,4 @@
-- name: Kubesphere | Getting minio installation files
+- name: KubeSphere | Getting minio installation files
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
@@ -6,7 +6,7 @@
     - "minio-ha"
 
 
-- name: Kubesphere | Creating manifests
+- name: KubeSphere | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.file }}"
@@ -14,7 +14,7 @@
     - { name: custom-values-minio, file: custom-values-minio.yaml }
 
 
-- name: Kubesphere | Check minio
+- name: KubeSphere | Check minio
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-minio"
   register: minio_check
@@ -22,7 +22,7 @@
 
 
 - block:
-    - name: Kubesphere | Deploy minio
+    - name: KubeSphere | Deploy minio
       shell: >
         {{ bin_dir }}/helm upgrade --install ks-minio
         {{ kubesphere_dir }}/minio-ha
@@ -51,7 +51,7 @@
     - (minio_check.stdout.find("deployed") == -1) or (minio_check.stdout.find("RELEASE.2019-08-07T01-59-21Z") == -1)
 
 
-- name: Kubesphere | Import minio status
+- name: KubeSphere | Import minio status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

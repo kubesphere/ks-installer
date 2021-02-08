@@ -1,10 +1,10 @@
-- name: Kubesphere | Getting fluentbit installation files
+- name: KubeSphere | Getting fluentbit installation files
   copy:
     src: "fluentbit-operator"
     dest: "{{ kubesphere_dir }}/"
 
 
-- name: Kubesphere | Creating custom manifests
+- name: KubeSphere | Creating custom manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.path }}/{{ item.file }}"
@@ -15,14 +15,14 @@
 
 
 # Upgrade or install fluentbit operator
-- name: Kubesphere | Checking fluentbit-version
+- name: KubeSphere | Checking fluentbit-version
   shell: >
     {{ bin_dir }}/kubectl get crd fluentbits.logging.kubesphere.io -o jsonpath='{.spec.versions[0].name}'
   register: fluentbit_version
   failed_when: false
 
 
-- name: Kubesphere | Backup old fluentbit crd
+- name: KubeSphere | Backup old fluentbit crd
   shell: >
     {{ bin_dir }}/kubectl get fluentbits.logging.kubesphere.io -n kubesphere-logging-system fluent-bit -o yaml > {{ kubesphere_dir }}/fluentbit-crd.yaml.bak
   when:
@@ -30,7 +30,7 @@
     - fluentbit_version.stdout.find("v1alpha1") != -1
   failed_when: false
 
-- name: Kubesphere | Deleting old fluentbit operator
+- name: KubeSphere | Deleting old fluentbit operator
   shell: >
     {{ bin_dir }}/kubectl delete {{ item.type }} -n kubesphere-logging-system {{ item.name }}
   loop:
@@ -46,12 +46,12 @@
   failed_when: false
 
 
-- name: Kubesphere | Prepare fluentbit operator setup
+- name: KubeSphere | Prepare fluentbit operator setup
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/init
 
 
-- name: Kubesphere | Migrate fluentbit operator old config
+- name: KubeSphere | Migrate fluentbit operator old config
   shell: >
     {{ bin_dir }}/kubectl apply -f  {{ kubesphere_dir }}/fluentbit-operator/migrator
   when:
@@ -59,7 +59,7 @@
     - fluentbit_version.stdout.find("v1alpha1") != -1
 
 
-- name: Kubesphere | Deploy new fluentbit operator
+- name: KubeSphere | Deploy new fluentbit operator
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/fluentbit
   register: import
@@ -69,7 +69,7 @@
 
 
 # Update clusterconfig (cc) status
-- name: Kubesphere | Import fluentbit status
+- name: KubeSphere | Import fluentbit status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
