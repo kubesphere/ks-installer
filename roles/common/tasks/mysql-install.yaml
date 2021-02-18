@@ -10,7 +10,7 @@
     - "import.stderr and 'is forbidden' not in import.stderr"
 #  when: devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled
 
-- name: KubeSphere | import mysql status
+- name: KubeSphere | Import mysql status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

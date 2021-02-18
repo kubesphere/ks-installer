@@ -125,7 +125,7 @@
   when:
     - ks_svc.stdout.find("ks-console") != -1
 
-- name: KubeSphere | import ks-core status
+- name: KubeSphere | Import ks-core status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

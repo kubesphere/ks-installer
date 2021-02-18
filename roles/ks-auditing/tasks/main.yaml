@@ -38,7 +38,7 @@
 - import_tasks: fluentbit-operator.yaml
 
 
-- name: ks-auditing | import ks-auditing status
+- name: ks-auditing | Import ks-auditing status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

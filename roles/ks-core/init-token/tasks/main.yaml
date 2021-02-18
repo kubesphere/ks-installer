@@ -51,14 +51,14 @@
     {{ bin_dir }}/kubectl get secrets -n kubesphere-system
   register: kubesphere_secrets
 
-- name: KubeSphere | Delete kubesphere secret
+- name: KubeSphere | Deleting kubesphere secret
   shell: >
     {{ bin_dir }}/kubectl delete secrets -n kubesphere-system kubesphere-secret
   when:
     - kubesphere_secrets.stdout.find("kubesphere-secret") != -1
     - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
     
-- name: KubeSphere | Create components token
+- name: KubeSphere | Creating components token
   shell: >
     {{ bin_dir }}/kubectl create secret generic kubesphere-secret
     --from-literal=token={{ ks_token.stdout }}
