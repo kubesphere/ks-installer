@@ -1,18 +1,18 @@
 ---
-- name: KubeSphere | Getting kubernetes version
+- name: KubeSphere | Getting Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
   failed_when: false
 
 
-- name: KubeSphere | Setting kubernetes version
+- name: KubeSphere | Setting Kubernetes version
   set_fact:
     kube_version: "{{ kubernetes_version.stdout }}"
   failed_when: false
 
 
-- name: KubeSphere | Getting kubernetes master num
+- name: KubeSphere | Getting Kubernetes master num
   shell: >
     {{ bin_dir }}/kubectl get node | awk '{if(NR>1){print $3}}' | grep master |wc -l
   register: masters
@@ -125,7 +125,7 @@
   when:
     - ks_svc.stdout.find("ks-console") != -1
 
-- name: KubeSphere | Import ks-core status
+- name: KubeSphere | Importing ks-core status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

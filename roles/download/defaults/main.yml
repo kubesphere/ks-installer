@@ -66,7 +66,7 @@ ks_image_tag: "{{ dev_tag | default('latest') }}"
 # it helps a lot for local private development or bare metal environment.
 # So you need define --registry-mirror or --insecure-registry, and modify the following url address.
 # example:
-# You need to deploy kubernetes cluster on local private development.
+# You need to deploy Kubernetes cluster on local private development.
 # Also provide the address of your own private registry.
 # And use --insecure-registry options for docker
 

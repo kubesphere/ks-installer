@@ -1,4 +1,4 @@
-## set kubernetes cluster domain where minio is running
+## set Kubernetes cluster domain where minio is running
 ##
 clusterDomain: cluster.local
 

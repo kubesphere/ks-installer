@@ -25,7 +25,7 @@
   retries: 5
   delay: 3
 
-- name: weave-scope | Import weave-scope status
+- name: weave-scope | Importing weave-scope status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

@@ -1,7 +1,7 @@
 MinIO
 =====
 
-[MinIO](https://min.io) is a distributed object storage service for high performance, high scale data infrastructures. It is a drop in replacement for AWS S3 in your own environment. It uses erasure coding to provide highly resilient storage that can tolerate failures of upto n/2 nodes. It runs on cloud, container, kubernetes and bare-metal environments. It is simple enough to be deployed in seconds, and can scale to 100s of peta bytes. MinIO is suitable for storing objects such as photos, videos, log files, backups, VM and container images.
+[MinIO](https://min.io) is a distributed object storage service for high performance, high scale data infrastructures. It is a drop in replacement for AWS S3 in your own environment. It uses erasure coding to provide highly resilient storage that can tolerate failures of upto n/2 nodes. It runs on cloud, container, Kubernetes and bare-metal environments. It is simple enough to be deployed in seconds, and can scale to 100s of peta bytes. MinIO is suitable for storing objects such as photos, videos, log files, backups, VM and container images.
 
 MinIO supports [distributed mode](https://docs.minio.io/docs/distributed-minio-quickstart-guide). In distributed mode, you can pool multiple drives (even on different machines) into a single object storage server.
 
@@ -111,10 +111,10 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `configPath`                              | Default config file location                                                                                                            | `~/.minio`                                 |
 | `configPathmc`                            | Default config file location for MinIO client - mc                                                                                      | `~/.mc`                                    |
 | `mountPath`                               | Default mount location for persistent drive                                                                                             | `/export`                                  |
-| `clusterDomain`                           | domain name of kubernetes cluster where pod is running.                                                                                 | `cluster.local`                            |
+| `clusterDomain`                           | Domain name of Kubernetes cluster where pod is running.                                                                                 | `cluster.local`                            |
 | `service.type`                            | Kubernetes service type                                                                                                                 | `ClusterIP`                                |
 | `service.port`                            | Kubernetes port where service is exposed                                                                                                | `9000`                                     |
-| `service.externalIPs`                     | service external IP addresses                                                                                                           | `nil`                                      |
+| `service.externalIPs`                     | Service external IP addresses                                                                                                           | `nil`                                      |
 | `service.annotations`                     | Service annotations                                                                                                                     | `{}`                                       |
 | `serviceAccount.create`                   | Toggle creation of new service account                                                                                                  | `true`                                     |
 | `serviceAccount.name`                     | Name of service account to create and/or use                                                                                            | `""`                                       |
@@ -154,7 +154,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `azuregateway.enabled`                    | Use MinIO as an [azure gateway](https://docs.minio.io/docs/minio-gateway-for-azure)                                                     | `false`                                    |
 | `azuregateway.replicas`                   | Number of azure gateway instances to run in parallel                                                                                    | `4`                                        |
 | `gcsgateway.enabled`                      | Use MinIO as a [Google Cloud Storage gateway](https://docs.minio.io/docs/minio-gateway-for-gcs)                                         | `false`                                    |
-| `gcsgateway.gcsKeyJson`                   | credential json file of service account key                                                                                             | `""`                                       |
+| `gcsgateway.gcsKeyJson`                   | Credential json file of service account key                                                                                             | `""`                                       |
 | `gcsgateway.projectId`                    | Google cloud project id                                                                                                                 | `""`                                       |
 | `ossgateway.enabled`                      | Use MinIO as an [Alibaba Cloud Object Storage Service gateway](https://github.com/minio/minio/blob/master/docs/gateway/oss.md)          | `false`                                    |
 | `ossgateway.replicas`                     | Number of oss gateway instances to run in parallel                                                                                      | `4`                                        |
