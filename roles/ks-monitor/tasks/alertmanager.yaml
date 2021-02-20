@@ -1,4 +1,4 @@
 ---
-- name: ks-monitor | Installing alertmanager 
+- name: Monitoring | Installing alertmanager 
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/alertmanager

@@ -1,4 +1,4 @@
 ---
-- name: ks-monitor | Installing thanosruler
+- name: Monitoring | Installing thanosruler
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/thanosruler

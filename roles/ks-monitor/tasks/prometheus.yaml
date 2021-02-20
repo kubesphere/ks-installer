@@ -1,5 +1,5 @@
 ---
-- name: ks-monitor | Installing prometheus
+- name: Monitoring | Installing Prometheus
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
   loop:
     - "prometheus"

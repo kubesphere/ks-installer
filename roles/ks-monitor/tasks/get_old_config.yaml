@@ -1,11 +1,11 @@
 ---
-- name: Logging | Check prometheus PersistentVolumeClaim
+- name: Monitoring | Checking Prometheus PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-monitoring-system prometheus-k8s-db-prometheus-k8s-0 -o jsonpath='{.status.capacity.storage}'
   register: prometheus_pvc
   failed_when: false
 
-- name: Logging | Setting prometheus data pv size
+- name: Monitoring | Setting Prometheus data pv size
   set_fact:
     prometheus_pv_size: "{{ prometheus_pvc.stdout }}"
   when:
@@ -13,13 +13,13 @@
     - prometheus_pvc.stdout != ""
   failed_when: false
 
-- name: Logging | Check prometheus retention days
+- name: Monitoring | Checking Prometheus retention days
   shell: >
     {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n kubesphere-monitoring-system k8s -o jsonpath='{.spec.retention}'
   register: prometheus_retention
   failed_when: false
 
-- name: Logging | Setting prometheus retention days
+- name: Monitoring | Setting Prometheus retention days
   set_fact:
     prometheus_retention_duration: "{{ prometheus_retention.stdout }}"
   when:
@@ -27,14 +27,14 @@
     - prometheus_retention.stdout != ""
   failed_when: false
 
-- name: Logging | Check prometheus node selector
+- name: Monitoring | Checking Prometheus node selector
   shell: |
     {{ bin_dir }}/kubectl get prometheuses.monitoring.coreos.com -n kubesphere-monitoring-system k8s -o go-template --template="{{ '{{' }}range \$key, \$value := .spec.nodeSelector{{ '}}' }}    {{ '{{' }}\$key{{ '}}' }}: {{ '{{' }}\$value{{ '}}' }}
     {{ '{{' }}end{{ '}}' }}"
   register: prometheus_node_selector
   failed_when: false
 
-- name: Logging | Setting prometheus node selector
+- name: Monitoring | Setting Prometheus node selector
   set_fact:
     prometheus_node_selector_map: "{{ prometheus_node_selector.stdout }}"
   when:
