@@ -69,7 +69,7 @@
 
 
 # Update clusterconfig (cc) status
-- name: KubeSphere | Import fluentbit status
+- name: KubeSphere | Importing fluentbit status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

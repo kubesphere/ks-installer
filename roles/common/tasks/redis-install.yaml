@@ -81,7 +81,7 @@
     - (enableHA is defined and not enableHA) or (enableHA is not defined)
 
 
-- name: KubeSphere | Import redis status
+- name: KubeSphere | Importing redis status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

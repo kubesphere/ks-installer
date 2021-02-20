@@ -19,7 +19,7 @@ Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCom
 Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.15.0`, it's good to go. Otherwise you need to upgrade your kubernetes first.
+> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.15.0`, it's good to go. Otherwise you need to upgrade your Kubernetes first.
 
 2. Check if the available resources meet the minimal prerequisite in your cluster.
 

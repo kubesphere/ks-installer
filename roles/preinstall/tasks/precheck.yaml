@@ -1,17 +1,17 @@
 ---
-- name: KubeSphere | Checking kubernetes version
+- name: KubeSphere | Checking Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
 
-- name: KubeSphere | Init kubernetes version
+- name: KubeSphere | Initing Kubernetes version
   set_fact: >
      k8s_version: {{ kubernetes_version.stdout }}
 
-- name: KubeSphere | Stopping if kubernetes version is nonsupport
+- name: KubeSphere | Stopping if Kubernetes version is nonsupport
   assert:
     that: kubernetes_version.stdout is version('v1.15.0', '>=')
-    msg: "The current kubernetes version is not supported !"
+    msg: "The current Kubernetes version is not supported !"
 
 - name: KubeSphere | Checking StorageClass
   shell: >

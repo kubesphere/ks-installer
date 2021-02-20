@@ -55,13 +55,13 @@
     {{ bin_dir }}/kubectl get secret kubesphere-secret -o jsonpath='{.data.secret}' | base64 -d
   register: ks_secret_str
 
-- name: KubeSphere | Checking kubernetes version
+- name: KubeSphere | Checking Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
 
 - debug:
-    msg: Current kubernetes version is {{kubernetes_version.stdout}}
+    msg: Current Kubernetes version is {{kubernetes_version.stdout}}
 
 # Get the matched kubectl image
 - name: KubeSphere | Setting kubectl image version

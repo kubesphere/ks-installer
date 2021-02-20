@@ -71,7 +71,7 @@
   delay: 10
 
 
-- name: Metrics-Server | Import metrics-server status
+- name: Metrics-Server | Importing metrics-server status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
