@@ -1,5 +1,5 @@
 ---
-- name: ks-monitor | Installing etcd monitoring
+- name: Monitoring | Installing etcd monitoring
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
   loop:
     - "etcd"

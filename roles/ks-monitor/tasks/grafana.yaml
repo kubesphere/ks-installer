@@ -1,4 +1,4 @@
 ---
-- name: ks-monitor | Installing grafana 
+- name: Monitoring | Installing grafana 
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/grafana

@@ -1,4 +1,4 @@
 ---
-- name: ks-monitor | Installing node-exporter 
+- name: Monitoring | Installing node-exporter 
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/node-exporter --force

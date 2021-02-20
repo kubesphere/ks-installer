@@ -1,11 +1,11 @@
 ---
 
-- name: notification-manager | getting notification-manager installation files
+- name: notification-manager | Getting notification-manager installation files
   copy:
     src: "notification-manager"
     dest: "{{ kubesphere_dir }}/"
 
-- name: notification-manager | getting notification-manager installation files
+- name: notification-manager | Getting notification-manager installation files
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
@@ -13,14 +13,14 @@
     - { path: notification-manager, file: custom-values-notification.yaml }
 
 
-- name: notification-manager | check notification-manager
+- name: notification-manager | Checking notification-manager
   shell: >
     {{ bin_dir }}/helm list -f notification-manager -n kubesphere-monitoring-system
   register: notification_check
   failed_when: false
 
 
-- name: notification-manager | deploy notification-manager
+- name: notification-manager | Deploying notification-manager
   shell: >
     {{ bin_dir }}/helm upgrade --install notification-manager
     {{ kubesphere_dir }}/notification-manager
