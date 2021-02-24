@@ -1,7 +1,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ThanosRuler
 metadata:
-  name: k8s
+  labels:
+    thanos-ruler: kubesphere
+  name: kubesphere
   namespace: kubesphere-monitoring-system
 spec:
   affinity:
@@ -10,10 +12,10 @@ spec:
       - podAffinityTerm:
           labelSelector:
             matchExpressions:
-            - key: thanosruler
+            - key: thanos-ruler
               operator: In
               values:
-              - k8s
+              - kubesphere
           namespaces:
           - kubesphere-monitoring-system
           topologyKey: kubernetes.io/hostname
