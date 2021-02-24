@@ -1,3 +1,4 @@
+
 apiVersion: notification.kubesphere.io/v2alpha1
 kind: NotificationManager
 metadata:
