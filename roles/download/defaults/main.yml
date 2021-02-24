@@ -196,10 +196,10 @@ thanos_tag: v0.18.0
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 notification_manager_operator_proxy_tag: v0.4.1
-notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager-operator"
-notification_manager_operator_tag: v0.1.0
-notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager"
-notification_manager_tag: v0.1.0
+notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager-operator"
+notification_manager_operator_tag: v1.0.0
+notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager"
+notification_manager_tag: v1.0.0
 
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-curator"
