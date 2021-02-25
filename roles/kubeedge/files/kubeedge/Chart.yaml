@@ -1,0 +1,11 @@
+apiVersion: v1
+name: kubeedge
+home: https://github.com/kubesphere/kubeedge
+version: 0.1.0
+appVersion: 0.1.0
+description: The KubeEdge component.
+sources:
+- https://github.com/kubesphere/kubeedge
+maintainers:
+- name: kubeedge
+  email: kubeedge@kubesphere.io

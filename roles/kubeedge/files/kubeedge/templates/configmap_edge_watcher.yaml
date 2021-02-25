@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edge-watcher
+  labels:
+    control-plane: controller-manager
+data:
+  edgewatcher.yaml: |
+    edgenode:
+      labels:
+        {{- range .Values.edgeWatcher.edgeNode.labels }}
+          "{{ .name }}": "{{ .value}}"
+        {{- end }}
+    iptablesrules:
+      name: edge-watcher
+      source:
+        metrics_port: {{ .Values.edgeWatcher.iptablesRules.source.metricsPort }}
+        log_port: {{ .Values.edgeWatcher.iptablesRules.source.logPort }}
+      destination:
+        address: {{ .Values.edgeWatcher.iptablesRules.destination.address }}
+        port: {{ .Values.edgeWatcher.iptablesRules.destination.port }}
