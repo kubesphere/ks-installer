@@ -96,7 +96,7 @@ jaegertracing/jaeger-operator:1.17.1
 jaegertracing/jaeger-query:1.17
 kubespheredev/kiali:v1.26.1
 ##ks-devops-images
-kubesphere/ks-jenkins:2.176.2                     
+kubesphere/ks-jenkins:2.249.1
 jenkins/jnlp-slave:3.27-1
 kubesphere/s2ioperator:v2.1.1               
 kubesphere/s2irun:v2.1.1                    

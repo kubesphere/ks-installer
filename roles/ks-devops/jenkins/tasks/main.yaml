@@ -5,15 +5,29 @@
     dest: "{{ kubesphere_dir }}/"
 
 
-- name: Jenkins | Check jenkins status
+- name: Jenkins | Check Jenkins status
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins
   register: jenkins_status
   failed_when: false
 
+
 - import_tasks: get_old_config.yaml
   when:
     - jenkins_status.rc == 0
+
+
+- name: Jenkins | Check Jenkins update center status
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system uc-jenkins-update-center
+  register: jenkins_uc_status
+  failed_when: false
+
+
+- import_tasks: uninstall_update_center.yaml
+  when:
+    - jenkins_uc_status.rc == 0
+
 
 - block:
   - name: Jenkins | Getting sonarqube host
