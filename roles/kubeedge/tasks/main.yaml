@@ -1,0 +1,23 @@
+---
+
+- name: KubeEdge | Getting KubeEdge installation files
+  copy:
+    src: "kubeedge"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: KubeEdge | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/kubeedge/{{ item.file }}"
+  with_items:
+    - { name: values, file: values.yaml, type: config }
+
+- name: KubeEdge | Installing KubeEdge
+  shell: >
+    {{ bin_dir }}/helm install kubeedge
+    {{ kubesphere_dir }}/kubeedge
+    --version 0.1.0
+    --namespace kubeedge
+  register: result
+  until: result is succeeded
+  retries: 3
