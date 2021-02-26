@@ -4,8 +4,8 @@
 appVersion: "0.1.0"
 
 cloudCore:
-  repository: "dockerhub.qingcloud.com/kubeedge/cloudcore"
-  tag: "v1.5.0"
+  repository: "{{ cloudcore_repo }}"
+  tag: "{{ cloudcore_tag }}"
   pullPolicy: "IfNotPresent"
   nodeSelector: {"node-role.kubernetes.io/worker": ""}
   tolerations: []
@@ -17,6 +17,16 @@ cloudCore:
   cloudHub:
     advertiseAddress:
       - ""
+    nodeLimit: "100"
+    websocket:
+      enable: true
+    quic:
+      enable: false
+      maxIncomingStreams: "10000"
+    https:
+      enable: true
+  cloudStream:
+    enable: true
   service:
     cloudhubNodePort: "30000"
     cloudhubQuicNodePort: "30001"
@@ -28,20 +38,26 @@ edgeWatcher:
   nodeSelector: {"node-role.kubernetes.io/worker": ""}
   tolerations: []
   controllerManager:
-    repository: "dockerhub.qingcloud.com/kubeedge/edge-watcher"
-    tag: "v0.1.0"
+    repository: "{{ edge_watcher_repo }}"
+    tag: "{{ edge_watcher_tag }}"
     pullPolicy: "IfNotPresent"
   kubeRBACProxy:
-    repository: "kubesphere/kube-rbac-proxy"
-    tag: "v0.5.0"
+    repository: "{{ kube_rbac_proxy_repo }}"
+    tag: "{{ kube_rbac_proxy_tag  }}"
     pullPolicy: "IfNotPresent"
   edgeWatcherAgent:
-    repository: "dockerhub.qingcloud.com/kubeedge/edge-watcher-agent"
-    tag: "v0.1.0"
+    repository: "{{ edge_watcher_agent_repo }}"
+    tag: "{{ edge_watcher_agent_tag }}"
     pullPolicy: "IfNotPresent"
     nodeSelector: {"node-role.kubernetes.io/worker": ""}
     tolerations: []
+  edgeNode:
+    labels:
+      - name: "node-role.kubernetes.io/edge"
+        value: ""
   iptablesRules:
+    source:
+      metricsPort: "10250"
+      logPort: "10350"
     destination:
-      address: ""
-      port: "30003"
+      address: "{{ ks_kubeedge_nodeIP }}"

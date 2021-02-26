@@ -1,0 +1,63 @@
+# Default values for kubeedge.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+appVersion: "0.1.0"
+
+cloudCore:
+  repository: "dockerhub.qingcloud.com/kubeedge/cloudcore"
+  tag: "v1.5.0"
+  pullPolicy: "IfNotPresent"
+  nodeSelector: {"node-role.kubernetes.io/worker": ""}
+  tolerations: []
+  cloudhubPort: "10000"
+  cloudhubQuicPort: "10001"
+  cloudhubHttpsPort: "10002"
+  cloudstreamPort: "10003"
+  tunnelPort: "10004"
+  cloudHub:
+    advertiseAddress:
+      - ""
+    nodeLimit: "100"
+    websocket:
+      enable: true
+    quic:
+      enable: false
+      maxIncomingStreams: "10000"
+    https:
+      enable: true
+  cloudStream:
+    enable: true
+  service:
+    cloudhubNodePort: "30000"
+    cloudhubQuicNodePort: "30001"
+    cloudhubHttpsNodePort: "30002"
+    cloudstreamNodePort: "30003"
+    tunnelNodePort: "30004"
+
+edgeWatcher:
+  nodeSelector: {"node-role.kubernetes.io/worker": ""}
+  tolerations: []
+  controllerManager:
+    repository: "dockerhub.qingcloud.com/kubeedge/edge-watcher"
+    tag: "v0.1.0"
+    pullPolicy: "IfNotPresent"
+  kubeRBACProxy:
+    repository: "kubesphere/kube-rbac-proxy"
+    tag: "v0.5.0"
+    pullPolicy: "IfNotPresent"
+  edgeWatcherAgent:
+    repository: "dockerhub.qingcloud.com/kubeedge/edge-watcher-agent"
+    tag: "v0.1.0"
+    pullPolicy: "IfNotPresent"
+    nodeSelector: {"node-role.kubernetes.io/worker": ""}
+    tolerations: []
+  edgeNode:
+    labels:
+      - name: "node-role.kubernetes.io/edge"
+        value: ""
+  iptablesRules:
+    source:
+      metricsPort: "10250"
+      logPort: "10350"
+    destination:
+      address: ""

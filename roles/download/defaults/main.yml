@@ -114,6 +114,14 @@ tower_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 tower_image: tower
 tower_image_tag: v0.1.0
 
+# kubeedge
+cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/cloudcore"
+cloudcore_tag: "v1.5.0"
+edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher"
+edge_watcher_tag: "v0.1.0"
+edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher-agent"
+edge_watcher_agent_tag: "v0.1.0"
+
 #openpitrix:
 op_version: "v0.5.3"
 openpitrix_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/openpitrix"
