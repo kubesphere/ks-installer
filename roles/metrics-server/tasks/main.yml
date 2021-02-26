@@ -1,42 +1,15 @@
 ---
-
-- name: Metrics-Server | Checking old installation files
-  stat:
-    path: "{{ kubesphere_dir }}/metrics-server/auth-reader.yaml"
-  failed_when: false
-  register: metrics_server_old_check
-
-
-- name: Metrics-Server | Deleting old metrics-server
-  shell: "{{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/metrics-server/"
-  register: import
-  failed_when: "import.stderr and 'NotFound' not in import.stderr"
-  when: metrics_server_old_check.stat.exists
-
-
-- name: Metrics-Server | Deleting old metrics-server files
-  file:
-    path: "{{ kubesphere_dir }}/{{ item }}"
-    state: absent
-  failed_when: false
-  loop:
-    - "metrics-server"
-  when: metrics_server_old_check
-
-
 - name: Metrics-Server | Getting metrics-server installation files
   copy:
     src: "metrics-server"
     dest: "{{ kubesphere_dir }}/"
-
 
 - name: Metrics-Server | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/metrics-server/{{ item.file }}"
   with_items:
-    - { name: values, file: values.yaml, type: config }
-
+    - { file: metrics-server.yaml}
 
 - name: Metrics-Server | Checking Metrics-Server
   shell: >
@@ -45,22 +18,23 @@
   failed_when: false
 
 - block:
-    - name: Metrics-Server | Installing metrics-server
+    - name: Metrics-Server | Uninstalling old metrics-server
       shell: >
-        {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server  --namespace kube-system
-      register: result
-      failed_when: false
-
-
-    - name: Metrics-Server | Installing metrics-server retry
-      shell: >
-        {{ bin_dir }}/helm del metrics-server -n kube-system &&
-        sleep 5 &&
-        {{ bin_dir }}/helm upgrade --install metrics-server {{ kubesphere_dir }}/metrics-server --namespace kube-system
-      when:
-        - result.rc != 0
+        {{ bin_dir }}/helm del metrics-server -n kube-system 
+      register: ms_uninstall
+      until: ms_uninstall.rc == 0
+      retries: 5 
+      delay: 1
   when:
-    - (metrics_server_check.stdout.find("DEPLOYED") == -1) or (metrics_server_check.stdout.find("0.3.1-0217") == -1)
+    - (metrics_server_check.stdout.find("DEPLOYED") == 0) or (metrics_server_check.stdout.find("0.3.7") == 0)
+
+- name: Metrics-Server | Installing new metrics-server
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/metrics-server/metrics-server.yaml
+  register: ms_install
+  until: ms_install.rc == 0
+  retries: 5 
+  delay: 1
 
 - name: Metrics-Server | Waitting for v1beta1.metrics.k8s.io ready
   shell: >

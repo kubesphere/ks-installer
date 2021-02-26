@@ -248,7 +248,7 @@ defaultbackend_tag: 1.4
 
 #metrics:
 metrics_server_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/metrics-server"
-metrics_server_tag: v0.3.7
+metrics_server_tag: v0.4.2
 
 #istio
 istio_hub: "{{ base_repo }}{{ namespace_override | default('istio') }}"
