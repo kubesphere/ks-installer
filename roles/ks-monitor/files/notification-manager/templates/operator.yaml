@@ -36,6 +36,12 @@ spec:
         - --enable-leader-election
         command:
         - /notification-manager-operator
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
         image: {{ .Values.operator.containers.operator.image.repo }}:{{ .Values.operator.containers.operator.image.tag }}
         imagePullPolicy: {{ .Values.operator.containers.operator.image.pullPolicy }}
         name: notification-manager-operator
