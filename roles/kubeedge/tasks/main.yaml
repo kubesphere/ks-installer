@@ -18,9 +18,8 @@
 
 - name: KubeEdge | Installing KubeEdge
   shell: >
-    {{ bin_dir }}/helm install kubeedge
-    {{ kubesphere_dir }}/kubeedge
-    --version 0.1.0
+    {{ bin_dir }}/helm upgrade --install kubeedge
+    {{ kubesphere_dir }}/kubeedge/kubeedge
     --namespace kubeedge
     --create-namespace
     -f {{ kubesphere_dir }}/kubeedge/custom-values-kubeedge.yaml

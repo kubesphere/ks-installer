@@ -60,4 +60,5 @@ edgeWatcher:
       metricsPort: "10250"
       logPort: "10350"
     destination:
-      address: "{{ ks_kubeedge_nodeIP }}"
+      address: "{{ ks_kubeedge_nodeIP.stdout }}"
+
