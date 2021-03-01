@@ -52,7 +52,7 @@ resource "null_resource" "install_kubesphere" {
 
   provisioner "remote-exec" {
     inline = [
-      "sh install.sh"
+      "bash install.sh"
     ]
 
     connection {

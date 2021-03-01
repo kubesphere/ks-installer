@@ -26,6 +26,7 @@ function wait_for_ks_finish() {
     kubectl -n kubesphere-system wait --timeout=180s --for=condition=Ready $(kubectl -n kubesphere-system get pod -l app=ks-install -oname)
     echo "waiting for KubeSphere ready"
     while IFS= read -r line; do
+        echo $line
         if [[ $line =~ "Welcome to KubeSphere" ]]
             then
                 break
