@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
 function wait_status_ok(){
     for ((n=0;n<30;n++))
     do  
