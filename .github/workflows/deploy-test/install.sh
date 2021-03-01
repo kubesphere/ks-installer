@@ -21,7 +21,7 @@ function wait_status_ok(){
     done
 }
 
-function wait_for_ks_finish() {
+function check_installer_ok(){
     echo "waiting for ks-installer pod ready"
     kubectl -n kubesphere-system wait --timeout=180s --for=condition=Ready $(kubectl -n kubesphere-system get pod -l app=ks-install -oname)
     echo "waiting for KubeSphere ready"
@@ -29,9 +29,12 @@ function wait_for_ks_finish() {
         echo $line
         if [[ $line =~ "Welcome to KubeSphere" ]]
             then
-                break
+                return
         fi
-    done < <(timeout 90 kubectl logs -n kubesphere-system deploy/ks-installer -f)
+    done < <(timeout 10 kubectl logs -n kubesphere-system deploy/ks-installer -f)
+    echo "ks-install not output 'Welcome to KubeSphere'"
+    sleep 20
+    exit 1
 }
 
 yum install -y vim openssl socat conntrack ipset wget
@@ -55,5 +58,5 @@ kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec"
 
 kubectl -n kubesphere-system rollout restart deploy ks-installer
 wait_status_ok
-wait_for_ks_finish
+check_installer_ok
 kubectl get all -A
