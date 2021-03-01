@@ -6,4 +6,4 @@
     - kubesphere-defaults
     - role: telemetry
       when:
-        - "telemetry_enabled| default(true)"
+        - "telemetry_enabled | default(true)"

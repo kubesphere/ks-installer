@@ -1,5 +1,4 @@
 ---
-
 - name: logsidecar-injector | Getting logsidecar-injector installation files
   copy:
     src: "logsidecar-injector"
@@ -17,7 +16,7 @@
 #   ignore_errors: True
 
 - block:
-  - name: logsidecar-injector | Delete old version logsidecar injector
+  - name: logsidecar-injector | Deleting old version logsidecar injector
     shell: >
       kubectl -n kubesphere-logging-system delete deploy logsidecar-injector ;
       kubectl -n kubesphere-logging-system delete service logsidecar-injector ;
@@ -25,7 +24,7 @@
       kubectl delete mutatingwebhookconfiguration logsidecar-injector
     failed_when: false
 
-  - name: logsidecar-injector | Deploy logsidecar-injector
+  - name: logsidecar-injector | Deploying logsidecar-injector
     shell: >
       {{ bin_dir }}/helm upgrade --install logsidecar-injector
       {{ kubesphere_dir }}/logsidecar-injector
@@ -35,13 +34,13 @@
     register: deploy_result
     failed_when: false
 
-  - name: logsidecar-injector | Delete logsidecar-injector configmap
+  - name: logsidecar-injector | Deleting logsidecar-injector configmap
     shell: >
       {{ bin_dir }}/kubectl delete cm -n  kubesphere-logging-system  logsidecar-injector-configmap
     when:
       - "deploy_result.stderr and 'missing key' in deploy_result.stderr"
 
-  - name: logsidecar-injector | Deploy logsidecar-injector
+  - name: logsidecar-injector | Deploying logsidecar-injector
     shell: >
       {{ bin_dir }}/helm upgrade --install logsidecar-injector
       {{ kubesphere_dir }}/logsidecar-injector
