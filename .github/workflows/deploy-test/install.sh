@@ -31,7 +31,7 @@ function wait_for_ks_finish() {
             then
                 break
         fi
-    done < <(timeout 900 kubectl logs -n kubesphere-system deploy/ks-installer -f)
+    done < <(timeout 90 kubectl logs -n kubesphere-system deploy/ks-installer -f)
 }
 
 yum install -y vim openssl socat conntrack ipset wget
@@ -54,6 +54,6 @@ kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec"
 kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
 
 kubectl -n kubesphere-system rollout restart deploy ks-installer
-wait_for_ks_finish
 wait_status_ok
+wait_for_ks_finish
 kubectl get all -A
