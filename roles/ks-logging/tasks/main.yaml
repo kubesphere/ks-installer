@@ -5,7 +5,7 @@
     dest: "{{ kubesphere_dir }}/"
 
 
-- name: ks-logging | Checking fluent bit migrating
+- name: ks-logging | Checking fluent-bit migrating
   shell: >
     {{ bin_dir }}/kubectl get outputs.logging.kubesphere.io -n kubesphere-logging-system es -o jsonpath='{.metadata.name}'
   register: migrating_completed
@@ -21,13 +21,14 @@
   when: migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
 
 
-- name: ks-logging | Apply fluentbit operator custom resources
+- name: ks-logging | Apply fluent-bit operator custom resources
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator
 
 
 - import_tasks: logsidecar.yaml
-  
+  when:
+  - "logging.logsidecar.enabled == true"
 
 - name: ks-logging | Importing logging status
   shell: >

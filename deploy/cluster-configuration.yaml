@@ -56,7 +56,9 @@ spec:
       replicas: 2
   logging:                 # (CPU: 57 m, Memory: 2.76 G) Whether to install KubeSphere logging system. Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false
-    logsidecarReplicas: 2
+    logsidecar:
+      enabled: true
+      replicas: 2
   metrics_server:                    # (CPU: 56 m, Memory: 44.35 MiB) Whether to install metrics-server. IT enables HPA (Horizontal Pod Autoscaler).
     enabled: false
   monitoring:

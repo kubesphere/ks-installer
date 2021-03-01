@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: {{ logging.logsidecarReplicas | default(2) }}
+replicaCount: {{ logging.logsidecar.replicas | default(2) }}
 
 image:
   repository: {{ ks_log_sidecar_injector_repo }}
