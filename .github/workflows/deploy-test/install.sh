@@ -15,6 +15,18 @@ function wait_status_ok(){
     done
 }
 
+function wait_for_ks_finish() {
+    echo "waiting for ks-installer pod ready"
+    kubectl -n kubesphere-system wait --timeout=180s --for=condition=Ready $(kubectl -n kubesphere-system get pod -l app=ks-install -oname)
+    echo "waiting for KubeSphere ready"
+    while IFS= read -r line; do
+        if [[ $line =~ "Welcome to KubeSphere" ]]
+            then
+                break
+        fi
+    done < <(timeout 900 kubectl logs -n kubesphere-system deploy/ks-installer -f)
+}
+
 yum install -y vim openssl socat conntrack ipset wget
 wget https://github.com/kubesphere/kubekey/releases/download/v1.0.0/kubekey-v1.0.0-linux-amd64.tar.gz
 tar xvf kubekey-v1.0.0-linux-amd64.tar.gz
@@ -35,5 +47,6 @@ kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec"
 kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
 
 kubectl -n kubesphere-system rollout restart deploy ks-installer
+wait_for_ks_finish
 wait_status_ok
 kubectl get all -A
