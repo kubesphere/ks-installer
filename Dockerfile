@@ -8,5 +8,5 @@ ADD roles /kubesphere/installer/roles
 ADD env /kubesphere/results/env
 ADD playbooks /kubesphere/playbooks
 
-RUN chown kubesphere:kubesphere -R /kubesphere /hooks/kubesphere
+#RUN chown kubesphere:kubesphere -R /kubesphere /hooks/kubesphere
 USER kubesphere
