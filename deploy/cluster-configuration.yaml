@@ -60,6 +60,7 @@ spec:
   metrics_server:                    # (CPU: 56 m, Memory: 44.35 MiB) Whether to install metrics-server. IT enables HPA (Horizontal Pod Autoscaler).
     enabled: false
   monitoring:
+    storageClass: ""                 # If there is a independent StorageClass your need for prometheus, you can specify it here. default StorageClass used by default.
     # prometheusReplicas: 1            # Prometheus replicas are responsible for monitoring different segments of data source and provide high availability as well.
     prometheusMemoryRequest: 400Mi   # Prometheus request memory.
     prometheusVolumeSize: 20Gi       # Prometheus PVC size.

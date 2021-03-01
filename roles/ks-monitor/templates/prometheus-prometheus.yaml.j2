@@ -82,7 +82,9 @@ spec:
   storage:
     volumeClaimTemplate:
       spec:
-{% if persistence.storageClass is defined and persistence.storageClass != "" %}
+{% if monitoring.storageClass is defined and monitoring.storageClass != "" %}
+        storageClassName: {{ monitoring.storageClass }}
+{% elif persistence.storageClass is defined and persistence.storageClass != "" %}
         storageClassName: {{ persistence.storageClass }}
 {% endif %}
         resources:
