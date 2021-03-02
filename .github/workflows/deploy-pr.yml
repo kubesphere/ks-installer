@@ -39,7 +39,7 @@ jobs:
         ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
 
     - name: Build image
-      run: docker build . --file Dockerfile --tag kubespheredev/${{ env.IMAGE_NAME }}:PRTEST
+      run: docker build . --file Dockerfile --tag kubespheredev/ks-installer:PRTEST
 
     - name: Docker login
       uses: azure/docker-login@v1
@@ -50,7 +50,7 @@ jobs:
     - name: Push image
       run: |
         echo "push image"
-        docker push kubespheredev/${{ env.IMAGE_NAME }}:PRTEST
+        docker push kubespheredev/ks-installer:PRTEST
 
   deploy:
     timeout-minutes: 150
