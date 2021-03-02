@@ -5,7 +5,7 @@
       - "URL: {{ download.url }}"
       - "Dest: {{ download.dest }}"
 
-- name: file_download | Create dest directory
+- name: file_download | Creating dest directory
   file:
     path: "{{download.dest|dirname}}"
     state: directory

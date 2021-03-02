@@ -14,7 +14,7 @@
     - { name: custom-values-minio, file: custom-values-minio.yaml }
 
 
-- name: KubeSphere | Check minio
+- name: KubeSphere | Checking minio
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-minio"
   register: minio_check
@@ -22,7 +22,7 @@
 
 
 - block:
-    - name: KubeSphere | Deploy minio
+    - name: KubeSphere | Deploying minio
       shell: >
         {{ bin_dir }}/helm upgrade --install ks-minio
         {{ kubesphere_dir }}/minio-ha

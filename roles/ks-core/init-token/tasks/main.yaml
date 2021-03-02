@@ -1,5 +1,5 @@
 ---
-- name: KubeSphere | Create KubeSphere dir
+- name: KubeSphere | Creating KubeSphere directory
   file:
     path: "{{ kubesphere_dir }}"
     state: directory
@@ -34,24 +34,24 @@
     - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
 
 
-- name: KubeSphere | Enable Token Script
+- name: KubeSphere | Enabling Token Script
   file:
     path: "{{ kubesphere_dir }}/jwt-script/jwt.sh"
     mode: 0755
 
 
-- name: KubeSphere | Getting KS Token
+- name: KubeSphere | Getting KubeSphere Token
   shell: >
     /bin/bash {{ kubesphere_dir }}/jwt-script/jwt.sh  {{ ks_secret_str }} '{"email": "admin@kubesphere.io","username": "admin","token_type": "static_token"}'
   register: ks_token
 
 
-- name: KubeSphere | Checking kubesphere secrets
+- name: KubeSphere | Checking KubeSphere secrets
   shell: >
     {{ bin_dir }}/kubectl get secrets -n kubesphere-system
   register: kubesphere_secrets
 
-- name: KubeSphere | Deleting kubesphere secret
+- name: KubeSphere | Deleting KubeSphere secret
   shell: >
     {{ bin_dir }}/kubectl delete secrets -n kubesphere-system kubesphere-secret
   when:

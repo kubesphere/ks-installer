@@ -16,7 +16,7 @@
     - { type: ds, file: weave-scope.yaml }
 
 
-- name: weave-scope | Deploy weave-scope
+- name: weave-scope | Deploying weave-scope
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/weave-scope/weave-scope.yaml
   register: import

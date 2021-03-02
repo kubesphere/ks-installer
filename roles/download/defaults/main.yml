@@ -106,7 +106,7 @@ ks_alerting_tag: "v2.1.2"
 ks_alerting_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/alert-adapter"
 ks_alerting_adapter_tag: "v3.0.0"
 
-# kubefed, kubesphere multiple cluster component
+# kubefed, KubeSphere multiple cluster component
 kubefed_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 kubefed_image: kubefed
 kubefed_image_tag: v0.3.0

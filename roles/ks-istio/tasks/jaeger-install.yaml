@@ -1,17 +1,17 @@
-- name: servicemesh | Check jaeger-operator
+- name: servicemesh | Checking jaeger-operator
   shell: >
     {{ bin_dir }}/helm list -n istio-system | grep "jaeger-operator"
   register: jaeger_check
   failed_when: false
 
-- name: servicemesh | Delete jaeger-operator deployment
+- name: servicemesh | Deleting jaeger-operator deployment
   shell: >
     {{ bin_dir }}/kubectl -n istio-system delete deployment jaeger-operator
   when:
     - (jaeger_check.stdout.find("deployed") != -1) and (jaeger_check.stdout.find("1.17.1") == -1)
   ignore_errors: True
 
-- name: servicemesh | Deploy jaeger-operator
+- name: servicemesh | Deploying jaeger-operator
   shell: >
     {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-operator-2.14.2.tgz
     -f {{ kubesphere_dir }}/servicemesh/jaeger/custom-values-jaeger.yaml
@@ -19,7 +19,7 @@
   when:
     - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
 
-- name: servicemesh | Deploy jaeger-cr
+- name: servicemesh | Deploying jaeger-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"
   register: import
   until: import is succeeded

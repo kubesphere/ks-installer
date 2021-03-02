@@ -5,7 +5,7 @@
     dest: "{{ kubesphere_dir }}/"
 
 
-- name: Jenkins | Check Jenkins status
+- name: Jenkins | Checking Jenkins status
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins
   register: jenkins_status
@@ -17,7 +17,7 @@
     - jenkins_status.rc == 0
 
 
-- name: Jenkins | Check Jenkins update center status
+- name: Jenkins | Checking Jenkins update center status
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system uc-jenkins-update-center
   register: jenkins_uc_status
@@ -72,12 +72,12 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
 
 
-- name: Jenkins | Create Jenkins Agent Config File
+- name: Jenkins | Creating Jenkins Agent Config File
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-system
 
 
-- name: Jenkins | Deploy Jenkins
+- name: Jenkins | Deploying Jenkins
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-jenkins {{ kubesphere_dir }}/jenkins/jenkins
     -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml

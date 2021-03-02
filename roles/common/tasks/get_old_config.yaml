@@ -1,6 +1,6 @@
 ---
 
-- name: KubeSphere | Check mysql PersistentVolumeClaim
+- name: KubeSphere | Checking mysql PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system mysql-pvc -o jsonpath='{.status.capacity.storage}'
   register: mysql_db_pvc
@@ -14,7 +14,7 @@
     - mysql_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Check redis PersistentVolumeClaim
+- name: KubeSphere | Checking redis PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system redis-pvc -o jsonpath='{.status.capacity.storage}'
   register: redis_db_pvc
@@ -28,7 +28,7 @@
     - redis_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Check minio PersistentVolumeClaim
+- name: KubeSphere | Checking minio PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system minio -o jsonpath='{.status.capacity.storage}'
   register: minio_storage_pvc
@@ -42,7 +42,7 @@
     - minio_storage_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Check openldap PersistentVolumeClaim
+- name: KubeSphere | Checking openldap PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system openldap-pvc-openldap-0 -o jsonpath='{.status.capacity.storage}'
   register: openldap_db_pvc
@@ -56,7 +56,7 @@
     - openldap_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Check etcd db PersistentVolumeClaim
+- name: KubeSphere | Checking etcd db PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system etcd-pvc -o jsonpath='{.status.capacity.storage}'
   register: etcd_db_pvc
@@ -70,7 +70,7 @@
     - etcd_db_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Check redis ha PersistentVolumeClaim
+- name: KubeSphere | Checking redis ha PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-system data-redis-ha-server-0 -o jsonpath='{.status.capacity.storage}'
   register: redis_ha_pvc
@@ -84,7 +84,7 @@
     - redis_ha_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Check es-master PersistentVolumeClaim
+- name: KubeSphere | Checking es-master PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.status.capacity.storage}'
   register: es_master_pvc
@@ -98,7 +98,7 @@
     - es_master_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Check es data PersistentVolumeClaim
+- name: KubeSphere | Checking es data PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.status.capacity.storage}'
   register: es_data_pvc

@@ -7,7 +7,7 @@
     /usr/sbin/slapcat > {{ kubesphere_dir }}/ldapdbak.ldif
 
 
-- name: KubeSphere | Check openldap-ha status
+- name: KubeSphere | Checking openldap-ha status
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system
     -l app.kubernetes.io/name=openldap-ha | awk '{if(NR>1){print}}' | grep -v '1/1' | wc -l
@@ -17,14 +17,14 @@
   delay: 30
 
 
-- name: KubeSphere | Get openldap-ha pod list
+- name: KubeSphere | Getting openldap-ha pod list
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system
     -l app.kubernetes.io/name=openldap-ha | awk '{if(NR>1){print $1}}'
   register: podList
 
 
-- name: KubeSphere | Get old openldap data
+- name: KubeSphere | Getting old openldap data
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system cp
     {{ kubesphere_dir }}/ldapdbak.ldif

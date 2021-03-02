@@ -1,4 +1,4 @@
-- name: KubeSphere | Check ha-redis
+- name: KubeSphere | Checking ha-redis
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-redis"
   register: redis_check
@@ -24,13 +24,13 @@
         - { name: custom-values-redis, file: custom-values-redis.yaml }
 
 
-    - name: KubeSphere | Check old redis status
+    - name: KubeSphere | Checking old redis status
       shell: >
         {{ bin_dir }}/kubectl get pod -n kubesphere-system  -l app=redis,tier=database,version=redis-4.0 | wc -l
       register: old_redis_exist
 
 
-    - name: KubeSphere | Delete and backup old redis svc
+    - name: KubeSphere | Deleting and backup old redis svc
       shell: >
         {{ bin_dir }}/kubectl get svc -n kubesphere-system redis -o yaml > {{ kubesphere_dir }}/redis-svc-backup.yaml
         &&

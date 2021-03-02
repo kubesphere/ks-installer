@@ -7,7 +7,7 @@ If you want to upgrade to 1.5.x, you need to upgrade 1.4.x firstly.
 
 # upgrade to 1.4.8 from 1.3.3
 
-Support to ***upgrade to 1.4.8 from istio 1.3.3*** on kubesphere platform by helm2.
+Support to ***upgrade to 1.4.8 from istio 1.3.3*** on KubeSphere platform by helm2.
 
 [official upgarde notes](https://archive.istio.io/v1.4/news/releases/1.4.x/announcing-1.4/upgrade-notes/)
 

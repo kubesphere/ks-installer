@@ -1,17 +1,17 @@
-- name: servicemesh | Check kiali-operator
+- name: servicemesh | Checking kiali-operator
   shell: >
     {{ bin_dir }}/helm list -n istio-system | grep "kiali-operator"
   register: kiali_check
   failed_when: false
 
-- name: servicemesh | Delete kiali operator deployment
+- name: servicemesh | Deleting kiali operator deployment
   shell: >
     {{ bin_dir }}/kubectl -n istio-system delete deployment kiali-operator
   when:
     - (kiali_check.stdout.find("deployed") != -1) and (kiali_check.stdout.find("v1.26.1") == -1)
   ignore_errors: True
 
-- name: servicemesh | Deploy kiali-operator
+- name: servicemesh | Deploying kiali-operator
   shell: >
     {{ bin_dir }}/helm upgrade --install kiali-operator {{ kubesphere_dir }}/servicemesh/kiali/kiali-operator-1.26.1.tgz
     -f {{ kubesphere_dir }}/servicemesh/kiali/custom-values-kiali.yaml
@@ -19,7 +19,7 @@
   when:
     - (kiali_check.stdout.find("deployed") == -1) or (kiali_check.stdout.find("v1.26.1") == -1)
 
-- name: servicemesh | Deploy kiali-cr
+- name: servicemesh | Deploying kiali-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/kiali/kiali-cr.yaml --namespace istio-system"
   register: import
   until: import is succeeded

@@ -1,17 +1,17 @@
 ---
-- name: KubeSphere | Check core components (1)
+- name: KubeSphere | Checking core components (1)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account
   register: check_account
   failed_when: "check_account.stderr and 'NotFound' not in check_account.stderr"
 
-- name: KubeSphere | Check core components (2)
+- name: KubeSphere | Checking core components (2)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway
   register: check_apigateway
   failed_when: "check_apigateway.stderr and 'NotFound' not in check_apigateway.stderr"
 
-- name: KubeSphere | Check core components (3)
+- name: KubeSphere | Checking core components (3)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account -o jsonpath='{.spec.replicas}'
   register: check_account_replicas
@@ -19,7 +19,7 @@
   when:
     - check_account.rc == 0
 
-- name: KubeSphere | Check core components (4)
+- name: KubeSphere | Checking core components (4)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway -o jsonpath='{.spec.replicas}'
   register: check_apigateway_replicas
@@ -36,22 +36,22 @@
     - { path: migration, file: ks-upgrade.yaml }
     - { path: migration, file: ks-devops-migration.yaml }
 
-  - name: KubeSphere | Create migration job
+  - name: KubeSphere | Creating migration job
     shell: >
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-upgrade.yaml
 
-  - name: KubeSphere | Check devops status
+  - name: KubeSphere | Checking devops status
     shell: >
       {{ bin_dir }}/kubectl get pod -n kubesphere-devops-system | grep "ks-jenkins" | wc -l
     register: devops_check
 
-  - name: KubeSphere | Create devops migration job
+  - name: KubeSphere | Creating devops migration job
     shell: >
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops-migration.yaml
     when:
       - devops_check.stdout != "0"
       
-  - name: KubeSphere | Get migration job status
+  - name: KubeSphere | Getting migration job status
     shell: >
       {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-upgrade --no-headers | awk '{print $3}'
     register: job_status
@@ -59,7 +59,7 @@
     retries: 90
     delay: 20
 
-  - name: KubeSphere | Get devops migration job status
+  - name: KubeSphere | Getting devops migration job status
     shell: >
       {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-devops-migration --no-headers | awk '{print $3}'
     register: job_status
@@ -77,7 +77,7 @@
     shell: >
       {{ bin_dir }}/kubectl delete deploy -n kubesphere-system ks-apigateway
 
-  - name: KubeSphere | Update ks-core status
+  - name: KubeSphere | Updating ks-core status
     shell: >
       {{ bin_dir }}/kubectl patch cc ks-installer
       --type merge

@@ -1,17 +1,17 @@
 ---
-- name: KubeSphere | Check core components (1)
+- name: KubeSphere | Checking core components (1)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account
   register: check_account
   failed_when: "check_account.stderr and 'NotFound' not in check_account.stderr"
 
-- name: KubeSphere | Check core components (2)
+- name: KubeSphere | Checking core components (2)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway
   register: check_apigateway
   failed_when: "check_apigateway.stderr and 'NotFound' not in check_apigateway.stderr"
 
-- name: KubeSphere | Check core components (3)
+- name: KubeSphere | Checking core components (3)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-account -o jsonpath='{.spec.replicas}'
   register: check_account_replicas
@@ -19,7 +19,7 @@
   when:
     - check_account.rc == 0
 
-- name: KubeSphere | Check core components (4)
+- name: KubeSphere | Checking core components (4)
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system ks-apigateway -o jsonpath='{.spec.replicas}'
   register: check_apigateway_replicas
@@ -28,7 +28,7 @@
     - check_apigateway.rc == 0
 
 - block:
-  - name: KubeSphere | Update ks-core status
+  - name: KubeSphere | Updating ks-core status
     shell: >
       {{ bin_dir }}/kubectl patch cc ks-installer
       --type merge
@@ -52,7 +52,7 @@
     - "'NotFound' not in check_apigateway_replicas.stderr"
 
 
-- name: KubeSphere | Create KubeSphere dir
+- name: KubeSphere | Creating KubeSphere directory
   file:
     path: "{{ kubesphere_dir }}"
     state: directory
@@ -95,7 +95,7 @@
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
 
 
-# - name: KubeSphere | Create KubeSphere vpa
+# - name: KubeSphere | Creating KubeSphere vpa
 #   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml"
 #   register: result
 #   until: result is succeeded
@@ -104,7 +104,7 @@
 #   when:
 #     - vertical_pod_autoscaler_enable == true
 
-- name: KubeSphere | Generate kubeconfig-admin
+- name: KubeSphere | Generating kubeconfig-admin
   shell: >
     /bin/bash {{ kubesphere_dir }}/ks-init/generate-kubeconfig.sh
   when:
@@ -115,7 +115,7 @@
 #     {{ bin_dir }}/kubectl get deploy -n kubesphere-system
 #   register: kubesphere_component_pod
 
-# - name: KubeSphere | Get kubesphere component version
+# - name: KubeSphere | Getting kubesphere component version
 #   shell: >
 #     {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
 #   register: console_version

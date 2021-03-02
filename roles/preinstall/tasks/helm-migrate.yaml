@@ -1,6 +1,6 @@
 ---
 
-- name: KubeSphere | Get kubesphere component version
+- name: KubeSphere | Getting KubeSphere component version
   shell: >
     {{ bin_dir }}/helm 2to3 convert {{ item }}
   loop:

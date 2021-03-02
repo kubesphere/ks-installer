@@ -15,7 +15,7 @@
   delay: 5
 
 
-- name: KubeSphere | Get PersistentVolume Name
+- name: KubeSphere | Getting PersistentVolume Name
   shell: >
     kubectl get pv | grep "{{ item.op }}" | awk '{print $1}'
   register: persistentVolumeName
@@ -27,7 +27,7 @@
     -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
 
 
-- name: KubeSphere | Delete PersistentVolumeClaim
+- name: KubeSphere | Deleting PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl delete pvc
     $({{ bin_dir }}/kubectl get pvc -n openpitrix-system | grep "{{ item.op }}" | awk '{print $1}')
