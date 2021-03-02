@@ -1,0 +1,86 @@
+name: Deploy-PullRequest
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  deploy-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: acknowledge deployment request to commenter
+        id: check
+        uses: khan/pull-request-comment-trigger@master
+        with:
+          trigger: "/deploy"
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    outputs:
+      triggered: ${{ steps.check.outputs.triggered }}
+
+  build-and-push:
+    if: needs.deploy-check.outputs.triggered == 'true'
+    runs-on: ubuntu-latest
+    needs: deploy-check
+    steps:
+    - name: get pull request ref
+      id: get_pull_request_ref
+      uses: octokit/request-action@v2.x
+      with:
+        route: GET /repos/:repository/pulls/:issue_id
+        repository: ${{ github.repository }}
+        issue_id: ${{ github.event.issue.number }}
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    - uses: actions/checkout@v2
+      with:
+        repository: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.repo.full_name }}
+        ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
+
+    - name: Build image
+      run: docker build . --file Dockerfile --tag kubespheredev/${{ env.IMAGE_NAME }}:PRTEST
+
+    - name: Docker login
+      uses: azure/docker-login@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push image
+      run: |
+        echo "push image"
+        docker push kubespheredev/${{ env.IMAGE_NAME }}:PRTEST
+
+  deploy:
+    timeout-minutes: 150
+    env:
+      working-directory: ./.github/workflows/deploy-pr
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    - name: setup terraform
+      working-directory: ${{env.working-directory}}
+      run: |
+        wget https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_linux_amd64.zip
+        unzip terraform_0.13.0_linux_amd64.zip
+
+    - name: setup secret
+      working-directory: ${{env.working-directory}}
+      run: |
+        sed -i 's/yourID/${{ secrets.QINGCLOUD_ACCESS_KEY }}/' var.tf
+        sed -i 's/yourSecret/${{ secrets.QINGCLOUD_SECRET_KEY }}/' var.tf
+
+    - name: destory
+      working-directory: ${{env.working-directory}}
+      run: |
+        echo 'yes' | terraform destroy
+      if: always()
+
+    - name: install kubesphere
+      working-directory: ${{env.working-directory}}
+      timeout-minutes: 90
+      run: |
+        terraform init
+        terraform apply -input=false -auto-approve
+
+
