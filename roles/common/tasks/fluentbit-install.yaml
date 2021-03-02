@@ -59,7 +59,7 @@
     - fluentbit_version.stdout.find("v1alpha1") != -1
 
 
-- name: KubeSphere | Deploy new fluentbit operator
+- name: KubeSphere | Deploying new fluentbit operator
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/fluentbit
   register: import

@@ -14,7 +14,7 @@
     - { name: custom-values-openldap, file: custom-values-openldap.yaml }
 
 
-- name: KubeSphere | Check old openldap status
+- name: KubeSphere | Checking old openldap status
   shell: >
     {{ bin_dir }}/kubectl get pod
     -n kubesphere-system
@@ -27,7 +27,7 @@
   when:
     - old_openldap_exist.stdout != "0"
 
-- name: KubeSphere | Delete and backup old openldap svc
+- name: KubeSphere | Deleting and backup old openldap svc
   shell: >
     {{ bin_dir }}/kubectl get svc -n kubesphere-system openldap -o yaml > {{ kubesphere_dir }}/openldap-svc-backup.yaml
     &&
@@ -36,14 +36,14 @@
     - old_openldap_exist.stdout != "0"
 
 
-- name: KubeSphere | Check openldap
+- name: KubeSphere | Checking openldap
   shell: >
     {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-openldap"
   register: openldap_check
   failed_when: false
 
 
-- name: KubeSphere | Deploy openldap
+- name: KubeSphere | Deploying openldap
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-openldap
     {{ kubesphere_dir }}/openldap-ha

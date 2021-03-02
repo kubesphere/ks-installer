@@ -14,7 +14,7 @@
     op-minio:openpitrix-internal-repo/{{ item }}
     /tmp/minio-backup/{{ item }}/
 
-- name: KubeSphere | Check minio status
+- name: KubeSphere | Checking minio status
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system | grep 'minio' | grep -v 'Running' | wc -l
   register: import

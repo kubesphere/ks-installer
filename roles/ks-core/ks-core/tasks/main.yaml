@@ -66,7 +66,7 @@
     - { path: ks-console, file: ks-console-svc.yml, type: svc }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml, type: config }
 
-- name: KubeSphere | Delete Ingress-controller configmap
+- name: KubeSphere | Deleting Ingress-controller configmap
   shell: >
     {{ bin_dir }}/kubectl delete cm -n kubesphere-system ks-router-config
   failed_when: false
@@ -81,7 +81,7 @@
   failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
 
 
-# - name: KubeSphere | Update kubectl image
+# - name: KubeSphere | Updating kubectl image
 #   shell: >
 #     for deploy in $(kubectl -n kubesphere-controls-system get deploy  | grep kubectl  | awk '{print $1}');
 #     do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl={{ ks_kubectl_repo }}:{{ ks_kubectl_tag }};
@@ -103,7 +103,7 @@
     - { path: ks-console, file: ks-console-deployment.yml }
 
 
-- name: KubeSphere | Check ks-console svc
+- name: KubeSphere | Checking ks-console svc
   command: >
     {{ bin_dir }}/kubectl get svc -n kubesphere-system
   register: ks_svc

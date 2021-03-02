@@ -44,13 +44,13 @@
   tags:
     - upgrade
 
-- name: ks-notification | Delete db-ctrl-job
+- name: ks-notification | Deleting db-ctrl-job
   shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch notification-db-ctrl-job"
   when: result.stdout.find("notification-db-ctrl-job") != -1
   tags:
     - upgrade
 
-- name: ks-notification | Delete db-init-job
+- name: ks-notification | Deleting db-init-job
   shell: "{{ bin_dir }}/kubectl -n kubesphere-alerting-system delete jobs.batch notification-db-init-job"
   when: result.stdout.find("notification-db-init-job") != -1
   tags:
@@ -64,7 +64,7 @@
   tags:
     - upgrade
 
-- name: ks-notification | Deploy ks-notification
+- name: ks-notification | Deploying ks-notification
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/notification.yaml"
   tags:
     - upgrade

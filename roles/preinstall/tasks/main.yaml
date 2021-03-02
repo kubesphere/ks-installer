@@ -2,12 +2,12 @@
 
 - import_tasks: precheck.yaml
 
-- name: KubeSphere | Checking kubesphere component
+- name: KubeSphere | Checking KubeSphere component
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-system
   register: kubesphere_component_deployment
 
-- name: KubeSphere | Get kubesphere component version
+- name: KubeSphere | Getting KubeSphere component version
   shell: >
     {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
   register: console_version

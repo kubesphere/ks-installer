@@ -3,7 +3,7 @@
 # This change obseletes editing ansible.cfg file depending on bastion existance
 ansible_ssh_common_args: "{% if 'bastion' in groups['all'] %} -o ProxyCommand='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -W %h:%p {{ hostvars['bastion']['ansible_user'] }}@{{ hostvars['bastion']['ansible_host'] }} {% if ansible_ssh_private_key_file is defined %}-i {{ ansible_ssh_private_key_file }}{% endif %} ' {% endif %}"
 
-# Limits for kubesphere components
+# Limits for KubeSphere components
 ks_apiserver_memory_limit: 1024Mi
 ks_apiserver_cpu_limit: "1"
 ks_apiserver_memory_requests: 100Mi

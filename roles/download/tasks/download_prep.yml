@@ -10,7 +10,7 @@
   environment: {}
   when: download_container
 
-- name: container_download | Create dest directory for saved/loaded container images
+- name: container_download | Creating dest directory for saved/loaded container images
   file:
     path: "{{local_release_dir}}/containers"
     state: directory

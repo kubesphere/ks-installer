@@ -26,7 +26,7 @@
 #   shell: >
 #     /bin/bash {{ kubesphere_dir }}/s2i/certs.sh --service webhook-server-service --namespace kubesphere-devops-system --secret webhook-server-secret 
 
-- name: S2I | Delete S2I ValidatingWebhook
+- name: S2I | Deleting S2I ValidatingWebhook
   shell: >
     {{ bin_dir }}/kubectl delete statefulsets.apps -n kubesphere-devops-system s2ioperator &&
     {{ bin_dir }}/kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validating-webhook-configuration
@@ -34,7 +34,7 @@
   failed_when: "validatin_status.stderr and 'NotFound' not in validatin_status.stderr"
   failed_when: false
 
-- name: S2I | Deploy S2I template&&operator
+- name: S2I | Deploying S2I template&&operator
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/{{ item }}"
   loop:
     - s2ioperator.yaml

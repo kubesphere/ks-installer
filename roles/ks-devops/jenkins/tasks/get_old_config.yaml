@@ -1,6 +1,6 @@
 ---
 
-- name: Jenkins | Get jenkins config
+- name: Jenkins | Getting jenkins config
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins -o json | jq '.spec.template.spec.containers[0].env'
   register: envs
@@ -48,7 +48,7 @@
   loop: "{{ envs.stdout }}"
   failed_when: false
 
-- name: Jenkins | Check jenkins PersistentVolumeClaim
+- name: Jenkins | Checking jenkins PersistentVolumeClaim
   shell: >
     {{ bin_dir }}/kubectl get pvc -n kubesphere-devops-system ks-jenkins -o jsonpath='{.status.capacity.storage}'
   register: jenkins_pvc

@@ -1,6 +1,6 @@
 ---
 
-- name: OpenPitrix | Delete old openpitrix
+- name: OpenPitrix | Deleting old openpitrix
   shell: >
     {{ bin_dir }}/kubectl delete deploy -n openpitrix-system {{ item }}
   loop:
@@ -32,14 +32,14 @@
     - { path: openpitrix, file: openpitrix-release-app-job.yaml }
     - { path: openpitrix, file: hyperpitrix-generate-kubeconfig-job.yaml }
 
-- name: OpenPitrix | Check OpenPitrix
+- name: OpenPitrix | Checking OpenPitrix
   shell: >
     {{ bin_dir }}/helm list ks-openpitrix -n openpitrix-system
   register: op_check
   failed_when: false
 
 
-- name: OpenPitrix | Deploy OpenPitrix
+- name: OpenPitrix | Deploying OpenPitrix
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-openpitrix
     {{ kubesphere_dir }}/openpitrix/openpitrix

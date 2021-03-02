@@ -15,31 +15,31 @@
     - { path: kubefed, file: custom-values-kubefed.yaml }
     - { path: kubefed, file: tower.yaml }
 
-- name: Kubefed | Check kubefed
+- name: Kubefed | Checking kubefed
   shell: >
     {{ bin_dir }}/helm list --namespace kube-federation-system | grep "kubefed"
   register: kubefed_check
   failed_when: false
 
 - block:
-    - name: Tower | Install tower
+    - name: Tower | Installing tower
       shell: >
         {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/kubefed/tower.yaml
       register: tower_result
       failed_when: false
 
-    - name: Kubefed | Init kube-federation-system
+    - name: Kubefed | Initing kube-federation-system
       shell: >
         {{ bin_dir }}/helm upgrade --install kubefed {{ kubesphere_dir }}/kubefed/kubefed
         -f {{ kubesphere_dir }}/kubefed/custom-values-kubefed.yaml
         --namespace kube-federation-system
 
-    - name: Kubfed | Label kube-federation-system namespace
+    - name: Kubfed | Labeling kube-federation-system namespace
       shell: >
         {{ bin_dir }}/kubectl label namespace kube-federation-system kubesphere.io/workspace=system-workspace --overwrite
 
 
-- name: KubeSphere | Check kubefed-admission-webhook status
+- name: KubeSphere | Checking kubefed-admission-webhook status
   wait_for:
     host: "kubefed-admission-webhook.kube-federation-system.svc"
     port: 443
@@ -47,7 +47,7 @@
     timeout: 1800
 
 
-- name: Kubefed | Create MultiCluster crds
+- name: Kubefed | Creating MultiCluster crds
   shell: "{{ bin_dir }}/kubectl create -f {{ item }} -n kube-federation-system"
   register: crds_result
   failed_when: "crds_result.stderr and 'AlreadyExists' not in crds_result.stderr"

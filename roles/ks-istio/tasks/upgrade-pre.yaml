@@ -1,4 +1,4 @@
-- name: servicemesh | upgrade-pre | Check galley validation
+- name: servicemesh | upgrade-pre | Checking galley validation
   shell: >
     {{ bin_dir }}/kubectl get ValidatingWebhookConfiguration istio-galley
   register: galley_check

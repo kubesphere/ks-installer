@@ -7,7 +7,7 @@
     - { path: /etc/kubesphere, file: redisMigrate.py }
 
 
-- name: KubeSphere | Check redis-ha status
+- name: KubeSphere | Checking redis-ha status
   shell: >
     {{ bin_dir }}/kubectl get pod -n kubesphere-system | grep 'redis-ha' | grep -v 'Running' | wc -l
   register: import
