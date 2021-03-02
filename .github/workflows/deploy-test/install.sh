@@ -55,6 +55,7 @@ kubectl -n kubesphere-system get cc ks-installer -o yaml | sed "s/false/true/g" 
 
 kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"monitoring":false}}}'
 kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
+kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"kubeedge":{"enabled":false}}}'
 
 kubectl -n kubesphere-system rollout restart deploy ks-installer
 wait_status_ok
