@@ -4,6 +4,6 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
-    - role: ks-notification
-      when:
-        - "status.notification is not defined or status.notification.status is not defined or status.notification.status != 'enabled'"
+#    - role: ks-notification
+#      when:
+#        - "status.notification is not defined or status.notification.status is not defined or status.notification.status != 'enabled'"
