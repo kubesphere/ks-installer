@@ -82,7 +82,13 @@ jobs:
         sed -i 's/yourID/${{ secrets.QINGCLOUD_ACCESS_KEY }}/' var.tf
         sed -i 's/yourSecret/${{ secrets.QINGCLOUD_SECRET_KEY }}/' var.tf
 
+    - name: init
+      working-directory: ${{env.working-directory}}
+      run: |
+        terraform init
+
     - name: destory
+      continue-on-error: true
       working-directory: ${{env.working-directory}}
       run: |
         echo 'yes' | terraform destroy
