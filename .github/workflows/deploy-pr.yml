@@ -59,6 +59,15 @@ jobs:
       working-directory: ./.github/workflows/deploy-pr
     runs-on: ubuntu-latest
     steps:
+    - name: get pull request ref
+      id: get_pull_request_ref
+      uses: octokit/request-action@v2.x
+      with:
+        route: GET /repos/:repository/pulls/:issue_id
+        repository: ${{ github.repository }}
+        issue_id: ${{ github.event.issue.number }}
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - uses: actions/checkout@v2
       with:
         repository: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.repo.full_name }}
