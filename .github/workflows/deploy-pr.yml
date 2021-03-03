@@ -69,9 +69,6 @@ jobs:
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - uses: actions/checkout@v2
-      with:
-        repository: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.repo.full_name }}
-        ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
 
     - name: setup terraform
       working-directory: ${{env.working-directory}}
