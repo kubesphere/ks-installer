@@ -143,6 +143,10 @@ data:
     notification:
       endpoint: http://notification.kubesphere-alerting-system.svc:9200
 {% endif %}
+{% if kubeedge.enabled is defined and kubeedge.enabled == true %}
+    kubeedge:
+      endpoint: http://edge-watcher.kubeedge.svc/api/
+{% endif %}
 kind: ConfigMap
 metadata:
   name: kubesphere-config
