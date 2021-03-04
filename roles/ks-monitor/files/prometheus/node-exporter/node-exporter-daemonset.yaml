@@ -16,6 +16,13 @@ spec:
         app.kubernetes.io/name: node-exporter
         app.kubernetes.io/version: v0.18.1
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/edge
+                operator: DoesNotExist
       containers:
       - args:
         - --web.listen-address=127.0.0.1:9100
