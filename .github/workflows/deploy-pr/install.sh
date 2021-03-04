@@ -29,5 +29,5 @@ kubectl patch storageclass openebs-hostpath -p '{"metadata": {"annotations":{"st
 kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/kubesphere-installer.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/cluster-configuration.yaml
 
-kubectl -n kubesphere-system set image deployment/ks-installer installer=kubesphere/ks-installer:PRTEST
+kubectl -n kubesphere-system set image deployment/ks-installer installer=kubespheredev/ks-installer:PRTEST
 kubectl -n kubesphere-system rollout restart deploy ks-installer

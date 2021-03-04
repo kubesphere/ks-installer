@@ -1,6 +1,6 @@
-#  "/deploy" comment will deploy a new kubernetes and KubeSphere in an open Pull Request.
+#  "/test" comment will reinstall KubeSphere in an open Pull Request.
 
-name: Deploy-PullRequest
+name: Test-PullRequest
 
 on:
   issue_comment:
@@ -14,7 +14,7 @@ jobs:
       id: check
       uses: khan/pull-request-comment-trigger@master
       with:
-        trigger: "/deploy"
+        trigger: "/test"
         reaction: rocket
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -54,57 +54,30 @@ jobs:
         echo "push image"
         docker push kubespheredev/ks-installer:PRTEST
 
-  deploy:
-    timeout-minutes: 150
+  reinstall-kubesphere:
     needs: build-and-push
-    env:
-      working-directory: ./.github/workflows/deploy-pr
     runs-on: ubuntu-latest
     steps:
-    - name: get pull request ref
-      id: get_pull_request_ref
-      uses: octokit/request-action@v2.x
+    - name: delete kubesphere
+      uses: appleboy/ssh-action@master
       with:
-        route: GET /repos/:repository/pulls/:issue_id
-        repository: ${{ github.repository }}
-        issue_id: ${{ github.event.issue.number }}
-      env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    - uses: actions/checkout@v2
-
-    - name: setup terraform
-      working-directory: ${{env.working-directory}}
-      run: |
-        wget https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_linux_amd64.zip
-        unzip terraform_0.13.0_linux_amd64.zip
-
-    - name: setup secret
-      working-directory: ${{env.working-directory}}
-      run: |
-        sed -i 's/QING_ACCESS_KEY/${{ secrets.QINGCLOUD_ACCESS_KEY }}/g' var.tf
-        sed -i 's/QING_SECRET_KEY/${{ secrets.QINGCLOUD_SECRET_KEY }}/g' var.tf
-        sed -i 's/QING_PR_EIP_ID/${{ secrets.QING_PR_EIP_ID }}/g' var.tf
-        sed -i 's/QING_PR_EIP/${{ secrets.QING_PR_EIP }}/g' var.tf
-        sed -i 's/QING_PASSWORD/${{ secrets.QING_PASSWORD }}/g' var.tf
-        sed -i 's/GITHUB_REPOSITORY/${{ github.repository_owner }}-tf-pr-cd-allinone/g' var.tf
-
-    - name: init
-      working-directory: ${{env.working-directory}}
-      run: |
-        terraform init
-
-    - name: destory
-      continue-on-error: true
-      working-directory: ${{env.working-directory}}
-      run: |
-        echo 'yes' | terraform destroy
-      if: always()
+        host: ${{ secrets.QING_PR_EIP }}
+        username: root
+        password: ${{ secrets.QING_PASSWORD }}
+        script: |
+          curl https://raw.githubusercontent.com/kubesphere/ks-installer/master/.github/workflows/deploy-pr/delete.sh | sh -x -
 
     - name: install kubesphere
-      working-directory: ${{env.working-directory}}
-      timeout-minutes: 90
-      run: |
-        terraform apply -input=false -auto-approve
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.QING_PR_EIP }}
+        username: root
+        password: ${{ secrets.QING_PASSWORD }}
+        script: |
+          kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/kubesphere-installer.yaml
+          kubectl apply -f https://raw.githubusercontent.com/kubesphere/ks-installer/master/deploy/cluster-configuration.yaml
+          kubectl -n kubesphere-system set image deployment/ks-installer installer=kubespheredev/ks-installer:PRTEST
+          kubectl -n kubesphere-system rollout restart deploy ks-installer
 
     - name: Create comment
       uses: peter-evans/create-or-update-comment@v1

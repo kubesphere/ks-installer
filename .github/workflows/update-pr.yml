@@ -1,6 +1,6 @@
-#  "/deploy" comment will deploy a new kubernetes and KubeSphere in an open Pull Request.
+#  "/update" comment will build new image and reinstall ks-install deployment of KubeSphere in an open Pull Request.
 
-name: Deploy-PullRequest
+name: Update-PullRequest
 
 on:
   issue_comment:
@@ -14,7 +14,7 @@ jobs:
       id: check
       uses: khan/pull-request-comment-trigger@master
       with:
-        trigger: "/deploy"
+        trigger: "/update"
         reaction: rocket
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -72,39 +72,20 @@ jobs:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - uses: actions/checkout@v2
 
-    - name: setup terraform
-      working-directory: ${{env.working-directory}}
-      run: |
-        wget https://releases.hashicorp.com/terraform/0.13.0/terraform_0.13.0_linux_amd64.zip
-        unzip terraform_0.13.0_linux_amd64.zip
+  update-kubesphere:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
 
-    - name: setup secret
-      working-directory: ${{env.working-directory}}
-      run: |
-        sed -i 's/QING_ACCESS_KEY/${{ secrets.QINGCLOUD_ACCESS_KEY }}/g' var.tf
-        sed -i 's/QING_SECRET_KEY/${{ secrets.QINGCLOUD_SECRET_KEY }}/g' var.tf
-        sed -i 's/QING_PR_EIP_ID/${{ secrets.QING_PR_EIP_ID }}/g' var.tf
-        sed -i 's/QING_PR_EIP/${{ secrets.QING_PR_EIP }}/g' var.tf
-        sed -i 's/QING_PASSWORD/${{ secrets.QING_PASSWORD }}/g' var.tf
-        sed -i 's/GITHUB_REPOSITORY/${{ github.repository_owner }}-tf-pr-cd-allinone/g' var.tf
-
-    - name: init
-      working-directory: ${{env.working-directory}}
-      run: |
-        terraform init
-
-    - name: destory
-      continue-on-error: true
-      working-directory: ${{env.working-directory}}
-      run: |
-        echo 'yes' | terraform destroy
-      if: always()
-
-    - name: install kubesphere
-      working-directory: ${{env.working-directory}}
-      timeout-minutes: 90
-      run: |
-        terraform apply -input=false -auto-approve
+    - name: update kubesphere
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.QING_PR_EIP }}
+        username: root
+        password: ${{ secrets.QING_PASSWORD }}
+        script: |
+          kubectl -n kubesphere-system set image deployment/ks-installer installer=kubespheredev/ks-installer:PRTEST
+          kubectl -n kubesphere-system rollout restart deploy ks-installer
 
     - name: Create comment
       uses: peter-evans/create-or-update-comment@v1
