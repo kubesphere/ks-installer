@@ -4,7 +4,7 @@
 appVersion: "0.1.0"
 
 cloudCore:
-  repository: "dockerhub.qingcloud.com/kubeedge/cloudcore"
+  repository: "kubespheredev/cloudcore"
   tag: "v1.5.0"
   pullPolicy: "IfNotPresent"
   nodeSelector: {"node-role.kubernetes.io/worker": ""}
@@ -15,8 +15,8 @@ cloudCore:
   cloudstreamPort: "10003"
   tunnelPort: "10004"
   cloudHub:
-    advertiseAddress:
-      - ""
+    advertiseAddress: # At least a public IP Address or an IP which can be accessed by edge nodes must be provide
+      - ""            # Causion!: Leave this entry to empty will cause CloudCore to exit abnormally once KubeEdge is enabled.
     nodeLimit: "100"
     websocket:
       enable: true
@@ -38,7 +38,7 @@ edgeWatcher:
   nodeSelector: {"node-role.kubernetes.io/worker": ""}
   tolerations: []
   controllerManager:
-    repository: "dockerhub.qingcloud.com/kubeedge/edge-watcher"
+    repository: "kubespheredev/edge-watcher"
     tag: "v0.1.0"
     pullPolicy: "IfNotPresent"
   kubeRBACProxy:
@@ -46,7 +46,7 @@ edgeWatcher:
     tag: "v0.5.0"
     pullPolicy: "IfNotPresent"
   edgeWatcherAgent:
-    repository: "dockerhub.qingcloud.com/kubeedge/edge-watcher-agent"
+    repository: "kubespheredev/edge-watcher-agent"
     tag: "v0.1.0"
     pullPolicy: "IfNotPresent"
     nodeSelector: {"node-role.kubernetes.io/worker": ""}

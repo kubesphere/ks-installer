@@ -96,8 +96,8 @@ spec:
       cloudstreamPort: "10003"
       tunnelPort: "10004"
       cloudHub:
-        advertiseAddress:
-          - ""
+        advertiseAddress: # At least a public IP Address or an IP which can be accessed by edge nodes must be provided
+          - ""            # Causion!: Leave this entry to empty will cause CloudCore to exit abnormally once KubeEdge is enabled.
         nodeLimit: "100"
       service:
         cloudhubNodePort: "30000"
