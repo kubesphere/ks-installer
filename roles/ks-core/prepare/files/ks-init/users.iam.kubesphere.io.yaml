@@ -10,11 +10,11 @@ webhooks:
     service:
       name: ks-controller-manager
       namespace: kubesphere-system
-      path: /validate-email-iam-kubesphere-io-v1alpha2-user
+      path: /validate-email-iam-kubesphere-io-v1alpha2
       port: 443
   failurePolicy: Fail
   matchPolicy: Exact
-  name: validating-user.kubesphere.io
+  name: users.iam.kubesphere.io
   namespaceSelector:
     matchExpressions:
     - key: control-plane
