@@ -11,3 +11,18 @@ spec:
     targetPort: https
   selector:
     control-plane: controller-manager
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: edge-watcher
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    control-plane: controller-manager

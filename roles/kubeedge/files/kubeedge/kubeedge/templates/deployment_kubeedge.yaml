@@ -54,8 +54,8 @@ spec:
         - mountPath: /etc/localtime
           name: host-time
       restartPolicy: Always
-      {{- with .Values.cloudCore.nodeSelector }}
-      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- with .Values.cloudCore.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.cloudCore.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
