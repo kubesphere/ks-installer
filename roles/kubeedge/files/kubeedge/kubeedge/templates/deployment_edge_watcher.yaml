@@ -51,8 +51,8 @@ spec:
           name: host-time
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
-      {{- with .Values.edgeWatcher.nodeSelector }}
-      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- with .Values.edgeWatcher.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.edgeWatcher.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}

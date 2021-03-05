@@ -7,7 +7,13 @@ cloudCore:
   repository: "kubespheredev/cloudcore"
   tag: "v1.5.0"
   pullPolicy: "IfNotPresent"
-  nodeSelector: {"node-role.kubernetes.io/worker": ""}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/edge
+            operator: DoesNotExist
   tolerations: []
   cloudhubPort: "10000"
   cloudhubQuicPort: "10001"
@@ -35,7 +41,13 @@ cloudCore:
     tunnelNodePort: "30004"
 
 edgeWatcher:
-  nodeSelector: {"node-role.kubernetes.io/worker": ""}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/edge
+            operator: DoesNotExist
   tolerations: []
   controllerManager:
     repository: "kubespheredev/edge-watcher"
@@ -49,8 +61,18 @@ edgeWatcher:
     repository: "kubespheredev/edge-watcher-agent"
     tag: "v0.1.0"
     pullPolicy: "IfNotPresent"
-    nodeSelector: {"node-role.kubernetes.io/worker": ""}
-    tolerations: []
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node-role.kubernetes.io/edge
+              operator: DoesNotExist
+    tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+    - key: CriticalAddonsOnly
+      operator: Exists
   edgeNode:
     labels:
       - name: "node-role.kubernetes.io/edge"
