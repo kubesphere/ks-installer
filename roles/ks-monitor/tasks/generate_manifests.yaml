@@ -43,7 +43,7 @@
     - { path: prometheus/node-exporter, file: node-exporter-daemonset.yaml }
     - { path: prometheus/alertmanager, file: alertmanager-alertmanager.yaml }
     - { path: prometheus/prometheus-adapter, file: prometheus-adapter-deployment.yaml }
-    # - { path: prometheus/grafana, file: grafana-deployment.yaml }
+    - { path: prometheus/grafana, file: grafana-deployment.yaml }
     - { path: prometheus/etcd, file: prometheus-serviceMonitorEtcd.yaml }
     - { path: prometheus/etcd, file: prometheus-endpointsEtcd.yaml }
     - { path: prometheus/upgrade, file: prometheus-system-pvc-cleanup.yaml }
