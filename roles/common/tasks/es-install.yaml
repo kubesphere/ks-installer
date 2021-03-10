@@ -25,7 +25,7 @@
       {{ bin_dir }}/kubectl get sts -n kubesphere-logging-system elasticsearch-logging-data -o yaml | grep "storageClassName" | wc -l
     register: sc_number
 
-  - name: KubeSphere | Comment elasticsearch storageclass parameter
+  - name: KubeSphere | Commenting elasticsearch storageclass parameter
     shell: >
       sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/elasticsearch/custom-values-elasticsearch.yaml
     when:
@@ -57,7 +57,7 @@
     when:
       - "es_result.stderr and 'no matches for kind' in es_result.stderr"
 
-  - name: KubeSphere | Patch PersistentVolume (persistentVolumeReclaimPolicy)
+  - name: KubeSphere | Patching PersistentVolume (persistentVolumeReclaimPolicy)
     shell: >
       kubectl patch pv {{ item }}
       -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'

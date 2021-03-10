@@ -83,7 +83,7 @@
     - { name: kubesphere-config, file: kubesphere-config.yaml, type: cm }
 
 
-- name: KubeSphere | Init KubeSphere
+- name: KubeSphere | Initing KubeSphere
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item }}"
   loop:
     - "kubesphere-config.yaml"

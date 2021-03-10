@@ -67,7 +67,7 @@
     - { name: jenkins-agent-config, file: jenkins-agent-config.yaml}
 
 
-- name: Jenkins | Configure Jenkins host and port
+- name: Jenkins | Configuring Jenkins host and port
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
 

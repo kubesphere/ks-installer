@@ -3,7 +3,7 @@
   when:
     - not skip_downloads|default(false)
 
-- name: "Download items"
+- name: "Downloading items"
   include_tasks: "download_{% if download.container %}container{% else %}file{% endif %}.yml"
   vars:
     download: "{{ download_defaults | combine(item.value) }}"
@@ -13,7 +13,7 @@
     - item.value.enabled
     - (not (item.value.container|default(False))) or (item.value.container and download_container)
 
-- name: "Sync container"
+- name: "Synchronizing container"
   include_tasks: sync_container.yml
   vars:
     download: "{{ download_defaults | combine(item.value) }}"

@@ -22,7 +22,7 @@
   failed_when: false
 
 
-- name: KubeSphere | Backup old fluentbit crd
+- name: KubeSphere | Backuping old fluentbit crd
   shell: >
     {{ bin_dir }}/kubectl get fluentbits.logging.kubesphere.io -n kubesphere-logging-system fluent-bit -o yaml > {{ kubesphere_dir }}/fluentbit-crd.yaml.bak
   when:
@@ -46,12 +46,12 @@
   failed_when: false
 
 
-- name: KubeSphere | Prepare fluentbit operator setup
+- name: KubeSphere | Preparing fluentbit operator setup
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator/init
 
 
-- name: KubeSphere | Migrate fluentbit operator old config
+- name: KubeSphere | Migrating fluentbit operator old config
   shell: >
     {{ bin_dir }}/kubectl apply -f  {{ kubesphere_dir }}/fluentbit-operator/migrator
   when:

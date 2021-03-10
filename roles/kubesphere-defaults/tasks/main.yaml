@@ -1,10 +1,10 @@
 ---
-- name: Set image's namespace override
+- name: KubeSphere | Setting images' namespace override
   set_fact: 
     namespace_override: "kubesphereio"
   when: (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn")
 
-- name: Configure defaults
+- name: KubeSphere | Configuring defaults
   debug:
     msg: "Check roles/kubesphere-defaults/defaults/main.yml"
   tags:

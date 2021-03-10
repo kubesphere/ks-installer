@@ -70,7 +70,7 @@
   when: ks_upgrade is not defined or (ks_upgrade != True)
 
 
-- name: KubeSphere | Init KubeSphere
+- name: KubeSphere | Initing KubeSphere
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
   loop:
     - "role-templates.yaml"
