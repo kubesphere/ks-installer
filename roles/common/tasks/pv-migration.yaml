@@ -21,7 +21,7 @@
   register: persistentVolumeName
 
 
-- name: KubeSphere | Patch PersistentVolume (persistentVolumeReclaimPolicy)
+- name: KubeSphere | Patching PersistentVolume (persistentVolumeReclaimPolicy)
   shell: >
     kubectl patch pv $(kubectl get pv | grep "{{ item.op }}" | awk '{print $1}')
     -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
@@ -34,7 +34,7 @@
     -n openpitrix-system
 
 
-- name: KubeSphere | Patch PersistentVolume
+- name: KubeSphere | Patching PersistentVolume
   shell: >
     kubectl patch pv $(kubectl get pv | grep "{{ item.op }}" | awk '{print $1}')
     -p '{"spec":{"claimRef": {"name": "{{ item.ks }}", "namespace": "kubesphere-system", "resourceVersion": "", "uid": ""}}}'

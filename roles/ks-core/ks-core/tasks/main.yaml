@@ -118,7 +118,7 @@
   when:
     - ks_svc.stdout.find("ks-console") == -1
 
-- name: KubeSphere | Patch ks-console svc
+- name: KubeSphere | Patching ks-console svc
   command: >
     {{ bin_dir }}/kubectl patch -n kubesphere-system svc ks-console -p
     '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}}'

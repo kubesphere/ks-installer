@@ -49,6 +49,6 @@
     - { path: prometheus/upgrade, file: prometheus-system-pvc-cleanup.yaml }
     - { path: prometheus/thanosruler, file: thanosruler.yaml }
 
-- name: Monitoring | Setup cronjob to cleanup prometheus-system pvcs
+- name: Monitoring | Setuping cronjob to cleanup prometheus-system pvcs
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/upgrade

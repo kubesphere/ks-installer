@@ -49,7 +49,7 @@
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/0-defaultrolebinding.yaml
 
 
-    - name: ks-alerting | Init ks-alerting db
+    - name: ks-alerting | Initing ks-alerting db
       shell: >
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting/alerting-db-init-job.yaml
 
