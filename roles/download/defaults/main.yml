@@ -200,6 +200,8 @@ alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/al
 alertmanager_tag: v0.21.0
 thanos_repo: "{{ base_repo }}{{ namespace_override | default('thanosio') }}/thanos"
 thanos_tag: v0.18.0
+grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
+grafana_tag: 7.4.3
 
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
