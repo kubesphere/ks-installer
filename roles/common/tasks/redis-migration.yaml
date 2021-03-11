@@ -22,6 +22,6 @@
     {{ kubesphere_dir }}/redisMigrate.py
 
 
-- name: KubeSphere | Disable old redis
+- name: KubeSphere | Disabling old redis
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment redis --replicas=0

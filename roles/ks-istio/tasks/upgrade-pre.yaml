@@ -4,7 +4,7 @@
   register: galley_check
   ignore_errors: true
 
-- name: servicemesh | upgrade-pre | Disable galley validation
+- name: servicemesh | upgrade-pre | Disabling galley validation
   shell: >
     {{ bin_dir }}/kubectl -n istio-system patch deployment istio-galley --patch "$(cat {{ kubesphere_dir }}/servicemesh/istio/istio-galley-patch.yaml)" --type=merge
   when:
