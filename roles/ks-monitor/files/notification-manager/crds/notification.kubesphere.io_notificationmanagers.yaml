@@ -20,7 +20,7 @@ spec:
     singular: notificationmanager
   scope: Cluster
   versions:
-  - name: v2alpha1
+  - name: v2beta1
     schema:
       openAPIV3Schema:
         description: NotificationManager is the Schema for the notificationmanagers

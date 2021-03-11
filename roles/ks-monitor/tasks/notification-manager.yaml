@@ -32,4 +32,4 @@
   retries: 3
   delay: 10
   when:
-    - (notification_check.stdout.find("deployed") == -1) or (notification_check.stdout.find("0.1.0") == -1)
+    - (notification_check.stdout.find("deployed") == -1) or (notification_check.stdout.find("1.0.0") == -1)
