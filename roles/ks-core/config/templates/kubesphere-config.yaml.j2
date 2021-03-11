@@ -45,7 +45,8 @@ data:
 {% endif %}
 {% if network is defined or networkpolicy is defined %}
     network:
-{% if networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled %}
+{% if ((networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled) or
+       (network.networkpolicy is defined and network.networkpolicy.enabled is defined and network.networkpolicy.enabled)) %}
       enableNetworkPolicy: true
 {% endif %}
 {% if network.ippool is defined and network.ippool.type is defined %}
