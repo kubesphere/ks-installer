@@ -242,7 +242,7 @@ auditing_webhook_tag: v0.1.0
 
 #ingress:
 nginx_ingress_controller_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nginx-ingress-controller"
-nginx_ingress_controller_tag: 0.24.1
+nginx_ingress_controller_tag: v0.44.0
 defaultbackend_repo: "{{ base_repo }}{{ namespace_override | default('mirrorgooglecontainers') }}/defaultbackend-amd64"
 defaultbackend_tag: 1.4
 
