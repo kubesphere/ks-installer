@@ -38,18 +38,9 @@ rules:
 - apiGroups:
   - notification.kubesphere.io
   resources:
-  - dingtalkconfigs
-  - dingtalkreceivers
-  - emailconfigs
-  - emailreceivers
+  - configs
   - notificationmanagers
   - receivers
-  - slackconfigs
-  - slackreceivers
-  - webhookconfigs
-  - webhookreceivers
-  - wechatconfigs
-  - wechatreceivers
   verbs:
   - create
   - delete
