@@ -81,7 +81,7 @@ ks_devops_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubes
 ks_devops_migration_tag: "flyway-v3.0.0"
 ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-console"
 ks_console_tag: "{{ ks_image_tag }}"
-ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/kubectl"
+ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
 ks_kubectl_tag: v1.0.0
 # kubectl versions
 ks_kubectl_versions:
