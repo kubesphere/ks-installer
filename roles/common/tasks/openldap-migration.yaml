@@ -1,6 +1,6 @@
 ---
 
-- name: KubeSphere | Load old openldap data
+- name: KubeSphere | Loading old openldap data
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system exec -it
     $(kubectl get pod -n kubesphere-system -l app=openldap,tier=database,version=openldap-2.4 -ojsonpath='{.items[0].metadata.name}')
@@ -39,15 +39,15 @@
   loop: "{{ podList.stdout_lines }}"
 
 
-- name: KubeSphere | Disable old openldap
+- name: KubeSphere | Disabling old openldap
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system scale deployment openldap --replicas=0
 
 
-#- name: KubeSphere | Restart openldap
+#- name: KubeSphere | Restarting openldap
 #  shell: >
 #    {{ bin_dir }}/kubectl -n kubesphere-system rollout restart sts/openldap
 
-- name: KubeSphere | Restart openldap
+- name: KubeSphere | Restarting openldap
   shell: >
     {{ bin_dir }}/kubectl delete pod -n kubesphere-system -l app.kubernetes.io/instance=ks-openldap

@@ -72,6 +72,7 @@ kubesphere/notification-manager:v0.1.0
 kubesphere/metrics-server:v0.3.7                
 kubesphere/kube-rbac-proxy:v0.4.1               
 kubesphere/kube-state-metrics:v1.9.6
+grafana/grafana:7.4.3
 ##ks-logging-images                 
 kubesphere/elasticsearch-oss:6.7.0-1      
 kubesphere/elasticsearch-curator:v5.7.6 
