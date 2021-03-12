@@ -1717,7 +1717,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-apiserver
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     cluster-total.json: |-
@@ -3545,7 +3545,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-cluster-total
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     controller-manager.json: |-
@@ -4671,7 +4671,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-controller-manager
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     k8s-resources-cluster.json: |-
@@ -7237,7 +7237,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-k8s-resources-cluster
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     k8s-resources-namespace.json: |-
@@ -9507,7 +9507,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-k8s-resources-namespace
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     k8s-resources-node.json: |-
@@ -10469,7 +10469,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-k8s-resources-node
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     k8s-resources-pod.json: |-
@@ -12225,7 +12225,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-k8s-resources-pod
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     k8s-resources-workload.json: |-
@@ -14243,7 +14243,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-k8s-resources-workload
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     k8s-resources-workloads-namespace.json: |-
@@ -16422,7 +16422,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-k8s-resources-workloads-namespace
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     kubelet.json: |-
@@ -18921,7 +18921,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-kubelet
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     namespace-by-pod.json: |-
@@ -20337,7 +20337,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-namespace-by-pod
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     namespace-by-workload.json: |-
@@ -22021,7 +22021,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-namespace-by-workload
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     node-cluster-rsrc-use.json: |-
@@ -22969,7 +22969,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-node-cluster-rsrc-use
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     node-rsrc-use.json: |-
@@ -23944,7 +23944,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-node-rsrc-use
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     nodes.json: |-
@@ -24922,7 +24922,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-nodes
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     persistentvolumesusage.json: |-
@@ -25481,7 +25481,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-persistentvolumesusage
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     pod-total.json: |-
@@ -26661,7 +26661,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-pod-total
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     prometheus-remote-write.json: |-
@@ -28300,7 +28300,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-prometheus-remote-write
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     prometheus.json: |-
@@ -29511,7 +29511,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-prometheus
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     proxy.json: |-
@@ -30716,7 +30716,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-proxy
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     scheduler.json: |-
@@ -31766,7 +31766,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-scheduler
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     statefulset.json: |-
@@ -32677,7 +32677,7 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-statefulset
-    namespace: monitoring
+    kubesphere-monitoring-system
 - apiVersion: v1
   data:
     workload-total.json: |-
@@ -34063,5 +34063,5 @@ items:
   kind: ConfigMap
   metadata:
     name: grafana-dashboard-workload-total
-    namespace: monitoring
+    kubesphere-monitoring-system
 kind: ConfigMapList
