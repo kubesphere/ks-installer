@@ -1,24 +1,24 @@
-
 ---
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
-  name: webhookreceivers.notification.kubesphere.io
+  name: configs.notification.kubesphere.io
   namespace: kube-federation-system
 spec:
   federatedType:
     group: types.kubefed.io
-    kind: FederatedWebhookReceiver
-    pluralName: federatedwebhookreceivers
+    kind: FederatedNotificationConfig
+    pluralName: federatednotificationconfigs
     scope: Cluster
     version: v1beta1
   propagation: Enabled
   targetType:
     group: notification.kubesphere.io
-    kind: WebhookReceiver
-    pluralName: webhookreceivers
+    kind: Config
+    pluralName: configs
     scope: Cluster
-    version: v2alpha1
+    version: v2beta1
+
 
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -27,14 +27,14 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: (devel)
   creationTimestamp: null
-  name: federatedwebhookreceivers.types.kubefed.io
+  name: federatednotificationconfigs.types.kubefed.io
 spec:
   group: types.kubefed.io
   names:
-    kind: FederatedWebhookReceiver
-    listKind: FederatedWebhookReceiverList
-    plural: federatedwebhookreceivers
-    singular: federatedwebhookreceiver
+    kind: FederatedNotificationConfig
+    listKind: FederatedNotificationConfigList
+    plural: federatednotificationconfigs
+    singular: federatednotificationconfig
   scope: Cluster
   versions:
   - name: v1beta1
@@ -121,46 +121,15 @@ spec:
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                   spec:
-                    description: WebhookReceiverSpec defines the desired state of WebhookReceiver
+                    description: ConfigSpec defines the desired state of Config
                     properties:
-                      alertSelector:
-                        description: Selector to filter alerts.
+                      dingtalk:
                         properties:
-                          matchExpressions:
-                            description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
-                            items:
-                              description: A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.
-                              properties:
-                                key:
-                                  description: key is the label key that the selector applies to.
-                                  type: string
-                                operator:
-                                  description: operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
-                                  type: string
-                                values:
-                                  description: values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
-                                  items:
-                                    type: string
-                                  type: array
-                              required:
-                              - key
-                              - operator
-                              type: object
-                            type: array
-                          matchLabels:
-                            additionalProperties:
-                              type: string
-                            description: matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
-                            type: object
-                        type: object
-                      httpConfig:
-                        description: HTTPClientConfig configures an HTTP client.
-                        properties:
-                          basicAuth:
-                            description: The HTTP basic authentication credentials for the targets.
+                          conversation:
+                            description: Only needed when send alerts to the conversation.
                             properties:
-                              password:
-                                description: SecretKeySelector selects a key of a Secret.
+                              appkey:
+                                description: The key of the application with which to send messages.
                                 properties:
                                   key:
                                     description: The key of the secret to select from.  Must be a valid secret key.
@@ -174,13 +143,34 @@ spec:
                                 required:
                                 - key
                                 type: object
-                              username:
-                                type: string
-                            required:
-                            - username
+                              appsecret:
+                                description: The key in the secret to be used. Must be a valid secret key.
+                                properties:
+                                  key:
+                                    description: The key of the secret to select from.  Must be a valid secret key.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: The namespace of the secret, default to the pod's namespace.
+                                    type: string
+                                required:
+                                - key
+                                type: object
                             type: object
-                          bearerToken:
-                            description: The bearer token for the targets.
+                          labels:
+                            additionalProperties:
+                              type: string
+                            type: object
+                        type: object
+                      email:
+                        properties:
+                          authIdentify:
+                            description: The identity for PLAIN authentication.
+                            type: string
+                          authPassword:
+                            description: The secret contains the SMTP password for LOGIN and PLAIN authentications.
                             properties:
                               key:
                                 description: The key of the secret to select from.  Must be a valid secret key.
@@ -194,11 +184,50 @@ spec:
                             required:
                             - key
                             type: object
-                          proxyUrl:
-                            description: HTTP proxy server to use to connect to the targets.
+                          authSecret:
+                            description: The secret contains the SMTP secret for CRAM-MD5 authentication.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must be a valid secret key.
+                                type: string
+                              name:
+                                description: Name of the secret.
+                                type: string
+                              namespace:
+                                description: The namespace of the secret, default to the pod's namespace.
+                                type: string
+                            required:
+                            - key
+                            type: object
+                          authUsername:
+                            description: The username for CRAM-MD5, LOGIN and PLAIN authentications.
                             type: string
-                          tlsConfig:
-                            description: TLSConfig to use to connect to the targets.
+                          from:
+                            description: The sender address.
+                            type: string
+                          hello:
+                            description: The hostname to use when identifying to the SMTP server.
+                            type: string
+                          labels:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          requireTLS:
+                            description: The default SMTP TLS requirement.
+                            type: boolean
+                          smartHost:
+                            description: The address of the SMTP server.
+                            properties:
+                              host:
+                                type: string
+                              port:
+                                type: integer
+                            required:
+                            - host
+                            - port
+                            type: object
+                          tls:
+                            description: TLSConfig configures the options for TLS connections.
                             properties:
                               clientCertificate:
                                 description: The certificate of the client.
@@ -256,62 +285,73 @@ spec:
                                 description: Used to verify the hostname for the targets.
                                 type: string
                             type: object
-                        type: object
-                      service:
-                        description: "`service` is a reference to the service for this webhook. Either `service` or `url` must be specified. \n If the webhook is running within the cluster, then you should use `service`."
-                        properties:
-                          name:
-                            description: '`name` is the name of the service. Required'
-                            type: string
-                          namespace:
-                            description: '`namespace` is the namespace of the service. Required'
-                            type: string
-                          path:
-                            description: '`path` is an optional URL path which will be sent in any request to this service.'
-                            type: string
-                          port:
-                            description: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
-                            format: int32
-                            type: integer
-                          scheme:
-                            description: Http scheme, default is http.
-                            type: string
                         required:
-                        - name
-                        - namespace
+                        - from
+                        - smartHost
                         type: object
-                      url:
-                        description: "`url` gives the location of the webhook, in standard URL form (`scheme://host:port/path`). Exactly one of `url` or `service` must be specified. \n The `host` should not refer to a service running in the cluster; use the `service` field instead. The host might be resolved via external DNS in some api servers (e.g., `kube-apiserver` cannot resolve in-cluster DNS as that would be a layering violation). `host` may also be an IP address. \n Please note that using `localhost` or `127.0.0.1` as a `host` is risky unless you take great care to run this webhook on all hosts which run an apiserver which might need to make calls to this webhook. Such installs are likely to be non-portable, i.e., not easy to turn up in a new cluster. \n A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier. \n Attempting to use a user or basic auth e.g. \"user:password@\" is not allowed. Fragments (\"#...\") and query parameters (\"?...\") are not allowed, either."
-                        type: string
-                      webhookConfigSelector:
-                        description: WebhookConfig to be selected for this receiver
+                      slack:
                         properties:
-                          matchExpressions:
-                            description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
-                            items:
-                              description: A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.
-                              properties:
-                                key:
-                                  description: key is the label key that the selector applies to.
-                                  type: string
-                                operator:
-                                  description: operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
-                                  type: string
-                                values:
-                                  description: values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
-                                  items:
-                                    type: string
-                                  type: array
-                              required:
-                              - key
-                              - operator
-                              type: object
-                            type: array
-                          matchLabels:
+                          labels:
                             additionalProperties:
                               type: string
-                            description: matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
                             type: object
+                          slackTokenSecret:
+                            description: The token of user or bot.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must be a valid secret key.
+                                type: string
+                              name:
+                                description: Name of the secret.
+                                type: string
+                              namespace:
+                                description: The namespace of the secret, default to the pod's namespace.
+                                type: string
+                            required:
+                            - key
+                            type: object
+                        type: object
+                      webhook:
+                        properties:
+                          labels:
+                            additionalProperties:
+                              type: string
+                            type: object
+                        type: object
+                      wechat:
+                        properties:
+                          labels:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          wechatApiAgentId:
+                            description: The id of the application which sending message.
+                            type: string
+                          wechatApiCorpId:
+                            description: The corp id for authentication.
+                            type: string
+                          wechatApiSecret:
+                            description: The API key to use when talking to the WeChat API.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must be a valid secret key.
+                                type: string
+                              name:
+                                description: Name of the secret.
+                                type: string
+                              namespace:
+                                description: The namespace of the secret, default to the pod's namespace.
+                                type: string
+                            required:
+                            - key
+                            type: object
+                          wechatApiUrl:
+                            description: The WeChat API URL.
+                            type: string
+                        required:
+                        - wechatApiAgentId
+                        - wechatApiCorpId
+                        - wechatApiSecret
                         type: object
                     type: object
                 type: object
