@@ -23,6 +23,11 @@ spec:
         image: {{ .Values.edgeWatcher.controllerManager.repository }}:{{ .Values.edgeWatcher.controllerManager.tag }}
         imagePullPolicy: {{ .Values.edgeWatcher.controllerManager.pullPolicy }}
         name: manager
+        env:
+        - name: VERSION
+          value: {{ .Values.cloudCore.tag }}
+        - name: REGION
+          value: zh
         resources:
           limits:
             cpu: 100m
