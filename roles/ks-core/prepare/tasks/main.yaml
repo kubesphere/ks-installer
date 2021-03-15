@@ -76,7 +76,8 @@
     - "role-templates.yaml"
     - "webhook-secret.yaml"
     - "network.kubesphere.io.yaml"
-    - "users.iam.kubesphere.io.yaml"
+    - "iam.kubesphere.io.yaml"
+    - "quota.kubesphere.io.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
 
