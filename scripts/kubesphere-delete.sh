@@ -45,6 +45,8 @@ kubectl delete deployment -n kubesphere-system `kubectl get deployment -n kubesp
 # delete monitor statefulset
 kubectl delete prometheus -n kubesphere-monitoring-system k8s 2>/dev/null
 kubectl delete statefulset -n kubesphere-monitoring-system `kubectl get statefulset -n kubesphere-monitoring-system -o jsonpath="{.items[*].metadata.name}"` 2>/dev/null
+# delete grafana
+kubectl delete deployment -n kubesphere-monitoring-system grafana 2>/dev/null
 kubectl --no-headers=true get pvc -n kubesphere-monitoring-system -o custom-columns=:metadata.namespace,:metadata.name | grep -E kubesphere-monitoring-system | xargs -n2 kubectl delete pvc -n 2>/dev/null
 
 # delete pvc
