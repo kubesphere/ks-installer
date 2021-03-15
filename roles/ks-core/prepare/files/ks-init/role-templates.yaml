@@ -105,6 +105,11 @@ metadata:
         input.User.Name == input.Name
       }
       allow = true {
+        allowedNoneResources := ["/api","/api/v1"]
+        allowedNoneResources[_] == input.Path
+        input.Verb == "GET"
+      }
+      allow = true {
         input.APIGroup == "tenant.kubesphere.io"
         input.KubernetesRequest == false
         allowedVerbs := ["get","list","watch"]
