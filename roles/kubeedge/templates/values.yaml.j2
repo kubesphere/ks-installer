@@ -62,12 +62,12 @@ edgeWatcher:
     tag: "{{ edge_watcher_agent_tag }}"
     pullPolicy: "IfNotPresent"
     affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: node-role.kubernetes.io/edge
-            operator: DoesNotExist
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node-role.kubernetes.io/edge
+              operator: DoesNotExist
     tolerations:
     - effect: NoSchedule
       key: node-role.kubernetes.io/master
