@@ -24,25 +24,17 @@ data:
       port: 6379
       password: {{ common.redisPasswd | default('""') }}
       db: 0
-{% if devops.enabled or openpitrix.enabled %}
+{% if devops.enabled%}
     s3:
-      endpoint: http://minio.kubesphere-system.svc:9000
-      region: us-east-1
-      disableSSL: true
-      forcePathStyle: true
-      accessKeyID: openpitrixminioaccesskey
-      secretAccessKey: openpitrixminiosecretkey
+      endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
+      region: {{ common.s3.region | default('us-east-1') }}
+      disableSSL: {{ common.s3.disableSSL | default(true) }}
+      forcePathStyle: {{ common.s3.forcePathStyle | default(true) }}
+      accessKeyID: {{ common.s3.accessKeyID | default('openpitrixminioaccesskey') }}
+      secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
       bucket: s2i-binaries
 {% endif %}
-{% if devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled %}
-    mysql:
-      host: mysql.kubesphere-system.svc:3306
-      username: {{ common.mysqlUsername | default("root") }}
-      password: {{ common.mysqlPassword | default("password") }}
-      maxIdleConnections: 100
-      maxOpenConnections: 100
-      maxConnectionLifeTime: 10s
-{% endif %}
+
 {% if network is defined or networkpolicy is defined %}
     network:
 {% if ((networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled) or
@@ -75,15 +67,16 @@ data:
       servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
       kialiQueryHost: http://kiali.istio-system:20001
 {% endif %}
-{% if openpitrix.enabled is defined and openpitrix.enabled == true %}
+{% if openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled %}
     openpitrix:
-      runtimeManagerEndpoint:    "hyperpitrix.openpitrix-system.svc:9103"
-      clusterManagerEndpoint:    "hyperpitrix.openpitrix-system.svc:9104"
-      repoManagerEndpoint:       "hyperpitrix.openpitrix-system.svc:9101"
-      appManagerEndpoint:        "hyperpitrix.openpitrix-system.svc:9102"
-      categoryManagerEndpoint:   "hyperpitrix.openpitrix-system.svc:9113"
-      attachmentManagerEndpoint: "hyperpitrix.openpitrix-system.svc:9122"
-      repoIndexerEndpoint:       "hyperpitrix.openpitrix-system.svc:9108"
+      s3:
+        endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
+        region: {{ common.s3.region | default('us-east-1') }}
+        disableSSL: {{ common.s3.disableSSL | default(true) }}
+        forcePathStyle: {{ common.s3.forcePathStyle | default(true) }}
+        accessKeyID: {{ common.s3.accessKeyID | default('openpitrixminioaccesskey') }}
+        secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
+        bucket: app
 {% endif %}
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
     multicluster:
@@ -134,16 +127,12 @@ data:
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
-{% if alerting.enabled is defined and alerting.enabled == true %}
+
     alerting:
       prometheusEndpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
       thanosRulerEndpoint: http://thanos-ruler-operated.kubesphere-monitoring-system.svc:10902
       thanosRuleResourceLabels: thanosruler=thanos-ruler,role=thanos-alerting-rules
-{% endif %}
-{% if notification.enabled is defined and notification.enabled == true %}
-    notification:
-      endpoint: http://notification.kubesphere-alerting-system.svc:9200
-{% endif %}
+
 {% if kubeedge.enabled is defined and kubeedge.enabled == true %}
     kubeedge:
       endpoint: http://edge-watcher.kubeedge.svc/api/
