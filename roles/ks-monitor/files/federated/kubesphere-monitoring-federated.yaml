@@ -1,0 +1,14 @@
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedNamespace
+metadata:
+  name: kubesphere-monitoring-federated
+  namespace: kubesphere-monitoring-federated
+spec:
+  placement:
+    clusterSelector: {}
+  template:
+    metadata:
+      labels:
+        kubesphere.io/workspace: system-workspace
+      annotations:
+        kubesphere.io/creator: admin
