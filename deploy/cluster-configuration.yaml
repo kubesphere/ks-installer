@@ -35,11 +35,6 @@ spec:
   console:
     enableMultiLogin: true  # enable/disable multiple sing on, it allows an account can be used by different users at the same time.
     port: 30880
-  alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) Whether to install KubeSphere alerting system. It enables Users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
-    enabled: false
-    # thanosruler:
-    #   replicas: 1
-    #   resources: {}
   auditing:                # Whether to install KubeSphere audit log system. It provides a security-relevant chronological set of records，recording the sequence of activities happened in platform, initiated by different tenants.
     enabled: false
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Whether to install KubeSphere DevOps System. It provides out-of-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
@@ -79,10 +74,9 @@ spec:
       type: none
     topology: # "weave-scope" means to use "weave-scope" to provide network topology information, "none" means that the ippool function is disabled
       type: none
-  notification:        # Email Notification support for the legacy alerting system, should be enabled/disabled together with the above alerting option.
-    enabled: false
-  openpitrix:          # (2 Core, 3.6 G) Whether to install KubeSphere Application Store. It provides an application store for Helm-based applications, and offer application lifecycle management.
-    enabled: false
+  openpitrix:
+    store:
+      enabled: false
   servicemesh:         # (0.3 Core, 300 MiB) Whether to install KubeSphere Service Mesh (Istio-based). It provides fine-grained traffic management, observability and tracing, and offer visualization for traffic topology.
     enabled: false     # base component (pilot)
   kubeedge:
