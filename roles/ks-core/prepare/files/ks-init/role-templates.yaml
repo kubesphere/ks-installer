@@ -52,6 +52,7 @@ rules:
       - apps
       - apps/versions
       - categories
+      - attachments
     verbs:
       - get
       - list
