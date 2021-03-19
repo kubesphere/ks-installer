@@ -656,6 +656,8 @@ rules:
       - categories
       - apps/audits
       - workloads
+      - groups
+      - groupbindings
     verbs:
       - get
       - list
