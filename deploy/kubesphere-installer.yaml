@@ -222,12 +222,12 @@ rules:
   - '*'
   verbs:
   - '*'
- - apiGroups:
-   - types.kubefed.io
-   resources:
-   - '*'
-   verbs:
-   - '*'
+- apiGroups:
+  - types.kubefed.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
 
 ---
 kind: ClusterRoleBinding
