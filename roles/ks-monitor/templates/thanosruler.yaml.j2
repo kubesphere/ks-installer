@@ -24,7 +24,11 @@ spec:
   - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
   image: {{ thanos_repo }}:{{ thanos_tag }}
   queryEndpoints:
+{% if common.monitoring is defined and common.monitoring.endpoint is defined %}
+  - {{ common.monitoring.endpoint }}
+{% else %}
   - prometheus-operated.kubesphere-monitoring-system.svc:9090
+{% endif %}
 {% if nodeNum is defined and nodeNum < 3 %}
   replicas: {{ alerting.thanosruler.replicas | default(1) }}
 {% else %}
