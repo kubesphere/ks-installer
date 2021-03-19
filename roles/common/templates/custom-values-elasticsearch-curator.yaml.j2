@@ -67,6 +67,9 @@ configMaps:
       # client_cert:
       # client_key:
       # ssl_no_validate: True
+{% if common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled is true %}
+      http_auth: {{ common.es.basicAuth.username }}:{{ common.es.basicAuth.password }}
+{% endif %}
       # http_auth:
       # timeout: 30
       # master_only: False

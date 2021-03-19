@@ -25,5 +25,10 @@ spec:
 {% else %}
         server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
+{% if common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled is true %}
+    secretName: jaeger-secret
+{% endif %}
     type: elasticsearch
   strategy: production
+
+---
