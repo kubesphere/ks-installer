@@ -76,7 +76,7 @@ data:
         forcePathStyle: {{ common.s3.forcePathStyle | default(true) }}
         accessKeyID: {{ common.s3.accessKeyID | default('openpitrixminioaccesskey') }}
         secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
-        bucket: app
+        bucket: {{ common.s3.openpitrixBucket | default('app-store') }}
 {% endif %}
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
     multicluster:
