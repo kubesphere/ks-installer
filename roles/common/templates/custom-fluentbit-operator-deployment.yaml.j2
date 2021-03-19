@@ -20,9 +20,12 @@ spec:
       volumes:
       - name: env
         emptyDir: {}
+{% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
+{% else %}
       - name: dockersock
         hostPath:
           path: /var/run/docker.sock
+{% endif %}
       initContainers:
       - name: setenv
         image: {{ docker_repo }}:{{ docker_tag }}
@@ -30,13 +33,20 @@ spec:
         - /bin/sh
         - '-c'
         - set -ex;
+{% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
+          echo DOCKER_ROOT_DIR={{ common.containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
+{% else %}
           echo DOCKER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
+{% endif %}
         volumeMounts:
         - name: env
           mountPath: /fluentbit-operator
+{% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
+{% else %}
         - name: dockersock
           readOnly: true
           mountPath: /var/run/docker.sock
+{% endif %}
       containers:
       - name: fluentbit-operator
         image: {{ fluentbit_operator_repo }}:{{ fluentbit_operator_tag }}
