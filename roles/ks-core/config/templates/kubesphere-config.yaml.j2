@@ -128,6 +128,7 @@ data:
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
 
+{% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
 {% if common.monitoring is defined and common.monitoring.endpoint is defined %}
       prometheusEndpoint: {{ common.monitoring.endpoint }}
@@ -136,6 +137,7 @@ data:
 {% endif %}
       thanosRulerEndpoint: http://thanos-ruler-operated.kubesphere-monitoring-system.svc:10902
       thanosRuleResourceLabels: thanosruler=thanos-ruler,role=thanos-alerting-rules
+{% endif %}
 
 {% if kubeedge.enabled is defined and kubeedge.enabled == true %}
     kubeedge:
