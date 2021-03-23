@@ -58,14 +58,8 @@ base_library_repo: >-
 
   {%- endif %}
 
-ks_image_tag: >-
-  {% if dev_tag is defined and dev_tag != "" -%}
-  "{{ dev_tag }}"
-  {%- elif ks_image_tag is defined and ks_image_tag != "" -%}
-  "{{ ks_image_tag }}"
-  {%- else -%}
-  "latest"
-  {%- endif %}
+
+ks_image_tag: "{{ dev_tag | default('latest') }}"
 
 # Containers
 # In some cases, we need a way to set --registry-mirror or --insecure-registry for docker,
