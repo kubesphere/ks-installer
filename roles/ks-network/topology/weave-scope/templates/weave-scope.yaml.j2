@@ -182,6 +182,7 @@ items:
             - name: app
               args:
                 - '--mode=app'
+                - '--weave=false'
               command:
                 - /home/weave/scope
               env: []
@@ -265,7 +266,8 @@ items:
                 - '--probe.http.listen=:4041'
                 - '--probe.publish.interval=4500ms'
                 - '--probe.spy.interval=2s'
-                - 'weave-scope-app.weave.svc.cluster.local:80'
+                - '--weave=false'
+                - 'weave-scope-app.weave:80'
               command:
                 - /home/weave/scope
               env: []
@@ -324,7 +326,8 @@ items:
                 - '--probe.spy.interval=2s'
                 - '--probe.docker.bridge=docker0'
                 - '--probe.docker=true'
-                - 'weave-scope-app.weave.svc.cluster.local:80'
+                - '--weave=false'
+                - 'weave-scope-app.weave:80'
               command:
                 - /home/weave/scope
               env: []
