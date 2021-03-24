@@ -1,0 +1,57 @@
+name: Auto-Test-PR
+
+on:
+  push:
+    branches: [master, express]
+  pull_request:
+    branches: [master]
+
+jobs:
+  auto-test-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build image
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/ks-installer:${{ github.sha }}
+
+    - name: Docker login
+      uses: azure/docker-login@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push image
+      run: |
+        echo "push image"
+        docker push ${{ secrets.DOCKER_USERNAME }}/ks-installer:${{ github.sha }}
+
+    - name: Create kind cluster
+      uses: helm/kind-action@v1.0.0-rc.1
+
+    - name: Deploy KubeSphere to Kind
+      run: |
+        kubectl apply -f deploy/kubesphere-installer.yaml
+        kubectl apply -f deploy/cluster-configuration.yaml
+        kubectl -n kubesphere-system set image deploy/ks-installer installer=${{ secrets.DOCKER_USERNAME }}/ks-installer:${{ github.sha }}
+        kubectl -n kubesphere-system get cc ks-installer -o yaml | sed "s/false/true/g" | kubectl replace -n kubesphere-system cc -f -
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"monitoring":false}}}'
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"kubeedge":{"enabled":false}}}'
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":false}}}'
+
+    - name: Check Cluster Status
+      run: bash scripts/check_cluster_status.sh
+      timeout-minutes: 90
+
+    - name: Check Cluster Status (servicemesh)
+      run: bash scripts/check_cluster_status.sh
+      timeout-minutes: 90
+
+    - name: slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+      if: ${{ failure() }}
