@@ -28,7 +28,7 @@
 
 - import_tasks: logsidecar.yaml
   when:
-  - "logging.logsidecar.enabled == true"
+    - logging is defined and logging.logsidecar is defined and logging.logsidecar.enabled is defined and logging.logsidecar.enabled
 
 - name: ks-logging | Importing logging status
   shell: >
