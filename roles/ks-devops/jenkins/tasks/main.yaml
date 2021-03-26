@@ -1,11 +1,11 @@
 ---
-- name: ks-devops | Getting jenkins installation files
+- name: ks-devops | Getting Jenkins installation files
   copy:
     src: "jenkins"
     dest: "{{ kubesphere_dir }}/"
 
 
-- name: Jenkins | Checking Jenkins status
+- name: ks-devops | Checking Jenkins status
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins
   register: jenkins_status
@@ -17,7 +17,7 @@
     - jenkins_status.rc == 0
 
 
-- name: Jenkins | Checking Jenkins update center status
+- name: ks-devops | Checking Jenkins update center status
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system uc-jenkins-update-center
   register: jenkins_uc_status
@@ -30,12 +30,12 @@
 
 
 - block:
-  - name: Jenkins | Getting sonarqube host
+  - name: ks-devops | Getting sonarqube host
     shell: >
       {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "host" | awk '{print $2}'
     register: sonarqube_host
 
-  - name: Jenkins | Getting sonarqube token
+  - name: ks-devops | Getting sonarqube token
     shell: >
       {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "token" | awk '{print $2}'
     register: sonarqube_token
@@ -57,7 +57,7 @@
     - devops.sonarqube.externalSonarUrl is defined
     - devops.sonarqube.externalSonarToken is defined
 
-- name: Jenkins | Creating manifests
+- name: ks-devops | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/jenkins/{{ item.file }}"
@@ -67,17 +67,17 @@
     - { name: jenkins-agent-config, file: jenkins-agent-config.yaml}
 
 
-- name: Jenkins | Configuring Jenkins host and port
+- name: ks-devops | Configuring Jenkins host and port
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
 
 
-- name: Jenkins | Creating Jenkins Agent Config File
+- name: ks-devops | Creating Jenkins Agent Config File
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-system
 
 
-- name: Jenkins | Deploying Jenkins
+- name: ks-devops | Deploying Jenkins
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-jenkins {{ kubesphere_dir }}/jenkins/jenkins
     -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml

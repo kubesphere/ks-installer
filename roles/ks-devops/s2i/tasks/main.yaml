@@ -1,5 +1,4 @@
 ---
-
 - name: S2I | Getting s2i installation files
   copy:
     src: "s2i"

@@ -1,4 +1,4 @@
 ---
-- name: Jenkins | Uninstall update center
+- name: ks-devops | Uninstall update center
   shell: >
     {{ bin_dir }}/helm -n kubesphere-devops-system uninstall uc
