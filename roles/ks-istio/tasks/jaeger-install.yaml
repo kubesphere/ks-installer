@@ -28,6 +28,8 @@
   when:
     - "common.es.basicAuth.enabled is defined"
     - "common.es.basicAuth.enabled == true"
+    - "common.es.basicAuth.password is defined and common.es.basicAuth.password != ''"
+    - "common.es.basicAuth.username is defined and common.es.basicAuth.username != ''"
 
 - name: servicemesh | Deploying jaeger-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"
