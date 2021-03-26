@@ -1,4 +1,4 @@
-- name: KubeSphere | Waiting for ks-account
+- name: ks-devops | Waiting for ks-account
   shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-account | awk '{print $3}'"
   register: result
   until: result.stdout.find("Running") != -1

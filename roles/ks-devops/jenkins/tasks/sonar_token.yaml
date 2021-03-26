@@ -1,5 +1,4 @@
 ---
-
 - name: ks-devops | Waiting for ks-sonarqube
   shell: >
     curl -I -s -u {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }} -X POST {{ sonar_server_url_internal }}/api/user_tokens/generate|awk '{if(NR==1){print $2}}'
