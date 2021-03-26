@@ -10,10 +10,15 @@ spec:
   match: kube_events
   es:
     logstashFormat: true
-    host: "{% if common.es.externalElasticsearchUrl is defined %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
+    host: "{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchUrl != "" %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-events"
-    port: {% if common.es.externalElasticsearchPort is defined %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
-{% if common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled is true %}
+    port: {% if common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchPort != "" %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
+
+{% if common.es.basicAuth is defined and common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled %}
+{% if common.es.basicAuth.username is defined and common.es.basicAuth.username != "" %}
     httpUser: {{ common.es.basicAuth.username }}
+{% endif %}
+{% if common.es.basicAuth.password is defined and common.es.basicAuth.password != "" %}
     httpPassword: {{ common.es.basicAuth.password }}
+{% endif %}
 {% endif %}
