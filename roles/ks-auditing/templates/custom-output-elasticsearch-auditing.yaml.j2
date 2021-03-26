@@ -13,4 +13,7 @@ spec:
     host: "{% if common.es.externalElasticsearchUrl is defined %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-auditing"
     port: {% if common.es.externalElasticsearchPort is defined %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
-
+{% if common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled is true %}
+    httpUser: {{ common.es.basicAuth.username }}
+    httpPassword: {{ common.es.basicAuth.password }}
+{% endif %}

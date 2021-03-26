@@ -19,6 +19,16 @@
   when:
     - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
 
+- name: servicemesh | Deploying jaeger-secret
+  shell: "{{ bin_dir }}/kubectl create secret generic jaeger-secret --from-literal=ES_PASSWORD={{ common.es.basicAuth.password }} --from-literal=ES_USERNAME={{ common.es.basicAuth.username }} --namespace istio-system"
+  register: import
+  until: import is succeeded
+  retries: 5
+  delay: 10
+  when:
+    - "common.es.basicAuth.enabled is defined"
+    - "common.es.basicAuth.enabled == true"
+
 - name: servicemesh | Deploying jaeger-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"
   register: import
