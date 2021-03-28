@@ -26,7 +26,7 @@
       retries: 5 
       delay: 1
   when:
-    - (metrics_server_check.stdout.find("DEPLOYED") == 0) or (metrics_server_check.stdout.find("0.3.7") == 0)
+    - (metrics_server_check.stdout.find("deployed") != -1) or (metrics_server_check.stdout.find("0.3.7") != -1)
 
 - name: Metrics-Server | Installing new metrics-server
   shell: >
@@ -36,9 +36,9 @@
   retries: 5 
   delay: 1
 
-- name: Metrics-Server | Waitting for v1beta1.metrics.k8s.io ready
+- name: Metrics-Server | Waitting for metrics.k8s.io ready
   shell: >
-    {{ bin_dir }}/kubectl get apiservices v1beta1.metrics.k8s.io -o jsonpath='{.status.conditions[0].status}'
+    {{ bin_dir }}/kubectl get apiservice | grep metrics.k8s.io
   register: metrics_health
   until: metrics_health.stdout.find("True") != -1
   retries: 60

@@ -25,6 +25,19 @@
   failed_when: false
 
 
+- name: notification-manager | Uninstalling old notification-manager
+  shell: >
+    {{ bin_dir }}/helm del notification-manager -n kubesphere-monitoring-system &&
+    {{ bin_dir }}/kubectl delete -f /kubesphere/kubesphere/notification-manager/crds/
+  register: nm_uninstall
+  until: nm_uninstall.rc == 0
+  retries: 5
+  delay: 1
+  when:
+    - notification_check.stdout.find("0.1.0") != -1
+  failed_when: false
+
+
 - name: notification-manager | Deploying notification-manager
   shell: >
     {{ bin_dir }}/helm upgrade --install notification-manager
@@ -36,8 +49,6 @@
   until: deploy_result is succeeded
   retries: 3
   delay: 10
-  when:
-    - (notification_check.stdout.find("deployed") == -1) or (notification_check.stdout.find("1.0.0") == -1)
 
 - name: notification-manager | Checking federatednamespace crd installed
   shell: >
