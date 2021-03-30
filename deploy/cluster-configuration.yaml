@@ -81,9 +81,9 @@ spec:
     networkpolicy: # Network policies allow network isolation within the same cluster, which means firewalls can be set up between certain instances (Pods).
       # Make sure that the CNI network plugin used by the cluster supports NetworkPolicy. There are a number of CNI network plugins that support NetworkPolicy, including Calico, Cilium, Kube-router, Romana and Weave Net.
       enabled: false
-    ippool: # kubevirt uses "local", if calico cni is integrated then use the value "calico", "none" means that the ippool function is disabled
+    ippool: # if calico cni is integrated then use the value "calico", "none" means that the ippool function is disabled
       type: none
-    topology: # "weave-scope" means to use "weave-scope" to provide network topology information, "none" means that the ippool function is disabled
+    topology: # "weave-scope" means to use "weave-scope" to provide network topology information, "none" means that the topology function is disabled
       type: none
   openpitrix:
     store:
