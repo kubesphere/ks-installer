@@ -4,6 +4,9 @@
   gather_facts: false
   roles:
     - kubesphere-defaults
-#    - role: openpitrix
-#      when:
-#        - "status.openpitrix is not defined or status.openpitrix.status is not defined or status.openpitrix.status != 'enabled'"
+    - role: openpitrix
+      when:
+        - openpitrix is defined
+        - openpitrix.store is defined
+        - openpitrix.store.enabled is defined
+        - openpitrix.store.enabled
