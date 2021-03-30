@@ -102,6 +102,10 @@ data:
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
+{% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+      username: "{{ common.es.username }}"
+      password: "{{ common.es.password }}"
+{% endif %}
 {% if esIndexPrefix is defined %}
       indexPrefix: {{ esIndexPrefix }}
 {% else %}
@@ -115,6 +119,10 @@ data:
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
+{% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+      username: "{{ common.es.username }}"
+      password: "{{ common.es.password }}"
+{% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-events
 {% endif %}
 {% if auditing.enabled is defined and auditing.enabled == true %}
@@ -124,6 +132,10 @@ data:
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+{% endif %}
+{% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+      username: "{{ common.es.username }}"
+      password: "{{ common.es.password }}"
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
