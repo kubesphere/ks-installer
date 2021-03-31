@@ -77,11 +77,11 @@ notificationmanager:
         notificationTimeout: 5
   volumeMounts:
     - mountPath: /etc/notification-manager/
-      name: noification-manager-template
+      name: notification-manager-template
   volumes:
     - configMap:
         defaultMode: 420
-        name: noification-manager-template
-      name: noification-manager-template
+        name: notification-manager-template
+      name: notification-manager-template
   defaultSecretNamespace: kubesphere-monitoring-federated
 
