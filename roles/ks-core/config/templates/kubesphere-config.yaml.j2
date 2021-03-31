@@ -24,6 +24,17 @@ data:
       port: 6379
       password: {{ common.redisPasswd | default('""') }}
       db: 0
+
+{% if devops.enabled or (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled) %}
+    mysql:
+      host: mysql.kubesphere-system.svc:3306
+      username: {{ common.mysqlUsername | default("root") }}
+      password: {{ common.mysqlPassword | default("password") }}
+      maxIdleConnections: 100
+      maxOpenConnections: 100
+      maxConnectionLifeTime: 10s
+{% endif %}
+
 {% if devops.enabled%}
     s3:
       endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
@@ -157,9 +168,9 @@ data:
 {% endif %}
     metering:
 {% if metering.enabled is defined and metering.enabled == true %}
-        enable: true
+      enable: true
 {% else %}
-        enable: false
+      enable: false
 {% endif %}
 kind: ConfigMap
 metadata:
