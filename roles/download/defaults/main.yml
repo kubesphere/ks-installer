@@ -302,7 +302,8 @@ vpa_updater_repo: dockerhub.qingcloud.com/google_containers/vpa-updater
 vpa_updater_tag: "{{ vpa_version }}"
 
 #examples-bookinfo
-examples_bookinfo_version: 1.13.0
+examples_bookinfo_version: 1.16.2
+examples_ratings_version: 1.16.3
 bookinfo_productpage_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-productpage-v1"
 bookinfo_productpage_v1_tag: "{{ examples_bookinfo_version }}"
 bookinfo_reviews_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-reviews-v1"
@@ -312,7 +313,7 @@ bookinfo_reviews_v2_tag: "{{ examples_bookinfo_version }}"
 bookinfo_details_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-details-v1"
 bookinfo_details_v1_tag: "{{ examples_bookinfo_version }}"
 bookinfo_ratings_v1_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/examples-bookinfo-ratings-v1"
-bookinfo_ratings_v1_tag: "{{ examples_bookinfo_version }}"
+bookinfo_ratings_v1_tag: "{{ examples_ratings_version }}"
 
 #wave-scope
 waveworks_scop_repo: "{{ base_repo }}{{ namespace_override | default('weaveworks') }}/scope"
