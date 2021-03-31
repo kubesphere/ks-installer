@@ -10,6 +10,11 @@
     src: "federated"
     dest: "{{ kubesphere_dir }}/"
 
+- name: notification-manager | Getting migrator files
+  copy:
+    src: "notification-manager-migrator"
+    dest: "{{ kubesphere_dir }}/"
+
 - name: notification-manager | Getting notification-manager installation files
   template:
     src: "{{ item.file }}.j2"
@@ -22,21 +27,42 @@
   shell: >
     {{ bin_dir }}/helm list -f notification-manager -n kubesphere-monitoring-system
   register: notification_check
-  failed_when: false
+  failed_when: notification_check.rc != 0
 
+- name: KubeSphere | Backuping old notification-manager crd
+  shell: >
+    cd {{ kubesphere_dir }}/notification-manager-migrator &&
+    chmod +x * &&
+    bash update.sh &&
+    cd -
+  register: notification_backuping
+  until: notification_backuping.rc == 0
+  retries: 5
+  delay: 1
+  when:
+    - notification_check.rc == 0
+    - notification_check.stdout.find("0.1.0") != -1
+  failed_when: notification_backuping.rc != 0
 
 - name: notification-manager | Uninstalling old notification-manager
   shell: >
     {{ bin_dir }}/helm del notification-manager -n kubesphere-monitoring-system &&
-    {{ bin_dir }}/kubectl delete -f /kubesphere/kubesphere/notification-manager/crds/
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd notificationmanagers.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd dingtalkconfigs.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd dingtalkreceivers.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd emailconfigs.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd emailreceivers.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd slackconfigs.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd slackreceivers.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd webhookconfigs.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd webhookreceivers.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd wechatconfigs.notification.kubesphere.io &&
+    {{ bin_dir }}/kubectl delete --ignore-not-found=true crd wechatreceivers.notification.kubesphere.io
   register: nm_uninstall
-  until: nm_uninstall.rc == 0
-  retries: 5
-  delay: 1
   when:
+    - notification_check.rc == 0
     - notification_check.stdout.find("0.1.0") != -1
-  failed_when: false
-
+  failed_when: nm_uninstall is not succeeded
 
 - name: notification-manager | Deploying notification-manager
   shell: >
@@ -49,6 +75,15 @@
   until: deploy_result is succeeded
   retries: 3
   delay: 10
+
+- name: notification-manager | Deploying notification-manager crds
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification-manager-migrator/crds/
+  register: deploy_crds
+  when:
+    - notification_backuping is not skipped
+    - notification_backuping.rc == 0
+  failed_when: deploy_crds is not succeeded
 
 - name: notification-manager | Checking federatednamespace crd installed
   shell: >
