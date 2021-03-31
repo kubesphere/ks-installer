@@ -50,17 +50,11 @@ spec:
         volumeMounts:
           - mountPath: /etc/localtime
             name: host-time
-          - mountPath: /etc/notification-manager/
-            name: noification-manager-template
       volumes:
         - hostPath:
             path: /etc/localtime
             type: ""
           name: host-time
-        - configMap:
-            defaultMode: 420
-            name: noification-manager-template
-          name: noification-manager-template
       serviceAccount: notification-manager-sa
       serviceAccountName: notification-manager-sa
       nodeSelector: 
