@@ -35,7 +35,7 @@ data:
       maxConnectionLifeTime: 10s
 {% endif %}
 
-{% if devops.enabled%}
+{% if devops.enabled %}
     s3:
       endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
       region: {{ common.s3.region | default('us-east-1') }}
@@ -114,6 +114,7 @@ data:
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+      basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.username }}"
       password: "{{ common.es.password }}"
 {% endif %}
@@ -131,6 +132,7 @@ data:
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+      basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.username }}"
       password: "{{ common.es.password }}"
 {% endif %}
@@ -145,6 +147,7 @@ data:
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+      basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.username }}"
       password: "{{ common.es.password }}"
 {% endif %}
