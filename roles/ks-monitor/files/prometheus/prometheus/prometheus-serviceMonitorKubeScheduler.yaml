@@ -2,19 +2,23 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    k8s-app: kube-scheduler
     app.kubernetes.io/vendor: kubesphere
+    k8s-app: kube-scheduler
   name: kube-scheduler
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-  - interval: 1m
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 1m
     metricRelabelings:
     - action: drop
       regex: scheduler_(e2e_scheduling_latency_microseconds|scheduling_algorithm_predicate_evaluation|scheduling_algorithm_priority_evaluation|scheduling_algorithm_preemption_evaluation|scheduling_algorithm_latency_microseconds|binding_latency_microseconds|scheduling_latency_seconds)
       sourceLabels:
       - __name__
-    port: http-metrics
+    port: https-metrics
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
   jobLabel: k8s-app
   namespaceSelector:
     matchNames:
