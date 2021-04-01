@@ -2,19 +2,23 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    k8s-app: kube-controller-manager
     app.kubernetes.io/vendor: kubesphere
+    k8s-app: kube-controller-manager
   name: kube-controller-manager
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-  - interval: 1m
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 1m
     metricRelabelings:
     - action: keep
       regex: up
       sourceLabels:
       - __name__
-    port: http-metrics
+    port: https-metrics
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
   jobLabel: k8s-app
   namespaceSelector:
     matchNames:
