@@ -1,0 +1,32 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: openpitrix
+    component: openpitrix-import-job
+  name: openpitrix-import-job
+  namespace: kubesphere-system
+spec:
+  template:
+    metadata:
+      labels:
+        app: openpitrix
+        component: openpitrix-import-job
+    spec:
+      serviceAccountName: kubesphere
+      restartPolicy: Never
+      containers:
+        - name: import
+          command:
+            - import-app
+            - import
+          image: xyzli/openpitrix-jobs
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /etc/kubesphere
+              name: kubesphere-config
+      volumes:
+        - name: kubesphere-config
+          configMap:
+            name: kubesphere-config

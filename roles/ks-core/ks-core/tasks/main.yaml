@@ -1,4 +1,6 @@
 ---
+
+
 - name: KubeSphere | Getting Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
@@ -66,6 +68,7 @@
     - { path: ks-console, file: ks-console-svc.yml, type: svc }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml, type: config }
 
+
 - name: KubeSphere | Deleting Ingress-controller configmap
   shell: >
     {{ bin_dir }}/kubectl delete cm -n kubesphere-system ks-router-config
@@ -102,7 +105,6 @@
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }
     - { path: ks-console, file: ks-console-deployment.yml }
 
-
 - name: KubeSphere | Checking ks-console svc
   command: >
     {{ bin_dir }}/kubectl get svc -n kubesphere-system
@@ -136,3 +138,5 @@
   until: import is succeeded
   retries: 5
   delay: 3
+
+

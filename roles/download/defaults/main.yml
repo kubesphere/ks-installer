@@ -123,15 +123,9 @@ edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubesp
 edge_watcher_agent_tag: "v0.1.0"
 
 #openpitrix:
-op_version: "v0.5.3"
-openpitrix_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/openpitrix"
-openpitrix_tag: "{{ op_version }}"
-openpitrix_flyway_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/openpitrix-flyway"
-openpitrix_flyway_tag: "{{ op_version }}"
-release_app_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/release-app"
-release_app_tag: "{{ op_version }}"
-generate_kubeconfig_repo: "{{ base_repo }}{{ namespace_override | default('openpitrix') }}/generate-kubeconfig"
-generate_kubeconfig_tag: "{{ op_version }}"
+openpitrix_job_tag: "latest"
+openpitrix_job_repo: "xyzli/openpitrix-jobs"
+
 minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
 mc_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/mc"

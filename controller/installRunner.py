@@ -273,7 +273,7 @@ def generateTaskLists():
 
 
 def getComponentLists():
-    readyToEnabledList = ['monitoring', 'multicluster']
+    readyToEnabledList = ['monitoring', 'multicluster', 'openpitrix']
     readyToDisableList = []
     global configFile
 
