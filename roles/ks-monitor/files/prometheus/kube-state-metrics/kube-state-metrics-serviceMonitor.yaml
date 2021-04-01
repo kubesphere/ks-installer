@@ -3,7 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: 1.9.6
+    app.kubernetes.io/version: 1.9.7
     app.kubernetes.io/vendor: kubesphere
   name: kube-state-metrics
   namespace: kubesphere-monitoring-system
