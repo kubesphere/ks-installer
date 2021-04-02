@@ -37,6 +37,7 @@
   shell: >
     {{ bin_dir }}/kubectl create secret generic elasticsearch-credentials --from-literal="username={{ common.es.basicAuth.username }}" --from-literal="password={{ common.es.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system
   register: secret
+  failed_when: "secret.stderr and 'AlreadyExists' not in secret.stderr"
   until: secret is succeeded
   retries: 5
   delay: 10
