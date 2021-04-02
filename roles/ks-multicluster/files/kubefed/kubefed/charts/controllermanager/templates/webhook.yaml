@@ -10,17 +10,23 @@ metadata:
 # using the namespace.
 {{- if and .Values.global.scope (eq .Values.global.scope "Namespaced") }}
   name: validations.core.kubefed.io-{{ .Release.Namespace }}
-{{ else }}
+{{- else }}
   name: validations.core.kubefed.io
-{{ end }}
+{{- end }}
+  annotations:
+  {{- if .Values.certManager.enabled }}
+    cert-manager.io/inject-ca-from: {{ printf "%s/%s%s" .Release.Namespace .Release.Name "-root-certificate" | quote }}
+  {{- end }}
 webhooks:
 - name: federatedtypeconfigs.core.kubefed.io
   clientConfig:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/validation.core.kubefed.io/v1beta1/federatedtypeconfigs
+      path: /validate-federatedtypeconfigs
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
+    {{- end }}
   rules:
   - operations:
     - CREATE
@@ -49,8 +55,10 @@ webhooks:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/validation.core.kubefed.io/v1beta1/kubefedclusters
+      path: /validate-kubefedcluster
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
+    {{- end }}
   rules:
   - operations:
     - CREATE
@@ -74,8 +82,10 @@ webhooks:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/validation.core.kubefed.io/v1beta1/kubefedconfigs
+      path: /validate-kubefedconfig
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
+    {{- end }}
   rules:
   - operations:
     - CREATE
@@ -92,7 +102,7 @@ webhooks:
   namespaceSelector:
     matchLabels:
       name: {{ .Release.Namespace }}
-{{ end }}
+{{- end }}
 ---
 # The same comments for ValidatingWebhookConfiguration apply here to
 # MutatingWebhookConfiguration.
@@ -101,17 +111,19 @@ kind: MutatingWebhookConfiguration
 metadata:
 {{- if and .Values.global.scope (eq .Values.global.scope "Namespaced") }}
   name: mutation.core.kubefed.io-{{ .Release.Namespace }}
-{{ else }}
+{{- else }}
   name: mutation.core.kubefed.io
-{{ end }}
+{{- end }}
 webhooks:
 - name: kubefedconfigs.core.kubefed.io
   clientConfig:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/mutation.core.kubefed.io/v1beta1/kubefedconfigs
+      path: /default-kubefedconfig
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
+    {{- end }}
   rules:
   - operations:
     - CREATE
@@ -127,6 +139,7 @@ webhooks:
     matchLabels:
       name: {{ .Release.Namespace }}
 {{ end }}
+{{- if not .Values.certManager.enabled }}
 ---
 apiVersion: v1
 kind: Secret
@@ -137,3 +150,56 @@ type: kubernetes.io/tls
 stringData:
   tls.crt: {{ $cert.Cert | quote }}
   tls.key: {{ $cert.Key | quote }}
+{{- else }}
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Release.Name }}-ca-issuer
+spec:
+  selfSigned: {}
+---
+# Generate a CA Certificate used to sign certificates for the webhook
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name}}-root-certificate
+spec:
+  secretName: {{ .Release.Name }}-root-ca
+  duration: 8760h # 1y
+  issuerRef:
+    name: {{ .Release.Name }}-ca-issuer
+  commonName: {{ .Values.certManager.rootCertificate.commonName }}
+{{- if .Values.certManager.rootCertificate.organizations }}
+  subject:
+    organizations:
+      {{- toYaml .Values.certManager.rootCertificate.organizations | nindent 4 }}
+{{- end }}
+  dnsNames:
+    {{- toYaml .Values.certManager.rootCertificate.dnsNames | nindent 4 }}
+  isCA: true
+---
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Release.Name }}-issuer
+spec:
+  ca:
+    secretName: {{ .Release.Name}}-root-ca
+---
+# Finally, generate a serving certificate for the webhook to use
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-certificate
+spec:
+  secretName: kubefed-admission-webhook-serving-cert
+  duration: 8760h # 1y
+  issuerRef:
+    name: {{ .Release.Name }}-issuer
+  dnsNames:
+    - kubefed-admission-webhook
+    - {{ $altName1 }}
+    - {{ $altName2 }}
+{{- end }}

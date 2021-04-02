@@ -5,8 +5,12 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     kubefed-control-plane: controller-manager
+{{- if .Values.controller.annotations }}
+  annotations:
+{{ toYaml .Values.controller.annotations | indent 4 }}
+{{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.controller.replicaCount }}
   selector:
     matchLabels:
       kubefed-control-plane: controller-manager
@@ -15,16 +19,36 @@ spec:
     metadata:
       labels:
         kubefed-control-plane: controller-manager
+      {{- if .Values.controller.forceRedeployment }}
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{- end }}
     spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
+      nodeSelector:
+        {{- toYaml .Values.commonNodeSelector | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.commonTolerations | nindent 8 }}
       securityContext:
         runAsUser: 1001
       serviceAccountName: kubefed-controller
       containers:
       - command:
         - /hyperfed/controller-manager
-        image: "{{ .Values.repository }}/{{ .Values.image }}:{{ .Values.tag }}"
-        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        - "--v={{ .Values.controller.logLevel }}"
+        image: "{{ .Values.controller.repository }}/{{ .Values.controller.image }}:{{ .Values.controller.tag }}"
+        imagePullPolicy: "{{ .Values.controller.imagePullPolicy }}"
         name: controller-manager
+{{- if .Values.controller.env }}
+        env:
+{{- range $key, $value := .Values.controller.env }}
+        - name: "{{ $key }}"
+          value: "{{ $value }}"
+{{- end }}
+{{- end }}
         ports:
         - containerPort: 9090
           name: metrics
@@ -36,8 +60,8 @@ spec:
           periodSeconds: 3
           timeoutSeconds: 3
         resources:
-{{- if .Values.resources }}
-{{ toYaml .Values.resources | indent 12 }}
+{{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
 {{- end }}
       terminationGracePeriodSeconds: 10
 ---
@@ -48,6 +72,10 @@ metadata:
   name: kubefed-admission-webhook
   labels:
     kubefed-admission-webhook: "true"
+{{- if .Values.webhook.annotations }}
+  annotations:
+{{ toYaml .Values.webhook.annotations | indent 4 }}
+{{- end }}
 spec:
   replicas: 1
   selector:
@@ -57,21 +85,38 @@ spec:
     metadata:
       labels:
         kubefed-admission-webhook: "true"
+      {{- if .Values.webhook.forceRedeployment }}
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      {{- end }}
     spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
+      nodeSelector:
+        {{- toYaml .Values.commonNodeSelector | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.commonTolerations | nindent 8 }}
       securityContext:
         runAsUser: 1001
       serviceAccountName: kubefed-admission-webhook
       containers:
       - name: admission-webhook
-        image: "{{ .Values.repository }}/{{ .Values.image }}:{{ .Values.tag }}"
-        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+        image: "{{ .Values.webhook.repository }}/{{ .Values.webhook.image }}:{{ .Values.webhook.tag }}"
+        imagePullPolicy: "{{ .Values.webhook.imagePullPolicy }}"
+{{- if .Values.webhook.env }}
+        env:
+{{- range $key, $value := .Values.webhook.env }}
+        - name: "{{ $key }}"
+          value: "{{ $value }}"
+{{- end }}
+{{- end }}
         command:
         - "/hyperfed/webhook"
         - "--secure-port=8443"
-        - "--audit-log-path=-"
-        - "--tls-cert-file=/var/serving-cert/tls.crt"
-        - "--tls-private-key-file=/var/serving-cert/tls.key"
-        - "--v=0"
+        - "--cert-dir=/var/serving-cert/"
+        - "--v={{ .Values.webhook.logLevel }}"
         ports:
         - containerPort: 8443
         volumeMounts:
@@ -79,9 +124,13 @@ spec:
           name: serving-cert
         readinessProbe:
           httpGet:
-            path: /healthz
+            path: /readyz
             port: 8443
             scheme: HTTPS
+        resources:
+{{- if .Values.webhook.resources }}
+{{ toYaml .Values.webhook.resources | indent 12 }}
+{{- end }}
       volumes:
       - name: serving-cert
         secret:

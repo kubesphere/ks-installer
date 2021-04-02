@@ -24,39 +24,8 @@ group](https://groups.google.com/forum/#!forum/kubernetes-sig-multicluster).
 
 ## Prerequisites
 
-- Kubernetes 1.13+
-- Helm 2.10+
-
-## Configuring RBAC for Helm (Optional)
-
-If your Kubernetes cluster has RBAC enabled, it will be necessary to
-ensure that helm is deployed with a service account with the
-permissions necessary to deploy KubeFed:
-
-```bash
-$ cat << EOF | kubectl apply -f -
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: tiller
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: tiller
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: tiller
-    namespace: kube-system
-EOF
-
-$ helm init --service-account tiller
-```
+- Kubernetes 1.16+
+- Helm 3.2+
 
 ## Installing the Chart
 
@@ -71,14 +40,25 @@ kubefed-charts   https://raw.githubusercontent.com/kubernetes-sigs/kubefed/maste
 
 With the repo added, available charts and versions can be viewed.
 ```bash
-$ helm search kubefed --devel
+$ helm search repo kubefed
 ```
 
 Install the chart and specify the version to install with the
 `--version` argument. Replace `<x.x.x>` with your desired version.
+If you don't want to install CRDs, add a `--skip-crds` at the end of the line:
+
 ```bash
-$ helm install kubefed-charts/kubefed --name kubefed --version=<x.x.x> --namespace kube-federation-system --devel
+$ helm --namespace kube-federation-system upgrade -i kubefed kubefed-charts/kubefed --version=<x.x.x> --create-namespace
+
+Release "kubefed" does not exist. Installing it now.
+NAME: kubefed
+LAST DEPLOYED: Wed Aug  5 16:03:46 2020
+NAMESPACE: kube-federation-system
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
 ```
+
 
 **NOTE:** For **namespace-scoped deployments** (configured with the `--set
 global.scope=Namespaced` option in the `helm install` command): if you created
@@ -95,26 +75,16 @@ namespace with this label by default.
 
 ## Uninstalling the Chart
 
-Due to this helm [issue](https://github.com/helm/helm/issues/4440), the CRDs cannot be deleted
-when delete helm release, so before delete the helm release, we need first delete all
-of the CR and CRDs for KubeFed release.
-
 Delete all KubeFed `FederatedTypeConfig`:
 
 ```bash
 $ kubectl -n kube-federation-system delete FederatedTypeConfig --all
 ```
 
-Delete all KubeFed CRDs:
-
-```bash
-$ kubectl delete crd $(kubectl get crd | grep -E 'kubefed.io' | awk '{print $1}')
-```
-
 Then you can uninstall/delete the `kubefed` release:
 
 ```bash
-$ helm delete --purge kubefed
+$ helm --namespace kube-federation-system uninstall kubefed
 ```
 
 The command above removes all the Kubernetes components associated with the chart
@@ -128,27 +98,38 @@ chart and their default values.
 | Parameter                             | Description                                                                                                                                                                                 | Default                         |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------|
 | controllermanager.enabled             | Specifies whether to enable the controller manager in KubeFed.                                                                                                                              | true                            |
-| controllermanager.replicaCount        | Number of replicas for KubeFed controller manager.                                                                                                                                          | 2                               |
-| controllermanager.repository          | Repo of the KubeFed image.                                                                                                                                                                  | quay.io/kubernetes-multicluster |
-| controllermanager.image               | Name of the KubeFed image.                                                                                                                                                                  | kubefed                         |
-| controllermanager.tag                 | Tag of the KubeFed image.                                                                                                                                                                   | latest                          |
-| controllermanager.imagePullPolicy     | Image pull policy.                                                                                                                                                                          | IfNotPresent                    |
+| controllermanager.imagePullSecrets    | Image pull secrets.                                                                                                                                                                         | []
+| controllermanager.commonTolerations   | Tolerations for all the pods.                                                                                                                                                               | []                              |
+| controllermanager.commonNodeSelector     | Node selector for all the pods.                                                                                                                                                          | {}                              |
+| controllermanager.controller.repository        | Repo of the KubeFed image.                                                                                                                                                         | quay.io/kubernetes-multicluster |
+| controllermanager.controller.image             | Name of the KubeFed image.                                                                                                                                                         | kubefed                         |
+| controllermanager.controller.tag               | Tag of the KubeFed image.                                                                                                                                                          | canary                          |
+| controllermanager.controller.replicaCount      | Number of replicas for KubeFed controller manager.                                                                                                                                 | 2                          |
+| controllermanager.controller.imagePullPolicy   | Image pull policy.                                                                                                                                                                 | IfNotPresent                          |
+| controllermanager.webhook.repository           | Repo of the KubeFed image.                                                                                                                                                         | quay.io/kubernetes-multicluster |
+| controllermanager.webhook.image                | Name of the KubeFed image.                                                                                                                                                         | kubefed                         |
+| controllermanager.webhook.tag                  | Tag of the KubeFed image.                                                                                                                                                          | canary                          |
+| controllermanager.webhook.imagePullPolicy   | Image pull policy.                                                                                                                                                                 | IfNotPresent                          |
 | controllermanager.featureGates.PushReconciler               | Push reconciler feature.                                                                                                                                              | true                            |
+| controllermanager.featureGates.RawResourceStatusCollection               | Raw collection of resource status on target clusters feature.                                                                                                                                              | false                            |
 | controllermanager.featureGates.SchedulerPreferences         | Scheduler preferences feature.                                                                                                                                        | true                            |
-| controllermanager.featureGates.CrossClusterServiceDiscovery | Cross cluster service discovery feature.                                                                                                                              | true                            |
-| controllermanager.featureGates.FederatedIngress             | Federated ingress feature.                                                                                                                                            | true                            |
 | controllermanager.clusterAvailableDelay   | Time to wait before reconciling on a healthy cluster.                                                                                                                                   | 20s                             |
 | controllermanager.clusterUnavailableDelay | Time to wait before giving up on an unhealthy cluster.                                                                                                                                  | 60s                             |
 | controllermanager.leaderElectLeaseDuration | The maximum duration that a leader can be stopped before it is replaced by another candidate.                                                                                          | 15s                             |
 | controllermanager.leaderElectRenewDeadline | The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to `controllermanager.LeaderElectLeaseDuration. | 10s                             |
 | controllermanager.leaderElectRetryPeriod   | The duration the clients should wait between attempting acquisition and renewal of a leadership.                                                                                       | 5s                              |
 | controllermanager.leaderElectResourceLock  | The type of resource object that is used for locking during leader election. Supported options are `configmaps` and `endpoints`.                                                       | configmaps                      |
-| controllermanager.clusterHealthCheckPeriod           | How often to monitor the cluster health.                                                                                                                                     | 10s                              |
+| controllermanager.clusterHealthCheckPeriod           | How often to monitor the cluster health.                                                                                                                                     | 10s                             |
 | controllermanager.clusterHealthCheckFailureThreshold | Minimum consecutive failures for the cluster health to be considered failed after having succeeded.                                                                          | 3                               |
 | controllermanager.clusterHealthCheckSuccessThreshold | Minimum consecutive successes for the cluster health to be considered successful after having failed.                                                                        | 1                               |
-| controllermanager.clusterHealthCheckTimeout          | Duration after which the cluster health check times out.                                                                                                                     | 3s                               |
-| controllermanager.syncController.adoptResources  | Whether to adopt pre-existing resource in member clusters.                                                                                                        		          | Enabled                         |
-| global.scope                   | Whether the KubeFed namespace will be the only target for the control plane.                                                                                                                           | Cluster                         |
+| controllermanager.clusterHealthCheckTimeout          | Duration after which the cluster health check times out.                                                                                                                     | 3s                              |
+| controllermanager.syncController.adoptResources      | Whether to adopt pre-existing resource in member clusters.                                                                                                        		        | Enabled                         |
+| controllermanager.service.labels                     | Kubernetes labels attached to the controller manager's services                                                                                                       		    | {}                              |
+| controllermanager.certManager.enabled             | Specifies whether to enable the usage of the cert-manager for the certificates generation.                                                                                      | false                           |
+| controllermanager.certManager.rootCertificate.organizations       | Specifies the list of organizations to include in the cert-manager generated root certificate.                                                                  | []                              |
+| controllermanager.certManager.rootCertificate.commonName     | Specifies the CN value for the cert-manager generated root certificate.                                                                                              | ca.webhook.kubefed              |
+| controllermanager.certManager.rootCertificate.dnsNames       | Specifies the list of subject alternative names for the cert-manager generated root certificate.                                                                     | ["ca.webhook.kubefed"]          |
+| global.scope                   | Whether the KubeFed namespace will be the only target for the control plane.                                                                                                                       | Cluster                         |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to
 `helm install`.
@@ -158,4 +139,33 @@ provided while installing the chart. For example:
 
 ```bash
 $ helm install kubefed-charts/kubefed --name kubefed --namespace kube-federation-system --values values.yaml --devel
+```
+
+## Migration from Helm v2 to v3
+
+Helm v3 has a built-in migration feature which can easy move your current Helm v2 installation to Helm v3.
+
+Download Helm v3 CLI from [Release Page](https://github.com/helm/helm/releases).
+
+Convert your kubefed installation to Helm v3:
+
+
+```bash
+$ helm 2to3 convert kubefed
+2020/08/06 18:50:57 Release "kubefed" will be converted from Helm v2 to Helm v3.
+2020/08/06 18:50:57 [Helm 3] Release "kubefed" will be created.
+2020/08/06 18:50:57 [Helm 3] ReleaseVersion "kubefed.v1" will be created.
+2020/08/06 18:50:58 [Helm 3] ReleaseVersion "kubefed.v1" created.
+2020/08/06 18:50:58 [Helm 3] Release "kubefed" created.
+2020/08/06 18:50:58 Release "kubefed" was converted successfully from Helm v2 to Helm v3.
+2020/08/06 18:50:58 Note: The v2 release information still remains and should be removed to avoid conflicts with the migrated v3 release.
+2020/08/06 18:50:58 v2 release information should only be removed using `helm 2to3` cleanup and when all releases have been migrated over.
+```
+
+Check your successful migration:
+
+```bash
+$ helm -n kube-federation-system list
+NAME    NAMESPACE               REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+kubefed kube-federation-system  1               2020-08-06 16:49:41.593438079 +0000 UTC deployed        kubefed-0.3.1
 ```
