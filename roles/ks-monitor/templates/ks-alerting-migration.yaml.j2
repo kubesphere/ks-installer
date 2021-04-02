@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ks-alerting-migration
+  namespace: kubesphere-system
+  labels:
+    app: ks-alerting-migration
+    job: ks-alerting-migration
+    version: v3.1.0
+spec:
+  backoffLimit: 6
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        app: ks-alerting-migration
+        job: ks-alerting-migration
+        version: v3.1.0
+      name: ks-alerting-migration
+    spec:
+      initContainers:
+        - name: wait-mysql
+          image: {{ busybox_repo }}:{{ busybox_tag }}
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'until nc -z mysql.kubesphere-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
+        - name: wait-apiserver
+          image: {{ busybox_repo }}:{{ busybox_tag }}
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'until nc -z ks-apiserver.kubesphere-system.svc 80; do echo "waiting for apiserver"; sleep 2; done;']
+      containers:
+        - image: {{ ks_alerting_migration_repo }}:{{ ks_alerting_migration_tag }}
+          imagePullPolicy: IfNotPresent
+          name: ks-alerting-migration
+      serviceAccount: kubesphere
+      serviceAccountName: kubesphere
+      restartPolicy: OnFailure

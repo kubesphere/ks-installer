@@ -1,0 +1,26 @@
+---
+- name: Alerting | Get migration files
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: alerting-migration, file: ks-alerting-migration.yaml}
+
+- name: Alerting | Checking status
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system | grep "alerting" | wc -l
+  register: alerting_check
+
+- name: Alerting | Creating migration job
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting-migration
+  when:
+    - alerting_check.stdout != "0"
+
+- name: Alerting | Getting migration job status
+  shell: >
+    {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-alerting-migration --no-headers | awk '{print $3}'
+  register: job_status
+  until: job_status.stdout.find('Completed') != -1
+  retries: 90
+  delay: 20
