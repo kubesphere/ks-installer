@@ -6,18 +6,6 @@
 ##
 controllermanager:
   enabled: true
-  replicaCount: 2
-  repository: quay.io/kubernetes-multicluster
-  image: kubefed
-  tag: v0.3.0
-  imagePullPolicy: IfNotPresent
-  resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 64Mi
   clusterAvailableDelay:
   clusterUnavailableDelay:
   leaderElectLeaseDuration:
@@ -35,13 +23,73 @@ controllermanager:
   featureGates:
     PushReconciler:
     SchedulerPreferences:
-    CrossClusterServiceDiscovery:
-    FederatedIngress:
+    RawResourceStatusCollection:
+
+  ## common node selector
+  commonNodeSelector: {}
+  #  key1: value1
+  #  key2: value2
+
+  ## common tolerations
+  commonTolerations: []
+  # - key: "key"
+  #   operator: "Equal"
+  #   value: "value"
+  #   effect: "NoSchedule"
+
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  imagePullSecrets: []
+  # - name: secretName
+
+  controller:
+    annotations: {}
+    replicaCount: 2
+    repository: quay.io/kubernetes-multicluster
+    image: kubefed
+    tag: canary
+    imagePullPolicy: IfNotPresent
+    logLevel: 2
+    forceRedeployment: false
+    env: {}
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+  webhook:
+    annotations: {}
+    repository: quay.io/kubernetes-multicluster
+    image: kubefed
+    tag: canary
+    imagePullPolicy: IfNotPresent
+    logLevel: 8
+    forceRedeployment: false
+    env: {}
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+
+  certManager:
+    enabled: false
+    rootCertificate:
+      organizations: []
+      dnsNames:
+        - ca.webhook.kubefed
+      commonName: ca.webhook.kubefed
+
+  service:
+    labels: {}
 
 ## Configuration global values for all charts
 ##
 global:
-  ## The scope of the the kubefed control plane.  Supported options
+  ## The scope of the the kubefed control plane. Supported options
   ## are `Cluster` (watch cluster-scoped resources and resources in
   ## all namespaces) and `Namespaced` (only watch resources in the
   ## kubefed system namespace). If unset, will default to `Cluster`.
