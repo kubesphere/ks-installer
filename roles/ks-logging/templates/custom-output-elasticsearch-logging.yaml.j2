@@ -14,10 +14,18 @@ spec:
 
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled %}
 {% if common.es.basicAuth.username is defined and common.es.basicAuth.username != "" %}
-    httpUser: {{ common.es.basicAuth.username }}
+    httpUser:
+      valueFrom:
+        secretKeyRef:
+          key: "username"
+          name: "elasticsearch-credentials"
 {% endif %}
 {% if common.es.basicAuth.password is defined and common.es.basicAuth.password != "" %}
-    httpPassword: {{ common.es.basicAuth.password }}
+    httpPassword:
+      valueFrom:
+        secretKeyRef:
+          key: "password"
+          name: "elasticsearch-credentials"
 {% endif %}
 {% endif %}
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-log"
