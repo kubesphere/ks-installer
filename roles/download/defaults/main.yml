@@ -110,9 +110,9 @@ ks_alerting_adapter_tag: "v3.0.0"
 kubefed_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 kubefed_image: kubefed
 kubefed_image_tag: v0.3.0
-tower_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
+tower_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
 tower_image: tower
-tower_image_tag: v0.1.0
+tower_image_tag: "latest"
 
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
