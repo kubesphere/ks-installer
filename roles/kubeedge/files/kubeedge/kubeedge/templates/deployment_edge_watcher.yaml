@@ -19,10 +19,10 @@ spec:
         - --metrics-addr=127.0.0.1:8080
         - --enable-leader-election
         command:
-        - /manager
+        - /edge-watcher
         image: {{ .Values.edgeWatcher.controllerManager.repository }}:{{ .Values.edgeWatcher.controllerManager.tag }}
         imagePullPolicy: {{ .Values.edgeWatcher.controllerManager.pullPolicy }}
-        name: manager
+        name: edge-watcher
         env:
         - name: VERSION
           value: {{ .Values.cloudCore.tag }}
