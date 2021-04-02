@@ -1504,6 +1504,12 @@ metadata:
   name: role-template-view-basic
 rules:
   - apiGroups:
+      - '*'
+    resources:
+      - workspaces
+    verbs:
+      - get
+  - apiGroups:
       - monitoring.kubesphere.io
       - metering.kubesphere.io
     resources:
