@@ -1,5 +1,13 @@
 ---
-- name: Alerting | Get migration files
+
+- name: Alerting | Getting migration files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "alerting-migration"
+
+- name: Alerting | Getting migration files
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
@@ -8,7 +16,7 @@
 
 - name: Alerting | Checking status
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system | grep "alerting" | wc -l
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system 2>1 | grep "alerting" | wc -l
   register: alerting_check
 
 - name: Alerting | Creating migration job
