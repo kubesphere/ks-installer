@@ -24,7 +24,7 @@ delete_sure
 kubectl delete deploy ks-installer -n kubesphere-system 2>/dev/null
 
 # delete helm
-for namespaces in kubesphere-system kubesphere-devops-system kubesphere-monitoring-system kubesphere-logging-system openpitrix-system
+for namespaces in kubesphere-system kubesphere-devops-system kubesphere-monitoring-system kubesphere-logging-system openpitrix-system kubesphere-monitoring-federated
 do
   helm list -n $namespaces | grep -v NAME | awk '{print $1}' | sort -u | xargs -r -L1 helm uninstall -n $namespaces 2>/dev/null
 done
@@ -150,6 +150,21 @@ do
 done
 kubectl delete users --all 2>/dev/null
 
+
+# delete helmcategories
+for helmcategory in `kubectl get helmcategories.application.kubesphere.io -o jsonpath="{.items[*].metadata.name}"`
+do
+  kubectl patch helmcategories.application.kubesphere.io $helmcategory -p '{"metadata":{"finalizers":null}}' --type=merge
+done
+kubectl delete helmcategories.application.kubesphere.io --all 2>/dev/null
+
+# delete workspacetemplates
+for workspacetemplate in `kubectl get workspacetemplates.tenant.kubesphere.io -o jsonpath="{.items[*].metadata.name}"`
+do
+  kubectl patch workspacetemplates.tenant.kubesphere.io $workspacetemplate -p '{"metadata":{"finalizers":null}}' --type=merge
+done
+kubectl delete workspacetemplates.tenant.kubesphere.io --all 2>/dev/null
+
 # delete crds
 for crd in `kubectl get crds -o jsonpath="{.items[*].metadata.name}"`
 do
@@ -157,7 +172,7 @@ do
 done
 
 # delete relevance ns
-for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devops-system kubesphere-logging-system kubesphere-monitoring-system openpitrix-system kubesphere-system
+for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devops-system kubesphere-logging-system kubesphere-monitoring-system kubesphere-monitoring-federated openpitrix-system kubesphere-system
 do
   kubectl delete ns $ns 2>/dev/null
 done
