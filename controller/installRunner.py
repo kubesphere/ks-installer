@@ -273,7 +273,7 @@ def generateTaskLists():
 
 
 def getComponentLists():
-    readyToEnabledList = ['monitoring', 'multicluster', 'openpitrix']
+    readyToEnabledList = ['monitoring', 'multicluster', 'openpitrix', 'network']
     readyToDisableList = []
     global configFile
 
@@ -468,7 +468,6 @@ def generate_new_cluster_configuration(api):
         if "enabled" in cluster_configuration_spec[
                 "networkpolicy"] and cluster_configuration_spec["networkpolicy"]["enabled"]:
             cluster_configuration_spec["network"] = {
-                "enabled": True,
                 "networkpolicy": {
                     "enabled": True,
                 },
@@ -481,7 +480,6 @@ def generate_new_cluster_configuration(api):
             }
         else:
             cluster_configuration_spec["network"] = {
-                "enabled": True,
                 "networkpolicy": {
                     "enabled": False,
                 },
