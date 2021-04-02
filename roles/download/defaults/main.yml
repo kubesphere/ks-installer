@@ -79,6 +79,8 @@ ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}
 ks_update_tag: v3.0.0
 ks_devops_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-devops"
 ks_devops_migration_tag: "flyway-v3.0.0"
+ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-alerting-migration"
+ks_alerting_migration_tag: "v3.1.0"
 ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-console"
 ks_console_tag: "{{ ks_image_tag }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
