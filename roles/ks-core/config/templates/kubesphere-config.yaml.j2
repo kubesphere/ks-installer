@@ -116,7 +116,7 @@ data:
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
-{% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+{% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.username }}"
       password: "{{ common.es.password }}"
@@ -134,7 +134,7 @@ data:
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
-{% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+{% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.username }}"
       password: "{{ common.es.password }}"
@@ -149,7 +149,7 @@ data:
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
-{% if common.es.basicAuth is defined and common.es.basicAuth is defined and common.es.basicAuth == true %}
+{% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.username }}"
       password: "{{ common.es.password }}"

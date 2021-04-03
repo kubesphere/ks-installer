@@ -32,6 +32,20 @@
       - sts_number.stdout != "0"
       - sc_number.stdout == "0"
 
+# Creating elasticsearch-credentials secret used to connect external es with basic auth enabled.
+- name: KubeSphere | Creating elasticsearch credentials secret
+  shell: >
+    {{ bin_dir }}/kubectl create secret generic elasticsearch-credentials --from-literal="username={{ common.es.basicAuth.username }}" --from-literal="password={{ common.es.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system
+  register: secret
+  failed_when: "secret.stderr and 'AlreadyExists' not in secret.stderr"
+  until: secret is succeeded
+  retries: 5
+  delay: 10
+  when:
+    - "common.es.basicAuth.enabled is defined"
+    - "common.es.basicAuth.enabled == true"
+    - "common.es.basicAuth.password is defined and common.es.basicAuth.password != ''"
+    - "common.es.basicAuth.username is defined and common.es.basicAuth.username != ''"
 
 # Deploy elasticsearch
 - name: KubeSphere | Checking internal es
@@ -104,6 +118,7 @@
     - common.es.externalElasticsearchPort is not defined or (common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchPort == "")
     - es_host.stdout is defined
     - es_host.stdout == "" or es_host.stdout == "http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200"
+
 
 
 # Deploy elasticsearch curator

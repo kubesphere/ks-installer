@@ -37,7 +37,7 @@
   register: import
   failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
 
-- name: KubeSphere | Checking k8s version
+- name: KubeSphere | Checking Kubernetes version
   shell: >
     {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
   register: kubernetes_version
@@ -58,7 +58,7 @@
       with_items:
         - { name: custom-values-snapshot-controller, file: custom-values-snapshot-controller.yaml }
 
-    - name: KubeSphere | Remove old snapshot crd
+    - name: KubeSphere | Removing old snapshot crd
       command: >
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml --force
       failed_when: false
