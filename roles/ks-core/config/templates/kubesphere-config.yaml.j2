@@ -118,8 +118,8 @@ data:
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
-      username: "{{ common.es.username }}"
-      password: "{{ common.es.password }}"
+      username: "{{ common.es.basicAuth.username | default("") }}"
+      password: "{{ common.es.basicAuth.password | default("") }}"
 {% endif %}
 {% if esIndexPrefix is defined %}
       indexPrefix: {{ esIndexPrefix }}
@@ -136,8 +136,8 @@ data:
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
-      username: "{{ common.es.username }}"
-      password: "{{ common.es.password }}"
+      username: "{{ common.es.basicAuth.username | default("") }}"
+      password: "{{ common.es.basicAuth.password | default("") }}"
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-events
 {% endif %}
@@ -151,8 +151,8 @@ data:
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
-      username: "{{ common.es.username }}"
-      password: "{{ common.es.password }}"
+      username: "{{ common.es.basicAuth.username | default("") }}"
+      password: "{{ common.es.basicAuth.password | default("") }}"
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
