@@ -267,7 +267,7 @@ items:
                 - '--probe.kubernetes.role=cluster'
                 - '--probe.http.listen=:4041'
                 - '--probe.publish.interval=4500ms'
-                - '--probe.spy.interval=2s'
+                - '--probe.spy.interval=3s'
                 - '--weave=false'
                 - 'weave-scope-app.weave:80'
               command:
@@ -282,6 +282,9 @@ items:
                 requests:
                   cpu: 25m
                   memory: 80Mi
+                limits:
+                  cpu: 500m
+                  memory: 500Mi
           serviceAccountName: weave-scope
   - apiVersion: apps/v1
     kind: DaemonSet
@@ -323,9 +326,10 @@ items:
               args:
                 - '--mode=probe'
                 - '--probe-only'
+                - '--probe.processes=false'
                 - '--probe.kubernetes.role=host'
                 - '--probe.publish.interval=4500ms'
-                - '--probe.spy.interval=2s'
+                - '--probe.spy.interval=3s'
                 - '--probe.docker.bridge=docker0'
                 - '--probe.docker=true'
                 - '--weave=false'
@@ -339,6 +343,9 @@ items:
                 requests:
                   cpu: 100m
                   memory: 100Mi
+                limits:
+                  cpu: 500m
+                  memory: 500Mi
               securityContext:
                 privileged: true
               volumeMounts:
