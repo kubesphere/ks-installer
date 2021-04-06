@@ -1621,7 +1621,7 @@ metadata:
     iam.kubesphere.io/dependencies: '[role-template-view-alerting-messages"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     kubesphere.io/alias-name: Alerting Messages Management
-    iam.kubesphere.io/role-template-rules: '{"alert-messages": "manage"}'
+    iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-alerting-messages
@@ -1635,7 +1635,7 @@ metadata:
     iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     kubesphere.io/alias-name: Alerting Policies Management
-    iam.kubesphere.io/role-template-rules: '{"alert-policies": "manage"}'
+    iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-alerting-policies
@@ -1786,7 +1786,7 @@ metadata:
   annotations:
     iam.kubesphere.io/module: Monitoring & Alerting
     kubesphere.io/alias-name: Alerting Messages View
-    iam.kubesphere.io/role-template-rules: '{"alert-messages": "view"}'
+    iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-alerting-messages
@@ -1800,7 +1800,7 @@ metadata:
     iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     kubesphere.io/alias-name: Alerting Policies View
-    iam.kubesphere.io/role-template-rules: '{"alert-policies": "view"}'
+    iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-alerting-policies
@@ -2209,7 +2209,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-messages": "view"}'
+      iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
       kubesphere.io/alias-name: Alerting Messages View
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2238,7 +2238,7 @@ role:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
       iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-messages": "manage"}'
+      iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
       kubesphere.io/alias-name: Alerting Messages Management
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2264,7 +2264,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-policies": "view"}'
+      iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
       kubesphere.io/alias-name: Alerting Policies View
     labels:
       iam.kubesphere.io/role-template: "true"
@@ -2299,7 +2299,7 @@ role:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies"]'
       iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-policies": "manage"}'
+      iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
       kubesphere.io/alias-name: Alerting Policies Management
     labels:
       iam.kubesphere.io/role-template: "true"
