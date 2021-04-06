@@ -2086,6 +2086,7 @@ role:
         "role-template-view-volumes","role-template-manage-volumes",
         "role-template-view-snapshots","role-template-manage-snapshots",
         "role-template-view-secrets","role-template-manage-secrets",
+        "role-template-view-serviceaccount","role-template-manage-serviceaccount",
         "role-template-view-configmaps","role-template-manage-configmaps",
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
@@ -2121,6 +2122,7 @@ role:
         "role-template-view-volumes","role-template-manage-volumes",
         "role-template-view-snapshots","role-template-manage-snapshots",
         "role-template-view-secrets","role-template-manage-secrets",
+        "role-template-view-serviceaccount","role-template-manage-serviceaccount",
         "role-template-view-configmaps","role-template-manage-configmaps",
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
@@ -2180,7 +2182,7 @@ role:
       iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
         "role-template-view-app-workloads","role-template-view-custom-monitoring",
         "role-template-view-volumes","role-template-view-snapshots",
-        "role-template-view-secrets","role-template-view-configmaps",
+        "role-template-view-secrets","role-template-view-configmaps","role-template-view-serviceaccount",
         "role-template-view-alerting-policies","role-template-view-alerting-messages",
         "role-template-view-pipelines","role-template-view-credentials"]'
       kubesphere.io/creator: system
@@ -2804,7 +2806,61 @@ role:
         - 'secrets'
       verbs:
         - '*'
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-view-serviceaccount
+  labels:
+    scope.kubesphere.io/namespace: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+      iam.kubesphere.io/module: Configuration Center
+      iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
+      kubesphere.io/alias-name: ServiceAccount View
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-view-serviceaccount
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'serviceaccounts'
+      verbs:
+        - get
+        - list
+        - watch
 
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-manage-serviceaccount
+  labels:
+    scope.kubesphere.io/namespace: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-serviceaccount"]'
+      iam.kubesphere.io/module: Configuration Center
+      iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
+      kubesphere.io/alias-name: ServiceAccount Management
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-manage-serviceaccount
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'serviceaccounts'
+      verbs:
+        - '*'
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleBase
