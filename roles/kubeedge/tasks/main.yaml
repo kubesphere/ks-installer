@@ -27,6 +27,10 @@
   until: result is succeeded
   retries: 3
 
+- name: KubeEdge | Labeling kubeedge namespace
+  shell: >
+    {{ bin_dir }}/kubectl label namespace kubeedge kubesphere.io/workspace=system-workspace --overwrite
+
 - name: KubeEdge | Importing kubeEdge status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
