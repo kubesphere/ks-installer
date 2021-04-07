@@ -40,4 +40,4 @@ export -f wait_status_ok
 
 check_installer_ok
 
-timeout 1800 bash -c wait_status_ok
+timeout 1200 bash -c wait_status_ok
