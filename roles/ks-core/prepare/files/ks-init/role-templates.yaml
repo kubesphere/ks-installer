@@ -182,6 +182,7 @@ rules:
   - apiGroups:
       - monitoring.kubesphere.io
       - metering.kubesphere.io
+      - monitoring.coreos.com
     resources:
       - cluster
     verbs:
@@ -665,6 +666,7 @@ rules:
       - watch
   - apiGroups:
       - monitoring.kubesphere.io
+      - monitoring.coreos.com
       - metering.kubesphere.io
     resources:
       - '*'
@@ -1084,6 +1086,7 @@ rules:
       - batch
       - logging.kubesphere.io
       - monitoring.kubesphere.io
+      - monitoring.coreos.com
       - autoscaling
       - app.k8s.io
       - servicemesh.kubesphere.io
@@ -1149,6 +1152,7 @@ rules:
       - logging.kubesphere.io
       - monitoring.kubesphere.io
       - metering.kubesphere.io
+      - monitoring.coreos.com
       - autoscaling
       - app.k8s.io
       - servicemesh.kubesphere.io
@@ -1512,6 +1516,7 @@ rules:
   - apiGroups:
       - monitoring.kubesphere.io
       - metering.kubesphere.io
+      - monitoring.coreos.com
     resources:
       - namespaces
       - workloads
@@ -1549,6 +1554,27 @@ rules:
       - 'workspaces'
     verbs:
       - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Workspace Settings
+    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "view"}'
+    kubesphere.io/alias-name: Workspace Settings
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-workspace-settings
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspaces'
+    verbs:
+      - 'get'
+      - 'list'
+      - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1971,7 +1997,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-members","role-template-view-roles","role-template-view-groups"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-members","role-template-view-roles","role-template-view-groups","role-template-view-workspace-settings"]'
       kubesphere.io/creator: system
     name: viewer
   rules:
@@ -1994,7 +2020,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '[]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-view-workspace-settings"]'
       kubesphere.io/creator: system
     name: regular
   rules:
@@ -2010,6 +2036,7 @@ role:
     - apiGroups:
         - monitoring.kubesphere.io
         - metering.kubesphere.io
+        - monitoring.coreos.com
       resources:
         - namespaces
       verbs:
@@ -2025,7 +2052,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-view-app-templates","role-template-manage-app-templates"]'
+      iam.kubesphere.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-view-app-templates","role-template-manage-app-templates","role-template-view-workspace-settings"]'
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
@@ -2054,6 +2081,7 @@ role:
     - apiGroups:
         - monitoring.kubesphere.io
         - metering.kubesphere.io
+        - monitoring.coreos.com
       resources:
         - namespaces
         - workloads
@@ -2145,6 +2173,7 @@ role:
         - batch
         - logging.kubesphere.io
         - monitoring.kubesphere.io
+        - monitoring.coreos.com
         - metering.kubesphere.io
         - notification.kubesphere.io
         - autoscaling
@@ -2159,6 +2188,7 @@ role:
         - events.k8s.io
         - events.kubesphere.io
         - snapshot.storage.k8s.io
+        - monitoring.coreos.com
       resources:
         - '*'
       verbs:
@@ -2334,6 +2364,7 @@ role:
     - apiGroups:
         - 'monitoring.kubesphere.io'
         - 'metering.kubesphere.io'
+        - 'monitoring.coreos.com'
       resources:
         - '*'
       verbs:
@@ -2364,6 +2395,7 @@ role:
     - apiGroups:
         - 'monitoring.kubesphere.io'
         - 'metering.kubesphere.io'
+        - 'monitoring.coreos.com'
       resources:
         - '*'
       verbs:
@@ -2595,6 +2627,7 @@ role:
     - apiGroups:
         - 'monitoring.kubesphere.io'
         - 'metering.kubesphere.io'
+        - 'monitoring.coreos.com'
         - 'servicemesh.kubesphere.io'
       resources:
         - '*'
