@@ -20,7 +20,7 @@ function check_installer_ok(){
 }
 
 function wait_status_ok(){
-    for ((n=0;n<30;n++))
+    for ((n=0;n<60;n++))
     do
         OK=`kubectl get pod -A| grep -E 'Running|Completed' | wc | awk '{print $1}'`
         Status=`kubectl get pod -A | sed '1d' | wc | awk '{print $1}'`
@@ -38,6 +38,6 @@ function wait_status_ok(){
 
 export -f wait_status_ok
 
-timeout 1800 bash -c wait_status_ok
-
 check_installer_ok
+
+timeout 1800 bash -c wait_status_ok

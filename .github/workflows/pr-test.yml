@@ -1,4 +1,4 @@
-name: Auto-Test-PR
+name: PR-Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  auto-test-pr:
+  pr-test:
     runs-on: ubuntu-latest
     timeout-minutes: 150
     env:
@@ -35,6 +35,26 @@ jobs:
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"kubeedge":{"enabled":false}}}'
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":false}}}'
+
+    - name: Check Cluster Status
+      run: bash scripts/check_cluster_status.sh
+      timeout-minutes: 90
+
+    - name: Enable servicemesh Plugin
+      run: |
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true}}}'
+        for i in {1..900};do
+          set +e
+          kubectl -n istio-system get deploy | grep istiod
+          if [[ $? -ne 0 ]];then
+            sleep 1
+            echo "wait $i s..."
+            continue
+          fi
+          set -e
+          kubectl -n istio-system get deploy istiod-1-6-10 -oyaml | sed 's/cpu: 500m/cpu: 5m/g' | sed 's/memory: 2Gi/memory: 100Mi/g' | kubectl replace -f - && \
+          break
+        done
 
     - name: Check Cluster Status
       run: bash scripts/check_cluster_status.sh
