@@ -151,12 +151,13 @@ done
 kubectl delete users --all 2>/dev/null
 
 
-# delete helmcategories
-for helmcategory in `kubectl get helmcategories.application.kubesphere.io -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch helmcategories.application.kubesphere.io $helmcategory -p '{"metadata":{"finalizers":null}}' --type=merge
+# delete helm resources
+for resource_type in `echo helmcategories helmapplications helmapplicationversions helmrepos helmreleases`; do
+  for resource_name in `kubectl get ${resource_type}.application.kubesphere.io -o jsonpath="{.items[*].metadata.name}"`; do
+    kubectl patch ${resource_type}.application.kubesphere.io ${resource_name} -p '{"metadata":{"finalizers":null}}' --type=merge
+  done
+  kubectl delete ${resource_type}.application.kubesphere.io --all 2>/dev/null
 done
-kubectl delete helmcategories.application.kubesphere.io --all 2>/dev/null
 
 # delete workspacetemplates
 for workspacetemplate in `kubectl get workspacetemplates.tenant.kubesphere.io -o jsonpath="{.items[*].metadata.name}"`
