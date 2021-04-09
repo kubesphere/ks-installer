@@ -2851,7 +2851,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-roles","role-template-view-secrets"]'
       iam.kubesphere.io/module: Configuration Center
       iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
       kubesphere.io/alias-name: ServiceAccount View
