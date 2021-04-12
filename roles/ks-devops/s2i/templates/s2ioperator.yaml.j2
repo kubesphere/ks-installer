@@ -442,7 +442,7 @@ spec:
         - name: S2IIMAGENAME
           value: "{{ s2irun_repo }}:{{ s2irun_tag }}"
         image: "{{ s2ioperator_repo }}:{{ s2ioperator_tag }}"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: manager
         ports:
         - containerPort: 8080
