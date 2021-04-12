@@ -153,9 +153,9 @@ builder_go_tag: v2.1.0
 
 #s2i
 s2ioperator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/s2ioperator"
-s2ioperator_tag: "latest"
+s2ioperator_tag: "v3.1.0"
 s2irun_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/s2irun"
-s2irun_tag: "latest"
+s2irun_tag: "release-2.1"
 
 s2itemplates_tag: v2.1.0
 binary_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2i-binary"
