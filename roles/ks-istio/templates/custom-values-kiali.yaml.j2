@@ -4,7 +4,7 @@ fullnameOverride: "kiali-operator"
 image:
   repo:  {{ kiali_operator_repo }}
   tag: {{ kiali_operator_tag }}
-  pullPolicy: {{ ks_image_pull_policy }}
+  pullPolicy: IfNotPresent
   pullSecrets: []
 
 # Defines where the operator will look for Kial CR resources. "" means "all namespaces".
