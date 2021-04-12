@@ -89,7 +89,7 @@ jobs:
             continue
           fi
           set -e
-          kubectl -n kubesphere-system get deploy minio -oyaml | sed '/cpu: /d' | sed '/memory: /d' | kubectl replace -f -
+          kubectl -n kubesphere-system get deploy minio -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
@@ -105,7 +105,7 @@ jobs:
           fi
           set -e
           sleep 2
-          kubectl -n kubesphere-monitoring-system get deploy prometheus-operator -oyaml | sed '/cpu: /d' | sed '/memory: /d' | kubectl replace -f -
+          kubectl -n kubesphere-monitoring-system get deploy prometheus-operator -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
@@ -121,7 +121,7 @@ jobs:
           fi
           set -e
           sleep 2
-          kubectl -n istio-system get deploy istiod-1-6-10 -oyaml | sed '/cpu: /d' | sed '/memory: /d' | kubectl replace -f -
+          kubectl -n istio-system get deploy istiod-1-6-10 -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
@@ -135,7 +135,7 @@ jobs:
           fi
           set -e
           sleep 2
-          kubectl -n istio-system get deploy istio-ingressgateway -oyaml | sed '/cpu: /d' | sed '/memory: /d' | kubectl replace -f -
+          kubectl -n istio-system get deploy istio-ingressgateway -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
@@ -151,7 +151,7 @@ jobs:
           fi
           set -e
           sleep 2
-          kubectl -n kubesphere-devops-system get deploy ks-jenkins -oyaml | sed '/cpu: /d' | sed '/memory: /d' | kubectl replace -f -
+          kubectl -n kubesphere-devops-system get deploy ks-jenkins -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
@@ -167,7 +167,7 @@ jobs:
           fi
           set -e
           sleep 2
-          kubectl -n kubesphere-monitoring-system get sts prometheus-k8s -oyaml | sed '/cpu: /d' | sed '/memory: /d' | kubectl replace -f -
+          kubectl -n kubesphere-monitoring-system get sts prometheus-k8s -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
