@@ -5,21 +5,13 @@
 ## Configuration values for kubefed controllermanager deployment.
 ##
 controllermanager:
-  enabled: true
+  controller:
+    annotations: {}
 {% if nodeNum is defined and nodeNum < 3 %}
-  replicaCount: 1
+    replicaCount: 1
 {% else %}
-  replicaCount: 2
+    replicaCount: 2
 {% endif %}
-  repository: {{ kubefed_repo }}
-  image: {{ kubefed_image }}
-  tag: {{ kubefed_image_tag }}
-  imagePullPolicy: IfNotPresent
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 100m
-      memory: 64Mi
-
+    repository: {{ kubefed_repo }}
+    image: {{ kubefed_image }}
+    tag: {{ kubefed_image_tag }}
