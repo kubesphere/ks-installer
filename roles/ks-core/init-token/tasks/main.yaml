@@ -14,9 +14,11 @@
     - "jwt-script"
 
 
+# https://tools.ietf.org/html/rfc7518#section-3.2
+# A key of the same size as the hash output (for instance, 256 bits for"HS256") or larger MUST be used with this algorithm.
 - name: KubeSphere | Creating KubeSphere Secret
   shell: >
-    dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=32 count=1 2>/dev/null | tr -d '\n'
+    dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | tr -d '\n' | dd bs=32 count=1 2>/dev/null 
   register: ks_secret
 
 
