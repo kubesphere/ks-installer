@@ -11,3 +11,36 @@
 - name: ks-upgrade | Restarting ks-controller-manager
   shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-controller-manager"
   failed_when: false
+
+
+# upgrade legacy openpitix
+- name: OpenPitrix | Getting openpitrix jobs installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "openpitrix"
+
+- name: OpenPitrix | Creating openpitrix jobs manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: openpitrix, file: ks-openpitrix-upgrade.yaml }
+
+- name: OpenPitrix | Check OpenPitrix v3.0.0
+  shell: >
+    {{ bin_dir }}/kubectl get deploy openpitrix-hyperpitrix-deployment -n openpitrix-system 2>1 -oNAME | wc -l
+  register: openpitrix_deploy_count
+
+- name: OpenPitrix | Upgrade OpenPitrix
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/ks-openpitrix-upgrade.yaml
+  when:
+    - openpitrix_deploy_count.stdout == "1"
+
+- name: OpenPitrix | Scale deploy openpitrix-hyperpitrix-deployment to 0
+  shell: >
+    {{ bin_dir }}/kubectl scale deploy openpitrix-hyperpitrix-deployment -n openpitrix-system --replicas=0
+  when:
+    - openpitrix_deploy_count.stdout == "1"
