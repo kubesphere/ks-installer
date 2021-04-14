@@ -213,7 +213,7 @@ docker_elasticsearch_curator_tag: v5.7.6
 elasticsearch_oss_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
 fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/fluentbit-operator"
-fluentbit_operator_tag: v0.4.0
+fluentbit_operator_tag: v0.5.0
 fluentbit_operator_migrator_tag: migrator
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
