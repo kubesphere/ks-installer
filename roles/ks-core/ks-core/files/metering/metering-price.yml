@@ -13,3 +13,4 @@ data:
 kind: ConfigMap
 metadata:
   name: ks-metering-config
+  namespace: kubesphere-system
