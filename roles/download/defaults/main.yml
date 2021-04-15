@@ -181,9 +181,9 @@ configmap_reload_tag: v0.3.0
 prometheus_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/prometheus"
 prometheus_tag: v2.26.0
 prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-config-reloader"
-prometheus_config_reloader_tag: v0.38.3
+prometheus_config_reloader_tag: v0.42.1
 prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-operator"
-prometheus_operator_tag: v0.38.3
+prometheus_operator_tag: v0.42.1
 kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.4.1
 kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
