@@ -166,6 +166,11 @@ do
 done
 kubectl delete workspacetemplates.tenant.kubesphere.io --all 2>/dev/null
 
+# delete federatednamespaces in namespace kubesphere-monitoring-federated
+for resource in $(kubectl get federatednamespaces.types.kubefed.io -n kubesphere-monitoring-federated -oname); do
+  kubectl patch "${resource}" -p '{"metadata":{"finalizers":null}}' --type=merge -n kubesphere-monitoring-federated
+done
+
 # delete crds
 for crd in `kubectl get crds -o jsonpath="{.items[*].metadata.name}"`
 do
