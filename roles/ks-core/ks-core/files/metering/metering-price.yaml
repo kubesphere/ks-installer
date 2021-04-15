@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  ks-metering.yaml: |
+    retentionDay: 30d
+    billing:
+      priceInfo:
+        currencyUnit: ""
+        cpuPerCorePerHour: -1
+        memPerGigabytesPerHour: -1
+        ingressNetworkTrafficPerMegabytesPerHour: -1
+        egressNetworkTrafficPerMegabytesPerHour: -1
+        pvcPerGigabytesPerHour: -1
+kind: ConfigMap
+metadata:
+  name: ks-metering-config

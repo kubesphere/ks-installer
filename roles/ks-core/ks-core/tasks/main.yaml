@@ -50,6 +50,7 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "ingress"
+    - "metering"
     - "ks-apiserver"
     - "ks-console"
     - "ks-controller-manager"
@@ -83,6 +84,9 @@
   register: cm_state
   failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
 
+- name: KubeSphere | Applying Metering configmap
+  command: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/metering/metering-price.yaml -n kubesphere-system
 
 # - name: KubeSphere | Updating kubectl image
 #   shell: >
