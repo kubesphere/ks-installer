@@ -173,11 +173,7 @@ data:
       endpoint: http://edge-watcher.kubeedge.svc/api/
 {% endif %}
     metering:
-{% if metering.enabled is defined and metering.enabled == true %}
       enable: true
-{% else %}
-      enable: false
-{% endif %}
 kind: ConfigMap
 metadata:
   name: kubesphere-config
