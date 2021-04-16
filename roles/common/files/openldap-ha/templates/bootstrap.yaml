@@ -1,0 +1,24 @@
+apiVersion: v1
+data:
+  bootstrap.ldif: |
+    dn: ou=Users,dc=kubesphere,dc=io
+    objectClass: organizationalUnit
+    objectClass: top
+    ou: Users
+
+    dn: ou=Groups,dc=kubesphere,dc=io
+    objectClass: organizationalUnit
+    objectClass: top
+    ou: Users
+    ou: Groups
+
+    dn: uid=admin,ou=Users,dc=kubesphere,dc=io
+    objectClass: inetOrgPerson
+    objectClass: top
+    cn: admin
+    sn: admin
+    uid: admin
+    userPassword:: e1NTSEF9RHRIdmQxOWlkMnBINENyYWJYa0NsSzY1OFNXeUVHSDAK
+kind: ConfigMap
+metadata:
+  name: openldap-bootstrap

@@ -90,6 +90,8 @@ spec:
           - mountPath: /etc/ldap/slapd.d
             name: openldap-pvc
             subPath: ldap-config
+          - mountPath: /container/service/slapd/assets/config/bootstrap/ldif/custom
+            name: openldap-bootstrap
           readinessProbe:
             tcpSocket:
               port: 389
@@ -111,6 +113,9 @@ spec:
       - name: openldap-pvc
         persistentVolumeClaim:
           claimName: openldap-pvc
+      - configMap:
+          name: openldap-bootstrap
+        name: openldap-bootstrap
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
