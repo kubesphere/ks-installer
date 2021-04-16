@@ -44,3 +44,48 @@
     {{ bin_dir }}/kubectl scale deploy openpitrix-hyperpitrix-deployment -n openpitrix-system --replicas=0
   when:
     - openpitrix_deploy_count.stdout == "1"
+
+
+# upgrade legacy alerting
+
+- name: Alerting | Checking status v3.0.0
+  shell: >
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system 2>1 | grep "alerting" | wc -l
+  register: alerting_check
+
+- block:
+    - name: Alerting | Getting migration files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ kubesphere_dir }}/"
+      loop:
+        - "alerting-migration"
+
+    - name: Alerting | Getting migration files
+      template:
+        src: "{{ item.file }}.j2"
+        dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+      with_items:
+        - { path: alerting-migration, file: ks-alerting-migration.yaml}
+
+    - name: Alerting | Creating migration job
+      shell: >
+        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/alerting-migration
+      register: job
+      failed_when: "job.stderr and 'Warning' not in job.stderr"
+
+    - name: Alerting | Getting migration job status
+      shell: >
+        {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-alerting-migration --no-headers | awk '{print $3}'
+      register: job_status
+      until: job_status.stdout.find('Completed') != -1
+      retries: 90
+      delay: 20
+
+    - name: Alerting | Getting migration job status
+      shell: >
+        {{ bin_dir }}/kubectl delete ns kubesphere-alerting-system --force --grace-period=0
+      failed_when: false
+
+  when:
+    - alerting_check.stdout != "0"
