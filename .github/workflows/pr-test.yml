@@ -31,8 +31,8 @@ jobs:
         kubectl -n kubesphere-system get deploy ks-installer -oyaml | sed "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" | kubectl replace -f -
         kubectl -n kubesphere-system set image deploy/ks-installer installer=ks-installer
         kubectl -n kubesphere-system get cc ks-installer -o yaml | sed "s/false/true/g" | kubectl replace -n kubesphere-system cc -f -
-        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"monitoring":false}}}'
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"tlsEnable":false}}}'
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"etcd":{"monitoring":false}}}'
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"kubeedge":{"enabled":false}}}'
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"logging":{"enabled":false}}}'
 
@@ -93,21 +93,21 @@ jobs:
           break
         done
 
-    - name: Adjust Prometheus Resource Request
-      run: |
-        for i in {1..900};do
-          set +e
-          kubectl -n kubesphere-monitoring-system get deploy | grep prometheus-operator
-          if [[ $? -ne 0 ]];then
-            sleep 1
-            echo "wait $i s..."
-            continue
-          fi
-          set -e
-          sleep 2
-          kubectl -n kubesphere-monitoring-system get deploy prometheus-operator -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
-          break
-        done
+#    - name: Adjust Prometheus Resource Request
+#      run: |
+#        for i in {1..900};do
+#          set +e
+#          kubectl -n kubesphere-monitoring-system get deploy | grep prometheus-operator
+#          if [[ $? -ne 0 ]];then
+#            sleep 1
+#            echo "wait $i s..."
+#            continue
+#          fi
+#          set -e
+#          sleep 2
+#          kubectl -n kubesphere-monitoring-system get deploy prometheus-operator -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
+#          break
+#        done
 
     - name: Adjust servicemesh Resource Request
       run: |
@@ -152,6 +152,22 @@ jobs:
           set -e
           sleep 2
           kubectl -n kubesphere-devops-system get deploy ks-jenkins -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
+          break
+        done
+
+    - name: Adjust Prometheus-k8s Resource Request
+      run: |
+        for i in {1..900};do
+          set +e
+          kubectl -n kubesphere-monitoring-system get sts | grep prometheus-k8s
+          if [[ $? -ne 0 ]];then
+            sleep 1
+            echo "wait $i s..."
+            continue
+          fi
+          set -e
+          sleep 5
+          kubectl -n kubesphere-monitoring-system get prometheus -oyaml | sed 's/cpu: .*/cpu: "0"/g' | sed 's/memory: .*/memory: 0Mi/g' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
