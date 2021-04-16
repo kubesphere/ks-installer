@@ -8,6 +8,7 @@ metadata:
   name: openpitrix-import-job
   namespace: kubesphere-system
 spec:
+  backoffLimit: 20
   template:
     metadata:
       labels:
@@ -15,7 +16,7 @@ spec:
         component: openpitrix-import-job
     spec:
       serviceAccountName: kubesphere
-      restartPolicy: Never
+      restartPolicy: OnFailure
       containers:
         - name: import
           command:
