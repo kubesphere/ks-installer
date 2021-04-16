@@ -50,6 +50,7 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "ingress"
+    - "metering"
     - "ks-apiserver"
     - "ks-console"
     - "ks-controller-manager"
@@ -83,7 +84,6 @@
   register: cm_state
   failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
 
-
 # - name: KubeSphere | Updating kubectl image
 #   shell: >
 #     for deploy in $(kubectl -n kubesphere-controls-system get deploy  | grep kubectl  | awk '{print $1}');
@@ -104,6 +104,7 @@
     - { path: ks-console, file: ks-console-config.yml }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }
     - { path: ks-console, file: ks-console-deployment.yml }
+    - { path: metering, file: metering-price.yml}
 
 - name: KubeSphere | Checking ks-console svc
   command: >
