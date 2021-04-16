@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  pr-test:
+  auto-test:
     runs-on: ubuntu-latest
     timeout-minutes: 150
     env:
@@ -152,22 +152,6 @@ jobs:
           set -e
           sleep 2
           kubectl -n kubesphere-devops-system get deploy ks-jenkins -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
-          break
-        done
-
-    - name: Adjust Prometheus-k8s Resource Request
-      run: |
-        for i in {1..900};do
-          set +e
-          kubectl -n kubesphere-monitoring-system get sts | grep prometheus-k8s
-          if [[ $? -ne 0 ]];then
-            sleep 1
-            echo "wait $i s..."
-            continue
-          fi
-          set -e
-          sleep 2
-          kubectl -n kubesphere-monitoring-system get sts prometheus-k8s -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
           break
         done
 
