@@ -941,6 +941,12 @@ rules:
       - '*'
     verbs:
       - '*'
+  - apiGroups:
+      - notification.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
