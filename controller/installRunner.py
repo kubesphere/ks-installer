@@ -273,7 +273,11 @@ def generateTaskLists():
 
 
 def getComponentLists():
-    readyToEnabledList = ['monitoring', 'multicluster', 'openpitrix', 'network']
+    readyToEnabledList = [
+        'monitoring',
+        'multicluster',
+        'openpitrix',
+        'network']
     readyToDisableList = []
     global configFile
 
@@ -441,6 +445,23 @@ def generate_new_cluster_configuration(api):
         exit(0)
 
     cluster_configuration_spec = old_cluster_configuration.get('spec')
+    cluster_configuration_status = old_cluster_configuration.get('status')
+
+    if "common" in cluster_configuration_spec:
+        if "mysqlVolumeSize" in cluster_configuration_spec["common"]:
+            del cluster_configuration_spec["common"]["mysqlVolumeSize"]
+        if "etcdVolumeSize" in cluster_configuration_spec["common"]:
+            del cluster_configuration_spec["common"]["etcdVolumeSize"]
+        if cluster_configuration_status is not None and "redis" in cluster_configuration_status and "status" in cluster_configuration_status[
+                "redis"] and cluster_configuration_status["redis"]["status"] == "enabled":
+            cluster_configuration_spec["common"]["redis"] = {
+                "enabled": True
+            }
+        if cluster_configuration_status is not None and "openldap" in cluster_configuration_status and "status" in cluster_configuration_status[
+                "openldap"] and cluster_configuration_status["openldap"]["status"] == "enabled":
+            cluster_configuration_spec["common"]["openldap"] = {
+                "enabled": True
+            }
 
     if "notification" in cluster_configuration_spec:
         upgrade_flag = True
