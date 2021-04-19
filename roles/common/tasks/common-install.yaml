@@ -1,33 +1,17 @@
 - import_tasks: redis-install.yaml
   when:
+    - (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or nodeNum > 1
     - "status.redis is not defined or status.redis.status is not defined or status.redis.status != 'enabled'"
 
 - import_tasks: openldap-install.yaml
   when:
+    - common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled
     - "status.openldap is not defined or status.openldap.status is not defined or status.openldap.status != 'enabled'"
 
 - import_tasks: minio-install.yaml
   when: 
     - (devops.enabled or (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled)) and common.s3 is not defined
     - "status.minio is not defined or status.minio.status is not defined or status.minio.status != 'enabled'"
-
-#- import_tasks: mysql-install.yaml
-#  when:
-#    - devops.enabled or openpitrix.enabled or notification.enabled or alerting.enabled
-#    - "status.mysql is not defined or status.mysql.status is not defined or status.mysql.status != 'enabled'"
-
-#- name: KubeSphere | Deploying common component
-#  shell: >
-#    {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
-#  loop:
-#    - "etcd.yaml"
-#  register: import
-#  failed_when:
-#    - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
-#    - "import.stderr and 'is forbidden' not in import.stderr"
-#  when:
-#    - openpitrix.enabled or notification.enabled or alerting.enabled
-#    - "status.etcd is not defined or status.etcd.status is not defined or status.etcd.status != 'enabled'"
 
 - import_tasks: es-install.yaml
   when:

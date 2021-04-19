@@ -17,13 +17,21 @@ data:
         accessTokenMaxAge: 0
 {% endif %}
     ldap:
+{% if common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled %}
       host: openldap.kubesphere-system.svc:389
+{% else %}
+      host: FAKE
+{% endif %}
       managerDN: cn=admin,dc=kubesphere,dc=io
       managerPassword: admin
       userSearchBase: ou=Users,dc=kubesphere,dc=io
       groupSearchBase: ou=Groups,dc=kubesphere,dc=io
     redis:
+{% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or nodeNum > 1 %}
       host: redis.kubesphere-system.svc
+{% else %}
+      host: FAKE
+{% endif %}
       port: 6379
       password: {{ common.redisPasswd | default('""') }}
       db: 0

@@ -18,9 +18,11 @@ spec:
     port: 2379              # etcd port
     tlsEnable: true
   common:
-    mysqlVolumeSize: 20Gi # MySQL PVC size.
+    redis:
+      enabled: false
+    openldap:
+      enabled: false
     minioVolumeSize: 20Gi # Minio PVC size.
-    etcdVolumeSize: 20Gi  # etcd PVC size.
     openldapVolumeSize: 2Gi   # openldap PVC size.
     redisVolumSize: 2Gi # Redis PVC size.
     monitoring:
