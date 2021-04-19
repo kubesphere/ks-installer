@@ -125,8 +125,8 @@ edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubesp
 edge_watcher_agent_tag: "v0.1.0"
 
 #openpitrix:
-openpitrix_job_tag: "latest"
-openpitrix_job_repo: "xyzli/openpitrix-jobs"
+openpitrix_job_tag: "v3.1.0-alpha1"
+openpitrix_job_repo: "kubespheredev/openpitrix-jobs"
 
 minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
