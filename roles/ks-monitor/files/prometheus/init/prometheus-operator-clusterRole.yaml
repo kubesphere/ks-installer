@@ -22,6 +22,7 @@ rules:
   - prometheusrules.monitoring.coreos.com
   - servicemonitors.monitoring.coreos.com
   - thanosrulers.monitoring.coreos.com
+  - probes.monitoring.coreos.com
   resources:
   - customresourcedefinitions
   verbs:
@@ -39,6 +40,7 @@ rules:
   - servicemonitors
   - podmonitors
   - prometheusrules
+  - probes
   verbs:
   - '*'
 - apiGroups:
