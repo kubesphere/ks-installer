@@ -159,7 +159,7 @@ jobs:
       run: |
         for i in {1..900};do
           set +e
-          kubectl -n kubesphere-monitoring-system get sts | grep prometheus-k8s
+          kubectl -n kubesphere-monitoring-system get prometheus | grep k8s
           if [[ $? -ne 0 ]];then
             sleep 1
             echo "wait $i s..."
