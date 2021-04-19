@@ -99,12 +99,12 @@
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
   loop:
+    - { path: metering, file: metering-price.yml}
     - { path: ks-apiserver, file: ks-apiserver.yml }
     - { path: ks-controller-manager, file: ks-controller-manager.yaml }
     - { path: ks-console, file: ks-console-config.yml }
     - { path: ks-console, file: sample-bookinfo-configmap.yaml }
     - { path: ks-console, file: ks-console-deployment.yml }
-    - { path: metering, file: metering-price.yml}
 
 - name: KubeSphere | Checking ks-console svc
   command: >
