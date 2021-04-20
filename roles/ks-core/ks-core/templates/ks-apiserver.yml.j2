@@ -55,8 +55,6 @@ spec:
           name: kubesphere-config
         - mountPath: /etc/localtime
           name: host-time
-        - mountPath: /etc/kubesphere/metering
-          name: ks-metering-config
         livenessProbe:
           failureThreshold: 8
           httpGet:
@@ -120,10 +118,6 @@ spec:
           path: /etc/localtime
           type: ""
         name: host-time
-      - configMap:
-          defaultMode: 420
-          name: ks-metering-config
-        name: ks-metering-config
 
 ---
 
