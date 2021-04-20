@@ -50,7 +50,6 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "ingress"
-    - "metering"
     - "ks-apiserver"
     - "ks-console"
     - "ks-controller-manager"
@@ -99,7 +98,6 @@
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
   loop:
-    - { path: metering, file: metering-price.yml}
     - { path: ks-apiserver, file: ks-apiserver.yml }
     - { path: ks-controller-manager, file: ks-controller-manager.yaml }
     - { path: ks-console, file: ks-console-config.yml }
