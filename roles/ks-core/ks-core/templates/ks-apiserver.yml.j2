@@ -33,7 +33,6 @@ spec:
       - command:
         - ks-apiserver
         - --logtostderr=true
-        - --debug=true
         image: {{ ks_apiserver_repo }}:{{ ks_apiserver_tag }}
         imagePullPolicy: {{ ks_image_pull_policy }}
         name: ks-apiserver
