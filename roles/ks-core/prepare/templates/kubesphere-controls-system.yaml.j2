@@ -3,7 +3,7 @@
 # metadata:
 #   name: kubesphere-controls-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: system:kubesphere-router-clusterrole
@@ -74,7 +74,7 @@ rules:
     verbs:
       - update
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: system:kubesphere-router-role
@@ -123,7 +123,7 @@ metadata:
   annotations:
     kubernetes.io/created-by: kubesphere.io/ks-router
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: system:nginx-ingress-clusterrole-nisa-binding
@@ -138,7 +138,7 @@ subjects:
     name: kubesphere-router-serviceaccount
     namespace: kubesphere-controls-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: nginx-ingress-role-nisa-binding
@@ -227,7 +227,7 @@ metadata:
     kubernetes.io/created-by: kubesphere.io/kubectl
 ---
 # bind kubesphere-cluster-admin sa to clusterrole cluster-admin
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: system:kubesphere-cluster-admin
