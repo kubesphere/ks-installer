@@ -35,31 +35,6 @@ update_v1alpha1() {
     namespace=$(echo "$src" | jq -r '.metadata.namespace')
     kind=$(echo "$src" | jq -r '.kind')
 
-    if [ "$kind" = "NotificationManager" ]; then
-      resource=$(echo "$src" |
-        jq 'setpath(["apiVersion"]; "notification.kubesphere.io/v2beta1")' |
-        jq 'setpath(["spec", "defaultSecretNamespace"]; "kubesphere-monitoring-federated")' |
-        jq 'del(.metadata.namespace)')
-      resource=$(delete_invalid_info "\"$(echo "$resource" | jq -c)\"")
-
-      if [ "$(echo "$resource" | jq '.spec.receivers.options' | jq 'has("global")')" != "true" ]; then
-        resource=$(echo "$resource" | jq '.spec.receivers.options.global.templateFile |= .+ ["/etc/notification-manager/template"]')
-      fi
-
-      if [ "$(echo "$resource" | jq '.spec' | jq 'has("volumes")')" != "true" ]; then
-        resource=$(echo "$resource" |
-          jq 'setpath(["spec", "volumes"]; [{"configMap": {"defaultMode": 420,"name": "notification-manager-template"},"name": "notification-manager-template"}])')
-      fi
-
-      if [ "$(echo "$resource" | jq '.spec' | jq 'has("volumeMounts")')" != "true" ]; then
-        resource=$(echo "$resource" |
-          jq 'setpath(["spec", "volumeMounts"]; [{"mountPath": "/etc/notification-manager/","name": "notification-manager-template"}])')
-      fi
-
-      echo "$resource" | jq >"${output_dir}/notification-manager-$(echo "$resource" | jq -r '.metadata.name').json"
-      continue
-    fi
-
     resource=$(echo "$src" | jq 'setpath(["apiVersion"]; "notification.kubesphere.io/v2beta1")')
     name=$(echo "$kind" | awk '{ print tolower($0) }')-$(echo "$resource" | jq -r '.metadata.namespace')-$(echo "$resource" | jq -r '.metadata.name')
     resource=$(echo "$resource" | jq --arg name "$name" 'setpath(["metadata", "name"]; $name)' | jq 'del(.metadata.namespace)')
@@ -273,18 +248,6 @@ update_v2alpha1() {
     kind=$(echo "$src" | jq -r '.kind')
 
     if [ "$kind" = "NotificationManager" ]; then
-
-      default_ns=$(echo "$src" | jq '.spec.defaultSecretNamespace')
-      if [ "$default_ns" != "null" ] && [ "$default_ns" != "" ]; then
-        ns="$default_ns"
-      fi
-
-      resource=$(echo "$src" |
-        jq 'setpath(["apiVersion"]; "notification.kubesphere.io/v2beta1")' |
-        jq 'setpath(["spec", "defaultSecretNamespace"]; "kubesphere-monitoring-federated")')
-      resource=$(delete_invalid_info "\"$(echo "$resource" | jq -c)\"")
-
-      echo "$resource" | jq >"${output_dir}/notification-manager-$(echo "$resource" | jq -r '.metadata.name').json"
       continue
     fi
 
