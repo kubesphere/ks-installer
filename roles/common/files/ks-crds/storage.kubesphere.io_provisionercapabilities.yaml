@@ -86,9 +86,7 @@ spec:
                     expandMode:
                       description: 'Determined by GetPluginCapabilities in IdentityServer'
                       type: string
-                      items:
-                        type: string
-                        enum: ["UNKNOWN", "OFFLINE", "ONLINE"]
+                      enum: ["UNKNOWN", "OFFLINE", "ONLINE"]
                 snapshot:
                   type: object
                   description: 'Snapshot represents whether plugin supports snapshot features'

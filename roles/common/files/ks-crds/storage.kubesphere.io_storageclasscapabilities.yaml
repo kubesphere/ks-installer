@@ -74,9 +74,7 @@ spec:
                     expandMode:
                       description: 'Determined by GetPluginCapabilities in IdentityServer and StorageClass AllowVolumeExpansion'
                       type: string
-                      items:
-                        type: string
-                        enum: ["UNKNOWN", "OFFLINE", "ONLINE"]
+                      enum: ["UNKNOWN", "OFFLINE", "ONLINE"]
                 snapshot:
                   type: object
                   properties:
