@@ -994,6 +994,8 @@ subjects:
 apiVersion: tenant.kubesphere.io/v1alpha2
 kind: WorkspaceTemplate
 metadata:
+  labels:
+    kubefed.io/managed: "false"
   annotations:
     kubesphere.io/creator: admin
     kubesphere.io/description: "system-workspace is a built-in workspace automatically created by KubeSphere, it contains all system components to run KubeSphere."
@@ -1005,7 +1007,18 @@ spec:
     spec:
       manager: admin
       networkIsolation: false
-
+---
+apiVersion: tenant.kubesphere.io/v1alpha1
+kind: Workspace
+metadata:
+  labels:
+    kubefed.io/managed: "false"
+  annotations:
+    kubesphere.io/creator: admin
+  name: system-workspace
+spec:
+  manager: admin
+  networkIsolation: false
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
