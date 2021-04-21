@@ -26,11 +26,17 @@
     master_num: "{{ masters.stdout }}"
   failed_when: false
 
+- name: KubeSphere | Override master num
+  set_fact:
+    master_num: "3"
+  failed_when: false
+  when:
+    - master_num is defined and (master_num == "1" or master_num == "0")
+    - enableHA is defined and enableHA
 
 - name: ks-console | Checking ks-console svc
   shell: "{{ bin_dir }}/kubectl get svc -n kubesphere-system"
   register: result
-
 
 - name: ks-console | Getting ks-console svc port
   shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"

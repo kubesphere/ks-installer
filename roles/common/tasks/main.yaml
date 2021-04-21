@@ -14,7 +14,8 @@
   set_fact:
     enableHA: >-
       {% if masters is defined and masters.stdout is defined and masters.stdout != "0" and masters.stdout != "1" %}true{% else %}false{% endif %}
-
+  when:
+    - enableHA is not defined
 
 - name: KubeSphere | Getting common component installation files
   copy:
