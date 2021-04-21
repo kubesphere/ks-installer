@@ -1,11 +1,11 @@
 - import_tasks: redis-install.yaml
   when:
-    - (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or nodeNum > 1
+    - (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or enableHA
     - "status.redis is not defined or status.redis.status is not defined or status.redis.status != 'enabled'"
 
 - import_tasks: openldap-install.yaml
   when:
-    - common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled
+    - (common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled) or devops.enabled
     - "status.openldap is not defined or status.openldap.status is not defined or status.openldap.status != 'enabled'"
 
 - import_tasks: minio-install.yaml
