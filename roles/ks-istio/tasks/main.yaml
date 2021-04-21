@@ -94,6 +94,7 @@
 - name: servicemesh | Creating prometheus config
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic additional-scrape-configs --from-file={{ kubesphere_dir }}/servicemesh/prometheus/prometheus-additional.yaml
+  ignore_errors: true
 
 - name: servicemesh | Show istiod installation logs
   debug:

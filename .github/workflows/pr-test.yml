@@ -171,6 +171,20 @@ jobs:
           break
         done
 
+        for i in {1..900};do
+          set +e
+          kubectl -n kubesphere-monitoring-system get ThanosRuler | grep kubesphere
+          if [[ $? -ne 0 ]];then
+            sleep 1
+            echo "wait $i s..."
+            continue
+          fi
+          set -e
+          sleep 5
+          kubectl -n kubesphere-monitoring-system get ThanosRuler kubesphere -oyaml | sed 's/cpu: .*/cpu: "0"/g' | sed 's/memory: .*/memory: 0Mi/g' | sed '/resourceVersion: /d' | kubectl replace -f -
+          break
+        done
+
     - name: Check Cluster Status
       run: bash scripts/check_cluster_status.sh
       timeout-minutes: 90
