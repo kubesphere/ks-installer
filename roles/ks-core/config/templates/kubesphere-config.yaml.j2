@@ -17,7 +17,7 @@ data:
         accessTokenMaxAge: 0
 {% endif %}
 
-{% if common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled %}
+{% if (common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled) or devops.enabled %}
     ldap:
       host: openldap.kubesphere-system.svc:389
       managerDN: cn=admin,dc=kubesphere,dc=io
@@ -26,7 +26,7 @@ data:
       groupSearchBase: ou=Groups,dc=kubesphere,dc=io
 {% endif %}
 
-{% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or nodeNum > 1 %}
+{% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or enableHA %}
     redis:
       host: redis.kubesphere-system.svc
       port: 6379

@@ -12,19 +12,17 @@ WORKDIR /go/src/github.com/flant/shell-operator
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w -X 'github.com/flant/shell-operator/pkg/app.Version=$appVersion'" -o shell-operator ./cmd/shell-operator
 
 
-FROM alpine:3.12
+FROM python:alpine
 
-RUN apk --no-cache add ca-certificates jq bash gcc  musl-dev libffi-dev openssl-dev linux-headers python3-dev py3-pip make openssl curl unzip git util-linux && \
-    pip3 install --no-cache-dir psutil ansible_runner ansible==2.8.12 redis kubernetes && \
+RUN apk --no-cache add jq gcc bash libffi-dev openssl-dev curl unzip musl-dev && \
+    pip install --no-cache-dir psutil cryptography==3.0 ansible_runner==1.4.6 ansible==2.8.12 redis kubernetes && \
     wget https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz && \
     tar -zxf helm-v3.2.1-linux-amd64.tar.gz && \
     mv linux-amd64/helm /bin/helm && \
     rm -rf *linux-amd64* && \
     chmod +x /bin/helm && \
-    helm plugin install https://github.com/helm/helm-2to3.git && \
-    wget https://storage.googleapis.com/kubernetes-release/release/v1.16.9/bin/linux/amd64/kubectl -O /bin/kubectl && \
+    wget https://storage.googleapis.com/kubernetes-release/release/v1.18.18/bin/linux/amd64/kubectl -O /bin/kubectl && \
     chmod +x /bin/kubectl && \
-    curl https://rclone.org/install.sh | bash && \
     ln -s /bin/kubectl /usr/local/bin/kubectl && \
     ln -s /bin/helm /usr/local/bin/helm && \
     mkdir -p /hooks/kubesphere /kubesphere/installer/roles /kubesphere/results/env /kubesphere/playbooks /kubesphere/config &&\
@@ -35,8 +33,7 @@ COPY --from=0 /go/src/github.com/flant/shell-operator/shell-operator /
 
 RUN chown -R kubesphere:kubesphere /shell-operator && \
     chown -R kubesphere:kubesphere /hooks && \
-    chown -R kubesphere:kubesphere /kubesphere && \
-    chown -R kubesphere:kubesphere /usr/bin/2to3-3.8
+    chown -R kubesphere:kubesphere /kubesphere
 
 ADD controller/* /hooks/kubesphere/
 RUN chmod +x -R /hooks/kubesphere
