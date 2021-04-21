@@ -12,11 +12,6 @@ backup_dir=$4
 mkdir -p "$backup_dir"
 
 backup_v1alpha1() {
-  # export notification manager
-  # shellcheck disable=SC2046
-  src=$(kubectl get notificationmanagers.notification.kubesphere.io -n "$notification_namespace" "$notification_name" -o json)
-  echo "$src" | jq >"${backup_dir}"/notification-manager-"$(echo "$src" | jq -r '.metadata.namespace')"-"$(echo "$src" | jq -r '.metadata.name')".json
-
   # export dingtalk config
   str=$(kubectl get dingtalkconfigs.notification.kubesphere.io -A | sed -n '1!p' | awk '{print $1}')
   # shellcheck disable=SC2206
