@@ -30,6 +30,10 @@ spec:
             type: string
           metadata:
             type: object
+            properties:
+              name:
+                maxLength: 63
+                type: string
           rules:
             description: Rules holds all the PolicyRules for this GlobalRole
             items:
