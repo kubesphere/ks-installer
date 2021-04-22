@@ -41,7 +41,7 @@
 
 - name: OpenPitrix | Delete namespace openpitrix-system
   shell: >
-    {{ bin_dir }}/kubectl delete --force namespace openpitrix-system
+    {{ bin_dir }}/kubectl delete  namespace openpitrix-system --force --grace-period=0
   when:
     - openpitrix_deploy_count.stdout == "1"
 
