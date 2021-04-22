@@ -1,10 +1,10 @@
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.2.5
+    controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
   name: rulers.events.kubesphere.io
 spec:
@@ -17,246 +17,247 @@ spec:
     - erl
     singular: ruler
   scope: Namespaced
-  validation:
-    openAPIV3Schema:
-      description: Ruler is the Schema for the ruler API
-      properties:
-        apiVersion:
-          description: 'APIVersion defines the versioned schema of this representation
-            of an object. Servers should convert recognized schemas to the latest
-            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-          type: string
-        kind:
-          description: 'Kind is a string value representing the REST resource this
-            object represents. Servers may infer this from the endpoint the client
-            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-          type: string
-        metadata:
-          type: object
-        spec:
-          description: Spec defines the specification of the desired behavior of the
-            Ruler.
-          properties:
-            image:
-              description: Docker image of events ruler
-              type: string
-            imagePullPolicy:
-              description: Image pull policy. One of Always, Never, IfNotPresent.
-              type: string
-            replicas:
-              description: Number of desired pods. Defaults to 1.
-              format: int32
-              type: integer
-            resources:
-              description: Resources defines resources requests and limits for single
-                Pod.
-              properties:
-                limits:
-                  additionalProperties:
-                    anyOf:
-                    - type: integer
-                    - type: string
-                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                    x-kubernetes-int-or-string: true
-                  description: 'Limits describes the maximum amount of compute resources
-                    allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
-                  type: object
-                requests:
-                  additionalProperties:
-                    anyOf:
-                    - type: integer
-                    - type: string
-                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                    x-kubernetes-int-or-string: true
-                  description: 'Requests describes the minimum amount of compute resources
-                    required. If Requests is omitted for a container, it defaults
-                    to Limits if that is explicitly specified, otherwise to an implementation-defined
-                    value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
-                  type: object
-              type: object
-            ruleNamespaceSelector:
-              description: Namespaces to be selected for Rules discovery. If unspecified,
-                discover Rule instances from all namespaces.
-              properties:
-                matchExpressions:
-                  description: matchExpressions is a list of label selector requirements.
-                    The requirements are ANDed.
-                  items:
-                    description: A label selector requirement is a selector that contains
-                      values, a key, and an operator that relates the key and values.
-                    properties:
-                      key:
-                        description: key is the label key that the selector applies
-                          to.
-                        type: string
-                      operator:
-                        description: operator represents a key's relationship to a
-                          set of values. Valid operators are In, NotIn, Exists and
-                          DoesNotExist.
-                        type: string
-                      values:
-                        description: values is an array of string values. If the operator
-                          is In or NotIn, the values array must be non-empty. If the
-                          operator is Exists or DoesNotExist, the values array must
-                          be empty. This array is replaced during a strategic merge
-                          patch.
-                        items:
-                          type: string
-                        type: array
-                    required:
-                    - key
-                    - operator
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Ruler is the Schema for the ruler API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the specification of the desired behavior of
+              the Ruler.
+            properties:
+              image:
+                description: Docker image of events ruler
+                type: string
+              imagePullPolicy:
+                description: Image pull policy. One of Always, Never, IfNotPresent.
+                type: string
+              replicas:
+                description: Number of desired pods. Defaults to 1.
+                format: int32
+                type: integer
+              resources:
+                description: Resources defines resources requests and limits for single
+                  Pod.
+                properties:
+                  limits:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Limits describes the maximum amount of compute resources
+                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
                     type: object
-                  type: array
-                matchLabels:
-                  additionalProperties:
-                    type: string
-                  description: matchLabels is a map of {key,value} pairs. A single
-                    {key,value} in the matchLabels map is equivalent to an element
-                    of matchExpressions, whose key field is "key", the operator is
-                    "In", and the values array contains only "value". The requirements
-                    are ANDed.
-                  type: object
-              type: object
-            ruleSelector:
-              description: A selector to select Rules instances.
-              properties:
-                matchExpressions:
-                  description: matchExpressions is a list of label selector requirements.
-                    The requirements are ANDed.
-                  items:
-                    description: A label selector requirement is a selector that contains
-                      values, a key, and an operator that relates the key and values.
-                    properties:
-                      key:
-                        description: key is the label key that the selector applies
-                          to.
-                        type: string
-                      operator:
-                        description: operator represents a key's relationship to a
-                          set of values. Valid operators are In, NotIn, Exists and
-                          DoesNotExist.
-                        type: string
-                      values:
-                        description: values is an array of string values. If the operator
-                          is In or NotIn, the values array must be non-empty. If the
-                          operator is Exists or DoesNotExist, the values array must
-                          be empty. This array is replaced during a strategic merge
-                          patch.
-                        items:
-                          type: string
-                        type: array
-                    required:
-                    - key
-                    - operator
+                  requests:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Requests describes the minimum amount of compute
+                      resources required. If Requests is omitted for a container,
+                      it defaults to Limits if that is explicitly specified, otherwise
+                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
                     type: object
-                  type: array
-                matchLabels:
-                  additionalProperties:
-                    type: string
-                  description: matchLabels is a map of {key,value} pairs. A single
-                    {key,value} in the matchLabels map is equivalent to an element
-                    of matchExpressions, whose key field is "key", the operator is
-                    "In", and the values array contains only "value". The requirements
-                    are ANDed.
-                  type: object
-              type: object
-            sinks:
-              description: Sinks defines sinks detail of this ruler
-              properties:
-                alertmanager:
-                  description: Alertmanager is an alertmanager sink to which only
-                    alerts can sink.
-                  properties:
-                    name:
-                      description: '`name` is the name of the alertmanager service.'
+                type: object
+              ruleNamespaceSelector:
+                description: Namespaces to be selected for Rules discovery. If unspecified,
+                  discover Rule instances from all namespaces.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
                       type: string
-                    namespace:
-                      description: '`namespace` is the namespace of the alertmanager
-                        service.'
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+              ruleSelector:
+                description: A selector to select Rules instances.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
                       type: string
-                    port:
-                      description: '`port` is the port on the alertmanager service.
-                        Default to 9093. `port` should be a valid port number (1-65535,
-                        inclusive).'
-                      type: integer
-                    targetPort:
-                      description: TargetPort is the port to access on the backend
-                        instances targeted by the alertmanager service. If this is
-                        not specified, the value of the 'port' field is used.
-                      type: integer
-                  required:
-                  - name
-                  - namespace
-                  type: object
-                stdout:
-                  description: Stdout can config write notifications or alerts to
-                    stdout; do nothing when no configuration
-                  properties:
-                    type:
-                      description: Type represents that the sink is for notification
-                        or alert. Available values are `notification` and `alert`
-                      type: string
-                  required:
-                  - type
-                  type: object
-                webhooks:
-                  description: Webhooks is a list of RulerWebhookSink to which notifications
-                    or alerts can sink
-                  items:
-                    description: RulerWebhookSink defines parameters for webhook sink
-                      of Events Ruler.
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+              sinks:
+                description: Sinks defines sinks detail of this ruler
+                properties:
+                  alertmanager:
+                    description: Alertmanager is an alertmanager sink to which only
+                      alerts can sink.
                     properties:
-                      service:
-                        description: '`service` is a reference to the service for
-                          this webhook. Either `service` or `url` must be specified.
-                          If the webhook is running within the cluster, then you should
-                          use `service`.'
-                        properties:
-                          name:
-                            description: '`name` is the name of the service.'
-                            type: string
-                          namespace:
-                            description: '`namespace` is the namespace of the service.'
-                            type: string
-                          path:
-                            description: '`path` is an optional URL path which will
-                              be sent in any request to this service.'
-                            type: string
-                          port:
-                            description: '`port` is the port on the service and should
-                              be a valid port number (1-65535, inclusive).'
-                            type: integer
-                        required:
-                        - name
-                        - namespace
-                        type: object
+                      name:
+                        description: '`name` is the name of the alertmanager service.'
+                        type: string
+                      namespace:
+                        description: '`namespace` is the namespace of the alertmanager
+                          service.'
+                        type: string
+                      port:
+                        description: '`port` is the port on the alertmanager service.
+                          Default to 9093. `port` should be a valid port number (1-65535,
+                          inclusive).'
+                        type: integer
+                      targetPort:
+                        description: TargetPort is the port to access on the backend
+                          instances targeted by the alertmanager service. If this
+                          is not specified, the value of the 'port' field is used.
+                        type: integer
+                    required:
+                    - name
+                    - namespace
+                    type: object
+                  stdout:
+                    description: Stdout can config write notifications or alerts to
+                      stdout; do nothing when no configuration
+                    properties:
                       type:
                         description: Type represents that the sink is for notification
                           or alert. Available values are `notification` and `alert`
                         type: string
-                      url:
-                        description: '`url` gives the location of the webhook, in
-                          standard URL form (`scheme://host:port/path`). Exactly one
-                          of `url` or `service` must be specified.'
-                        type: string
                     required:
                     - type
                     type: object
-                  type: array
-              type: object
-          required:
-          - image
-          type: object
-        status:
-          description: RulerStatus defines the observed state of Ruler
-          type: object
-      required:
-      - spec
-      type: object
-  version: v1alpha1
-  versions:
-  - name: v1alpha1
+                  webhooks:
+                    description: Webhooks is a list of RulerWebhookSink to which notifications
+                      or alerts can sink
+                    items:
+                      description: RulerWebhookSink defines parameters for webhook
+                        sink of Events Ruler.
+                      properties:
+                        service:
+                          description: '`service` is a reference to the service for
+                            this webhook. Either `service` or `url` must be specified.
+                            If the webhook is running within the cluster, then you
+                            should use `service`.'
+                          properties:
+                            name:
+                              description: '`name` is the name of the service.'
+                              type: string
+                            namespace:
+                              description: '`namespace` is the namespace of the service.'
+                              type: string
+                            path:
+                              description: '`path` is an optional URL path which will
+                                be sent in any request to this service.'
+                              type: string
+                            port:
+                              description: '`port` is the port on the service and
+                                should be a valid port number (1-65535, inclusive).'
+                              type: integer
+                          required:
+                          - name
+                          - namespace
+                          type: object
+                        type:
+                          description: Type represents that the sink is for notification
+                            or alert. Available values are `notification` and `alert`
+                          type: string
+                        url:
+                          description: '`url` gives the location of the webhook, in
+                            standard URL form (`scheme://host:port/path`). Exactly
+                            one of `url` or `service` must be specified.'
+                          type: string
+                      required:
+                      - type
+                      type: object
+                    type: array
+                type: object
+            required:
+            - image
+            type: object
+          status:
+            description: RulerStatus defines the observed state of Ruler
+            type: object
+        required:
+        - spec
+        type: object
     served: true
     storage: true
 status:
