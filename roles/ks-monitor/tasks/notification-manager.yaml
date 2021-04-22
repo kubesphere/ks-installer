@@ -78,7 +78,10 @@
 
 - name: notification-manager | Deploying notification-manager crds
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification-manager-migrator/crds/
+     cd {{ kubesphere_dir }}/notification-manager-migrator &&
+     chmod +x * &&
+     bash deploy.sh &&
+     cd -
   register: deploy_crds
   when:
     - notification_backuping is not skipped
