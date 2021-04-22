@@ -70,7 +70,7 @@ jimmidyson/configmap-reload:v0.3.0
 kubesphere/notification-manager-operator:v0.1.0 
 kubesphere/notification-manager:v0.1.0          
 kubesphere/metrics-server:v0.3.7                
-kubesphere/kube-rbac-proxy:v0.4.1               
+kubesphere/kube-rbac-proxy:v0.8.0               
 kubesphere/kube-state-metrics:v1.9.7
 grafana/grafana:7.4.3
 ##ks-logging-images                 
