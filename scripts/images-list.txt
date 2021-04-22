@@ -78,10 +78,10 @@ kubesphere/elasticsearch-oss:6.7.0-1
 kubesphere/elasticsearch-curator:v5.7.6 
 kubesphere/fluentbit-operator:v0.5.0       
 kubesphere/fluentbit-operator:migrator     
-kubesphere/fluent-bit:v1.4.6             
+kubesphere/fluent-bit:v1.6.9
 elastic/filebeat:6.7.0  
-kubesphere/kube-auditing-operator:v0.1.0   
-kubesphere/kube-auditing-webhook:v0.1.0    
+kubesphere/kube-auditing-operator:v0.1.2
+kubesphere/kube-auditing-webhook:v0.1.2
 kubesphere/kube-events-exporter:v0.1.0     
 kubesphere/kube-events-operator:v0.1.0     
 kubesphere/kube-events-ruler:v0.1.0        
@@ -147,3 +147,5 @@ mirrorgooglecontainers/hpa-example:latest
 java:openjdk-8-jre-alpine
 fluent/fluentd:v1.4.2-2.0
 perl:latest
+kubesphere/notification-manager-operator:v1.0.0
+kubesphere/notification-manager:v1.0.0
