@@ -69,6 +69,10 @@ spec:
         - containerPort: 9100
           hostPort: 9100
           name: https
+        securityContext:
+          runAsGroup: 65532
+          runAsNonRoot: true
+          runAsUser: 65532
         resources:
           limits:
             cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
