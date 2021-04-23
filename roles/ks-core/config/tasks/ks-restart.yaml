@@ -39,9 +39,9 @@
   when:
     - openpitrix_deploy_count.stdout == "1"
 
-- name: OpenPitrix | Scale deploy openpitrix-hyperpitrix-deployment to 0
+- name: OpenPitrix | Delete namespace openpitrix-system
   shell: >
-    {{ bin_dir }}/kubectl scale deploy openpitrix-hyperpitrix-deployment -n openpitrix-system --replicas=0
+    {{ bin_dir }}/kubectl delete  namespace openpitrix-system --force --grace-period=0
   when:
     - openpitrix_deploy_count.stdout == "1"
 
