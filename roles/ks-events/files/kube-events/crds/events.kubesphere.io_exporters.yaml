@@ -1,10 +1,10 @@
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.2.5
+    controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
   name: exporters.events.kubesphere.io
 spec:
@@ -17,117 +17,116 @@ spec:
     - ex
     singular: exporter
   scope: Namespaced
-  validation:
-    openAPIV3Schema:
-      description: Exporter is the Schema for the exporter API
-      properties:
-        apiVersion:
-          description: 'APIVersion defines the versioned schema of this representation
-            of an object. Servers should convert recognized schemas to the latest
-            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-          type: string
-        kind:
-          description: 'Kind is a string value representing the REST resource this
-            object represents. Servers may infer this from the endpoint the client
-            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-          type: string
-        metadata:
-          type: object
-        spec:
-          description: Spec defines the specification of the desired behavior of the
-            Exporter.
-          properties:
-            image:
-              description: Docker image of events exporter
-              type: string
-            imagePullPolicy:
-              description: Image pull policy. One of Always, Never, IfNotPresent.
-              type: string
-            resources:
-              description: Resources defines resources requests and limits for single
-                Pod.
-              properties:
-                limits:
-                  additionalProperties:
-                    anyOf:
-                    - type: integer
-                    - type: string
-                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                    x-kubernetes-int-or-string: true
-                  description: 'Limits describes the maximum amount of compute resources
-                    allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
-                  type: object
-                requests:
-                  additionalProperties:
-                    anyOf:
-                    - type: integer
-                    - type: string
-                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                    x-kubernetes-int-or-string: true
-                  description: 'Requests describes the minimum amount of compute resources
-                    required. If Requests is omitted for a container, it defaults
-                    to Limits if that is explicitly specified, otherwise to an implementation-defined
-                    value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
-                  type: object
-              type: object
-            sinks:
-              description: Sinks defines details of events sinks
-              properties:
-                stdout:
-                  description: Stdout represents whether to write events to stdout.
-                    Output when configure an empty struct `{}`, but do nothing when
-                    no configuration
-                  type: object
-                webhooks:
-                  description: Webhooks is a list of ExporterWebhookSink
-                  items:
-                    description: ExporterWebhookSink defines parameters for webhook
-                      sink of Events Exporter.
-                    properties:
-                      service:
-                        description: '`service` is a reference to the service for
-                          this webhook. Either `service` or `url` must be specified.
-                          If the webhook is running within the cluster, then you should
-                          use `service`.'
-                        properties:
-                          name:
-                            description: '`name` is the name of the service.'
-                            type: string
-                          namespace:
-                            description: '`namespace` is the namespace of the service.'
-                            type: string
-                          path:
-                            description: '`path` is an optional URL path which will
-                              be sent in any request to this service.'
-                            type: string
-                          port:
-                            description: '`port` is the port on the service and should
-                              be a valid port number (1-65535, inclusive).'
-                            type: integer
-                        required:
-                        - name
-                        - namespace
-                        type: object
-                      url:
-                        description: '`url` gives the location of the webhook, in
-                          standard URL form (`scheme://host:port/path`). Exactly one
-                          of `url` or `service` must be specified.'
-                        type: string
-                    type: object
-                  type: array
-              type: object
-          required:
-          - image
-          type: object
-        status:
-          description: ExporterStatus defines the observed state of Exporter
-          type: object
-      required:
-      - spec
-      type: object
-  version: v1alpha1
   versions:
   - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Exporter is the Schema for the exporter API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the specification of the desired behavior of
+              the Exporter.
+            properties:
+              image:
+                description: Docker image of events exporter
+                type: string
+              imagePullPolicy:
+                description: Image pull policy. One of Always, Never, IfNotPresent.
+                type: string
+              resources:
+                description: Resources defines resources requests and limits for single
+                  Pod.
+                properties:
+                  limits:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Limits describes the maximum amount of compute resources
+                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                    type: object
+                  requests:
+                    additionalProperties:
+                      anyOf:
+                      - type: integer
+                      - type: string
+                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                      x-kubernetes-int-or-string: true
+                    description: 'Requests describes the minimum amount of compute
+                      resources required. If Requests is omitted for a container,
+                      it defaults to Limits if that is explicitly specified, otherwise
+                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                    type: object
+                type: object
+              sinks:
+                description: Sinks defines details of events sinks
+                properties:
+                  stdout:
+                    description: Stdout represents whether to write events to stdout.
+                      Output when configure an empty struct `{}`, but do nothing when
+                      no configuration
+                    type: object
+                  webhooks:
+                    description: Webhooks is a list of ExporterWebhookSink
+                    items:
+                      description: ExporterWebhookSink defines parameters for webhook
+                        sink of Events Exporter.
+                      properties:
+                        service:
+                          description: '`service` is a reference to the service for
+                            this webhook. Either `service` or `url` must be specified.
+                            If the webhook is running within the cluster, then you
+                            should use `service`.'
+                          properties:
+                            name:
+                              description: '`name` is the name of the service.'
+                              type: string
+                            namespace:
+                              description: '`namespace` is the namespace of the service.'
+                              type: string
+                            path:
+                              description: '`path` is an optional URL path which will
+                                be sent in any request to this service.'
+                              type: string
+                            port:
+                              description: '`port` is the port on the service and
+                                should be a valid port number (1-65535, inclusive).'
+                              type: integer
+                          required:
+                          - name
+                          - namespace
+                          type: object
+                        url:
+                          description: '`url` gives the location of the webhook, in
+                            standard URL form (`scheme://host:port/path`). Exactly
+                            one of `url` or `service` must be specified.'
+                          type: string
+                      type: object
+                    type: array
+                type: object
+            required:
+            - image
+            type: object
+          status:
+            description: ExporterStatus defines the observed state of Exporter
+            type: object
+        required:
+        - spec
+        type: object
     served: true
     storage: true
 status:
