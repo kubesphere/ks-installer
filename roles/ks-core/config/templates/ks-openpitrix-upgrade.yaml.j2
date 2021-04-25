@@ -5,23 +5,28 @@ metadata:
   labels:
     app: openpitrix
     component: openpitrix-upgrade-job
+    version: v3.1.0
   name: openpitrix-upgrade-job
   namespace: kubesphere-system
 spec:
+  backoffLimit: 100
   template:
     metadata:
       labels:
         app: openpitrix
         component: openpitrix-upgrade-job
+        version: v3.1.0
     spec:
       serviceAccountName: kubesphere
-      restartPolicy: Never
+      restartPolicy: OnFailure
       containers:
         - name: upgrade
           command:
-            - upgrade
+            - sh
+            - -c
+            - upgrade && import-app import
           image: {{ openpitrix_job_repo }}:{{ openpitrix_job_tag }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/kubesphere
               name: kubesphere-config
