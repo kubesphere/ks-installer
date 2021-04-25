@@ -14,7 +14,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w -X 'github.com/flant/shell
 
 FROM python:alpine
 
-RUN apk --no-cache add jq gcc bash libffi-dev openssl-dev curl unzip musl-dev && \
+RUN apk --no-cache add jq gcc bash libffi-dev openssl-dev curl unzip musl-dev openssl && \
     pip install --no-cache-dir psutil cryptography==3.0 ansible_runner==1.4.6 ansible==2.8.12 redis kubernetes && \
     wget https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz && \
     tar -zxf helm-v3.2.1-linux-amd64.tar.gz && \
