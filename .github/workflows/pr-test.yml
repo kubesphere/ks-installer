@@ -127,7 +127,7 @@ jobs:
       - name: Push image
         run: |
           IMAGE=$IMAGE_REPO/$IMAGE_NAME:$IMAGE_VERSION
-          docker tag ks-installer $IMAGE
+          docker build . --file Dockerfile --tag $IMAGE
           echo $IMAGE
           docker push $IMAGE
           echo "Push $IMAGE success!"
