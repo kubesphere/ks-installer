@@ -14,37 +14,32 @@
 
 
 # upgrade legacy openpitix
-- name: OpenPitrix | Getting openpitrix jobs installation files
-  copy:
-    src: "{{ item }}"
-    dest: "{{ kubesphere_dir }}/"
-  loop:
-    - "openpitrix"
+- block:
+    - name: OpenPitrix | Getting openpitrix jobs installation files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ kubesphere_dir }}/"
+      loop:
+        - "openpitrix"
 
-- name: OpenPitrix | Creating openpitrix jobs manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
-  with_items:
-    - { path: openpitrix, file: ks-openpitrix-upgrade.yaml }
+    - name: OpenPitrix | Creating openpitrix jobs manifests
+      template:
+        src: "{{ item.file }}.j2"
+        dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+      with_items:
+        - { path: openpitrix, file: ks-openpitrix-upgrade.yaml }
 
-- name: OpenPitrix | Check OpenPitrix v3.0.0
-  shell: >
-    {{ bin_dir }}/kubectl get deploy openpitrix-hyperpitrix-deployment -n openpitrix-system 2>1 -oNAME | wc -l
-  register: openpitrix_deploy_count
-
-- name: OpenPitrix | Upgrade OpenPitrix
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/ks-openpitrix-upgrade.yaml
+    - name: OpenPitrix | Upgrade OpenPitrix
+      shell: >
+        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/ks-openpitrix-upgrade.yaml
+      register: job
+      failed_when: "job.stderr and 'Warning' not in job.stderr"
+      
+    - name: OpenPitrix | Delete namespace openpitrix-system
+      shell: >
+        {{ bin_dir }}/kubectl delete  namespace openpitrix-system --force --grace-period=0
   when:
-    - openpitrix_deploy_count.stdout == "1"
-
-- name: OpenPitrix | Delete namespace openpitrix-system
-  shell: >
-    {{ bin_dir }}/kubectl delete  namespace openpitrix-system --force --grace-period=0
-  when:
-    - openpitrix_deploy_count.stdout == "1"
-
+    - OPMigrate is defined and OPMigrate
 
 # upgrade legacy alerting
 

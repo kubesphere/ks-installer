@@ -89,6 +89,16 @@
   when:
     - enableHA is not defined
 
+- name: OpenPitrix | Check OpenPitrix v3.0.0
+  shell: >
+    {{ bin_dir }}/kubectl get deploy openpitrix-hyperpitrix-deployment -n openpitrix-system 2>1 -oNAME | wc -l
+  register: openpitrix_deploy_count
+
+- set_fact:
+    OPMigrate: true
+  when:
+    - openpitrix_deploy_count.stdout == "1"
+
 - name: KubeSphere | Creating manifests
   template:
     src: "{{ item.file }}.j2"
