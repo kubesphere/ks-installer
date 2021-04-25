@@ -5,15 +5,17 @@ metadata:
   labels:
     app: openpitrix
     component: openpitrix-import-job
+    version: v3.1.0
   name: openpitrix-import-job
   namespace: kubesphere-system
 spec:
-  backoffLimit: 20
+  backoffLimit: 100
   template:
     metadata:
       labels:
         app: openpitrix
         component: openpitrix-import-job
+        version: v3.1.0
     spec:
       serviceAccountName: kubesphere
       restartPolicy: OnFailure
@@ -23,7 +25,7 @@ spec:
             - import-app
             - import
           image: {{ openpitrix_job_repo }}:{{ openpitrix_job_tag }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/kubesphere
               name: kubesphere-config
