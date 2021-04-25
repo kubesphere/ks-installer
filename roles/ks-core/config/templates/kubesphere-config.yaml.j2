@@ -34,7 +34,7 @@ data:
       db: 0
 {% endif %}
 
-{% if devops.enabled or (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled) %}
+{% if OPMigrate is defined and OPMigrate %}
     mysql:
       host: mysql.kubesphere-system.svc:3306
       username: {{ common.mysqlUsername | default("root") }}
