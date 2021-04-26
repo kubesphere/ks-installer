@@ -16,32 +16,22 @@
     - { name: tomcat, file: tomcat.yaml }
     - { name: s2ioperator, file: s2ioperator.yaml }
 
-- name: S2I | Creating S2I secret(1)
-  file:
-    path: "{{ kubesphere_dir }}/s2i/certs.sh"
-    mode: 0755
-
-# - name: S2I | Creating S2I secret(2)
-#   shell: >
-#     /bin/bash {{ kubesphere_dir }}/s2i/certs.sh --service webhook-server-service --namespace kubesphere-devops-system --secret webhook-server-secret 
-
 - name: S2I | Deleting S2I ValidatingWebhook
   shell: >
     {{ bin_dir }}/kubectl delete statefulsets.apps -n kubesphere-devops-system s2ioperator &&
     {{ bin_dir }}/kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io validating-webhook-configuration
   register: validatin_status
   failed_when: "validatin_status.stderr and 'NotFound' not in validatin_status.stderr"
-  failed_when: false
 
 - name: S2I | Deploying S2I template&&operator
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/s2i/{{ item }}"
   loop:
-    - s2ioperator.yaml
     - java.yaml
     - nodejs.yaml
     - python.yaml
     - binary.yaml
     - tomcat.yaml
+    - s2ioperator.yaml
   register: import
   until: import is succeeded
   retries: 3
