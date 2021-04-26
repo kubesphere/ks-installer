@@ -47,7 +47,7 @@ spec:
       automountServiceAccountToken: true
       containers:
       - name: post-install-job
-        image: "bitnami/kubectl:1.17.16"
+        image: "{{ .Values.postinstalljob.repository }}/{{ .Values.postinstalljob.image }}:{{ .Values.postinstalljob.tag }}"
         command: ["/bin/bash"]
         args: ["/opt/scripts/setup.sh"]
         volumeMounts:
