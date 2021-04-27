@@ -93,8 +93,8 @@ ks_kubectl_versions:
   v1.16.0: v1.16.0
   v1.15.0: v1.0.0
 
-ks_image_pull_policy: Always
-# ks_image_pull_policy: IfNotPresent
+#ks_image_pull_policy: Always
+ks_image_pull_policy: IfNotPresent
 
 #ks-notification
 notification_flyway_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification"
