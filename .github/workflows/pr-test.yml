@@ -41,7 +41,7 @@ jobs:
 
     - name: Test plugin
       run: |
-        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"alerting":{"enabled":true},"auditing":{"enabled":true},"enableMultiLogin":{"enabled":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"store":{"enabled":true}}}'
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
         bash scripts/check_cluster_status.sh
 
     - name: Delete Cluster
