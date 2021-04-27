@@ -197,7 +197,7 @@ prometheus_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesp
 prometheus_adapter_tag: v0.6.0
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
 alertmanager_tag: v0.21.0
-thanos_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/thanos"
+thanos_repo: "{{ base_repo }}{{ namespace_override | default('thanosio') }}/thanos"
 thanos_tag: v0.18.0
 grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
 grafana_tag: 7.4.3
