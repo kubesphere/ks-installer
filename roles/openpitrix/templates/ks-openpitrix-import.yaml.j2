@@ -19,6 +19,11 @@ spec:
     spec:
       serviceAccountName: kubesphere
       restartPolicy: OnFailure
+      initContainers:
+        - name: wait-apiserver
+          image: {{ openpitrix_job_repo }}:{{ openpitrix_job_tag }}
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'until nc -z ks-apiserver.kubesphere-system.svc 80; do echo "waiting for apiserver"; sleep 2; done;']
       containers:
         - name: import
           command:
