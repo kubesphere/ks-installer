@@ -122,9 +122,9 @@ post_install_job_tag: "1.17.16"
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
 cloudcore_tag: "v1.6.1"
-edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher"
+edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher"
 edge_watcher_tag: "v0.1.0"
-edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher-agent"
+edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher-agent"
 edge_watcher_agent_tag: "v0.1.0"
 
 #openpitrix:
@@ -264,9 +264,9 @@ jaeger_query_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracin
 jaeger_query_tag: 1.17
 jaeger_es_cleaner_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-es-index-cleaner"
 jaeger_es_cleaner_tag: 1.17
-kiali_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/kiali-operator"
+kiali_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali-operator"
 kiali_operator_tag: v1.26.1
-kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/kiali"
+kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali"
 kiali_tag: v1.26.1
 
 #base:
