@@ -23,7 +23,7 @@ spec:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
         server-urls: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
-        server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+        server-urls: http://elasticsearch-es-logging.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled is true and common.es.basicAuth.username is defined and common.es.basicAuth.password is defined and common.es.basicAuth.username != "" and common.es.basicAuth.password != "" %}
     secretName: jaeger-secret

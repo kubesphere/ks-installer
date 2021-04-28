@@ -1,0 +1,18 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+  namespace: kubesphere-logging-system
+spec:
+  version: {{ elasticsearch_tag }}
+  image: {{ elasticsearch_repo }}:{{ elasticsearch_tag }}
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+  - name: logging
+    count: 3
+    config:
+      node.store.allow_mmap: false
+

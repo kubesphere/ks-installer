@@ -57,7 +57,7 @@ configMaps:
     ---
     client:
       hosts:
-        - {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchUrl != "" %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}
+        - {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchUrl != "" %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-es-logging.kubesphere-logging-system.svc{% endif %}
 
       port: {% if common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchPort != "" %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
       

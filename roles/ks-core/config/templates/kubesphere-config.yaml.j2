@@ -120,7 +120,7 @@ data:
 {% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      host: http://elasticsearch-es-logging.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
@@ -138,7 +138,7 @@ data:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      host: http://elasticsearch-es-logging.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
@@ -153,7 +153,7 @@ data:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
-      host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+      host: http://elasticsearch-es-logging.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}

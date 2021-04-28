@@ -10,7 +10,7 @@ spec:
   match: kube_auditing
   es:
     logstashFormat: true
-    host: "{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchUrl != "" %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
+    host: "{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchUrl != "" %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-es-logging.kubesphere-logging-system.svc{% endif %}"
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-auditing"
     port: {% if common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchPort != "" %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
 
