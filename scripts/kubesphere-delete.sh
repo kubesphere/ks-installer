@@ -4,7 +4,7 @@ function delete_sure(){
   cat << eof
 $(echo -e "\033[1;36mNote:\033[0m")
 
-Delete the KubeSphere cluster, including the module kubesphere-system kubesphere-devops-system kubesphere-monitoring-system kubesphere-logging-system openpitrix-system.
+Delete the KubeSphere cluster, including the module kubesphere-system kubesphere-devops-system kubesphere-devops-worker kubesphere-monitoring-system kubesphere-logging-system openpitrix-system.
 eof
 
 read -p "Please reconfirm that you want to delete the KubeSphere cluster.  (yes/no) " ans
@@ -178,7 +178,7 @@ do
 done
 
 # delete relevance ns
-for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devops-system kubesphere-logging-system kubesphere-monitoring-system kubesphere-monitoring-federated openpitrix-system kubesphere-system
+for ns in kubesphere-alerting-system kubesphere-controls-system kubesphere-devops-system kubesphere-devops-worker kubesphere-logging-system kubesphere-monitoring-system kubesphere-monitoring-federated openpitrix-system kubesphere-system
 do
   kubectl delete ns $ns 2>/dev/null
 done

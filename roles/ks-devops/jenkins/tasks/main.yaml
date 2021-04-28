@@ -30,15 +30,15 @@
 
 
 - block:
-  - name: ks-devops | Getting sonarqube host
-    shell: >
-      {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "host" | awk '{print $2}'
-    register: sonarqube_host
+    - name: ks-devops | Getting sonarqube host
+      shell: >
+        {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "host" | awk '{print $2}'
+      register: sonarqube_host
 
-  - name: ks-devops | Getting sonarqube token
-    shell: >
-      {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "token" | awk '{print $2}'
-    register: sonarqube_token
+    - name: ks-devops | Getting sonarqube token
+      shell: >
+        {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "token" | awk '{print $2}'
+      register: sonarqube_token
   when:
     - devops.sonarqube is not defined
 
@@ -64,7 +64,8 @@
   with_items:
     - { name: custom-values-jenkins, file: custom-values-jenkins.yaml }
     - { name: jenkins-casc-config, file: jenkins-casc-config.yml }
-    - { name: jenkins-agent-config, file: jenkins-agent-config.yaml}
+    - { name: jenkins-agent-config, file: jenkins-agent-config.yaml }
+    - { name: worker-resourcequota, file: worker-resourcequota.yaml }
 
 
 - name: ks-devops | Configuring Jenkins host and port
@@ -74,8 +75,11 @@
 
 - name: ks-devops | Creating Jenkins Agent Config File
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-system
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-worker
 
+- name: ks-devops | Create resource quota for worker namespace
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-resourcequota.yaml
 
 - name: ks-devops | Deploying Jenkins
   shell: >

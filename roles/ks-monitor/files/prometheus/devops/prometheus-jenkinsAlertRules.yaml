@@ -1,0 +1,50 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    custom-alerting-rule-level: cluster
+    role: thanos-alerting-rules
+    thanosruler: thanos-ruler
+  name: prometheus-devops-rules
+  namespace: kubesphere-monitoring-system
+spec:
+  groups:
+    - name: devops.jenkins.rules
+      rules:
+        - alert: jenkins-cpu-overcommit
+          annotations:
+            summary: >-
+              Jenkins({{ $labels.instance }}) process has overcommitted CPU resource requests.
+          expr: >
+            sum(rate(process_cpu_seconds_total{container="ks-jenkins", namespace="kubesphere-devops-system"}[5m])) by (container, instance)
+            > 0.8
+          for: 5m
+          labels:
+            alerttype: metric
+            severity: warning
+        - alert: jenkins-down
+          annotations:
+            message: Jenkins has disppeared from Prometheus target discovery.
+          expr: absent(default_jenkins_up)
+          for: 5m
+          labels:
+            alerttype: metric
+            severity: critical
+        - alert: jenkins-too-many-stuck-jobs
+          annotations:
+            summary: Jenkins has too many stuck jobs.
+            message: Jenkins has more than 10 stuck jobs({{ $value | humanize }}) in the past 5 minutes. Please have an inspection about jenkins.
+          expr: avg_over_time(jenkins_queue_size_value[5m]) > 10
+          for: 5m
+          labels:
+            alerttype: metric
+            severity: warning
+        - alert: jenkins-too-many-failure-jobs
+          annotations:
+            summary: Jenkins has too many failed jobs.
+            message: Jenkins has more than 5 failed jobs({{ $value | humanize }}) in the past 5 minutes.
+          expr: increase(jenkins_runs_failure_total{namespace='kubesphere-devops-system', container='ks-jenkins', job='ks-jenkins'}[5m]) > 5
+          for: 5m
+          labels:
+            alerttype: metric
+            severity: warning
