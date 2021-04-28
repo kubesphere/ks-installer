@@ -6,7 +6,7 @@ In addition to supporting deploying on VM and BM, KubeSphere also supports insta
 
 ## Prerequisites
 
-> - Kubernetes Version: 1.15.x, 1.16.x, 1.17.x, 1.18.x;
+> - Kubernetes Version: 1.17.x, 1.18.x, 1.19.x, 1.20.x;
 > - CPU > 1 Core, Memory > 2 G;
 > - An existing default Storage Class in your Kubernetes clusters.
 > - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309).
@@ -15,11 +15,11 @@ In addition to supporting deploying on VM and BM, KubeSphere also supports insta
 
 ```bash
 $ kubectl version
-Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
-Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.1", GitCommit:"4485c6f18cee9a5d3c3b4e523bd27972b1b53892", GitTreeState:"clean", BuildDate:"2019-07-18T09:09:21Z", GoVersion:"go1.12.5", Compiler:"gc", Platform:"linux/amd64"}
+Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.8", GitCommit:"fd5d41537aee486160ad9b5356a9d82363273721", GitTreeState:"clean", BuildDate:"2021-02-17T12:41:51Z", GoVersion:"go1.15.8", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.8", GitCommit:"fd5d41537aee486160ad9b5356a9d82363273721", GitTreeState:"clean", BuildDate:"2021-02-17T12:33:08Z", GoVersion:"go1.15.8", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.15.0`, it's good to go. Otherwise you need to upgrade your Kubernetes first.
+> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.17.0`, it's good to go. Otherwise you need to upgrade your Kubernetes first.
 
 2. Check if the available resources meet the minimal prerequisite in your cluster.
 
@@ -45,8 +45,8 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 ### Minimal Installation
 
 ```bash
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.0.0/kubesphere-installer.yaml
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.0.0/cluster-configuration.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/cluster-configuration.yaml
 ```
 
 Then inspect the logs of installation.
@@ -101,18 +101,11 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 
 ## Upgrade
 
-1. Download the Yaml file as follows:
-
+Deploy the new version of ks-installer:
 ```bash
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/kubesphere-installer.yaml
-wget https://raw.githubusercontent.com/kubesphere/ks-installer/v3.0.0/deploy/cluster-configuration.yaml
+# Notice: ks-installer will automatically migrate the configuration. Do not modify the cluster configuration by yourself.
+
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.0/kubesphere-installer.yaml
 ```
 
-2. Sync the changes from the v2.1.1 to v3.0.0 in the config section of `cluster-configuration.yaml`, note the storage class and the pluggable components need to be consistent with the v2.1.1:
-
-```bash
-kubectl apply -f kubesphere-installer.yaml
-kubectl apply -f cluster-configuration.yaml
-```
-
-> Note: If your KubeSphere version is v2.1.0 or eariler, please upgrade to v2.1.1 first.
+> Note: If your KubeSphere version is v2.1.1 or eariler, please upgrade to v3.0.0 first.
