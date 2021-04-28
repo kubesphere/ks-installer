@@ -51,7 +51,6 @@ nginx:1.14-alpine
 minio/minio:RELEASE.2019-08-07T01-59-21Z        
 minio/mc:RELEASE.2019-08-07T23-14-43Z           
 mirrorgooglecontainers/defaultbackend-amd64:1.4 
-kubesphere/nginx-ingress-controller:v0.44.0      
 osixia/openldap:1.3.0                           
 csiplugin/snapshot-controller:v2.0.1            
 kubesphere/kubefed:v0.7.0
