@@ -1,27 +1,4 @@
 ---
-
-# Delete prometheus-system immediately and related pvcs after 7 days
-- name: Monitoring | Calculating Prometheus system cleanup schedule
-  shell: >
-    {{ bin_dir }}/kubectl delete prometheuses -n kubesphere-monitoring-system k8s-system
-  failed_when: false
-
-- name: Monitoring | Calculating Prometheus system pvc cleanup schedule
-  shell: |
-    retention=$((`date +%s` + 3600*24*7 + 3600))
-    min=`date --date=@$retention +%M | sed -e 's/^0//'`
-    hour=`date --date=@$retention +%H | sed -e 's/^0//'`
-    day=`date --date=@$retention +%d | sed -e 's/^0//'`
-    month=`date --date=@$retention +%m | sed -e 's/^0//'`
-    echo "$min $hour $day $month *"
-  register: prometheus_system_pvc_cleanup_schedule
-
-
-- name: Monitoring | Setting Prometheus system pvc cleanup schedule
-  set_fact:
-    prometheus_system_pvc_cleanup_schedule: "{{ prometheus_system_pvc_cleanup_schedule.stdout }}"
-
-
 - name: Monitoring | Getting ks-monitoring installation files
   copy:
     src: "{{ item }}"
@@ -46,9 +23,4 @@
     - { path: prometheus/grafana, file: grafana-deployment.yaml }
     - { path: prometheus/etcd, file: prometheus-serviceMonitorEtcd.yaml }
     - { path: prometheus/etcd, file: prometheus-endpointsEtcd.yaml }
-    - { path: prometheus/upgrade, file: prometheus-system-pvc-cleanup.yaml }
     - { path: prometheus/thanosruler, file: thanosruler.yaml }
-
-- name: Monitoring | Setuping cronjob to cleanup prometheus-system pvcs
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/upgrade
