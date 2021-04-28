@@ -19,39 +19,25 @@ user="admin"
 passwd="Harbor12345"
 
 harbor_projects=(library
-    jimmidyson
     kubesphere
-    csiplugin
-    openpitrix
-    mirrorgitlabcontainers
-    google-containers
-    istio
-    k8scsi
-    osixia
-    goharbor
-    minio
-    openebs
-    kubernetes-helm
-    coredns
-    jenkins
-    jaegertracing
     calico
-    oliver006
-    fluent
-    kubernetes_ingress_controller
-    kibana
-    gitlab_org
-    coreos
-    google_containers
-    grafana
-    external_storage
-    pires
-    nginxdemos
-    gitlab
-    joosthofman
+    coredns
+    csiplugin
+    minio
     mirrorgooglecontainers
-    wrouesnel
-    dduportal
+    osixia
+    prom
+    thanosio
+    jimmidyson
+    grafana
+    elastic
+    istio
+    jaegertracing
+    jenkins
+    openpitrix
+    joosthofman
+    nginxdemos
+    kubeedge
 )
 
 for project in "${harbor_projects[@]}"; do
