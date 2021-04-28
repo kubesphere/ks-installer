@@ -11,7 +11,7 @@ spec:
   deployment:
     accessible_namespaces: [ "**" ]
     image_name: "{{ kiali_repo }}"
-    image_pull_policy: "{{ ks_image_pull_policy }}"
+    image_pull_policy: "IfNotPresent"
     image_version: "{{ kiali_tag }}"
     namespace: "istio-system"
     service_type: "ClusterIP"
