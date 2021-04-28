@@ -73,11 +73,11 @@ jobs:
     - name: Load image to kind
       run: kind load docker-image ks-installer --name chart-testing
 
-    - name: Test servicemesh & multicluster Plugin
+    - name: Test servicemesh Plugin
       run: |
         kubectl apply -f deploy/kubesphere-installer.yaml
         kubectl apply -f deploy/cluster-configuration.yaml
-        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true},"multicluster":{"clusterRole":"host"}}}'
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true}}}'
         for i in {1..300};do
           set +e
           kubectl -n istio-system get deploy | grep istiod
