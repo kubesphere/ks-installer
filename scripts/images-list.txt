@@ -1,27 +1,26 @@
-##k8s-images
+# k8s
+## v1.19.8
+kubesphere/kube-apiserver:v1.19.8          
+kubesphere/kube-scheduler:v1.19.8          
+kubesphere/kube-proxy:v1.19.8              
+kubesphere/kube-controller-manager:v1.19.8
+## v1.18.6
+kubesphere/kube-apiserver:v1.18.6          
+kubesphere/kube-scheduler:v1.18.6          
+kubesphere/kube-proxy:v1.18.6              
+kubesphere/kube-controller-manager:v1.18.6
+## v1.17.9
 kubesphere/kube-apiserver:v1.17.9          
 kubesphere/kube-scheduler:v1.17.9          
 kubesphere/kube-proxy:v1.17.9              
 kubesphere/kube-controller-manager:v1.17.9 
-kubesphere/kube-apiserver:v1.18.6          
-kubesphere/kube-scheduler:v1.18.6          
-kubesphere/kube-proxy:v1.18.6              
-kubesphere/kube-controller-manager:v1.18.6 
-kubesphere/kube-apiserver:v1.16.13         
-kubesphere/kube-scheduler:v1.16.13         
-kubesphere/kube-proxy:v1.16.13             
-kubesphere/kube-controller-manager:v1.16.13
-kubesphere/kube-apiserver:v1.15.12         
-kubesphere/kube-scheduler:v1.15.12         
-kubesphere/kube-proxy:v1.15.12             
-kubesphere/kube-controller-manager:v1.15.12
 kubesphere/pause:3.1                       
 kubesphere/pause:3.2                       
 kubesphere/etcd:v3.3.12                    
-calico/kube-controllers:v3.15.1            
-calico/node:v3.15.1                        
-calico/cni:v3.15.1                         
-calico/pod2daemon-flexvol:v3.15.1          
+calico/cni:v3.16.3
+calico/kube-controllers:v3.16.3
+calico/node:v3.16.3
+calico/pod2daemon-flexvol:v3.16.3        
 coredns/coredns:1.6.9                      
 kubesphere/k8s-dns-node-cache:1.15.12      
 kubesphere/node-disk-manager:0.5.0         
@@ -29,7 +28,7 @@ kubesphere/node-disk-operator:0.5.0
 kubesphere/provisioner-localpv:1.10.0      
 kubesphere/linux-utils:1.10.0
 kubesphere/nfs-client-provisioner:v3.1.0-k8s1.11
-##csi-images
+# csi
 csiplugin/csi-neonsan:v1.2.0
 csiplugin/csi-neonsan-ubuntu:v1.2.0
 csiplugin/csi-neonsan-centos:v1.2.0
@@ -39,19 +38,15 @@ csiplugin/csi-resizer:v0.4.0
 csiplugin/csi-snapshotter:v2.0.1
 csiplugin/csi-node-driver-registrar:v1.2.0
 csiplugin/csi-qingcloud:v1.2.0
-##ks-core-images
-kubesphere/ks-apiserver:v3.0.0                  
-kubesphere/ks-console:v3.0.0                    
-kubesphere/ks-controller-manager:v3.0.0         
-kubesphere/ks-installer:v3.0.0                  
-kubesphere/etcd:v3.2.18                         
-kubesphere/kubectl:v1.0.0
-kubesphere/ks-upgrade:v3.0.0
-kubesphere/ks-devops:flyway-v3.0.0                       
+# kubesphere
+kubesphere/ks-apiserver:v3.1.0
+kubesphere/ks-console:v3.1.0
+kubesphere/ks-controller-manager:v3.1.0
+kubesphere/ks-installer:v3.1.0
+kubesphere/kubectl:v1.19.0                 
 redis:5.0.5-alpine                              
 alpine:3.10.4                                   
 haproxy:2.0.4                                   
-mysql:8.0.11                                    
 nginx:1.14-alpine                               
 minio/minio:RELEASE.2019-08-07T01-59-21Z        
 minio/mc:RELEASE.2019-08-07T23-14-43Z           
@@ -59,8 +54,8 @@ mirrorgooglecontainers/defaultbackend-amd64:1.4
 kubesphere/nginx-ingress-controller:v0.44.0      
 osixia/openldap:1.3.0                           
 csiplugin/snapshot-controller:v2.0.1            
-kubesphere/kubefed:v0.3.0                       
-kubesphere/tower:v0.1.0                         
+kubesphere/kubefed:v0.7.0
+kubesphere/tower:v0.2.0
 kubesphere/prometheus-config-reloader:v0.42.1   
 kubesphere/prometheus-operator:v0.42.1          
 prom/alertmanager:v0.21.0                       
@@ -69,11 +64,13 @@ prom/node-exporter:v0.18.1
 jimmidyson/configmap-reload:v0.3.0              
 kubesphere/notification-manager-operator:v0.1.0 
 kubesphere/notification-manager:v0.1.0          
-kubesphere/metrics-server:v0.3.7                
+kubesphere/metrics-server:v0.4.2
 kubesphere/kube-rbac-proxy:v0.8.0               
 kubesphere/kube-state-metrics:v1.9.7
+openebs/provisioner-localpv:2.3.0
+thanosio/thanos:v0.18.0
 grafana/grafana:7.4.3
-##ks-logging-images                 
+# kubesphere logging              
 kubesphere/elasticsearch-oss:6.7.0-1      
 kubesphere/elasticsearch-curator:v5.7.6 
 kubesphere/fluentbit-operator:v0.5.0       
@@ -84,10 +81,10 @@ kubesphere/kube-auditing-operator:v0.1.2
 kubesphere/kube-auditing-webhook:v0.1.2
 kubesphere/kube-events-exporter:v0.1.0     
 kubesphere/kube-events-operator:v0.1.0     
-kubesphere/kube-events-ruler:v0.1.0        
+kubesphere/kube-events-ruler:v0.2.0
 kubesphere/log-sidecar-injector:1.1
 docker:19.03
-##istio-images
+# istio
 istio/pilot:1.6.10
 istio/proxyv2:1.6.10
 jaegertracing/jaeger-agent:1.17
@@ -95,11 +92,12 @@ jaegertracing/jaeger-collector:1.17
 jaegertracing/jaeger-es-index-cleaner:1.17
 jaegertracing/jaeger-operator:1.17.1
 jaegertracing/jaeger-query:1.17
-kubespheredev/kiali:v1.26.1
-##ks-devops-images
+kubesphere/kiali:v1.26.1
+kubesphere/kiali-operator:v1.26.1
+# kubesphere devops
 kubesphere/ks-jenkins:2.249.1
 jenkins/jnlp-slave:3.27-1
-kubesphere/s2ioperator:v2.1.1               
+kubesphere/s2ioperator:v3.1.0
 kubesphere/s2irun:v2.1.1                    
 kubesphere/builder-base:v2.1.0              
 kubesphere/builder-nodejs:v2.1.0            
@@ -126,12 +124,14 @@ kubesphere/notification:v2.1.2
 kubesphere/alert-adapter:v3.0.0             
 kubesphere/alerting-dbinit:v3.0.0           
 kubesphere/alerting:v2.1.2
-##openpitrix-images
-openpitrix/generate-kubeconfig:v0.5.0       
-openpitrix/openpitrix:flyway-v0.5.0         
-openpitrix/openpitrix:v0.5.0                
-openpitrix/release-app:v0.5.0
-##example-images
+# openpitrix
+kubesphere/openpitrix-jobs:v3.1.0
+# kubeedge
+kubeedge/cloudcore:v1.6.1
+kubesphere/edge-watcher:v0.1.0
+kubesphere/kube-rbac-proxy:v0.5.0
+kubesphere/edge-watcher-agent:v0.1.0
+# example-images
 kubesphere/examples-bookinfo-productpage-v1:1.13.0
 kubesphere/examples-bookinfo-reviews-v1:1.13.0
 kubesphere/examples-bookinfo-reviews-v2:1.13.0
@@ -149,9 +149,5 @@ fluent/fluentd:v1.4.2-2.0
 perl:latest
 kubesphere/notification-manager-operator:v1.0.0
 kubesphere/notification-manager:v1.0.0
-##kubeedge
-kubeedge/cloudcore:v1.6.1
-kubespheredev/edge-watcher:v0.1.0
-kubesphere/kube-rbac-proxy:v0.5.0
-kubespheredev/edge-watcher-agent:v0.1.0
+
 
