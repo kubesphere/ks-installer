@@ -125,6 +125,8 @@ kubesphere/alerting-dbinit:v3.0.0
 kubesphere/alerting:v2.1.2
 # openpitrix
 kubesphere/openpitrix-jobs:v3.1.0
+# weave-scope
+weaveworks/scope:1.13.0
 # kubeedge
 kubeedge/cloudcore:v1.6.1
 kubesphere/edge-watcher:v0.1.0
