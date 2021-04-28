@@ -140,7 +140,7 @@ kubesphere/examples-bookinfo-reviews-v1:1.16.2
 kubesphere/examples-bookinfo-reviews-v2:1.16.2
 kubesphere/examples-bookinfo-reviews-v3:1.16.2
 kubesphere/examples-bookinfo-details-v1:1.16.2
-kubesphere/examples-bookinfo-ratings-v1:1.16.2
+kubesphere/examples-bookinfo-ratings-v1:1.16.3
 busybox:1.31.1
 joosthofman/wget:1.0
 kubesphere/netshoot:v1.0
