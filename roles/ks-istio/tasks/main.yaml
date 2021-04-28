@@ -100,6 +100,16 @@
   debug:
     var: istio_result
 
+- name: servicemesh | patch hpa to istiod-1-6-10
+  shell: >
+    {{ bin_dir }}/kubectl -n istio-system patch hpa istiod-1-6-10
+    --type merge -p '{"spec":{"scaleTargetRef":{"name":"istiod-1-6-10"}}}'
+  register: import
+  failed_when: "import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
+
 - name: servicemesh | set servicemesh status enabled
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
