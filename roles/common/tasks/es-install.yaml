@@ -3,6 +3,10 @@
     src: "elasticsearch"
     dest: "{{ kubesphere_dir }}/"
 
+- name: KubeSphere | Getting elasticsearch default user and role files
+  copy:
+    src: "filerealm"
+    dest: "{{ kubesphere_dir }}/"
 
 - name: KubeSphere | Creating custom manifests
   template:
@@ -38,9 +42,14 @@
 
 
 - block:
+
+  - name: KubeSphere | Creating elasticsearch credentials secret
+    shell: >
+      {{ bin_dir }}/kubectl create secret generic kubesphere-elasticsearch-realm-secret --from-file {{ kubesphere_dir }}/filerealm -n kubesphere-logging-system
+
   - name: KubeSphere | Deploying eck-operator
     shell: >
-      {{ bin_dir }}/kubectl apply -f eck-operator.yaml
+      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/elasticsearch/eck-operator.yaml
     failed_when: false
 
   - name: KubeSphere | Deploying eck-operator waiting
@@ -48,7 +57,7 @@
 
   - name: KubeSphere | Deploying elasticsearch-logging
     shell: >
-      {{ bin_dir }}/kubectl apply -f eck-elasticsearch.yaml
+      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/elasticsearch/eck-elasticsearch.yaml
     register: es_result
     failed_when: false
 
@@ -69,7 +78,7 @@
 
   - name: KubeSphere | Deleting elasticsearch
     shell: >
-      {{ bin_dir }}/kubectl delete -f eck-elasticsearch.yaml
+      {{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/elasticsearch/eck-elasticsearch.yaml
     when:
       - "es_result.stderr and 'no matches for kind' in es_result.stderr"
 
@@ -80,7 +89,7 @@
 
   - name: KubeSphere | Deploying elasticsearch-logging
     shell: >
-      {{ bin_dir }}/kubectl apply -f eck-elasticsearch.yaml
+      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/elasticsearch/eck-elasticsearch.yaml
     register: es_result
     when:
       - "es_result.stderr and 'no matches for kind' in es_result.stderr"

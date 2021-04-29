@@ -6,6 +6,9 @@ metadata:
 spec:
   version: {{ elasticsearch_tag }}
   image: {{ elasticsearch_repo }}:{{ elasticsearch_tag }}
+  auth:
+    fileRealm:
+    - secretName: kubesphere-elasticsearch-realm-secret
   http:
     tls:
       selfSignedCertificate:
@@ -15,4 +18,15 @@ spec:
     count: 3
     config:
       node.store.allow_mmap: false
-
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 30Gi
+{% if persistence.storageClass is defined and persistence.storageClass != "" %}
+        storageClass: "{{ persistence.storageClass }}"
+{% endif %}
