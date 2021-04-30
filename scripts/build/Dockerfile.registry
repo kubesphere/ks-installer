@@ -1,0 +1,18 @@
+FROM registry:2 as base
+FROM debian:buster-slim
+
+RUN apt update -y \
+    && apt install -y ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=base /bin/registry /bin/registry
+COPY --from=base /etc/docker/registry/config.yml /etc/docker/registry/config.yml
+COPY docker /var/lib/registry/docker
+
+WORKDIR /root
+COPY skopeo /usr/bin
+COPY scripts/sync-images.sh sync.sh
+COPY scripts/images-list.txt images-list.txt
+EXPOSE 5000
+ENTRYPOINT ["registry"]
+CMD ["serve", "/etc/docker/registry/config.yml"]
