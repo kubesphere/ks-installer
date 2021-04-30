@@ -97,6 +97,16 @@ kubectl edit cc ks-installer -n kubesphere-system
 ```bash
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
+
+> 如果你正在启用 KubeEdge ，在运行或重启 ks-installer 之前，需要配置集群外网访问地址advertiseAddress，暴露相应的访问端口，更多内容请参考[Kubeedge 指南](https://kubesphere.io/docs/pluggable-components/kubeedge/)：
+```yaml
+ kubeedge:
+    cloudCore:
+      cloudHub:
+        advertiseAddress:
+        - xxxx.xxxx.xxxx.xxxx
+```
+
 ## 升级
 
 1. 下载 v3.0.0 部署文件:
