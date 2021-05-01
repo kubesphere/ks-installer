@@ -27,6 +27,4 @@ spec:
         resources:
           requests:
             storage: 30Gi
-{% if persistence.storageClass is defined and persistence.storageClass != "" %}
-        storageClass: "{{ persistence.storageClass }}"
-{% endif %}
+        storageClass: managed-nfs-storage

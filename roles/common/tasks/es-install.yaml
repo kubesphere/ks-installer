@@ -19,7 +19,7 @@
 
 
 # Creating elasticsearch-credentials secret used to connect external es with basic auth enabled.
-- name: KubeSphere | Creating elasticsearch credentials secret
+- name: KubeSphere | Creating external elasticsearch credentials secret
   shell: >
     {{ bin_dir }}/kubectl create secret generic elasticsearch-credentials --from-literal="username={{ common.es.basicAuth.username }}" --from-literal="password={{ common.es.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system
   register: secret
@@ -40,59 +40,32 @@
   register: es_host
   failed_when: false
 
+- name: KubeSphere | stdout es_host info
+  debug: msg="internal es info | {{es_host.stdout}}"
 
 - block:
-
-  - name: KubeSphere | Creating elasticsearch credentials secret
+  - name: KubeSphere | Creating internal elasticsearch credentials secret
     shell: >
       {{ bin_dir }}/kubectl create secret generic kubesphere-elasticsearch-realm-secret --from-file {{ kubesphere_dir }}/filerealm -n kubesphere-logging-system
 
   - name: KubeSphere | Deploying eck-operator
     shell: >
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/elasticsearch/eck-operator.yaml
-    failed_when: false
-
-  - name: KubeSphere | Deploying eck-operator waiting
-    wait_for: timeout=30
-
-  - name: KubeSphere | Deploying elasticsearch-logging
-    shell: >
-      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/elasticsearch/eck-elasticsearch.yaml
-    register: es_result
-    failed_when: false
-
-  - name: KubeSphere | Getting PersistentVolume Name
-    shell: >
-      kubectl get pv | grep "kubesphere-logging-system/elasticsearch-es-logging" | awk '{print $1}'
-    register: es_pv_name
-    when:
-      - "es_result.stderr and 'no matches for kind' in es_result.stderr"
-
-  - name: KubeSphere | Patching PersistentVolume (persistentVolumeReclaimPolicy)
-    shell: >
-      kubectl patch pv {{ item }}
-      -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
-    loop: "{{ es_pv_name.stdout_lines }}"
-    when:
-      - "es_result.stderr and 'no matches for kind' in es_result.stderr"
-
-  - name: KubeSphere | Deleting elasticsearch
-    shell: >
-      {{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/elasticsearch/eck-elasticsearch.yaml
-    when:
-      - "es_result.stderr and 'no matches for kind' in es_result.stderr"
-
-  - name: KubeSphere | Waiting for seconds
-    wait_for: timeout=20
-    when:
-      - "es_result.stderr and 'no matches for kind' in es_result.stderr"
+    register: import_eck
+    until: import_eck is succeeded
+    retries: 5
+    delay: 10
 
   - name: KubeSphere | Deploying elasticsearch-logging
     shell: >
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/elasticsearch/eck-elasticsearch.yaml
     register: es_result
-    when:
-      - "es_result.stderr and 'no matches for kind' in es_result.stderr"
+    until: es_result is succeeded
+    retries: 5
+    delay: 10
+
+  - name: KubeSphere | stdout es_result info
+    debug: msg="internal es_result info | {{es_result.stdout}}"
 
   # Update clusterconfig (cc) status
   - name: KubeSphere | Importing es status
