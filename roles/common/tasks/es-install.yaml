@@ -41,7 +41,7 @@
   failed_when: false
 
 - name: KubeSphere | stdout es_host info
-  debug: msg="internal es info | {{es_host.stdout}}"
+  debug: msg="internal es info | {{es_host}}"
 
 - block:
   - name: KubeSphere | Creating internal elasticsearch credentials secret
@@ -65,7 +65,7 @@
     delay: 10
 
   - name: KubeSphere | stdout es_result info
-    debug: msg="internal es_result info | {{es_result.stdout}}"
+    debug: msg="internal es_result info | {{es_result}}"
 
   # Update clusterconfig (cc) status
   - name: KubeSphere | Importing es status
