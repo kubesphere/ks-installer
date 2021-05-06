@@ -7,6 +7,10 @@ kubesphere/kube-apiserver:v1.19.8
 kubesphere/kube-scheduler:v1.19.8
 kubesphere/kube-proxy:v1.19.8
 kubesphere/kube-controller-manager:v1.19.8
+kubesphere/kube-apiserver:v1.19.9
+kubesphere/kube-scheduler:v1.19.9
+kubesphere/kube-proxy:v1.19.9
+kubesphere/kube-controller-manager:v1.19.9
 kubesphere/kube-apiserver:v1.18.6
 kubesphere/kube-scheduler:v1.18.6
 kubesphere/kube-proxy:v1.18.6
@@ -119,8 +123,6 @@ kubesphere/python-36-centos7:v2.1.0
 kubesphere/python-35-centos7:v2.1.0
 kubesphere/python-34-centos7:v2.1.0
 kubesphere/python-27-centos7:v2.1.0
-kubesphere/notification:flyway_v2.1.2
-kubesphere/notification:v2.1.2
 ##openpitrix-images
 kubesphere/openpitrix-jobs:v3.1.0
 ##weave-scope-images
