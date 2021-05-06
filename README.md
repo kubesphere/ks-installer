@@ -92,6 +92,14 @@ kubectl -n kubesphere-monitoring-system create secret generic kube-etcd-client-c
 ```bash
 kubectl edit cc ks-installer -n kubesphere-system
 ```
+> Note: When you're enabling KubeEdge, please set advertiseAddress as below and expose corresponding ports correctly before you run or restart ks-installer. Please refer to [KubeEdge Guide](https://kubesphere.io/docs/pluggable-components/kubeedge/) for more details.
+```yaml
+kubeedge:
+    cloudCore:
+      cloudHub:
+        advertiseAddress:
+        - xxxx.xxxx.xxxx.xxxx
+```
 
 3. Inspect the logs of installation.
 

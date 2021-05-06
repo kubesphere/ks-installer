@@ -1,0 +1,11 @@
+FROM golang:1.14-buster as builder
+ARG SKOPEO_VERSION=v1.2.0
+RUN apt-get update && \
+    apt-get install -y \
+        libdevmapper-dev \
+        libgpgme11-dev 
+
+ENV GOPATH=/
+WORKDIR /src/github.com/containers/skopeo
+RUN git clone --branch ${SKOPEO_VERSION} https://github.com/containers/skopeo /src/github.com/containers/skopeo && \
+    CGO_ENABLE=0 GO111MODULE=on go build -mod=vendor "-buildmode=pie" -ldflags '-extldflags "-static"' -gcflags "" -tags "exclude_graphdriver_devicemapper exclude_graphdriver_btrfs containers_image_openpgp" -o /usr/bin/skopeo ./cmd/skopeo
