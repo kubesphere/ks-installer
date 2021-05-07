@@ -1,6 +1,7 @@
 {{- $cn := printf "%s.%s.svc" ( include "logsidecar-injector.admission.fullname" . ) .Release.Namespace }}
 {{- $ca := genCA "logsidecar-injector-admission-ca" 3650 -}}
-{{- $cert := genSignedCert $cn nil nil 3650 $ca -}}
+{{- $altNames := list ( printf "%s" ( include "logsidecar-injector.admission.fullname" . ) ) ( printf "%s.%s" ( include "logsidecar-injector.admission.fullname" . ) .Release.Namespace ) ( printf "%s.%s.svc" ( include  "logsidecar-injector.admission.fullname" . ) .Release.Namespace ) -}}
+{{- $cert := genSignedCert $cn nil $altNames 3650 $ca -}}
 apiVersion: v1
 data:
   server.crt: {{ b64enc $cert.Cert }}
