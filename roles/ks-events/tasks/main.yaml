@@ -63,7 +63,7 @@
   retries: 5
   delay: 3
   when:
-    - events is defined 
-    - events.ruler is defined 
+    - events is defined
+    - events.ruler is defined
     - events.ruler.enabled is defined
     - events.ruler.enabled == True

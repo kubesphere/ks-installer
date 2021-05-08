@@ -18,7 +18,7 @@
 # A key of the same size as the hash output (for instance, 256 bits for"HS256") or larger MUST be used with this algorithm.
 - name: KubeSphere | Creating KubeSphere Secret
   shell: >
-    dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | tr -d '\n' | dd bs=32 count=1 2>/dev/null 
+    dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | tr -d '\n' | dd bs=32 count=1 2>/dev/null
   register: ks_secret
 
 
@@ -59,7 +59,7 @@
   when:
     - kubesphere_secrets.stdout.find("kubesphere-secret") != -1
     - authentication is defined and authentication.jwtSecret is defined and authentication.jwtSecret != ""
-    
+
 - name: KubeSphere | Creating components token
   shell: >
     {{ bin_dir }}/kubectl create secret generic kubesphere-secret

@@ -20,10 +20,10 @@
 - block:
     - name: Metrics-Server | Uninstalling old metrics-server
       shell: >
-        {{ bin_dir }}/helm del metrics-server -n kube-system 
+        {{ bin_dir }}/helm del metrics-server -n kube-system
       register: ms_uninstall
       until: ms_uninstall.rc == 0
-      retries: 5 
+      retries: 5
       delay: 1
   when:
     - (metrics_server_check.stdout.find("deployed") != -1) or (metrics_server_check.stdout.find("0.3.7") != -1)
@@ -33,7 +33,7 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/metrics-server/metrics-server.yaml
   register: ms_install
   until: ms_install.rc == 0
-  retries: 5 
+  retries: 5
   delay: 1
 
 - name: Metrics-Server | Waitting for metrics.k8s.io ready

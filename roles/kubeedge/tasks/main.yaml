@@ -6,7 +6,7 @@
 
 - name: KubeEdge | Getting NodeIp
   shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
-  register:  ks_kubeedge_nodeIP
+  register: ks_kubeedge_nodeIP
 
 - name: KubeEdge | Creating manifests
   template:

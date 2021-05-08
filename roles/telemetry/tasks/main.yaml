@@ -114,7 +114,7 @@
   shell: >
     cat /kubesphere/config/ks-config.json | grep clusterRole | awk '{print $2}'
   register: multi
-  ignore_errors: true 
+  ignore_errors: true
 
 - name: Get essential information
   uri:
