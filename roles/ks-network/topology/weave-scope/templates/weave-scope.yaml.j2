@@ -188,7 +188,7 @@ items:
               command:
                 - /home/weave/scope
               env: []
-              image: 'weaveworks/scope:1.13.0'
+              image: "{{ waveworks_scop_repo }}:{{ waveworks_scop_tag }}"
               imagePullPolicy: IfNotPresent
               ports:
                 - containerPort: 4040
