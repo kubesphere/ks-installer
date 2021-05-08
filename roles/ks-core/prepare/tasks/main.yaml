@@ -73,7 +73,11 @@
 - name: KubeSphere | Initing KubeSphere
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
   loop:
+    - "globalroles.yaml"
+    - "clusterroles.yaml"
+    - "workspaceroles.yaml"
     - "role-templates.yaml"
+    - "rolebindings.yaml"
     - "webhook-secret.yaml"
     - "network.kubesphere.io.yaml"
     - "iam.kubesphere.io.yaml"

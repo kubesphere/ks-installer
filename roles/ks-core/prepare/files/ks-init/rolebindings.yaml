@@ -1,0 +1,69 @@
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: admin
+roleRef:
+  apiGroup: iam.kubesphere.io/v1alpha2
+  kind: GlobalRole
+  name: platform-admin
+subjects:
+  - apiGroup: iam.kubesphere.io/v1alpha2
+    kind: User
+    name: admin
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubesphere
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: kubesphere
+    namespace: kubesphere-system
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: pre-registration
+roleRef:
+  apiGroup: iam.kubesphere.io
+  kind: GlobalRole
+  name: pre-registration
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: pre-registration
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: anonymous
+roleRef:
+  apiGroup: iam.kubesphere.io/v1alpha2
+  kind: GlobalRole
+  name: anonymous
+subjects:
+  - apiGroup: iam.kubesphere.io/v1alpha2
+    kind: Group
+    name: system:unauthenticated
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: authenticated
+roleRef:
+  apiGroup: iam.kubesphere.io/v1alpha2
+  kind: GlobalRole
+  name: authenticated
+subjects:
+  - apiGroup: iam.kubesphere.io/v1alpha2
+    kind: Group
+    name: system:authenticated

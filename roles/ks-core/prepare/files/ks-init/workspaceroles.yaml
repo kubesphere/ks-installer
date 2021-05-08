@@ -1,0 +1,626 @@
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Projects Management
+    iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
+    kubesphere.io/alias-name: Projects View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-projects
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - persistentvolumeclaims
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - s2ibinaries
+      - s2ibinaries/file
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - pods
+      - pods/log
+      - pods/containers
+      - namespacenetworkpolicies
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - members
+      - servicepolicies
+      - federatedapplications
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedservicestatuses
+      - federatedstatefulsets
+      - workspaces
+      - quotas
+      - abnormalworkloads
+      - workloads
+      - router
+      - dashboards
+      - strategies
+      - volumesnapshots
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - metering.kubesphere.io
+      - apps
+      - extensions
+      - batch
+      - logging.kubesphere.io
+      - monitoring.kubesphere.io
+      - monitoring.coreos.com
+      - autoscaling
+      - app.k8s.io
+      - servicemesh.kubesphere.io
+      - operations.kubesphere.io
+      - resources.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - list
+      - get
+      - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Projects Management
+    iam.kubesphere.io/role-template-rules: '{"projects": "create"}'
+    kubesphere.io/alias-name: Projects Create
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-create-projects
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaces
+      - workspacemembers
+      - quotas
+      - abnormalworkloads
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - 'namespaces'
+      - 'federatednamespaces'
+    verbs:
+      - create
+      - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-members","role-template-create-projects"]'
+    iam.kubesphere.io/module: Projects Management
+    iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
+    kubesphere.io/alias-name: Projects Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-projects
+rules:
+  - apiGroups:
+      - apps
+      - extensions
+      - batch
+      - logging.kubesphere.io
+      - monitoring.kubesphere.io
+      - metering.kubesphere.io
+      - monitoring.coreos.com
+      - autoscaling
+      - app.k8s.io
+      - servicemesh.kubesphere.io
+      - operations.kubesphere.io
+      - resources.kubesphere.io
+    resources:
+      - "*"
+    verbs:
+      - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces
+      - configmaps
+      - endpoints
+      - events
+      - limitranges
+      - persistentvolumeclaims
+      - podtemplates
+      - replicationcontrollers
+      - resourcequotas
+      - secrets
+      - serviceaccounts
+      - services
+      - applications
+      - controllerrevisions
+      - deployments
+      - replicasets
+      - statefulsets
+      - daemonsets
+      - meshpolicies
+      - cronjobs
+      - jobs
+      - s2ibinaries
+      - s2ibinaries/file
+      - s2ibuilders
+      - s2ibuildertemplates
+      - s2iruns
+      - events
+      - ingresses
+      - router
+      - pods
+      - pods/log
+      - pods/containers
+      - namespacenetworkpolicies
+      - networkpolicies
+      - podsecuritypolicies
+      - rolebindings
+      - roles
+      - members
+      - servicepolicies
+      - federatedapplications
+      - federatedconfigmaps
+      - federateddeployments
+      - federatedingresses
+      - federatedjobs
+      - federatedlimitranges
+      - federatednamespaces
+      - federatedpersistentvolumeclaims
+      - federatedreplicasets
+      - federatedsecrets
+      - federatedserviceaccounts
+      - federatedservices
+      - federatedservicestatuses
+      - federatedstatefulsets
+      - workspaces
+      - quotas
+      - abnormalworkloads
+      - workloads
+      - router
+      - dashboards
+      - strategies
+      - volumesnapshots
+    verbs:
+      - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: DevOps Management
+    iam.kubesphere.io/role-template-rules: '{"devops": "view"}'
+    kubesphere.io/alias-name: DevOps View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-devops
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
+      - 'roles'
+      - 'members'
+      - 'devops'
+      - 'devopsprojects'
+    verbs:
+      - get
+      - list
+      - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: DevOps Management
+    iam.kubesphere.io/role-template-rules: '{"devops": "create"}'
+    kubesphere.io/alias-name: DevOps Create
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-create-devops
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'devops'
+      - 'devopsprojects'
+    verbs:
+      - create
+      - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-view-members","role-template-create-devops"]'
+    iam.kubesphere.io/module: DevOps Management
+    iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
+    kubesphere.io/alias-name: DevOps Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-devops
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'pipelines'
+      - 'pipelines/runs'
+      - 'pipelines/branches'
+      - 'pipelines/checkScriptCompile'
+      - 'pipelines/consolelog'
+      - 'pipelines/scan'
+      - 'pipelines/sonarstatus'
+      - 'checkCron'
+      - 'credentials'
+      - 'credentials/usage'
+      - 'roles'
+      - 'members'
+      - 'devops'
+      - 'devopsprojects'
+    verbs:
+      - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Apps Management
+    iam.kubesphere.io/role-template-rules: '{"app-repos": "view"}'
+    kubesphere.io/alias-name: Workspace App Repos View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-app-repos
+rules:
+  - apiGroups:
+      - openpitrix.io
+    resources:
+      - repos
+      - repos/events
+    verbs:
+      - get
+      - list
+      - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-app-repos"]'
+    iam.kubesphere.io/module: Apps Management
+    iam.kubesphere.io/role-template-rules: '{"app-repos": "manage"}'
+    kubesphere.io/alias-name: Workspace App Repos Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-app-repos
+rules:
+  - apiGroups:
+      - 'openpitrix.io'
+    resources:
+      - 'repos'
+      - 'repos/events'
+      - 'repos/action'
+    verbs:
+      - '*'
+
+
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Apps Management
+    iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
+    kubesphere.io/alias-name: Workspace App Templates View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-app-templates
+rules:
+  - apiGroups:
+      - 'openpitrix.io'
+    resources:
+      - '*'
+    verbs:
+      - get
+      - list
+      - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
+    iam.kubesphere.io/module: Apps Management
+    iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
+    kubesphere.io/alias-name: Workspace App Templates Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-app-templates
+rules:
+  - apiGroups:
+      - 'openpitrix.io'
+    resources:
+      - '*'
+    verbs:
+      - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+    kubesphere.io/alias-name: Workspace Roles View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-roles
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaceroles
+    verbs:
+      - get
+      - list
+      - watch
+
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+    kubesphere.io/alias-name: Workspace Roles Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-roles
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaceroles
+    verbs:
+      - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"members": "view"}'
+    kubesphere.io/alias-name: Workspace Members View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-members
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspacemembers'
+    verbs:
+      - get
+      - list
+      - watch
+
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+    kubesphere.io/alias-name: Workspace Members Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-members
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspacemembers'
+    verbs:
+      - '*'
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaceroles
+    verbs:
+      - list
+      - get
+      - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-basic
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - workspaces
+    verbs:
+      - get
+  - apiGroups:
+      - monitoring.kubesphere.io
+      - metering.kubesphere.io
+      - monitoring.coreos.com
+    resources:
+      - namespaces
+      - workloads
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces
+    verbs:
+      - watch
+  - apiGroups:
+      - iam.kubesphere.io
+    resources:
+      - workspacemembers
+    verbs:
+      - list
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Workspace Settings
+    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "manage"}'
+    kubesphere.io/alias-name: Workspace Settings
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-workspace-settings
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspaces'
+    verbs:
+      - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Workspace Settings
+    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "view"}'
+    kubesphere.io/alias-name: Workspace Settings
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-workspace-settings
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - 'workspaces'
+    verbs:
+      - 'get'
+      - 'list'
+      - 'watch'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-groups","role-template-view-roles"]'
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"groups": "manage"}'
+    kubesphere.io/alias-name: Workspace Groups Management
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-groups
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - groups
+      - groupbindings
+      - rolebindings
+      - workspacerolebindings
+    verbs:
+      - '*'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: WorkspaceRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"groups": "view"}'
+    kubesphere.io/alias-name: Workspace Groups View
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-groups
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - groups
+      - groupbindings
+      - roles
+      - rolebindings
+      - workspacerolebindings
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
