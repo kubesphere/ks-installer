@@ -5,6 +5,6 @@
   roles:
     - kubesphere-defaults
     - role: ks-multicluster
-      when: 
+      when:
         - "multicluster is defined and multicluster.clusterRole == 'host'"
         - "status.multicluster is not defined or status.multicluster.status is not defined or status.multicluster.status != 'enabled'"

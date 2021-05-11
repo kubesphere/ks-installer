@@ -2,7 +2,7 @@
 
 - name: ks-devops | Getting ks-sonarqube NodeIp
   shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
-  register:  ks_nodeIP
+  register: ks_nodeIP
 
 - name: KubeSphere | Waiting for ks-console
   shell: "{{ bin_dir }}/kubectl get pod -n kubesphere-system -o wide | grep ks-console | awk '{print $3}'"

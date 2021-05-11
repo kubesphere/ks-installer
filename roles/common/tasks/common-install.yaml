@@ -9,7 +9,7 @@
     - "status.openldap is not defined or status.openldap.status is not defined or status.openldap.status != 'enabled'"
 
 - import_tasks: minio-install.yaml
-  when: 
+  when:
     - (devops.enabled or (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled)) and common.s3 is not defined
     - "status.minio is not defined or status.minio.status is not defined or status.minio.status != 'enabled'"
 

@@ -15,6 +15,6 @@
     - kubesphere_component_deployment.stdout.find("ks-console") != -1
 
 - import_tasks: helm-migrate.yaml
-  when: 
+  when:
     - kubesphere_component_deployment.stdout.find("ks-console") != -1
     - console_version.stdout is version('v3.0.0', '<')

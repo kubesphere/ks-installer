@@ -5,6 +5,6 @@
   roles:
     - kubesphere-defaults
     - role: metrics-server
-      when: 
+      when:
         - "metrics_server is defined and metrics_server.enabled == true"
         - "status.metricsServer is not defined or status.metricsServer.status is not defined or status.metricsServer.status != 'enabled'"

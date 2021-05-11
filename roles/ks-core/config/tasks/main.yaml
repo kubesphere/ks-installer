@@ -15,14 +15,14 @@
 - set_fact:
     sonarQubeHost: "{{ sonarqube_host.stdout }}"
     sonarQubeToken: "{{ sonarqube_token.stdout }}"
-  when: 
+  when:
     - sonarqube_host is defined and sonarqube_host.stdout is defined and sonarqube_host.stdout != ""
     - sonarqube_token is defined and sonarqube_token.stdout is defined and sonarqube_token.stdout != ""
 
 - set_fact:
     sonarQubeHost: "{{ devops.sonarqube.externalSonarUrl }}"
     sonarQubeToken: "{{ devops.sonarqube.externalSonarToken }}"
-  when: 
+  when:
     - devops.sonarqube is defined
     - devops.sonarqube.externalSonarUrl is defined
     - devops.sonarqube.externalSonarToken is defined
@@ -65,10 +65,10 @@
 
 # Get the matched kubectl image
 - name: KubeSphere | Setting kubectl image version
-  set_fact: 
+  set_fact:
     ks_kubectl_tag: "{{item.value}}"
     kubectl_break: true
-  loop:  "{{ query('dict', ks_kubectl_versions) }}"
+  loop: "{{ query('dict', ks_kubectl_versions) }}"
   when:
     - kubectl_break is undefined and kubernetes_version is defined and kubernetes_version.stdout is version(item.key, '>=')
 
