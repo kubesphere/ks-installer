@@ -99,7 +99,7 @@ jaegertracing/jaeger-collector:1.17
 jaegertracing/jaeger-es-index-cleaner:1.17
 jaegertracing/jaeger-operator:1.17.1
 jaegertracing/jaeger-query:1.17
-kubesphere/kiali:v1.26.1
+kubesphere/kiali:v1.24
 kubesphere/kiali-operator:v1.26.1
 ##kubesphere-devops-images
 kubesphere/ks-jenkins:2.249.1
