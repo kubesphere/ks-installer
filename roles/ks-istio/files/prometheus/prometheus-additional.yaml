@@ -1,6 +1,6 @@
 # Mixer scrapping. Defaults to Prometheus and mixer on same namespace.
 - job_name: 'istio-mesh'
-  scrape_interval: 1m
+  scrape_interval: 15s
   kubernetes_sd_configs:
   - role: endpoints
     namespaces:
