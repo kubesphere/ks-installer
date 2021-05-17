@@ -12,7 +12,7 @@
 
 - name: ks-devops | Getting ks-sonarqube NodeIp
   shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
-  register:  ks_sonarqube_nodeIP
+  register: ks_sonarqube_nodeIP
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
@@ -21,7 +21,7 @@
 
 - name: ks-devops | Getting ks-sonarqube NodePort
   shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.ports[0].nodePort}'"
-  register:  ks_sonarqube_nodePort
+  register: ks_sonarqube_nodePort
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
@@ -30,7 +30,7 @@
 
 - name: ks-devops | Getting ks-sonarqube ClusterIP
   shell: "{{ bin_dir }}/kubectl get svc ks-sonarqube-sonarqube -n kubesphere-devops-system -o=jsonpath='{.spec.clusterIP}'"
-  register:  ks_sonarqube_clusterIP
+  register: ks_sonarqube_clusterIP
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true

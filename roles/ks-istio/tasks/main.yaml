@@ -110,6 +110,11 @@
   retries: 5
   delay: 3
 
+- name: servicemesh | replace webhook to istiod-1-6-10
+  shell: >
+    {{ bin_dir }}/kubectl get validatingwebhookconfigurations.admissionregistration.k8s.io istiod-istio-system -oyaml | sed 's/name: istiod$/name: istiod-1-6-10/' | {{ bin_dir }}/kubectl replace -f -
+  ignore_errors: true
+
 - name: servicemesh | set servicemesh status enabled
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer

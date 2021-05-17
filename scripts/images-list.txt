@@ -106,10 +106,10 @@ kubesphere/ks-jenkins:2.249.1
 jenkins/jnlp-slave:3.27-1
 kubesphere/s2ioperator:v3.1.0
 kubesphere/s2irun:v2.1.1
-kubesphere/builder-base:v2.1.0
-kubesphere/builder-nodejs:v2.1.0
-kubesphere/builder-maven:v2.1.0
-kubesphere/builder-go:v2.1.0
+kubesphere/builder-base:v3.1.0
+kubesphere/builder-nodejs:v3.1.0
+kubesphere/builder-maven:v3.1.0
+kubesphere/builder-go:v3.1.0
 kubesphere/s2i-binary:v2.1.0
 kubesphere/tomcat85-java11-centos7:v2.1.0
 kubesphere/tomcat85-java11-runtime:v2.1.0

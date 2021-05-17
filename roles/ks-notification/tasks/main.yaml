@@ -17,7 +17,7 @@
 
 - name: ks-notification | Checking notification image version
   shell: >
-    {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system notification-deployment 
+    {{ bin_dir }}/kubectl get deploy -n kubesphere-alerting-system notification-deployment
     -o=jsonpath='{.spec.template.spec.containers[0].image}'
   register: notification_image
   failed_when: false

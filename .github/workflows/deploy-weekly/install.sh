@@ -16,11 +16,9 @@ function wait_status_ok(){
 }
 
 yum install -y vim openssl socat conntrack ipset wget
-wget https://github.com/kubesphere/kubekey/releases/download/v1.0.0/kubekey-v1.0.0-linux-amd64.tar.gz
-tar xvf kubekey-v1.0.0-linux-amd64.tar.gz
-ls -al
-chmod +x ./kk
-./kk create cluster --with-kubernetes v1.17.9 -y
+curl -sfL https://get-kk.kubesphere.io | VERSION=v1.1.0 sh -
+chmod +x kk
+echo "yes" | ./kk create cluster --with-kubernetes v1.20.4
 
 kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
 wait_status_ok

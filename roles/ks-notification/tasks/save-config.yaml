@@ -7,8 +7,8 @@
 
 - name: ks-notification | Getting notification configs
   shell: >
-    curl -X POST "http://{{ notification_clusterIP.stdout }}:9200/v1/notifications/get_service_config" 
-    -H  "accept: application/json" -H  "Content-Type: application/json" 
+    curl -X POST "http://{{ notification_clusterIP.stdout }}:9200/v1/notifications/get_service_config"
+    -H  "accept: application/json" -H  "Content-Type: application/json"
     -d "{  \"service_type\": [    \"email\"  ]}" | jq .  > {{ kubesphere_dir }}/notification/notification-configs.json
   register: notification_configs
 

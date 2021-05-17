@@ -50,7 +50,7 @@
       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-devops-migration.yaml
     when:
       - devops_check.stdout != "0"
-      
+
   - name: KubeSphere | Getting migration job status
     shell: >
       {{ bin_dir }}/kubectl get pod -n kubesphere-system -l job-name=ks-upgrade --no-headers | awk '{print $3}'
