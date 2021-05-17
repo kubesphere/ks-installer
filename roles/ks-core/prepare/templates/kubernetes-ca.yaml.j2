@@ -1,9 +1,0 @@
-apiVersion: v1
-data:
-  ca.crt: {{ cacrt.stdout }}
-  ca.key: {{ cakey.stdout }}
- 
-kind: Secret
-metadata:
-  name: kubesphere-ca
-  namespace: kubesphere-system
