@@ -1,0 +1,33 @@
+replicaCount: {{ master_num }}
+
+image:
+  ks_controller_manager_repo: {{ ks_controller_manager_repo }}
+  ks_controller_manager_tag: {{ ks_controller_manager_tag }}
+  ks_apiserver_repo: {{ ks_apiserver_repo }}
+  ks_apiserver_tag: {{ ks_apiserver_tag }}
+  ks_console_repo: {{ ks_console_repo }}
+  ks_console_tag: {{ ks_console_tag }}
+  ks_kubectl_repo: {{ ks_kubectl_repo }}
+  ks_kubectl_tag: {{ ks_kubectl_tag }}
+  nginx_ingress_controller_repo: {{ nginx_ingress_controller_repo }}
+  nginx_ingress_controller_tag: {{ nginx_ingress_controller_tag }}
+  defaultbackend_repo: {{ defaultbackend_repo }}
+  defaultbackend_tag: {{ defaultbackend_tag }}
+  bookinfo_productpage_v1_repo: {{ bookinfo_productpage_v1_repo }}
+  bookinfo_productpage_v1_tag: {{ bookinfo_productpage_v1_tag }}
+  bookinfo_reviews_v1_repo: {{ bookinfo_reviews_v1_repo }}
+  bookinfo_reviews_v1_tag: {{ bookinfo_reviews_v1_tag }}
+  bookinfo_details_v1_repo: {{ bookinfo_details_v1_repo }}
+  bookinfo_details_v1_tag: {{ bookinfo_details_v1_tag }}
+  bookinfo_ratings_v1_repo: {{ bookinfo_ratings_v1_repo }}
+  bookinfo_ratings_v1_tag: {{ bookinfo_ratings_v1_tag }}
+  pullPolicy: {{ ks_image_pull_policy }}
+
+config:
+  create: false
+
+console:
+  type: {{ console.type }}
+  port: {{ console.port }}
+
+kube_version: {{ kube_version }}

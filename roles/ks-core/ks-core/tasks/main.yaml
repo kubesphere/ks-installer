@@ -34,103 +34,61 @@
     - master_num is defined and (master_num == "1" or master_num == "0")
     - enableHA is defined and enableHA
 
-- name: ks-console | Checking ks-console svc
-  shell: "{{ bin_dir }}/kubectl get svc -n kubesphere-system"
-  register: result
+- name: KubeSphere | Checking ks-core Helm Release
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-system get secrets --field-selector=type=helm.sh/release.v1  | grep ks-core |wc -l
+  register: helm_release
 
-- name: ks-console | Getting ks-console svc port
-  shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
-  register: ks_console_svc_port
-  when: result.stdout.find("ks-console") != -1
+- name: KubeSphere | Convert ks-core to helm mananged
+  shell: >
+    {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-name={{ item.release }} &&
+    {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-namespace=kubesphere-system &&
+    {{ bin_dir }}/kubectl -n {{ item.ns }} label --overwrite {{ item.kind }} {{ item.resource }} app.kubernetes.io/managed-by=Helm
+  loop:
+    - {ns: "kubesphere-system", kind: "secrets", resource: "ks-controller-manager-webhook-cert", release: "ks-core"}
+    - {ns: "kubesphere-controls-system", kind: "serviceaccounts", resource: "kubesphere-cluster-admin", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "serviceaccounts", resource: "kubesphere", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "configmaps", resource: "ks-console-config", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "configmaps", resource: "ks-router-config", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "configmaps", resource: "sample-bookinfo", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "clusterroles", resource: "system:kubesphere-router-clusterrole", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "clusterrolebindings", resource: "system:nginx-ingress-clusterrole-nisa-binding", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "clusterrolebindings", resource: "system:kubesphere-cluster-admin", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "clusterrolebindings", resource: "kubesphere", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "services", resource: "ks-apiserver", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "services", resource: "ks-console", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "services", resource: "ks-controller-manager", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "deployments", resource: "ks-apiserver", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "deployments", resource: "ks-console", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "deployments", resource: "ks-controller-manager", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "users.iam.kubesphere.io", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "resourcesquotas.quota.kubesphere.io", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "network.kubesphere.io", release: "ks-core"}
+  when:
+    - helm_release.stdout == "0"
 
-
-- name: ks-console | Setting console_port
-  set_fact:
-    console_port: "{{ ks_console_svc_port.stdout }}"
-  when: result.stdout.find("ks-console") != -1
-
-
-- name: KubeSphere | Getting Ingress installation files
+- name: KubeSphere | Getting ks-core helm charts
   copy:
     src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
   loop:
-    - "ingress"
-    - "ks-apiserver"
-    - "ks-console"
-    - "ks-controller-manager"
-
+    - "ks-core"
 
 - name: KubeSphere | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
-    - { path: ingress, file: ingress-controller.yaml, type: config }
-    - { path: ks-apiserver, file: ks-apiserver.yml, type: deploy }
-    - { path: ks-controller-manager, file: ks-controller-manager.yaml, type: deploy }
-    - { path: ks-console, file: ks-console-config.yml, type: config }
-    - { path: ks-console, file: ks-console-deployment.yml, type: deploy }
-    - { path: ks-console, file: ks-console-svc.yml, type: svc }
-    - { path: ks-console, file: sample-bookinfo-configmap.yaml, type: config }
-
-
-- name: KubeSphere | Deleting Ingress-controller configmap
-  shell: >
-    {{ bin_dir }}/kubectl delete cm -n kubesphere-system ks-router-config
-  failed_when: false
-
-- name: KubeSphere | Creating Ingress-controller configmap
-  command: >
-    {{ bin_dir }}/kubectl create configmap ks-router-config
-    --from-file=ingress-controller.yaml={{ kubesphere_dir }}/ingress/ingress-controller.yaml
-    --from-file=ingress-controller-svc.yaml={{ kubesphere_dir }}/ingress/ingress-controller-svc.yaml
-    -n kubesphere-system
-  register: cm_state
-  failed_when: "cm_state.stderr and 'AlreadyExists' not in cm_state.stderr"
-
-# - name: KubeSphere | Updating kubectl image
-#   shell: >
-#     for deploy in $(kubectl -n kubesphere-controls-system get deploy  | grep kubectl  | awk '{print $1}');
-#     do kubectl -n kubesphere-controls-system set image deployment/$deploy kubectl={{ ks_kubectl_repo }}:{{ ks_kubectl_tag }};
-#     done
-#   when:
-#     - account_version.stdout and account_version.stdout != 'v2.1.1'
-#   ignore_errors: True
+    - { path: ks-core, file: custom-values-ks-core.yaml, type: config }
 
 - name: KubeSphere | Creating ks-core
-  command: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
+  shell: >
+    {{ bin_dir }}/helm upgrade --install ks-core
+    {{ kubesphere_dir }}/ks-core/ks-core-0.1.0.tgz
+    -f {{ kubesphere_dir }}/ks-core/custom-values-ks-core.yaml
+    --namespace kubesphere-system
   register: source_state
   failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
-  loop:
-    - { path: ks-apiserver, file: ks-apiserver.yml }
-    - { path: ks-controller-manager, file: ks-controller-manager.yaml }
-    - { path: ks-console, file: ks-console-config.yml }
-    - { path: ks-console, file: sample-bookinfo-configmap.yaml }
-    - { path: ks-console, file: ks-console-deployment.yml }
-
-- name: KubeSphere | Checking ks-console svc
-  command: >
-    {{ bin_dir }}/kubectl get svc -n kubesphere-system
-  register: ks_svc
-
-- name: KubeSphere | Creating ks-console svc
-  command: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item.path }}/{{ item.file }} --force
-  register: source_state
-  failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
-  loop:
-    - { path: ks-console, file: ks-console-svc.yml }
-  when:
-    - ks_svc.stdout.find("ks-console") == -1
-
-- name: KubeSphere | Patching ks-console svc
-  command: >
-    {{ bin_dir }}/kubectl patch -n kubesphere-system svc ks-console -p
-    '{"metadata": {"labels": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}, "spec": {"selector": {"app": "ks-console", "tier": "frontend", "version": "{{ ks_version }}"}}}'
-  when:
-    - ks_svc.stdout.find("ks-console") != -1
 
 - name: KubeSphere | Importing ks-core status
   shell: >
@@ -143,5 +101,3 @@
   until: import is succeeded
   retries: 5
   delay: 3
-
-

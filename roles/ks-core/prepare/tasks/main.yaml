@@ -65,6 +65,7 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "ks-init"
+    - "provisonercapability"
 
 - import_tasks: ks-init.yaml
   when: ks_upgrade is not defined or (ks_upgrade != True)
@@ -74,36 +75,9 @@
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
   loop:
     - "role-templates.yaml"
-    - "webhook-secret.yaml"
-    - "network.kubesphere.io.yaml"
-    - "iam.kubesphere.io.yaml"
-    - "quota.kubesphere.io.yaml"
   register: import
   failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
 
-
-- name: KubeSphere | Getting controls-system file
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.file }}"
-  with_items:
-    - { name: kubesphere-controls-system, file: kubesphere-controls-system.yaml }
-
-
-- name: KubeSphere | Installing controls-system
-  command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubesphere-controls-system.yaml  -n kubesphere-controls-system"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-
-
-# - name: KubeSphere | Creating KubeSphere vpa
-#   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/ks-vpa.yaml"
-#   register: result
-#   until: result is succeeded
-#   retries: 5
-#   delay: 3
-#   when:
-#     - vertical_pod_autoscaler_enable == true
 
 - name: KubeSphere | Generating kubeconfig-admin
   shell: >
@@ -111,18 +85,8 @@
   when:
     - openpitrix.enabled is defined and openpitrix.enabled
 
-# - name: KubeSphere | Checking kubesphere component
-#   shell: >
-#     {{ bin_dir }}/kubectl get deploy -n kubesphere-system
-#   register: kubesphere_component_pod
+- name: KubeSphere | Creating Storage ProvisionerCapability
+  shell: "{{ bin_dir }}/kubectl apply -R -f {{ kubesphere_dir }}/provisonercapability"
+  register: import
+  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
 
-# - name: KubeSphere | Getting kubesphere component version
-#   shell: >
-#     {{ bin_dir }}/kubectl get deploy -n  kubesphere-system ks-console -o jsonpath='{.metadata.labels.version}'
-#   register: console_version
-#   when:
-#     - kubesphere_component_pod.stdout.find("ks-console") != -1
-
-# - import_tasks: ks-stop.yaml
-#   when:
-#     - console_version.stdout and console_version.stdout != ks_version
