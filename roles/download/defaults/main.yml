@@ -121,7 +121,7 @@ post_install_job_tag: "v1.19.0"
 
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
-cloudcore_tag: "v1.6.1"
+cloudcore_tag: "v1.6.2"
 edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher"
 edge_watcher_tag: "v0.1.0"
 edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher-agent"
