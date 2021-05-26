@@ -267,7 +267,7 @@ jaeger_es_cleaner_tag: 1.17
 kiali_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/kiali-operator"
 kiali_operator_tag: v1.26.1
 kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/kiali"
-kiali_tag: v1.26.1
+kiali_tag: v1.24
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
