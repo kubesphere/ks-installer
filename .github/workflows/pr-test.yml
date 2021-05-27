@@ -15,16 +15,19 @@ env:
 
 jobs:
   Test-on-k8s-v-1-19-7:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 150
     steps:
     - uses: actions/checkout@v2
+
+    - name: Clean up
+      run: kind delete cluster --name chart-testing && docker image prune -f
 
     - name: Build image
       run: docker build . --file Dockerfile --tag ks-installer
 
     - name: Create kind cluster
-      uses: helm/kind-action@v1.0.0-rc.1
+      uses: helm/kind-action@v1.1.0
       with:
         config: .github/workflows/kind/kind.yaml
 
@@ -35,75 +38,15 @@ jobs:
       run: |
         sed -i 's/image: .*/image: ks-installer/g' deploy/kubesphere-installer.yaml
         sed -i 's/imagePullPolicy: .*/imagePullPolicy: IfNotPresent/g' deploy/kubesphere-installer.yaml
+        sed -i 's/jenkinsMemoryReq: .*/jenkinsMemoryReq: 200Mi/g' deploy/cluster-configuration.yaml
+        sed -i 's/# elasticsearchDataReplicas: .*/elasticsearchDataReplicas: 1/g' deploy/cluster-configuration.yaml
         kubectl apply -f deploy/kubesphere-installer.yaml
         kubectl apply -f deploy/cluster-configuration.yaml
         bash scripts/check_cluster_status.sh
 
     - name: Test plugin
       run: |
-        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
-        bash scripts/check_cluster_status.sh
-
-    - name: Delete Cluster
-      run: kind delete cluster --name chart-testing
-
-    - name: Create kind cluster
-      uses: helm/kind-action@v1.0.0-rc.1
-      with:
-        config: .github/workflows/kind/kind.yaml
-
-    - name: Load image to kind
-      run: kind load docker-image ks-installer --name chart-testing
-
-    - name: Test devops plugin
-      run: |
-        kubectl apply -f deploy/kubesphere-installer.yaml
-        kubectl apply -f deploy/cluster-configuration.yaml
-        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"devops":{"enabled":true}}}'
-        bash scripts/check_cluster_status.sh
-
-    - name: Delete Cluster
-      run: kind delete cluster --name chart-testing
-
-    - name: Create kind cluster
-      uses: helm/kind-action@v1.0.0-rc.1
-      with:
-        config: .github/workflows/kind/kind.yaml
-
-    - name: Load image to kind
-      run: kind load docker-image ks-installer --name chart-testing
-
-    - name: Test servicemesh Plugin
-      run: |
-        kubectl apply -f deploy/kubesphere-installer.yaml
-        kubectl apply -f deploy/cluster-configuration.yaml
-        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true}}}'
-        for i in {1..300};do
-          set +e
-          kubectl -n istio-system get deploy | grep istiod
-          if [[ $? -ne 0 ]];then
-            sleep 1
-            echo "wait $i s..."
-            continue
-          fi
-          set -e
-          sleep 2
-          kubectl -n istio-system get deploy istiod-1-6-10 -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
-          break
-        done
-        for i in {1..300};do
-          set +e
-          kubectl -n istio-system get deploy | grep istio-ingressgateway
-          if [[ $? -ne 0 ]];then
-            sleep 1
-            echo "wait $i s..."
-            continue
-          fi
-          set -e
-          sleep 2
-          kubectl -n istio-system get deploy istio-ingressgateway -oyaml | sed '/cpu: /d' | sed '/memory: /d' | sed '/resourceVersion: /d' | kubectl replace -f -
-          break
-        done
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true},"devops":{"enabled":true},"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
         bash scripts/check_cluster_status.sh
 
     - name: slack

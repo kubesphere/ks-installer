@@ -6,6 +6,8 @@ nodes:
   extraMounts:
   - hostPath: /etc/localtime
     containerPath: /etc/localtime
+  - containerPath: /var/lib/kubelet/config.json
+    hostPath: /root/.docker/config.json
   extraPortMappings:
   - containerPort: 30881
     hostPort: 9090
