@@ -4,8 +4,8 @@
 appVersion: "0.1.0"
 
 cloudCore:
-  repository: "kubeedge/cloudcore"
-  tag: "v1.6.1"
+  repository: "kubespheredev/cloudcore"
+  tag: "v1.6.2"
   pullPolicy: "IfNotPresent"
   affinity:
     nodeAffinity:
