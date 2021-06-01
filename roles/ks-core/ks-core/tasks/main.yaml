@@ -89,8 +89,8 @@
     {{ kubesphere_dir }}/ks-core/ks-core-0.1.0.tgz
     -f {{ kubesphere_dir }}/ks-core/custom-values-ks-core.yaml
     --namespace kubesphere-system
-  register: source_state
-  failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
+  # register: source_state
+  # failed_when: "source_state.stderr and 'AlreadyExists' not in source_state.stderr"
 
 - name: KubeSphere | Importing ks-core status
   shell: >
