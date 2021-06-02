@@ -39,14 +39,24 @@
     {{ bin_dir }}/kubectl -n kubesphere-system get secrets --field-selector=type=helm.sh/release.v1  | grep ks-core |wc -l
   register: helm_release
 
+- name: KubeSphere | Checking ks-core Exsit
+  shell: >
+    {{ bin_dir }}/kubectl get crd users.iam.kubesphere.io  | grep users.iam.kubesphere.io |wc -l
+  register: ks_crds
+
 - name: KubeSphere | Convert ks-core to helm mananged
   shell: >
     {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-name={{ item.release }} &&
     {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-namespace=kubesphere-system &&
     {{ bin_dir }}/kubectl -n {{ item.ns }} label --overwrite {{ item.kind }} {{ item.resource }} app.kubernetes.io/managed-by=Helm
   loop:
-    - {ns: "kubesphere-system", kind: "secrets", resource: "ks-controller-manager-webhook-cert", release: "ks-core"}
     - {ns: "kubesphere-controls-system", kind: "serviceaccounts", resource: "kubesphere-cluster-admin", release: "ks-core"}
+    - {ns: "kubesphere-controls-system", kind: "serviceaccounts", resource: "kubesphere-router-serviceaccount", release: "ks-core"}
+    - {ns: "kubesphere-controls-system", kind: "role", resource: "system:kubesphere-router-role", release: "ks-core"}
+    - {ns: "kubesphere-controls-system", kind: "rolebinding", resource: "nginx-ingress-role-nisa-binding", release: "ks-core"}
+    - {ns: "kubesphere-controls-system", kind: "deployment", resource: "default-http-backend", release: "ks-core"}
+    - {ns: "kubesphere-controls-system", kind: "service", resource: "default-http-backend", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "secrets", resource: "ks-controller-manager-webhook-cert", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "serviceaccounts", resource: "kubesphere", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "configmaps", resource: "ks-console-config", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "configmaps", resource: "ks-router-config", release: "ks-core"}
@@ -64,8 +74,9 @@
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "users.iam.kubesphere.io", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "resourcesquotas.quota.kubesphere.io", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "network.kubesphere.io", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "users", resource: "admin", release: "ks-core"}
   when:
-    - helm_release.stdout == "0"
+    - helm_release.stdout == "0" and ks_crds.stdout != "0"
   register: source_state
   failed_when: "source_state.stderr and 'NotFound' not in source_state.stderr"
 
@@ -81,7 +92,7 @@
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
-    - { path: ks-core, file: custom-values-ks-core.yaml, type: config }
+    - { path: ks-core, file: custom-values-ks-core.yaml}
 
 - name: KubeSphere | Creating ks-core
   shell: >

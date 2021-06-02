@@ -27,7 +27,7 @@ config:
   create: false
 
 console:
-  type: {{ console.type }}
+  type: {{ console.type | default('NodePort') }}
   port: {{ console.port }}
 
 kube_version: {{ kube_version }}
