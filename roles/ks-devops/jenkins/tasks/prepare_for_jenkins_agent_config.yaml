@@ -1,0 +1,67 @@
+---
+- name: ks-devops | Preparing for default Jenkins agent configuration
+  set_fact:
+    devops:
+      agent:
+        jnlp:
+          limit:
+            cpu: 500m
+            memory: 512Mi
+        base:
+          limit:
+            cpu: 1000m
+            memory: 1024Mi
+        nodejs:
+          limit:
+            cpu: 1000m
+            memory: 1024Mi
+        maven:
+          limit:
+            cpu: 1000m
+            memory: 1024Mi
+        go:
+          limit:
+            cpu: 1000m
+            memory: 1024Mi
+      worker:
+        quota:
+          limit:
+            cpu: 3000m
+            memory: 3072Mi
+  when: devops.agent.config is not defined or devops.agent.config == "default"
+- name: ks-devops | Preparing for high Jenkins agent configuration
+  set_fact:
+    devops:
+      agent:
+        jnlp:
+          limit:
+            cpu: 500m
+            memory: 1536Mi
+        base:
+          limit:
+            cpu: 3000m
+            memory: 4096Mi
+        nodejs:
+          limit:
+            cpu: 3000m
+            memory: 4096Mi
+        maven:
+          limit:
+            cpu: 3000m
+            memory: 4096Mi
+        go:
+          limit:
+            cpu: 3000m
+            memory: 4096Mi
+      worker:
+        quota:
+          limit:
+            cpu: 7000m
+            memory: 11264Mi
+  when: devops.agent.config is defined and devops.agent.config == 'high'
+
+- debug:
+    var: devops.agent.jnlp.limit.cpu
+- debug:
+    msg: "Jnlp cpu limit: {{ devops.agent.jnlp.limit.cpu }}"
+
