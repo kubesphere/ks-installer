@@ -56,13 +56,11 @@
         limit:
           cpu: 7000m
           memory: 11264Mi
-  when: devops.agent.config is defined and devops.agent.config == 'high'
+  when: devops.agent.config is defined and devops.agent.config == "high"
 
-- debug:
-    var: devops_agent.jnlp.limit.cpu
-- debug:
-    var: devops_worker.quota.limit.cpu
-- debug:
-    msg: "Jnlp cpu limit: {{ devops_agent.jnlp.limit.cpu }}"
-- debug:
-    msg: "DevOps Worker quota limit cpu: {{ devops_worker.quota.limit.cpu }}"
+- name: ks-devops | Debug devops_agent
+  debug:
+    var: devops_agent
+- name: ks-devops | Debug devops_worker
+  debug:
+    var: devops_worker

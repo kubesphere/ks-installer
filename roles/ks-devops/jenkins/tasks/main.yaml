@@ -73,7 +73,7 @@
 - name: ks-devops | Configuring Jenkins casc
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
-  when: devops.agent.config is not defined or devops.agent.config == 'custom'
+  when: devops.agent.config is not defined or devops.agent.config != 'custom'
 
 - name: ks-devops | Creating Jenkins Agent Config File
   shell: >
