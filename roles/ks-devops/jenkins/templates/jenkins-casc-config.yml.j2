@@ -35,17 +35,17 @@ data:
                   args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
-                  resourceLimitCpu: "{{ devops.agent.base.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.base.limit.cpu }}"
                   resourceRequestMemory: "100Mi"
-                  resourceLimitMemory: "{{ devops.agent.base.limit.memory }}"
+                  resourceLimitMemory: "{{ devops_agent.base.limit.memory }}"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceLimitCpu: "{{ devops.agent.jnlp.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.jnlp.limit.cpu }}"
                   resourceRequestMemory: "400Mi"
-                  resourceLimitMemory: "{{ devops.agent.jnlp.limit.memory }}"
+                  resourceLimitMemory: "{{ devops_agent.jnlp.limit.memory }}"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false
@@ -69,17 +69,17 @@ data:
                   args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
-                  resourceLimitCpu: "{{ devops.agent.nodejs.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.nodejs.limit.cpu }}"
                   resourceRequestMemory: "100Mi"
-                  resourceLimitMemory: "{{ devops.agent.nodejs.limit.memory }}"
+                  resourceLimitMemory: "{{ devops_agent.nodejs.limit.memory }}"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceLimitCpu: "{{ devops.agent.jnlp.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.jnlp.limit.cpu }}"
                   resourceRequestMemory: "400Mi"
-                  resourceLimitMemory: "{{ devops.agent.jnlp.limit.memory}}"
+                  resourceLimitMemory: "{{ devops_agent.jnlp.limit.memory}}"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false
@@ -109,17 +109,17 @@ data:
                   args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
-                  resourceLimitCpu: "{{ devops.agent.maven.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.maven.limit.cpu }}"
                   resourceRequestMemory: "100Mi"
-                  resourceLimitMemory: "{{ devops.agent.maven.limit.memory}}"
+                  resourceLimitMemory: "{{ devops_agent.maven.limit.memory}}"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceLimitCpu: "{{ devops.agent.jnlp.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.jnlp.limit.cpu }}"
                   resourceRequestMemory: "400Mi"
-                  resourceLimitMemory: "{{ devops.agent.jnlp.limit.memory }}"
+                  resourceLimitMemory: "{{ devops_agent.jnlp.limit.memory }}"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false
@@ -146,17 +146,17 @@ data:
                   args: ""
                   ttyEnabled: true
                   resourceRequestCpu: "100m"
-                  resourceLimitCpu: "{{ devops.agent.go.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.go.limit.cpu }}"
                   resourceRequestMemory: "100Mi"
-                  resourceLimitMemory: "{{ devops.agent.go.limit.memory }}"
+                  resourceLimitMemory: "{{ devops_agent.go.limit.memory }}"
                 - name: "jnlp"
                   image: "{{ jnlp_slave_repo }}:{{ jnlp_slave_tag }}"
                   command: "jenkins-slave"
                   args: "^${computer.jnlpmac} ^${computer.name}"
                   resourceRequestCpu: "50m"
-                  resourceLimitCpu: "{{ devops.agent.jnlp.limit.cpu }}"
+                  resourceLimitCpu: "{{ devops_agent.jnlp.limit.cpu }}"
                   resourceRequestMemory: "400Mi"
-                  resourceLimitMemory: "{{ devops.agent.jnlp.limit.memory }}"
+                  resourceLimitMemory: "{{ devops_agent.jnlp.limit.memory }}"
                 workspaceVolume:
                   emptyDirWorkspaceVolume:
                     memory: false

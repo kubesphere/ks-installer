@@ -48,7 +48,6 @@ sonar_account_user: ks-devops
 
 harbor_domain: harbor.devops.kubesphere.local
 
-
 sonarqube_enable: true
 
 sonarqube_user_name: sonarqube
