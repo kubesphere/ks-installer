@@ -1,0 +1,15 @@
+kind: LimitRangeList
+apiVersion: v1
+items:
+  - metadata:
+      name: worker-limit-range
+      namespace: kubesphere-devops-worker
+    spec:
+      limits:
+        - type: Container
+          default:
+            cpu: "{{ devops_worker.limitrange.container.default.cpu }}"
+            memory: "{{ devops_worker.limitrange.container.default.memory }}"
+          defaultRequest:
+            cpu: "{{ devops_worker.limitrange.container.request.cpu }}"
+            memory: "{{ devops_worker.limitrange.container.request.memory }}"

@@ -27,6 +27,14 @@
         limit:
           cpu: 3000m
           memory: 3072Mi
+      limitrange:
+        container:
+          default:
+            cpu: 750m
+            memory: 768Mi
+          request:
+            cpu: 100m
+            memory: 128Mi
   when: devops.agent.config is not defined or devops.agent.config == "default"
 - name: ks-devops | Preparing for high Jenkins agent configuration
   set_fact:
@@ -56,6 +64,14 @@
         limit:
           cpu: 7000m
           memory: 11264Mi
+      limitrange:
+        container:
+          default:
+            cpu: 2000m
+            memory: 4Gi
+          request:
+            cpu: 200m
+            memory: 256Mi
   when: devops.agent.config is defined and devops.agent.config == "high"
 
 - name: ks-devops | Debug devops_agent

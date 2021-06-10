@@ -69,6 +69,7 @@
     - { name: jenkins-casc-config, file: jenkins-casc-config.yml }
     - { name: jenkins-agent-config, file: jenkins-agent-config.yaml }
     - { name: worker-resourcequota, file: worker-resourcequota.yaml }
+    - { name: worker-limitrange, file: worker-limitrange.yaml }
 
 - name: ks-devops | Configuring Jenkins casc
   shell: >
@@ -82,6 +83,12 @@
 - name: ks-devops | Create resource quota for worker namespace
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-resourcequota.yaml
+  when: devops.agent.config is not defined or devops.agent.config != 'custom'
+
+- name: ks-devops | Create limit range for worker namespace
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-limitrange.yaml
+  when: devops.agent.config is not defined or devops.agent.config != 'custom'
 
 - name: ks-devops | Deploying Jenkins
   shell: >
