@@ -5,5 +5,5 @@ metadata:
   namespace: kubesphere-devops-worker
 spec:
   hard:
-    limits.cpu: "9"
-    limits.memory: 19Gi
+    limits.cpu: "{{ devops.worker.quota.limit.cpu }}"
+    limits.memory: "{{ devops.worker.quota.limit.memory }}"
