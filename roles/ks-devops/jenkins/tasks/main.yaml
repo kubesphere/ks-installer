@@ -58,7 +58,7 @@
     - devops.sonarqube.externalSonarToken is defined
 
 # Prepare Jenkins agent configuration. And this task must be before creating manifests
-- import_tasks: prepare_for_jenkins_agent_config.yaml
+- import_tasks: prepare_for_jenkins_agent_limit.yaml
 
 - name: ks-devops | Creating manifests
   template:

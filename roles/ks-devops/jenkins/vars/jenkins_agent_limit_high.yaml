@@ -1,0 +1,34 @@
+devops_agent:
+  jnlp:
+    limit:
+      cpu: 500m
+      memory: 1536Mi
+  base:
+    limit:
+      cpu: 3000m
+      memory: 4096Mi
+  nodejs:
+    limit:
+      cpu: 3000m
+      memory: 4096Mi
+  maven:
+    limit:
+      cpu: 3000m
+      memory: 4096Mi
+  go:
+    limit:
+      cpu: 3000m
+      memory: 4096Mi
+devops_worker:
+  quota:
+    limit:
+      cpu: 7000m
+      memory: 11264Mi
+  limitrange:
+    container:
+      default:
+        cpu: 2000m
+        memory: 4Gi
+      request:
+        cpu: 200m
+        memory: 256Mi
