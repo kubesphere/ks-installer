@@ -1,4 +1,5 @@
 devops_agent:
+  concurrent: 20
   jnlp:
     limit:
       cpu: 500m

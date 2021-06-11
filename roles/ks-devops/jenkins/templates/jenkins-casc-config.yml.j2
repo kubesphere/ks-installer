@@ -18,7 +18,7 @@ data:
             credentialsId: "k8s-service-account"
             jenkinsUrl: "http://ks-jenkins.kubesphere-devops-system:80"
             jenkinsTunnel: "ks-jenkins-agent.kubesphere-devops-system:50000"
-            containerCapStr: "100"
+            containerCapStr: "{{ devops_agent.concurrent }}"
             connectTimeout: "60"
             readTimeout: "60"
             maxRequestsPerHostStr: "32"
