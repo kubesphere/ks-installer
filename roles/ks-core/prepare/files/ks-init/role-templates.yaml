@@ -1563,7 +1563,7 @@ metadata:
   annotations:
     iam.kubesphere.io/module: Workspace Settings
     iam.kubesphere.io/role-template-rules: '{"workspace-settings": "manage"}'
-    kubesphere.io/alias-name: Workspace Settings
+    kubesphere.io/alias-name: Workspace Settings Management
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-workspace-settings
@@ -1582,7 +1582,7 @@ metadata:
   annotations:
     iam.kubesphere.io/module: Workspace Settings
     iam.kubesphere.io/role-template-rules: '{"workspace-settings": "view"}'
-    kubesphere.io/alias-name: Workspace Settings
+    kubesphere.io/alias-name: Workspace Settings View
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-workspace-settings
