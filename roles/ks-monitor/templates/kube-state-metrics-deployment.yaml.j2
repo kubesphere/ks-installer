@@ -28,8 +28,8 @@ spec:
         name: kube-state-metrics
         resources:
           limits:
-            cpu: {{ monitoring.kube_state_metrics.limits.cpu | default("500m") }}
-            memory: {{ monitoring.kube_state_metrics.limits.memory | default("2Gi") }}
+            cpu: {{ monitoring.kube_state_metrics.limits.cpu | default("1") }}
+            memory: {{ monitoring.kube_state_metrics.limits.memory | default("8Gi") }}
           requests:
             cpu: {{ monitoring.kube_state_metrics.requests.cpu | default("100m") }}
             memory: {{ monitoring.kube_state_metrics.requests.memory | default("150Mi") }}
