@@ -97,7 +97,7 @@
 - name: KubeSphere | Creating ks-core
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-core
-    {{ kubesphere_dir }}/ks-core/ks-core-0.1.0.tgz
+    {{ kubesphere_dir }}/ks-core/
     -f {{ kubesphere_dir }}/ks-core/custom-values-ks-core.yaml
     --namespace kubesphere-system
   # register: source_state
