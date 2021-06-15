@@ -57,8 +57,8 @@
     - devops.sonarqube.externalSonarUrl is defined
     - devops.sonarqube.externalSonarToken is defined
 
-# Prepare Jenkins agent configuration. And this task must be before creating manifests
-- import_tasks: prepare_for_jenkins_agent_limit.yaml
+# Handle Jenkins agent configuration
+- import_tasks: handle_jenkins_agent_config.yaml
 
 - name: ks-devops | Creating manifests
   template:
@@ -66,29 +66,6 @@
     dest: "{{ kubesphere_dir }}/jenkins/{{ item.file }}"
   with_items:
     - { name: custom-values-jenkins, file: custom-values-jenkins.yaml }
-    - { name: jenkins-casc-config, file: jenkins-casc-config.yml }
-    - { name: jenkins-agent-config, file: jenkins-agent-config.yaml }
-    - { name: worker-resourcequota, file: worker-resourcequota.yaml }
-    - { name: worker-limitrange, file: worker-limitrange.yaml }
-
-- name: ks-devops | Configuring Jenkins casc
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
-  when: devops.agent.config is not defined or devops.agent.config != 'custom'
-
-- name: ks-devops | Creating Jenkins Agent Config File
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-worker
-
-- name: ks-devops | Create resource quota for worker namespace
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-resourcequota.yaml
-  when: devops.agent.config is not defined or devops.agent.config != 'custom'
-
-- name: ks-devops | Create limit range for worker namespace
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-limitrange.yaml
-  when: devops.agent.config is not defined or devops.agent.config != 'custom'
 
 - name: ks-devops | Deploying Jenkins
   shell: >

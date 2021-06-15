@@ -1,0 +1,23 @@
+---
+- import_tasks: pre_check_jenkins_agent_config.yaml
+
+# When Jenkins agent configuration not editable
+- name: ks-devops | Label Jenkins Casc Configuration with custom
+  shell: >
+    {{ bin_dir }}/kubectl label configmap -n kubesphere-devops-system jenkins-casc-config devops.kubesphere.io/limit-level=custom --overwrite
+  when: not jac_editable
+
+# When Jenkins agent configuration editable and provided limit level is not equal to "custom"
+- import_tasks: apply_jenkins_agent_config.yaml
+  when: jac_editable and provided_limit_level != "custom"
+
+# Label the Jenkins casc configuration
+- name: ks-devops | Label Jenkins Casc Configuration with corresponding limit level
+  shell: >
+    {{ bin_dir }}/kubectl label configmap -n kubesphere-devops-system jenkins-casc-config devops.kubesphere.io/limit-level={{ provided_limit_level }} --overwrite
+  when: jac_editable
+
+- debug:
+    var: devops_agent
+- debug:
+    var: devops_worker

@@ -1,0 +1,67 @@
+### Prepare Conditions
+## Exposed variables:
+# 1. has_jac: has Jenkins agent configuration
+# 2. jac_limit_level: Limit level of Jenkins agent configuration
+# 3. has_jac_limit_level: Indicate that there has limit level label of Jenkins agent configuration
+# 4. jac_editable: Indicate that Jenkins agent configuration is editable for later
+# 5. provided_limit_level: Provided limit level by user, this value will never be undefined or empty
+###
+- name: ks-devops | Check if Jenkins Casc Configuration exists
+  shell: >
+    kubectl get configmap -n kubesphere-devops-system jenkins-casc-config -o name
+  register:
+    check_jac
+  failed_when: false
+
+- debug:
+    var: check_jac
+
+- set_fact:
+    has_jac: '{{ check_jac.rc == 0 and check_jac.stdout == "configmap/jenkins-casc-config"}}'
+
+- debug:
+    var: has_jac
+
+- name: ks-devops | Check Jenkins Casc Configuration label
+  shell: |
+    set -o pipefail
+    kubectl get configmap -n kubesphere-devops-system jenkins-casc-config -o json | jq -r '.metadata.labels."devops.kubesphere.io/limit-level"'
+  args:
+    executable: /bin/bash
+  register:
+    check_jac_limit_level
+  when: has_jac
+
+- debug:
+    var: check_jac_limit_level
+
+- set_fact:
+    jac_limit_level: '{{ check_jac_limit_level.stdout }}'
+  when: check_jac_limit_level.rc == 0
+
+- debug:
+    var: jac_limit_level
+
+- set_fact:
+    has_jac_limit_level: '{{ jac_limit_level != "" and jac_limit_level != "null"}}'
+
+- debug:
+    var: has_jac_limit_level
+
+- set_fact:
+    jac_editable: '{{ has_jac and jac_limit_level != "custom" and has_jac_limit_level }}'
+
+- debug:
+    var: jac_editable
+
+- set_fact:
+    available_limit_levels:
+      - "default"
+      - "high"
+      - "custom"
+
+- set_fact:
+    provided_limit_level: '{{ "default" if devops.agent.config not in available_limit_levels else devops.agent.config }}'
+
+- debug:
+    var: provided_limit_level

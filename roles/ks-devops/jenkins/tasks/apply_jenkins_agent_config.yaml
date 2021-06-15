@@ -1,0 +1,40 @@
+# Load configuration for default limit level
+- name: ks-devops | Preparing for default Jenkins agent configuration
+  include_vars: vars/jenkins_agent_limit_default.yaml
+  when:
+    - provided_limit_level == "default"
+
+# Load configuration for high limit level
+- name: ks-devops | Preparing for high Jenkins agent configuration
+  include_vars: vars/jenkins_agent_limit_high.yaml
+  when:
+    - provided_limit_level == "high"
+
+# Next-step: Load configuration for others
+
+# Apply configuration
+- name: ks-devops | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/jenkins/{{ item.file }}"
+  with_items:
+    - { name: jenkins-casc-config, file: jenkins-casc-config.yml }
+    - { name: jenkins-agent-config, file: jenkins-agent-config.yaml }
+    - { name: worker-resourcequota, file: worker-resourcequota.yaml }
+    - { name: worker-limitrange, file: worker-limitrange.yaml }
+
+- name: ks-devops | Configuring Jenkins casc
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
+
+- name: ks-devops | Creating Jenkins Agent Config File
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-worker
+
+- name: ks-devops | Create resource quota for worker namespace
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-resourcequota.yaml
+
+- name: ks-devops | Create limit range for worker namespace
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-limitrange.yaml
