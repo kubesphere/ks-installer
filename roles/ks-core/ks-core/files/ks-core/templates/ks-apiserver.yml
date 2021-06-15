@@ -4,48 +4,42 @@ metadata:
   labels:
     app: ks-apiserver
     tier: backend
-    version: {{ ks_version }}
+    version: {{ .Chart.AppVersion }}
   name: ks-apiserver
-  namespace: kubesphere-system
 spec:
   strategy:
     rollingUpdate:
       maxSurge: 0
     type: RollingUpdate
-{% if master_num is defined and master_num != "0" %}
-  replicas: {{ master_num }}
-{% else %}
-  replicas: 1
-{% endif %}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: ks-apiserver
       tier: backend
-      version: {{ ks_version }}
+      # version: {{ .Chart.AppVersion }}
   template:
     metadata:
       labels:
         app: ks-apiserver
         tier: backend
-        version: {{ ks_version }}
+        # version: {{ .Chart.AppVersion }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - command:
         - ks-apiserver
         - --logtostderr=true
-        image: {{ ks_apiserver_repo }}:{{ ks_apiserver_tag }}
-        imagePullPolicy: {{ ks_image_pull_policy }}
+        image: {{ .Values.image.ks_apiserver_repo }}:{{ .Values.image.ks_apiserver_tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: ks-apiserver
         ports:
         - containerPort: 9090
           protocol: TCP
         resources:
-          limits:
-            cpu: {{ ks_apiserver_cpu_limit }}
-            memory: {{ ks_apiserver_memory_limit }}
-          requests:
-            cpu: {{ ks_apiserver_cpu_requests }}
-            memory: {{ ks_apiserver_memory_requests }}
+          {{- toYaml .Values.apiserverResources | nindent 12 }}
         volumeMounts:
         - mountPath: /var/run/docker.sock
           name: docker-sock
@@ -63,21 +57,11 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 15
           timeoutSeconds: 15
-      serviceAccount: kubesphere
-      serviceAccountName: kubesphere
+      serviceAccountName: {{ include "ks-core.serviceAccountName" . }}
+      {{- with .Values.tolerations }}
       tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
-        - key: CriticalAddonsOnly
-          operator: Exists
-        - effect: NoExecute
-          key: node.kubernetes.io/not-ready
-          operator: Exists
-          tolerationSeconds: 60
-        - effect: NoExecute
-          key: node.kubernetes.io/unreachable
-          operator: Exists
-          tolerationSeconds: 60
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -88,7 +72,7 @@ spec:
                 operator: In
                 values:
                 - ""
-{% if master_num is defined and master_num != "1" %}
+{{- if gt .Values.replicaCount 1.0 }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - topologyKey: kubernetes.io/hostname
@@ -99,8 +83,8 @@ spec:
                 values:
                 - ks-apiserver
             namespaces:
-            - kubesphere-system
-{% endif %}
+            - {{ .Release.Namespace }}
+{{- end }}
       volumes:
       - hostPath:
           path: /var/run/docker.sock
@@ -129,9 +113,8 @@ metadata:
   labels:
     app: ks-apiserver
     tier: backend
-    version: {{ ks_version }}
+    version: {{ .Chart.AppVersion }}
   name: ks-apiserver
-  namespace: kubesphere-system
 spec:
   ports:
   - port: 80
@@ -140,5 +123,5 @@ spec:
   selector:
     app: ks-apiserver
     tier: backend
-    version: {{ ks_version }}
+    # version: {{ .Chart.AppVersion }}
   type: ClusterIP

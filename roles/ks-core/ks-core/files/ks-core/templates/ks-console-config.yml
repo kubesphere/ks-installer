@@ -18,11 +18,10 @@ data:
       sessionTimeout: 7200000
     client:
       version:
-        kubesphere: {{ ks_version }}
-        kubernetes: {{ kube_version }}
-        openpitrix: {{ openpitrix_version }}
+        kubesphere: {{ .Chart.AppVersion }}
+        kubernetes: {{ .Values.kube_version }}
+        openpitrix: {{ .Chart.AppVersion }}
       enableKubeConfig: true
 kind: ConfigMap
 metadata:
   name: ks-console-config
-  namespace: kubesphere-system

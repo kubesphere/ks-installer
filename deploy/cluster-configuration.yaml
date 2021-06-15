@@ -44,6 +44,7 @@ spec:
   console:
     enableMultiLogin: true  # Enable or disable simultaneous logins. It allows different users to log in with the same account at the same time.
     port: 30880
+    type: NodePort
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false         # Enable or disable the KubeSphere Alerting System.
     # thanosruler:
