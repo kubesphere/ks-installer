@@ -4,7 +4,7 @@
 # 2. jac_limit_level: Limit level of Jenkins agent configuration
 # 3. has_jac_limit_level: Indicate that there has limit level label of Jenkins agent configuration
 # 4. jac_editable: Indicate that Jenkins agent configuration is editable for later
-# 5. provided_limit_level: Provided limit level by user, this value will never be undefined or empty
+# 5. provided_jenkins_agent_pod_resource_limit: Provided limit level by user, this value will never be undefined or empty
 ###
 - name: ks-devops | Check if Jenkins Casc Configuration exists
   shell: >
@@ -61,7 +61,7 @@
       - "custom"
 
 - set_fact:
-    provided_limit_level: '{{ "default" if devops.agent.config not in available_limit_levels else devops.agent.config }}'
+    provided_jenkins_agent_pod_resource_limit: '{{ "default" if devops.jenkinsAgent.podResourceLimit not in available_limit_levels else devops.jenkinsAgent.podResourceLimit }}'
 
 - debug:
-    var: provided_limit_level
+    var: provided_jenkins_agent_pod_resource_limit

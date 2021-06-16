@@ -9,12 +9,12 @@
 
 # When Jenkins agent configuration editable and provided limit level is not equal to "custom"
 - import_tasks: apply_jenkins_agent_config.yaml
-  when: jac_editable and provided_limit_level != "custom"
+  when: jac_editable and provided_jenkins_agent_pod_resource_limit != "custom"
 
 # Label the Jenkins casc configuration
 - name: ks-devops | Label Jenkins Casc Configuration with corresponding limit level
   shell: >
-    {{ bin_dir }}/kubectl label configmap -n kubesphere-devops-system jenkins-casc-config devops.kubesphere.io/limit-level={{ provided_limit_level }} --overwrite
+    {{ bin_dir }}/kubectl label configmap -n kubesphere-devops-system jenkins-casc-config devops.kubesphere.io/limit-level={{ provided_jenkins_agent_pod_resource_limit }} --overwrite
   when: jac_editable
 
 - debug:

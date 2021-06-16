@@ -1,14 +1,14 @@
 # Load configuration for default limit level
-- name: ks-devops | Preparing for default Jenkins agent configuration
+- name: ks-devops | Preparing for default pod resource limit of Jenkins agent
   include_vars: vars/jenkins_agent_limit_default.yaml
   when:
-    - provided_limit_level == "default"
+    - provided_jenkins_agent_pod_resource_limit == "default"
 
 # Load configuration for high limit level
-- name: ks-devops | Preparing for high Jenkins agent configuration
+- name: ks-devops | Preparing for high pod resource limit Jenkins agent
   include_vars: vars/jenkins_agent_limit_high.yaml
   when:
-    - provided_limit_level == "high"
+    - provided_jenkins_agent_pod_resource_limit == "high"
 
 # Next-step: Load configuration for others
 

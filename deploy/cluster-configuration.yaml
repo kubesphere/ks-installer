@@ -58,8 +58,8 @@ spec:
     jenkinsJavaOpts_Xms: 512m  # The following three fields are JVM parameters.
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
-    agent:
-      config: default          # Available config level: default, high, custom
+    jenkinsAgent:
+      podResourceLimit: default          # Available limit: default, high, custom
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
     ruler:
