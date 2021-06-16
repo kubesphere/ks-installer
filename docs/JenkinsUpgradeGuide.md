@@ -19,7 +19,7 @@ v3.0.0.
 
 ### Migrate `ks-devops-config` configmap
 
-- If you customized `ks-devops-config` configmap before, you might need to migrate it into new namespace by executing the
+If you customized `ks-devops-config` configmap before, you might need to migrate it into new namespace by executing the
 following command:
 
 ```shell

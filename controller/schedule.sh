@@ -17,7 +17,7 @@ else
   ansible-playbook /kubesphere/playbooks/telemetry.yaml -e @/kubesphere/config/ks-config.json
   if [[ $? -eq 0 ]]; then
     #statements
-    str="successful!"
+    str="successsful!"
     echo -e "$str"
   else
     exit
