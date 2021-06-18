@@ -37,11 +37,7 @@
 
 - set_fact:
     jac_limit_level: '{{ check_jac_limit_level.stdout }}'
-  when: check_jac_limit_level is defined and check_jac_limit_level.rc == 0
-
-- set_fact:
-    jac_limit_level: ''
-  when: check_jac_limit_level is not defined or check_jac_limit_level.rc != 0
+  when: check_jac_limit_level.rc | default('') == 0
 
 - debug:
     var: jac_limit_level
