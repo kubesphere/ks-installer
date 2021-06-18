@@ -2,9 +2,9 @@ name: e2e-TEST
 
 on:
   push:
-    branches: [master, express]
+    branches: [master, release-3.1]
   pull_request:
-    branches: [master]
+    branches: [master, release-3.1]
 
 env:
   # TODO: Change variable to your image's name.
@@ -59,17 +59,21 @@ jobs:
   push-image-to-dockerhub:
     runs-on: ubuntu-latest
     needs: [Test-on-k8s-v-1-19-7]
-    if: github.event_name == 'push' && github.repository_owner == 'kubesphere'
+    if: (github.event_name == 'push' || github.event_name == 'pull_request') && github.repository_owner == 'kubesphere'
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Get Version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/heads/}
 
       - name: Log into registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Push image
         run: |
-          IMAGE=$IMAGE_REPO/$IMAGE_NAME:$IMAGE_VERSION
+          IMAGE=$IMAGE_REPO/$IMAGE_NAME:$([ "$GITHUB_REF" = refs/heads/master ] && echo "latest" || echo "${{ steps.get_version.outputs.VERSION }}")
           docker build . --file Dockerfile --tag $IMAGE
           echo $IMAGE
           docker push $IMAGE
