@@ -264,7 +264,7 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: kubesphere/ks-installer:v3.1.0
+        image: kubespheredev/ks-installer:release-3.1
         imagePullPolicy: "Always"
         resources:
           limits:
