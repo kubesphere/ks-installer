@@ -20,18 +20,6 @@
       {%- if (logging.enabled is defined and logging.enabled) or (events.enabled is defined and events.enabled) or (auditing.enabled is defined and auditing.enabled) or (servicemesh.enabled is defined and servicemesh.enabled)%}
       kubesphere-logging-system
       {%- endif %}
-      {%- if devops.enabled is defined and devops.enabled %}
-      kubesphere-devops-system
-      kubesphere-devops-worker
-      {%- endif %}
-      {%- if harbor.enabled is defined and harbor.enabled %}
-      kubesphere-devops-system
-      kubesphere-devops-worker
-      {%- endif %}
-      {%- if gitlab.enabled is defined and gitlab.enabled %}
-      kubesphere-devops-system
-      kubesphere-devops-worker
-      {%- endif %}
       {%- if servicemesh.enabled is defined and servicemesh.enabled %}
       istio-system
       {%- endif %}

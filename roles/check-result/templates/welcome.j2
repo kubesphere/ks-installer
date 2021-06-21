@@ -14,7 +14,7 @@ NOTES：
      are up and running.
   2. Please change the default password after login.
 {% if istio_old_version_check is defined and istio_old_version_check.stdout.find('deployed') != -1 %}
-  3. Istio has already been upraded to istio 1.6.10
+  3. Istio has already been upgraded to istio 1.6.10
      by canary. The pods, which injected with sidecar,
       will still use 1.4.8. You can rollout restart
      your deployments to uprade the sidecar to 1.6.10
@@ -31,7 +31,15 @@ NOTES：
      ```bash
       helm -n istio-system delete istio-init
       helm -n istio-system delete istio
-    ```
+     ```
+{% endif %}
+{% if devops.enabled is defined and devops.enabled %}
+  4. DevOps component has been separated from ks-installer,
+     please use helm chart to install devops component instead
+
+     ```
+     https://github.com/LinuxSuRen/ks-devops/tree/master/charts/ks-devops
+     ```
 {% endif %}
 
 #####################################################
