@@ -17,6 +17,8 @@ jobs:
   Test-on-k8s-v-1-19-7:
     runs-on: self-hosted
     timeout-minutes: 150
+    outputs:
+      is_MY_SECRET_set: ${{ steps.checksecret_job.outputs.is_MY_SECRET_set }}
     steps:
     - uses: actions/checkout@v2
 
@@ -49,6 +51,14 @@ jobs:
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true},"devops":{"enabled":true},"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
         bash scripts/check_cluster_status.sh
 
+    - name: Check DOCKER_PASSWORD secret
+      id: checksecret_job
+      env:
+          MY_SECRET: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+          echo "is_MY_SECRET_set: ${{ env.MY_SECRET != '' }}"
+          echo "::set-output name=is_MY_SECRET_set::${{ env.MY_SECRET != '' }}"
+
     - name: slack
       uses: 8398a7/action-slack@v3
       with:
@@ -59,7 +69,7 @@ jobs:
   push-image-to-dockerhub:
     runs-on: ubuntu-latest
     needs: [Test-on-k8s-v-1-19-7]
-    if: (github.event_name == 'push' || github.event_name == 'pull_request') && github.actor == 'kubesphere'
+    if: needs.Test-on-k8s-v-1-19-7.outputs.is_MY_SECRET_set == 'true'
 
     steps:
       - uses: actions/checkout@v2
