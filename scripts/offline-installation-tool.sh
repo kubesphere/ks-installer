@@ -164,7 +164,7 @@ elif [ -n "${ImagesList}" ]; then
           ImageName=${image#*/}
           echo $image
 
-          if echo "${reposUrl[@]}" | grep -w "$url" &>/dev/null; then
+          if echo "${reposUrl[@]}" | grep -Fx "$url" &>/dev/null; then
             imageurl=$registryurl"/"${image#*/}
           elif [ $url == $registryurl ]; then
               if [[ $ImageName != */* ]]; then
