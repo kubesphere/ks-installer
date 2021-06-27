@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 GREEN_COL="\\033[32;1m"
 RED_COL="\\033[1;31m"
 YELLOW_COL="\\033[33;1m"
