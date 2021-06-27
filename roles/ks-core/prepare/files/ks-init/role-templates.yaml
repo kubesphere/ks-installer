@@ -317,7 +317,6 @@ rules:
       - limitranges
       - namespaces
       - persistentvolumeclaims
-      - pods
       - podtemplates
       - replicationcontrollers
       - resourcequotas
@@ -356,6 +355,7 @@ rules:
       - filters
       - pods
       - pods/log
+      - pods/exec
       - pods/containers
       - namespacenetworkpolicies
       - workspacenetworkpolicies
@@ -747,6 +747,7 @@ rules:
       - filters
       - pods
       - pods/log
+      - pods/exec
       - pods/containers
       - namespacenetworkpolicies
       - workspacenetworkpolicies
@@ -1216,6 +1217,7 @@ rules:
       - router
       - pods
       - pods/log
+      - pods/exec
       - pods/containers
       - namespacenetworkpolicies
       - networkpolicies
@@ -2722,6 +2724,7 @@ role:
         - cronjobs
         - pods
         - pods/log
+        - pods/exec
         - pods/containers
         - services
         - ingresses
