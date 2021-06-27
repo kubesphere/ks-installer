@@ -22,6 +22,7 @@ harbor_projects=(library
     kubesphere
     calico
     coredns
+    openebs
     csiplugin
     minio
     mirrorgooglecontainers
@@ -34,9 +35,11 @@ harbor_projects=(library
     istio
     jaegertracing
     jenkins
+    weaveworks
     openpitrix
     joosthofman
     nginxdemos
+    fluent
     kubeedge
 )
 
