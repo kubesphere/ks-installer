@@ -17,8 +17,22 @@
     {{ bin_dir }}/kubectl get deploy openpitrix-hyperpitrix-deployment -n openpitrix-system 2>1 -oNAME | wc -l
   register: openpitrix_deploy_count
 
+- name: OpenPitrix | Check openpitrix jobs exists or not
+  shell: >
+    {{ bin_dir }}/kubectl get job openpitrix-import-job -n kubesphere-system 2>1 -oNAME | wc -l
+  register: openpitrix_job_count
+  when:
+    - openpitrix_deploy_count.stdout == "0"
+
+- name: OpenPitrix | Delete previous openpitrix jobs
+  shell: >
+    {{ bin_dir }}/kubectl delete job openpitrix-import-job -n kubesphere-system
+  when:
+    - openpitrix_job_count.stdout == "1"
+    - openpitrix_deploy_count.stdout == "0"
+
 - name: OpenPitrix | Import App
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/ks-openpitrix-import.yaml
   when:
-    - openpitrix_deploy_count.stdout=="0"
+    - openpitrix_deploy_count.stdout == "0"
