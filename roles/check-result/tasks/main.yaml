@@ -23,6 +23,19 @@
   register: ks_console_svc_port
 
 
+- name: KubeSphere | Importing ks-core status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"core": {"version": "{{ ks_version }}"}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3
+
+
 - name: KubeSphere | Creating info_file
   template:
     src: "welcome.j2"

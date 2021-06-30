@@ -68,47 +68,34 @@
   register: number
   ignore_errors: true
 
-- name: Get clusterId by cm of kubesphere-config
+- name: Get clusterId by cc of ks-installer
   shell: >
-     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o yaml | grep "clusterId"
+     {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
   register: check
   ignore_errors: true
 
 - name: KubeSphere | Creating KubeSphere clusterId
   shell: >
-    uuidgen -r -t
+    echo $(cat /proc/sys/kernel/random/uuid)-$(date '+%s')
   register: cluster
   when: check.stdout.find('clusterId') == -1
   ignore_errors: true
 
-- name: clusterId patch to cm of kubesphere-config
+- name: clusterId patch to cc of ks-installer
   shell: >
      {{ bin_dir }}/kubectl patch cc ks-installer -n kubesphere-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
   when: check.stdout.find('clusterId') == -1
   ignore_errors: true
 
-- name: KubeSphere | KubeSphere clusterId
-  set_fact:
-    cluster_str: "{{ cluster.stdout}}"
-  when: check.stdout.find('clusterId') == -1
-
 - name: Get clusterId
   shell: >
      {{ bin_dir }}/kubectl get cc ks-installer -n kubesphere-system -o=jsonpath='{.status.clusterId}'
   register: cluster
-  when: check.stdout.find('clusterId') != -1
   ignore_errors: true
 
 - name: KubeSphere | KubeSphere clusterId
   set_fact:
     cluster_str: "{{ cluster.stdout}}"
-  when: check.stdout.find('clusterId') != -1
-
-- name: clusterId add ks
-  shell: >
-    echo "{{ cluster_str }}"
-  register: clusterId
-  ignore_errors: true
 
 - name: Get multicluster status
   shell: >
@@ -118,7 +105,7 @@
 
 - name: Get essential information
   uri:
-    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ clusterId[ 'stdout' ] }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
+    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks={{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ cluster_str }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
     method: GET
     validate_certs: false
   ignore_errors: true
