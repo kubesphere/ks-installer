@@ -1,6 +1,30 @@
 - import_tasks: prometheus-stack.yaml
   when:
+    - monitoring.grafana is defined
+    - monitoring.grafana.enabled is defined
+    - monitoring.grafana.enabled == true
+
+- import_tasks: prometheus.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
+
+- import_tasks: devops.yaml
+
+- import_tasks: etcd.yaml
+
+- import_tasks: prometheus-rules.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
+
+- import_tasks: alertmanager.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
+
+- import_tasks: notification-manager.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
     - "common.monitoring.type is not defined or common.monitoring.type != 'external'"
+
 
 - import_tasks: monitoring-dashboard.yaml
   when:
@@ -17,11 +41,11 @@
   until: import is succeeded
   retries: 5
   delay: 3
-  when:
-    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: thanosruler.yaml
   when:
     - alerting is defined
     - alerting.enabled is defined
     - alerting.enabled == true
+    - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
+
