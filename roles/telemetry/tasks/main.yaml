@@ -78,13 +78,13 @@
   shell: >
     echo $(cat /proc/sys/kernel/random/uuid)-$(date '+%s')
   register: cluster
-  when: check.stdout.find('clusterId') == -1
+  when: check.stdout == ""
   ignore_errors: true
 
 - name: clusterId patch to cc of ks-installer
   shell: >
      {{ bin_dir }}/kubectl patch cc ks-installer -n kubesphere-system --type merge -p '{"status": {"clusterId": "{{ cluster[ 'stdout' ] }}"}}'
-  when: check.stdout.find('clusterId') == -1
+  when: check.stdout == ""
   ignore_errors: true
 
 - name: Get clusterId

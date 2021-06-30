@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "v3.1.1-rc.0"
+            "version": "v3.1.1-rc.1"
         },
     },
 }
@@ -536,10 +536,10 @@ def generate_new_cluster_configuration(api):
             }
         del cluster_configuration_spec["networkpolicy"]
 
-        if "core" in cluster_configuration_status:
-            if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=
-                    cluster_configuration["metadata"]["labels"]["version"]) or "version" not in cluster_configuration_status["core"]:
-                upgrade_flag = True
+    if "core" in cluster_configuration_status:
+        if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=
+                cluster_configuration["metadata"]["labels"]["version"]) or "version" not in cluster_configuration_status["core"]:
+            upgrade_flag = True
 
     if upgrade_flag:
         cluster_configuration["spec"] = cluster_configuration_spec

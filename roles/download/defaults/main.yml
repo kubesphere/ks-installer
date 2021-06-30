@@ -58,7 +58,7 @@ base_library_repo: >-
   {%- endif %}
 
 
-ks_version: "{{ dev_tag | default('v3.1.1-rc.0') }}"
+ks_version: "{{ dev_tag | default('v3.1.1-rc.1') }}"
 
 # Containers
 # In some cases, we need a way to set --registry-mirror or --insecure-registry for docker,
