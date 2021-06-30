@@ -390,7 +390,7 @@ def resultInfo(resultState=False, api=None):
             exit()
 
     if not resultState:
-        with open('/kubesphere/playbooks/kubesphere_running', 'r') as f:
+        with open(os.path.join(playbookBasePath,'kubesphere_running'), 'r') as f:
             info = f.read()
             logging.info(info)
 
@@ -553,20 +553,31 @@ def generate_new_cluster_configuration(api):
 
 
 def main():
-    if not os.path.exists(privateDataDir):
-        os.makedirs(privateDataDir)
+    global privateDataDir, playbookBasePath, configFile, statusFile
 
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
+        return
+    
+    if len(sys.argv) > 1 and sys.argv[1] == "--debug": 
+        privateDataDir = os.path.abspath('./results')
+        playbookBasePath = os.path.abspath('./playbooks')
+        configFile = os.path.abspath('./results/ks-config.json')
+        statusFile = os.path.abspath('./results/ks-status.json')
+        config.load_kube_config()
     else:
         config.load_incluster_config()
-        api = client.CustomObjectsApi()
-        generate_new_cluster_configuration(api)
-        generateConfig(api)
-        # execute preInstall tasks
-        preInstallTasks()
-        resultState = getResultInfo()
-        resultInfo(resultState, api)
+
+    if not os.path.exists(privateDataDir):
+        os.makedirs(privateDataDir)
+
+    api = client.CustomObjectsApi()
+    generate_new_cluster_configuration(api)
+    generateConfig(api)
+    # execute preInstall tasks
+    preInstallTasks()
+    resultState = getResultInfo()
+    resultInfo(resultState, api)
 
 
 if __name__ == '__main__':

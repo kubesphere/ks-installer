@@ -1,5 +1,3 @@
-#!/bin/bash
-
 #!/usr/bin/env bash
 
 # Copyright 2018 The KubeSphere Authors.
@@ -15,6 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
 CurrentDIR=$(cd "$(dirname "$0")" || exit;pwd)
 ImagesDirDefault=${CurrentDIR}/kubesphere-images
 save="false"

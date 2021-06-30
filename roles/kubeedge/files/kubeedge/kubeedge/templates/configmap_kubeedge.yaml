@@ -14,7 +14,10 @@ data:
       master: ""
     modules:
       cloudHub:
-        advertiseAddress: {{ .Values.cloudCore.cloudHub.advertiseAddress }}
+        advertiseAddress:
+        {{- range .Values.cloudCore.cloudHub.advertiseAddress }}
+        - {{  .  }}
+        {{- end}}
         nodeLimit: {{ .Values.cloudCore.cloudHub.nodeLimit }}
         tlsCAFile: /etc/kubeedge/ca/rootCA.crt
         tlsCertFile: /etc/kubeedge/certs/edge.crt

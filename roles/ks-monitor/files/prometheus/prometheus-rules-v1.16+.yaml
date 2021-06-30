@@ -1250,7 +1250,7 @@ spec:
         message: Cluster has overcommitted CPU resource requests for Namespaces.
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubecpuquotaovercommit
       expr: |
-        sum(kube_resourcequota{job="kube-state-metrics", type="hard", resource="cpu"})
+        sum(kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"cpu|requests.cpu"})
           /
         sum(kube_node_status_allocatable_cpu_cores)
           > 1.5
@@ -1262,9 +1262,9 @@ spec:
         message: Cluster has overcommitted memory resource requests for Namespaces.
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubememoryquotaovercommit
       expr: |
-        sum(kube_resourcequota{job="kube-state-metrics", type="hard", resource="memory"})
+        sum(kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"memory|requests.memory"})
           /
-        sum(kube_node_status_allocatable_memory_bytes{job="node-exporter"})
+        sum(kube_node_status_allocatable_memory_bytes{job="kube-state-metrics"})
           > 1.5
       for: 5m
       labels:

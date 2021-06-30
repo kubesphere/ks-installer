@@ -2,3 +2,4 @@
 
 kubernetes_ca_crt: "{{ kube_cert_dir }}/ca.crt"
 kubernetes_ca_key: "{{ kube_cert_dir }}/ca.key"
+

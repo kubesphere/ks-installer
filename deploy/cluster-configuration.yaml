@@ -26,6 +26,7 @@ spec:
     openldapVolumeSize: 2Gi   # openldap PVC size.
     redisVolumSize: 2Gi # Redis PVC size.
     monitoring:
+      # type: external   # Whether to specify the external prometheus stack, and need to modify the endpoint at the next line.
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data.
     es:   # Storage backend for logging, events and auditing.
       # elasticsearchMasterReplicas: 1   # The total number of master nodes. Even numbers are not allowed.
@@ -43,6 +44,7 @@ spec:
   console:
     enableMultiLogin: true  # Enable or disable simultaneous logins. It allows different users to log in with the same account at the same time.
     port: 30880
+    type: NodePort
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false         # Enable or disable the KubeSphere Alerting System.
     # thanosruler:

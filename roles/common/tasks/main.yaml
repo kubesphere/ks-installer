@@ -23,20 +23,6 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "common"
-    - "ks-crds"
-
-
-- name: KubeSphere | Creating KubeSphere crds
-  shell: "{{ bin_dir }}/kubectl apply -R -f {{ item }}"
-  register: import
-  with_fileglob:
-    - "{{ kubesphere_dir }}/ks-crds/*.yaml"
-  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
-
-- name: KubeSphere | Creating Storage ProvisionerCapability
-  shell: "{{ bin_dir }}/kubectl apply -R -f {{ kubesphere_dir }}/ks-crds/provisonercapability"
-  register: import
-  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
 
 - name: KubeSphere | Checking Kubernetes version
   shell: >

@@ -1,23 +1,4 @@
----
-- import_tasks: cleanup.yaml
-
-- import_tasks: generate_manifests.yaml
-
-- import_tasks: prometheus-operator.yaml
-  when:
-    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
-
-- import_tasks: node-exporter.yaml
-  when:
-    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
-
-- import_tasks: kube-state-metrics.yaml
-  when:
-    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
-
-# - import_tasks: prometheus-adapter.yaml
-
-- import_tasks: grafana.yaml
+- import_tasks: prometheus-stack.yaml
   when:
     - monitoring.grafana is defined
     - monitoring.grafana.enabled is defined
@@ -42,6 +23,8 @@
 - import_tasks: notification-manager.yaml
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
+    - "common.monitoring.type is not defined or common.monitoring.type != 'external'"
+
 
 - import_tasks: monitoring-dashboard.yaml
   when:
@@ -65,3 +48,4 @@
     - alerting.enabled is defined
     - alerting.enabled == true
     - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
+

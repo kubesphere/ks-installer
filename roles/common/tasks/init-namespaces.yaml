@@ -22,12 +22,15 @@
       {%- endif %}
       {%- if devops.enabled is defined and devops.enabled %}
       kubesphere-devops-system
+      kubesphere-devops-worker
       {%- endif %}
       {%- if harbor.enabled is defined and harbor.enabled %}
       kubesphere-devops-system
+      kubesphere-devops-worker
       {%- endif %}
       {%- if gitlab.enabled is defined and gitlab.enabled %}
       kubesphere-devops-system
+      kubesphere-devops-worker
       {%- endif %}
       {%- if servicemesh.enabled is defined and servicemesh.enabled %}
       istio-system
