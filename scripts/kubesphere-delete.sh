@@ -83,6 +83,34 @@ do
   delete_roles $ns
 done
 
+# delete clusterroles
+delete_cluster_roles() {
+  for role in `kubectl get clusterrole -l iam.kubesphere.io/role-template -o jsonpath="{.items[*].metadata.name}"`
+  do
+    kubectl delete clusterrole $role 2>/dev/null
+  done
+
+  for role in `kubectl get clusterroles | grep "kubesphere" | awk '{print $1}'| paste -sd " "`
+  do
+    kubectl delete clusterrole $role 2>/dev/null
+  done
+}
+delete_cluster_roles
+
+# delete clusterrolebindings
+delete_cluster_role_bindings() {
+  for rolebinding in `kubectl get clusterrolebindings -l iam.kubesphere.io/role-template -o jsonpath="{.items[*].metadata.name}"`
+  do
+    kubectl delete clusterrolebindings $rolebinding 2>/dev/null
+  done
+
+  for rolebinding in `kubectl get clusterrolebindings | grep "kubesphere" | awk '{print $1}'| paste -sd " "`
+  do
+    kubectl delete clusterrolebindings $rolebinding 2>/dev/null
+  done
+}
+delete_cluster_role_bindings
+
 # delete clusters
 for cluster in `kubectl get clusters -o jsonpath="{.items[*].metadata.name}"`
 do
@@ -132,7 +160,7 @@ kubectl delete devopsprojects --all 2>/dev/null
 
 
 # delete validatingwebhookconfigurations
-for webhook in ks-events-admission-validate users.iam.kubesphere.io network.kubesphere.io validating-webhook-configuration
+for webhook in ks-events-admission-validate users.iam.kubesphere.io network.kubesphere.io validating-webhook-configuration resourcesquotas.quota.kubesphere.io
 do
   kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io $webhook 2>/dev/null
 done
