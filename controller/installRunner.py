@@ -536,7 +536,7 @@ def generate_new_cluster_configuration(api):
             }
         del cluster_configuration_spec["networkpolicy"]
 
-    if "core" in cluster_configuration_status:
+    if isinstance(cluster_configuration_status, dict) and "core" in cluster_configuration_status:
         if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=
                 cluster_configuration["metadata"]["labels"]["version"]) or "version" not in cluster_configuration_status["core"]:
             upgrade_flag = True
