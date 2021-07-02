@@ -407,6 +407,7 @@ rules:
       - apps/versions
       - categories
       - apps/audits
+      - clusters/applications
     verbs:
       - '*'
   - apiGroups:
@@ -416,7 +417,18 @@ rules:
       - cluster
     verbs:
       - list
-
+  - apiGroups:
+      - monitoring.kubesphere.io
+      - monitoring.coreos.com
+      - metering.kubesphere.io
+      - servicemesh.kubesphere.io
+      - alerting.kubesphere.io
+      - network.kubesphere.io
+      - resources.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -657,6 +669,7 @@ rules:
       - apps/versions
       - categories
       - apps/audits
+      - clusters/applications
       - workloads
       - groups
       - groupbindings
@@ -668,11 +681,16 @@ rules:
       - monitoring.kubesphere.io
       - monitoring.coreos.com
       - metering.kubesphere.io
+      - servicemesh.kubesphere.io
+      - alerting.kubesphere.io
+      - network.kubesphere.io
+      - resources.kubesphere.io
     resources:
       - '*'
     verbs:
       - list
       - get
+      - watch
   - apiGroups:
       - '*'
     resources:
@@ -794,6 +812,18 @@ rules:
       - clusters
     verbs:
       - list
+  - apiGroups:
+      - monitoring.kubesphere.io
+      - monitoring.coreos.com
+      - metering.kubesphere.io
+      - servicemesh.kubesphere.io
+      - alerting.kubesphere.io
+      - network.kubesphere.io
+      - resources.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
 
 
 ---
