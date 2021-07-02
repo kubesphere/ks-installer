@@ -22,6 +22,7 @@ harbor_projects=(library
     kubesphere
     calico
     coredns
+    openebs
     csiplugin
     minio
     mirrorgooglecontainers
@@ -34,13 +35,15 @@ harbor_projects=(library
     istio
     jaegertracing
     jenkins
+    weaveworks
     openpitrix
     joosthofman
     nginxdemos
+    fluent
     kubeedge
 )
 
 for project in "${harbor_projects[@]}"; do
     echo "creating $project"
-    curl -u "${user}:${passwd}" -X POST -H "Content-Type: application/json" "${url}/api/projects" -d "{ \"project_name\": \"${project}\", \"public\": 1}"
+    curl -u "${user}:${passwd}" -X POST -H "Content-Type: application/json" "${url}/api/v2.0/projects" -d "{ \"project_name\": \"${project}\", \"public\": true}"
 done
