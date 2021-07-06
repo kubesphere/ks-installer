@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine3.12
+FROM golang:1.14-alpine3.13
 
 ARG appVersion=latest
 
@@ -12,7 +12,7 @@ WORKDIR /go/src/github.com/flant/shell-operator
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w -X 'github.com/flant/shell-operator/pkg/app.Version=$appVersion'" -o shell-operator ./cmd/shell-operator
 
 
-FROM python:alpine
+FROM 3.9.6-alpine3.13
 
 RUN apk --no-cache add jq gcc bash libffi-dev openssl-dev curl unzip musl-dev openssl && \
     pip install --no-cache-dir psutil cryptography==3.0 ansible_runner==1.4.6 ansible==2.8.12 redis kubernetes && \
