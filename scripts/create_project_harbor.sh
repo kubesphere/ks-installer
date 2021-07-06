@@ -17,6 +17,7 @@
 url="http://192.168.6.2"
 user="admin"
 passwd="Harbor12345"
+version="v2" #support v1 or v2
 
 harbor_projects=(library
     kubesphere
@@ -38,9 +39,15 @@ harbor_projects=(library
     joosthofman
     nginxdemos
     kubeedge
+    weaveworks
+
 )
 
 for project in "${harbor_projects[@]}"; do
     echo "creating $project"
-    curl -u "${user}:${passwd}" -X POST -H "Content-Type: application/json" "${url}/api/projects" -d "{ \"project_name\": \"${project}\", \"public\": 1}"
+    if [ $version == 'v2' ]; then
+      curl -u "${user}:${passwd}" -X POST -H "Content-Type: application/json" "${url}/api/v2.0/projects" -d "{\"project_name\": \"${project}\", \"metadata\": {\"public\": \"true\"}, \"storage_limit\": -1}"
+    else
+      curl -u "${user}:${passwd}" -X POST -H "Content-Type: application/json" "${url}/api/projects" -d "{ \"project_name\": \"${project}\", \"public\": 1}"
+    fi
 done
