@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "v3.1.1-rc.1"
+            "version": "v3.1.1"
         },
     },
 }
@@ -543,7 +543,7 @@ def generate_new_cluster_configuration(api):
 
     if upgrade_flag:
         cluster_configuration["spec"] = cluster_configuration_spec
-        if "clusterId" in cluster_configuration_status:
+        if isinstance(cluster_configuration_status, dict) and "clusterId" in cluster_configuration_status:
             cluster_configuration["status"] = {
                 "clusterId": cluster_configuration_status["clusterId"]
             }

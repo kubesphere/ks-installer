@@ -33,6 +33,10 @@
         {{ bin_dir }}/helm upgrade --install kubefed {{ kubesphere_dir }}/kubefed/kubefed
         -f {{ kubesphere_dir }}/kubefed/custom-values-kubefed.yaml
         --namespace kube-federation-system --wait --timeout 1800s
+      register: kubefed_result
+      until: kubefed_result is succeeded
+      retries: 10
+      delay: 60
 
     - name: Kubfed | Labeling kube-federation-system namespace
       shell: >
