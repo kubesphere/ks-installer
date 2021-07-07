@@ -58,7 +58,7 @@ base_library_repo: >-
   {%- endif %}
 
 
-ks_version: "{{ dev_tag | default('v3.1.1-rc.1') }}"
+ks_version: "{{ dev_tag | default('v3.1.1') }}"
 
 # Containers
 # In some cases, we need a way to set --registry-mirror or --insecure-registry for docker,
@@ -70,9 +70,9 @@ ks_version: "{{ dev_tag | default('v3.1.1-rc.1') }}"
 # And use --insecure-registry options for docker
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-apiserver"
+ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-apiserver"
 ks_apiserver_tag: "{{ ks_version }}"
-ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-controller-manager"
+ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-controller-manager"
 ks_controller_manager_tag: "{{ ks_version }}"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
@@ -80,13 +80,14 @@ ks_devops_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubes
 ks_devops_migration_tag: "flyway-v3.0.0"
 ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
-ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-console"
+ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-console"
 ks_console_tag: "{{ ks_version }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
 ks_kubectl_tag: v1.0.0
 # kubectl versions
 ks_kubectl_versions:
-  v1.19.0: v1.19.0
+  v1.20.0: v1.20.0
+  v1.19.0: v1.19.1
   v1.18.0: v1.18.0
   v1.17.0: v1.17.0
   v1.16.0: v1.16.0
@@ -137,7 +138,7 @@ mc_tag: RELEASE.2019-08-07T23-14-43Z
 
 #ks-hostnic
 snapshot_controller_repo: "{{ base_repo }}{{ namespace_override | default('csiplugin') }}/snapshot-controller"
-snapshot_controller_tag: "v2.0.1"
+snapshot_controller_tag: "v3.0.3"
 
 #jenkins:
 jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-jenkins"
