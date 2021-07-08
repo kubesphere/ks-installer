@@ -32,15 +32,6 @@ NOTES：
       helm -n istio-system delete istio-init
       helm -n istio-system delete istio
      ```
-{% endif %}
-{% if devops.enabled is defined and devops.enabled %}
-  4. DevOps component has been separated from ks-installer,
-     please use helm chart to install devops component instead
-
-     ```
-     https://github.com/LinuxSuRen/ks-devops/tree/master/charts/ks-devops
-     ```
-{% endif %}
 
 #####################################################
 https://kubesphere.io             {{ lookup('pipe','date  \"+%Y-%m-%d %H:%M:%S\"') }}
