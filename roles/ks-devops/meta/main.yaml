@@ -1,1 +1,22 @@
 ---
+- name: ks-devops | Deploying DevOps component
+  shell: >
+    {{ bin_dir }}/helm repo add ks-devops https://johnniang.github.io/ks-devops
+    {{ bin_dir }}/helm repo update
+    {{ bin_dir }}/helm upgrade --install ks-ctl ks-devops/ks-devops \
+                -n kubesphere-devops-system --create-namespace \
+                --set serviceAccount.create=true \
+                --set image.pullPolicy=Always \
+                --set jenkins.ksAuth.enabled=true
+
+- name: ks-devops | Importing ks-devops status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"devops": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3

@@ -7,4 +7,3 @@
     - role: ks-devops
       when:
         - "status.devops is not defined or status.devops.status is not defined or status.devops.status != 'enabled'"
-#    - { role: ks-core, when: sonar_health is defined and sonar_health == true }
