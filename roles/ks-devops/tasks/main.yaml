@@ -1,6 +1,6 @@
 ---
 - name: ks-devops | Deploying DevOps component
-  shell: >
+  shell: |
     {{ bin_dir }}/helm repo add ks-devops https://johnniang.github.io/ks-devops
     {{ bin_dir }}/helm repo update
     {{ bin_dir }}/helm upgrade --install ks-ctl ks-devops/ks-devops \
