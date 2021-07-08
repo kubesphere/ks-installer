@@ -17,11 +17,11 @@
   until: import is succeeded
   retries: 5
   delay: 3
-  when:
-    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
 - import_tasks: thanosruler.yaml
   when:
     - alerting is defined
     - alerting.enabled is defined
     - alerting.enabled == true
+    - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
+

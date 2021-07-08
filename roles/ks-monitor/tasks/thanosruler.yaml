@@ -2,3 +2,15 @@
 - name: Monitoring | Installing thanosruler
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/thanosruler
+
+- name: Monitoring | Importing alerting status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"alerting": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: import
+  failed_when: "import.stderr and 'Warning' not in import.stderr"
+  until: import is succeeded
+  retries: 5
+  delay: 3

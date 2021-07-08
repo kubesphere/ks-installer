@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "v3.1.0"
+            "version": "v3.1.1"
         },
     },
 }
@@ -465,6 +465,27 @@ def generate_new_cluster_configuration(api):
                 "enabled": True
             }
 
+    if "logging" in cluster_configuration_spec and "logsidecarReplicas" in cluster_configuration_spec[
+            "logging"]:
+        upgrade_flag = True
+        if "enabled" in cluster_configuration_spec["logging"]:
+            if cluster_configuration_spec["logging"]["enabled"]:
+                cluster_configuration_spec["logging"] = {
+                    "enabled": True,
+                    "logsidecar": {
+                        "enabled": True,
+                        "replicas": 2
+                    }
+                }
+            else:
+                cluster_configuration_spec["logging"] = {
+                    "enabled": False,
+                    "logsidecar": {
+                        "enabled": False,
+                        "replicas": 2
+                    }
+                }
+
     if "notification" in cluster_configuration_spec:
         upgrade_flag = True
         del cluster_configuration_spec['notification']
@@ -514,12 +535,17 @@ def generate_new_cluster_configuration(api):
                 },
             }
         del cluster_configuration_spec["networkpolicy"]
+
+    if isinstance(cluster_configuration_status, dict) and "core" in cluster_configuration_status:
+        if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=
+                cluster_configuration["metadata"]["labels"]["version"]) or "version" not in cluster_configuration_status["core"]:
+            upgrade_flag = True
+
     if upgrade_flag:
         cluster_configuration["spec"] = cluster_configuration_spec
-        if "status" in old_cluster_configuration and "clusterId" in old_cluster_configuration[
-                "status"]:
+        if isinstance(cluster_configuration_status, dict) and "clusterId" in cluster_configuration_status:
             cluster_configuration["status"] = {
-                "clusterId": old_cluster_configuration["status"]["clusterId"]
+                "clusterId": cluster_configuration_status["clusterId"]
             }
         delete_cluster_configuration(api)
         create_cluster_configuration(api, cluster_configuration)
