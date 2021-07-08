@@ -12,13 +12,19 @@
   with_items:
     - { path: ks-events, file: custom-values-events.yaml }
 
-
 - name: ks-events | Checking ks-events
   shell: >
     {{ bin_dir }}/helm list -f ks-events -n kubesphere-logging-system
   register: events_check
   failed_when: false
 
+- name: ks-events | Checking ks-events
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-logging-system get rulers.events.kubesphere.io ks-events-ruler -o jsonpath='{.spec.image}'
+  register: events_ruler_check
+  when:
+    - (events_check.stdout.find("deployed") != -1) and (events_check.stdout.find("0.1.0") != -1)
+  failed_when: false
 
 - name: ks-events | Deploying ks-events
   shell: >
@@ -32,7 +38,7 @@
   retries: 3
   delay: 10
   when:
-    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.1.0") == -1)
+    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.1.0") == -1) or (events_ruler_check.stdout.find("v0.1.0") != -1)
 
 
 - import_tasks: fluentbit-operator.yaml
