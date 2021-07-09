@@ -104,6 +104,8 @@ metadata:
         allowedResources := ["users","clustermembers","workspacemembers","members"]
         allowedResources[_] == input.Resource
         input.User.Name == input.Name
+        allowedVerbs := ["get","list","watch"]
+        allowedVerbs[_] == input.Verb
       }
       allow = true {
         allowedNoneResources := ["/api","/api/v1"]
