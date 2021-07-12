@@ -49,7 +49,7 @@ kubesphere/ks-console:v3.1.1
 kubesphere/ks-controller-manager:v3.1.1
 kubesphere/ks-installer:v3.1.1
 kubesphere/kubectl:v1.20.0
-kubesphere/kubectl:v1.19.0
+kubesphere/kubectl:v1.19.1
 redis:5.0.12-alpine
 alpine:3.14
 haproxy:2.0.22-alpine
