@@ -111,7 +111,7 @@
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/{{ item }}"
   loop:
     - "kubesphere-config.yaml"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  register: init_result
+  failed_when: "init_result.stderr and 'AlreadyExists' not in init_result.stderr"
 
 - import_tasks: ks-restart.yaml

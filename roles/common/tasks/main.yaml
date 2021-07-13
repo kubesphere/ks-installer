@@ -28,15 +28,15 @@
 
 - name: KubeSphere | Creating KubeSphere crds
   shell: "{{ bin_dir }}/kubectl apply -R -f {{ item }}"
-  register: import
+  register: cc_result
   with_fileglob:
     - "{{ kubesphere_dir }}/ks-crds/*.yaml"
-  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
+  failed_when: "cc_result.stderr and 'Warning: kubectl apply' not in cc_result.stderr"
 
 - name: KubeSphere | Creating Storage ProvisionerCapability
   shell: "{{ bin_dir }}/kubectl apply -R -f {{ kubesphere_dir }}/ks-crds/provisonercapability"
-  register: import
-  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
+  register: spc_result
+  failed_when: "spc_result.stderr and 'Warning: kubectl apply' not in spc_result.stderr"
 
 - name: KubeSphere | Checking Kubernetes version
   shell: >
@@ -144,15 +144,6 @@
 #    - { name: mysql, file: mysql.yaml }
     - { path: redis, file: redis.yaml }
 
-
-#- name: KubeSphere | Creating mysql sercet
-#  shell: >
-#    {{ bin_dir }}/kubectl create secret generic mysql-pass
-#    --from-file={{ kubesphere_dir }}/common/password.txt
-#    -n kubesphere-system
-#  register: import
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
-
 - name: KubeSphere | Deploying common component
   block:
     - name: KubeSphere | Deploying etcd and mysql
@@ -161,10 +152,10 @@
       loop:
         - "etcd.yaml"
         - "mysql.yaml"
-      register: import
+      register: db_result
       failed_when:
-        - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
-        - "import.stderr and 'is forbidden' not in import.stderr"
+        - "db_result.stderr and 'is immutable after creation except resources.requests for bound claims' not in db_result.stderr"
+        - "db_result.stderr and 'is forbidden' not in db_result.stderr"
 
 
     - import_tasks: minio-install.yaml
