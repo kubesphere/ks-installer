@@ -101,7 +101,11 @@ metadata:
       package authz
       default allow = false
       allow = true {
-        allowedResources := ["users","clustermembers","workspacemembers","members"]
+        input.Resource == "users"
+        input.User.Name == input.Name
+      }
+      allow = true {
+        allowedResources := ["clustermembers","workspacemembers","members"]
         allowedResources[_] == input.Resource
         input.User.Name == input.Name
         allowedVerbs := ["get","list","watch"]
