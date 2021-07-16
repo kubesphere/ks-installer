@@ -42,7 +42,3 @@
 - import_tasks: notification-manager.yaml
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
-
-- import_tasks: monitoring-dashboard.yaml
-  when:
-    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"

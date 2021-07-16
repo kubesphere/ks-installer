@@ -1,4 +1,12 @@
 ---
+
+- name: Monitoring | Getting monitoring-dashboard installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "monitoring-dashboard"
+
 - name: Monitoring | Installing monitoring-dashboard
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/monitoring-dashboard
