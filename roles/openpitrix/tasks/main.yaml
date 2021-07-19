@@ -28,7 +28,8 @@
   shell: >
     {{ bin_dir }}/kubectl delete job openpitrix-import-job -n kubesphere-system
   when:
-    - openpitrix_job_count.stdout == "1"
+    - openpitrix_job_count is defined
+    - openpitrix_job_count.stdout is defined and openpitrix_job_count.stdout == "1"
     - openpitrix_deploy_count.stdout == "0"
 
 - name: OpenPitrix | Import App

@@ -143,7 +143,7 @@ mc_tag: RELEASE.2019-08-07T23-14-43Z
 
 #ks-hostnic
 snapshot_controller_repo: "{{ base_repo }}{{ namespace_override | default('csiplugin') }}/snapshot-controller"
-snapshot_controller_tag: "v2.0.1"
+snapshot_controller_tag: "v4.0.0"
 
 #jenkins:
 jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-jenkins"

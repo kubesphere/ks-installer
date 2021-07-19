@@ -72,11 +72,6 @@ spec:
           name: Age
           type: date
       name: v1beta1
-      # This indicates the v1beta1 version of the custom resource is deprecated.
-      # API requests to this version receive a warning in the server response.
-      deprecated: true
-      # This overrides the default warning returned to clients making v1beta1 API requests.
-      deprecationWarning: "snapshot.storage.k8s.io/v1beta1 VolumeSnapshotClass is deprecated; use snapshot.storage.k8s.io/v1 VolumeSnapshotClass"
       schema:
         openAPIV3Schema:
           description: VolumeSnapshotClass specifies parameters that a underlying storage system uses when creating a volume snapshot. A specific VolumeSnapshotClass is used by specifying its name in a VolumeSnapshot object. VolumeSnapshotClasses are non-namespaced
@@ -305,11 +300,6 @@ spec:
           name: Age
           type: date
       name: v1beta1
-      # This indicates the v1beta1 version of the custom resource is deprecated.
-      # API requests to this version receive a warning in the server response.
-      deprecated: true
-      # This overrides the default warning returned to clients making v1beta1 API requests.
-      deprecationWarning: "snapshot.storage.k8s.io/v1beta1 VolumeSnapshotContent is deprecated; use snapshot.storage.k8s.io/v1 VolumeSnapshotContent"
       schema:
         openAPIV3Schema:
           description: VolumeSnapshotContent represents the actual "on-disk" snapshot object in the underlying storage system
@@ -573,11 +563,6 @@ spec:
           name: Age
           type: date
       name: v1beta1
-      # This indicates the v1beta1 version of the custom resource is deprecated.
-      # API requests to this version receive a warning in the server response.
-      deprecated: true
-      # This overrides the default warning returned to clients making v1beta1 API requests.
-      deprecationWarning: "snapshot.storage.k8s.io/v1beta1 VolumeSnapshot is deprecated; use snapshot.storage.k8s.io/v1 VolumeSnapshot"
       schema:
         openAPIV3Schema:
           description: VolumeSnapshot is a user's request for either creating a point-in-time snapshot of a persistent volume, or binding to a pre-existing snapshot.

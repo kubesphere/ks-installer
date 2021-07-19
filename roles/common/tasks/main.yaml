@@ -45,9 +45,13 @@
       with_items:
         - { name: custom-values-snapshot-controller, file: custom-values-snapshot-controller.yaml }
 
-    - name: KubeSphere | Removing old snapshot crd
+    - name: KubeSphere | Updating snapshot crd
       command: >
+        {% if kubernetes_version.stdout is version('v1.19.0', '>=') %}
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml --force
+        {% else %}
+        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot_before119.yaml --force
+        {% endif %}
       failed_when: false
 
     - name: KubeSphere | Deploying snapshot controller
