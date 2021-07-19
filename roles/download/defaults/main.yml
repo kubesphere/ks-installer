@@ -76,9 +76,9 @@ ks_version: >-
 
 #KubeSphere:
 ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-apiserver"
-ks_apiserver_tag: "{{ ks_version }}"
+ks_apiserver_tag: "remove-devops-ctrl"
 ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-controller-manager"
-ks_controller_manager_tag: "{{ ks_version }}"
+ks_controller_manager_tag: "remove-devops-ctrl"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
 ks_devops_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-devops"

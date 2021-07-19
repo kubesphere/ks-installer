@@ -264,7 +264,7 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: kubespheredev/ks-installer:latest
+        image: johnniang/ks-installer:remove-devops-comp
         imagePullPolicy: "Always"
         resources:
           limits:
