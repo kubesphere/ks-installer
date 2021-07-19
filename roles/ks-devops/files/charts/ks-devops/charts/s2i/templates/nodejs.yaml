@@ -1,0 +1,63 @@
+apiVersion: devops.kubesphere.io/v1alpha1
+kind: S2iBuilderTemplate
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+    builder-type.kubesphere.io/s2i: "s2i"
+  annotations:
+    descriptionEN: "Node.js available as container is a base platform for building and running various Node.js applications and frameworks. Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices."
+    descriptionCN: "Nodejs 应用的构建器模版。Node.js 是基于 Chrome 的 JavaScript 运行时构建的平台，可轻松构建快速，可扩展的网络应用程序。"
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-nodejs-container
+    "helm.sh/hook": pre-install
+  name: nodejs
+spec:
+  containerInfo:
+     - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.nodejs8CentOs7.image.name }}:{{ .Values.nodejs8CentOs7.image.tag }}
+     - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.nodejs6CentOs7.image.name }}:{{ .Values.nodejs6CentOs7.image.tag }}
+     - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.nodejs4CentOs7.image.name }}:{{ .Values.nodejs4CentOs7.image.tag }}
+  environment:
+    - key: NODE_ENV
+      type: string
+      description: "NodeJS runtime mode (default: \"production\")"
+      required: false
+      defaultValue: ""
+    - key: DEV_MODE
+      type: boolean
+      description: "When set to \"true\", nodemon will be used to automatically reload the server while you work (default: \"false\"). Setting DEV_MODE to \"true\" will change the NODE_ENV default to \"development\" (if not explicitly set)."
+      required: false
+      defaultValue: ""
+    - key: NPM_RUN
+      type: string
+      description: "Select an alternate / custom runtime mode, defined in your package.json file's scripts section (default: npm run \"start\"). These user-defined run-scripts are unavailable while DEV_MODE is in use."
+      required: false
+      defaultValue: ""
+    - key: HTTP_PROXY
+      type: string
+      description: "Use an npm proxy during assembly"
+      required: false
+      defaultValue: ""
+    - key: HTTPS_PROXY
+      type: string
+      description: "Use an npm proxy during assembly"
+      required: false
+      defaultValue: ""
+    - key: NPM_MIRROR
+      type: string
+      description: "Use a custom NPM registry mirror to download packages during the build process"
+      required: false
+      defaultValue: ""
+    - key: YARN_ENABLED
+      type: string
+      description: "Set this variable to a non-empty value to use \"yarn install\" get dependencies"
+      required: false
+      defaultValue: ""
+    - key: YARN_ARGS
+      type: string
+      description: "\"yarn install\" args"
+      required: false
+      defaultValue: ""
+  codeFramework: nodejs
+  defaultBaseImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.nodejs8CentOs7.image.name }}:{{ .Values.nodejs8CentOs7.image.tag }}
+  version: 0.0.1
+  description: "Node.js available as container is a base platform for building and running various Node.js applications and frameworks. Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices."
+  iconPath: assets/nodejs.png

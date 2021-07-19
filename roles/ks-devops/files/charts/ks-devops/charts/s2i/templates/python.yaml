@@ -1,0 +1,87 @@
+apiVersion: devops.kubesphere.io/v1alpha1
+kind: S2iBuilderTemplate
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+    builder-type.kubesphere.io/s2i: "s2i"
+  name: python
+  annotations:
+    descriptionCN: "Python 应用的构建器模版。Python 是一种易于学习，功能强大的编程语言。 它具有高效的高级数据结构和简单但有效的面向对象编程方法。"
+    descriptionEN: "Python available as container is a base platform for building and running various Python applications and frameworks. Python is an easy to learn, powerful programming language. It has efficient high-level data structures and a simple but effective approach to object-oriented programming. Python's elegant syntax and dynamic typing, together with its interpreted nature, make it an ideal language for scripting and rapid application development in many areas on most platforms."
+    "helm.sh/hook": pre-install
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-python-container
+spec:
+  containerInfo:
+    - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.python36CentOs7.image.name }}:{{ .Values.python36CentOs7.image.tag }}
+    - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.python35CentOs7.image.name }}:{{ .Values.python35CentOs7.image.tag }}
+    - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.python34CentOs7.image.name }}:{{ .Values.python34CentOs7.image.tag }}
+    - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.python27CentOs7.image.name }}:{{ .Values.python27CentOs7.image.tag }}
+  environment:
+    - key: APP_SCRIPT
+      type: string
+      description: "Used to run the application from a script file. This should be a path to a script file (defaults to app.sh unless set to null) that will be run to start the application."
+      required: false
+      defaultValue: ""
+    - key: APP_FILE
+      description: "Used to run the application from a Python script. This should be a path to a Python file (defaults to app.py unless set to null) that will be passed to the Python interpreter to start the application."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: APP_MODULE
+      description: "Used to run the application with Gunicorn, as documented here. This variable specifies a WSGI callable with the pattern MODULE_NAME:VARIABLE_NAME, where MODULE_NAME is the full dotted path of a module, and VARIABLE_NAME refers to a WSGI callable inside the specified module. Gunicorn will look for a WSGI callable named application if not specified.
+
+                      If APP_MODULE is not provided, the run script will look for a wsgi.py file in your project and use it if it exists.
+
+                      If using setup.py for installing the application, the MODULE_NAME part can be read from there. "
+      required: false
+      defaultValue: ""
+      type: string
+    - key: APP_HOME
+      description: "This variable can be used to specify a sub-directory in which the application to be run is contained. The directory pointed to by this variable needs to contain wsgi.py (for Gunicorn) or manage.py (for Django).
+
+                      If APP_HOME is not provided, the assemble and run scripts will use the application's root directory."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: APP_CONFIG
+      description: "Path to a valid Python file with a Gunicorn configuration file."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: DISABLE_COLLECTSTATIC
+      description: "Set this variable to a non-empty value to inhibit the execution of 'manage.py collectstatic' during the build. This only affects Django projects."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: DISABLE_SETUP_PY_PROCESSING
+      description: "Set this to a non-empty value to skip processing of setup.py script if you use -e . in requirements.txt to trigger its processing or you don't want your application to be installed into site-packages directory."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: ENABLE_PIPENV
+      description: "Set this variable to use Pipenv, the higher-level Python packaging tool, to manage dependencies of the application. This should be used only if your project contains properly formated Pipfile and Pipfile.lock."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: PIP_INDEX_URL
+      description: "Set this variable to use a custom index URL or mirror to download required packages during build process. This only affects packages listed in requirements.txt. Pipenv ignores this variable."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: UPGRADE_PIP_TO_LATEST
+      description: "Set this variable to a non-empty value to have the 'pip' program and related python packages (setuptools and wheel) be upgraded to the most recent version before any Python packages are installed. If not set it will use whatever the default version is included by the platform for the Python version being used.."
+      required: false
+      defaultValue: ""
+      type: string
+    - key: WEB_CONCURRENCY
+      description: "Set this to change the default setting for the number of workers. By default, this is set to the number of available cores times 2, capped at 12."
+      required: false
+      defaultValue: ""
+      type: string
+  codeFramework: python
+  defaultBaseImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.python36CentOs7.image.name }}:{{ .Values.python36CentOs7.image.tag }}
+  version: 0.0.1
+  description: "Python available as container is a base platform for building and running various Python applications and frameworks. Python is an easy to learn, powerful programming language. It has efficient high-level data structures and a simple but effective approach to object-oriented programming. Python's elegant syntax and dynamic typing, together with its interpreted nature, make it an ideal language for scripting and rapid application development in many areas on most platforms.
+
+                This container image includes an npm utility, so users can use it to install JavaScript modules for their web applications. There is no guarantee for any specific npm or nodejs version, that is included in the image; those versions can be changed anytime and the nodejs itself is included just to make the npm work."
+  iconPath: assets/python.png

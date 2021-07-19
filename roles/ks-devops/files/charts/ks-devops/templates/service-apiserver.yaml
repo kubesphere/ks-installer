@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ks-devops.fullname" . }}-apiserver
+  labels:
+    {{- include "ks-devops-apiserver.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 9090
+      protocol: TCP
+  selector:
+    {{- include "ks-devops-apiserver.selectorLabels" . | nindent 4 }}

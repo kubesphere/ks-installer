@@ -1,0 +1,26 @@
+apiVersion: devops.kubesphere.io/v1alpha1
+kind: S2iBuilderTemplate
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+    builder-type.kubesphere.io/b2i: "b2i"
+    binary-type.kubesphere.io: "binary"
+  annotations:
+    descriptionEN: "This is a builder template for binary build"
+    descriptionCN: "二进制文件的构建器模版"
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-binary-container
+  name: binary
+spec:
+  containerInfo:
+    - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.binary.image.name }}:{{ .Values.binary.image.tag }}
+  environment:
+    - key: ARGS
+      type: string
+      description: "Arguments to use when calling binary,"
+      required: false
+      defaultValue: ""
+  codeFramework: binary
+  defaultBaseImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.binary.image.name }}:{{ .Values.binary.image.tag }}
+  version: 0.0.1
+  description: "This is a builder template for binary build"
+  iconPath: assets/binary.png

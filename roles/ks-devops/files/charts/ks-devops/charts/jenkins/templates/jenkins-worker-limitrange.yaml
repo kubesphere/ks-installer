@@ -1,0 +1,14 @@
+kind: LimitRange
+apiVersion: v1
+metadata:
+  name: worker-limit-range
+  namespace: {{ .Values.Agent.WorkerNamespace }}
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: "750m"
+        memory: "1024Mi"
+      defaultRequest:
+        cpu: "100m"
+        memory: "256Mi"

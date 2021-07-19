@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: worker-resource-quota
+  namespace: {{ .Values.Agent.WorkerNamespace }}
+spec:
+  hard:
+    limits.cpu: "3000m"
+    limits.memory: "3072Mi"

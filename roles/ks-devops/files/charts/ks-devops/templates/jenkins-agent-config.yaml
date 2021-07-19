@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-agent-config
+data:
+  agent.pod_resource_limit: default # or high or custom
+  ## The following settings are only available for custom setting
+  # worker.limit.cpu: "3000m"
+  # worker.limit.memory: "3Gi"
+  # worker.limitrange.container.default.cpu: "750m"
+  # worker.limitrange.container.default.memory: "1024Mi"
+  # worker.limitrange.container.defaultrequest.cpu: "100m"
+  # worker.limitrange.container.defaultrequest.memory: "128Mi"
+  # pod.concurrent: "2"
+  # jnlp.limit.cpu: "500m"
+  # jnlp.limit.memory: "512Mi"
+  # base.limit.cpu: "1000m"
+  # base.limit.memory: "1024Mi"
+  # nodejs.limit.cpu: "1000m"
+  # nodejs.limit.memory: "1024Mi"
+  # maven.limit.cpu: "1000m"
+  # maven.limit.memory: "1024Mi"
+  # go.limit.cpu: "1000m"
+  # go.limit.memory: "1024Mi"

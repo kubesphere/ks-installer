@@ -1,0 +1,147 @@
+apiVersion: devops.kubesphere.io/v1alpha1
+kind: S2iBuilderTemplate
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+    builder-type.kubesphere.io/s2i: "s2i"
+    builder-type.kubesphere.io/b2i: "b2i"
+    binary-type.kubesphere.io: "jar"
+  annotations:
+    "helm.sh/hook": pre-install
+    descriptionCN: "Java 应用的构建器模版。通过该模版可构建出直接运行的应用镜像。"
+    descriptionEN: "This is a builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\")."
+    devops.kubesphere.io/s2i-template-url: https://github.com/kubesphere/s2i-java-container/blob/master/java/images
+  name: java
+spec:
+  containerInfo:
+    - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.java8CentOs7.image.name }}:{{ .Values.java8CentOs7.image.tag }}
+      runtimeImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.java8Runtime.image.name }}:{{ .Values.java8Runtime.image.tag }}
+      runtimeArtifacts:
+        - source: "/deployments"
+      buildVolumes: [ "s2i_java_cache:/tmp/artifacts" ]
+    - builderImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.java11CentOs7.image.name }}:{{ .Values.java11CentOs7.image.tag }}
+      runtimeImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.java11Runtime.image.name }}:{{ .Values.java11Runtime.image.tag }}
+      runtimeArtifacts:
+        - source: "/deployments"
+      buildVolumes: [ "s2i_java_cache:/tmp/artifacts" ]
+  environment:
+    - key: MAVEN_ARGS
+      type: string
+      description: "Arguments to use when calling Maven, replacing the default package hawt-app:build -DskipTests -e. Please be sure to run the hawt-app:build goal (when not already bound to the package execution phase), otherwise the startup scripts won't work."
+      required: false
+      defaultValue: ""
+    - key: MAVEN_ARGS_APPEND
+      type: string
+      description: "Additional Maven arguments, useful for temporary adding arguments like -X or -am -pl ."
+      required: false
+      defaultValue: ""
+    - key: ARTIFACT_DIR
+      type: string
+      description: "Path to target/ where the jar files are created for multi module builds. These are added to ${MAVEN_ARGS}"
+      required: false
+      defaultValue: ""
+    - key: ARTIFACT_COPY_ARGS
+      type: string
+      description: "Arguments to use when copying artifacts from the output dir to the application dir. Useful to specify which artifacts will be part of the image. It defaults to -r hawt-app/* when a hawt-app dir is found on the build directory, otherwise jar files only will be included (*.jar)."
+      required: false
+      defaultValue: ""
+    - key: MAVEN_CLEAR_REPO
+      type: boolean
+      description: "If set then the Maven repository is removed after the artifact is built. This is useful for keeping the created application image small, but prevents incremental builds. The default is false"
+      required: false
+      defaultValue: ""
+    - key: JAVA_APP_DIR
+      type: string
+      description: "the directory where the application resides. All paths in your application are relative to this directory. By default it is the same directory where this startup script resides."
+      required: false
+      defaultValue: ""
+    - key: JAVA_LIB_DIR
+      type: string
+      description: "directory holding the Java jar files as well an optional classpath file which holds the classpath. Either as a single line classpath (colon separated) or with jar files listed line-by-line. If not set JAVA_LIB_DIR is the same as JAVA_APP_DIR."
+      required: false
+      defaultValue: ""
+    - key: JAVA_OPTIONS
+      type: string
+      description: "options to add when calling java"
+      required: false
+      defaultValue: ""
+    - key: JAVA_MAJOR_VERSION
+      type: string
+      description: "a number >= 7. If the version is set then only options suitable for this version are used. When set to 7 options known only to Java > 8 will be removed. For versions >= 10 no explicit memory limit is calculated since Java >= 10 has support for container limits."
+      required: false
+      defaultValue: ""
+    - key: JAVA_MAX_MEM_RATIO
+      type: string
+      description: "is used when no -Xmx option is given in JAVA_OPTIONS. This is used to calculate a default maximal Heap Memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then -Xmx is set to a ratio of the container available memory as set here. The default is 25 when the maximum amount of memory available to the container is below 300M, 50 otherwise, which means in that case that 50% of the available memory is used as an upper boundary. You can skip this mechanism by setting this value to 0 in which case no -Xmx option is added."
+      required: false
+      defaultValue: ""
+    - key: JAVA_INIT_MEM_RATIO
+      type: string
+      description: "is used when no -Xms option is given in JAVA_OPTIONS. This is used to calculate a default initial Heap Memory based on a containers restriction. If used in a Docker container without any memory constraints for the container then this option has no effect. If there is a memory constraint then -Xms is set to a ratio of the container available memory as set here. By default this value is not set."
+      required: false
+      defaultValue: ""
+    - key: JAVA_MAX_CORE
+      type: string
+      description: "restrict manually the number of cores available which is used for calculating certain defaults like the number of garbage collector threads. If set to 0 no base JVM tuning based on the number of cores is performed."
+      required: false
+      defaultValue: ""
+    - key: JAVA_DIAGNOSTICS
+      type: string
+      description: "set this to get some diagnostics information to standard out when things are happening"
+      required: false
+      defaultValue: ""
+    - key: JAVA_MAIN_CLASS
+      type: string
+      description: "main class to use as argument for java. When this environment variable is given, all jar files in $JAVA_APP_DIR are added to the classpath as well as $JAVA_LIB_DIR."
+      required: false
+      defaultValue: ""
+    - key: JAVA_APP_JAR
+      type: string
+      description: "A jar file with an appropriate manifest so that it can be started with java -jar if no $JAVA_MAIN_CLASS is set. In all cases this jar file is added to the classpath, too."
+      required: false
+      defaultValue: ""
+    - key: JAVA_APP_NAME
+      type: string
+      description: "Name to use for the process"
+      required: false
+      defaultValue: ""
+    - key: JAVA_CLASSPATH
+      type: string
+      description: "the classpath to use. If not given, the startup script checks for a file ${JAVA_APP_DIR}/classpath and use its content literally as classpath. If this file doesn't exists all jars in the app dir are added (classes:${JAVA_APP_DIR}/*)."
+      required: false
+      defaultValue: ""
+    - key: JAVA_DEBUG
+      type: string
+      description: "If set remote debugging will be switched on"
+      required: false
+      defaultValue: ""
+    - key: JAVA_DEBUG_SUSPEND
+      type: string
+      description: "If set enables suspend mode in remote debugging"
+      required: false
+      defaultValue: ""
+    - key: JAVA_DEBUG_PORT
+      type: string
+      description: "Port used for remote debugging. Default: 5005"
+      required: false
+      defaultValue: ""
+    - key: HTTP_PROXY
+      type: string
+      description: "The URL of the proxy server that translates into the http.proxyHost and http.proxyPort system properties."
+      required: false
+      defaultValue: ""
+    - key: HTTPS_PROXY
+      type: string
+      description: "The URL of the proxy server that translates into the https.proxyHost and https.proxyPort system properties."
+      required: false
+      defaultValue: ""
+    - key: NO_PROXY
+      type: string
+      description: "The list of hosts that should be reached directly, bypassing the proxy, that translates into the http.nonProxyHosts system property."
+      required: false
+      defaultValue: ""
+  codeFramework: java
+  defaultBaseImage: {{ template "s2i.imagePrefix" . }}/{{ .Values.java8CentOs7.image.name }}:{{ .Values.java8CentOs7.image.tag }}
+  version: 0.0.1
+  description: "This is a builder template for Java builds whose result can be run directly without any further application server.It's suited ideally for microservices with a flat classpath (including \"far jars\")"
+  iconPath: assets/java.png

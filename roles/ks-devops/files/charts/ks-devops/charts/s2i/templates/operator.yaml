@@ -1,0 +1,468 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: mutating-webhook-configuration
+  namespace: {{ .Release.Namespace }}
+webhooks:
+  - clientConfig:
+      caBundle: {{ .Values.s2ioperator.secret.caBundle | b64enc }}
+      service:
+        name: webhook-server-service
+        namespace: {{ .Release.Namespace }}
+        path: /mutate-devops-kubesphere-io-v1alpha1-s2ibuilder
+    failurePolicy: Fail
+    name: s2ibuilder.kb.io
+    rules:
+      - apiGroups:
+          - devops.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - s2ibuilders
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validating-webhook-configuration
+  namespace: {{ .Release.Namespace }}
+webhooks:
+  - clientConfig:
+      caBundle: {{ .Values.s2ioperator.secret.caBundle | b64enc }}
+      service:
+        name: webhook-server-service
+        namespace: {{ .Release.Namespace }}
+        path: /validate-devops-kubesphere-io-v1alpha1-s2ibuilder
+    failurePolicy: Fail
+    name: vs2ibuilder.kb.io
+    rules:
+      - apiGroups:
+          - devops.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - s2ibuilders
+  - clientConfig:
+      caBundle: {{ .Values.s2ioperator.secret.caBundle | b64enc }}
+      service:
+        name: webhook-server-service
+        namespace: {{ .Release.Namespace }}
+        path: /validate-devops-kubesphere-io-v1alpha1-s2ibuildertemplate
+    failurePolicy: Fail
+    name: s2ibuildertemplate.kb.io
+    rules:
+      - apiGroups:
+          - devops.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - s2ibuildertemplates
+  - clientConfig:
+      caBundle: {{ .Values.s2ioperator.secret.caBundle | b64enc }}
+      service:
+        name: webhook-server-service
+        namespace: {{ .Release.Namespace }}
+        path: /validate-devops-kubesphere-io-v1alpha1-s2irun
+    failurePolicy: Fail
+    name: vs2irun.kb.io
+    rules:
+      - apiGroups:
+          - devops.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - s2iruns
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - s2ibuilders
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - s2ibuilders/status
+    verbs:
+      - get
+      - update
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - s2iruns
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - s2iruns/status
+    verbs:
+      - get
+      - update
+      - patch
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - s2ibuildertemplates
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+  - apiGroups:
+      - extensions
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - rolebindings
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - mutatingwebhookconfigurations
+      - validatingwebhookconfigurations
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: proxy-role
+rules:
+  - apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+    verbs:
+      - create
+  - apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+    verbs:
+      - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  creationTimestamp: null
+  name: manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: manager-role
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: proxy-role
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+data:
+  caBundle: {{ .Values.s2ioperator.secret.caBundle | b64enc }}
+  tls.crt: {{ .Values.s2ioperator.secret.certificate | b64enc }}
+  tls.key: {{ .Values.s2ioperator.secret.key | b64enc }}
+kind: Secret
+metadata:
+  name: s2i-webhook-server-cert
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: http
+    prometheus.io/scrape: "true"
+  labels:
+    app: s2i-metrics
+    control-plane: s2i-controller-manager
+    controller-tools.k8s.io: "1.0"
+  name: s2ioperator-metrics-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    control-plane: s2i-controller-manager
+    controller-tools.k8s.io: "1.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: s2i-trigger-service
+    control-plane: s2i-controller-manager
+    controller-tools.k8s.io: "1.0"
+  name: s2ioperator-trigger-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - name: http
+      port: 8081
+      targetPort: 8081
+  selector:
+    control-plane: s2i-controller-manager
+    controller-tools.k8s.io: "1.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-server-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - port: 443
+      targetPort: 443
+  selector:
+    control-plane: s2i-controller-manager
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    control-plane: s2ioperator
+    controller-tools.k8s.io: "1.0"
+  name: s2ioperator
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      control-plane: s2i-controller-manager
+      controller-tools.k8s.io: "1.0"
+  serviceName: s2ioperator
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      labels:
+        control-plane: s2i-controller-manager
+        controller-tools.k8s.io: "1.0"
+    spec:
+      containers:
+        - command:
+            - /manager
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: S2IIMAGENAME
+              value: "{{ template "s2i.imagePrefix" . }}/{{ .Values.s2irun.image.name }}:{{ .Values.s2irun.image.tag }}"
+          image: "{{ template "s2i.imagePrefix" . }}/{{ .Values.s2ioperator.image.name }}:{{ .Values.s2ioperator.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          name: manager
+          ports:
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+            - containerPort: 8081
+              name: trigger
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 20Mi
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: s2i-webhook-server-cert

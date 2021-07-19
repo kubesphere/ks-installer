@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  kubesphere.yaml: |
+    authentication:
+      authenticateRateLimiterMaxTries: 10
+      authenticateRateLimiterDuration: 10m0s
+      loginHistoryRetentionPeriod: 168h
+      maximumClockSkew: 10s
+      jwtSecret: "Z1TBo4jUSB5Rs6eyLqHSJ77GXtG8NhSP"
+kind: ConfigMap
+metadata:
+  name: devops-plugin-config

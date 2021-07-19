@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: ghcr.io/linuxsuren/ks/ks:v0.0.37
+          command: ["/ks", "option", "migrate", "--service", '{{ include "ks-devops.fullname" . }}-apiserver.{{ .Release.Namespace }}:9090', "--namespace", "{{ .Release.Namespace }}"]
+      serviceAccountName:  {{ include "ks-devops.serviceAccountName" . }}
+      restartPolicy: Never
+  backoffLimit: 4

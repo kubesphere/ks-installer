@@ -1,0 +1,208 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-casc-config
+data:
+  jenkins.yaml: |
+    jenkins:
+      mode: EXCLUSIVE
+      numExecutors: 5
+      scmCheckoutRetryCount: 2
+      disableRememberMe: true
+
+      clouds:
+        - kubernetes:
+            name: "kubernetes"
+            serverUrl: "https://kubernetes.default"
+            skipTlsVerify: true
+            namespace: "{{ .Values.Agent.WorkerNamespace }}"
+            credentialsId: "k8s-service-account"
+            jenkinsUrl: "http://{{template "jenkins.fullname" . }}.{{ .Release.Namespace }}:80"
+            jenkinsTunnel: "{{ template "jenkins.fullname" . }}-agent.{{ .Release.Namespace }}:50000"
+            containerCapStr: "2"
+            connectTimeout: "60"
+            readTimeout: "60"
+            maxRequestsPerHostStr: "32"
+            templates:
+              - name: "base"
+                namespace: "{{ .Values.Agent.WorkerNamespace }}"
+                label: "base"
+                nodeUsageMode: "NORMAL"
+                idleMinutes: 0
+                containers:
+                - name: "base"
+                  image: "{{ .Values.Agent.Builder.Base.Image }}:{{ .Values.Agent.Builder.Base.Tag }}"
+                  command: "cat"
+                  args: ""
+                  ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
+                - name: "jnlp"
+                  image: "{{ .Values.Agent.Image }}:{{ .Values.Agent.ImageTag }}"
+                  command: "jenkins-slave"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "50m"
+                  resourceLimitCpu: "500m"
+                  resourceRequestMemory: "400Mi"
+                  resourceLimitMemory: "1536Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_sonar_cache"
+                    mountPath: "/root/.sonar/cache"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"base\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
+              - name: "nodejs"
+                namespace: "{{ .Values.Agent.WorkerNamespace }}"
+                label: "nodejs"
+                nodeUsageMode: "EXCLUSIVE"
+                idleMinutes: 0
+                containers:
+                - name: "nodejs"
+                  image: "{{ .Values.Agent.Builder.NodeJs.Image }}:{{ .Values.Agent.Builder.NodeJs.Tag }}"
+                  command: "cat"
+                  args: ""
+                  ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
+                - name: "jnlp"
+                  image: "{{ .Values.Agent.Image }}:{{ .Values.Agent.ImageTag }}"
+                  command: "jenkins-slave"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "50m"
+                  resourceLimitCpu: "500m"
+                  resourceRequestMemory: "400Mi"
+                  resourceLimitMemory: "1536Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_nodejs_yarn_cache"
+                    mountPath: "/root/.yarn"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_nodejs_npm_cache"
+                    mountPath: "/root/.npm"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_sonar_cache"
+                    mountPath: "/root/.sonar/cache"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"nodejs\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
+              - name: "maven"
+                namespace: "{{ .Values.Agent.WorkerNamespace }}"
+                label: "maven"
+                nodeUsageMode: "EXCLUSIVE"
+                idleMinutes: 0
+                containers:
+                - name: "maven"
+                  image: "{{ .Values.Agent.Builder.Maven.Image }}:{{ .Values.Agent.Builder.Maven.Tag }}"
+                  command: "cat"
+                  args: ""
+                  ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
+                - name: "jnlp"
+                  image: "{{ .Values.Agent.Image }}:{{ .Values.Agent.ImageTag }}"
+                  command: "jenkins-slave"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "50m"
+                  resourceLimitCpu: "500m"
+                  resourceRequestMemory: "400Mi"
+                  resourceLimitMemory: "1536Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_maven_cache"
+                    mountPath: "/root/.m2"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_sonar_cache"
+                    mountPath: "/root/.sonar/cache"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"maven\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n    volumeMounts:\r\n    - name: config-volume\r\n      mountPath: /opt/apache-maven-3.5.3/conf/settings.xml\r\n      subPath: settings.xml\r\n  volumes:\r\n    - name: config-volume\r\n      configMap:\r\n        name: ks-devops-agent\r\n        items:\r\n        - key: MavenSetting\r\n          path: settings.xml\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
+              - name: "go"
+                namespace: "{{ .Values.Agent.WorkerNamespace }}"
+                label: "go"
+                nodeUsageMode: "EXCLUSIVE"
+                idleMinutes: 0
+                containers:
+                - name: "go"
+                  image: "{{ .Values.Agent.Builder.Golang.Image }}:{{ .Values.Agent.Builder.Golang.Tag }}"
+                  command: "cat"
+                  args: ""
+                  ttyEnabled: true
+                  resourceRequestCpu: "100m"
+                  resourceLimitCpu: "4000m"
+                  resourceRequestMemory: "100Mi"
+                  resourceLimitMemory: "8192Mi"
+                - name: "jnlp"
+                  image: "{{ .Values.Agent.Image }}:{{ .Values.Agent.ImageTag }}"
+                  command: "jenkins-slave"
+                  args: "^${computer.jnlpmac} ^${computer.name}"
+                  resourceRequestCpu: "50m"
+                  resourceLimitCpu: "500m"
+                  resourceRequestMemory: "400Mi"
+                  resourceLimitMemory: "1536Mi"
+                workspaceVolume:
+                  emptyDirWorkspaceVolume:
+                    memory: false
+                volumes:
+                - hostPathVolume:
+                    hostPath: "/var/run/docker.sock"
+                    mountPath: "/var/run/docker.sock"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_go_cache"
+                    mountPath: "/home/jenkins/go/pkg"
+                - hostPathVolume:
+                    hostPath: "/var/data/jenkins_sonar_cache"
+                    mountPath: "/root/.sonar/cache"
+                yaml: "spec:\r\n  affinity:\r\n    nodeAffinity:\r\n      preferredDuringSchedulingIgnoredDuringExecution:\r\n      - weight: 1\r\n        preference:\r\n          matchExpressions:\r\n          - key: node-role.kubernetes.io/worker\r\n            operator: In\r\n            values:\r\n            - ci\r\n  tolerations:\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"NoSchedule\"\r\n  - key: \"node.kubernetes.io/ci\"\r\n    operator: \"Exists\"\r\n    effect: \"PreferNoSchedule\"\r\n  containers:\r\n  - name: \"go\"\r\n    resources:\r\n      requests:\r\n        ephemeral-storage: \"1Gi\"\r\n      limits:\r\n        ephemeral-storage: \"10Gi\"\r\n  securityContext:\r\n    fsGroup: 1000\r\n "
+      securityRealm:
+      {{ if eq .Values.securityRealm.type "ldap" }}
+        ldap:
+          configurations:
+          - displayNameAttributeName: "uid"
+            mailAddressAttributeName: "mail"
+            inhibitInferRootDN: false
+            managerDN: "cn=admin,dc=kubesphere,dc=io"
+            managerPasswordSecret: "admin"
+            rootDN: "dc=kubesphere,dc=io"
+            userSearchBase: "ou=Users"
+            userSearch: "(&(objectClass=inetOrgPerson)(|(uid={0})(mail={0})))"
+            groupSearchBase: "ou=Groups"
+            groupSearchFilter: "(&(objectClass=posixGroup)(cn={0}))"
+            server: "ldap://{{.Values.securityRealm.ldap.host }}"
+          disableMailAddressResolver: false
+          disableRolePrefixing: true
+      {{ else }}
+      authorizationStrategy: loggedInUsersCanDoAnything
+      {{end}}
+
+    unclassified:
+      location:
+        url: {{ .Values.Master.HostName }}
+      kubespheretokenauthglobalconfiguration:
+        cacheConfiguration:
+          size: 20
+          ttl: 300
+        enabled: {{ .Values.ksAuth.enabled }}
+        server: "http://{{ .Release.Name }}-ks-devops-apiserver.{{ .Release.Namespace }}:9090/"
+      gitLabServers:
+        servers:
+        - name: "https://gitlab.com"
+          serverUrl: "https://gitlab.com"

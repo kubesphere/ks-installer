@@ -1,0 +1,36 @@
+apiVersion: v1
+data:
+  kubesphere.yaml: |
+    authentication:
+      authenticateRateLimiterMaxTries: 10
+      authenticateRateLimiterDuration: 10m0s
+      loginHistoryRetentionPeriod: 168h
+      maximumClockSkew: 10s
+      jwtSecret: "Z1TBo4jUSB5Rs6eyLqHSJ77GXtG8NhSP"
+
+    ldap:
+      host: openldap.kubesphere-system.svc:389
+      managerDN: cn=admin,dc=kubesphere,dc=io
+      managerPassword: admin
+      userSearchBase: ou=Users,dc=kubesphere,dc=io
+      groupSearchBase: ou=Groups,dc=kubesphere,dc=io
+
+    s3:
+      endpoint: http://minio.kubesphere-system.svc:9000
+      region: us-east-1
+      disableSSL: True
+      forcePathStyle: True
+      accessKeyID: openpitrixminioaccesskey
+      secretAccessKey: openpitrixminiosecretkey
+      bucket: s2i-binaries
+
+    devops:
+      host: http://{{ .Release.Name }}-jenkins.{{ .Release.Namespace }}
+      username: admin
+      password: 119d76305a05e7a2a65d096f71feb77921
+      maxConnections: 100
+      namespace: {{ .Release.Namespace }}
+      workerNamespace: {{ .Values.jenkins.Agent.WorkerNamespace }}
+kind: ConfigMap
+metadata:
+  name: devops-config
