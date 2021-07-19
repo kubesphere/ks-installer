@@ -7,7 +7,7 @@
 
 - name: ks-devops | Upgrading or installing ks-devops
   shell: |
-    {{ bin_dir }}/helm upgrade --install ks-devops-ctl {{ kubesphere_dir }}/charts/ks-devops \
+    {{ bin_dir }}/helm upgrade --install ks-devops-ctl {{ kubesphere_dir }}/files/charts/ks-devops \
     -n kubesphere-devops-system \
     --create-namespace \
     --set serviceAccount.create=true \
@@ -16,7 +16,7 @@
 
 - name: ks-devops | Upgrading or installing ks-devops-plugin
   shell: |
-    {{ bin_dir }}/helm upgrade --install ks-devops-plugin {{ kubesphere_dir }}/charts/ks-devops-plugin \
+    {{ bin_dir }}/helm upgrade --install ks-devops-plugin {{ kubesphere_dir }}/files/charts/ks-devops-plugin \
     -n kubesphere-devops-system \
     --create-namespace \
     --set serviceAccount.create=true \
