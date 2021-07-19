@@ -5,5 +5,5 @@
   roles:
     - kubesphere-defaults
     - role: ks-devops
-      when:
-        - "status.devops is not defined or status.devops.status is not defined or status.devops.status != 'enabled'"
+#      when:
+#        - "status.devops is not defined or status.devops.status is not defined or status.devops.status != 'enabled'"
