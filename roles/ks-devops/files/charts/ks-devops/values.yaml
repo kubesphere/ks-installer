@@ -2,13 +2,13 @@ replicaCount: 1
 
 image:
   controller:
-    repository: ghcr.io/linuxsuren/devops-controller
+    repository: ghcr.io/kubesphere-sigs/devops-controller
     tag: master
   apiserver:
-    repository: ghcr.io/linuxsuren/devops-apiserver
+    repository: ghcr.io/kubesphere-sigs/devops-apiserver
     tag: master
   tools:
-    repository: ghcr.io/linuxsuren/devops-tools
+    repository: ghcr.io/kubesphere-sigs/devops-tools
     tag: master
   pullPolicy: IfNotPresent
 
