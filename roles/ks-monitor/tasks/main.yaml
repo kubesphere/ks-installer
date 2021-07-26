@@ -6,6 +6,10 @@
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
+- import_tasks: gpu-monitoring.yaml
+  when:
+    - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
+
 - name: Monitoring | Importing ks-monitoring status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
