@@ -17,6 +17,11 @@ spec:
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/version: 1.9.7
     spec:
+      volumes:
+      - name: host-time
+        hostPath:
+          path: /etc/localtime
+          type: ""
       containers:
       - args:
         - --host=127.0.0.1
@@ -35,6 +40,10 @@ spec:
             memory: {{ monitoring.kube_state_metrics.requests.memory | default("150Mi") }}
         securityContext:
           runAsUser: 65534
+        volumeMounts:
+        - name: host-time
+          mountPath: /etc/localtime
+          readOnly: true
       - args:
         - --logtostderr
         - --secure-listen-address=:8443
