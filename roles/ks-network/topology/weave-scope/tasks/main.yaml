@@ -19,9 +19,9 @@
 - name: weave-scope | Deploying weave-scope
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/weave-scope/weave-scope.yaml
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
+  register: weave_result
+  failed_when: "weave_result.stderr and 'Warning' not in weave_result.stderr and 'spec.clusterIP' not in weave_result.stderr"
+  until: weave_result is succeeded
   retries: 5
   delay: 3
 
@@ -31,9 +31,9 @@
     --type merge
     -p '{"status": {"network": {"topology": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}}'
     -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr"
-  until: import is succeeded
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
   retries: 5
   delay: 3
 

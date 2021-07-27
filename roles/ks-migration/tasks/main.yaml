@@ -83,9 +83,9 @@
       --type merge
       -p '{"status": {"core": {"migration": null}}}'
       -n kubesphere-system
-    register: import
-    failed_when: "import.stderr and 'Warning' not in import.stderr"
-    until: import is succeeded
+    register: cc_result
+    failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+    until: cc_result is succeeded
     retries: 5
     delay: 3
   when:

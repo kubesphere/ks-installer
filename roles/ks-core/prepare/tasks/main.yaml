@@ -34,9 +34,9 @@
       --type merge
       -p '{"status": {"core": {"migration": true}}}'
       -n kubesphere-system
-    register: import
-    failed_when: "import.stderr and 'Warning' not in import.stderr"
-    until: import is succeeded
+    register: cc_result
+    failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+    until: cc_result is succeeded
     retries: 5
     delay: 3
   - set_fact:
@@ -78,8 +78,8 @@
     - "network.kubesphere.io.yaml"
     - "iam.kubesphere.io.yaml"
     - "quota.kubesphere.io.yaml"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+  register: init_result
+  failed_when: "init_result.stderr and 'AlreadyExists' not in init_result.stderr and 'Warning' not in init_result.stderr"
 
 
 - name: KubeSphere | Getting controls-system file
@@ -92,8 +92,8 @@
 
 - name: KubeSphere | Installing controls-system
   command: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubesphere-controls-system.yaml  -n kubesphere-controls-system"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+  register: install_result
+  failed_when: "install_result.stderr and 'AlreadyExists' not in install_result.stderr"
 
 
 # - name: KubeSphere | Creating KubeSphere vpa

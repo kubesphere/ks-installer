@@ -32,8 +32,8 @@
     - binary.yaml
     - tomcat.yaml
     - s2ioperator.yaml
-  register: import
-  until: import is succeeded
+  register: s2i_result
+  until: s2i_result is succeeded
   retries: 3
   delay: 3
   failed_when: false
