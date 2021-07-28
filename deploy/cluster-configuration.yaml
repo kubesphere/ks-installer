@@ -19,6 +19,22 @@ spec:
     port: 2379              # etcd port.
     tlsEnable: true
   common:
+    # apiserver:            # Enlarge the apiserver and controller manager's resource requests and limits for the large cluster
+    #  resources:
+    #    limits:
+    #      cpu: 1
+    #      memory: 1024Mi
+    #    requests:
+    #      cpu: 20m
+    #      memory: 100Mi
+    # controllerManager:
+    #  resources:
+    #    limits:
+    #      cpu: 1
+    #      memory: 1000Mi
+    #    requests:
+    #      cpu: 30m
+    #      memory: 50Mi
     redis:
       enabled: false
     openldap:
