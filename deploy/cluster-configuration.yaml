@@ -95,6 +95,12 @@ spec:
     prometheusMemoryRequest: 400Mi   # Prometheus request memory.
     prometheusVolumeSize: 20Gi       # Prometheus PVC size.
     # alertmanagerReplicas: 1          # AlertManager Replicas.
+    # gpu:                           # GPU monitoring-related plugins installation.
+    #   enabled: true
+    #   nvidia_device_plugin:
+    #     enabled: true
+    #   nvidia_dcgm_exporter:
+    #     enabled: true
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the Host or Member Cluster.
   network:
