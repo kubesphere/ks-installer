@@ -104,9 +104,9 @@
   shell: >
     {{ bin_dir }}/kubectl -n istio-system patch hpa istiod-1-6-10
     --type merge -p '{"spec":{"scaleTargetRef":{"name":"istiod-1-6-10"}}}'
-  register: import
-  failed_when: "import.stderr"
-  until: import is succeeded
+  register: patch_result
+  failed_when: "patch_result.stderr"
+  until: patch_result is succeeded
   retries: 5
   delay: 3
 
@@ -121,9 +121,9 @@
     --type merge
     -p '{"status": {"servicemesh": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
     -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr"
-  until: import is succeeded
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
   retries: 5
   delay: 3
   when:
@@ -135,9 +135,9 @@
     --type merge
     -p '{"status": {"servicemesh": {"status": "failed", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
     -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr"
-  until: import is succeeded
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
   retries: 5
   delay: 3
   when:

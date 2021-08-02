@@ -22,7 +22,7 @@ metadata:
 {{ include "openldap-ha.labels" . | indent 4 }}
 spec:
   serviceName: {{ include "openldap-ha.fullname" . }}
-  {{- if (.Values.ldap.replication) and eq .Values.ldap.replication "true" }}
+  {{- if .Values.ldap.replication }}
   replicas: 2
   {{- else }}
   replicas: 1
@@ -69,7 +69,7 @@ spec:
                 fieldPath: metadata.name
           - name: HOSTNAME
             value: "$(MY_POD_NAME).{{ include "openldap-ha.fullname" . }}"
-          {{- if (.Values.ldap.replication) and eq .Values.ldap.replication true }}
+          {{- if .Values.ldap.replication }}
           - name: LDAP_REPLICATION_CONFIG_SYNCPROV
             value: "binddn=\"cn=admin,cn=config\" bindmethod=simple credentials=$LDAP_CONFIG_PASSWORD searchbase=\"cn=config\" type=refreshAndPersist retry=\"60 +\" timeout=1"
           - name: LDAP_REPLICATION_DB_SYNCPROV

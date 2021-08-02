@@ -21,8 +21,8 @@
 
 - name: servicemesh | Deploying kiali-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/kiali/kiali-cr.yaml --namespace istio-system"
-  register: import
-  until: import is succeeded
+  register: kiali_cr_result
+  until: kiali_cr_result is succeeded
   retries: 5
   delay: 10
   when:

@@ -21,8 +21,8 @@
 
 - name: servicemesh | Deploying jaeger-secret
   shell: "{{ bin_dir }}/kubectl create secret generic jaeger-secret --from-literal=ES_PASSWORD={{ common.es.basicAuth.password }} --from-literal=ES_USERNAME={{ common.es.basicAuth.username }} --namespace istio-system"
-  register: import
-  until: import is succeeded
+  register: jaeger_result
+  until: jaeger_result is succeeded
   retries: 5
   delay: 10
   when:
@@ -33,8 +33,8 @@
 
 - name: servicemesh | Deploying jaeger-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"
-  register: import
-  until: import is succeeded
+  register: jaeger_cr_result
+  until: jaeger_cr_result is succeeded
   retries: 5
   delay: 10
   when:

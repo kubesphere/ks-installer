@@ -4,8 +4,8 @@
   loop:
     - "prometheus"
     - "prometheus"
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
+  register: prom_result
+  failed_when: "prom_result.stderr and 'Warning' not in prom_result.stderr and 'spec.clusterIP' not in prom_result.stderr"
+  until: prom_result is succeeded
   retries: 5
   delay: 3
