@@ -65,20 +65,6 @@
   loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
 
 
-- name: KubeSphere | Creating ImagePullSecrets
-  shell: |
-    cat <<EOF | kubectl apply -f -
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        name: qingcloud
-        namespace: "{{ item }}"
-      data:
-        .dockerconfigjson: eyJhdXRocyI6eyJkb2NrZXJodWIucWluZ2Nsb3VkLmNvbSI6eyJhdXRoIjoiWjNWbGMzUTZaM1ZsYzNRPSJ9fX0=
-      type: kubernetes.io/dockerconfigjson
-    EOF
-  loop: "{{ ['default', 'kube-public', 'kube-system', systemNamespacesList] | flatten(1) }}"
-
 - name: KubeSphere | Labeling namespace for network policy
   shell: >
     for ns in `kubectl get ns -o jsonpath="{.items[*].metadata.name}"`; do kubectl label  ns $ns kubesphere.io/namespace=$ns --overwrite; done
