@@ -50,10 +50,12 @@ spec:
           name: kubesphere-config
         - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: webhook-secret
-        - mountPath: /var/lib/kubelet/plugins/
-          name: kubelet-plugin
         - mountPath: /etc/localtime
           name: host-time
+        env:
+        {{- if .Values.env }}
+        {{- toYaml .Values.env | nindent 8 }}
+        {{- end }}
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -68,10 +70,6 @@ spec:
           secret:
             defaultMode: 420
             secretName: ks-controller-manager-webhook-cert
-        - name: kubelet-plugin
-          hostPath:
-            path: /var/lib/kubelet/plugins/
-            type: DirectoryOrCreate
         - hostPath:
             path: /etc/localtime
             type: ""
