@@ -30,7 +30,7 @@ data:
     redis:
       host: redis.kubesphere-system.svc
       port: 6379
-      password: {{ common.redisPasswd | default('""') }}
+      password: KUBESPHERE_REDIS_PASSWORD
       db: 0
 {% endif %}
 

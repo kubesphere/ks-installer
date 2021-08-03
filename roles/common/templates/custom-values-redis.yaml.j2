@@ -217,11 +217,12 @@ podDisruptionBudget: {}
   # minAvailable: 1
 
 ## Configures redis with AUTH (requirepass & masterauth conf params)
-auth: false
+auth: true
 # redisPassword:
 
 ## Use existing secret containing key `authKey` (ignores redisPassword)
-# existingSecret:
+existingSecret: redis-secret
+  
 
 ## Defines the key holding the redis password in existing secret.
 authKey: auth

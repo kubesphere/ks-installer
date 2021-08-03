@@ -38,10 +38,28 @@ spec:
         tier: database
         version: redis-4.0
     spec:
+      initContainers:
+      - name: init
+        image: {{ redis_repo }}:{{ redis_tag }}
+        command: ['sh', '-c', 'cat /tmp/redis/redis.conf | sed "s/REDIS_PASSWORD/$KUBESPHERE_REDIS_PASSWORD/" > /data/redis.conf']
+        volumeMounts:
+        - mountPath: /data
+          name: redis-pvc
+          subPath: redis-data
+        - name: redis-config
+          mountPath: "/tmp/redis"
+          readOnly: true
+        env:
+        - name: KUBESPHERE_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: auth
       containers:
       - image: {{ redis_repo }}:{{ redis_tag }}
         imagePullPolicy: IfNotPresent
         name: redis
+        args: ["/data/redis.conf"]
         volumeMounts:
         - mountPath: /data
           name: redis-pvc
@@ -60,6 +78,9 @@ spec:
       - name: redis-pvc
         persistentVolumeClaim:
           claimName: redis-pvc
+      - name: redis-config
+        configMap:
+          name: redis-configmap
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
@@ -76,6 +97,20 @@ spec:
                 values:
                 - "" 
 
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-configmap
+  labels:
+    app: redis
+    tier: database
+    version: redis-4.0
+data:
+  redis.conf: |
+    requirepass REDIS_PASSWORD
+    masterauth REDIS_PASSWORD
 
 ---
 
