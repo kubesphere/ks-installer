@@ -1,9 +1,3 @@
-- name: KubeSphere | Checking ha-redis
-  shell: >
-    {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-redis"
-  register: redis_check
-  failed_when: false
-
 - name: KubeSphere | Init Redis password
   block:
     - name: KubeSphere | Generet Random password
@@ -75,7 +69,6 @@
 
   when:
     - enableHA is defined and enableHA
-    - (redis_check.stdout.find("deployed") == -1) or (redis_check.stdout.find("5.0.5") == -1)
 
 
 - name: KubeSphere | Deploying redis
