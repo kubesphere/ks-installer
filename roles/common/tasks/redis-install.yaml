@@ -48,20 +48,20 @@
         --namespace kubesphere-system
 
 
-    - name: KubeSphere | Getting redis PodIp
-      shell: >
-        {{ bin_dir }}/kubectl get pod
-        -n kubesphere-system
-        -l  app=redis,tier=database,version=redis-4.0
-        -ojsonpath='{.items[0].status.podIP}'
-      register: redis_podIp
-      when:
-        - old_redis_exist.stdout != "0"
-
-
-    - import_tasks: redis-migration.yaml
-      when:
-        - old_redis_exist.stdout != "0"
+#    - name: KubeSphere | Getting redis PodIp
+#      shell: >
+#        {{ bin_dir }}/kubectl get pod
+#        -n kubesphere-system
+#        -l  app=redis,tier=database,version=redis-4.0
+#        -ojsonpath='{.items[0].status.podIP}'
+#      register: redis_podIp
+#      when:
+#        - old_redis_exist.stdout != "0"
+#
+#
+#    - import_tasks: redis-migration.yaml
+#      when:
+#        - old_redis_exist.stdout != "0"
 
   when:
     - enableHA is defined and enableHA
@@ -73,10 +73,10 @@
     {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/common/{{ item }}
   loop:
     - "redis.yaml"
-  register: import
+  register: redis_result
   failed_when:
-    - "import.stderr and 'bound claims' not in import.stderr"
-    - "import.stderr and 'is forbidden' not in import.stderr"
+    - "redis_result.stderr and 'bound claims' not in redis_result.stderr"
+    - "redis_result.stderr and 'is forbidden' not in redis_result.stderr"
   when:
     - (enableHA is defined and not enableHA) or (enableHA is not defined)
 
@@ -87,8 +87,8 @@
     --type merge
     -p '{"status": {"redis": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
     -n kubesphere-system
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr"
-  until: import is succeeded
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
   retries: 5
   delay: 3

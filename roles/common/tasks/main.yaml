@@ -151,10 +151,10 @@
       loop:
         - "etcd.yaml"
         - "mysql.yaml"
-      register: import
+      register: common_result
       failed_when:
-        - "import.stderr and 'is immutable after creation except resources.requests for bound claims' not in import.stderr"
-        - "import.stderr and 'is forbidden' not in import.stderr"
+        - "common_result.stderr and 'is immutable after creation except resources.requests for bound claims' not in common_result.stderr"
+        - "common_result.stderr and 'is forbidden' not in common_result.stderr"
 
 
     - import_tasks: minio-install.yaml

@@ -38,18 +38,7 @@ RUN chown -R kubesphere:kubesphere /shell-operator && \
 ADD controller/* /hooks/kubesphere/
 RUN chmod +x -R /hooks/kubesphere
 
-USER kubesphere
-
 ENV SHELL_OPERATOR_WORKING_DIR /hooks
-ENV ANSIBLE_ROLES_PATH /kubesphere/installer/roles
-
-WORKDIR /kubesphere
-
-ADD roles /kubesphere/installer/roles
-
-ADD env /kubesphere/results/env
-
-ADD playbooks /kubesphere/playbooks
 
 ENTRYPOINT ["/shell-operator"]
 

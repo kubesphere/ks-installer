@@ -34,9 +34,9 @@
       --type merge
       -p '{"status": {"core": {"migration": true}}}'
       -n kubesphere-system
-    register: import
-    failed_when: "import.stderr and 'Warning' not in import.stderr"
-    until: import is succeeded
+    register: cc_result
+    failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+    until: cc_result is succeeded
     retries: 5
     delay: 3
   - set_fact:
@@ -75,8 +75,8 @@
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
   loop:
     - "role-templates.yaml"
-  register: import
-  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr and 'Warning' not in import.stderr"
+  register: init_ks_result
+  failed_when: "init_ks_result.stderr and 'AlreadyExists' not in init_ks_result.stderr and 'Warning' not in init_ks_result.stderr"
 
 
 - name: KubeSphere | Generating kubeconfig-admin
@@ -87,6 +87,6 @@
 
 - name: KubeSphere | Creating Storage ProvisionerCapability
   shell: "{{ bin_dir }}/kubectl apply -R -f {{ kubesphere_dir }}/provisonercapability"
-  register: import
-  failed_when: "import.stderr and 'Warning: kubectl apply' not in import.stderr"
+  register: storage_pc_result
+  failed_when: "storage_pc_result.stderr and 'Warning: kubectl apply' not in storage_pc_result.stderr"
 

@@ -99,9 +99,9 @@
 
 - name: notification-manager | Deploying federatednamespace crd
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/federated/federatednamespaces.yaml"
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
+  register: fed_result
+  failed_when: "fed_result.stderr and 'Warning' not in fed_result.stderr and 'spec.clusterIP' not in fed_result.stderr"
+  until: fed_result is succeeded
   retries: 5
   delay: 3
   when:
@@ -116,9 +116,9 @@
 
 - name: notification-manager | Deploying federated namespace
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/federated/kubesphere-monitoring-federated.yaml"
-  register: import
-  failed_when: "import.stderr and 'Warning' not in import.stderr and 'spec.clusterIP' not in import.stderr"
-  until: import is succeeded
+  register: fed_result
+  failed_when: "fed_result.stderr and 'Warning' not in fed_result.stderr and 'spec.clusterIP' not in fed_result.stderr"
+  until: fed_result is succeeded
   retries: 5
   delay: 3
   when:
