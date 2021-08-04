@@ -51,7 +51,7 @@
   register: sonarqube_health
   failed_when: false
 
-- name: ks-devops | Setting sonarqube heaalth status
+- name: ks-devops | Setting sonarqube health status
   set_fact:
     sonar_health: "{% if sonarqube_health.state is defined and sonarqube_health.state == 'started' %}true{% else %}false{% endif %}"
 

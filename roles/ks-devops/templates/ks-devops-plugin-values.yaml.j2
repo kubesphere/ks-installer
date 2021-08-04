@@ -1,0 +1,12 @@
+# ks-devops-plugin helm chart values patch
+
+image:
+  registry: "{{ ks_devops_plugin_registry }}"
+  # TODO Change to IfNotPresent
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "{{ ks_devops_plugin_tag }}"
+
+authentication:
+  # If not set, jwt tools will generate and set it automatically
+  jwtSecret: "{{ ks_jwt_secret.stdout }}"

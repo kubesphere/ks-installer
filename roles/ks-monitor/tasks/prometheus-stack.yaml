@@ -27,8 +27,6 @@
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
-- import_tasks: devops.yaml
-
 - import_tasks: etcd.yaml
 
 - import_tasks: prometheus-rules.yaml
