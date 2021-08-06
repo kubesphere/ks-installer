@@ -41,6 +41,7 @@ spec:
           readOnly: true
         - mountPath: /etc/localtime
           name: host-time
+          readOnly: true
       serviceAccountName: {{ template "kube-events.operator.fullname" . }}
       terminationGracePeriodSeconds: 10
       volumes:

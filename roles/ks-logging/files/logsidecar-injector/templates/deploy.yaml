@@ -40,6 +40,7 @@ spec:
             mountPath: /etc/logsidecar-injector/config
           - mountPath: /etc/localtime
             name: host-time
+            readOnly: true
       - name: config-reloader
         image: {{ .Values.configReloader.image.repository }}:{{ .Values.configReloader.image.tag }}
         imagePullPolicy: {{ .Values.configReloader.image.pullPolicy }}
@@ -56,3 +57,4 @@ spec:
             mountPath: /etc/logsidecar-injector/config
           - mountPath: /etc/localtime
             name: host-time
+            readOnly: true

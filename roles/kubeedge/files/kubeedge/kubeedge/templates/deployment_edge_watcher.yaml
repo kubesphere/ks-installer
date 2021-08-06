@@ -38,6 +38,7 @@ spec:
         volumeMounts:
         - mountPath: /etc/localtime
           name: host-time
+          readOnly: true
         - name: config
           mountPath: /etc/edgewatcher/config
       - args:
