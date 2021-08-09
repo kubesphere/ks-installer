@@ -122,7 +122,7 @@ tower_image: tower
 tower_image_tag: "v0.2.0"
 post_install_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 post_install_job_image: kubectl
-post_install_job_tag: "v1.19.0"
+post_install_job_tag: "v1.19.1"
 
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
