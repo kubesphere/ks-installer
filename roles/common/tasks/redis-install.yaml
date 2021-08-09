@@ -1,9 +1,13 @@
-- name: KubeSphere | Checking ha-redis
-  shell: >
-    {{ bin_dir }}/helm list -n kubesphere-system | grep "ks-redis"
-  register: redis_check
-  failed_when: false
-
+- name: KubeSphere | Init Redis password
+  block:
+    - name: KubeSphere | Generet Random password
+      set_fact:
+        redis_password: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+    - name: KubeSphere | Creating Redis Password Secret
+      shell: >
+        {{ bin_dir }}/kubectl -n kubesphere-system create secret generic redis-secret --from-literal=auth={{redis_password}}
+      register: secret
+      failed_when: "secret.stderr and 'AlreadyExists' not in secret.stderr"
 
 - name: KubeSphere | Deploying ha redis
   block:
@@ -65,7 +69,6 @@
 
   when:
     - enableHA is defined and enableHA
-    - (redis_check.stdout.find("deployed") == -1) or (redis_check.stdout.find("5.0.5") == -1)
 
 
 - name: KubeSphere | Deploying redis
