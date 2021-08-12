@@ -1,2 +1,5 @@
 .idea
 results
+
+# GitHub Codespaces
+.venv/
