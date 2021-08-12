@@ -95,12 +95,6 @@
     -n kubesphere-devops-system \
     -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
 
-- name: ks-devops | Upgrading or installing ks-devops-plugin
-  shell: |
-    {{ bin_dir }}/helm upgrade --install ks-devops-plugin {{ kubesphere_dir }}/ks-devops/charts/ks-devops-plugin-0.1.0.tgz \
-    -n kubesphere-devops-system \
-    -f {{ kubesphere_dir }}/ks-devops/ks-devops-plugin-values.yaml
-
 - name: ks-devops | Labelling devops namespaces as system workspace
   shell: |
     {{ bin_dir }}/kubectl label --overwrite namespaces {{ item }} kubesphere.io/workspace=system-workspace
