@@ -75,7 +75,7 @@ data:
       password: {{ ks_token_str.stdout }}
       maxConnections: 100
       # TODO Rename the service name
-      endpoint: ks-ctl-ks-devops-apiserver.kubesphere-devops-system:9090
+      endpoint: http://ks-ctl-ks-devops-apiserver.kubesphere-devops-system:9090
 {% if sonarQubeHost is defined and sonarQubeToken is defined %}
     sonarQube:
       host: {{ sonarQubeHost }}

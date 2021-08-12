@@ -4,4 +4,5 @@
     kubectl -n kubesphere-monitoring-system delete --ignore-not-found=true ServiceMonitor s2i-operator
     kubectl -n kubesphere-monitoring-system delete --ignore-not-found=true ServiceMonitor ks-jenkins
     kubectl -n kubesphere-monitoring-system delete --ignore-not-found=true PrometheusRule prometheus-devops-rules
+    kubectl delete --ignore-not-found=true namespace kubesphere-devops-worker
   failed_when: false

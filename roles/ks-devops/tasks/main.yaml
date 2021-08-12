@@ -74,7 +74,6 @@
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: ks-devops, file: ks-devops-values.yaml }
-    - { path: ks-devops, file: ks-devops-plugin-values.yaml }
 
 - name: ks-devops | Checking if ks-devops has installed
   shell: |
@@ -94,6 +93,10 @@
     {{ bin_dir }}/helm upgrade --install ks-ctl {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.0.tgz \
     -n kubesphere-devops-system \
     -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
+  register: devops_upgrade_result
+  until: devops_upgrade_result is succeeded
+  retries: 3
+  delay: 10
 
 - name: ks-devops | Labelling devops namespaces as system workspace
   shell: |
