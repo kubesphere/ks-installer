@@ -270,8 +270,7 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        # TODO Revert to kubespheredev/ks-installer:latest
-        image: johnniang/ks-installer:remove-devops-comp
+        image: kubespheredev/ks-installer:latest
         imagePullPolicy: "Always"
         resources:
           limits:

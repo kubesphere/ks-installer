@@ -10,8 +10,7 @@ image:
     tag: "{{ ks_devops_apiserver_tag }}"
   tools:
     tag: "{{ ks_devops_tools_tag }}"
-  # TODO Change to IfNotPresent
-  pullPolicy: Always
+  pullPolicy: {{ ks_image_pull_policy }}
 
 authentication:
   # If not set, jwt tools will generate and set it automatically
@@ -101,7 +100,7 @@ jenkins:
   Master:
     Image: "{{ jenkins_repo }}"
     ImageTag: "{{ jenkins_tag }}"
-    ImagePullPolicy: IfNotPresent
+    ImagePullPolicy: {{ ks_image_pull_policy }}
     resources:
       requests:
         cpu: "0.1"
