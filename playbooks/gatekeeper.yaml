@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: gatekeeper
+      when:
+        - "gatekeeper is defined and gatekeeper.enabled == true"
+        - "status.gatekeeper is not defined or status.gatekeeper.status is not defined or status.gatekeeper.status != 'enabled'"

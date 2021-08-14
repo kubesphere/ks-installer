@@ -1,0 +1,74 @@
+replicas: 3
+auditInterval: 60
+auditMatchKindOnly: false
+constraintViolationsLimit: 20
+auditFromCache: false
+disableValidatingWebhook: false
+validatingWebhookTimeoutSeconds: 3
+enableDeleteOperations: false
+experimentalEnableMutation: false
+auditChunkSize: 0
+logLevel: INFO
+logDenies: false
+emitAdmissionEvents: false
+emitAuditEvents: false
+postInstall:
+  labelNamespace:
+    enabled: true
+    image:
+      repository: line/kubectl-kustomize
+      tag: 1.20.4-4.0.5
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+image:
+  repository: openpolicyagent/gatekeeper
+  release: v3.5.2
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+podAnnotations:
+  { container.seccomp.security.alpha.kubernetes.io/manager: runtime/default }
+podLabels: {}
+podCountLimit: 100
+secretAnnotations: {}
+controllerManager:
+  hostNetwork: false
+  priorityClassName: system-cluster-critical
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: gatekeeper.sh/operation
+                  operator: In
+                  values:
+                    - webhook
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+  tolerations: []
+  nodeSelector: { kubernetes.io/os: linux }
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+audit:
+  hostNetwork: false
+  priorityClassName: system-cluster-critical
+  affinity: {}
+  tolerations: []
+  nodeSelector: { kubernetes.io/os: linux }
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+pdb:
+  controllerManager:
+    minAvailable: 1
+service: {}
+disabledBuiltins:
