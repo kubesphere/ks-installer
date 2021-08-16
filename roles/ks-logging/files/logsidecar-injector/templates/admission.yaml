@@ -29,7 +29,7 @@ spec:
     logging.kubesphere.io/logsidecar-injector: {{ template "logsidecar-injector.deploy.fullname" . }}
 {{ include "logsidecar-injector.labels" . | indent 4 }}
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: {{ template "logsidecar-injector.admission.fullname" . }}-mutate
@@ -37,6 +37,8 @@ metadata:
 {{ include "logsidecar-injector.labels" . | indent 4 }}
 webhooks:
   - name: logsidecar-injector.logging.kubesphere.io
+    admissionReviewVersions:
+      - v1beta1
     failurePolicy: Fail
     rules:
       - apiGroups:
@@ -62,3 +64,4 @@ webhooks:
       matchExpressions:
       - key: logging.kubesphere.io/logsidecar-injector
         operator: DoesNotExist
+    sideEffects: None
