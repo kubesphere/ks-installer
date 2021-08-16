@@ -45,10 +45,10 @@ spec:
         volumeMounts:
         - mountPath: /host/proc
           name: proc
-          readOnly: false
+          readOnly: true
         - mountPath: /host/sys
           name: sys
-          readOnly: false
+          readOnly: true
         - mountPath: /host/root
           mountPropagation: HostToContainer
           name: root
