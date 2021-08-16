@@ -5,7 +5,7 @@
     dest: "{{ kubesphere_dir }}/"
 
 - name: KubeEdge | Getting NodeIp
-  shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
+  shell: "{{ bin_dir }}/kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}' -l '!node-role.kubernetes.io/edge'"
   register: ks_kubeedge_nodeIP
 
 - name: KubeEdge | Creating manifests
