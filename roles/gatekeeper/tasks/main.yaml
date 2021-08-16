@@ -1,0 +1,39 @@
+---
+- name: GateKeeper | Getting GateKeeper installation files
+  copy:
+    src: "gatekeeper"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: GateKeeper | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: gatekeeper, file: custom-values-gatekeeper.yaml }
+
+- name: GateKeeper | Installing GateKeeper
+  shell: >
+    {{ bin_dir }}/helm upgrade --install gatekeeper
+    {{ kubesphere_dir }}/gatekeeper
+    --namespace gatekeeper
+    --create-namespace
+    -f {{ kubesphere_dir }}/gatekeeper/custom-values-gatekeeper.yaml
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: GateKeeper | Labeling GateKeeper namespace
+  shell: >
+    {{ bin_dir }}/kubectl label namespace gatekeeper kubesphere.io/workspace=system-workspace --overwrite
+
+- name: GateKeeper | Importing GateKeeper status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"gatekeeper": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3

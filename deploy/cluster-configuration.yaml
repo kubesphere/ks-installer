@@ -139,3 +139,5 @@ spec:
       edgeWatcherAgent:
         nodeSelector: {"node-role.kubernetes.io/worker": ""}
         tolerations: []
+  gatekeeper:        # Provide admission policy and rule management, A validating (mutating TBA) webhook that enforces CRD-based policies executed by Open Policy Agent.
+    enabled: false   # Enable or disable Gatekeeper.
