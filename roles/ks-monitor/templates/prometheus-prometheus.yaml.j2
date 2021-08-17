@@ -48,17 +48,17 @@ spec:
   query:
     maxConcurrency: 1000
 {% if nodeNum is defined and nodeNum < 3 %}
-  replicas: {{ monitoring.prometheusReplicas | default(1) }}
+  replicas: {{ monitoring.prometheus.replicas | default(monitoring.prometheusReplicas) | default(1) }}
 {% else %}
-  replicas: {{ monitoring.prometheusReplicas | default(2) }}
+  replicas: {{ monitoring.prometheus.replicas | default(monitoring.prometheusReplicas) | default(2) }}
 {% endif %}
   resources:
     limits:
-      cpu: "{{ monitoring.prometheus.limits.cpu | default("4") }}"
-      memory: {{ monitoring.prometheus.limits.memory | default("16Gi") }}
+      cpu: "{{ monitoring.prometheus.resources.limits.cpu | default(monitoring.prometheus.limits.cpu) | default("4") }}"
+      memory: {{ monitoring.prometheus.resources.limits.memory | default(monitoring.prometheus.limits.memory) | default("16Gi") }}
     requests:
-      cpu: {{ monitoring.prometheus.requests.cpu | default("200m") }}
-      memory: {{ monitoring.prometheus.requests.memory | default("400Mi") }}
+      cpu: {{ monitoring.prometheus.resources.requests.cpu | default(monitoring.prometheus.requests.cpu) | default("200m") }}
+      memory: {{ monitoring.prometheus.resources.requests.memory | default(monitoring.prometheus.requests.memory) | default("400Mi") }}
   retention: {% if prometheus_retention_duration is defined %}{{ prometheus_retention_duration }}{% else %}7d{% endif %}
 
   ruleSelector:
@@ -87,7 +87,7 @@ spec:
 {% endif %}
         resources:
           requests:
-            storage: {% if prometheus_pv_size is defined %}{{ prometheus_pv_size }}{% else %}{{ monitoring.prometheusVolumeSize }}{% endif %}
+            storage: {% if prometheus_pv_size is defined %}{{ prometheus_pv_size }}{% else %}{{ monitoring.prometheus.volumeSize | default(monitoring.prometheusVolumeSize) | default("20Gi") }}{% endif %}
 
   tolerations:
   - effect: NoSchedule

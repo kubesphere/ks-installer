@@ -29,11 +29,11 @@ spec:
         name: prometheus-adapter
         resources:
           limits:
-            cpu: {{ monitoring.prometheus_adapter.limits.cpu | default("600m") }}
-            memory: {{ monitoring.prometheus_adapter.limits.memory | default("500Mi") }}
+            cpu: {{ monitoring.prometheus.adapter.resources.limits.cpu | default(monitoring.prometheus_adapter.limits.cpu) | default("600m") }}
+            memory: {{ monitoring.prometheus.adapter.resources.limits.memory | default(monitoring.prometheus_adapter.limits.memory) | default("500Mi") }}
           requests:
-            cpu: {{ monitoring.prometheus_adapter.requests.cpu | default("200m") }}
-            memory: {{ monitoring.prometheus_adapter.requests.memory | default("250Mi") }}
+            cpu: {{ monitoring.prometheus.adapter.resources.requests.cpu | default(monitoring.prometheus_adapter.requests.cpu) | default("200m") }}
+            memory: {{ monitoring.prometheus.adapter.resources.requests.memory | default(monitoring.prometheus_adapter.requests.memory) | default("250Mi") }}
         ports:
         - containerPort: 6443
         volumeMounts:
