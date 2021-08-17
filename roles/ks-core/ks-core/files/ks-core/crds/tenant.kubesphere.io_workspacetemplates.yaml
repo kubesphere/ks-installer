@@ -42,11 +42,11 @@ spec:
                       items:
                         properties:
                           op:
+                            pattern: ^(add|remove|replace)?$
                             type: string
                           path:
                             type: string
                           value:
-                            type: object
                             x-kubernetes-preserve-unknown-fields: true
                         required:
                         - path
