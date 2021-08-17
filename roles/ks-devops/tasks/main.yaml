@@ -1,34 +1,28 @@
 ---
-- name: ks-devops | Getting Jenkins installation files
-  copy:
-    src: "jenkins"
-    dest: "{{ kubesphere_dir }}/"
 
-
-- name: ks-devops | Checking Jenkins status
+- name: Jenkins | Check jenkins status
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system ks-jenkins
   register: jenkins_status
-  failed_when: false
+  ignore_errors: True
 
-
+# Get old config
 - import_tasks: get_old_config.yaml
   when:
     - jenkins_status.rc == 0
 
-
+# Uninstall update center
 - name: ks-devops | Checking Jenkins update center status
   shell: >
     {{ bin_dir }}/kubectl get deploy -n kubesphere-devops-system uc-jenkins-update-center
   register: jenkins_uc_status
   failed_when: false
 
-
 - import_tasks: uninstall_update_center.yaml
   when:
     - jenkins_uc_status.rc == 0
 
-
+# SonarQube application
 - block:
     - name: ks-devops | Getting sonarqube host
       shell: >
@@ -57,38 +51,58 @@
     - devops.sonarqube.externalSonarUrl is defined
     - devops.sonarqube.externalSonarToken is defined
 
+# DevOps application
+- name: ks-devops | Getting KubeSphere JWT secret
+  register: ks_jwt_secret
+  shell: >
+    {{ bin_dir }}/kubectl get secret -n kubesphere-system kubesphere-secret -ojsonpath="{.data.secret}" | base64 -d
+
+- name: ks-devops | Debug KubeSphere JWT secret
+  debug:
+    var: ks_jwt_secret
+
+- name: ks-devops | Getting devops installation charts
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - ks-devops
+
 - name: ks-devops | Creating manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/jenkins/{{ item.file }}"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
-    - { name: custom-values-jenkins, file: custom-values-jenkins.yaml }
-    - { name: jenkins-casc-config, file: jenkins-casc-config.yml }
-    - { name: jenkins-agent-config, file: jenkins-agent-config.yaml }
-    - { name: worker-resourcequota, file: worker-resourcequota.yaml }
+    - { path: ks-devops, file: ks-devops-values.yaml }
 
+- name: ks-devops | Checking if ks-devops has installed
+  shell: |
+    # TODO Rename helm chart name
+    helm status devops -n kubesphere-devops-system
+  register: ks_devops_installed
+  failed_when: false
 
-- name: ks-devops | Configuring Jenkins host and port
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-casc-config.yml --namespace kubesphere-devops-system
+- name: ks-devops | Cleaning up resources before upgrading or installing ks-devops
+  import_tasks: cleanup.yaml
+  # When ks-devops is not installed, clean up some resources
+  when: ks_devops_installed is not defined or ks_devops_installed.rc != 0
 
+- name: ks-devops | Upgrading or installing ks-devops
+  shell: |
+    # TODO Rename helm chart name
+    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.0.tgz \
+    -n kubesphere-devops-system \
+    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
+  register: devops_upgrade_result
+  until: devops_upgrade_result is succeeded
+  retries: 3
+  delay: 10
 
-- name: ks-devops | Creating Jenkins Agent Config File
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/jenkins-agent-config.yaml --namespace kubesphere-devops-worker
-
-- name: ks-devops | Create resource quota for worker namespace
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/jenkins/worker-resourcequota.yaml
-
-- name: ks-devops | Deploying Jenkins
-  shell: >
-    {{ bin_dir }}/helm upgrade --install ks-jenkins {{ kubesphere_dir }}/jenkins/jenkins
-    -f {{ kubesphere_dir }}/jenkins/custom-values-jenkins.yaml
-    --namespace kubesphere-devops-system
-#  when:
-#    - (jenkins_check.stdout.find("DEPLOYED") == -1) or (jenkins_check.stdout.find("2.121.3-0217") == -1)
-
+- name: ks-devops | Labelling devops namespaces as system workspace
+  shell: |
+    {{ bin_dir }}/kubectl label --overwrite namespaces {{ item }} kubesphere.io/workspace=system-workspace
+  loop:
+    - kubesphere-devops-worker
 
 - name: ks-devops | Importing ks-devops status
   shell: >

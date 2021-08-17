@@ -1,0 +1,183 @@
+# ks-devops helm chart values patch
+
+## ks-devops chart values
+image:
+  # support 'ghcr.io/kubesphere-sigs' or 'kubespheresig'
+  registry: "{{ ks_devops_registry }}"
+  controller:
+    tag: "{{ ks_devops_controller_tag }}"
+  apiserver:
+    tag: "{{ ks_devops_apiserver_tag }}"
+  tools:
+    tag: "{{ ks_devops_tools_tag }}"
+  pullPolicy: {{ ks_image_pull_policy }}
+
+authentication:
+  # If not set, jwt tools will generate and set it automatically
+  jwtSecret: "{{ ks_jwt_secret.stdout }}"
+
+serviceAccount:
+  create: true
+
+## s2i chart values
+s2i:
+  image:
+    registry: "{{ s2i_registry }}"
+  # Binary image
+  binary:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+
+  # Java image
+  java8CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  java8Runtime:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+
+  java11CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+
+  java11Runtime:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+
+  # Nodejs image
+  nodejs8CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  nodejs6CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  nodejs4CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+
+  # Python image
+  python36CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  python35CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  python34CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  python27CentOs7:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+
+  # Tomcat image
+  tomcat85Java11:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  tomcat85Java11Runtime:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  tomcat85Java8:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+  tomcat85Java8Runtime:
+    image:
+      tag: "{{ s2itemplates_tag }}"
+
+  s2irun:
+    image:
+      tag: "{{ s2irun_tag }}"
+
+  s2ioperator:
+    image:
+      tag: "{{ s2ioperator_tag }}"
+  prometheus:
+    namespace: "kubesphere-monitoring-system"
+
+# Jenkins chart values
+jenkins:
+  ksAuth:
+    enabled: true
+  Master:
+    Image: "{{ jenkins_repo }}"
+    ImageTag: "{{ jenkins_tag }}"
+    ImagePullPolicy: {{ ks_image_pull_policy }}
+    resources:
+      requests:
+        cpu: "0.1"
+        memory: "{{ devops.jenkinsMemoryReq }}"
+      limits:
+        cpu: "1"
+        memory: "{{ devops.jenkinsMemoryLim }}"
+    JavaOpts: "{{ JavaOpts }}"
+  Agent:
+    Image: "{{ jnlp_slave_repo }}"
+    ImageTag: "{{ jnlp_slave_tag }}"
+    Builder:
+      Registry: "{{ builder_registry }}"
+      Base:
+        Tag: "{{ builder_base_tag }}"
+      NodeJs:
+        Image: builder-nodejs
+        Tag: "{{ builder_nodejs_tag }}"
+      Maven:
+        Image: builder-maven
+        Tag: "{{ builder_maven_tag }}"
+      Golang:
+        Image: builder-go
+        Tag: "{{ builder_go_tag }}"
+  securityRealm:
+    type: ldap
+    ldap:
+      host: openldap.kubesphere-system.svc:389
+  ContainerEnv:
+    - name: CASC_JENKINS_CONFIG
+      value: /var/jenkins_home/casc_configs/jenkins.yaml
+    - name: com.sun.jndi.ldap.connect.timeout
+      value: "15000"
+    - name: com.sun.jndi.ldap.read.timeout
+      value: "60000"
+    - name: kubernetes.connection.timeout
+      value: "60000"
+    - name: kubernetes.request.timeout
+      value: "60000"
+    - name: EMAIL_SMTP_HOST
+      value: "{{ EMAIL_SMTP_HOST }}"
+    - name: EMAIL_SMTP_PORT
+      value: "{{ EMAIL_SMTP_PORT }}"
+    - name: EMAIL_USE_SSL
+      value: "{{ EMAIL_USE_SSL }}"
+    - name: EMAIL_FROM_NAME
+      value: "{{ EMAIL_FROM_NAME }}"
+    - name: EMAIL_FROM_ADDR
+      value: "{{ EMAIL_FROM_ADDR }}"
+    - name: EMAIL_FROM_PASS
+      value: "{{ EMAIL_FROM_PASS }}"
+{% if sonarQubeHost is defined and sonarQubeToken is defined %}
+    - name: SONAR_ENABLED
+      value: "true"
+    - name: SONAR_RUNNER_VERSION
+      value: "3.3.0.1492"
+    - name: SONAR_SERVER_URL
+      value: "{{ sonarQubeHost }}"
+    - name: SONAR_AUTH_TOKEN
+      value: "{{ sonarQubeToken }}"
+{% endif %}
+
+  Persistence:
+    Enabled: true
+{% if persistence.storageClass is defined and persistence.storageClass != "" %}
+    StorageClass: "{{ persistence.storageClass }}"
+{% endif %}
+    AccessMode: ReadWriteOnce
+    Size: {% if jenkins_pv_size is defined %}{{ jenkins_pv_size }}{% else %}{{ devops.jenkinsVolumeSize }}{% endif %}
+
+    volumes:
+    - name: casc-config
+      configMap:
+        name: jenkins-casc-config
+    mounts:
+    - name: casc-config
+      mountPath: /var/jenkins_home/casc_configs
+      readOnly: true
+  prometheus:
+    namespace: "kubesphere-monitoring-system"

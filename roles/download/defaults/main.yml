@@ -149,43 +149,29 @@ mc_tag: RELEASE.2019-08-07T23-14-43Z
 snapshot_controller_repo: "{{ base_repo }}{{ namespace_override | default('csiplugin') }}/snapshot-controller"
 snapshot_controller_tag: "v4.0.0"
 
+# ks-devops
+ks_devops_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+ks_devops_controller_tag: "master"
+ks_devops_apiserver_tag: "master"
+ks_devops_tools_tag: "master"
+
 #jenkins:
 jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-jenkins"
 jenkins_tag: 2.249.1
 jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/jnlp-slave"
 jnlp_slave_tag: 3.27-1
-builder_base_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-base"
+
+builder_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 builder_base_tag: v3.1.0
-builder_nodejs_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-nodejs"
 builder_nodejs_tag: v3.1.0
-builder_maven_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-maven"
 builder_maven_tag: v3.1.0
-builder_go_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-go"
 builder_go_tag: v3.1.0
 
 #s2i
-s2ioperator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2ioperator"
+s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 s2ioperator_tag: "v3.1.0"
-s2irun_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2irun"
 s2irun_tag: "v2.1.1"
-
-s2itemplates_tag: v2.1.0
-binary_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2i-binary"
-tomcat85_java11_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java11-centos7"
-tomcat85_java11_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java11-runtime"
-tomcat85_java8_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java8-centos7"
-tomcat85_java8_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java8-runtime"
-java11centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-11-centos7"
-java8centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-8-centos7"
-java8_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-8-runtime"
-java11_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-11-runtime"
-nodejs8centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-8-centos7"
-nodejs6centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-6-centos7"
-nodejs4centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-4-centos7"
-python36centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-36-centos7"
-python35centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-35-centos7"
-python34centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-34-centos7"
-python27centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-27-centos7"
+s2itemplates_tag: "v2.1.0"
 
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
