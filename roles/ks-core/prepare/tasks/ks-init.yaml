@@ -5,10 +5,13 @@
   register: kubesphere_user_check
   failed_when: "kubesphere_user_check.stderr and 'NotFound' not in kubesphere_user_check.stderr"
 
-- name: KubeSphere | Initing account
+- name: KubeSphere | Initing admin account
   shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/initial-account.yaml
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/admin-account.yaml
   when:
     - kubesphere_user_check.stderr is defined
     - kubesphere_user_check.stderr.find("NotFound") != -1
 
+- name: KubeSphere | Initing account
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/initial-account.yaml
