@@ -65,7 +65,6 @@
     dest: "{{ kubesphere_dir }}/"
   loop:
     - "ks-init"
-    - "provisonercapability"
 
 - import_tasks: ks-init.yaml
   when: ks_upgrade is not defined or (ks_upgrade != True)
@@ -84,9 +83,3 @@
     /bin/bash {{ kubesphere_dir }}/ks-init/generate-kubeconfig.sh
   when:
     - openpitrix.enabled is defined and openpitrix.enabled
-
-- name: KubeSphere | Creating Storage ProvisionerCapability
-  shell: "{{ bin_dir }}/kubectl apply -R -f {{ kubesphere_dir }}/provisonercapability"
-  register: storage_pc_result
-  failed_when: "storage_pc_result.stderr and 'Warning: kubectl apply' not in storage_pc_result.stderr"
-
