@@ -24,7 +24,10 @@ spec:
     {{- toYaml .Values.webhook.receivers | nindent 4 }}
   archivingPriority: {{ .Values.webhook.archivingPriority }}
   alertingPriority: {{ .Values.webhook.alertingPriority }}
-  auditType: {{ .Values.webhook.auditType }}
   auditLevel: {{ .Values.webhook.auditLevel }}
   k8sAuditingEnabled: {{ .Values.webhook.k8sAuditingEnabled }}
+  useHTTPS: {{ .Values.webhook.useHTTPS }}
+  {{- if .Values.webhook.port }}
+  port: {{ .Values.webhook.port }}
+  {{- end }}
 

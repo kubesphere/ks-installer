@@ -151,6 +151,7 @@ data:
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
       enable: true
+      webhookURL: https://kube-auditing-webhook-svc.kubesphere-logging-system.svc:6443/audit/webhook/event
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
       host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
