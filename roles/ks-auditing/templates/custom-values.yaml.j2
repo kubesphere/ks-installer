@@ -7,11 +7,11 @@ operator:
   imagePullSecrets: []
   resources:
     limits:
-      cpu: 200m
-      memory: 200Mi
+      cpu: {{ auditing.operator.resources.limits.cpu | default("200m") }}
+      memory: {{ auditing.operator.resources.limits.memory | default("200Mi") }}
     requests:
-      cpu: 20m
-      memory: 20Mi
+      cpu: {{ auditing.operator.resources.requests.cpu | default("20m") }}
+      memory: {{ auditing.operator.resources.requests.memory | default("20Mi") }}
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -28,11 +28,11 @@ webhook:
   imagePullSecrets: []
   resources:
     limits:
-      cpu: 200m
-      memory: 500Mi
+      cpu: {{ auditing.webhook.resources.limits.memory | default("200m") }}
+      memory: {{ auditing.webhook.resources.limits.memory | default("500Mi") }}
     requests:
-      cpu: 20m
-      memory: 50Mi
+      cpu: {{ auditing.webhook.resources.requests.memory | default("20m") }}
+      memory: {{ auditing.webhook.resources.requests.memory | default("50Mi") }}
   nodeSelector: {}
   tolerations: []
   affinity: {}

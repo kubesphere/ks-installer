@@ -1,3 +1,20 @@
 image:
   repository: {{ gatekeeper_repo }}
   release: {{ gatekeeper_release }}
+
+controllerManager:
+  resources:
+    limits:
+      cpu: {{ gatekeeper.controller_manager.resources.limits.cpu | default("1000m") }}
+      memory: {{ gatekeeper.controller_manager.resources.limits.memory | default("512Mi") }}
+    requests:
+      cpu: {{ gatekeeper.controller_manager.resources.resources.cpu | default("100m") }}
+      memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("256Mi") }}
+audit:
+  resources:
+    limits:
+      cpu: {{ gatekeeper.controller_manager.resources.resources.memory | default("1000m") }}
+      memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("512Mi") }}
+    requests:
+      cpu: {{ gatekeeper.controller_manager.resources.resources.memory | default("100m") }}
+      memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("256Mi") }}

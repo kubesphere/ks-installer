@@ -8,11 +8,11 @@ operator:
     image: {{ configmap_reload_repo }}:{{ configmap_reload_tag }}
   resources:
     limits:
-      cpu: 200m
-      memory: 200Mi
+      cpu: {{ events.operator.resources.limits.cpu | default("200m") }}
+      memory: {{ events.operator.resources.limits.cpu | default("200Mi") }}
     requests:
-      cpu: 20m
-      memory: 20Mi
+      cpu: {{ events.operator.resources.requests.cpu | default("20m") }}
+      memory: {{ events.operator.resources.requests.cpu | default("20Mi") }}
   serviceAccount:
     create: true
     name: ""
@@ -28,11 +28,11 @@ exporter:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 200m
-      memory: 500Mi
+      cpu: {{ events.exporter.resources.limits.cpu | default("200m") }}
+      memory: {{ events.exporter.resources.limits.memory | default("500Mi") }}
     requests:
-      cpu: 20m
-      memory: 50Mi
+      cpu: {{ events.exporter.resources.requests.cpu | default("20m") }}
+      memory: {{ events.exporter.resources.requests.memory | default("50Mi") }}
   sinks:
     stdout:
       enabled: true
@@ -53,11 +53,11 @@ ruler:
     pullPolicy: IfNotPresent
   resources:
     limits:
-      cpu: 500m
-      memory: 500Mi
+      cpu: {{ events.ruler.resources.limits.cpu | default("500m") }}
+      memory: {{ events.ruler.resources.limits.memory | default("500Mi") }}
     requests:
-      cpu: 50m
-      memory: 50Mi
+      cpu: {{ events.ruler.resources.requests.cpu | default("50m") }}
+      memory: {{ events.ruler.resources.requests.memory | default("50Mi") }}
   ruleNamespaceSelector: {}
   ruleSelector: {}
   sinks:

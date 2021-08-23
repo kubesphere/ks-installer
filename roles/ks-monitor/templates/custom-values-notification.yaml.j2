@@ -9,11 +9,11 @@ operator:
         pullPolicy: IfNotPresent
       resources:
         limits:
-          cpu: 50m
-          memory: 50Mi
+          cpu: {{ monitoring.notification_manager.proxy.resources.limits.cpu | default("50m") }}
+          memory: {{ monitoring.notification_manager.proxy.resources.limits.memory | default("50Mi") }}
         requests:
-          cpu: 5m
-          memory: 10Mi
+          cpu: {{ monitoring.notification_manager.proxy.resources.requests.cpu | default("5m") }}
+          memory: {{ monitoring.notification_manager.proxy.resources.requests.memory | default("10Mi") }}
     operator:
       image:
         repo: {{ notification_manager_operator_repo }}
@@ -21,11 +21,11 @@ operator:
         pullPolicy: IfNotPresent 
       resources:
         limits:
-          cpu: 50m
-          memory: 50Mi
+          cpu: {{ monitoring.notification_manager.operator.resources.limits.cpu | default("50m") }}
+          memory: {{ monitoring.notification_manager.operator.resources.limits.memory | default("50Mi") }}
         requests:
-          cpu: 5m
-          memory: 20Mi
+          cpu: {{ monitoring.notification_manager.operator.resources.requests.cpu | default("5m") }}
+          memory: {{ monitoring.notification_manager.operator.resources.requests.memory | default("20Mi") }}
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -45,11 +45,11 @@ notificationmanager:
 {% endif %}
   resources:
     limits:
-      cpu: 500m
-      memory: 500Mi
+      cpu: {{ monitoring.notification_manager.resources.limits.cpu | default("500m") }}
+      memory: {{ monitoring.notification_manager.resources.limits.memory | default("500Mi") }}
     requests:
-      cpu: 5m
-      memory: 20Mi
+      cpu: {{ monitoring.notification_manager.resources.requests.cpu | default("5m") }}
+      memory: {{ monitoring.notification_manager.resources.requests.memory | default("20Mi") }}
   nodeSelector: {}
   tolerations: []
   affinity: {}

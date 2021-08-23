@@ -241,7 +241,7 @@ persistentVolume:
 {% endif %}
   accessModes:
     - ReadWriteOnce
-  size: {% if redis_ha_pv_size is defined %}{{ redis_ha_pv_size }}{% else %}{{ common.redisVolumSize }}{% endif %}
+  size: {% if redis_ha_pv_size is defined %}{{ redis_ha_pv_size }}{% else %}{{ common.redis.volumeSize | default("2Gi") }}{% endif %}
 
   annotations: {}
 init:

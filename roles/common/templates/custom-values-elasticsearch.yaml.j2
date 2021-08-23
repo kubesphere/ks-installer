@@ -73,9 +73,9 @@ master:
   name: master
   exposeHttp: false
 {% if nodeNum is defined and nodeNum < 5 %}
-  replicas: {{ common.es.elasticsearchMasterReplicas | default(1) }}
+  replicas: {{ common.es.master.replicas | default(1) }}
 {% else %}
-  replicas: {{ common.es.elasticsearchMasterReplicas | default(3) }}
+  replicas: {{ common.es.master.replicas | default(3) }}
 {% endif %}
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
@@ -83,7 +83,7 @@ master:
     enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: {% if es_master_pv_size is defined %}{{ es_master_pv_size }}{% else %}{{ common.es.elasticsearchMasterVolumeSize }}{% endif %}
+    size: {% if es_master_pv_size is defined %}{{ es_master_pv_size }}{% else %}{{ common.es.master.volumeSize | default("4Gi") }}{% endif %}
 
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"
@@ -106,11 +106,11 @@ master:
     #   memory: "128Mi"
   resources:
     limits:
-      cpu: "2"
-      # memory: "1024Mi"
+      cpu: {{ common.es.master.resources.limits.cpu | default("2") }}
+      memory: {{ common.es.master.resources.limits.memory | default("1024Mi") }}
     requests:
-      cpu: "25m"
-      memory: "512Mi"
+      cpu: {{ common.es.master.resources.requests.cpu | default("25m") }}
+      memory: {{ common.es.master.resources.requests.memory | default("512Mi") }}
   priorityClassName: ""
   ## (dict) If specified, apply these annotations to each master Pod
   # podAnnotations:
@@ -129,9 +129,9 @@ data:
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
 {% if nodeNum is defined and nodeNum < 5 %}
-  replicas: {{ common.es.elasticsearchDataReplicas | default(2) }}
+  replicas: {{ common.es.data.replicas | default(2) }}
 {% else %}
-  replicas: {{ common.es.elasticsearchDataReplicas | default(3) }}
+  replicas: {{ common.es.data.replicas | default(3) }}
 {% endif %}
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
@@ -139,7 +139,7 @@ data:
     enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: {% if es_data_pv_size is defined %}{{ es_data_pv_size }}{% else %}{{ common.es.elasticsearchDataVolumeSize }}{% endif %}
+    size: {% if es_data_pv_size is defined %}{{ es_data_pv_size }}{% else %}{{ common.es.data.volumeSize | default("20Gi") }}{% endif %}
 
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"
@@ -163,11 +163,11 @@ data:
     #   memory: "128Mi"
   resources:
     limits:
-      cpu: "4"
-      # memory: "2048Mi"
+      cpu: {{ common.es.master.resources.limits.cpu | default("4") }}
+      memory: {{ common.es.master.resources.limits.memory | default("2048Mi") }}
     requests:
-      cpu: "25m"
-      memory: "1536Mi"
+      cpu: {{ common.es.master.resources.requests.cpu | default("25m") }}
+      memory: {{ common.es.master.resources.requests.memory | default("1536Mi") }}
   priorityClassName: ""
   ## (dict) If specified, apply these annotations to each data Pod
   # podAnnotations:

@@ -23,18 +23,18 @@ spec:
   image: {{ alertmanager_repo }}:{{ alertmanager_tag }}
   resources:
     limits:
-      cpu: {{ monitoring.alertmanager.limits.cpu | default("200m") }}
-      memory: {{ monitoring.alertmanager.limits.memory | default("200Mi") }}
+      cpu: {{ monitoring.alertmanager.resources.limits.cpu | default(monitoring.alertmanager.limits.cpu) | default("200m") }}
+      memory: {{ monitoring.alertmanager.resources.limits.memory | default(monitoring.alertmanager.limits.memory) | default("200Mi") }}
     requests:
-      cpu: {{ monitoring.alertmanager.requests.cpu | default("20m") }}
-      memory: {{ monitoring.alertmanager.requests.memory | default("30Mi") }}
+      cpu: {{ monitoring.alertmanager.resources.requests.cpu | default(monitoring.alertmanager.requests.cpu) | default("20m") }}
+      memory: {{ monitoring.alertmanager.resources.requests.memory | default(monitoring.alertmanager.requests.memory) | default("30Mi") }}
   nodeSelector:
     kubernetes.io/os: linux
 
 {% if nodeNum is defined and nodeNum < 3 %}
-  replicas: {{ monitoring.alertmanagerReplicas | default(1) }}
+  replicas: {{ monitoring.alertmanager.replicas | default(monitoring.alertmanagerReplicas) | default(1) }}
 {% else %}
-  replicas: {{ monitoring.alertmanagerReplicas | default(3) }}
+  replicas: {{ monitoring.alertmanager.replicas | default(monitoring.alertmanagerReplicas) | default(3) }}
 {% endif %}
   securityContext:
     fsGroup: 2000

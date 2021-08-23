@@ -34,11 +34,11 @@ spec:
           name: http
         resources:
           limits:
-            cpu: 200m
-            memory: 200Mi
+            cpu: {{ monitoring.prometheus.operator.resources.limits.cpu | default("200m") }}
+            memory: {{ monitoring.prometheus.operator.resources.limits.memory | default("200Mi") }}
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: {{ monitoring.prometheus.operator.resources.requests.cpu | default("100m") }}
+            memory: {{ monitoring.prometheus.operator.resources.requests.memory | default("100Mi") }}
         securityContext:
           allowPrivilegeEscalation: false
       - args:
@@ -50,11 +50,11 @@ spec:
         name: kube-rbac-proxy
         resources:
           limits:
-            cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
-            memory: {{ monitoring.kube_rbac_proxy.limits.memory | default("100Mi") }}
+            cpu: {{ monitoring.kube_rbac_proxy.resources.limits.cpu | default(monitoring.kube_rbac_proxy.limits.cpu) | default("1") }}
+            memory: {{ monitoring.kube_rbac_proxy.resources.limits.memory | default(monitoring.kube_rbac_proxy.limits.memory) | default("100Mi") }}
           requests:
-            cpu: {{ monitoring.kube_rbac_proxy.requests.cpu | default("10m") }}
-            memory: {{ monitoring.kube_rbac_proxy.requests.memory| default("20Mi") }}
+            cpu: {{ monitoring.kube_rbac_proxy.resources.requests.cpu | default(monitoring.kube_rbac_proxy.requests.cpu) | default("10m") }}
+            memory: {{ monitoring.kube_rbac_proxy.resources.requests.memory | default(monitoring.kube_rbac_proxy.requests.memory) | default("20Mi") }}
         ports:
         - containerPort: 8443
           name: https
