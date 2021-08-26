@@ -30,7 +30,7 @@ spec:
           name: "elasticsearch-credentials"
 {% endif %}
 {% endif %}
-{% if common.es.externalElasticsearchScheme is defined and common.es.externalElasticsearchScheme == "https" %}
+{% if common.es.externalElasticsearchProtocol  is defined and common.es.externalElasticsearchProtocol == "https" %}
     tls:
       verify: false
 {% endif %}
