@@ -3,7 +3,7 @@
 
 - name: KubeSphere | Getting Kubernetes version
   shell: >
-    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
+    {{ bin_dir }}/kubectl version -o json | jq -r '.serverVersion.gitVersion'
   register: kubernetes_version
   failed_when: false
 
