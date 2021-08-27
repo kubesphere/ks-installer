@@ -10,7 +10,11 @@ spec:
   tail:
     tag: kube.*
     path: /var/log/containers/*.log
+{% if (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
     parser: docker
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd' or logging.containerruntime == 'cri-o' ) %}
+    parser: cri
+{% endif %}
     refreshIntervalSeconds: 10
     memBufLimit: 5MB
     skipLongLines: true
