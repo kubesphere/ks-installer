@@ -236,6 +236,7 @@ spec:
                                       format: int32
                                       type: integer
                                     protocol:
+                                      default: TCP
                                       description: 'Protocol is the protocol of the
                                         service port of which status is recorded here
                                         The supported values are: "TCP", "UDP", "SCTP"'
@@ -692,12 +693,25 @@ spec:
                   `Namespaced` or `Cluster`. `Namespaced` indicates that the KubeFed
                   namespace will be the only target of the control plane.
                 type: string
+              statusController:
+                properties:
+                  maxConcurrentReconciles:
+                    description: The maximum number of concurrent Reconciles of status
+                      controller which can be run. Defaults to 1.
+                    format: int64
+                    type: integer
+                type: object
               syncController:
                 properties:
                   adoptResources:
                     description: Whether to adopt pre-existing resources in member
                       clusters. Defaults to "Enabled".
                     type: string
+                  maxConcurrentReconciles:
+                    description: The maximum number of concurrent Reconciles of sync
+                      controller which can be run. Defaults to 1.
+                    format: int64
+                    type: integer
                 type: object
             required:
             - scope
@@ -860,6 +874,14 @@ spec:
                   provided. If omitted, clusters without explicit preferences should
                   not have any replicas scheduled.
                 type: object
+              intersectWithClusterSelector:
+                description: If set to true, the placement of target kind will be
+                  determined using the instersection of RSP placement scheduling result
+                  and the clusterSelector (spec.placement.clusterSelector) specified
+                  on the target kind. If set to false or not defined, RSP placement
+                  scheduling result overwrites the clusters list in the spec.placement.clusters
+                  of the target resource.
+                type: boolean
               rebalance:
                 description: If set to true then already scheduled and running replicas
                   may be moved to other clusters in order to match current state to
