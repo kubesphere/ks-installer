@@ -2,6 +2,7 @@ kind=(applications.app.k8s.io
       clusterrolebindings.rbac.authorization.k8s.io
       clusterroles.rbac.authorization.k8s.io
       configmaps deployments.apps
+      ingresses.networking.k8s.io
       globalrolebindings.iam.kubesphere.io
       globalroles.iam.kubesphere.io
       groupbindings.iam.kubesphere.io
