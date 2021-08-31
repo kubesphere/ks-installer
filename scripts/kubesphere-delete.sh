@@ -39,12 +39,16 @@ fi
 
 helm uninstall -n kube-system snapshot-controller 2>/dev/null
 
-# delete kubesphere deployment
+# delete kubesphere deployment & statefulset
 kubectl delete deployment -n kubesphere-system `kubectl get deployment -n kubesphere-system -o jsonpath="{.items[*].metadata.name}"` 2>/dev/null
+kubectl delete statefulset -n kubesphere-system `kubectl get statefulset -n kubesphere-system -o jsonpath="{.items[*].metadata.name}"` 2>/dev/null
 
-# delete monitor statefulset
+# delete monitor resources
 kubectl delete prometheus -n kubesphere-monitoring-system k8s 2>/dev/null
+kubectl delete Alertmanager -n kubesphere-monitoring-system main 2>/dev/null
+kubectl delete DaemonSet -n kubesphere-monitoring-system node-exporter 2>/dev/null
 kubectl delete statefulset -n kubesphere-monitoring-system `kubectl get statefulset -n kubesphere-monitoring-system -o jsonpath="{.items[*].metadata.name}"` 2>/dev/null
+
 # delete grafana
 kubectl delete deployment -n kubesphere-monitoring-system grafana 2>/dev/null
 kubectl --no-headers=true get pvc -n kubesphere-monitoring-system -o custom-columns=:metadata.namespace,:metadata.name | grep -E kubesphere-monitoring-system | xargs -n2 kubectl delete pvc -n 2>/dev/null
