@@ -1,6 +1,7 @@
 apiVersion: v1
 data:
-  template: |
+  template: |2
+
     {{ "{{ define \"nm.default.subject\" }}{{ .Alerts | len }} alert{{ if gt (len .Alerts) 1 }}s{{ end }} for {{ range .GroupLabels.SortedPairs }} {{ .Name }}={{ .Value }} {{ end }}" }}
     {{ "{{- end }}" }}
 
@@ -8,8 +9,7 @@ data:
     {{ "{{ range .Labels.SortedPairs }}{{ if ne .Name \"runbook_url\" }}- {{ .Name }} = {{ .Value }}{{ end }}" }}
     {{ "{{ end }}Annotations:" }}
     {{ "{{ range .Annotations.SortedPairs }}{{ if ne .Name \"runbook_url\"}}- {{ .Name }} = {{ .Value }}{{ end }}" }}
-    {{ "{{ end }}" }}
-    {{ "{{ end }}{{ end }}" }}
+    {{ "{{ end }}{{ end }}{{ end }}" }}
 
     {{ "{{ define \"nm.default.text\" }}{{ template \"nm.default.subject\" . }}" }}
     {{ "{{ if gt (len .Alerts.Firing) 0 -}}" }}
@@ -19,6 +19,23 @@ data:
     {{ "{{ if gt (len .Alerts.Resolved) 0 -}}" }}
     {{ "Alerts Resolved:" }}
     {{ "{{ template \"__nm_alert_list\" .Alerts.Resolved }}" }}
+    {{ "{{- end }}" }}
+    {{ "{{- end }}" }}
+
+    {{ "{{ define \"__nm_alert_list_markdown\" }}{{ range . }}### Labels:" }}
+    {{ "{{ range .Labels.SortedPairs }}{{ if ne .Name \"runbook_url\" }}- {{ .Name }} = {{ .Value }}{{ end }}" }}
+    {{ "{{ end }}### Annotations:" }}
+    {{ "{{ range .Annotations.SortedPairs }}{{ if ne .Name \"runbook_url\"}}- {{ .Name }} = {{ .Value }}{{ end }}" }}
+    {{ "{{ end }}{{ end }}{{ end }}" }}
+
+    {{ "{{ define \"nm.default.markdown\" }}# {{ template \"nm.default.subject\" . }}" }}
+    {{ "{{ if gt (len .Alerts.Firing) 0 -}}" }}
+    {{ "## <font color=#CD0000>Alerts Firing:</font>" }}
+    {{ "{{ template \"__nm_alert_list_markdown\" .Alerts.Firing }}" }}
+    {{ "{{- end }}" }}
+    {{ "{{ if gt (len .Alerts.Resolved) 0 -}}" }}
+    {{ "## <font color=#00CD00>Alerts Resolved:</font>" }}
+    {{ "{{ template \"__nm_alert_list_markdown\" .Alerts.Resolved }}" }}
     {{ "{{- end }}" }}
     {{ "{{- end }}" }}
 
