@@ -296,19 +296,19 @@ spec:
         tolerations: []
   gatekeeper:        # Provide admission policy and rule management, A validating (mutating TBA) webhook that enforces CRD-based policies executed by Open Policy Agent.
     enabled: false   # Enable or disable Gatekeeper.
-    controller_manager:
-      resources:
-        limits:
-          cpu: 1000m
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
-    audit:
-      resources:
-        limits:
-          cpu: 1000m
-          memory: 512Mi
-        requests:
-          cpu: 100m
-          memory: 256Mi
+    # controller_manager:
+    #   resources:
+    #     limits:
+    #       cpu: 1000m
+    #       memory: 512Mi
+    #     requests:
+    #       cpu: 100m
+    #       memory: 256Mi
+    # audit:
+    #   resources:
+    #     limits:
+    #       cpu: 1000m
+    #       memory: 512Mi
+    #     requests:
+    #       cpu: 100m
+    #       memory: 256Mi

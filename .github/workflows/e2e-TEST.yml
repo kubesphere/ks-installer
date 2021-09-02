@@ -48,7 +48,29 @@ jobs:
 
     - name: Test plugin
       run: |
-        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true},"devops":{"enabled":true},"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
+        bash scripts/check_cluster_status.sh
+
+    - name: Clean up
+      run: kind delete cluster --name chart-testing
+
+    - name: Create kind cluster
+      uses: helm/kind-action@v1.2.0
+      with:
+        config: .github/workflows/kind/kind.yaml
+
+    - name: Load image to kind
+      run: kind load docker-image ks-installer --name chart-testing
+
+    - name: Deploy KubeSphere to Kind
+      run: |
+        kubectl apply -f deploy/kubesphere-installer.yaml
+        kubectl apply -f deploy/cluster-configuration.yaml
+        bash scripts/check_cluster_status.sh
+
+    - name: Test plugin (servicemesh / devops / gatekeeper)
+      run: |
+        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true},"devops":{"enabled":true},"gatekeeper":{"enabled":true}}}'
         bash scripts/check_cluster_status.sh
 
     - name: Check DOCKER_PASSWORD secret
