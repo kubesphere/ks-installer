@@ -28,6 +28,11 @@
       register: tower_result
       failed_when: false
 
+    - name: Kubefed | Upgrade crd manually #see https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+      shell: >
+        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubefed/kubefed/charts/controllermanager/crds/
+      failed
+
     - name: Kubefed | Initing kube-federation-system
       shell: >
         {{ bin_dir }}/helm upgrade --install kubefed {{ kubesphere_dir }}/kubefed/kubefed
