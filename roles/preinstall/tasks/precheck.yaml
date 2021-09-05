@@ -1,7 +1,7 @@
 ---
 - name: KubeSphere | Checking Kubernetes version
   shell: >
-    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
+    {{ bin_dir }}/kubectl version -o json | jq -r '.serverVersion.gitVersion'
   register: kubernetes_version
 
 - name: KubeSphere | Initing Kubernetes version
