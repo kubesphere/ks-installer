@@ -212,7 +212,6 @@ elasticsearch_oss_repo: "{{ base_repo }}{{ namespace_override | default('kubesph
 elasticsearch_oss_tag: 6.7.0-1
 fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/fluentbit-operator"
 fluentbit_operator_tag: v0.5.0
-fluentbit_operator_migrator_tag: migrator
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
 ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/fluent-bit"
@@ -625,15 +624,6 @@ downloads:
     container: true
     repo: "{{ fluentbit_operator_repo }}"
     tag: "{{ fluentbit_operator_tag }}"
-    sha256: "{{ fluentbit_operator|default(None) }}"
-    groups:
-      - kube-node
-
-  fluentbit_operator_migrator:
-    enabled: "{{ logging_enabled }}"
-    container: true
-    repo: "{{ fluentbit_operator_repo }}"
-    tag: "{{ fluentbit_operator_migrator_tag }}"
     sha256: "{{ fluentbit_operator|default(None) }}"
     groups:
       - kube-node
