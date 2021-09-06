@@ -114,6 +114,11 @@ data:
 {% else %}
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
 {% endif %}
+{% if common.monitoring.GPUMonitoring is defined and common.monitoring.GPUMonitoring.enabled == false %}
+      enableGPUMonitoring: false
+{% else %}
+      enableGPUMonitoring: true
+{% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
