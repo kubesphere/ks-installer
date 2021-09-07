@@ -28,21 +28,14 @@
     - devops.sonarqube.externalSonarToken is defined
 
 - block:
-  - name: KubeSphere | Getting es host
-    shell: >
-      {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "logging:" -A 2 | grep "host" | awk '{print $2}'
-    register: es_host
-
   - name: KubeSphere | Getting es index prefix
     shell: >
       {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "logging:" -A 2 | grep "indexPrefix" | awk '{print $2}'
     register: es_indexPrefix
 
 - set_fact:
-    esHost: "{{ es_host.stdout }}"
     esIndexPrefix: "{{ es_indexPrefix.stdout }}"
   when:
-    - es_host is defined and es_host.stdout is defined and es_host.stdout != ""
     - es_indexPrefix is defined and es_indexPrefix.stdout is defined and es_indexPrefix.stdout != ""
 
 - name: KubeSphere | Getting token

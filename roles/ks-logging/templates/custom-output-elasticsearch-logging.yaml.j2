@@ -31,3 +31,7 @@ spec:
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-log"
     logstashFormat: true
     timeKey: "@timestamp"
+{% if common.es.externalElasticsearchProtocol is defined and common.es.externalElasticsearchProtocol == "https" %}
+    tls:
+      verify: false
+{% endif %}
