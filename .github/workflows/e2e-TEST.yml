@@ -26,7 +26,10 @@ jobs:
       run: kind delete cluster --name chart-testing && docker image prune -f
 
     - name: Build image
-      run: docker build . --file Dockerfile --tag ks-installer
+      run: |
+        echo ${{ github.base_ref }}
+        tag=${{ github.base_ref }} && sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml && sed -i "/    \"version\"/s/\:.*/\: \"$tag\"/g" controller/installRunner.py
+        docker build . --file Dockerfile --tag ks-installer
 
     - name: Create kind cluster
       uses: helm/kind-action@v1.2.0
@@ -51,18 +54,18 @@ jobs:
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
         bash scripts/check_cluster_status.sh
 
-    - name: Clean up
+    - name: Clean up (servicemesh / devops / gatekeeper)
       run: kind delete cluster --name chart-testing
 
-    - name: Create kind cluster
+    - name: Create kind cluster (servicemesh / devops / gatekeeper)
       uses: helm/kind-action@v1.2.0
       with:
         config: .github/workflows/kind/kind.yaml
 
-    - name: Load image to kind
+    - name: Load image to kind (servicemesh / devops / gatekeeper)
       run: kind load docker-image ks-installer --name chart-testing
 
-    - name: Deploy KubeSphere to Kind
+    - name: Deploy KubeSphere to Kind (servicemesh / devops / gatekeeper)
       run: |
         kubectl apply -f deploy/kubesphere-installer.yaml
         kubectl apply -f deploy/cluster-configuration.yaml
