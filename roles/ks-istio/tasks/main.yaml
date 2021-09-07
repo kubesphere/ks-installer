@@ -100,15 +100,15 @@
   debug:
     var: istio_result
 
-- name: servicemesh | patch hpa to istiod-1-6-10
-  shell: >
-    {{ bin_dir }}/kubectl -n istio-system patch hpa istiod-1-6-10
-    --type merge -p '{"spec":{"scaleTargetRef":{"name":"istiod-1-6-10"}}}'
-  register: patch_result
-  failed_when: "patch_result.stderr"
-  until: patch_result is succeeded
-  retries: 5
-  delay: 3
+#- name: servicemesh | patch hpa to istiod-1-6-10
+#  shell: >
+#    {{ bin_dir }}/kubectl -n istio-system patch hpa istiod-1-6-10
+#    --type merge -p '{"spec":{"scaleTargetRef":{"name":"istiod-1-6-10"}}}'
+#  register: patch_result
+#  failed_when: "patch_result.stderr"
+#  until: patch_result is succeeded
+#  retries: 5
+#  delay: 3
 
 - name: servicemesh | replace webhook to istiod-1-6-10
   shell: >
