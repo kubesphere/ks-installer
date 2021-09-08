@@ -31,7 +31,7 @@
     - name: Kubefed | Upgrade crd manually #see https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
       shell: >
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubefed/kubefed/charts/controllermanager/crds/
-      failed
+      ignore_errors: true
 
     - name: Kubefed | Initing kube-federation-system
       shell: >
