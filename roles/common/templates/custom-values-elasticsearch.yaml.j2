@@ -128,7 +128,9 @@ data:
   serviceType: ClusterIP
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
-{% if nodeNum is defined and nodeNum < 5 %}
+{% if nodeNum is defined and nodeNum == 1 %}
+  replicas: {{ common.es.data.replicas | default(1) }}
+{% elif nodeNum is defined and nodeNum > 1 and nodeNum < 5 %}
   replicas: {{ common.es.data.replicas | default(2) }}
 {% else %}
   replicas: {{ common.es.data.replicas | default(3) }}
