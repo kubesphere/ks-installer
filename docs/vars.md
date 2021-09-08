@@ -37,6 +37,7 @@ events:
   enabled: false
 logging:
   enabled: false
+  containerruntime: docker
   elasticsearchMasterReplicas: 1
   elasticsearchDataReplicas: 1
   logsidecarReplicas: 2

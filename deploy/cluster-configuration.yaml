@@ -148,6 +148,7 @@ spec:
     #       memory: 50Mi
   logging:                 # (CPU: 57 m, Memory: 2.76 G) Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false         # Enable or disable the KubeSphere Logging System.
+    containerruntime: docker
     logsidecar:
       enabled: true
       replicas: 2

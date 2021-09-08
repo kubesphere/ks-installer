@@ -21,7 +21,18 @@ spec:
       - name: env
         emptyDir: {}
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
-{% else %}
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
+      - name: containerdsock
+        hostPath:
+          path: /var/run/containerd/containerd.sock
+      - name: crictl
+        hostPath:
+          path: /usr/local/bin/crictl
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'cri-o') %}
+        - name: crisock
+          hostPath:
+            path: /var/run/crio/crio.sock
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
       - name: dockersock
         hostPath:
           path: /var/run/docker.sock
@@ -34,15 +45,30 @@ spec:
         - '-c'
         - set -ex;
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
-          echo DOCKER_ROOT_DIR={{ common.containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
-{% else %}
-          echo DOCKER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
+          echo CONTAINER_ROOT_DIR={{ common.containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
+          echo CONTAINER_ROOT_DIR=$(crictl info --output go-template --template {{'{{.config.containerdRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'cri-o') %}
+          echo CONTAINER_ROOT_DIR= > /fluentbit-operator/fluent-bit.env
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
+          echo CONTAINER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
 {% endif %}
         volumeMounts:
         - name: env
           mountPath: /fluentbit-operator
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
-{% else %}
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
+        - name: containerdsock
+          readOnly: true
+          mountPath: /var/run/containerd/containerd.sock
+        - name: crictl
+          readOnly: true
+          mountPath: /usr/local/bin/crictl
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'cri-o') %}
+        - name: crisock
+          hostPath:
+            path: /var/run/crio/crio.sock
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
         - name: dockersock
           readOnly: true
           mountPath: /var/run/docker.sock
