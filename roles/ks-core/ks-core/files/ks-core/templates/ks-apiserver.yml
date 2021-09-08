@@ -39,18 +39,19 @@ spec:
         - containerPort: 9090
           protocol: TCP
         resources:
-          {{- toYaml .Values.apiserverResources | nindent 12 }}
+          {{- toYaml .Values.apiserver.resources | nindent 12 }}
         volumeMounts:
         - mountPath: /var/run/docker.sock
           name: docker-sock
-          readOnly: true
         - mountPath: /etc/kubesphere/ingress-controller
           name: ks-router-config
         - mountPath: /etc/kubesphere/
           name: kubesphere-config
         - mountPath: /etc/localtime
           name: host-time
-          readOnly: true
+        {{- if .Values.apiserver.extraVolumeMounts }}
+          {{- toYaml .Values.apiserver.extraVolumeMounts | nindent 8 }}
+        {{- end }}
         env:
         {{- if .Values.env }}
         {{- toYaml .Values.env | nindent 8 }}
@@ -108,7 +109,9 @@ spec:
           path: /etc/localtime
           type: ""
         name: host-time
-
+      {{- if .Values.apiserver.extraVolumes }}
+        {{ toYaml .Values.apiserver.extraVolumes | nindent 6 }}
+      {{- end }}
 ---
 
 apiVersion: v1
