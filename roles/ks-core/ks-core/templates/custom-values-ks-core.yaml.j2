@@ -32,21 +32,23 @@ console:
 
 kube_version: {{ kube_version }}
 
-apiserverResources:
-  limits:
-    cpu: {{ common.apiserver.resources.limits.cpu | default('1') }}
-    memory: {{ common.apiserver.resources.limits.memory | default('1024Mi') }}
-  requests:
-    cpu: {{ common.apiserver.resources.requests.cpu | default('20m') }}
-    memory: {{ common.apiserver.resources.requests.memory | default('100Mi') }}
+apiserver:
+  resources:
+    limits:
+      cpu: {{ common.apiserver.resources.limits.cpu | default('1') }}
+      memory: {{ common.apiserver.resources.limits.memory | default('1024Mi') }}
+    requests:
+      cpu: {{ common.apiserver.resources.requests.cpu | default('20m') }}
+      memory: {{ common.apiserver.resources.requests.memory | default('100Mi') }}
 
-controllerManagerResources:
-  limits:
-    cpu: {{ common.controllerManager.resources.limits.cpu | default('1') }}
-    memory: {{ common.controllerManager.resources.limits.memory | default('1000Mi') }}
-  requests:
-    cpu: {{ common.controllerManager.resources.requests.cpu | default('30m') }}
-    memory: {{ common.controllerManager.resources.requests.memory | default('50Mi') }}
+controller:
+  resources:
+    limits:
+      cpu: {{ common.controllerManager.resources.limits.cpu | default('1') }}
+      memory: {{ common.controllerManager.resources.limits.memory | default('1000Mi') }}
+    requests:
+      cpu: {{ common.controllerManager.resources.requests.cpu | default('30m') }}
+      memory: {{ common.controllerManager.resources.requests.memory | default('50Mi') }}
 {% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or (enableHA is defined and enableHA) %}
 env:
 - name: KUBESPHERE_REDIS_PASSWORD
