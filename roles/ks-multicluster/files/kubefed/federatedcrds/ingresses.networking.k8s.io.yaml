@@ -2,32 +2,33 @@
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
-  name: configmaps
+  name: ingresses.networking.k8s.io
 spec:
   federatedType:
     group: types.kubefed.io
-    kind: FederatedConfigMap
-    pluralName: federatedconfigmaps
+    kind: FederatedIngress
+    pluralName: federatedingresses
     scope: Namespaced
     version: v1beta1
   propagation: Enabled
   targetType:
-    kind: ConfigMap
-    pluralName: configmaps
+    group: networking.k8s.io
+    kind: Ingress
+    pluralName: ingresses
     scope: Namespaced
     version: v1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: federatedconfigmaps.types.kubefed.io
+  name: federatedingresses.types.kubefed.io
 spec:
   group: types.kubefed.io
   names:
-    kind: FederatedConfigMap
-    plural: federatedconfigmaps
+    kind: FederatedIngress
+    plural: federatedingresses
     shortNames:
-    - fcm
+    - fing
   scope: Namespaced
   versions:
   - name: v1beta1

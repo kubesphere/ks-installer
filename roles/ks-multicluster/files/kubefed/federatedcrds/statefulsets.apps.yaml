@@ -1,3 +1,4 @@
+---
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
@@ -27,127 +28,127 @@ spec:
     kind: FederatedStatefulSet
     plural: federatedstatefulsets
     shortNames:
-      - fsts
+    - fsts
   scope: Namespaced
   versions:
-    - name: v1beta1
-      schema:
-        openAPIV3Schema:
-          properties:
-            apiVersion:
-              type: string
-            kind:
-              type: string
-            metadata:
-              type: object
-            spec:
-              properties:
-                overrides:
-                  items:
-                    properties:
-                      clusterName:
-                        type: string
-                      clusterOverrides:
-                        items:
-                          properties:
-                            op:
-                              pattern: ^(add|remove|replace)?$
-                              type: string
-                            path:
-                              type: string
-                            value:
-                              x-kubernetes-preserve-unknown-fields: true
-                          required:
-                            - path
-                          type: object
-                        type: array
-                    type: object
-                  type: array
-                placement:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              overrides:
+                items:
                   properties:
-                    clusterSelector:
-                      properties:
-                        matchExpressions:
-                          items:
-                            properties:
-                              key:
-                                type: string
-                              operator:
-                                type: string
-                              values:
-                                items:
-                                  type: string
-                                type: array
-                            required:
-                              - key
-                              - operator
-                            type: object
-                          type: array
-                        matchLabels:
-                          additionalProperties:
-                            type: string
-                          type: object
-                      type: object
-                    clusters:
+                    clusterName:
+                      type: string
+                    clusterOverrides:
                       items:
                         properties:
-                          name:
+                          op:
+                            pattern: ^(add|remove|replace)?$
                             type: string
+                          path:
+                            type: string
+                          value:
+                            x-kubernetes-preserve-unknown-fields: true
                         required:
-                          - name
+                        - path
                         type: object
                       type: array
                   type: object
-                retainReplicas:
-                  type: boolean
-                template:
-                  type: object
-                  x-kubernetes-preserve-unknown-fields: true
-              type: object
-            status:
-              properties:
-                clusters:
-                  items:
+                type: array
+              placement:
+                properties:
+                  clusterSelector:
                     properties:
-                      name:
-                        type: string
-                      remoteStatus:
+                      matchExpressions:
+                        items:
+                          properties:
+                            key:
+                              type: string
+                            operator:
+                              type: string
+                            values:
+                              items:
+                                type: string
+                              type: array
+                          required:
+                          - key
+                          - operator
+                          type: object
+                        type: array
+                      matchLabels:
+                        additionalProperties:
+                          type: string
                         type: object
-                        x-kubernetes-preserve-unknown-fields: true
-                      status:
-                        type: string
-                    required:
+                    type: object
+                  clusters:
+                    items:
+                      properties:
+                        name:
+                          type: string
+                      required:
                       - name
-                    type: object
-                  type: array
-                conditions:
-                  items:
-                    properties:
-                      lastTransitionTime:
-                        format: date-time
-                        type: string
-                      lastUpdateTime:
-                        format: date-time
-                        type: string
-                      reason:
-                        type: string
-                      status:
-                        type: string
-                      type:
-                        type: string
-                    required:
-                      - type
-                      - status
-                    type: object
-                  type: array
-                observedGeneration:
-                  format: int64
-                  type: integer
-              type: object
-          required:
-            - spec
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
+                      type: object
+                    type: array
+                type: object
+              retainReplicas:
+                type: boolean
+              template:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+            type: object
+          status:
+            properties:
+              clusters:
+                items:
+                  properties:
+                    name:
+                      type: string
+                    remoteStatus:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    status:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    lastUpdateTime:
+                      format: date-time
+                      type: string
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - type
+                  - status
+                  type: object
+                type: array
+              observedGeneration:
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

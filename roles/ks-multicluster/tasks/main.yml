@@ -28,6 +28,11 @@
       register: tower_result
       failed_when: false
 
+    - name: Kubefed | Upgrade crd manually #see https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+      shell: >
+        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubefed/kubefed/charts/controllermanager/crds/
+      ignore_errors: true
+
     - name: Kubefed | Initing kube-federation-system
       shell: >
         {{ bin_dir }}/helm upgrade --install kubefed {{ kubesphere_dir }}/kubefed/kubefed
@@ -52,12 +57,8 @@
 
 
 - name: Kubefed | Creating MultiCluster crds
-  shell: "{{ bin_dir }}/kubectl create -f {{ item }} -n kube-federation-system"
-  register: crds_result
-  failed_when: "crds_result.stderr and 'AlreadyExists' not in crds_result.stderr"
-  until: crds_result is succeeded
-  retries: 5
-  delay: 5
+  shell: "{{ bin_dir }}/kubectl apply -f {{ item }} -n kube-federation-system"
+  ignore_errors: true
   with_fileglob:
     - "{{ kubesphere_dir }}/kubefed/federatedcrds/*"
 

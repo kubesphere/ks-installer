@@ -18,7 +18,10 @@ controllermanager:
   ## Supported options are `configmaps` and `endpoints`
   leaderElectResourceLock:
   syncController:
+    maxConcurrentReconciles:
     adoptResources:
+  statusController:
+    maxConcurrentReconciles:
   ## Value of feature gates item should be either `Enabled` or `Disabled`
   featureGates:
     PushReconciler:
@@ -44,9 +47,9 @@ controllermanager:
   controller:
     annotations: {}
     replicaCount: 2
-    repository: kubesphere
+    repository: quay.io/kubernetes-multicluster
     image: kubefed
-    tag: v0.7.0
+    tag: canary
     imagePullPolicy: IfNotPresent
     logLevel: 2
     forceRedeployment: false
@@ -60,9 +63,9 @@ controllermanager:
         memory: 64Mi
   webhook:
     annotations: {}
-    repository: kubesphere
+    repository: quay.io/kubernetes-multicluster
     image: kubefed
-    tag: v0.7.0
+    tag: canary
     imagePullPolicy: IfNotPresent
     logLevel: 8
     forceRedeployment: false
@@ -82,6 +85,12 @@ controllermanager:
       dnsNames:
         - ca.webhook.kubefed
       commonName: ca.webhook.kubefed
+
+  postInstallJob:
+    repository: bitnami
+    image: kubectl
+    tag: 1.17.16
+    imagePullPolicy: IfNotPresent
 
   service:
     labels: {}
