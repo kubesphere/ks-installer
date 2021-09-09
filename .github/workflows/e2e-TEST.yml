@@ -25,12 +25,20 @@ jobs:
     - name: Clean up
       run: kind delete cluster --name chart-testing && docker image prune -f
 
-    - name: Build image
+    - name: Build image (pr)
+      if: ${{ github.event_name == 'pull_request' }}
       run: |
         echo ${{ github.base_ref }}
         tag=${{ github.base_ref }} && sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml && sed -i "/    \"version\"/s/\:.*/\: \"$tag\"/g" controller/installRunner.py
         docker build . --file Dockerfile --tag ks-installer
-
+      
+    - name: Build image (push)
+      if: ${{ github.event_name == 'push' }}
+      run: |
+        echo ${GITHUB_REF#refs/heads/}
+        tag=${GITHUB_REF#refs/heads/} && sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml && sed -i "/    \"version\"/s/\:.*/\: \"$tag\"/g" controller/installRunner.py
+        docker build . --file Dockerfile --tag ks-installer
+      
     - name: Create kind cluster
       uses: helm/kind-action@v1.2.0
       with:
@@ -107,7 +115,7 @@ jobs:
 
       - name: Push image
         run: |
-          IMAGE=$IMAGE_REPO/$IMAGE_NAME:$([ "$GITHUB_REF" = refs/heads/master ] && echo "latest" || echo "${{ steps.get_version.outputs.VERSION }}")
+          IMAGE=$IMAGE_REPO/$IMAGE_NAME:${{ steps.get_version.outputs.VERSION }}
           docker build . --file Dockerfile --tag $IMAGE
           echo $IMAGE
           docker push $IMAGE
