@@ -28,10 +28,10 @@ spec:
       - name: crictl
         hostPath:
           path: /usr/local/bin/crictl
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'cri-o') %}
-        - name: crisock
-          hostPath:
-            path: /var/run/crio/crio.sock
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
+      - name: crisock
+        hostPath:
+          path: /var/run/crio/crio.sock
 {% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
       - name: dockersock
         hostPath:
@@ -48,8 +48,8 @@ spec:
           echo CONTAINER_ROOT_DIR={{ common.containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
 {% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
           echo CONTAINER_ROOT_DIR=$(crictl info --output go-template --template {{'{{.config.containerdRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'cri-o') %}
-          echo CONTAINER_ROOT_DIR= > /fluentbit-operator/fluent-bit.env
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
+          echo CONTAINER_ROOT_DIR=/var/log > /fluentbit-operator/fluent-bit.env
 {% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
           echo CONTAINER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
 {% endif %}
@@ -64,10 +64,10 @@ spec:
         - name: crictl
           readOnly: true
           mountPath: /usr/local/bin/crictl
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'cri-o') %}
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
         - name: crisock
-          hostPath:
-            path: /var/run/crio/crio.sock
+          readOnly: true
+          mountPath: /var/run/crio/crio.sock
 {% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
         - name: dockersock
           readOnly: true
