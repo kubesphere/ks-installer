@@ -15,7 +15,7 @@
   shell: >
     {{ bin_dir }}/helm upgrade --install gatekeeper
     {{ kubesphere_dir }}/gatekeeper
-    --namespace gatekeeper
+    --namespace gatekeeper-system
     --create-namespace
     -f {{ kubesphere_dir }}/gatekeeper/custom-values-gatekeeper.yaml
   register: result
@@ -24,7 +24,7 @@
 
 - name: GateKeeper | Labeling GateKeeper namespace
   shell: >
-    {{ bin_dir }}/kubectl label namespace gatekeeper kubesphere.io/workspace=system-workspace --overwrite
+    {{ bin_dir }}/kubectl label namespace gatekeeper-system kubesphere.io/workspace=system-workspace --overwrite
 
 - name: GateKeeper | Importing GateKeeper status
   shell: >
