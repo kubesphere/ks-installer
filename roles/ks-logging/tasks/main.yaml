@@ -25,6 +25,7 @@
   with_items:
     - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
     - { name: custom-input-logging, file: custom-input-logging.yaml }
+    - { name: custom-input-systemd, file: custom-input-systemd.yaml }
   when: migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
 
 
@@ -38,7 +39,7 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator-cri
   when:
     - logging is defined and logging.enabled and logging.containerruntime is defined
-    - logging.containerruntime == 'containerd' or logging.containerruntime == 'cri-o'
+    - logging.containerruntime == 'containerd' or logging.containerruntime == 'crio'
 
 
 - import_tasks: logsidecar.yaml
