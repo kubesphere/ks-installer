@@ -84,4 +84,9 @@ notificationmanager:
         name: notification-manager-template
       name: notification-manager-template
   defaultSecretNamespace: kubesphere-monitoring-federated
+  sidecars:
+    tenant:
+      image: {{ notification_tenant_sidecar_repo }}:{{ notification_tenant_sidecar_tag }}
+      name: tenant
+      type: kubesphere
 
