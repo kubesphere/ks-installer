@@ -125,6 +125,17 @@ data:
 {% else %}
       enableGPUMonitoring: false
 {% endif %}
+{% if common.gpu is defined and common.gpu.kinds is defined %}
+    gpu:
+      kinds: 
+{% for kind in common.gpu.kinds %}
+      - resourceName: {{ kind.resourceName }}
+        resourceType: {{ kind.resourceType }}
+{% if kind.default is defined %}
+        default: {{ kind.default }}
+{% endif %}
+{% endfor %}
+{% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
