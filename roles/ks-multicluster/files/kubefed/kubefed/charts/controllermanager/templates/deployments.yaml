@@ -98,6 +98,8 @@ spec:
         {{- toYaml .Values.commonNodeSelector | nindent 8 }}
       tolerations:
         {{- toYaml .Values.commonTolerations | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.commonAffinity | nindent 8 }}
       securityContext:
         runAsUser: 1001
       serviceAccountName: kubefed-admission-webhook

@@ -19,6 +19,16 @@ operator:
   # If true, just clean up cr but not crd
   cleanupAllCustomResources: false
   kubectlImage: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
+{% if affinity is defined and affinity is not None %}
+  affinity:
+{{ affinity | to_nice_yaml }}
+{% elif events.affinity is defined and events.affinity is not None %}
+  affinity:
+{{ events.affinity | to_nice_yaml }}
+{% else %}
+  affinity: {}
+{% endif %}
+{% endif %}
 
 exporter:
   enabled: true
@@ -43,6 +53,16 @@ exporter:
     #     name:
     #     port:
     #     path:
+{% if affinity is defined and affinity is not None %}
+  affinity:
+{{ affinity | to_nice_yaml }}
+{% elif events.affinity is defined and events.affinity is not None %}
+  affinity:
+{{ events.affinity | to_nice_yaml }}
+{% else %}
+  affinity: {}
+{% endif %}
+{% endif %}
 
 ruler:
   enabled: {{ events.ruler.enabled | default(true) }}
@@ -72,6 +92,15 @@ ruler:
     #     name:
     #     port:
     #     path:
+{% if affinity is defined and affinity is not None %}
+  affinity:
+{{ affinity | to_nice_yaml }}
+{% elif events.affinity is defined and events.affinity is not None %}
+  affinity:
+{{ events.affinity | to_nice_yaml }}
+{% else %}
+  affinity: {}
+{% endif %}
 
 rule:
   createDefaults: true

@@ -57,3 +57,35 @@ env:
       name: redis-secret
       key: auth
 {% endif %}
+
+affinity:
+{% if affinity is defined and affinity is not None %}
+{{ affinity | to_nice_yaml }}
+{% elif common.core.affinity is defined and common.core.affinity is not None %}
+{{ common.core.affinity | to_nice_yaml }}
+{% else %}
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      preference:
+        matchExpressions:
+        - key: node-role.kubernetes.io/master
+          operator: In
+          values:
+          - ""
+{% if master_num is defined and master_num != "1" %}
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - topologyKey: kubernetes.io/hostname
+      labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - ks-apiserver
+      namespaces:
+      - {{ .Release.Namespace }}
+{% endif %}
+{% endif %}
+
+

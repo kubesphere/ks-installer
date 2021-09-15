@@ -17,6 +17,16 @@ resources:
     cpu: {{ logging.logsidecar.resources.requests.cpu | default("10m") }}
     memory: {{ logging.logsidecar.resources.requests.memory | default("10Mi") }}
 
+{% if affinity is defined and affinity is not None %}
+affinity:
+{{ affinity | to_nice_yaml }}
+{% elif logging.affinity is defined and logging.affinity is not None %}
+affinity:
+{{ logging.affinity | to_nice_yaml }}
+{% else %}
+affinity: {}
+{% endif %}
+
 configReloader:
   image:
     repository: {{ configmap_reload_repo }}

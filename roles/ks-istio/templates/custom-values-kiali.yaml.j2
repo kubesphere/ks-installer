@@ -9,3 +9,13 @@ image:
 
 # Defines where the operator will look for Kial CR resources. "" means "all namespaces".
 watchNamespace: "istio-system"
+
+{% if affinity is defined and affinity is not None %}
+affinity:
+{{ affinity | to_nice_yaml }}
+{% elif servicemesh.affinity is defined and servicemesh.affinity is not None %}
+affinity:
+{{ servicemesh.affinity | to_nice_yaml }}
+{% else %}
+affinity: {}
+{% endif %}

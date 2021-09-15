@@ -14,7 +14,16 @@ operator:
       memory: {{ auditing.operator.resources.requests.memory | default("20Mi") }}
   nodeSelector: {}
   tolerations: []
+{% if affinity is defined and affinity is not None %}
+  affinity:
+{{ affinity | to_nice_yaml }}
+{% elif auditing.affinity is defined and auditing.affinity is not None %}
+  affinity:
+{{ auditing.affinity | to_nice_yaml }}
+{% else %}
   affinity: {}
+{% endif %}
+{% endif %}
 
 
 # value of kube-auditing webhook
@@ -35,7 +44,15 @@ webhook:
       memory: {{ auditing.webhook.resources.requests.memory | default("50Mi") }}
   nodeSelector: {}
   tolerations: []
+{% if affinity is defined and affinity is not None %}
+  affinity:
+{{ affinity | to_nice_yaml }}
+{% elif auditing.affinity is defined and auditing.affinity is not None %}
+  affinity:
+{{ auditing.affinity | to_nice_yaml }}
+{% else %}
   affinity: {}
+{% endif %}
   receivers:
     - name: alert
       type: alertmanager

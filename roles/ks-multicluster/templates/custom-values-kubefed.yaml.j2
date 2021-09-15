@@ -5,6 +5,15 @@
 ## Configuration values for kubefed controllermanager deployment.
 ##
 controllermanager:
+{% if affinity is defined and affinity is not None %}
+  commonAffinity:
+{{ affinity | to_nice_yaml }}
+{% elif multicluster.affinity is defined and multicluster.affinity is not None %}
+  commonAffinity:
+{{ multicluster.affinity | to_nice_yaml }}
+{% else %}
+  commonAffinity: {}
+{% endif %}
   controller:
     annotations: {}
 {% if nodeNum is defined and nodeNum < 3 %}

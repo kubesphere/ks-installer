@@ -10,6 +10,27 @@ controllerManager:
     requests:
       cpu: {{ gatekeeper.controller_manager.resources.resources.cpu | default("100m") }}
       memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("256Mi") }}
+{% if affinity is defined and affinity is not None %}
+  affinity:
+{{ affinity | to_nice_yaml }}
+{% elif gatekeeper.affinity is defined and gatekeeper.affinity is not None %}
+  affinity:
+{{ gatekeeper.affinity | to_nice_yaml }}
+{% else %}
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: gatekeeper.sh/operation
+                  operator: In
+                  values:
+                    - webhook
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+{% endif %}
+{% endif %}
 audit:
   resources:
     limits:

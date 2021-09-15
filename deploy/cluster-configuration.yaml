@@ -18,6 +18,9 @@ spec:
     endpointIps: localhost  # etcd cluster EndpointIps. It can be a bunch of IPs here.
     port: 2379              # etcd port.
     tlsEnable: true
+  affinity: {}
+  tolerations: {}
+  nodeSelector: {}
   common:
     # apiserver:            # Enlarge the apiserver and controller manager's resource requests and limits for the large cluster
     #  resources:

@@ -165,6 +165,15 @@ spec:
       hostNetwork: true
       nodeSelector:
         kubernetes.io/os: linux
+{% if affinity is defined and affinity is not None %}
+      affinity:
+{{ affinity | to_nice_yaml }}
+{% elif metrics_server.affinity is defined and metrics_server.affinity is not None %}
+      affinity:
+{{ metrics_server.affinity | to_nice_yaml }}
+{% else %}
+      affinity: {}
+{% endif %}
       priorityClassName: system-cluster-critical
       serviceAccountName: metrics-server
       volumes:
