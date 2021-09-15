@@ -130,6 +130,9 @@ spec:
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
     # operator:
+    #   affinity: {}
+    #   tolerations: {}
+    #   nodeSelector: {}
     #   resources:
     #     limits:
     #       cpu: 200m
@@ -138,6 +141,9 @@ spec:
     #       cpu: 20m
     #       memory: 20Mi
     # exporter:
+    #   affinity: {}
+    #   tolerations: {}
+    #   nodeSelector: {}
     #   resources:
     #     limits:
     #       cpu: 200m
@@ -148,6 +154,9 @@ spec:
     # ruler:
     #   enabled: true
     #   replicas: 2
+    #   affinity: {}
+    #   tolerations: {}
+    #   nodeSelector: {}
     #   resources:
     #     limits:
     #       cpu: 500m

@@ -6,6 +6,17 @@ operator:
     pullPolicy: IfNotPresent
   configReloader:
     image: {{ configmap_reload_repo }}:{{ configmap_reload_tag }}
+{% if events.operator is defined %}
+{% if events.operator.affinity is defined %}
+  affinity: {{ events.operator.affinity }}
+{% endif %}
+{% if events.operator.tolerations is defined %}
+  tolerations: {{ events.operator.tolerations }}
+{% endif %}
+{% if events.operator.nodeSelector is defined %}
+  nodeSelector: {{ events.operator.nodeSelector }}
+{% endif %}
+{% endif %}
   resources:
     limits:
       cpu: {{ events.operator.resources.limits.cpu | default("200m") }}
@@ -26,6 +37,17 @@ exporter:
     repository: {{ kube_events_exporter_repo }}
     tag: {{ kube_events_exporter_tag }}
     pullPolicy: IfNotPresent
+{% if events.exporter is defined %}
+{% if events.exporter.affinity is defined %}
+  affinity: {{ events.exporter.affinity }}
+{% endif %}
+{% if events.exporter.tolerations is defined %}
+  tolerations: {{ events.exporter.tolerations }}
+{% endif %}
+{% if events.exporter.nodeSelector is defined %}
+  nodeSelector: {{ events.exporter.nodeSelector }}
+{% endif %}
+{% endif %}
   resources:
     limits:
       cpu: {{ events.exporter.resources.limits.cpu | default("200m") }}
@@ -51,6 +73,17 @@ ruler:
     repository: {{ kube_events_ruler_repo }}
     tag: {{ kube_events_ruler_tag }}
     pullPolicy: IfNotPresent
+{% if events.ruler is defined %}
+{% if events.ruler.affinity is defined %}
+  affinity: {{ events.ruler.affinity }}
+{% endif %}
+{% if events.ruler.tolerations is defined %}
+  tolerations: {{ events.ruler.tolerations }}
+{% endif %}
+{% if events.ruler.nodeSelector is defined %}
+  nodeSelector: {{ events.ruler.nodeSelector }}
+{% endif %}
+{% endif %}
   resources:
     limits:
       cpu: {{ events.ruler.resources.limits.cpu | default("500m") }}
