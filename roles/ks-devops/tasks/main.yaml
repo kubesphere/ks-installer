@@ -90,7 +90,7 @@
 - name: ks-devops | Upgrading or installing ks-devops
   shell: |
     # TODO Rename helm chart name
-    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.1.tgz \
+    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.2.tgz \
     -n kubesphere-devops-system \
     -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
   register: devops_upgrade_result
