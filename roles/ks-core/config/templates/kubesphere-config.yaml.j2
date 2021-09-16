@@ -136,6 +136,12 @@ data:
 {% endif %}
 {% endfor %}
 {% endif %}
+    notification:
+{% if common.notification is defined and common.notification.endpoint is defined %}
+      endpoint: {{ common.notification.endpoint }}
+{% else %}
+      endpoint: http://notification-manager-svc.kubesphere-monitoring-system.svc:19093
+{% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
