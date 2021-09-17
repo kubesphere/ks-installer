@@ -9,12 +9,24 @@ data:
       multipleLogin: {{ console.enableMultiLogin | default(true) }}
       kubectlImage: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
       jwtSecret: "{{ ks_secret_str.stdout }}"
-{% if authentication.oauthOptions is defined %}
       oauthOptions:
-        {{ authentication.oauthOptions |  to_nice_yaml(indent=2) | trim | indent(8) }}
-{% elif multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
-      oauthOptions:
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
         accessTokenMaxAge: 0
+{% elif authentication.oauthOptions is defined %}
+        {{ authentication.oauthOptions |  to_nice_yaml(indent=2) | trim | indent(8) }}
+{% if authentication.oauthOptions.clients is not defined %}
+        clients:
+        - name: kubesphere
+          secret: kubesphere
+          redirectURIs:
+          - '*'
+{% endif %}
+{% else %}
+        clients:
+        - name: kubesphere
+          secret: kubesphere
+          redirectURIs:
+          - '*'
 {% endif %}
 
 {% if (common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled) or devops.enabled %}
