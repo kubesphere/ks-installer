@@ -200,6 +200,15 @@ data:
     kubeedge:
       endpoint: http://edge-watcher.kubeedge.svc/api/
 {% endif %}
+
+    gateway:
+      watchesPath: /var/helm-charts/watches.yaml
+{% if gateway is defined and gateway.namespace is defined %}
+      namespace: {{ gateway.namespace }}
+{% else %}
+      namespace: kubesphere-controls-system
+{% endif %}
+
 kind: ConfigMap
 metadata:
   name: kubesphere-config
