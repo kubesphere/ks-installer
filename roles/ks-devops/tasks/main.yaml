@@ -87,12 +87,74 @@
   # When ks-devops is not installed, clean up some resources
   when: ks_devops_installed is not defined or ks_devops_installed.rc != 0
 
-- name: ks-devops | Upgrading or installing ks-devops
+- name: ks-devops | Checking ks-devops Helm Release
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system get secrets --field-selector=type=helm.sh/release.v1  | grep s2i-webhook-server-cert |wc -l
+  register: helm_release
+  ignore_errors: True
+
+- name: ks-devops | Convert ks-devops to helm mananged
+  args:
+    executable: /bin/bash
   shell: |
+    # Try to get the resource
+    RESOURCE=$({{ bin_dir }}/kubectl -n {{ item.ns }} get {{ item.kind }} {{ item.resource }} 2> /dev/null | head -n 1)
+    # Skip labeling and annotating if no resource found
+    if [[ "$RESOURCE" -ne "" ]]; then
+      {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-name={{ item.release }}
+      {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-namespace=kubesphere-devops-system
+      {{ bin_dir }}/kubectl -n {{ item.ns }} label --overwrite {{ item.kind }} {{ item.resource }} app.kubernetes.io/managed-by=Helm
+    fi
+  loop:
+    - {ns: "kubesphere-devops-system", kind: "secrets", resource: "s2i-webhook-server-cert", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "configmap", resource: "jenkins-casc-config", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "configmap", resource: "ks-devops-agent", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "clusterrole", resource: "manager-role", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "clusterrole", resource: "proxy-role", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "ClusterRoleBinding", resource: "manager-rolebinding", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "ClusterRoleBinding", resource: "proxy-rolebinding", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "service", resource: "s2ioperator-metrics-service", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "service", resource: "s2i-trigger-service", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "service", resource: "webhook-server-service", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "service", resource: "s2ioperator-trigger-service", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "StatefulSet", resource: "s2ioperator", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "MutatingWebhookConfiguration", resource: "mutating-webhook-configuration", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "ValidatingWebhookConfiguration", resource: "validating-webhook-configuration", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "S2iBuilderTemplate", resource: "binary", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "S2iBuilderTemplate", resource: "java", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "S2iBuilderTemplate", resource: "nodejs", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "S2iBuilderTemplate", resource: "tomcat", release: "devops"}
+    - {ns: "kubesphere-devops-system", kind: "S2iBuilderTemplate", resource: "python", release: "devops"}
+  when:
+    - helm_release.stdout == "0"
+  register: source_state
+  failed_when: "source_state.stderr and 'NotFound' not in source_state.stderr"
+
+- name: ks-devops | Stop the existing Jenkins
+  shell: |
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system delete service ks-jenkins-agent
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system delete service ks-jenkins
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system scale deployment ks-jenkins --replicas=0
+  ignore_errors: True
+  when:
+    - helm_release.stdout == "0"
+
+- name: ks-devops | Upgrading or installing ks-devops
+  args:
+    executable: /bin/bash
+  shell: |
+    PVC=$({{ bin_dir }}/kubectl -n kubesphere-devops-system get pvc ks-jenkins || true)
+    if [[ "$PVC" -ne "" ]]; then
+      PVC="ks-jenkins"
+    else
+      PVC=""
+    fi
+
     # TODO Rename helm chart name
     {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.3.tgz \
     -n kubesphere-devops-system \
-    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
+    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml \
+    --set-string jenkins.Persistence.ExistingClaim=$PVC
   register: devops_upgrade_result
   until: devops_upgrade_result is succeeded
   retries: 3
