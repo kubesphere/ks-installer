@@ -139,7 +139,7 @@ data:
 {% endif %}
 {% if common.gpu is defined and common.gpu.kinds is defined %}
     gpu:
-      kinds: 
+      kinds:
 {% for kind in common.gpu.kinds %}
       - resourceName: {{ kind.resourceName }}
         resourceType: {{ kind.resourceType }}
