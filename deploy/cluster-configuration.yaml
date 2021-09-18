@@ -19,22 +19,15 @@ spec:
     port: 2379              # etcd port.
     tlsEnable: true
   common:
+    core:
+      console:
+        enableMultiLogin: true  # Enable or disable simultaneous logins. It allows different users to log in with the same account at the same time.
+        port: 30880
+        type: NodePort
     # apiserver:            # Enlarge the apiserver and controller manager's resource requests and limits for the large cluster
-    #  resources:
-    #    limits:
-    #      cpu: 1
-    #      memory: 1024Mi
-    #    requests:
-    #      cpu: 20m
-    #      memory: 100Mi
+    #  resources: {}
     # controllerManager:
-    #  resources:
-    #    limits:
-    #      cpu: 1
-    #      memory: 1000Mi
-    #    requests:
-    #      cpu: 30m
-    #      memory: 50Mi
+    #  resources: {}
     redis:
       enabled: false
       volumeSize: 2Gi # Redis PVC size.
@@ -57,23 +50,11 @@ spec:
       # master:
       #   volumeSize: 4Gi  # The volume size of Elasticsearch master nodes.
       #   replicas: 1      # The total number of master nodes. Even numbers are not allowed.
-      #   resources:
-      #     limits:
-      #       cpu: 2
-      #       memory: 1024Mi
-      #     requests:
-      #       cpu: 25m
-      #       memory: 512Mi
+      #   resources: {}
       # data:
       #   volumeSize: 20Gi  # The volume size of Elasticsearch data nodes.
       #   replicas: 1       # The total number of data nodes.
-      #   resources:
-      #     limits:
-      #       cpu: 4
-      #       memory: 2048Mi
-      #     requests:
-      #       cpu: 25m
-      #       memory: 1536Mi
+      #   resources: {}
       logMaxAge: 7             # Log retention time in built-in Elasticsearch. It is 7 days by default.
       elkPrefix: logstash      # The string making up index names. The index name will be formatted as ks-<elk_prefix>-log.
       basicAuth:
@@ -82,39 +63,17 @@ spec:
         password: ""
       externalElasticsearchUrl: ""
       externalElasticsearchPort: ""
-  console:
-    enableMultiLogin: true  # Enable or disable simultaneous logins. It allows different users to log in with the same account at the same time.
-    port: 30880
-    type: NodePort
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false         # Enable or disable the KubeSphere Alerting System.
     # thanosruler:
     #   replicas: 1
-    #   resources:
-    #    limits:
-    #      cpu: "1"
-    #      memory: "1Gi"
-    #    requests:
-    #      cpu: "100m"
-    #      memory: "100Mi"
+    #   resources: {}
   auditing:                # Provide a security-relevant chronological set of records，recording the sequence of activities happening on the platform, initiated by different tenants.
     enabled: false         # Enable or disable the KubeSphere Auditing Log System.
     # operator:
-    #   resources:
-    #     limits:
-    #       cpu: 200m
-    #       memory: 200Mi
-    #     requests:
-    #       cpu: 20m
-    #       memory: 20Mi
+    #   resources: {}
     # webhook:
-    #   resources:
-    #     limits:
-    #       cpu: 200m
-    #       memory: 500Mi
-    #     requests:
-    #       cpu: 20m
-    #       memory: 50Mi
+    #   resources: {}
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
     enabled: false             # Enable or disable the KubeSphere DevOps System.
     jenkinsMemoryLim: 2Gi      # Jenkins memory limit.
@@ -126,150 +85,51 @@ spec:
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
     # operator:
-    #   affinity: {}
-    #   tolerations: {}
-    #   nodeSelector: {}
-    #   resources:
-    #     limits:
-    #       cpu: 200m
-    #       memory: 200Mi
-    #     requests:
-    #       cpu: 20m
-    #       memory: 20Mi
+    #   resources: {}
     # exporter:
-    #   affinity: {}
-    #   tolerations: {}
-    #   nodeSelector: {}
-    #   resources:
-    #     limits:
-    #       cpu: 200m
-    #       memory: 500Mi
-    #     requests:
-    #       cpu: 20m
-    #       memory: 50Mi
+    #   resources: {}
     # ruler:
     #   enabled: true
     #   replicas: 2
-    #   affinity: {}
-    #   tolerations: {}
-    #   nodeSelector: {}
-    #   resources:
-    #     limits:
-    #       cpu: 500m
-    #       memory: 500Mi
-    #     requests:
-    #       cpu: 50m
-    #       memory: 50Mi
+    #   resources: {}
   logging:                 # (CPU: 57 m, Memory: 2.76 G) Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false         # Enable or disable the KubeSphere Logging System.
     containerruntime: docker
     logsidecar:
       enabled: true
       replicas: 2
-      # resources:
-      #   limits:
-      #     cpu: 100m
-      #     memory: 100Mi
-      #   requests:
-      #     cpu: 10m
-      #     memory: 10Mi
+      # resources: {}
   metrics_server:                    # (CPU: 56 m, Memory: 44.35 MiB) It enables HPA (Horizontal Pod Autoscaler).
     enabled: false                   # Enable or disable metrics-server.
   monitoring:
     storageClass: ""                 # If there is an independent StorageClass you need for Prometheus, you can specify it here. The default StorageClass is used by default.
     # kube_rbac_proxy:
-    #   resources:
-    #     limits:
-    #       cpu: 1
-    #       memory: 100Mi
-    #     requests:
-    #       cpu: 10m
-    #       memory: 20Mi
+    #   resources: {}
     # kube_state_metrics:
-    #   resources:
-    #     limits:
-    #       cpu: 1
-    #       memory: 8Gi
-    #     requests:
-    #       cpu: 100m
-    #       memory: 150Mi
+    #   resources: {}
     # prometheus:
     #   replicas: 1  # Prometheus replicas are responsible for monitoring different segments of data source and providing high availability.
     #   volumeSize: 20Gi  # Prometheus PVC size.
-    #   resources:
-    #     limits:
-    #       cpu: 4
-    #       memory: 16Gi
-    #     requests:
-    #       cpu: 200m
-    #       memory: 400Mi
+    #   resources: {}
     #   operator:
-    #     resources:
-    #       limits:
-    #         cpu: 200m
-    #         memory: 200Mi
-    #       requests:
-    #         cpu: 100m
-    #         memory: 100Mi
+    #     resources: {}
     #   adapter:
-    #     resources:
-    #       limits:
-    #         cpu: 600m
-    #         memory: 500Mi
-    #       requests:
-    #         cpu: 200m
-    #         memory: 250Mi
+    #     resources: {}
     # node_exporter:
-    #   resources:
-    #     limits:
-    #       cpu: 1
-    #       memory: 500Mi
-    #     requests:
-    #       cpu: 102m
-    #       memory: 180Mi
+    #   resources: {}
     # alertmanager:
     #   replicas: 1          # AlertManager Replicas.
-    #   resources:
-    #     limits:
-    #       cpu: 200m
-    #       memory: 200Mi
-    #     requests:
-    #       cpu: 20m
-    #       memory: 30Mi
+    #   resources: {}
     # notification_manager:
-    #   resources:
-    #     limits:
-    #       cpu: 500m
-    #       memory: 500Mi
-    #     requests:
-    #       cpu: 5m
-    #       memory: 20Mi
+    #   resources: {}
     #   operator:
-    #     resources:
-    #       limits:
-    #         cpu: 50m
-    #         memory: 50Mi
-    #       requests:
-    #         cpu: 5m
-    #         memory: 20Mi
+    #     resources: {}
     #   proxy:
-    #     resources:
-    #       limits:
-    #         cpu: 50m
-    #         memory: 50Mi
-    #       requests:
-    #         cpu: 5m
-    #         memory: 10Mi
+    #     resources: {}
     gpu:                           # GPU monitoring-related plugins installation.
       nvidia_dcgm_exporter:
         enabled: false
-        # resources:
-        #   limits:
-        #     cpu: 100m
-        #     memory: 128Mi
-        #   requests:
-        #     cpu: 100m
-        #     memory: 128Mi
+        # resources: {}
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the Host or Member Cluster.
   network:
@@ -314,18 +174,6 @@ spec:
   gatekeeper:        # Provide admission policy and rule management, A validating (mutating TBA) webhook that enforces CRD-based policies executed by Open Policy Agent.
     enabled: false   # Enable or disable Gatekeeper.
     # controller_manager:
-    #   resources:
-    #     limits:
-    #       cpu: 1000m
-    #       memory: 512Mi
-    #     requests:
-    #       cpu: 100m
-    #       memory: 256Mi
+    #   resources: {}
     # audit:
-    #   resources:
-    #     limits:
-    #       cpu: 1000m
-    #       memory: 512Mi
-    #     requests:
-    #       cpu: 100m
-    #       memory: 256Mi
+    #   resources: {}
