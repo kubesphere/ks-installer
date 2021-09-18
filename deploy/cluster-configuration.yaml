@@ -5,7 +5,7 @@ metadata:
   name: ks-installer
   namespace: kubesphere-system
   labels:
-    version: v3.1.1
+    version: v3.2.0-alpha.0
 spec:
   persistence:
     storageClass: ""        # If there is no default StorageClass in your cluster, you need to specify an existing StorageClass here.
@@ -171,9 +171,3 @@ spec:
       edgeWatcherAgent:
         nodeSelector: {"node-role.kubernetes.io/worker": ""}
         tolerations: []
-  gatekeeper:        # Provide admission policy and rule management, A validating (mutating TBA) webhook that enforces CRD-based policies executed by Open Policy Agent.
-    enabled: false   # Enable or disable Gatekeeper.
-    # controller_manager:
-    #   resources: {}
-    # audit:
-    #   resources: {}
