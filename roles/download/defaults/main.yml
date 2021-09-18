@@ -62,7 +62,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.1.1-rc.1
+  master
   {%- endif %}
 
 # Containers

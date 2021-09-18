@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "v3.1.1"
+            "version": "master"
         },
     },
 }
@@ -511,6 +511,15 @@ def generate_new_cluster_configuration(api):
             if "elasticsearchDataVolumeSize" in cluster_configuration_spec["common"]["es"]:
                 cluster_configuration_spec["common"]["es"]["data"]["volumeSize"] = cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
                 del cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
+
+        if "console" in cluster_configuration_spec:
+            if "core" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["core"]["console"]=cluster_configuration_spec["console"]
+            else:
+                cluster_configuration_spec["common"]["core"] = {
+                    "console": cluster_configuration_spec["console"]
+                }
+            del cluster_configuration_spec["console"]
 
     if "logging" in cluster_configuration_spec and "logsidecarReplicas" in cluster_configuration_spec[
             "logging"]:
