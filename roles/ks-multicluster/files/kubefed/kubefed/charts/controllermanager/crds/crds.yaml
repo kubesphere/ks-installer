@@ -94,6 +94,7 @@ spec:
     plural: federatedservicestatuses
     singular: federatedservicestatus
   scope: Namespaced
+  preserveUnknownFields: false
   versions:
   - name: v1alpha1
     schema:
