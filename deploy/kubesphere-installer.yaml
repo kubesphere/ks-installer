@@ -244,6 +244,13 @@ rules:
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - application.kubesphere.io
+  resources:
+  - '*'
+  verbs:
+  - '*'
+
 
 ---
 kind: ClusterRoleBinding
