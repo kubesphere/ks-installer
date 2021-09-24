@@ -4,12 +4,6 @@
 image:
   # support 'ghcr.io/kubesphere-sigs' or 'kubespheresig'
   registry: "{{ ks_devops_registry }}"
-  controller:
-    tag: "{{ ks_devops_controller_tag }}"
-  apiserver:
-    tag: "{{ ks_devops_apiserver_tag }}"
-  tools:
-    tag: "{{ ks_devops_tools_tag }}"
   pullPolicy: {{ ks_image_pull_policy }}
 
 authentication:
@@ -23,73 +17,6 @@ serviceAccount:
 s2i:
   image:
     registry: "{{ s2i_registry }}"
-  # Binary image
-  binary:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-
-  # Java image
-  java8CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  java8Runtime:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-
-  java11CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-
-  java11Runtime:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-
-  # Nodejs image
-  nodejs8CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  nodejs6CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  nodejs4CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-
-  # Python image
-  python36CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  python35CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  python34CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  python27CentOs7:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-
-  # Tomcat image
-  tomcat85Java11:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  tomcat85Java11Runtime:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  tomcat85Java8:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-  tomcat85Java8Runtime:
-    image:
-      tag: "{{ s2itemplates_tag }}"
-
-  s2irun:
-    image:
-      tag: "{{ s2irun_tag }}"
-
-  s2ioperator:
-    image:
-      tag: "{{ s2ioperator_tag }}"
   prometheus:
     namespace: "kubesphere-monitoring-system"
 
@@ -99,7 +26,6 @@ jenkins:
     enabled: true
   Master:
     Image: "{{ jenkins_repo }}"
-    ImageTag: "{{ jenkins_tag }}"
     ImagePullPolicy: {{ ks_image_pull_policy }}
     resources:
       requests:
@@ -111,20 +37,8 @@ jenkins:
     JavaOpts: "{{ JavaOpts }}"
   Agent:
     Image: "{{ jnlp_slave_repo }}"
-    ImageTag: "{{ jnlp_slave_tag }}"
     Builder:
       Registry: "{{ builder_registry }}"
-      Base:
-        Tag: "{{ builder_base_tag }}"
-      NodeJs:
-        Image: builder-nodejs
-        Tag: "{{ builder_nodejs_tag }}"
-      Maven:
-        Image: builder-maven
-        Tag: "{{ builder_maven_tag }}"
-      Golang:
-        Image: builder-go
-        Tag: "{{ builder_go_tag }}"
   securityRealm:
     type: ldap
     ldap:
