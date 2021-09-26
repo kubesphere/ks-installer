@@ -1,3 +1,8 @@
+# upgrading to Istio 1.11.1
+
+With KubeSphere v3.2 release, Istio v1.11.1 will be installed when ServiceMesh is enabled. However, Istio v1.6.11 may still run in the cluster when upgrading from an older release. You have to rollout all your existing deployments before the Istio v1.6.11 be uninstalled.
+
+
 # install istio-1.6.10
 
 ```bash

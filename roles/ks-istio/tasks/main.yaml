@@ -11,7 +11,7 @@
 
 - name: servicemesh | Unarchive istio files
   shell: >
-    tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.6.10-linux-amd64.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
+    tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2-linux-amd64.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
 
 - name: servicemesh | Grant privileges to ks-installer
   shell: >
@@ -40,80 +40,48 @@
     - { path: kiali, file: custom-values-kiali.yaml }
     - { path: kiali, file: kiali-cr.yaml }
 
-- name: servicemesh | Checking istiod
-  shell: >
-    {{ bin_dir }}/kubectl -n istio-system get pods -lapp=istiod
-  register: istiod_check
-  failed_when: false
-
 - name: servicemesh | Checking istio old version
-  shell: helm -n istio-system list | grep "istio-1.4.8"
+  shell: kubectl -n istio-system get pods -lapp=istiod,istio.io/rev=1-6-10
   register: istio_old_version_check
   failed_when: false
 
 - import_tasks: upgrade-pre.yaml
   when:
-    - istiod_check.stdout.find("istiod") == -1
-    - istio_old_version_check.stdout.find('deployed') != -1
+    istio_old_version_check.stdout.find('istiod') != -1
 
-- name: servicemesh | Installing istiod-1.6.10
+- name: servicemesh | Installing istiod-1.11.2
   shell: >
-    {{ kubesphere_dir }}/servicemesh/istio/istio-1.6.10/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/istio-profile.yaml
+    {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/istio-profile.yaml --set revision=1-11-2 -y
   register: istio_result
   failed_when: false
   retries: 3
   until: "'errors occurred during operation' not in istio_result.stderr"
-  when: istiod_check.stdout.find("istiod") == -1
-
-# when install istiod-1.6.10 failed, disable injector
-- name: servicemesh | Disabling istiod-1.6.10 injector
-  ignore_errors: true
-  shell: >
-    {{ bin_dir }}/kubectl delete mutatingwebhookconfigurations istio-sidecar-injector-1-6-10
-  when:
-    - (istiod_check.stdout.find("istiod") == -1) and ('errors occurred during operation' in istio_result.stderr)
-
-# when install istiod failed, delete deploy istiod
-- name: servicemesh | Deleting istiod deployment
-  ignore_errors: true
-  shell: >
-    {{ bin_dir }}/kubectl -n istio-system delete deploy istiod-1-6-10
-  when:
-    - (istiod_check.stdout.find("istiod") == -1) and ('errors occurred during operation' in istio_result.stderr)
-
-- import_tasks: jaeger-install.yaml
-
-- import_tasks: kiali-install.yaml
-
-# new prometheus config is compatible for istio-1.4.8 and istio-1.6.10
-- name: servicemesh | Deleting prometheus config
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-monitoring-system delete secret additional-scrape-configs
-  ignore_errors: true
-
-- name: servicemesh | Creating prometheus config
-  shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-monitoring-system create secret generic additional-scrape-configs --from-file={{ kubesphere_dir }}/servicemesh/prometheus/prometheus-additional.yaml
-  ignore_errors: true
 
 - name: servicemesh | Show istiod installation logs
   debug:
     var: istio_result
 
-#- name: servicemesh | patch hpa to istiod-1-6-10
-#  shell: >
-#    {{ bin_dir }}/kubectl -n istio-system patch hpa istiod-1-6-10
-#    --type merge -p '{"spec":{"scaleTargetRef":{"name":"istiod-1-6-10"}}}'
-#  register: patch_result
-#  failed_when: "patch_result.stderr"
-#  until: patch_result is succeeded
-#  retries: 5
-#  delay: 3
-
-- name: servicemesh | replace webhook to istiod-1-6-10
-  shell: >
-    {{ bin_dir }}/kubectl get validatingwebhookconfigurations.admissionregistration.k8s.io istiod-istio-system -oyaml | sed 's/name: istiod$/name: istiod-1-6-10/' | {{ bin_dir }}/kubectl replace -f -
+# when install istiod-1.11.2 successful 
+- name: servicemesh | Change istiod-1.11.2 injector to default
   ignore_errors: true
+  shell: >
+    {{ bin_dir }}/kubectl patch mutatingwebhookconfigurations istio-sidecar-injector-1-11-2 --type='json' -p='[{ "op": "remove", "path": "/webhooks/1/objectSelector/matchExpressions/1" }]'
+  when: "'errors occurred during operation' not in istio_result.stderr"
+
+- import_tasks: jaeger-install.yaml
+
+- import_tasks: kiali-install.yaml
+
+# create prometheus config by PodMonitor and SerivceMonitor CR
+# wait until PodMonitor kind created.
+- name: servicemesh | Creating prometheus config
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/prometheus/prometheus-operator.yaml
+  register: prom_result
+  failed_when: false
+  until: prom_result is succeeded
+  retries: 5
+  delay: 5
 
 - name: servicemesh | set servicemesh status enabled
   shell: >
@@ -126,8 +94,7 @@
   until: cc_result is succeeded
   retries: 5
   delay: 3
-  when:
-    - (istiod_check.stdout.find("istiod") == -1 and 'errors occurred during operation' not in istio_result.stderr) or (istiod_check.stdout.find("istiod") != -1)
+  when: "'errors occurred during operation' not in istio_result.stderr"
 
 - name: servicemesh | set servicemesh status failed
   shell: >
@@ -140,5 +107,4 @@
   until: cc_result is succeeded
   retries: 5
   delay: 3
-  when:
-    - istiod_check.stdout.find("istiod") == -1 and 'errors occurred during operation' in istio_result.stderr
+  when: "'errors occurred during operation' in istio_result.stderr"

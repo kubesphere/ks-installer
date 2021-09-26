@@ -1,20 +1,11 @@
-- name: servicemesh | upgrade-pre | Checking galley validation
+
+
+- name: servicemesh | upgrade-pre | disable old sidecar injection 
   shell: >
-    {{ bin_dir }}/kubectl get ValidatingWebhookConfiguration istio-galley
-  register: galley_check
+    {{ bin_dir }}/kubectl patch mutatingwebhookconfigurations istio-sidecar-injector-1-6-10 --type='json' -p='[{ "op": "replace", "path": "/webhooks/0/namespaceSelector/matchExpressions/3","value":{"key": "istio.io/rev", "operator": "In","values": ["1-6-10"]} }]'
   ignore_errors: true
 
-- name: servicemesh | upgrade-pre | Disabling galley validation
+- name: servicemesh | delete old validating webhook
   shell: >
-    {{ bin_dir }}/kubectl -n istio-system patch deployment istio-galley --patch "$(cat {{ kubesphere_dir }}/servicemesh/istio/istio-galley-patch.yaml)" --type=merge
-  when:
-    - (galley_check.stdout.find("istio-galley") != -1) and (galley_check.stderr == "")
+    {{ bin_dir }}/kubectl delete validatingwebhookconfigurations istiod-istio-system
   ignore_errors: true
-
-- name: servicemesh | upgrade-pre | wait until galley webhook not exists
-  shell: >
-    {{ bin_dir }}/kubectl get ValidatingWebhookConfiguration istio-galley
-  register: galley_check
-  failed_when: false
-  until: galley_check.stdout == ""
-  retries: 5
