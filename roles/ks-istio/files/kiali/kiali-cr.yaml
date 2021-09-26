@@ -12,7 +12,7 @@ spec:
     accessible_namespaces: [ "**" ]
     image_name: "quay.io/kiali/kiali"
     image_pull_policy: "IfNotPresent"
-    image_version: "v1.26.1"
+    image_version: "v1.38"
     ingress_enabled: false
     namespace: "istio-system"
     service_type: "ClusterIP"
@@ -27,5 +27,4 @@ spec:
       exclude:
         - "kube-.*"
         - "kubesphere-.*system"
-        - "istio-system"
         - "openpitrix-system"
