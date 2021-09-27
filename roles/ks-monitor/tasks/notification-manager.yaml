@@ -46,7 +46,7 @@
   delay: 10
   when:
     - notification_check.rc == 0
-    - notification_check.stdout.find("1.3.0") == -1
+    - notification_check.stdout.find("1.4.0") == -1
 
 - name: notification-manager | Checking federatednamespace crd installed
   shell: >
