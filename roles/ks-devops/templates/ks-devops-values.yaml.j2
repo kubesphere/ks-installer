@@ -11,6 +11,12 @@ image:
   tools:
     tag: "{{ ks_devops_tools_tag }}"
   pullPolicy: {{ ks_image_pull_policy }}
+  controller:
+    tag: "{{ ks_devops_controller_tag }}"
+  apiserver:
+    tag: "{{ ks_devops_apiserver_tag }}"
+  tools:
+    tag: "{{ ks_devops_tools_tag }}"
 
 authentication:
   # If not set, jwt tools will generate and set it automatically
