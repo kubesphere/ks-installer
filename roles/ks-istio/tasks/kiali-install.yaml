@@ -8,16 +8,16 @@
   shell: >
     {{ bin_dir }}/kubectl -n istio-system delete deployment kiali-operator
   when:
-    - (kiali_check.stdout.find("deployed") != -1) and (kiali_check.stdout.find("v1.26.1") == -1)
+    - (kiali_check.stdout.find("deployed") != -1) and (kiali_check.stdout.find("v1.38.1") == -1)
   ignore_errors: True
 
 - name: servicemesh | Deploying kiali-operator
   shell: >
-    {{ bin_dir }}/helm upgrade --install kiali-operator {{ kubesphere_dir }}/servicemesh/kiali/kiali-operator-1.26.1.tgz
+    {{ bin_dir }}/helm upgrade --install kiali-operator {{ kubesphere_dir }}/servicemesh/kiali/kiali-operator-1.38.1.tgz
     -f {{ kubesphere_dir }}/servicemesh/kiali/custom-values-kiali.yaml
     --namespace istio-system
   when:
-    - (kiali_check.stdout.find("deployed") == -1) or (kiali_check.stdout.find("v1.26.1") == -1)
+    - (kiali_check.stdout.find("deployed") == -1) or (kiali_check.stdout.find("v1.38.1") == -1)
 
 - name: servicemesh | Deploying kiali-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/kiali/kiali-cr.yaml --namespace istio-system"
@@ -26,4 +26,4 @@
   retries: 5
   delay: 10
   when:
-    - (kiali_check.stdout.find("deployed") == -1) or (kiali_check.stdout.find("v1.26.1") == -1)
+    - (kiali_check.stdout.find("deployed") == -1) or (kiali_check.stdout.find("v1.38.1") == -1)
