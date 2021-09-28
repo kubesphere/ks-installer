@@ -96,4 +96,53 @@ rules:
   verbs:
   - create
 
-
+{{- if eq .Values.kubesphere true }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: notification-manager-tenant-sidecar-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+      - rolebindings
+      - clusterroles
+      - clusterrolebindings
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - iam.kubesphere.io
+    resources:
+      - users
+      - globalroles
+      - globalrolebindings
+      - groups
+      - groupbindings
+      - workspaceroles
+      - workspacerolebindings
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - tenant.kubesphere.io
+    resources:
+      - workspaces
+      - workspacetemplates
+    verbs:
+      - get
+      - list
+      - watch
+{{- end}}
