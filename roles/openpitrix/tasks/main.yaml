@@ -11,6 +11,7 @@
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: openpitrix, file: ks-openpitrix-import.yaml }
+    - { path: openpitrix, file: builtin-repo.yaml }
 
 - name: OpenPitrix | Check OpenPitrix v3.0.0
   shell: >
@@ -37,3 +38,16 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/ks-openpitrix-import.yaml
   when:
     - openpitrix_deploy_count.stdout == "0"
+
+- name: OpenPitrix | Check whether builtin repo exists
+  shell: >
+    {{ bin_dir }}/kubectl get hrepo builtin-stable -oname
+  register: builtin_repo_output
+  failed_when: false
+
+- name: OpenPitrix | Create builtin repo
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/openpitrix/builtin-repo.yaml
+  when:
+    - builtin_repo_output.stdout is not defined or builtin_repo_output.stdout == ""
+
