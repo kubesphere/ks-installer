@@ -2,7 +2,7 @@
 
 - name: KubeSphere | Checking mysql PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system mysql-pvc -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system mysql-pvc -o jsonpath='{.spec.resources.requests.storage}'
   register: mysql_db_pvc
   failed_when: false
 
@@ -16,7 +16,7 @@
 
 - name: KubeSphere | Checking redis PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system redis-pvc -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system redis-pvc -o jsonpath='{.spec.resources.requests.storage}'
   register: redis_db_pvc
   failed_when: false
 
@@ -30,7 +30,7 @@
 
 - name: KubeSphere | Checking minio PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system minio -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system minio -o jsonpath='{.spec.resources.requests.storage}'
   register: minio_storage_pvc
   failed_when: false
 
@@ -44,7 +44,7 @@
 
 - name: KubeSphere | Checking openldap PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system openldap-pvc-openldap-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system openldap-pvc-openldap-0 -o jsonpath='{.spec.resources.requests.storage}'
   register: openldap_db_pvc
   failed_when: false
 
@@ -58,7 +58,7 @@
 
 - name: KubeSphere | Checking etcd db PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system etcd-pvc -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system etcd-pvc -o jsonpath='{.spec.resources.requests.storage}'
   register: etcd_db_pvc
   failed_when: false
 
@@ -72,7 +72,7 @@
 
 - name: KubeSphere | Checking redis ha PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-system data-redis-ha-server-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-system data-redis-ha-server-0 -o jsonpath='{.spec.resources.requests.storage}'
   register: redis_ha_pvc
   failed_when: false
 
@@ -86,7 +86,7 @@
 
 - name: KubeSphere | Checking es-master PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.spec.resources.requests.storage}'
   register: es_master_pvc
   failed_when: false
 
@@ -100,7 +100,7 @@
 
 - name: KubeSphere | Checking es data PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.spec.resources.requests.storage}'
   register: es_data_pvc
   failed_when: false
 
