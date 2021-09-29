@@ -1,7 +1,7 @@
 ---
 - name: Monitoring | Checking Prometheus PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-monitoring-system prometheus-k8s-db-prometheus-k8s-0 -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-monitoring-system prometheus-k8s-db-prometheus-k8s-0 -o jsonpath='{.spec.resources.requests.storage}'
   register: prometheus_pvc
   failed_when: false
 
