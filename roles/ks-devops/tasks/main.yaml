@@ -96,14 +96,12 @@
 - name: ks-devops | Convert ks-devops to helm mananged
   args:
     executable: /bin/bash
-  shell: |
-    # Try to get the resource
-    RESOURCE=$({{ bin_dir }}/kubectl -n {{ item.ns }} get {{ item.kind }} {{ item.resource }} 2> /dev/null | head -n 1)
-    # Skip labeling and annotating if no resource found
-    if [[ "$RESOURCE" -ne "" ]]; then
-      {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-name={{ item.release }}
-      {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-namespace=kubesphere-devops-system
-      {{ bin_dir }}/kubectl -n {{ item.ns }} label --overwrite {{ item.kind }} {{ item.resource }} app.kubernetes.io/managed-by=Helm
+  shell: >
+    RESOURCE=$({{ bin_dir }}/kubectl -n {{ item.ns }} get {{ item.kind }} {{ item.resource }} 2> /dev/null | head -n 1);
+    if [[ $RESOURCE != '' ]]; then
+    {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-name={{ item.release }};
+    {{ bin_dir }}/kubectl -n {{ item.ns }} annotate --overwrite {{ item.kind }} {{ item.resource }} meta.helm.sh/release-namespace=kubesphere-devops-system;
+    {{ bin_dir }}/kubectl -n {{ item.ns }} label --overwrite {{ item.kind }} {{ item.resource }} app.kubernetes.io/managed-by=Helm;
     fi
   loop:
     - {ns: "kubesphere-devops-system", kind: "secrets", resource: "s2i-webhook-server-cert", release: "devops"}
