@@ -477,17 +477,21 @@ def generate_new_cluster_configuration(api):
         if "redisVolumSize" in cluster_configuration_spec["common"]:
             cluster_configuration_spec["common"]["redis"][
                 "volumeSize"] = cluster_configuration_spec["common"]["redisVolumSize"]
-
+            del cluster_configuration_spec["common"]["redisVolumSize"]
         if "openldapVolumeSize" in cluster_configuration_spec["common"]:
             cluster_configuration_spec["common"]["openldap"][
                 "volumeSize"] = cluster_configuration_spec["common"]["openldapVolumeSize"]
-
+            del cluster_configuration_spec["common"]["openldapVolumeSize"]
         if "minio" not in cluster_configuration_spec["common"]:
-            cluster_configuration_spec["common"]["minio"] = {
-                "volumeSize": cluster_configuration_spec["common"]["minioVolumeSize"]
-            }
-        if "minioVolumeSize" in cluster_configuration_spec["common"]:
-            cluster_configuration_spec["common"]["minio"]["volumeSize"] = cluster_configuration_spec["common"]["minioVolumeSize"]
+            if "minioVolumeSize" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["minio"] = {
+                    "volumeSize": cluster_configuration_spec["common"]["minioVolumeSize"]
+                }
+                del cluster_configuration_spec["common"]["minioVolumeSize"]
+        else:
+            if "minioVolumeSize" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["minio"]["volumeSize"] = cluster_configuration_spec["common"]["minioVolumeSize"]
+                del cluster_configuration_spec["common"]["minioVolumeSize"]
 
         # Migrate the configuration of es elasticsearch
         if "es" in cluster_configuration_spec["common"]:

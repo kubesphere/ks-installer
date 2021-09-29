@@ -50,7 +50,7 @@
 
 - name: ks-devops | Checking Jenkins PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-devops-system ks-jenkins -o jsonpath='{.status.capacity.storage}'
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-devops-system ks-jenkins -o jsonpath='{.spec.resources.requests.storage}'
   register: jenkins_pvc
   failed_when: false
 
