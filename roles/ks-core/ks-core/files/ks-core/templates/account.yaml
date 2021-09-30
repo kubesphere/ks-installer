@@ -1,3 +1,4 @@
+{{ if not (lookup "iam.kubesphere.io/v1alpha2" "User" "" "admin") -}}
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: User
@@ -11,3 +12,4 @@ spec:
   password: "{{ include "getOrDefaultPass" (dict "Name" "admin" "Default" "$2a$10$zcHepmzfKPoxCVCYZr5K7ORPZZ/ySe9p/7IUb/8u./xHrnSX2LOCO") }}"
 status:
   state: Active
+{{ end -}}
