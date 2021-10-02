@@ -21,11 +21,11 @@ spec:
     spec:
       initContainers:
         - name: wait-mysql
-          image: {{ busybox_repo }}:{{ busybox_tag }}
+          image: {{ alpine_repo }}:{{ alpine_tag }}
           imagePullPolicy: IfNotPresent
           command: ['sh', '-c', 'until nc -z mysql.kubesphere-system.svc 3306; do echo "waiting for mysql"; sleep 2; done;']
         - name: wait-apiserver
-          image: {{ busybox_repo }}:{{ busybox_tag }}
+          image: {{ alpine_repo }}:{{ alpine_tag }}
           imagePullPolicy: IfNotPresent
           command: ['sh', '-c', 'until nc -z ks-apiserver.kubesphere-system.svc 80; do echo "waiting for apiserver"; sleep 2; done;']
       containers:

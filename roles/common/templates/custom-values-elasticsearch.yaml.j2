@@ -40,8 +40,8 @@ image:
   #   - registry-secret
 
 initImage:
-  repository: {{ busybox_repo }}
-  tag: {{ busybox_tag }}
+  repository: {{ alpine_repo }}
+  tag: {{ alpine_tag }}
   pullPolicy: "IfNotPresent"
 
 cluster:
