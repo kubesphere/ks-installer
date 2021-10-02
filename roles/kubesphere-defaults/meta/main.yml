@@ -1,6 +1,7 @@
 ---
 dependencies:
   - role: download
-    skip_downloads: true
+    skip_sync: true
+    images: {}
     tags:
       - facts
