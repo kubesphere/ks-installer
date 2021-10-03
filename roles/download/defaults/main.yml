@@ -353,19 +353,19 @@ images:
     group: "kubesphere-images"
 
   ks_devops_apiserver:
-    repo: "{{ ks_devops_registry }}/devops_apiserver"
+    repo: "{{ ks_devops_registry }}/devops-apiserver"
     tag: "{{ ks_devops_apiserver_tag }}"
     sha256: "{{ ks_devops_apiserver_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   ks_devops_controller:
-    repo: "{{ ks_devops_registry }}/devops_controller"
+    repo: "{{ ks_devops_registry }}/devops-controller"
     tag: "{{ ks_devops_controller_tag }}"
     sha256: "{{ ks_devops_apiserver_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   ks_devops_tools:
-    repo: "{{ ks_devops_registry }}/devops_tools"
+    repo: "{{ ks_devops_registry }}/devops-tools"
     tag: "{{ ks_devops_controller_tag }}"
     sha256: "{{ ks_devops_tools_checksum|default(None) }}"
     group: "kubesphere-devops-images"
@@ -383,25 +383,25 @@ images:
     group: "kubesphere-devops-images"
 
   builder_base:
-    repo: "{{ builder_registry }}/builder_base"
+    repo: "{{ builder_registry }}/builder-base"
     tag: "{{ builder_base_tag }}"
     sha256: "{{ builder_base_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   builder_nodejs:
-    repo: "{{ builder_registry }}/builder_nodejs"
+    repo: "{{ builder_registry }}/builder-nodejs"
     tag: "{{ builder_nodejs_tag }}"
     sha256: "{{ builder_nodejs_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   builder_maven:
-    repo: "{{ builder_registry }}/builder_maven"
+    repo: "{{ builder_registry }}/builder-maven"
     tag: "{{ builder_maven_tag }}"
     sha256: "{{ builder_maven_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   builder_go:
-    repo: "{{ builder_registry }}/builder_go"
+    repo: "{{ builder_registry }}/builder-go"
     tag: "{{ builder_go_tag }}"
     sha256: "{{ builder_go_checksum|default(None) }}"
     group: "kubesphere-devops-images"
@@ -419,97 +419,97 @@ images:
     group: "kubesphere-devops-images"
 
   s2i_binary:
-    repo: "{{ s2i_registry }}/s2i_binary"
+    repo: "{{ s2i_registry }}/s2i-binary"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ s2i_binary_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   tomcat85_java11_centos7:
-    repo: "{{ s2i_registry }}/tomcat85_java11_centos7"
+    repo: "{{ s2i_registry }}/tomcat85-java11-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ tomcat85_java11_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   tomcat85_java11_runtime:
-    repo: "{{ s2i_registry }}/tomcat85_java11_runtime"
+    repo: "{{ s2i_registry }}/tomcat85-java11-runtime"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ tomcat85_java11_runtime_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   tomcat85_java8_centos7:
-    repo: "{{ s2i_registry }}/tomcat85_java8_centos7"
+    repo: "{{ s2i_registry }}/tomcat85-java8-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ tomcat85_java8_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   tomcat85_java8_runtime:
-    repo: "{{ s2i_registry }}/tomcat85_java8_runtime"
+    repo: "{{ s2i_registry }}/tomcat85-java8-runtime"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ tomcat85_java8_runtime_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   java_11_centos7:
-    repo: "{{ s2i_registry }}/java_11_centos7"
+    repo: "{{ s2i_registry }}/java-11-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ java_11_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   java_8_centos7:
-    repo: "{{ s2i_registry }}/java_8_centos7"
+    repo: "{{ s2i_registry }}/java-8-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ java_8_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   java_8_runtime:
-    repo: "{{ s2i_registry }}/java_8_runtime"
+    repo: "{{ s2i_registry }}/java-8-runtime"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ java_8_runtime_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   java_11_runtime:
-    repo: "{{ s2i_registry }}/java_11_runtime"
+    repo: "{{ s2i_registry }}/java-11-runtime"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ java_11_runtime_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   nodejs_8_centos7:
-    repo: "{{ s2i_registry }}/nodejs_8_centos7"
+    repo: "{{ s2i_registry }}/nodejs-8-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ nodejs_8_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   nodejs_6_centos7:
-    repo: "{{ s2i_registry }}/nodejs_6_centos7"
+    repo: "{{ s2i_registry }}/nodejs-6-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ nodejs_6_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   nodejs_4_centos7:
-    repo: "{{ s2i_registry }}/nodejs_4_centos7"
+    repo: "{{ s2i_registry }}/nodejs-4-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ nodejs_4_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   python_36_centos7:
-    repo: "{{ s2i_registry }}/python_36_centos7"
+    repo: "{{ s2i_registry }}/python-36-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ python_36_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   python_35_centos7:
-    repo: "{{ s2i_registry }}/python_35_centos7"
+    repo: "{{ s2i_registry }}/python-35-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ python_35_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   python_34_centos7:
-    repo: "{{ s2i_registry }}/python_34_centos7"
+    repo: "{{ s2i_registry }}/python-34-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ python_34_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   python_27_centos7:
-    repo: "{{ s2i_registry }}/python_27_centos7"
+    repo: "{{ s2i_registry }}/python-27-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ python_27_centos7_checksum|default(None) }}"
     group: "kubesphere-devops-images"
