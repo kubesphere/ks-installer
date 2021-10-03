@@ -1,0 +1,8 @@
+{% for group in images_group_list %}
+##{{ group }}
+{% for key, value in images.items() %}
+{% if value.group == group %}
+{{ value.repo }}:{{ value.tag }}
+{% endif %}
+{% endfor %}
+{% endfor %}

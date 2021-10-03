@@ -1,26 +1,18 @@
 ---
-- include_tasks: download_prep.yml
+- name: Generating images list
+  include_tasks: "generate_images_list.yml"
+  tags:
+  - images_list
   when:
-    - not skip_downloads|default(false)
+    - not skip_sync|default(false)
 
-- name: "Downloading items"
-  include_tasks: "download_{% if download.container %}container{% else %}file{% endif %}.yml"
+- name: Synchronizing images
+  include_tasks: "sync_images.yml"
   vars:
-    download: "{{ download_defaults | combine(item.value) }}"
-  with_dict: "{{ downloads }}"
+    image: "{{ image_default | combine(item.value) }}"
+  with_dict: "{{ images }}"
+  tags:
+  - sync_images
   when:
-    - not skip_downloads|default(false)
-    - item.value.enabled
-    - (not (item.value.container|default(False))) or (item.value.container and download_container)
+    - not skip_sync|default(false)
 
-- name: "Synchronizing container"
-  include_tasks: sync_container.yml
-  vars:
-    download: "{{ download_defaults | combine(item.value) }}"
-  with_dict: "{{ downloads }}"
-  when:
-    - not skip_downloads|default(false)
-    - item.value.enabled
-    - item.value.container | default(false)
-    - download_run_once
-    - group_names | intersect(download.groups) | length
