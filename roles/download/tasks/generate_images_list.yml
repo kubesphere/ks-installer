@@ -1,0 +1,23 @@
+---
+- set_fact:
+    images_group: |-
+      {
+      {% for key, value in images.items() %}
+        '{{ value.group }}': ''{% if not loop.last %},{% endif %}
+      {% endfor %}
+      }
+
+- set_fact:
+    images_group_list: |-
+      [
+      {% for key, value in images_group.items() %}
+         '{{ key }}'{% if not loop.last %},{% endif %}
+      {% endfor %}
+      ]
+
+- name: Generating images list
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.file }}"
+  with_items:
+    - { path: ks-core, file: images-list.txt}

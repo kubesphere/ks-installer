@@ -1,0 +1,17 @@
+---
+- set_fact:
+    pull_args: >-
+      {{ image.repo }}:{{ image.tag }}
+  when:
+  - not skip_sync|default(false)
+
+- name: images_sync ( {{ pull_args }} )
+  command: >
+    skopeo sync --src docker --dest docker {{ pull_args }} {{ images_mirror | default("registry.cn-beijing.aliyuncs.com/kubesphereio") }} -a
+  register: pull_task_result
+  until: pull_task_result is succeeded
+  retries: 4
+  run_once: yes
+  when:
+  - not skip_sync|default(false)
+

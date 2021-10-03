@@ -69,7 +69,7 @@ spec:
         - rm
         - -fr
         - /var/lib/mysql/lost+found
-        image: {{ busybox_repo }}:{{ busybox_tag }}
+        image: {{ alpine_repo }}:{{ alpine_tag }}
         imagePullPolicy: IfNotPresent
         resources:
           requests:
