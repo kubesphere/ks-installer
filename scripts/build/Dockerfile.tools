@@ -1,0 +1,11 @@
+FROM ubuntu:20.04
+
+ENV VERSION_ID=20.04
+RUN apt update && apt install curl gnupg -y && \
+    echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list && \
+    curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | apt-key add -  && \
+    apt update && \
+    apt -y install skopeo
+
+RUN apt install python3-pip -y && \
+    pip install ansible

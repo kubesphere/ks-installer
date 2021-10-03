@@ -22,7 +22,7 @@
 
 - name: Get ks version
   shell: >
-     {{ bin_dir }}/kubectl get svc -n kubesphere-system ks-console -o=jsonpath='{.spec.selector.version}'
+     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.status.core.version}'
   register: ks
   ignore_errors: true
 
