@@ -68,7 +68,7 @@ jobs:
       - name: Sync images to mirror
         run: >
           docker run --rm
-          -v "$PWD":/usr/src/myapp -w /usr/src/myapp kubespheredev/release-tools:v0.0.1
-          skopeo login -u ${{ secrets.DOCKER_USERNAME }} -p "${{ secrets.DOCKER_PASSWORD }}" docker.io &&
-          skopeo login -u ${{ secrets.REGISTRY_ALIYUN_USERNAME }} -p "${{ secrets.REGISTRY_ALIYUN_PASSWORD }}" registry.cn-beijing.aliyuncs.com &&
-          ansible-playbook release.yml --skip-tags=images_list
+          -v "$PWD":/usr/src/myapp -w /usr/src/myapp kubespheredev/release-tools:v0.0.1 sh -c
+          "skopeo login -u ${{ secrets.DOCKER_USERNAME }} -p \"${{ secrets.DOCKER_PASSWORD }}\" docker.io &&
+          skopeo login -u ${{ secrets.REGISTRY_ALIYUN_USERNAME }} -p \"${{ secrets.REGISTRY_ALIYUN_PASSWORD }}\" registry.cn-beijing.aliyuncs.com &&
+          ansible-playbook release.yml --skip-tags=images_list"
