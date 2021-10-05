@@ -4,12 +4,25 @@
     dest: "{{ kubesphere_dir }}/"
 
 
+- name: ks-logging | Getting auditing containerd or cri-o installation files
+  copy:
+    src: "fluentbit-operator-cri"
+    dest: "{{ kubesphere_dir }}/"
+
 - name: ks-auditing | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
   with_items:
     - { name: custom-output-elasticsearch-auditing, file: custom-output-elasticsearch-auditing.yaml }
+    - { name: custom-input-auditing, file: custom-input-auditing.yaml }
+
+- name: ks-logging | Apply fluent-bit operator cri custom resources
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator-cri
+  when:
+    - auditing is defined and auditing.enabled and logging.containerruntime is defined
+    - logging.containerruntime == 'containerd' or logging.containerruntime == 'crio'
 
 - name: ks-auditing | Apply fluentbit operator custom resources
   shell: >

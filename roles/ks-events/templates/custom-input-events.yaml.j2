@@ -10,7 +10,11 @@ spec:
   tail:
     tag: kube_events
     path: /var/log/containers/*_kubesphere-logging-system_events-exporter*.log
+{% if (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
     parser: docker
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd' or logging.containerruntime == 'crio' ) %}
+    parser: cri
+{% endif %}
     refreshIntervalSeconds: 10
     memBufLimit: 5MB
     skipLongLines: true
