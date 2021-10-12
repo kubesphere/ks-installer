@@ -82,7 +82,7 @@ data:
 {% endif %}
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
-      host: http://ks-jenkins.kubesphere-devops-system.svc/
+      host: http://devops-jenkins.kubesphere-devops-system.svc/
       username: admin
       password: {{ ks_token_str.stdout }}
       maxConnections: 100
