@@ -51,7 +51,33 @@ spec:
               memory: 256Mi
               cpu: 500m
       serviceAccountName: kubesphere
-
+{% if multicluster.affinity is defined and multicluster.affinity is not none %}
+      affinity:
+        {{ multicluster.affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% elif affinity is defined and affinity is not none %}
+      affinity:
+        {{ affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      affinity: {}
+{% endif %}
+{% if multicluster.nodeSelector is defined and multicluster.nodeSelector is not none %}
+      nodeSelector:
+        {{ multicluster.nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+      nodeSelector:
+        {{ nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      nodeSelector: {}
+{% endif %}
+{% if multicluster.tolerations is defined and multicluster.tolerations is not none %}
+      tolerations:
+        {{ multicluster.tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% elif tolerations is defined and tolerations is not none %}
+      tolerations:
+        {{ tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      tolerations: []
+{% endif %}
 ---
 
 apiVersion: v1

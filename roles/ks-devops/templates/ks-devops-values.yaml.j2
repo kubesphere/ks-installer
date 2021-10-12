@@ -19,6 +19,42 @@ authentication:
 serviceAccount:
   create: true
 
+resources:
+  limits:
+    cpu: {{ devops.resources.limits.memory | default("200m") }}
+    memory: {{ devops.resources.limits.memory | default("200Mi") }}
+  requests:
+    cpu: {{ devops.resources.requests.memory | default("20m") }}
+    memory: {{ devops.resources.requests.memory | default("50Mi") }}
+
+{% if devops.nodeSelector is defined and devops.nodeSelector is not none %}
+nodeSelector:
+  {{ devops.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+nodeSelector: {}
+{% endif %}
+{% if devops.tolerations is defined and devops.tolerations is not none %}
+tolerations:
+  {{ devops.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+tolerations: []
+{% endif %}
+{% if devops.affinity is defined and devops.affinity is not none %}
+affinity:
+   {{ devops.affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% elif affinity is defined and affinity is not none %}
+affinity:
+  {{ affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+affinity: {}
+{% endif %}
+
 ## s2i chart values
 s2i:
   image:

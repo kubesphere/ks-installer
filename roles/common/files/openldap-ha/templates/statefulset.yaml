@@ -116,6 +116,10 @@ spec:
       - configMap:
           name: openldap-bootstrap
         name: openldap-bootstrap
+{{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+{{- end }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -124,15 +128,14 @@ spec:
                   app.kubernetes.io/name: {{ include "openldap-ha.name" . }}
                   app.kubernetes.io/instance: {{ .Release.Name }}
               topologyKey: kubernetes.io/hostname
+{{- with .Values.nodeAffinity }}
         nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
-                  - key: node-role.kubernetes.io/master
-                    operator: In
-                    values:
-                      - ""
+{{ toYaml . | indent 10 }}
+{{- end }}
+{{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
   volumeClaimTemplates:
   - metadata:
       name: openldap-pvc

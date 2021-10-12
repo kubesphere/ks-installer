@@ -57,3 +57,52 @@ env:
       name: redis-secret
       key: auth
 {% endif %}
+
+{% if common.core.affinity is defined and common.core.affinity is not none %}
+affinity:
+  {{ common.core.affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% elif affinity is defined and affinity is not none %}
+affinity:
+  {{ affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      preference:
+        matchExpressions:
+        - key: node-role.kubernetes.io/master
+          operator: In
+          values:
+          - ""
+{% if master_num is defined and master_num != "1" %}
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - topologyKey: kubernetes.io/hostname
+      labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - ks-apiserver
+{% endif %}
+{% endif %}
+
+{% if common.core.nodeSelector is defined and common.core.nodeSelector is not none %}
+nodeSelector:
+  {{ common.core.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+nodeSelector: {}
+{% endif %}
+{% if common.core.tolerations is defined and common.core.tolerations is not none %}
+tolerations:
+  {{ common.core.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+tolerations: []
+{% endif %}

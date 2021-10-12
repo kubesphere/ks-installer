@@ -6,16 +6,32 @@ operator:
     pullPolicy: IfNotPresent
   configReloader:
     image: {{ configmap_reload_repo }}:{{ configmap_reload_tag }}
-{% if events.operator is defined %}
-{% if events.operator.affinity is defined %}
-  affinity: {{ events.operator.affinity }}
+{% if events.nodeSelector is defined and events.nodeSelector is not none %}
+  nodeSelector:
+    {{ events.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  nodeSelector: {}
 {% endif %}
-{% if events.operator.tolerations is defined %}
-  tolerations: {{ events.operator.tolerations }}
+{% if events.tolerations is defined and events.tolerations is not none %}
+  tolerations:
+    {{ events.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  tolerations: []
 {% endif %}
-{% if events.operator.nodeSelector is defined %}
-  nodeSelector: {{ events.operator.nodeSelector }}
-{% endif %}
+{% if events.affinity is defined and events.affinity is not none %}
+  affinity:
+    {{ events.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  affinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  affinity: {}
 {% endif %}
   resources:
     limits:
@@ -37,16 +53,32 @@ exporter:
     repository: {{ kube_events_exporter_repo }}
     tag: {{ kube_events_exporter_tag }}
     pullPolicy: IfNotPresent
-{% if events.exporter is defined %}
-{% if events.exporter.affinity is defined %}
-  affinity: {{ events.exporter.affinity }}
+{% if events.nodeSelector is defined and events.nodeSelector is not none %}
+  nodeSelector:
+    {{ events.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  nodeSelector: {}
 {% endif %}
-{% if events.exporter.tolerations is defined %}
-  tolerations: {{ events.exporter.tolerations }}
+{% if events.tolerations is defined and events.tolerations is not none %}
+  tolerations:
+    {{ events.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  tolerations: []
 {% endif %}
-{% if events.exporter.nodeSelector is defined %}
-  nodeSelector: {{ events.exporter.nodeSelector }}
-{% endif %}
+{% if events.affinity is defined and events.affinity is not none %}
+  affinity:
+    {{ events.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  affinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  affinity: {}
 {% endif %}
   resources:
     limits:
@@ -73,16 +105,32 @@ ruler:
     repository: {{ kube_events_ruler_repo }}
     tag: {{ kube_events_ruler_tag }}
     pullPolicy: IfNotPresent
-{% if events.ruler is defined %}
-{% if events.ruler.affinity is defined %}
-  affinity: {{ events.ruler.affinity }}
+{% if events.nodeSelector is defined and events.nodeSelector is not none %}
+  nodeSelector:
+    {{ events.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  nodeSelector: {}
 {% endif %}
-{% if events.ruler.tolerations is defined %}
-  tolerations: {{ events.ruler.tolerations }}
+{% if events.tolerations is defined and events.tolerations is not none %}
+  tolerations:
+    {{ events.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  tolerations: []
 {% endif %}
-{% if events.ruler.nodeSelector is defined %}
-  nodeSelector: {{ events.ruler.nodeSelector }}
-{% endif %}
+{% if events.affinity is defined and events.affinity is not none %}
+  affinity:
+    {{ events.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  affinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  affinity: {}
 {% endif %}
   resources:
     limits:
