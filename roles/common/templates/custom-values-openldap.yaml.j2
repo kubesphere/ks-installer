@@ -42,8 +42,36 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+{% if common.openldap.nodeSelector is defined and common.openldap.nodeSelector is not none %}
+nodeSelector:
+  {{ common.openldap.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 nodeSelector: {}
-
+{% endif %}
+{% if common.openldap.tolerations is defined and common.openldap.tolerations is not none %}
+tolerations:
+  {{ common.openldap.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 tolerations: []
+{% endif %}
 
-affinity: {}
+{% if common.openldap.nodeAffinity is defined and common.openldap.nodeAffinity is not none %}
+nodeAffinity:
+  {{ common.openldap.nodeAffinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+nodeAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      preference:
+        matchExpressions:
+          - key: node-role.kubernetes.io/master
+            operator: In
+            values:
+              - ""
+{% endif %}

@@ -84,12 +84,12 @@ spec:
       hostPID: true
       nodeSelector:
         kubernetes.io/os: linux
+      tolerations:
+      - operator: Exists
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
       serviceAccountName: node-exporter
-      tolerations:
-      - operator: Exists
       volumes:
       - hostPath:
           path: /proc
