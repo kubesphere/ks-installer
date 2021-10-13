@@ -34,6 +34,13 @@
     - master_num is defined and (master_num == "1" or master_num == "0")
     - enableHA is defined and enableHA
 
+- name: KubeSphere | Setting enableHA
+  set_fact:
+    enableHA: >-
+      {% if masters is defined and masters.stdout is defined and masters.stdout != "0" and masters.stdout != "1" %}true{% else %}false{% endif %}
+  when:
+    - enableHA is not defined
+
 - name: KubeSphere | Checking ks-core Helm Release
   shell: >
     {{ bin_dir }}/kubectl -n kubesphere-system get secrets --field-selector=type=helm.sh/release.v1  | grep ks-core |wc -l
