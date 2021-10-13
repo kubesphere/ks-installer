@@ -84,6 +84,7 @@ jenkins:
 {% endif %}
 
   Persistence:
+    ExistingClaim: "{{ KS_JENKINS_PVC }}"
     Enabled: true
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     StorageClass: "{{ persistence.storageClass }}"
