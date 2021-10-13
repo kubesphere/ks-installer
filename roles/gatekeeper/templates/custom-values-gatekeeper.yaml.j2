@@ -1,3 +1,5 @@
+validatingWebhookCheckIgnoreFailurePolicy: Ignore
+
 image:
   repository: {{ gatekeeper_repo }}
   release: {{ gatekeeper_release }}
@@ -10,6 +12,7 @@ controllerManager:
     requests:
       cpu: {{ gatekeeper.controller_manager.resources.resources.cpu | default("100m") }}
       memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("256Mi") }}
+
 audit:
   resources:
     limits:
