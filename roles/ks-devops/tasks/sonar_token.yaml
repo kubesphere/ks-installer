@@ -139,12 +139,12 @@
     body_format: form-urlencoded
     body:
       name: ks-jenkins
-      url: 'http://ks-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
+      url: 'http://devops-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
   when:
     - devops.sonarqube.enabled is defined
     - devops.sonarqube.enabled == true
     - devops.sonarqube.externalSonarToken is not defined
-    - webhooks_list.stdout.find("ks-jenkins.kubesphere-devops-system") == -1
+    - webhooks_list.stdout.find("devops-jenkins.kubesphere-devops-system") == -1
 
 
 - name: ks-devops | Setting ks-sonarqube token

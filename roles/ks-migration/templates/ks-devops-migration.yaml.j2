@@ -24,7 +24,7 @@ spec:
         - name: wait-jenkins
           image: {{ alpine_repo }}:{{ alpine_tag }}
           imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'until wget --spider http://ks-jenkins.kubesphere-devops-system.svc/login; do echo "waiting for myservice"; sleep 2; done;']
+          command: ['sh', '-c', 'until wget --spider http://devops-jenkins.kubesphere-devops-system.svc/login; do echo "waiting for myservice"; sleep 2; done;']
         - name: wait-mysql
           image: {{ alpine_repo }}:{{ alpine_tag }}
           imagePullPolicy: IfNotPresent
