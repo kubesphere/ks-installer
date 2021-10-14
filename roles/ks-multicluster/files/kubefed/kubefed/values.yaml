@@ -61,6 +61,8 @@ controllermanager:
       requests:
         cpu: 100m
         memory: 64Mi
+    restConfigQPS: 50
+    restConfigBurst: 100
   webhook:
     annotations: {}
     repository: quay.io/kubernetes-multicluster
