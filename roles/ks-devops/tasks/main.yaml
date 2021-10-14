@@ -68,6 +68,19 @@
   loop:
     - ks-devops
 
+- name: ks-devops | Checking existing PVC named ks-jenkins
+  shell: >
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system get pvc ks-jenkins -o jsonpath='{.metadata.name}' --ignore-not-found
+  register: ks_jenkins_pvc
+
+- name: ks-devops | Debug exisiting PVC named ks-jenkins
+  debug:
+    var: ks_jenkins_pvc
+
+- name: ks-devops | Getting name of existing PVC named ks-jenkins
+  set_fact: 
+    KS_JENKINS_PVC: "{{ ks_jenkins_pvc.stdout }}"
+
 - name: ks-devops | Creating manifests
   template:
     src: "{{ item.file }}.j2"
@@ -141,18 +154,12 @@
   args:
     executable: /bin/bash
   shell: |
-    PVC=$({{ bin_dir }}/kubectl -n kubesphere-devops-system get pvc ks-jenkins || true)
-    if [[ "$PVC" -ne "" ]]; then
-      PVC="ks-jenkins"
-    else
-      PVC=""
-    fi
+    # Delete Job migrate because 'helm upgrade' will try to update immutable fields of Job, which is not allowed. 
+    {{ bin_dir }}/kubectl delete job -n kubesphere-devops-system migrate --ignore-not-found
 
-    # TODO Rename helm chart name
     {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.4.tgz \
     -n kubesphere-devops-system \
-    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml \
-    --set-string jenkins.Persistence.ExistingClaim=$PVC
+    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
   register: devops_upgrade_result
   until: devops_upgrade_result is succeeded
   retries: 3
