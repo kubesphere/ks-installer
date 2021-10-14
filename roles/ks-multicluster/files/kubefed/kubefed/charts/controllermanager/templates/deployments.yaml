@@ -39,6 +39,8 @@ spec:
       - command:
         - /hyperfed/controller-manager
         - "--v={{ .Values.controller.logLevel }}"
+        - "--rest-config-qps={{ .Values.controller.restConfigQPS }}"
+        - "--rest-config-burst={{ .Values.controller.restConfigBurst }}"
         image: "{{ .Values.controller.repository }}/{{ .Values.controller.image }}:{{ .Values.controller.tag }}"
         imagePullPolicy: "{{ .Values.controller.imagePullPolicy }}"
         name: controller-manager
