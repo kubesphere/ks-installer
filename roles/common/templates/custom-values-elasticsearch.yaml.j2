@@ -94,9 +94,30 @@ master:
       port: 9200
     initialDelaySeconds: 5
   antiAffinity: "soft"
+{% if common.es.nodeAffinity is defined and common.es.nodeAffinity is not none %}
+  nodeAffinity:
+    {{ common.es.nodeAffinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeAffinity: {}
+{% endif %}
+{% if common.es.nodeSelector is defined and common.es.nodeSelector is not none %}
+  nodeSelector:
+    {{ common.es.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeSelector: {}
+{% endif %}
+{% if common.es.tolerations is defined and common.es.tolerations is not none %}
+  tolerations:
+    {{ common.es.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   tolerations: []
+{% endif %}
   initResources: {}
     # limits:
     #   cpu: "25m"
@@ -153,9 +174,30 @@ data:
     initialDelaySeconds: 5
   terminationGracePeriodSeconds: 120
   antiAffinity: "soft"
+{% if common.es.nodeAffinity is defined and common.es.nodeAffinity is not none %}
+  nodeAffinity:
+    {{ common.es.nodeAffinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeAffinity: {}
+{% endif %}
+{% if common.es.nodeSelector is defined and common.es.nodeSelector is not none %}
+  nodeSelector:
+    {{ common.es.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeSelector: {}
+{% endif %}
+{% if common.es.tolerations is defined and common.es.tolerations is not none %}
+  tolerations:
+    {{ common.es.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   tolerations: [{key: "CriticalAddonsOnly", operator: "Exists"}, {key: "dedicated", value: "log", effect: "NoSchedule"}]
+{% endif %}
   initResources: {}
     # limits:
     #   cpu: "25m"
