@@ -20,17 +20,39 @@ serviceAccount:
   name:
 
 resources:
-   limits:
-    cpu: 100m
-    memory: 128Mi
-   requests:
-    cpu: 100m
-    memory: 128Mi
+  limits:
+    cpu: {{ servicemesh.jaeger_operator.resources.limits.memory | default("100m") }}
+    memory: {{ servicemesh.jaeger_operator.resources.limits.memory | default("128Mi") }}
+  requests:
+    cpu: {{ servicemesh.jaeger_operator.resources.requests.memory | default("20m") }}
+    memory: {{ servicemesh.jaeger_operator.resources.requests.memory | default("50Mi") }}
 
+{% if servicemesh.nodeSelector is defined and servicemesh.nodeSelector is not none %}
+nodeSelector:
+  {{ servicemesh.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 nodeSelector: {}
-
+{% endif %}
+{% if servicemesh.tolerations is defined and servicemesh.tolerations is not none %}
+tolerations:
+  {{ servicemesh.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 tolerations: []
-
+{% endif %}
+{% if servicemesh.affinity is defined and servicemesh.affinity is not none %}
+affinity:
+   {{ servicemesh.affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% elif affinity is defined and affinity is not none %}
+affinity:
+  {{ affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 affinity: {}
+{% endif %}
 
 securityContext: {}

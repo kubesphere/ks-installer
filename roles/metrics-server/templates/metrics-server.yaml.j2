@@ -165,6 +165,34 @@ spec:
       hostNetwork: true
       nodeSelector:
         kubernetes.io/os: linux
+{% if metrics_server.affinity is defined and metrics_server.affinity is not none %}
+      affinity:
+        {{ metrics_server.affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% elif affinity is defined and affinity is not none %}
+      affinity:
+        {{ affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      affinity: {}
+{% endif %}
+{% if metrics_server.nodeSelector is defined and metrics_server.nodeSelector is not none %}
+      nodeSelector:
+        {{ metrics_server.nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+      nodeSelector:
+        {{ nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      nodeSelector:
+        kubernetes.io/os: linux
+{% endif %}
+{% if metrics_server.tolerations is defined and metrics_server.tolerations is not none %}
+      tolerations:
+        {{ metrics_server.tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% elif tolerations is defined and tolerations is not none %}
+      tolerations:
+        {{ tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      tolerations: []
+{% endif %}
       priorityClassName: system-cluster-critical
       serviceAccountName: metrics-server
       volumes:

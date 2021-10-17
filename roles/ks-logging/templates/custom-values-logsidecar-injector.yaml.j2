@@ -30,6 +30,34 @@ configReloader:
       cpu: 10m
       memory: 10Mi
 
+{% if logging.nodeSelector is defined and logging.nodeSelector is not none %}
+  nodeSelector:
+    {{ logging.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  nodeSelector: {}
+{% endif %}
+{% if logging.tolerations is defined and logging.tolerations is not none %}
+  tolerations:
+    {{ logging.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  tolerations: []
+{% endif %}
+{% if logging.affinity is defined and logging.affinity is not none %}
+affinity:
+  {{ logging.affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% elif affinity is defined and affinity is not none %}
+affinity:
+  {{ affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+affinity: {}
+{% endif %}
+
 sidecar:
   container:
     image:
