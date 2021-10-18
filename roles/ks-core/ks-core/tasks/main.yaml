@@ -101,6 +101,13 @@
   with_items:
     - { path: ks-core, file: custom-values-ks-core.yaml}
 
+
+- name: KubeSphere | Upgrade CRDs
+  shell: "{{ bin_dir }}/kubectl apply -f {{ item }}"
+  ignore_errors: false
+  with_fileglob:
+    - "{{ kubesphere_dir }}/ks-core/crds/*"
+
 - name: KubeSphere | Creating ks-core
   shell: >
     {{ bin_dir }}/helm upgrade --install ks-core
