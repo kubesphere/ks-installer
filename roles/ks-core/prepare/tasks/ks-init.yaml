@@ -1,7 +1,7 @@
 ---
 - name: KubeSphere | Checking account init
   shell: >
-    {{ bin_dir }}/kubectl get users admin
+    {{ bin_dir }}/kubectl get users.iam.kubesphere.io admin
   register: kubesphere_user_check
   failed_when: "kubesphere_user_check.stderr and 'NotFound' not in kubesphere_user_check.stderr"
 
