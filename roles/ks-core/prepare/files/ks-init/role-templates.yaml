@@ -1028,6 +1028,20 @@ subjects:
     name: system:authenticated
 
 ---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRoleBinding
+metadata:
+  name: pre-registration
+roleRef:
+  apiGroup: iam.kubesphere.io
+  kind: GlobalRole
+  name: pre-registration
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: pre-registration
+
+---
 apiVersion: tenant.kubesphere.io/v1alpha2
 kind: WorkspaceTemplate
 metadata:

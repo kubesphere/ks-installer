@@ -66,10 +66,6 @@
   loop:
     - "ks-init"
 
-- import_tasks: ks-init.yaml
-  when: ks_upgrade is not defined or (ks_upgrade != True)
-
-
 - name: KubeSphere | Initing KubeSphere
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-init/{{ item }}"
   loop:
