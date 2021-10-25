@@ -27,7 +27,7 @@ spec:
           path: /var/run/containerd/containerd.sock
       - name: crictl
         hostPath:
-          path: /usr/local/bin/crictl
+          path: {{ logging.crictlPath | default('/usr/bin/crictl') }}
 {% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
       - name: crisock
         hostPath:
@@ -63,7 +63,7 @@ spec:
           mountPath: /var/run/containerd/containerd.sock
         - name: crictl
           readOnly: true
-          mountPath: /usr/local/bin/crictl
+          mountPath: {{ logging.crictlPath | default('/usr/bin/crictl') }}
 {% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
         - name: crisock
           readOnly: true
