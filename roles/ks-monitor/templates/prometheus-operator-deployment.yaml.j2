@@ -24,7 +24,6 @@ spec:
       - args:
         - --kubelet-service=kube-system/kubelet
         - --logtostderr=true
-        - --config-reloader-image={{ configmap_reload_repo }}:{{ configmap_reload_tag }}
         - --prometheus-config-reloader={{ prometheus_config_reloader_repo }}:{{ prometheus_config_reloader_tag }}
         - --config-reloader-cpu=0
         image: {{ prometheus_operator_repo }}:{{ prometheus_operator_tag }}
