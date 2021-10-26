@@ -104,5 +104,17 @@ tolerations:
 tolerations:
   {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
 {% else %}
-tolerations: []
+tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 60
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 60
 {% endif %}

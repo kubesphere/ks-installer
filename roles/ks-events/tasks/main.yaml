@@ -48,12 +48,12 @@
       {{ kubesphere_dir }}/ks-events/kube-events
       -f {{ kubesphere_dir }}/ks-events/custom-values-events.yaml
       -n kubesphere-logging-system --force
-    register: events_result
-    until: events_result is succeeded
+    register: events_re_result
+    until: events_re_result is succeeded
     retries: 3
     delay: 10
     when:
-      - "events_result.stderr"
+      - "events_result.stderr and 'field is immutable' in events_result.stderr"
 
   when:
     - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.3.0") == -1) or (events_ruler_check.stdout != 'true' and events.ruler is defined and events.ruler.enabled is defined and events.ruler.enabled == True)
