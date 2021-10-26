@@ -43,6 +43,8 @@ ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }
 ks_kubectl_tag: v1.0.0
 # kubectl versions
 ks_kubectl_versions:
+  v1.22.0: v1.22.0
+  v1.21.0: v1.21.0
   v1.20.0: v1.20.0
   v1.19.0: v1.19.1
   v1.18.0: v1.18.0
@@ -193,15 +195,15 @@ metrics_server_tag: v0.4.2
 istio_hub: "{{ base_repo }}{{ namespace_override | default('istio') }}"
 istio_tag: 1.11.1
 jaeger_operator_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-operator"
-jaeger_operator_tag: 1.17.1
+jaeger_operator_tag: 1.27
 jaeger_agent_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-agent"
-jaeger_agent_tag: 1.17
+jaeger_agent_tag: 1.27
 jaeger_collector_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-collector"
-jaeger_collector_tag: 1.17
+jaeger_collector_tag: 1.27
 jaeger_query_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-query"
-jaeger_query_tag: 1.17
+jaeger_query_tag: 1.27
 jaeger_es_cleaner_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-es-index-cleaner"
-jaeger_es_cleaner_tag: 1.17
+jaeger_es_cleaner_tag: 1.27
 kiali_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali-operator"
 kiali_operator_tag: v1.38.1
 kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali"
