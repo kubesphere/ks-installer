@@ -1040,6 +1040,9 @@ subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: Group
   name: pre-registration
+- apiGroup: iam.kubesphere.io/v1alpha2
+  kind: User
+  name: system:pre-registration
 
 ---
 apiVersion: tenant.kubesphere.io/v1alpha2
