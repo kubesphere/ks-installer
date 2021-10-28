@@ -1,9 +1,0 @@
----
-- name: KubeSphere | Comparing Kubernetes version
-  shell: >
-    [ "$(echo \"$({{ bin_dir }}/kubectl get nodes -o jsonpath='{.items[0].status.nodeInfo.kubeletVersion}' -l '!node-role.kubernetes.io/edge') v1.22\" | tr \" \" \"\\n\" | sort -V | head -n 1)" = "v1.22" ] && echo "false" || echo "true"
-  register: is_kubernetes_version_satisfied
-
-- import_tasks: kubeedge.yaml
-  when:
-    - 'is_kubernetes_version_satisfied.stdout == "true"'

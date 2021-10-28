@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  {{- with .Values.edgeService.labels }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: edgeservice-sa
+  namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: edgeservice
+  {{- with .Values.edgeService.labels }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edgeservice
+subjects:
+- kind: ServiceAccount
+  name: edgeservice-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: edgeservice
+  {{- with .Values.edgeService.labels }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+rules:
+- apiGroups: [""]
+  resources: ["nodes","configmaps","secrets","services"]
+  verbs: ["get", "list", "watch"]

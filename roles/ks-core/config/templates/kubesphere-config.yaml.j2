@@ -214,9 +214,11 @@ data:
       thanosRuleResourceLabels: thanosruler=thanos-ruler,role=thanos-alerting-rules
 {% endif %}
 
-{% if kubeedge.enabled is defined and kubeedge.enabled == true %}
-    kubeedge:
-      endpoint: http://edge-watcher.kubeedge.svc/api/
+{% if edgeruntime.enabled is defined and edgeruntime.enabled == true %}
+{% if edgeruntime.kubeedge.enabled is defined and edgeruntime.kubeedge.enabled == true %}
+    edgeruntime:
+      endpoint: http://edgeservice.kubeedge.svc/api/
+{% endif %}
 {% endif %}
 
     gateway:
