@@ -87,6 +87,13 @@
   register: source_state
   failed_when: "source_state.stderr and 'NotFound' not in source_state.stderr"
 
+- name: KubeSphere | Patch admin user
+  shell: >
+    {{ bin_dir }}/kubectl annotate --overwrite users.iam.kubesphere.io admin helm.sh/resource-policy=keep
+  when:
+    - ks_crds.stdout != "0"
+  failed_when: false
+
 - name: KubeSphere | Getting ks-core helm charts
   copy:
     src: "{{ item }}"
