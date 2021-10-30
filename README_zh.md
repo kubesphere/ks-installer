@@ -6,7 +6,7 @@ KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://ku
 
 ## 准备工作
 
-1. 确认现有的 `Kubernetes` 版本为 `1.17.x, 1.18.x, 1.19.x, 1.20.x`，可以执行 `kubectl version` 来确认 :
+1. 确认现有的 `Kubernetes` 版本为 `1.19.x, 1.20.x, 1.21.x, 1.22.x (experimental)`，可以执行 `kubectl version` 来确认 :
 
 ```bash
 $ kubectl version

@@ -6,7 +6,7 @@ In addition to supporting deploying on VM and BM, KubeSphere also supports insta
 
 ## Prerequisites
 
-> - Kubernetes Version: 1.17.x, 1.18.x, 1.19.x, 1.20.x;
+> - Kubernetes Version: 1.19.x, 1.20.x, 1.21.x, 1.22.x (experimental);
 > - CPU > 1 Core, Memory > 2 G;
 > - An existing default Storage Class in your Kubernetes clusters.
 > - The CSR signing feature is activated in kube-apiserver when it is started with the `--cluster-signing-cert-file` and `--cluster-signing-key-file` parameters, see [RKE installation issue](https://github.com/kubesphere/kubesphere/issues/1925#issuecomment-591698309).
@@ -45,8 +45,8 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 ### Minimal Installation
 
 ```bash
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.1/kubesphere-installer.yaml
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.1/cluster-configuration.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.0/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.0/cluster-configuration.yaml
 ```
 
 Then inspect the logs of installation.
@@ -113,7 +113,7 @@ Deploy the new version of ks-installer:
 ```bash
 # Notice: ks-installer will automatically migrate the configuration. Do not modify the cluster configuration by yourself.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.1/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.0/kubesphere-installer.yaml
 ```
 
-> Note: If your KubeSphere version is v2.1.1 or eariler, please upgrade to v3.0.0 first.
+> Note: If your KubeSphere version is v3.0.0 or eariler, please upgrade to v3.1.0 first.

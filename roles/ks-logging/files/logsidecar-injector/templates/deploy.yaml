@@ -58,15 +58,15 @@ spec:
           - mountPath: /etc/localtime
             name: host-time
             readOnly: true
-      {{ - with .Values.nodeSelector }}
+      {{- with .Values.nodeSelector }}
       nodeSelector:
-      {{ toYaml . | indent 8 }}
-      {{ - end }}
+        {{ toYaml . | indent 8 }}
+      {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{ - with .Values.affinity }}
+      {{- with .Values.affinity }}
       affinity:
-      {{ toYaml . | indent 8 }}
-      {{ - end }}
+        {{ toYaml . | indent 8 }}
+      {{- end }}
