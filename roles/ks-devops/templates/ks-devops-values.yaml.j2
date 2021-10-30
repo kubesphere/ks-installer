@@ -19,13 +19,13 @@ authentication:
 serviceAccount:
   create: true
 
-resources:
-  limits:
-    cpu: {{ devops.resources.limits.memory | default("200m") }}
-    memory: {{ devops.resources.limits.memory | default("200Mi") }}
-  requests:
-    cpu: {{ devops.resources.requests.memory | default("20m") }}
-    memory: {{ devops.resources.requests.memory | default("50Mi") }}
+resources: {}
+  # limits:
+  #   cpu: {{ devops.resources.limits.memory | default("200m") }}
+  #   memory: {{ devops.resources.limits.memory | default("200Mi") }}
+  # requests:
+  #   cpu: {{ devops.resources.requests.memory | default("20m") }}
+  #   memory: {{ devops.resources.requests.memory | default("50Mi") }}
 
 {% if devops.nodeSelector is defined and devops.nodeSelector is not none %}
 nodeSelector:
