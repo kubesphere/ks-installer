@@ -19,7 +19,7 @@ Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.8", GitCom
 Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.8", GitCommit:"fd5d41537aee486160ad9b5356a9d82363273721", GitTreeState:"clean", BuildDate:"2021-02-17T12:33:08Z", GoVersion:"go1.15.8", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.17.0`, it's good to go. Otherwise you need to upgrade your Kubernetes first.
+> Note: Pay attention to `Server Version` line, if `GitVersion` is greater than `v1.19.0`, it's good to go. Otherwise you need to upgrade your Kubernetes first.
 
 2. Check if the available resources meet the minimal prerequisite in your cluster.
 
@@ -116,4 +116,4 @@ Deploy the new version of ks-installer:
 kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.0/kubesphere-installer.yaml
 ```
 
-> Note: If your KubeSphere version is v3.0.0 or eariler, please upgrade to v3.1.0 first.
+> Note: If your KubeSphere version is v3.0.0 or eariler, please upgrade to v3.1.x first.
