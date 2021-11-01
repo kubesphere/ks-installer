@@ -101,21 +101,22 @@ ks_devops_tools_tag: "{{ ks_version }}"
 
 #jenkins:
 jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-jenkins"
-jenkins_tag: 3.2.0-rc0-2.249.1
+jenkins_tag: v3.2.0-2.249.1
 jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/jnlp-slave"
 jnlp_slave_tag: 3.27-1
 
-builder_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
-builder_base_tag: v3.1.0
-builder_nodejs_tag: v3.1.0
-builder_maven_tag: v3.1.0
-builder_go_tag: v3.1.0
+builder_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+builder_base_tag: v3.2.0
+builder_nodejs_tag: v3.2.0
+builder_maven_tag: v3.2.0
+builder_go_tag: v3.2.0
+builder_go16_tag: v3.2.0
 
 #s2i
-s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
-s2ioperator_tag: "v3.1.0"
-s2irun_tag: "v2.1.1"
-s2itemplates_tag: "v2.1.0"
+s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+s2ioperator_tag: "v3.2.0"
+s2irun_tag: "v3.2.0"
+s2itemplates_tag: "v3.2.0"
 
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
@@ -406,6 +407,12 @@ images:
     repo: "{{ builder_registry }}/builder-go"
     tag: "{{ builder_go_tag }}"
     sha256: "{{ builder_go_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go16:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go16_tag }}"
+    sha256: "{{ builder_go16_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   s2ioperator:
