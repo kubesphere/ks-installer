@@ -25,19 +25,19 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  release-3.2
+  v3.2.0
   {%- endif %}
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-apiserver"
+ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-apiserver"
 ks_apiserver_tag: "{{ ks_version }}"
-ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-controller-manager"
+ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-controller-manager"
 ks_controller_manager_tag: "{{ ks_version }}"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
-ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-alerting-migration"
+ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
-ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-console"
+ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-console"
 ks_console_tag: "{{ ks_version }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
 ks_kubectl_tag: v1.0.0
@@ -52,7 +52,7 @@ ks_kubectl_versions:
   v1.16.0: v1.16.0
   v1.15.0: v1.0.0
 
-ks_installer_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-installer"
+ks_installer_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-installer"
 ks_installer_tag: "{{ ks_version }}"
 
 ks_image_pull_policy: Always
@@ -72,9 +72,9 @@ post_install_job_tag: "v1.19.1"
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
 cloudcore_tag: "v1.7.2"
-edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher"
+edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher"
 edge_watcher_tag: "v0.1.1"
-edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher-agent"
+edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher-agent"
 edge_watcher_agent_tag: "v0.1.0"
 
 # gatekeeper
@@ -83,7 +83,7 @@ gatekeeper_release: "v3.5.2"
 
 #openpitrix:
 openpitrix_job_tag: "v3.2.0"
-openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/openpitrix-jobs"
+openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/openpitrix-jobs"
 
 minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
@@ -94,18 +94,18 @@ snapshot_controller_repo: "{{ base_repo }}{{ namespace_override | default('csipl
 snapshot_controller_tag: "v4.0.0"
 
 # ks-devops
-ks_devops_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+ks_devops_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 ks_devops_controller_tag: "{{ ks_version }}"
 ks_devops_apiserver_tag: "{{ ks_version }}"
 ks_devops_tools_tag: "{{ ks_version }}"
 
 #jenkins:
-jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-jenkins"
+jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-jenkins"
 jenkins_tag: v3.2.0-2.249.1
 jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/jnlp-slave"
 jnlp_slave_tag: 3.27-1
 
-builder_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+builder_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 builder_base_tag: v3.2.0
 builder_nodejs_tag: v3.2.0
 builder_maven_tag: v3.2.0
@@ -113,7 +113,7 @@ builder_go_tag: v3.2.0
 builder_go16_tag: v3.2.0
 
 #s2i
-s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 s2ioperator_tag: "v3.2.0"
 s2irun_tag: "v3.2.0"
 s2itemplates_tag: "v3.2.0"
@@ -145,9 +145,9 @@ grafana_tag: 7.4.3
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 notification_manager_operator_proxy_tag: v0.8.0
-notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager-operator"
+notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager-operator"
 notification_manager_operator_tag: v1.4.0
-notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager"
+notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager"
 notification_manager_tag: v1.4.0
 notification_tenant_sidecar_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-tenant-sidecar"
 notification_tenant_sidecar_tag: v3.2.0
