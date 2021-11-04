@@ -114,7 +114,7 @@
     delay: 3
 
   when:
-    - common.es.externalElasticsearchUrl is not defined or (common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchUrl == "")
+    - common.es.externalElasticsearchHost is not defined or (common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchHost == "")
     - common.es.externalElasticsearchPort is not defined or (common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchPort == "")
     - es_host.stdout is defined
     - es_host.stdout == "" or es_host.stdout == "http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200"

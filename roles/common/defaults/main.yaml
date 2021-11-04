@@ -15,7 +15,7 @@ common:
     elasticsearchDataVolumeSize: 20Gi
     logMaxAge: 7
     elkPrefix: logstash
-    # externalElasticsearchUrl:
+    # externalElasticsearchHost:
     # externalElasticsearchPort:
 
 
