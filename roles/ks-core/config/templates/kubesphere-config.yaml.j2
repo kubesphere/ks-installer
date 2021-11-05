@@ -158,6 +158,8 @@ data:
     logging:
 {% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
       host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
+{% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
+    host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -176,6 +178,8 @@ data:
     events:
 {% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
       host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
+{% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
+    host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -192,6 +196,8 @@ data:
       webhookURL: https://kube-auditing-webhook-svc.kubesphere-logging-system.svc:6443/audit/webhook/event
 {% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
       host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
+% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
+    host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}

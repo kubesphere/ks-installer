@@ -11,7 +11,7 @@ spec:
   es:
     logstashFormat: true
     generateID: true
-    host: "{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchHost != "" %}{{ common.es.externalElasticsearchHost }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
+    host: "{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchHost != "" %}{{ common.es.externalElasticsearchHost }}{% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchUrl != "" %}{{ common.es.externalElasticsearchUrl }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-events"
     port: {% if common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchPort != "" %}{{ common.es.externalElasticsearchPort }}{% else %}9200{% endif %}
 
