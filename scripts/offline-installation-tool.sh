@@ -20,9 +20,10 @@ ImagesDirDefault=${CurrentDIR}/kubesphere-images
 save="false"
 registryurl=""
 reposUrl=("quay.azk8s.cn" "gcr.azk8s.cn" "docker.elastic.co" "quay.io" "k8s.gcr.io")
-KubernetesVersionDefault="v1.17.9"
-HELM_VERSION="v3.2.1"
-CNI_VERSION="v0.8.6"
+KUBERNETES_VERSION=${KUBERNETES_VERSION:-"v1.21.5"}
+HELM_VERSION=${HELM_VERSION:-"v3.6.3"}
+CNI_VERSION=${CNI_VERSION:-"v0.9.1"}
+ETCD_VERSION=${ETCD_VERSION:-"v3.4.13"}
 
 func() {
     echo "Usage:"
@@ -46,7 +47,6 @@ while getopts 'bsl:r:d:v:h' OPT; do
         d) ImagesDir="$OPTARG";;
         l) ImagesList="$OPTARG";;
         r) Registry="$OPTARG";;
-        v) KubernetesVersion="$OPTARG";;
         s) save="true";;
         h) func;;
         ?) func;;
@@ -60,10 +60,6 @@ fi
 
 if [ -n "${Registry}" ]; then
    registryurl=${Registry}
-fi
-
-if [ -z "${KubernetesVersion}" ]; then
-   KubernetesVersion=${KubernetesVersionDefault}
 fi
 
 if [ -z "${ARCH}" ]; then
@@ -87,32 +83,36 @@ if [ -z "${ARCH}" ]; then
   esac
 fi
 
-binariesDIR=${CurrentDIR}/kubekey/${KubernetesVersion}/${ARCH}
+binariesDIR=${CurrentDIR}/kubekey/${KUBERNETES_VERSION}/${ARCH}
 
 if [[ ${binary} == "true" ]]; then
   mkdir -p ${binariesDIR}
   if [ -n "${KKZONE}" ] && [ "x${KKZONE}" == "xcn" ]; then
      echo "Download kubeadm ..."
-     curl -L -o ${binariesDIR}/kubeadm https://kubernetes-release.pek3b.qingstor.com/release/${KubernetesVersion}/bin/linux/${ARCH}/kubeadm
+     curl -L -o ${binariesDIR}/kubeadm https://kubernetes-release.pek3b.qingstor.com/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubeadm
      echo "Download kubelet ..."
-     curl -L -o ${binariesDIR}/kubelet https://kubernetes-release.pek3b.qingstor.com/release/${KubernetesVersion}/bin/linux/${ARCH}/kubelet
+     curl -L -o ${binariesDIR}/kubelet https://kubernetes-release.pek3b.qingstor.com/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubelet
      echo "Download kubectl ..."
-     curl -L -o ${binariesDIR}/kubectl https://kubernetes-release.pek3b.qingstor.com/release/${KubernetesVersion}/bin/linux/${ARCH}/kubectl
+     curl -L -o ${binariesDIR}/kubectl https://kubernetes-release.pek3b.qingstor.com/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubectl
      echo "Download helm ..."
      curl -L -o ${binariesDIR}/helm https://kubernetes-helm.pek3b.qingstor.com/linux-${ARCH}/${HELM_VERSION}/helm
      echo "Download cni plugins ..."
      curl -L -o ${binariesDIR}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz https://containernetworking.pek3b.qingstor.com/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz
+     echo "Download etcd ..."
+     curl -L -o ${binariesDIR}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz https://kubernetes-release.pek3b.qingstor.com/etcd/release/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz
   else
      echo "Download kubeadm ..."
-     curl -L -o ${binariesDIR}/kubeadm https://storage.googleapis.com/kubernetes-release/release/${KubernetesVersion}/bin/linux/${ARCH}/kubeadm
+     curl -L -o ${binariesDIR}/kubeadm https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubeadm
      echo "Download kubelet ..."
-     curl -L -o ${binariesDIR}/kubelet https://storage.googleapis.com/kubernetes-release/release/${KubernetesVersion}/bin/linux/${ARCH}/kubelet
+     curl -L -o ${binariesDIR}/kubelet https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubelet
      echo "Download kubectl ..."
-     curl -L -o ${binariesDIR}/kubectl https://storage.googleapis.com/kubernetes-release/release/${KubernetesVersion}/bin/linux/${ARCH}/kubectl
+     curl -L -o ${binariesDIR}/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubectl
      echo "Download helm ..."
      curl -L -o ${binariesDIR}/helm-${HELM_VERSION}-linux-${ARCH}.tar.gz https://get.helm.sh/helm-${HELM_VERSION}-linux-${ARCH}.tar.gz && cd ${binariesDIR} && tar -zxf helm-${HELM_VERSION}-linux-${ARCH}.tar.gz && mv linux-${ARCH}/helm . && rm -rf *linux-${ARCH}* && cd -
      echo "Download cni plugins ..."
      curl -L -o ${binariesDIR}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz
+     echo "Download etcd ..."
+     curl -L -o ${binariesDIR}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz
   fi
 fi
 
