@@ -221,6 +221,8 @@ data:
 
     gateway:
       watchesPath: /var/helm-charts/watches.yaml
+      repository: {{ nginx_ingress_controller_repo }}
+      tag: {{ nginx_ingress_controller_tag }}
 {% if gateway is defined and gateway.namespace is defined %}
       namespace: {{ gateway.namespace }}
 {% else %}
