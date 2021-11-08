@@ -515,6 +515,8 @@ def generate_new_cluster_configuration(api):
             if "elasticsearchDataVolumeSize" in cluster_configuration_spec["common"]["es"]:
                 cluster_configuration_spec["common"]["es"]["data"]["volumeSize"] = cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
                 del cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
+            if "externalElasticsearchHost" not in cluster_configuration_spec["common"]["es"] and "externalElasticsearchUrl" in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["externalElasticsearchHost"] = cluster_configuration_spec["common"]["es"]["externalElasticsearchUrl"]
 
         if "console" in cluster_configuration_spec:
             if "core" in cluster_configuration_spec["common"]:

@@ -61,7 +61,7 @@ spec:
         enabled: false
         username: ""
         password: ""
-      externalElasticsearchUrl: ""
+      externalElasticsearchHost: ""
       externalElasticsearchPort: ""
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false         # Enable or disable the KubeSphere Alerting System.
