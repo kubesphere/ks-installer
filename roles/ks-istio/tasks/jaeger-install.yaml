@@ -20,7 +20,12 @@
     - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.27.0") == -1)
 
 - name: servicemesh | Deploying jaeger-secret
-  shell: "{{ bin_dir }}/kubectl create secret generic jaeger-secret --from-literal=ES_PASSWORD={{ common.es.basicAuth.password }} --from-literal=ES_USERNAME={{ common.es.basicAuth.username }} --namespace istio-system"
+  shell: >
+    {{ bin_dir }}/kubectl create secret generic jaeger-secret
+    --from-literal=ES_PASSWORD={{ common.es.basicAuth.password }}
+    --from-literal=ES_USERNAME={{ common.es.basicAuth.username }}
+    --namespace istio-system
+    --dry-run=client -oyaml | {{ bin_dir }}/kubectl apply -f -
   register: jaeger_result
   until: jaeger_result is succeeded
   retries: 5
