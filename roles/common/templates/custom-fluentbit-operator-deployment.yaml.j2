@@ -32,7 +32,7 @@ spec:
       - name: crisock
         hostPath:
           path: /var/run/crio/crio.sock
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
+{% else %}
       - name: dockersock
         hostPath:
           path: /var/run/docker.sock
@@ -50,7 +50,7 @@ spec:
           echo CONTAINER_ROOT_DIR=$(crictl info --output go-template --template {{'{{.config.containerdRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
 {% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
           echo CONTAINER_ROOT_DIR=/var/log > /fluentbit-operator/fluent-bit.env
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
+{% else %}
           echo CONTAINER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
 {% endif %}
         volumeMounts:
@@ -68,7 +68,7 @@ spec:
         - name: crisock
           readOnly: true
           mountPath: /var/run/crio/crio.sock
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
+{% else %}
         - name: dockersock
           readOnly: true
           mountPath: /var/run/docker.sock
