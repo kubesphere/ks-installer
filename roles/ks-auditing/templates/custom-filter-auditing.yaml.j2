@@ -9,10 +9,10 @@ metadata:
 spec:
   filters:
     - parser:
-{% if (logging.containerruntime is defined) and (logging.containerruntime == 'docker') %}
-        keyName: log
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd' or logging.containerruntime == 'crio' ) %}
+{% if (logging.containerruntime is defined) and (logging.containerruntime == 'containerd' or logging.containerruntime == 'crio' ) %}
         keyName: message
+{% else %}
+        keyName: log
 {% endif %}
         parser: json
     - modify:
