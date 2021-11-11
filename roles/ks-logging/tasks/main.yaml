@@ -24,14 +24,6 @@
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
   with_items:
     - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
-  when: migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
-
-
-- name: ks-logging | Creating input configuration
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
-  with_items:
     - { name: custom-input-logging, file: custom-input-logging.yaml }
     - { name: custom-input-systemd, file: custom-input-systemd.yaml }
 
