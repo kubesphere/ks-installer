@@ -81,6 +81,7 @@ jenkins:
     Image: "{{ jnlp_slave_repo }}"
     Builder:
       Registry: "{{ builder_registry }}"
+      ContainerRuntime: "{{ builder_container_runtime }}"
   securityRealm:
     type: ldap
     ldap:
