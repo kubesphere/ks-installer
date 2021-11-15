@@ -6,7 +6,7 @@ KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://ku
 
 ## 准备工作
 
-1. 确认现有的 `Kubernetes` 版本为 `1.17.x, 1.18.x, 1.19.x, 1.20.x`，可以执行 `kubectl version` 来确认 :
+1. 确认现有的 `Kubernetes` 版本为 `1.19.x, 1.20.x, 1.21.x, 1.22.x (experimental)`，可以执行 `kubectl version` 来确认 :
 
 ```bash
 $ kubectl version
@@ -14,7 +14,7 @@ Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.8", GitCom
 Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.8", GitCommit:"fd5d41537aee486160ad9b5356a9d82363273721", GitTreeState:"clean", BuildDate:"2021-02-17T12:33:08Z", GoVersion:"go1.15.8", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-注意输出结果中的 `Server Version` 这行，如果显示 `GitVersion` 大于 `v1.17.0`，Kubernetes 的版本是可以安装的。如果低于 `v1.17.0`，可以先对 K8s 版本进行升级。
+注意输出结果中的 `Server Version` 这行，如果显示 `GitVersion` 大于 `v1.19.0`，Kubernetes 的版本是可以安装的。如果低于 `v1.19.0`，可以先对 K8s 版本进行升级。
 
 
 2. 集群现有的可用内存至少在 `2G` 以上。 如果是执行的 `allinone` 安装，那么执行 `free -g` 可以看下可用资源
@@ -45,8 +45,8 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 ### 最小化快速部署
 
 ```bash
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.1/kubesphere-installer.yaml
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.1/cluster-configuration.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.0/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.0/cluster-configuration.yaml
 
  # 查看部署进度及日志
  $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
@@ -113,8 +113,8 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 ```bash
 # 注意: ks-installer会自动迁移cluster-configuration. 请勿自行修改.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.1.1/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.0/kubesphere-installer.yaml
 ```
 
 
-> 注意: 如果当前集群中部署的 KubeSphere 版本是 v2.1.1 或更早的版本，请先升级到 v3.0.0。
+> 注意: 如果当前集群中部署的 KubeSphere 版本是 v3.0.0 或更早的版本，请先升级到 v3.1.x。
