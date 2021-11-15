@@ -80,6 +80,15 @@
 - name: ks-devops | Getting name of existing PVC named ks-jenkins
   set_fact: 
     KS_JENKINS_PVC: "{{ ks_jenkins_pvc.stdout }}"
+  
+- name: ks-devops | Getting Kubernetes Node info
+  shell: |
+    kubectl get node -ojson | jq '.items[0].status.nodeInfo.containerRuntimeVersion'
+  register: container_runtime
+
+- name: ks-devops | Setting container runtime of agent builder
+  set_fact:
+    builder_container_runtime: "{{ container_runtime.stdout is search('docker://') | ternary('docker', 'podman') }}"
 
 - name: ks-devops | Creating manifests
   template:
