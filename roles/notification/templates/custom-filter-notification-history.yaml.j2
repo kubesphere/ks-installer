@@ -1,0 +1,19 @@
+apiVersion: logging.kubesphere.io/v1alpha2
+kind: Filter
+metadata:
+  labels:
+    logging.kubesphere.io/enabled: 'true'
+    logging.kubesphere.io/component: "notification"
+  name: filter-notification
+  namespace: kubesphere-logging-system
+spec:
+  filters:
+    - parser:
+{% if (logging.containerruntime is defined) and (logging.containerruntime == 'containerd' or logging.containerruntime == 'crio' ) %}
+        keyName: message
+{% else %}
+        keyName: log
+{% endif %}
+        parser: json
+  match: kube_notification
+

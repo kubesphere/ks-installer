@@ -15,10 +15,10 @@
 
 - import_tasks: es-install.yaml
   when:
-    - logging.enabled or events.enabled or auditing.enabled or servicemesh.enabled
+    - logging.enabled or events.enabled or auditing.enabled or servicemesh.enabled or (notification.history is defined and notification.history.enabled)
     - "status.es is not defined or status.es.status is not defined or status.es.status != 'enabled'"
 
 - import_tasks: fluentbit-install.yaml
   when:
-    - logging.enabled or events.enabled or auditing.enabled
+    - logging.enabled or events.enabled or auditing.enabled or (notification.history is defined and notification.history.enabled)
     - "status.fluentbit is not defined or status.fluentbit.status is not defined or status.fluentbit.status != 'enabled'"

@@ -172,3 +172,6 @@ spec:
       edgeWatcherAgent:
         nodeSelector: {"node-role.kubernetes.io/worker": ""}
         tolerations: []
+  notification:
+    history:
+      enabled: true

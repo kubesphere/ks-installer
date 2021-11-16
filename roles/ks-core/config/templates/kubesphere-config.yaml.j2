@@ -154,6 +154,21 @@ data:
 {% else %}
       endpoint: http://notification-manager-svc.kubesphere-monitoring-system.svc:19093
 {% endif %}
+{% if notification.history is defined and notification.history.enabled == true %}
+      history:
+        enable: true
+{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
+        host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+{% else %}
+        host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+{% endif %}
+{% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
+        basicAuth: {{ common.es.basicAuth.enabled }}
+        username: "{{ common.es.basicAuth.username | default("") }}"
+        password: "{{ common.es.basicAuth.password | default("") }}"
+{% endif %}
+        indexPrefix: ks-{{ common.es.elkPrefix }}-notification
+{% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
 {% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
