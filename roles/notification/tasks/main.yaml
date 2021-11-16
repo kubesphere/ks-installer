@@ -1,0 +1,4 @@
+- import_tasks: notification-history.yaml
+  when:
+    - "status.notification.history is not defined or status.notification.history.status is not defined or status.notification.history.status != 'enabled'"
+    - "notification.history is defined and notification.history.enabled"

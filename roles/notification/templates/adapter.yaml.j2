@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-adapter
+  namespace: kubesphere-monitoring-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: notification-adapter
+  template:
+    metadata:
+      labels:
+        name: notification-adapter
+    spec:
+      containers:
+        - name: notification-adapter
+          image: {{ notification_adapter_repo }}:{{ notification_adapter_tag }}
+          args:
+            - --with-stdout=true
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: host-time
+              readOnly: true
+          lifecycle:
+            preStop:
+              httpGet:
+                path: /preStop
+                port: 8080
+                scheme: HTTP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readiness
+              port: 8080
+              scheme: HTTP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readiness
+              port: 8080
+              scheme: HTTP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 500Mi
+            requests:
+              cpu: 20m
+              memory: 50Mi
+      volumes:
+        - hostPath:
+            path: /etc/localtime
+            type: ""
+          name: host-time
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-adapter
+  namespace: kubesphere-monitoring-system
+spec:
+  selector:
+    name: notification-adapter
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

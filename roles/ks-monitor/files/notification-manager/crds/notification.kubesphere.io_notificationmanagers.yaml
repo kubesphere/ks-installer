@@ -1879,7 +1879,7 @@ spec:
                     type: string
                   type: array
                 defaultConfigSelector:
-                  description: Default Email/Wechat/Slack/Webhook Config to be selected
+                  description: Default Email/WeChat/Slack/Webhook Config to be selected
                   properties:
                     matchExpressions:
                       description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
@@ -1911,6 +1911,264 @@ spec:
                 defaultSecretNamespace:
                   description: The default namespace to which notification manager secrets belong.
                   type: string
+                history:
+                  description: History used to collect notification history.
+                  properties:
+                    webhook:
+                      description: Use a webhook to collect notification history, it will create a virtual receiver.
+                      properties:
+                        alertSelector:
+                          description: Selector to filter alerts.
+                          properties:
+                            matchExpressions:
+                              description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
+                              items:
+                                description: A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.
+                                properties:
+                                  key:
+                                    description: key is the label key that the selector applies to.
+                                    type: string
+                                  operator:
+                                    description: operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                                    type: string
+                                  values:
+                                    description: values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                  - key
+                                  - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+                              type: object
+                          type: object
+                        enabled:
+                          description: whether the receiver is enabled
+                          type: boolean
+                        httpConfig:
+                          description: HTTPClientConfig configures an HTTP client.
+                          properties:
+                            basicAuth:
+                              description: The HTTP basic authentication credentials for the targets.
+                              properties:
+                                password:
+                                  properties:
+                                    value:
+                                      type: string
+                                    valueFrom:
+                                      properties:
+                                        secretKeyRef:
+                                          description: Selects a key of a secret in the pod's namespace
+                                          properties:
+                                            key:
+                                              description: The key of the secret to select from.  Must be a valid secret key.
+                                              type: string
+                                            name:
+                                              description: Name of the secret.
+                                              type: string
+                                            namespace:
+                                              description: The namespace of the secret, default to the `defaultSecretNamespace` of `NotificationManager` crd. If the `defaultSecretNamespace` does not set, default to the pod's namespace.
+                                              type: string
+                                          required:
+                                            - key
+                                            - name
+                                          type: object
+                                      type: object
+                                  type: object
+                                username:
+                                  type: string
+                              required:
+                                - username
+                              type: object
+                            bearerToken:
+                              description: The bearer token for the targets.
+                              properties:
+                                value:
+                                  type: string
+                                valueFrom:
+                                  properties:
+                                    secretKeyRef:
+                                      description: Selects a key of a secret in the pod's namespace
+                                      properties:
+                                        key:
+                                          description: The key of the secret to select from.  Must be a valid secret key.
+                                          type: string
+                                        name:
+                                          description: Name of the secret.
+                                          type: string
+                                        namespace:
+                                          description: The namespace of the secret, default to the `defaultSecretNamespace` of `NotificationManager` crd. If the `defaultSecretNamespace` does not set, default to the pod's namespace.
+                                          type: string
+                                      required:
+                                        - key
+                                        - name
+                                      type: object
+                                  type: object
+                              type: object
+                            proxyUrl:
+                              description: HTTP proxy server to use to connect to the targets.
+                              type: string
+                            tlsConfig:
+                              description: TLSConfig to use to connect to the targets.
+                              properties:
+                                clientCertificate:
+                                  description: The certificate of the client.
+                                  properties:
+                                    cert:
+                                      description: The client cert file for the targets.
+                                      properties:
+                                        value:
+                                          type: string
+                                        valueFrom:
+                                          properties:
+                                            secretKeyRef:
+                                              description: Selects a key of a secret in the pod's namespace
+                                              properties:
+                                                key:
+                                                  description: The key of the secret to select from.  Must be a valid secret key.
+                                                  type: string
+                                                name:
+                                                  description: Name of the secret.
+                                                  type: string
+                                                namespace:
+                                                  description: The namespace of the secret, default to the `defaultSecretNamespace` of `NotificationManager` crd. If the `defaultSecretNamespace` does not set, default to the pod's namespace.
+                                                  type: string
+                                              required:
+                                                - key
+                                                - name
+                                              type: object
+                                          type: object
+                                      type: object
+                                    key:
+                                      description: The client key file for the targets.
+                                      properties:
+                                        value:
+                                          type: string
+                                        valueFrom:
+                                          properties:
+                                            secretKeyRef:
+                                              description: Selects a key of a secret in the pod's namespace
+                                              properties:
+                                                key:
+                                                  description: The key of the secret to select from.  Must be a valid secret key.
+                                                  type: string
+                                                name:
+                                                  description: Name of the secret.
+                                                  type: string
+                                                namespace:
+                                                  description: The namespace of the secret, default to the `defaultSecretNamespace` of `NotificationManager` crd. If the `defaultSecretNamespace` does not set, default to the pod's namespace.
+                                                  type: string
+                                              required:
+                                                - key
+                                                - name
+                                              type: object
+                                          type: object
+                                      type: object
+                                  required:
+                                    - cert
+                                    - key
+                                  type: object
+                                insecureSkipVerify:
+                                  description: Disable target certificate validation.
+                                  type: boolean
+                                rootCA:
+                                  description: RootCA defines the root certificate authorities that clients use when verifying server certificates.
+                                  properties:
+                                    value:
+                                      type: string
+                                    valueFrom:
+                                      properties:
+                                        secretKeyRef:
+                                          description: Selects a key of a secret in the pod's namespace
+                                          properties:
+                                            key:
+                                              description: The key of the secret to select from.  Must be a valid secret key.
+                                              type: string
+                                            name:
+                                              description: Name of the secret.
+                                              type: string
+                                            namespace:
+                                              description: The namespace of the secret, default to the `defaultSecretNamespace` of `NotificationManager` crd. If the `defaultSecretNamespace` does not set, default to the pod's namespace.
+                                              type: string
+                                          required:
+                                            - key
+                                            - name
+                                          type: object
+                                      type: object
+                                  type: object
+                                serverName:
+                                  description: Used to verify the hostname for the targets.
+                                  type: string
+                              type: object
+                          type: object
+                        service:
+                          description: "`service` is a reference to the service for this webhook. Either `service` or `url` must be specified. \n If the webhook is running within the cluster, then you should use `service`."
+                          properties:
+                            name:
+                              description: '`name` is the name of the service. Required'
+                              type: string
+                            namespace:
+                              description: '`namespace` is the namespace of the service. Required'
+                              type: string
+                            path:
+                              description: '`path` is an optional URL path which will be sent in any request to this service.'
+                              type: string
+                            port:
+                              description: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. `port` should be a valid port number (1-65535, inclusive).
+                              format: int32
+                              type: integer
+                            scheme:
+                              description: Http scheme, default is http.
+                              type: string
+                          required:
+                            - name
+                            - namespace
+                          type: object
+                        template:
+                          description: The name of the template to generate DingTalk message. If the global template is not set, it will use default.
+                          type: string
+                        url:
+                          description: "`url` gives the location of the webhook, in standard URL form (`scheme://host:port/path`). Exactly one of `url` or `service` must be specified. \n The `host` should not refer to a service running in the cluster; use the `service` field instead. The host might be resolved via external DNS in some api servers (e.g., `kube-apiserver` cannot resolve in-cluster DNS as that would be a layering violation). `host` may also be an IP address. \n Please note that using `localhost` or `127.0.0.1` as a `host` is risky unless you take great care to run this webhook on all hosts which run an apiserver which might need to make calls to this webhook. Such installs are likely to be non-portable, i.e., not easy to turn up in a new cluster. \n A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier. \n Attempting to use a user or basic auth e.g. \"user:password@\" is not allowed. Fragments (\"#...\") and query parameters (\"?...\") are not allowed, either."
+                          type: string
+                        webhookConfigSelector:
+                          description: WebhookConfig to be selected for this receiver
+                          properties:
+                            matchExpressions:
+                              description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
+                              items:
+                                description: A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.
+                                properties:
+                                  key:
+                                    description: key is the label key that the selector applies to.
+                                    type: string
+                                  operator:
+                                    description: operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.
+                                    type: string
+                                  values:
+                                    description: values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                  - key
+                                  - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
+                              type: object
+                          type: object
+                      type: object
+                  required:
+                    - webhook
+                  type: object
                 image:
                   description: Docker Image used to start Notification Manager container, for example kubesphere/notification-manager:v0.1.0
                   type: string
@@ -1967,7 +2225,7 @@ spec:
                               description: The flow control fo chatbot.
                               properties:
                                 maxWaitTime:
-                                  description: The maximum tolerable waiting time when the calls trigger flow control, if the actual waiting time is more than this time, it will return a error, else it will wait for the flow restriction lifted, and send the message. Nil means do not wait, the maximum value is `Unit`.
+                                  description: The maximum tolerable waiting time when the calls trigger flow control, if the actual waiting time is more than this time, it will return an error, else it will wait for the flow restriction lifted, and send the message. Nil means do not wait, the maximum value is `Unit`.
                                   format: int64
                                   type: integer
                                 threshold:
@@ -1988,7 +2246,7 @@ spec:
                               description: The flow control fo conversation.
                               properties:
                                 maxWaitTime:
-                                  description: The maximum tolerable waiting time when the calls trigger flow control, if the actual waiting time is more than this time, it will return a error, else it will wait for the flow restriction lifted, and send the message. Nil means do not wait, the maximum value is `Unit`.
+                                  description: The maximum tolerable waiting time when the calls trigger flow control, if the actual waiting time is more than this time, it will return an error, else it will wait for the flow restriction lifted, and send the message. Nil means do not wait, the maximum value is `Unit`.
                                   format: int64
                                   type: integer
                                 threshold:
@@ -2048,7 +2306,7 @@ spec:
                               description: The name of the template to generate message. If the receiver dose not setup template, it will use this.
                               type: string
                             templateFile:
-                              description: Template file path, must be a absolute path.
+                              description: Template file path, must be an absolute path.
                               items:
                                 type: string
                               type: array
@@ -2070,7 +2328,7 @@ spec:
                               format: int32
                               type: integer
                             template:
-                              description: The name of the template to generate slack message. If the global template is not set, it will use default.
+                              description: The name of the template to generate Slack message. If the global template is not set, it will use default.
                               type: string
                           type: object
                         sms:
@@ -2103,7 +2361,7 @@ spec:
                               format: int32
                               type: integer
                             template:
-                              description: The name of the template to generate wechat message.
+                              description: The name of the template to generate WeChat message.
                               type: string
                             tmplType:
                               description: 'template type: text or markdown, default type is text'
@@ -2183,7 +2441,7 @@ spec:
                   type: string
                 sidecars:
                   additionalProperties:
-                    description: Sidecar defines a sidecar container which will be add to the notification manager deployment pod.
+                    description: Sidecar defines a sidecar container which will be added to the notification manager deployment pod.
                     properties:
                       args:
                         description: 'Arguments to the entrypoint. The docker image''s CMD is used if this is not provided. Variable references $(VAR_NAME) are expanded using the container''s environment. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Cannot be updated. More info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell'

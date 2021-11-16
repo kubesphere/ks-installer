@@ -151,6 +151,8 @@ notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kube
 notification_manager_tag: v1.4.0
 notification_tenant_sidecar_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-tenant-sidecar"
 notification_tenant_sidecar_tag: v3.2.0
+notification_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-adapter"
+notification_adapter_tag: v0.2.0
 
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-curator"
