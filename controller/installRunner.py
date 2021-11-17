@@ -276,6 +276,7 @@ def getComponentLists():
     readyToEnabledList = [
         'monitoring',
         'multicluster',
+        'notification',
         'openpitrix',
         'network']
     readyToDisableList = []
@@ -545,10 +546,6 @@ def generate_new_cluster_configuration(api):
                         "replicas": 2
                     }
                 }
-
-    if "notification" in cluster_configuration_spec:
-        upgrade_flag = True
-        del cluster_configuration_spec['notification']
 
     if "openpitrix" in cluster_configuration_spec and "store" not in cluster_configuration_spec[
             "openpitrix"]:

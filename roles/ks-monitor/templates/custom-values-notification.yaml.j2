@@ -139,4 +139,12 @@ notificationmanager:
       image: {{ notification_tenant_sidecar_repo }}:{{ notification_tenant_sidecar_tag }}
       name: tenant
       type: kubesphere
+  history:
+    webhook:
+      enabled: true
+      service:
+        name: notification-adapter
+        namespace: kubesphere-monitoring-system
+        path: alerts
+        port: 8080
 

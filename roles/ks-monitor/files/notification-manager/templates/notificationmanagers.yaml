@@ -33,4 +33,6 @@ spec:
     {{- toYaml .Values.notificationmanager.defaultSecretNamespace | nindent 4 }}
   sidecars:
     {{- toYaml .Values.notificationmanager.sidecars | nindent 4 }}
+  history:
+    {{- toYaml .Values.notificationmanager.history | nindent 4 }}
 

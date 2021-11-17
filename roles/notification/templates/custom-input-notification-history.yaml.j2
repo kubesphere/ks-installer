@@ -1,0 +1,23 @@
+apiVersion: logging.kubesphere.io/v1alpha2
+kind: Input
+metadata:
+  labels:
+    logging.kubesphere.io/enabled: 'true'
+    logging.kubesphere.io/component: "notification"
+  name: tail-notification
+  namespace: kubesphere-logging-system
+spec:
+  tail:
+    db: /fluent-bit/tail/pos-notification.db
+    dbSync: Normal
+    memBufLimit: 5MB
+{% if (logging.containerruntime is defined) and (logging.containerruntime == 'containerd' or logging.containerruntime == 'crio' ) %}
+    parser: cri
+{% else %}
+    parser: docker
+{% endif %}
+    path: /var/log/containers/notification-adapter*_kubesphere-monitoring-system_notification-adapter*.log
+    refreshIntervalSeconds: 10
+    skipLongLines: true
+    tag: kube_notification
+
