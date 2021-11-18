@@ -1,0 +1,64 @@
+# Default values for mysql-operator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+installCRDS: true
+
+## Specify an imagePullPolicy (Required)
+## It's recommended to change this to 'Always' if the image tag is 'latest'
+## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
+## Always IfNotPresent Never
+imagePullPolicy: IfNotPresent
+nameOverride: ""
+fullnameOverride: ""
+
+manager:
+  image: radondb/mysql-operator
+  tag: latest
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 30Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 20Mi
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+rbac:
+  create: true
+
+rbacProxy:
+  create: true
+  image: gcr.azk8s.cn/kubebuilder/kube-rbac-proxy:v0.8.0
+
+leaderElection:
+  create: true
+
+serviceMonitor:
+  enabled: true
+  ## Additional labels for the serviceMonitor. Useful if you have multiple prometheus operators running to select only specific ServiceMonitors
+  # additionalLabels:
+  #   prometheus: prom-internal
+  interval: 10s
+  scrapeTimeout: 3s
+  # jobLabel:
+  # targetLabels:
+  # podTargetLabels:
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/managed-by: mysql.radondb.com
+      app.kubernetes.io/name: mysql
+

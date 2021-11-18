@@ -1,0 +1,25 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplicationVersion
+metadata:
+  name: postgresql
+  labels:
+    application.kubesphere.io/operator-app: postgresql
+spec:
+  name: "PostgreSQL"
+  screenshots: |
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+  screenshots_en: |
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+  changeLog: |
+    - Distributed引擎支持currentDatabase函数
+    - 增强备份恢复功能
+  changeLog_en: |
+    - English log pg
+    - English log pg
+  operatorVersion: "1.1.0"
+  appVersion: "15.6"
+  owner: "RadonDB"
+status:
+  state: active

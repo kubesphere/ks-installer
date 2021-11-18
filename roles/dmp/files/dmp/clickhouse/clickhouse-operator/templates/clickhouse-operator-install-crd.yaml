@@ -1,0 +1,95 @@
+{{- if .Capabilities.APIVersions.Has "apiextensions.k8s.io/v1" }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: clickhouseinstallations.clickhouse.radondb.com
+spec:
+  group: clickhouse.radondb.com
+  scope: Namespaced
+  names:
+    kind: ClickHouseInstallation
+    singular: clickhouseinstallation
+    plural: clickhouseinstallations
+    shortNames:
+      - chi
+{{- if .Capabilities.APIVersions.Has "apiextensions.k8s.io/v1" }}
+  versions:
+    - name: v1
+      served: true
+      storage: true
+{{- include "clickhouseinstallations.additionalPrinterColumnsV1" . | indent 6}}
+      schema:
+{{- include "clickhouseinstallations.openAPIV3Schema" . | indent 8}}
+{{- else }}
+  version: v1
+{{- include "clickhouseinstallations.additionalPrinterColumnsV1Beta1" . | indent 2}}
+  validation:
+{{- include "clickhouseinstallations.openAPIV3Schema" . | indent 4}}
+{{- end }}
+---
+{{- if .Capabilities.APIVersions.Has "apiextensions.k8s.io/v1" }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: clickhouseinstallationtemplates.clickhouse.radondb.com
+spec:
+  group: clickhouse.radondb.com
+  scope: Namespaced
+  names:
+    kind: ClickHouseInstallationTemplate
+    singular: clickhouseinstallationtemplate
+    plural: clickhouseinstallationtemplates
+    shortNames:
+      - chit
+{{- if .Capabilities.APIVersions.Has "apiextensions.k8s.io/v1" }}
+  versions:
+    - name: v1
+      served: true
+      storage: true
+{{- include "clickhouseinstallationtemplates.additionalPrinterColumnsV1" . | indent 6}}
+      schema:
+{{- include "clickhouseinstallationtemplates.openAPIV3Schema" . | indent 8}}
+{{- else }}
+  version: v1
+{{- include "clickhouseinstallationtemplates.additionalPrinterColumnsV1Beta1" . | indent 2}}
+  validation:
+{{- include "clickhouseinstallationtemplates.openAPIV3Schema" . | indent 4}}
+{{- end }}
+---
+{{- if .Capabilities.APIVersions.Has "apiextensions.k8s.io/v1" }}
+apiVersion: apiextensions.k8s.io/v1
+{{- else }}
+apiVersion: apiextensions.k8s.io/v1beta1
+{{- end }}
+kind: CustomResourceDefinition
+metadata:
+  name: clickhouseoperatorconfigurations.clickhouse.radondb.com
+spec:
+  group: clickhouse.radondb.com
+  scope: Namespaced
+  names:
+    kind: ClickHouseOperatorConfiguration
+    singular: clickhouseoperatorconfiguration
+    plural: clickhouseoperatorconfigurations
+    shortNames:
+      - chopconf
+{{- if .Capabilities.APIVersions.Has "apiextensions.k8s.io/v1" }}
+  versions:
+    - name: v1
+      served: true
+      storage: true
+{{- include "clickhouseoperatorconfigurations.additionalPrinterColumnsV1" . | indent 6}}
+      schema:
+{{- include "clickhouseoperatorconfigurations.openAPIV3Schema" . | indent 8}}
+{{- else }}
+  version: v1
+{{- include "clickhouseoperatorconfigurations.additionalPrinterColumnsV1Beta1" . | indent 2}}
+  validation:
+{{- include "clickhouseoperatorconfigurations.openAPIV3Schema" . | indent 4}}
+{{- end }}

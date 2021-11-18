@@ -1,0 +1,25 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplicationVersion
+metadata:
+  name: mysql
+  labels:
+    application.kubesphere.io/operator-app: mysql
+spec:
+  name: "MySQL"
+  screenshots: |
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+  screenshots_en: |
+    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+  changeLog: |
+    - Distributed引擎支持currentDatabase函数
+    - 增强备份恢复功能
+  changeLog_en: |
+    - English log mysql
+    - English log mysql
+  operatorVersion: "2.1.0"
+  appVersion: "5.7.34"
+  owner: "RadonDB"
+status:
+  state: active

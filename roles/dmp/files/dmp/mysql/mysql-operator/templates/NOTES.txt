@@ -1,0 +1,10 @@
+You can create a new mysqlcluster by issuing:
+
+cat <<EOF | kubectl apply -f-
+apiVersion: mysql.radondb.com/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: sample
+spec:
+  replicas: 3
+EOF

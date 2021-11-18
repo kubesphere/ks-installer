@@ -83,6 +83,8 @@ spec:
     jenkinsJavaOpts_Xms: 512m  # The following three fields are JVM parameters.
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
+  dmp:
+    enabled: true
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
     # operator:
@@ -143,7 +145,7 @@ spec:
       type: none # Specify "weave-scope" for this field to enable Service Topology. "none" means that Service Topology is disabled.
   openpitrix: # An App Store that is accessible to all platform tenants. You can use it to manage apps across their entire lifecycle.
     store:
-      enabled: false # Enable or disable the KubeSphere App Store.
+      enabled: true # Enable or disable the KubeSphere App Store.
   servicemesh:         # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
     enabled: false     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
   kubeedge:          # Add edge nodes to your cluster and deploy workloads on edge nodes.

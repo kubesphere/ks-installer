@@ -1,0 +1,58 @@
+{{ if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" -}}{{ if .Values.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: radondb-postgres-operator
+spec:
+  endpoints:
+    - interval: 1m
+      port: postgres-exporter
+      path: /metrics
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_pod_label_radondb_postgres_exporter]
+        action: keep
+        regex: 'true'
+      - sourceLabels: [__meta_kubernetes_pod_container_port_number]
+        action: drop
+        regex: '5432'
+      - sourceLabels: [__meta_kubernetes_pod_container_port_number]
+        action: drop
+        regex: '10000'
+      - sourceLabels: [__meta_kubernetes_pod_container_port_number]
+        action: drop
+        regex: '8009'
+      - sourceLabels: [__meta_kubernetes_pod_container_port_number]
+        action: drop
+        regex: '2022'
+      - sourceLabels: [__meta_kubernetes_namespace]
+        action: replace
+        targetLabel: kubernetes_namespace
+      - sourceLabels: [__meta_kubernetes_pod_name]
+        targetLabel: pod
+      - sourceLabels: [__meta_kubernetes_namespace,__meta_kubernetes_pod_label_pg_cluster]
+        targetLabel: pg_cluster
+        separator: ':'
+        replacement: '$1$2'
+      - sourceLabels: [__meta_kubernetes_pod_ip]
+        targetLabel: ip
+        replacement: '$1'
+      - sourceLabels: [__meta_kubernetes_pod_label_deployment_name]
+        targetLabel: deployment
+        replacement: '$1'
+      - sourceLabels: [__meta_kubernetes_pod_label_role]
+        targetLabel: role
+        replacement: '$1'
+      - sourceLabels: [dbname]
+        targetLabel: dbname
+        replacement: '$1'
+      - sourceLabels: [relname]
+        targetLabel: relname
+        replacement: '$1'
+      - sourceLabels: [schemaname]
+        targetLabel: schemaname
+        replacement: '$1'
+      - targetLabel: exp_type
+        replacement: 'pg'
+  namespaceSelector: {{ toYaml .Values.serviceMonitor.namespaceSelector | nindent 4 }}
+  selector: {{ toYaml .Values.serviceMonitor.selector | nindent 4 }}
+{{ end -}}{{ end -}}

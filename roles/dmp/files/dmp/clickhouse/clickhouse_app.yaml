@@ -1,0 +1,26 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplication
+metadata:
+  name: clickhouse
+spec:
+  # Add fields here
+  name: "ClickHouse"
+  description: "一款基于 ClickHouse 分布式实时分析型列式存储数据库。"
+  description_en: "A cloud-native, distributed, real-time analytical, column-storage database system based on ClickHouse."
+  abstraction: |
+    - 具备高可用、PB 级数据存储、实时数据分析、架构稳定和可扩展等性能
+    - 具备千亿数据毫秒级查询性能，并支持自定义图形化呈现查询结果
+    - 提供可视化集群管理功能，包括在线水平扩展、参数优化、用户帐号管理等
+    - 提供高级集群管理功能，包括集群内数据重分布等
+    - 提供自动备份、监控告警等功能
+  abstraction_en: |
+    - Provide  features such as high availability, PB storage, real-time analytical, architectural stability  and scalability.
+    - Milliseconds of hundreds of billions data query performance, and support custom graphical rendering of query results.
+    - Provide visual cluster management functions, including online horizontal scaling, parameter optimization and account management.
+    - Provide advanced cluster management functions, including data redistribution.
+    - Provide functions such as automatic backup and alarm monitoring.
+  operator: "admin"
+  icon: "https://raw.githubusercontent.com/radondb/radondb-mysql-kubernetes/main/docs/images/logo_radondb-mysql.png"
+  owner: "RadonDB"
+status:
+  state: active

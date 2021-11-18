@@ -1,0 +1,8 @@
+# Default values for ClickHouse-operator
+
+operator:
+  image: {{ chronus_operator_repo }}:{{ chronus_operator_tag }}
+  imagePullPolicy: IfNotPresent
+metrics_operator:
+  image: {{ chronus_metrics_operator_repo }}:{{ chronus_metrics_operator_tag }}
+  imagePullPolicy: IfNotPresent

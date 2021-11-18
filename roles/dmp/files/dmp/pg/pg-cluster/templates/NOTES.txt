@@ -1,0 +1,10 @@
+You can create a new PostgreSQLCluster by issuing:
+
+cat <<EOF | kubectl apply -f-
+apiVersion: pgcluster.kubesphere.io/v1alpha1
+kind: PostgreSQLCluster
+metadata:
+  name: sample
+spec:
+  replicas: 1
+EOF
