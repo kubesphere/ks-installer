@@ -1,4 +1,4 @@
-- name: notification-history | Creates directory
+- name: ks-events | Creates directory
   file:
     path: "{{ kubesphere_dir }}/fluentbit-operator"
     state: directory
