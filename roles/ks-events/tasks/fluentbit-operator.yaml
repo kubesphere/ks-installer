@@ -1,3 +1,8 @@
+- name: ks-events | Creates directory
+  file:
+    path: "{{ kubesphere_dir }}/fluentbit-operator"
+    state: directory
+
 - name: ks-events | Creating manifests
   template:
     src: "{{ item.file }}.j2"
