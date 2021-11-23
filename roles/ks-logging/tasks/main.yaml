@@ -27,6 +27,12 @@
   when: migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
 
 
+- name: genrateId patch to es of Output
+  shell: >
+    {{ bin_dir }}/kubectl patch Output es --type merge -p '{"spec":{"es":{"generateID":'true'}}}' -n kubesphere-logging-system
+  ignore_errors: true
+
+
 - name: ks-logging | Creating input configuration
   template:
     src: "{{ item.file }}.j2"
