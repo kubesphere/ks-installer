@@ -212,9 +212,9 @@ kiali_tag: v1.38
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
-redis_tag: 5.0.12-alpine
+redis_tag: 5.0.14-alpine
 haproxy_repo: "{{ base_library_repo }}haproxy"
-haproxy_tag: 2.0.22-alpine
+haproxy_tag: 2.0.25-alpine
 alpine_repo: "{{ base_library_repo }}alpine"
 alpine_tag: 3.14
 busybox_repo: "{{ base_library_repo }}busybox"
