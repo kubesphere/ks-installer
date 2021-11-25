@@ -347,6 +347,7 @@ rules:
       - 'pipelines/consolelog'
       - 'pipelines/scan'
       - 'pipelines/sonarstatus'
+      - 'pipelineruns'
       - 'checkCron'
       - 'credentials'
       - 'credentials/usage'
@@ -624,6 +625,7 @@ rules:
       - pipelines/consolelog
       - pipelines/scan
       - pipelines/sonarstatus
+      - pipelineruns
       - checkCron
       - credentials
       - credentials/usage
@@ -756,6 +758,7 @@ rules:
       - pipelines/consolelog
       - pipelines/scan
       - pipelines/sonarstatus
+      - pipelineruns
       - checkCron
       - credentials
       - credentials/usage
@@ -1326,6 +1329,7 @@ rules:
       - 'pipelines/consolelog'
       - 'pipelines/scan'
       - 'pipelines/sonarstatus'
+      - 'pipelineruns'
       - 'checkCron'
       - 'credentials'
       - 'credentials/usage'
@@ -1382,6 +1386,7 @@ rules:
       - 'pipelines/consolelog'
       - 'pipelines/scan'
       - 'pipelines/sonarstatus'
+      - 'pipelineruns'
       - 'checkCron'
       - 'credentials'
       - 'credentials/usage'
@@ -2195,6 +2200,7 @@ role:
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
         "role-template-view-pipelines","role-template-manage-pipelines",
+        "role-template-view-pipelineruns","role-template-manage-pipelineruns",
         "role-template-view-credentials","role-template-manage-credentials",
         "role-template-manage-project-settings","role-template-manage-devops-settings"]'
       kubesphere.io/creator: system
@@ -2231,6 +2237,7 @@ role:
         "role-template-view-alerting-messages","role-template-manage-alerting-messages",
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
         "role-template-view-pipelines","role-template-manage-pipelines",
+        "role-template-view-pipelineruns","role-template-manage-pipelineruns",
         "role-template-view-credentials","role-template-manage-credentials"]'
       kubesphere.io/creator: system
     name: operator
@@ -2289,7 +2296,7 @@ role:
         "role-template-view-volumes","role-template-view-snapshots",
         "role-template-view-secrets","role-template-view-configmaps","role-template-view-serviceaccount",
         "role-template-view-alerting-policies","role-template-view-alerting-messages",
-        "role-template-view-pipelines","role-template-view-credentials"]'
+        "role-template-view-pipelines","role-template-view-pipelineruns","role-template-view-credentials"]'
       kubesphere.io/creator: system
     name: viewer
   rules:
@@ -3133,10 +3140,10 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-credentials"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-pipelineruns", "role-template-view-credentials"]'
       iam.kubesphere.io/module: Pipelines Management
       kubesphere.io/alias-name: Pipelines Management
-      iam.kubesphere.io/role-template-rules: '{"pipelines": "manage"}'
+      iam.kubesphere.io/role-template-rules: '{"pipelines": "manage", "pipelineruns": "manage"}'
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-pipelines
@@ -3154,6 +3161,33 @@ role:
       verbs:
         - '*'
 
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-manage-pipelineruns
+  labels:
+    scope.kubesphere.io/devops: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-pipelineruns"]'
+      iam.kubesphere.io/module: PipelineRuns Management
+      kubesphere.io/alias-name: PipelineRuns Management
+      iam.kubesphere.io/role-template-rules: '{"pipelineruns": "manage"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-manage-pipelineruns
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'pipelineruns'
+        - 'pipelineruns/status'
+      verbs:
+        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -3198,7 +3232,7 @@ role:
     annotations:
       iam.kubesphere.io/module: Pipelines Management
       kubesphere.io/alias-name: Pipelines View
-      iam.kubesphere.io/role-template-rules: '{"pipelines": "view"}'
+      iam.kubesphere.io/role-template-rules: '{"pipelines": "view", "pipelineruns": "view"}'
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-view-pipelines
@@ -3213,6 +3247,35 @@ role:
         - 'pipelines/consolelog'
         - 'pipelines/scan'
         - 'pipelines/sonarstatus'
+      verbs:
+        - 'get'
+        - 'list'
+        - 'watch'
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleBase
+metadata:
+  name: role-template-view-pipelineruns
+  labels:
+    scope.kubesphere.io/devops: ""
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    annotations:
+      iam.kubesphere.io/module: PipelineRuns Management
+      kubesphere.io/alias-name: PipelineRuns View
+      iam.kubesphere.io/role-template-rules: '{"pipelineruns": "view"}'
+    labels:
+      iam.kubesphere.io/role-template: "true"
+    name: role-template-view-pipelineruns
+  rules:
+    - apiGroups:
+        - '*'
+      resources:
+        - 'pipelineruns'
+        - 'pipelineruns/status'
       verbs:
         - 'get'
         - 'list'
