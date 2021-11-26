@@ -37,7 +37,7 @@
   shell: >
     {{ bin_dir }}/kubectl label namespace kubeedge kubesphere.io/workspace=system-workspace --overwrite
 
-- name: KubeEdge | Importing kubeEdge status
+- name: KubeEdge | Importing EdgeRuntime status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

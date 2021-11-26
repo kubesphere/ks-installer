@@ -54,19 +54,5 @@ rules:
   resources: ["volumeattachments"]
   verbs: ["get", "list", "watch", "update"]
 - apiGroups: ["networking.istio.io"]
-<<<<<<< HEAD:roles/kubeedge/files/kubeedge/kubeedge/templates/clusterrole_kubeedge.yaml
   resources: ["*"]
   verbs: ["get", "list", "watch"]
-=======
-  resources: ["destinationrules"]
-  verbs: ["get", "list", "watch", "update"]
-
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  {{- with .Values.cloudCore.labels }}
-  labels: {{- toYaml . | nindent 4 }}
-  {{- end }}
-  name: cloudcore
->>>>>>> e8596434 (integrate ks edge runtime && support kubeedge v1.8.2):roles/edgeruntime/files/kubeedge/cloudcore/templates/rbac_cloudcore.yaml
