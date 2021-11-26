@@ -8,7 +8,7 @@ rules:
   - apiGroups:
       - pgcluster.kubesphere.io
     resources:
-      - postgresqlclusters/status
+      - postgresqlclusters
     verbs:
       - get
       - list
@@ -104,6 +104,25 @@ rules:
       - watch
       - get
       - list
+  - apiGroups:
+      - radondb.com
+    resources:
+      - pgclusters
+    verbs:
+      - watch
+      - get
+      - list
+  - apiGroups:
+      - pgcluster.kubesphere.io
+    resources:
+      - postgresqlclusters/status
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - create
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

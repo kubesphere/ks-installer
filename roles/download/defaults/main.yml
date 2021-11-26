@@ -29,16 +29,16 @@ ks_version: >-
   {%- endif %}
 
 #KubeSphere:
-ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('mgw2168') }}/ks-apiserver"
-ks_apiserver_tag: "v3.3.6"
-ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('mgw2168') }}/ks-controller-manager"
-ks_controller_manager_tag: "v3.3.6"
+ks_apiserver_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-apiserver"
+ks_apiserver_tag: "qkcp"
+ks_controller_manager_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-controller-manager"
+ks_controller_manager_tag: "qkcp"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
 ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
-ks_console_repo: "{{ base_repo }}{{ namespace_override | default('zhangdoudou') }}/dmp-console"
-ks_console_tag: "0.0.3"
+ks_console_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-console"
+ks_console_tag: "qkcp"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
 ks_kubectl_tag: v1.0.0
 # kubectl versions

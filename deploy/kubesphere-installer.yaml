@@ -287,7 +287,7 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: pixiake/ks-installer:dmp
+        image: registry.cn-beijing.aliyuncs.com/qkcp/ks-installer:qkcp
         imagePullPolicy: "Always"
         resources:
           limits:
