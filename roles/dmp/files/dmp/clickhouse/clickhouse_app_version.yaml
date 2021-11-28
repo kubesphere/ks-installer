@@ -3,23 +3,27 @@ kind: OperatorApplicationVersion
 metadata:
   name: clickhouse
   labels:
-    application.kubesphere.io/operator-app: clickhouse
+    category_id: radondb
 spec:
   name: "ClickHouse"
   screenshots: |
     - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
     - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
     - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
-  screenshots_en: |
+  screenshots_zh: |
     - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
   changeLog: |
-    - Distributed引擎支持currentDatabase函数
-    - 增强备份恢复功能"
-  changeLog_en: |
-    - English log clickhosue
-    - English log clickhosue
-  operatorVersion: "1.0.1"
-  appVersion: "20.1"
+    - change version from 2.0 to 2.1
+    - create/delete zookeeper when create/delete clickhouse
+    - rename status to state
+    - add describle about cluster parameter
+  changeLog_zh: |
+    - change version from 2.0 to 2.1
+    - create/delete zookeeper when create/delete clickhouse
+    - rename status to state
+    - add describle about cluster parameter
+  operatorVersion: "2.1.0"
+  appVersion: "21.1.3.32"
   owner: "RadonDB"
 status:
   state: active
