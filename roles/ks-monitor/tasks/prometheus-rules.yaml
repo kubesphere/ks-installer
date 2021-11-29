@@ -8,10 +8,10 @@
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-rules.yaml
   when:
-    - kubernetes_version.stdout is version('v1.16.0', '<')
+    - kubernetes_version is version('v1.16.0', '<')
 
 - name: Monitoring | Creating Prometheus rules (v1.16.0+)
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/prometheus-rules-v1.16+.yaml
   when:
-    - kubernetes_version.stdout is version('v1.16.0', '>=')
+    - kubernetes_version is version('v1.16.0', '>=')

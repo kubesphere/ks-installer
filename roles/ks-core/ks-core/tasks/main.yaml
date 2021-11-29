@@ -1,16 +1,16 @@
 ---
 
 
-- name: KubeSphere | Getting Kubernetes version
-  shell: >
-    {{ bin_dir }}/kubectl version -o json | jq -r '.serverVersion.gitVersion'
-  register: kubernetes_version
-  failed_when: false
+#- name: KubeSphere | Getting Kubernetes version
+#  shell: >
+#    {{ bin_dir }}/kubectl version -o json | jq -r '.serverVersion.gitVersion'
+#  register: kubernetes_version
+#  failed_when: false
 
 
 - name: KubeSphere | Setting Kubernetes version
   set_fact:
-    kube_version: "{{ kubernetes_version.stdout }}"
+    kube_version: "{{ kubernetes_version }}"
   failed_when: false
 
 
