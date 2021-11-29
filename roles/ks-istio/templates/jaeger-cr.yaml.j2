@@ -4,6 +4,8 @@ metadata:
   name: jaeger
   namespace: istio-system
 spec:
+  ingress:
+    enabled: false
   agent:
     image: {{ jaeger_agent_repo }}:{{ jaeger_agent_tag }}
   collector:
