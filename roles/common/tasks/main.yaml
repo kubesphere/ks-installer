@@ -47,7 +47,7 @@
 
     - name: KubeSphere | Updating snapshot crd
       command: >
-        {% if kubernetes_version.stdout is version('v1.19.0', '>=') %}
+        {% if kubernetes_version is version('v1.19.0', '>=') %}
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot.yaml --force
         {% else %}
         {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/snapshot-controller/crds/snapshot.storage.k8s.io_volumesnapshot_before119.yaml --force
@@ -63,7 +63,7 @@
       failed_when: false
 
   when:
-    - kubernetes_version.stdout is version('v1.17.0', '>=')
+    - kubernetes_version is version('v1.17.0', '>=')
 
 
 - name: KubeSphere | Checking openpitrix common component

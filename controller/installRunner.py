@@ -418,6 +418,7 @@ def generateConfig(api):
     nodesObj = json.loads(nodesStr)
 
     cluster_config['nodeNum'] = len(nodesObj["items"])
+    cluster_config['kubernetes_version'] = client.VersionApi().get_code().git_version
 
     try:
         with open(configFile, 'w', encoding='utf-8') as f:
