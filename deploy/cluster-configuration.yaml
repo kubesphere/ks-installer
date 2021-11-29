@@ -80,8 +80,8 @@ spec:
     jenkinsMemoryLim: 2Gi      # Jenkins memory limit.
     jenkinsMemoryReq: 1500Mi   # Jenkins memory request.
     jenkinsVolumeSize: 8Gi     # Jenkins volume size.
-    jenkinsJavaOpts_Xms: 512m  # The following three fields are JVM parameters.
-    jenkinsJavaOpts_Xmx: 512m
+    jenkinsJavaOpts_Xms: 1200m  # The following three fields are JVM parameters.
+    jenkinsJavaOpts_Xmx: 1600m
     jenkinsJavaOpts_MaxRAM: 2g
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
