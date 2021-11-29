@@ -15,6 +15,7 @@ spec:
     image_version: "{{ kiali_tag }}"
     namespace: "istio-system"
     service_type: "ClusterIP"
+    ingress_enabled: false
   external_services:
     prometheus:
       url: http://prometheus-k8s.kubesphere-monitoring-system:9090
