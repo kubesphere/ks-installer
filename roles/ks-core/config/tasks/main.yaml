@@ -48,25 +48,25 @@
     {{ bin_dir }}/kubectl get secret kubesphere-secret -o jsonpath='{.data.secret}' | base64 -d
   register: ks_secret_str
 
-- name: KubeSphere | Checking Kubernetes version
-  shell: >
-    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
-  register: kubernetes_version
+#- name: KubeSphere | Checking Kubernetes version
+#  shell: >
+#    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
+#  register: kubernetes_version
 
 - debug:
-    msg: Current Kubernetes version is {{kubernetes_version.stdout}}
+    msg: Current Kubernetes version is {{ kubernetes_version }}
 
 # Get the matched kubectl image
 - name: KubeSphere | Setting kubectl image version
   set_fact:
-    ks_kubectl_tag: "{{item.value}}"
+    ks_kubectl_tag: "{{ item.value }}"
     kubectl_break: true
   loop: "{{ query('dict', ks_kubectl_versions) }}"
   when:
-    - kubectl_break is undefined and kubernetes_version is defined and kubernetes_version.stdout is version(item.key, '>=')
+    - kubectl_break is undefined and kubernetes_version is defined and kubernetes_version is version(item.key, '>=')
 
 - debug:
-    msg: Current kubectl image version is {{ks_kubectl_tag}}
+    msg: Current kubectl image version is {{ ks_kubectl_tag }}
 
 - name: KubeSphere | Getting Kubernetes master num
   shell: >
