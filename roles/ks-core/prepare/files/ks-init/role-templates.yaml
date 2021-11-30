@@ -239,6 +239,13 @@ rules:
     verbs:
       - list
       - create
+  - apiGroups:
+      - license.kubesphere.io
+    resources:
+      - licenses
+    verbs:
+      - list
+      - get
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
