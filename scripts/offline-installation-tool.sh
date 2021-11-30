@@ -36,8 +36,16 @@ func() {
     echo "  -l IMAGES-LIST         : text file with list of images."
     echo "  -r PRIVATE-REGISTRY    : target private registry:port."
     echo "  -s                     : save model will be applied. Pull the images in the IMAGES-LIST and save images as a tar.gz file."
-    echo "  -v KUBERNETES-VERSION  : download kubernetes' binaries. default: v1.17.9"
     echo "  -h                     : usage message"
+    echo 
+    echo "Examples:"
+    echo
+    echo "# Download the default kubernetes version dependency binaries.(default: [kubernetes: v1.21.5], [helm: v3.6.3], [cni: v0.9.1], [etcd: v3.4.13])"
+    echo "./offline-installtion-tool.sh -b"
+    echo
+    echo "# Custom download the kubernetes version dependecy binaries."
+    echo "export KUBERNETES_VERSION=v1.22.1;export HELM_VERSION=v3.6.3;"
+    echo "./offline-installtion-tool.sh -b"
     exit
 }
 
