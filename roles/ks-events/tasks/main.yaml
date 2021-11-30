@@ -5,6 +5,21 @@
     src: "kube-events"
     dest: "{{ kubesphere_dir }}/ks-events/"
 
+- debug:
+    msg: Current Kubernetes version is {{ kubernetes_version }}
+
+# Get the matched kubectl image
+- name: KubeSphere | Setting kubectl image version
+  set_fact:
+    ks_kubectl_tag: "{{ item.value }}"
+    kubectl_break: true
+  loop: "{{ query('dict', ks_kubectl_versions) }}"
+  when:
+    - kubectl_break is undefined and kubernetes_version is defined and kubernetes_version is version(item.key, '>=')
+
+- debug:
+    msg: Current kubectl image version is {{ ks_kubectl_tag }}
+
 - name: ks-events | Getting ks-events installation files
   template:
     src: "{{ item.file }}.j2"

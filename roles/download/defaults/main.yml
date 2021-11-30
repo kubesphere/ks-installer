@@ -40,7 +40,7 @@ ks_alerting_migration_tag: "v3.1.0"
 ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-console"
 ks_console_tag: "{{ ks_version }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
-ks_kubectl_tag: v1.0.0
+ks_kubectl_tag: v1.22.0
 # kubectl versions
 ks_kubectl_versions:
   v1.22.0: v1.22.0
@@ -67,7 +67,7 @@ tower_image: tower
 tower_image_tag: "v0.2.0"
 post_install_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 post_install_job_image: kubectl
-post_install_job_tag: "v1.19.1"
+# post_install_job_tag: "v1.19.1"
 
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
