@@ -6,7 +6,7 @@ metadata:
     category_id: radondb
 spec:
   # app name
-  name: "MySQL"
+  name: "RadonDB MySQL"
   # app description
   description_zh: "一款基于 MySQL 提供的企业级数据库。"
   description: "A cloud-native, enterprise-class database system based on MySQL."
@@ -23,7 +23,11 @@ spec:
     - Provide Semi-Sync plug-in to ensure data consistency between nodes.
     - Support master/slave switchover in seconds to ensure service continuity that based on Raft protocol.
     - Provide functions such as automatic backup and alarm monitoring.
-  icon: "https://raw.githubusercontent.com/radondb/radondb-mysql-kubernetes/main/docs/images/logo_radondb-mysql.png"
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/mysql_create.jpg,/assets/screenshots/mysql_detail.jpg,/assets/screenshots/mysql_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mysql_create_zh.jpg,/assets/screenshots/mysql_detail_zh.jpg,/assets/screenshots/mysql_monitor_zh.jpg
+  icon: "/assets/radondb_logo.svg"
   owner: "RadonDB"
 status:
   latestVersion: "2.1.0"

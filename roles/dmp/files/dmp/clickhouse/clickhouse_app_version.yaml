@@ -5,23 +5,31 @@ metadata:
   labels:
     category_id: radondb
 spec:
-  name: "ClickHouse"
+  name: "RadonDB ClickHouse"
   screenshots: |
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/ck_create.jpg,/assets/screenshots/ck_detail.jpg,/assets/screenshots/ck_monitor.jpg
   screenshots_zh: |
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/ck_create_zh.jpg,/assets/screenshots/ck_detail_zh.jpg,/assets/screenshots/ck_monitor_zh.jpg
   changeLog: |
-    - change version from 2.0 to 2.1
-    - create/delete zookeeper when create/delete clickhouse
-    - rename status to state
-    - add describle about cluster parameter
+    - Support ClickHouse kernel version 21.1.3.32
+    - Rich display of monitoring metrics
+    - Support horizontal and vertical expansion
+    - SVC-based cluster load balancing
+    - High-availability based on multiple replicas
+    - Fine-grained cluster state presentation
+    - Disk expansion support qingcloud-csi
+    - Compatible kubernetes api extension version v1
+    - Automatically create/delete/configure ZooKeeper cluster dependencies
   changeLog_zh: |
-    - change version from 2.0 to 2.1
-    - create/delete zookeeper when create/delete clickhouse
-    - rename status to state
-    - add describle about cluster parameter
+    - 支持 21.1.3.32 内核版本
+    - 丰富的监控指标展示
+    - 支持集群水平垂直扩容
+    - 基于 SVC 的集群负载均衡
+    - 基于多副本的高可用功能
+    - 提供了细粒度的集群状态展示
+    - 磁盘扩容兼容了 qingcloud-csi
+    - 兼容了 kubernetes api extension v1 版本
+    - 支持自动创建 / 删除 / 配置 ZooKeeper 集群依赖
   operatorVersion: "2.1.0"
   appVersion: "21.1.3.32"
   owner: "RadonDB"

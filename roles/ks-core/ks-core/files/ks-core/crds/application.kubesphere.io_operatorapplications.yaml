@@ -51,6 +51,10 @@ spec:
                 type: string
               owner:
                 type: string
+              screenshots:
+                type: string
+              screenshots_zh:
+                type: string
             required:
             - name
             type: object

@@ -5,27 +5,23 @@ metadata:
   labels:
     category_id: radondb
 spec:
-  name: "MySQL"
+  name: "RadonDB MySQL"
   screenshots: |
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/mysql_create.jpg,/assets/screenshots/mysql_detail.jpg,/assets/screenshots/mysql_monitor.jpg
   screenshots_zh: |
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mysql_create_zh.jpg,/assets/screenshots/mysql_detail_zh.jpg,/assets/screenshots/mysql_monitor_zh.jpg
   changeLog: |
-    - Add serviceMonitor for operator #169 #174
-    - Backup to S3 and restore from S3 #116 #144 #197
-    - Add ci for images management and greeting. #207
-    - Support user management through crd. #175 #198 #228
-    - Support extranet access service. #251 #252
-    - Make the cluster state cover more scenarios. #253 #264
+    - Add MySQL Cluster service monitoring
+    - Database account management
+    - Support dynamic disk expansion
+    - Optimized start stop logic
+    - Rich cluster state granularity
   changeLog_zh: |
-    - Add serviceMonitor for operator #169 #174
-    - Backup to S3 and restore from S3 #116 #144 #197
-    - Add ci for images management and greeting. #207
-    - Support user management through crd. #175 #198 #228
-    - Support extranet access service. #251 #252
-    - Make the cluster state cover more scenarios. #253 #264
+    - 增加 MySQL 集群服务监控
+    - 完善数据库账户管理
+    - 支持磁盘动态扩容
+    - 优化优雅启停逻辑
+    - 丰富集群状态粒度
   operatorVersion: "2.1.0"
   appVersion: "5.7.34"
   owner: "RadonDB"

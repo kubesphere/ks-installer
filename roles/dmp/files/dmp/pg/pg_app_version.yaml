@@ -5,18 +5,18 @@ metadata:
   labels:
     category_id: radondb
 spec:
-  name: "PostgreSQL"
+  name: "RadonDB PostgreSQL"
   screenshots: |
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/pg_create.jpg,/assets/screenshots/pg_detail.jpg,/assets/screenshots/pg_monitor.jpg
   screenshots_zh: |
-    - https://github.com/radondb/radondb-clickhouse-kubernetes/raw/main/document/_images/logo_radondb.svg
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/pg_create_zh.jpg,/assets/screenshots/pg_detail_zh.jpg,/assets/screenshots/pg_monitor_zh.jpg
   changeLog: |
-    - docs: Add the README_zh and README_en
-    - docs: Add deploy-mannual and monitor
-    - docs: Modfy the readme-files
-    - api: re-modify api names
+    -  Support PostgreSQL kernel version 12.7 and 13.3
+    -  All kernel versions support PostGis plugin
+    -  Support Scale Out and Scale Up
+    -  High-availability based on distributed consensus protocol
+    -  Support synchronous/asynchronous streaming replication
+    -  Rich display of monitoring indicators
   changeLog_zh: |
     - 支持12.7及13.3内核版本
     - 所有内核版本均支持PostGis插件

@@ -6,7 +6,7 @@ metadata:
     category_id: radondb
 spec:
   # Add fields here
-  name: "PostgreSQL"
+  name: "RadonDB PostgreSQL"
   description_zh: "一款基于 PostgreSQL 的容器化、开源关系型数据库。"
   description: "A cloud-native, powerful, open source object-relational database system based on PostgreSQL."
   abstraction_zh: |
@@ -25,7 +25,11 @@ spec:
     - Provide PostgreSQL common APIs to facilitate parameter adjustment.
     - Provide PostGIS plug-in to store, query and modify spatial relationships.
     - Provide functions such as real-time monitoring, health check and automatic log clearing.
-  icon: "https://raw.githubusercontent.com/radondb/radondb-mysql-kubernetes/main/docs/images/logo_radondb-mysql.png"
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/pg_create.jpg,/assets/screenshots/pg_detail.jpg,/assets/screenshots/pg_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/pg_create_zh.jpg,/assets/screenshots/pg_detail_zh.jpg,/assets/screenshots/pg_monitor_zh.jpg
+  icon: "/assets/radondb_logo.svg"
   owner: "RadonDB"
 status:
   latestVersion: "2.0"
