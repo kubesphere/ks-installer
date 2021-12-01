@@ -5,8 +5,7 @@ metadata:
   labels:
     category_id: radondb
 spec:
-  # Add fields here
-  name: "ClickHouse"
+  name: "RadonDB ClickHouse"
   description_zh: "一款基于 ClickHouse 分布式实时分析型列式存储数据库。"
   description: "A cloud-native, distributed, real-time analytical, column-storage database system based on ClickHouse."
   abstraction_zh: |
@@ -21,7 +20,11 @@ spec:
     - Provide visual cluster management functions, including online horizontal scaling, parameter optimization and account management.
     - Provide advanced cluster management functions, including data redistribution.
     - Provide functions such as automatic backup and alarm monitoring.
-  icon: "https://raw.githubusercontent.com/radondb/radondb-mysql-kubernetes/main/docs/images/logo_radondb-mysql.png"
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/ck_create.jpg,/assets/screenshots/ck_detail.jpg,/assets/screenshots/ck_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/ck_create_zh.jpg,/assets/screenshots/ck_detail_zh.jpg,/assets/screenshots/ck_monitor_zh.jpg
+  icon: "/assets/radondb_logo.svg"
   owner: "RadonDB"
 status:
   latestVersion: "2.1.0"
