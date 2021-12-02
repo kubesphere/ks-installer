@@ -244,16 +244,16 @@ spec:
                       More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1'
                     type: string
                 type: object
-              podPolicy:
+              podSpec:
                 default:
                   busyboxImage: busybox:1.32
-                  extraResources:
+                  imagePullPolicy: IfNotPresent
+                  resources:
                     requests:
                       cpu: 10m
                       memory: 32Mi
-                  imagePullPolicy: IfNotPresent
-                  sidecarImage: radondb/mysql-sidecar:latest
-                description: PodPolicy defines the policy to extra specification.
+                  sidecarImage: radondb/mysql-sidecar:v2.1.0
+                description: Pod extra specification.
                 properties:
                   affinity:
                     description: Affinity is a group of affinity scheduling rules.
@@ -1132,14 +1132,27 @@ spec:
                     default: busybox:1.32
                     description: The busybox image.
                     type: string
-                  extraResources:
+                  imagePullPolicy:
+                    default: IfNotPresent
+                    description: PullPolicy describes a policy for if/when to pull
+                      a container image
+                    enum:
+                    - Always
+                    - IfNotPresent
+                    - Never
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  priorityClassName:
+                    type: string
+                  resources:
                     default:
                       requests:
                         cpu: 10m
                         memory: 32Mi
-                    description: ExtraResources defines quotas for containers other
-                      than mysql or xenon. These containers take up less resources,
-                      so quotas are set uniformly.
+                    description: The compute resource requirements.
                     properties:
                       limits:
                         additionalProperties:
@@ -1164,25 +1177,10 @@ spec:
                           to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                         type: object
                     type: object
-                  imagePullPolicy:
-                    default: IfNotPresent
-                    description: PullPolicy describes a policy for if/when to pull
-                      a container image
-                    enum:
-                    - Always
-                    - IfNotPresent
-                    - Never
-                    type: string
-                  labels:
-                    additionalProperties:
-                      type: string
-                    type: object
-                  priorityClassName:
-                    type: string
                   schedulerName:
                     type: string
                   sidecarImage:
-                    default: radondb/mysql-sidecar:0.1
+                    default: radondb/mysql-sidecar:v2.1.0
                     description: To specify the image that will be used for sidecar
                       container.
                     type: string
@@ -1379,23 +1377,6 @@ spec:
                     name:
                       description: Name of the node.
                       type: string
-                    raftStatus:
-                      description: RaftStatus is the raft status of the node.
-                      properties:
-                        leader:
-                          description: Leader is the name of the Leader of the current
-                            node.
-                          type: string
-                        nodes:
-                          description: Nodes is a list of nodes that can be identified
-                            by the current node.
-                          items:
-                            type: string
-                          type: array
-                        role:
-                          description: Role is one of (LEADER/CANDIDATE/FOLLOWER/IDLE/INVALID)
-                          type: string
-                      type: object
                   required:
                   - name
                   type: object
