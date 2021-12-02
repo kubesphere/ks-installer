@@ -2273,6 +2273,7 @@ role:
         - events.kubesphere.io
         - snapshot.storage.k8s.io
         - monitoring.coreos.com
+        - networking.k8s.io
       resources:
         - '*'
       verbs:
