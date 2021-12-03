@@ -24,6 +24,8 @@ KUBERNETES_VERSION=${KUBERNETES_VERSION:-"v1.21.5"}
 HELM_VERSION=${HELM_VERSION:-"v3.6.3"}
 CNI_VERSION=${CNI_VERSION:-"v0.9.1"}
 ETCD_VERSION=${ETCD_VERSION:-"v3.4.13"}
+CRICTL_VERSION=${CRICTL_VERSION:-"v1.22.0"}
+DOCKER_VERSION=${DOCKER_VERSION:-"20.10.8"}
 
 func() {
     echo "Usage:"
@@ -37,7 +39,7 @@ func() {
     echo "  -r PRIVATE-REGISTRY    : target private registry:port."
     echo "  -s                     : save model will be applied. Pull the images in the IMAGES-LIST and save images as a tar.gz file."
     echo "  -h                     : usage message"
-    echo 
+    echo
     echo "Examples:"
     echo
     echo "# Download the default kubernetes version dependency binaries.(default: [kubernetes: v1.21.5], [helm: v3.6.3], [cni: v0.9.1], [etcd: v3.4.13])"
@@ -108,6 +110,10 @@ if [[ ${binary} == "true" ]]; then
      curl -L -o ${binariesDIR}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz https://containernetworking.pek3b.qingstor.com/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz
      echo "Download etcd ..."
      curl -L -o ${binariesDIR}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz https://kubernetes-release.pek3b.qingstor.com/etcd/release/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz
+     echo "Download crictl ..."
+     curl -L -o ${binariesDIR}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz https://kubernetes-release.pek3b.qingstor.com/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz
+     echo "Download docker ..."
+     curl -L -o ${binariesDIR}/docker-${DOCKER_VERSION}.tgz https://mirrors.aliyun.com/docker-ce/linux/static/stable/${ARCH}/docker-${DOCKER_VERSION}.tgz
   else
      echo "Download kubeadm ..."
      curl -L -o ${binariesDIR}/kubeadm https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubeadm
@@ -121,6 +127,10 @@ if [[ ${binary} == "true" ]]; then
      curl -L -o ${binariesDIR}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz
      echo "Download etcd ..."
      curl -L -o ${binariesDIR}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-${ARCH}.tar.gz
+     echo "Download crictl ..."
+     curl -L -o ${binariesDIR}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz
+     echo "Download docker ..."
+     curl -L -o ${binariesDIR}/docker-${DOCKER_VERSION}.tgz https://download.docker.com/linux/static/stable/${ARCH}/docker-${DOCKER_VERSION}.tgz
   fi
 fi
 
