@@ -113,7 +113,7 @@ if [[ ${binary} == "true" ]]; then
      echo "Download crictl ..."
      curl -L -o ${binariesDIR}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz https://kubernetes-release.pek3b.qingstor.com/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz
      echo "Download docker ..."
-     curl -L -o ${binariesDIR}/docker-${DOCKER_VERSION}.tgz https://mirrors.aliyun.com/docker-ce/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz
+     curl -L -o ${binariesDIR}/docker-${DOCKER_VERSION}.tgz https://mirrors.aliyun.com/docker-ce/linux/static/stable/${ARCH}/docker-${DOCKER_VERSION}.tgz
   else
      echo "Download kubeadm ..."
      curl -L -o ${binariesDIR}/kubeadm https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/${ARCH}/kubeadm
@@ -130,7 +130,7 @@ if [[ ${binary} == "true" ]]; then
      echo "Download crictl ..."
      curl -L -o ${binariesDIR}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz https://github.com/kubernetes-sigs/cri-tools/releases/download/${CRICTL_VERSION}/crictl-${CRICTL_VERSION}-linux-${ARCH}.tar.gz
      echo "Download docker ..."
-     curl -L -o ${binariesDIR}/docker-${DOCKER_VERSION}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz
+     curl -L -o ${binariesDIR}/docker-${DOCKER_VERSION}.tgz https://download.docker.com/linux/static/stable/${ARCH}/docker-${DOCKER_VERSION}.tgz
   fi
 fi
 
