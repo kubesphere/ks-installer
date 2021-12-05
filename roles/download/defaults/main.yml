@@ -109,8 +109,16 @@ builder_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') 
 builder_base_tag: v3.2.0
 builder_nodejs_tag: v3.2.0
 builder_maven_tag: v3.2.0
+builder_python_tag: v3.2.0
 builder_go_tag: v3.2.0
 builder_go16_tag: v3.2.0
+
+builder_base_podman_tag: v3.2.0-podman
+builder_nodejs_podman_tag: v3.2.0-podman
+builder_maven_podman_tag: v3.2.0-podman
+builder_python_podman_tag: v3.2.0-podman
+builder_go_podman_tag: v3.2.0-podman
+builder_go16_podman_tag: v3.2.0-podman
 
 #s2i
 s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
@@ -403,6 +411,12 @@ images:
     sha256: "{{ builder_maven_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
+  builder_python:
+    repo: "{{ builder_registry }}/builder-python"
+    tag: "{{ builder_python_tag }}"
+    sha256: "{{ builder_python_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
   builder_go:
     repo: "{{ builder_registry }}/builder-go"
     tag: "{{ builder_go_tag }}"
@@ -413,6 +427,42 @@ images:
     repo: "{{ builder_registry }}/builder-go"
     tag: "{{ builder_go16_tag }}"
     sha256: "{{ builder_go16_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_base_podman:
+    repo: "{{ builder_registry }}/builder-base"
+    tag: "{{ builder_base_podman_tag }}"
+    sha256: "{{ builder_base_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_nodejs_podman:
+    repo: "{{ builder_registry }}/builder-nodejs"
+    tag: "{{ builder_nodejs_podman_tag }}"
+    sha256: "{{ builder_nodejs_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_maven_podman:
+    repo: "{{ builder_registry }}/builder-maven"
+    tag: "{{ builder_maven_podman_tag }}"
+    sha256: "{{ builder_maven_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_python_podman:
+    repo: "{{ builder_registry }}/builder-python"
+    tag: "{{ builder_python_podman_tag }}"
+    sha256: "{{ builder_python_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go_podman:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go_podman_tag }}"
+    sha256: "{{ builder_go_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go16_podman:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go16_podman_tag }}"
+    sha256: "{{ builder_go16_podman_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   s2ioperator:
@@ -882,4 +932,3 @@ image_default:
   tag: ""
   sha256: ""
   group: ""
-
