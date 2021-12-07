@@ -3,7 +3,8 @@ kind: OperatorApplication
 metadata:
   name: clickhouse
   labels:
-    category_id: radondb
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
 spec:
   name: "RadonDB ClickHouse"
   description_zh: "一款基于 ClickHouse 分布式实时分析型列式存储数据库。"

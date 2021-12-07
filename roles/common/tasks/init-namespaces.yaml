@@ -38,6 +38,9 @@
       {%- if multicluster is defined and multicluster.clusterRole is defined and multicluster.clusterRole == 'host' %}
       kube-federation-system
       {%- endif %}
+      {%- if dmp.enabled is defined and dmp.enabled %}
+      dmp-system
+      {%- endif %}
 
 
 - set_fact:
