@@ -3,7 +3,8 @@ kind: OperatorApplication
 metadata:
   name: mysql
   labels:
-    category_id: radondb
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
 spec:
   # app name
   name: "RadonDB MySQL"

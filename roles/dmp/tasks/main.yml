@@ -41,7 +41,9 @@
     {{ bin_dir }}/helm upgrade --install pg-operator
     {{ kubesphere_dir }}/dmp/pg/pg-operator
     -f {{ kubesphere_dir }}/dmp/pg/custom-values-pg-operator.yaml
-    --namespace pgo
+    --namespace dmp-system
+    --set namespace=dmp-system
+    --set pgo_operator_namespace=dmp-system
     --create-namespace
   register: result
   until: result is succeeded
@@ -52,7 +54,7 @@
     {{ bin_dir }}/helm upgrade --install pg-cluster
     {{ kubesphere_dir }}/dmp/pg/pg-cluster
     -f {{ kubesphere_dir }}/dmp/pg/custom-values-pg-cluster.yaml
-    --namespace pgo
+    --namespace dmp-system
     --create-namespace
   register: result
   until: result is succeeded

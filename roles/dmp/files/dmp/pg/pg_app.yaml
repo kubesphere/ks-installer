@@ -3,7 +3,8 @@ kind: OperatorApplication
 metadata:
   name: postgresql
   labels:
-    category_id: radondb
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
 spec:
   # Add fields here
   name: "RadonDB PostgreSQL"
