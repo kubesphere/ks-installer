@@ -40,7 +40,8 @@ rbac:
 
 rbacProxy:
   create: true
-  image: {{ kube_rbac_proxy_repo }}:{{ kube_rbac_proxy_tag }}
+  image: {{ kube_rbac_proxy_repo }}
+  tag: {{ kube_rbac_proxy_tag }}
 
 leaderElection:
   create: true
