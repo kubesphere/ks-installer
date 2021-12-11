@@ -1,6 +1,8 @@
 apiVersion: application.kubesphere.io/v1alpha1
 kind: OperatorApplication
 metadata:
+  annotations:
+    kubesphere.io/creator: RadonDB
   name: mysql
   labels:
     application.kubesphere.io/app-category-id: radondb

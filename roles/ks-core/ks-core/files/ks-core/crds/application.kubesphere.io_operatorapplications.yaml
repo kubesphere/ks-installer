@@ -41,6 +41,8 @@ spec:
                 type: string
               abstraction_zh:
                 type: string
+              appHome:
+                type: string
               description:
                 type: string
               description_zh:
@@ -64,6 +66,12 @@ spec:
               latestVersion:
                 type: string
               state:
+                type: string
+              statusTime:
+                format: date-time
+                type: string
+              updateTime:
+                format: date-time
                 type: string
             type: object
         type: object
