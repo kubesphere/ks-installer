@@ -44,6 +44,24 @@ spec:
                 type: string
               changeLog_zh:
                 type: string
+              maintainers:
+                description: operator maintainers
+                items:
+                  description: Maintainer describes a Chart maintainer.
+                  properties:
+                    email:
+                      description: Email is an optional email address to contact the
+                        named maintainer
+                      type: string
+                    name:
+                      description: Name is a user name or organization name
+                      type: string
+                    url:
+                      description: URL is an optional URL to an address for the named
+                        maintainer
+                      type: string
+                  type: object
+                type: array
               name:
                 type: string
               operatorVersion:
