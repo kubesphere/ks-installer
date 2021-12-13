@@ -1,0 +1,39 @@
+---
+- name: SpringCloud | Getting Nacos installation files
+  copy:
+    src: "nacos"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: SpringCloud | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: nacos, file: custom-values-nacos.yaml }
+
+- name: SpringCloud | Installing Nacos
+  shell: >
+    {{ bin_dir }}/helm upgrade --install nacos
+    {{ kubesphere_dir }}/nacos
+    --namespace nacos-system
+    --create-namespace
+    -f {{ kubesphere_dir }}/nacos/custom-values-nacos.yaml
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: SpringCloud | Labeling Nacos namespace
+  shell: >
+    {{ bin_dir }}/kubectl label namespace nacos-system kubesphere.io/workspace=system-workspace --overwrite
+
+- name: SpringCloud | Importing Nacos status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"springcloud": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3
