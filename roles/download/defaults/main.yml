@@ -25,7 +25,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.2.1-rc.2
+  v3.2.1-rc.3
   {%- endif %}
 
 #KubeSphere:
