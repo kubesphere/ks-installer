@@ -6,6 +6,9 @@ metadata:
     application.kubesphere.io/app-category-id: radondb
     kubesphere.io/workspace: system-workspace
 spec:
+  maintainers:
+    - email: dpg_database@yunify.com
+      name: RadonDB
   name: "RadonDB ClickHouse"
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/ck_create.jpg,/assets/screenshots/ck_detail.jpg,/assets/screenshots/ck_monitor.jpg
