@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - kubesphere-defaults
+    - role: springcloud
+      when:
+        - "springcloud is defined and springcloud.enabled == true"
+        - "status.springcloud is not defined or status.springcloud.status is not defined or status.springcloud.status != 'enabled'"
