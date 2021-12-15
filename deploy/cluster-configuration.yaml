@@ -127,9 +127,9 @@ spec:
     #     resources: {}
     #   proxy:
     #     resources: {}
-    gpu:                           # GPU monitoring-related plugins installation.
-      nvidia_dcgm_exporter:
-        enabled: false
+    gpu:                           # GPU monitoring-related plug-in installation. 
+      nvidia_dcgm_exporter:        # Ensure that gpu resources on your hosts can be used normally, otherwise this plug-in will not work properly.
+        enabled: false             # Check whether the labels on the GPU hosts contain "nvidia.com/gpu.present=true" to ensure that the DCGM pod is scheduled to these nodes.
         # resources: {}
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the Host or Member Cluster.
