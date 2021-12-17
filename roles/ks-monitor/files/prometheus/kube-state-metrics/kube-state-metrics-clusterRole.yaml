@@ -21,10 +21,21 @@ rules:
   - persistentvolumes
   - namespaces
   - endpoints
+  - ingresses
   verbs:
   - list
   - watch
   - delete
+- apiGroups:
+    - extensions
+    - networking.k8s.io
+  resources:
+    - ingresses
+    - ingressclasses
+  verbs:
+    - get
+    - list
+    - watch
 - apiGroups:
   - extensions
   resources:

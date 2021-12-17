@@ -138,7 +138,7 @@ prometheus_operator_tag: v0.43.2
 kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.8.0
 kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
-kube_state_metrics_tag: v1.9.7
+kube_state_metrics_tag: v2.3.0
 node_exporter_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/node-exporter"
 node_exporter_tag: v0.18.1
 prometheus_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/k8s-prometheus-adapter-amd64"
