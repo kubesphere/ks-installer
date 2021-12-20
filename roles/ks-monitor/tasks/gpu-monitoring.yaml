@@ -23,7 +23,7 @@
 
 - name: Monitoring | Labeling GPU nodes
   shell: >
-   {{ bin_dir }}/kubectl get nodes -o go-template --template='{{range .items}}{{ $nvidiaFlag := index .status.allocatable "nvidia.com/gpu"}}{{if $nvidiaFlag }}{{.metadata.name}}{{end}}{{end}}' | xargs -I {} kubectl label node {} nvidia-gpu=true --overwrite
+   {{ bin_dir }}/kubectl get nodes -o go-template --template='{{range .items}}{{ $nvidiaFlag := index .status.allocatable "nvidia.com/gpu"}}{{if $nvidiaFlag }}{{.metadata.name}}{{end}}{{end}}' | xargs -I {} kubectl label node {} nvidia.com/gpu.present=true --overwrite
   ignore_errors: yes
   when:
     - monitoring.gpu is defined
