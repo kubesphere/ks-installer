@@ -129,39 +129,14 @@ do
 done
 kubectl delete workspaces --all 2>/dev/null
 
-# delete devopsprojects
-for devopsproject in `kubectl get devopsprojects -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch devopsprojects $devopsproject -p '{"metadata":{"finalizers":null}}' --type=merge
+# make DevOps CRs deletable
+for devops_crd in $(kubectl get crd -o=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep "devops.kubesphere.io"); do
+    for ns in $(kubectl get ns -ojsonpath='{.items..metadata.name}'); do
+        for devops_res in $(kubectl get $devops_crd -n $ns -oname); do
+            kubectl patch $devops_res -n $ns -p '{"metadata":{"finalizers":[]}}' --type=merge
+        done
+    done
 done
-
-for pip in `kubectl get pipeline -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch pipeline $pip -n `kubectl get pipeline -A | grep $pip | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2ibinaries in `kubectl get s2ibinaries -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2ibinaries $s2ibinaries -n `kubectl get s2ibinaries -A | grep $s2ibinaries | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2ibuilders in `kubectl get s2ibuilders -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2ibuilders $s2ibuilders -n `kubectl get s2ibuilders -A | grep $s2ibuilders | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2ibuildertemplates in `kubectl get s2ibuildertemplates -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2ibuildertemplates $s2ibuildertemplates -n `kubectl get s2ibuildertemplates -A | grep $s2ibuildertemplates | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2iruns in `kubectl get s2iruns -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2iruns $s2iruns -n `kubectl get s2iruns -A | grep $s2iruns | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-kubectl delete devopsprojects --all 2>/dev/null
-
 
 # delete validatingwebhookconfigurations
 for webhook in ks-events-admission-validate users.iam.kubesphere.io network.kubesphere.io validating-webhook-configuration resourcesquotas.quota.kubesphere.io

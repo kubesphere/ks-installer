@@ -28,6 +28,6 @@ affinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
       - matchExpressions:
-        - key: nvidia-gpu
+        - key: nvidia.com/gpu.present
           operator: Exists
 

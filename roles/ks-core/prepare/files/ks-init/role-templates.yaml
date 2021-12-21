@@ -349,12 +349,14 @@ rules:
       - devops
       - 'pipelines'
       - 'pipelines/runs'
+      - 'pipelines/pipelineruns'
       - 'pipelines/branches'
       - 'pipelines/checkScriptCompile'
       - 'pipelines/consolelog'
       - 'pipelines/scan'
       - 'pipelines/sonarstatus'
       - 'pipelineruns'
+      - 'pipelineruns/nodedetails'
       - 'checkCron'
       - 'credentials'
       - 'credentials/usage'
@@ -627,12 +629,14 @@ rules:
       - devops
       - pipelines
       - pipelines/runs
+      - pipelines/pipelineruns
       - pipelines/branches
       - pipelines/checkScriptCompile
       - pipelines/consolelog
       - pipelines/scan
       - pipelines/sonarstatus
       - pipelineruns
+      - pipelineruns/nodedetails
       - checkCron
       - credentials
       - credentials/usage
@@ -760,12 +764,14 @@ rules:
       - devops
       - pipelines
       - pipelines/runs
+      - pipelines/pipelineruns
       - pipelines/branches
       - pipelines/checkScriptCompile
       - pipelines/consolelog
       - pipelines/scan
       - pipelines/sonarstatus
       - pipelineruns
+      - pipelineruns/nodedetails
       - checkCron
       - credentials
       - credentials/usage
@@ -1331,12 +1337,14 @@ rules:
     resources:
       - 'pipelines'
       - 'pipelines/runs'
+      - 'pipelines/pipelineruns'
       - 'pipelines/branches'
       - 'pipelines/checkScriptCompile'
       - 'pipelines/consolelog'
       - 'pipelines/scan'
       - 'pipelines/sonarstatus'
       - 'pipelineruns'
+      - 'pipelineruns/nodedetails'
       - 'checkCron'
       - 'credentials'
       - 'credentials/usage'
@@ -1388,12 +1396,14 @@ rules:
     resources:
       - 'pipelines'
       - 'pipelines/runs'
+      - 'pipelines/pipelineruns'
       - 'pipelines/branches'
       - 'pipelines/checkScriptCompile'
       - 'pipelines/consolelog'
       - 'pipelines/scan'
       - 'pipelines/sonarstatus'
       - 'pipelineruns'
+      - 'pipelineruns/nodedetails'
       - 'checkCron'
       - 'credentials'
       - 'credentials/usage'
@@ -2280,6 +2290,7 @@ role:
         - events.kubesphere.io
         - snapshot.storage.k8s.io
         - monitoring.coreos.com
+        - networking.k8s.io
       resources:
         - '*'
       verbs:
@@ -3147,7 +3158,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-pipelineruns", "role-template-view-credentials"]'
+      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-manage-pipelineruns", "role-template-view-credentials"]'
       iam.kubesphere.io/module: Pipelines Management
       kubesphere.io/alias-name: Pipelines Management
       iam.kubesphere.io/role-template-rules: '{"pipelines": "manage", "pipelineruns": "manage"}'
@@ -3181,7 +3192,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-pipelineruns"]'
-      iam.kubesphere.io/module: PipelineRuns Management
+      iam.kubesphere.io/module: Pipelines Management
       kubesphere.io/alias-name: PipelineRuns Management
       iam.kubesphere.io/role-template-rules: '{"pipelineruns": "manage"}'
     labels:
@@ -3192,6 +3203,9 @@ role:
         - '*'
       resources:
         - 'pipelineruns'
+        - 'pipelines/runs'
+        - 'pipelines/pipelineruns'
+        - 'pipelineruns/nodedetails'
         - 'pipelineruns/status'
       verbs:
         - '*'
@@ -3237,6 +3251,7 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-pipelineruns"]'
       iam.kubesphere.io/module: Pipelines Management
       kubesphere.io/alias-name: Pipelines View
       iam.kubesphere.io/role-template-rules: '{"pipelines": "view", "pipelineruns": "view"}'
@@ -3271,7 +3286,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/module: PipelineRuns Management
+      iam.kubesphere.io/module: Pipelines Management
       kubesphere.io/alias-name: PipelineRuns View
       iam.kubesphere.io/role-template-rules: '{"pipelineruns": "view"}'
     labels:
@@ -3282,6 +3297,9 @@ role:
         - '*'
       resources:
         - 'pipelineruns'
+        - 'pipelines/runs'
+        - 'pipelines/pipelineruns'
+        - 'pipelineruns/nodedetails'
         - 'pipelineruns/status'
       verbs:
         - 'get'
