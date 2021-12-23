@@ -14,7 +14,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w -X 'github.com/flant/shell
 
 FROM python:3.9.7-alpine3.14
 
-RUN apk --no-cache add jq bash curl unzip openssl && \
+RUN apk --no-cache add jq yq bash curl unzip openssl && \
     apk --no-cache add gcc libffi-dev openssl-dev musl-dev && \
     export CRYPTOGRAPHY_DONT_BUILD_RUST=1 && \
     pip install --no-cache-dir ansible_runner==2.0.1 ansible==2.9.23 kubernetes && \ 
