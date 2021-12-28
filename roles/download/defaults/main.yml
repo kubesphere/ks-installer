@@ -275,8 +275,8 @@ chronus_metrics_operator_repo: "{{ base_repo }}{{ namespace_override | default('
 chronus_metrics_operator_tag: "2.1.1"
 mysql_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mysql-operator"
 mysql_operator_tag: "v2.1.0"
-pg_cluster_repo: "{{ base_repo }}{{ namespace_override | default('mgw2168') }}/postgresqlcluster"
-pg_cluster_tag: "v0.3"
+pg_cluster_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/postgresqlcluster"
+pg_cluster_tag: "v0.1"
 pgo_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
 pgo_image_tag: "centos8-4.7.1"
 
