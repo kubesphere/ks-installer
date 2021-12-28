@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "qkcp"
+            "version": "v3.2.1-rc.0"
         },
     },
 }
