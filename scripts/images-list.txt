@@ -127,7 +127,7 @@ kubesphere/python-35-centos7:v2.1.0
 kubesphere/python-34-centos7:v2.1.0
 kubesphere/python-27-centos7:v2.1.0
 ##openpitrix-images
-kubespheredev/openpitrix-jobs:v3.1.1
+kubesphere/openpitrix-jobs:v3.1.1
 ##weave-scope-images
 weaveworks/scope:1.13.0
 ##kubeedge-images

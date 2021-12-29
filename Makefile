@@ -1,4 +1,4 @@
-REPO?=kubespheredev/ks-installer
+REPO?=kubesphere/ks-installer
 TAG:=$(shell git rev-parse --abbrev-ref HEAD)-dev
 
 build:
