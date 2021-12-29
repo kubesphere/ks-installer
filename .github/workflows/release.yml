@@ -51,7 +51,7 @@ jobs:
       - name: Build Release Images List
         run: >
           docker run --rm
-          -v "$PWD":/usr/src/myapp -w /usr/src/myapp kubespheredev/release-tools:v0.0.1
+          -v "$PWD":/usr/src/myapp -w /usr/src/myapp kubesphere/release-tools:v0.0.1
           ansible-playbook release.yml --skip-tags=sync_images
 
       - name: Upload Release Asset (3)

@@ -290,7 +290,7 @@ spec:
 <<<<<<< HEAD
         image: kubesphere/ks-installer:latest
 =======
-        image: kubespheredev/ks-installer:master
+        image: kubesphere/ks-installer:master
 >>>>>>> upstream/master
         imagePullPolicy: "Always"
         resources:
