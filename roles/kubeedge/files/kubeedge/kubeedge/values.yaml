@@ -50,7 +50,7 @@ edgeWatcher:
             operator: DoesNotExist
   tolerations: []
   controllerManager:
-    repository: "kubespheredev/edge-watcher"
+    repository: "kubesphere/edge-watcher"
     tag: "v0.1.0"
     pullPolicy: "IfNotPresent"
   kubeRBACProxy:
@@ -58,7 +58,7 @@ edgeWatcher:
     tag: "v0.5.0"
     pullPolicy: "IfNotPresent"
   edgeWatcherAgent:
-    repository: "kubespheredev/edge-watcher-agent"
+    repository: "kubesphere/edge-watcher-agent"
     tag: "v0.1.0"
     pullPolicy: "IfNotPresent"
     affinity:

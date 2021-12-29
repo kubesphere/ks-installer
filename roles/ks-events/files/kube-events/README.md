@@ -55,7 +55,7 @@ The following tables list the configurable parameters of the kube-events chart a
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
 | operator.enabled | Deploy kube-events-operator. Only one of these should be deployed into the cluster | `true` |
-| operator.image.repository | Repository for kube-events-operator image | `kubespheredev/kube-events-operator` |
+| operator.image.repository | Repository for kube-events-operator image | `kubesphere/kube-events-operator` |
 | operator.image.tag | Tag for kube-events-operator image | `v0.1.0` |
 | operator.image.pullPolicy | Pull policy for kube-events-operator image | `IfNotPresent` |
 | operator.configReloader.image | Image for config reloader | `jimmidyson/configmap-reload:v0.3.0` |
@@ -67,7 +67,7 @@ The following tables list the configurable parameters of the kube-events chart a
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
 | exporter.enabled | Deploy kube-events-exporter | `true` |
-| exporter.image.repository | Repository for kube-events-operator image | `kubespheredev/kube-events-exporter` |
+| exporter.image.repository | Repository for kube-events-operator image | `kubesphere/kube-events-exporter` |
 | exporter.image.tag | Tag for kube-events-exporter image | `v0.1.0` |
 | exporter.image.pullPolicy | Pull policy for kube-events-exporter image | `IfNotPresent` |
 | exporter.resources | Define resources requests and limits for single Pods | `{}` |
@@ -78,7 +78,7 @@ The following tables list the configurable parameters of the kube-events chart a
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
 | ruler.enabled | Deploy kube-events-ruler | `true` |
-| ruler.image.repository | Repository for kube-events-ruler image | `kubespheredev/kube-events-ruler` |
+| ruler.image.repository | Repository for kube-events-ruler image | `kubesphere/kube-events-ruler` |
 | ruler.image.tag | Tag for kube-events-ruler image | `v0.1.0` |
 | ruler.image.pullPolicy | Pull policy for kube-events-ruler image | `IfNotPresent` |
 | ruler.resources | Define resources requests and limits for single Pods | `{}` |

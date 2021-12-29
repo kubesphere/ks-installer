@@ -1,7 +1,7 @@
 operator:
   enabled: true
   image:
-    repository: kubespheredev/kube-events-operator
+    repository: kubesphere/kube-events-operator
     tag: v0.1.0
     pullPolicy: IfNotPresent
   configReloader:
@@ -23,7 +23,7 @@ operator:
 exporter:
   enabled: true
   image:
-    repository: kubespheredev/kube-events-exporter
+    repository: kubesphere/kube-events-exporter
     tag: v0.1.0
     pullPolicy: IfNotPresent
   resources: {}
@@ -48,7 +48,7 @@ ruler:
   enabled: true
   replicas: 2
   image:
-    repository: kubespheredev/kube-events-ruler
+    repository: kubesphere/kube-events-ruler
     tag: v0.1.0
     pullPolicy: IfNotPresent
   resources: {}

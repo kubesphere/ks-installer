@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: kubespheredev/log-sidecar-injector
+  repository: kubesphere/log-sidecar-injector
   tag: 1.1
   pullPolicy: IfNotPresent
 
