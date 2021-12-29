@@ -51,7 +51,11 @@ edgeWatcher:
   tolerations: []
   controllerManager:
     repository: "kubesphere/edge-watcher"
+<<<<<<< HEAD
+    tag: "v0.1.0"
+=======
     tag: "v0.1.1"
+>>>>>>> upstream/master
     pullPolicy: "IfNotPresent"
   kubeRBACProxy:
     repository: "kubesphere/kube-rbac-proxy"

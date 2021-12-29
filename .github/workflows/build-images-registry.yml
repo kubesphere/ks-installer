@@ -10,7 +10,7 @@ on:
     - cron: "0 16 * * *"
 
 env:
-  IMAGE_REPO: "kubespheredev"
+  IMAGE_REPO: "kubesphere"
   IMAGE_NAME: "images-registry"
   IMAGE_TAG: "latest"
   SKOPEO_VERSION: v1.2.0

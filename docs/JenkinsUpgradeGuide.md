@@ -61,11 +61,11 @@ from [ks-jenkins](https://github.com/kubesphere/ks-jenkins).
 
 #### Step1:
 
-Update the image from deploy to `kubespheredev/ks-jenkins:2.249.1`
+Update the image from deploy to `kubesphere/ks-jenkins:2.249.1`
 
 ```shell
-kubectl -n kubesphere-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "kubespheredev/ks-jenkins:2.249.1"}]'
-kubectl -n kubesphere-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/initContainers/0/image", "value": "kubespheredev/ks-jenkins:2.249.1"}]'
+kubectl -n kubesphere-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "kubesphere/ks-jenkins:2.249.1"}]'
+kubectl -n kubesphere-devops-system patch deploy ks-jenkins --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/initContainers/0/image", "value": "kubesphere/ks-jenkins:2.249.1"}]'
 ```
 
 #### Step2:

@@ -32,7 +32,7 @@ The following tables list the configurable parameters of the logsidecar-injector
 
 | Parameter | Description | Default |
 | ----- | ----------- | ------ |
-| image.repository | Repository for logsidecar-injector | `kubespheredev/log-sidecar-injector` |
+| image.repository | Repository for logsidecar-injector | `kubesphere/log-sidecar-injector` |
 | image.tag | Tag for logsidecar-injector | `1.1` |
 | image.pullPolicy | Pull policy for logsidecar-injector image | `IfNotPresent` |
 | resources | Define resources requests and limits for logsidecar-injector container | `{}` |
