@@ -2,10 +2,17 @@ operator:
   enabled: true
   image:
     repository: kubesphere/kube-events-operator
+<<<<<<< HEAD
     tag: v0.1.0
+=======
+    tag: latest
+>>>>>>> upstream/master
     pullPolicy: IfNotPresent
   configReloader:
     image: jimmidyson/configmap-reload:v0.3.0
+  affinity: {}
+  nodeSelector: {}
+  tolerations: {}
   resources: {}
 #    limits:
 #      cpu: 200m
@@ -24,8 +31,15 @@ exporter:
   enabled: true
   image:
     repository: kubesphere/kube-events-exporter
+<<<<<<< HEAD
     tag: v0.1.0
+=======
+    tag: latest
+>>>>>>> upstream/master
     pullPolicy: IfNotPresent
+  affinity: {}
+  nodeSelector: {}
+  tolerations: {}
   resources: {}
 #    limits:
 #      cpu: 200m
@@ -49,8 +63,15 @@ ruler:
   replicas: 2
   image:
     repository: kubesphere/kube-events-ruler
+<<<<<<< HEAD
     tag: v0.1.0
+=======
+    tag: latest
+>>>>>>> upstream/master
     pullPolicy: IfNotPresent
+  affinity: {}
+  nodeSelector: {}
+  tolerations: {}
   resources: {}
 #    limits:
 #      cpu: 500m

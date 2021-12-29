@@ -8,19 +8,24 @@
   shell: >
     {{ bin_dir }}/kubectl -n istio-system delete deployment jaeger-operator
   when:
-    - (jaeger_check.stdout.find("deployed") != -1) and (jaeger_check.stdout.find("1.17.1") == -1)
+    - (jaeger_check.stdout.find("deployed") != -1) and (jaeger_check.stdout.find("1.27.0") == -1)
   ignore_errors: True
 
 - name: servicemesh | Deploying jaeger-operator
   shell: >
-    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-operator-2.14.2.tgz
+    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-operator-2.26.0.tgz
     -f {{ kubesphere_dir }}/servicemesh/jaeger/custom-values-jaeger.yaml
     --namespace istio-system
   when:
-    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
+    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.27.0") == -1)
 
 - name: servicemesh | Deploying jaeger-secret
-  shell: "{{ bin_dir }}/kubectl create secret generic jaeger-secret --from-literal=ES_PASSWORD={{ common.es.basicAuth.password }} --from-literal=ES_USERNAME={{ common.es.basicAuth.username }} --namespace istio-system"
+  shell: >
+    {{ bin_dir }}/kubectl create secret generic jaeger-secret
+    --from-literal=ES_PASSWORD={{ common.es.basicAuth.password }}
+    --from-literal=ES_USERNAME={{ common.es.basicAuth.username }}
+    --namespace istio-system
+    --dry-run=client -oyaml | {{ bin_dir }}/kubectl apply -f -
   register: jaeger_result
   until: jaeger_result is succeeded
   retries: 5
@@ -38,4 +43,4 @@
   retries: 5
   delay: 10
   when:
-    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.17.1") == -1)
+    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.27.0") == -1)

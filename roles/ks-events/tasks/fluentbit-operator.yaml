@@ -1,8 +1,7 @@
-- name: ks-events | Getting logging installation files
-  copy:
-    src: "fluentbit-operator"
-    dest: "{{ kubesphere_dir }}/"
-
+- name: ks-events | Creates directory
+  file:
+    path: "{{ kubesphere_dir }}/fluentbit-operator"
+    state: directory
 
 - name: ks-events | Creating manifests
   template:
@@ -10,6 +9,9 @@
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
   with_items:
     - { name: custom-output-elasticsearch-events, file: custom-output-elasticsearch-events.yaml }
+    - { name: custom-input-events, file: custom-input-events.yaml }
+    - { name: custom-filter-events, file: custom-filter-events.yaml }
+
 
 - name: ks-events | Apply fluentbit operator custom resources
   shell: >

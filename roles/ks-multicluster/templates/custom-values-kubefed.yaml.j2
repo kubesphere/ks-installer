@@ -5,6 +5,34 @@
 ## Configuration values for kubefed controllermanager deployment.
 ##
 controllermanager:
+{% if multicluster.affinity is defined and multicluster.affinity is not none %}
+  commonAffinity:
+    {{ multicluster.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  commonAffinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  commonAffinity: {}
+{% endif %}
+{% if multicluster.nodeSelector is defined and multicluster.nodeSelector is not none %}
+  commonNodeSelector:
+    {{ multicluster.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  commonNodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  commonNodeSelector: {}
+{% endif %}
+{% if multicluster.tolerations is defined and multicluster.tolerations is not none %}
+  commonTolerations:
+    {{ multicluster.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  commonTolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  commonTolerations: []
+{% endif %}
+
   controller:
     annotations: {}
 {% if nodeNum is defined and nodeNum < 3 %}
@@ -15,10 +43,10 @@ controllermanager:
     repository: {{ kubefed_repo }}
     image: {{ kubefed_image }}
     tag: {{ kubefed_image_tag }}
-  postinstalljob:
+  postInstallJob:
     repository: {{ post_install_job_repo }}
     image: {{ post_install_job_image }}
-    tag: {{ post_install_job_tag }}
+    tag: {{ ks_kubectl_tag }}
   webhook:
     repository: {{ kubefed_repo }}
     image: {{ kubefed_image }}

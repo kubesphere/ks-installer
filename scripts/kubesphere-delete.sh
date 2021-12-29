@@ -39,12 +39,16 @@ fi
 
 helm uninstall -n kube-system snapshot-controller 2>/dev/null
 
-# delete kubesphere deployment
+# delete kubesphere deployment & statefulset
 kubectl delete deployment -n kubesphere-system `kubectl get deployment -n kubesphere-system -o jsonpath="{.items[*].metadata.name}"` 2>/dev/null
+kubectl delete statefulset -n kubesphere-system `kubectl get statefulset -n kubesphere-system -o jsonpath="{.items[*].metadata.name}"` 2>/dev/null
 
-# delete monitor statefulset
+# delete monitor resources
 kubectl delete prometheus -n kubesphere-monitoring-system k8s 2>/dev/null
+kubectl delete Alertmanager -n kubesphere-monitoring-system main 2>/dev/null
+kubectl delete DaemonSet -n kubesphere-monitoring-system node-exporter 2>/dev/null
 kubectl delete statefulset -n kubesphere-monitoring-system `kubectl get statefulset -n kubesphere-monitoring-system -o jsonpath="{.items[*].metadata.name}"` 2>/dev/null
+
 # delete grafana
 kubectl delete deployment -n kubesphere-monitoring-system grafana 2>/dev/null
 kubectl --no-headers=true get pvc -n kubesphere-monitoring-system -o custom-columns=:metadata.namespace,:metadata.name | grep -E kubesphere-monitoring-system | xargs -n2 kubectl delete pvc -n 2>/dev/null
@@ -125,39 +129,14 @@ do
 done
 kubectl delete workspaces --all 2>/dev/null
 
-# delete devopsprojects
-for devopsproject in `kubectl get devopsprojects -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch devopsprojects $devopsproject -p '{"metadata":{"finalizers":null}}' --type=merge
+# make DevOps CRs deletable
+for devops_crd in $(kubectl get crd -o=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep "devops.kubesphere.io"); do
+    for ns in $(kubectl get ns -ojsonpath='{.items..metadata.name}'); do
+        for devops_res in $(kubectl get $devops_crd -n $ns -oname); do
+            kubectl patch $devops_res -n $ns -p '{"metadata":{"finalizers":[]}}' --type=merge
+        done
+    done
 done
-
-for pip in `kubectl get pipeline -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch pipeline $pip -n `kubectl get pipeline -A | grep $pip | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2ibinaries in `kubectl get s2ibinaries -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2ibinaries $s2ibinaries -n `kubectl get s2ibinaries -A | grep $s2ibinaries | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2ibuilders in `kubectl get s2ibuilders -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2ibuilders $s2ibuilders -n `kubectl get s2ibuilders -A | grep $s2ibuilders | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2ibuildertemplates in `kubectl get s2ibuildertemplates -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2ibuildertemplates $s2ibuildertemplates -n `kubectl get s2ibuildertemplates -A | grep $s2ibuildertemplates | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-for s2iruns in `kubectl get s2iruns -A -o jsonpath="{.items[*].metadata.name}"`
-do
-  kubectl patch s2iruns $s2iruns -n `kubectl get s2iruns -A | grep $s2iruns | awk '{print $1}'` -p '{"metadata":{"finalizers":null}}' --type=merge
-done
-
-kubectl delete devopsprojects --all 2>/dev/null
-
 
 # delete validatingwebhookconfigurations
 for webhook in ks-events-admission-validate users.iam.kubesphere.io network.kubesphere.io validating-webhook-configuration resourcesquotas.quota.kubesphere.io

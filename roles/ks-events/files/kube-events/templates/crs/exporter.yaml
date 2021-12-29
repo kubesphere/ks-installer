@@ -11,8 +11,22 @@ spec:
   image: {{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}
   imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
   {{- end }}
+  {{- if .Values.exporter.affinity }}
+  affinity:
+{{ toYaml .Values.exporter.affinity | indent 4 }}
+  {{- end }}
+  {{- if .Values.exporter.nodeSelector }}
+  nodeSelector:
+{{ toYaml .Values.exporter.nodeSelector | indent 4 }}
+  {{- end }}
+  {{- if .Values.exporter.tolerations }}
+  tolerations:
+{{ toYaml .Values.exporter.tolerations | indent 4 }}
+  {{- end }}
+  {{- if .Values.exporter.resources }}
   resources:
 {{ toYaml .Values.exporter.resources | indent 4 }}
+  {{- end }}
   sinks:
     {{- if .Values.exporter.sinks.stdout.enabled }}
     stdout: {}

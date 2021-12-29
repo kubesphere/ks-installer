@@ -21,6 +21,17 @@ spec:
       - name: env
         emptyDir: {}
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
+      - name: containerdsock
+        hostPath:
+          path: /var/run/containerd/containerd.sock
+      - name: crictl
+        hostPath:
+          path: {{ logging.crictlPath | default('/usr/bin/crictl') }}
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
+      - name: crisock
+        hostPath:
+          path: /var/run/crio/crio.sock
 {% else %}
       - name: dockersock
         hostPath:
@@ -34,14 +45,29 @@ spec:
         - '-c'
         - set -ex;
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
-          echo DOCKER_ROOT_DIR={{ common.containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
+          echo CONTAINER_ROOT_DIR={{ common.containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
+          echo CONTAINER_ROOT_DIR=$(crictl info --output go-template --template {{'{{.config.containerdRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
+          echo CONTAINER_ROOT_DIR=/var/log > /fluentbit-operator/fluent-bit.env
 {% else %}
-          echo DOCKER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
+          echo CONTAINER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
 {% endif %}
         volumeMounts:
         - name: env
           mountPath: /fluentbit-operator
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
+        - name: containerdsock
+          readOnly: true
+          mountPath: /var/run/containerd/containerd.sock
+        - name: crictl
+          readOnly: true
+          mountPath: {{ logging.crictlPath | default('/usr/bin/crictl') }}
+{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
+        - name: crisock
+          readOnly: true
+          mountPath: /var/run/crio/crio.sock
 {% else %}
         - name: dockersock
           readOnly: true
@@ -61,3 +87,30 @@ spec:
         - name: env
           mountPath: /fluentbit-operator
       serviceAccountName: fluentbit-operator
+{% if common.fluentbit.affinity is defined and common.fluentbit.affinity is not none %}
+      affinity:
+        {{ common.fluentbit.affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% elif affinity is defined and affinity is not none %}
+      affinity:
+        {{ affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      affinity: {}
+{% endif %}
+{% if common.fluentbit.nodeSelector is defined and common.fluentbit.nodeSelector is not none %}
+      nodeSelector:
+        {{ common.fluentbit.nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+      nodeSelector:
+        {{ nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      nodeSelector: {}
+{% endif %}
+{% if common.fluentbit.tolerations is defined and common.fluentbit.tolerations is not none %}
+      tolerations:
+        {{ common.fluentbit.tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% elif tolerations is defined and tolerations is not none %}
+      tolerations:
+        {{ tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      tolerations: []
+{% endif %}

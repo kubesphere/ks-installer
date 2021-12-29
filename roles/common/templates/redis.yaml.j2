@@ -12,7 +12,7 @@ spec:
 {% endif %}
   resources:
     requests:
-      storage: {% if redis_db_pv_size is defined %}{{ redis_db_pv_size }}{% else %}{{ common.redisVolumSize }}{% endif %}
+      storage: {% if redis_db_pv_size is defined %}{{ redis_db_pv_size }}{% else %}{{ common.redis.volumeSize | default("2Gi") }}{% endif %}
 
 
 ---
@@ -81,11 +81,13 @@ spec:
       - name: redis-config
         configMap:
           name: redis-configmap
-      tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
-        - key: CriticalAddonsOnly
-          operator: Exists
+{% if common.redis.affinity is defined and common.redis.affinity is not none %}
+      affinity:
+        {{ common.redis.affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% elif affinity is defined and affinity is not none %}
+      affinity:
+        {{ affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -95,7 +97,32 @@ spec:
               - key: node-role.kubernetes.io/master
                 operator: In
                 values:
-                - "" 
+                - ""
+{% endif %}
+{% if common.redis.nodeSelector is defined and common.redis.nodeSelector is not none %}
+      nodeSelector:
+        {{ common.redis.nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+      nodeSelector:
+        {{ nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      nodeSelector: {}
+{% endif %}
+{% if common.redis.tolerations is defined and common.redis.tolerations is not none %}
+      tolerations:
+        {{ common.redis.tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% elif tolerations is defined and tolerations is not none %}
+      tolerations:
+        {{ tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+{% endif %}
+
+
 
 ---
 

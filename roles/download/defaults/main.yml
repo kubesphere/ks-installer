@@ -1,43 +1,8 @@
 ---
-local_release_dir: /tmp/releases
-
-# Used to only evaluate vars from download role
-skip_downloads: false
-
-# if this is set to true will only download files once. Doesn't work
-# on Container Linux by CoreOS unless the download_localhost is true and localhost
-# is running another OS type. Default compress level is 1 (fastest).
-download_run_once: False
-download_compress: 1
-
-# if this is set to true will download container
-download_container: True
-
-# if this is set to true, uses the localhost for download_run_once mode
-# (requires docker and sudo to access docker). You may want this option for
-# local caching of docker images or for Container Linux by CoreOS cluster nodes.
-# Otherwise, uses the first node in the kube-master group to store images
-# in the download_run_once mode.
-download_localhost: False
-
-# Always pull images if set to True. Otherwise check by the repo's tag/digest.
-download_always_pull: False
-
-# Some problems may occur when downloading files over https proxy due to ansible bug
-# https://github.com/ansible/ansible/issues/32750. Set this variable to False to disable
-# SSL validation of get_url module. Note that kubespray will still be performing checksum validation.
-download_validate_certs: True
-
-# Use the first kube-master if download_localhost is not set
-download_delegate: "{% if download_localhost %}localhost{% else %}{{groups['kube-master'][0]}}{% endif %}"
-
 # Arch of Docker images and needed packages
 image_arch: "{{host_architecture | default('amd64')}}"
 
-# Versions
-kube_version: v1.15.5
-etcd_version: v3.2.18
-
+# registry
 base_repo: >-
   {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
   registry.cn-beijing.aliyuncs.com/
@@ -46,7 +11,6 @@ base_repo: >-
   {%- else -%}
 
   {%- endif %}
-
 
 base_library_repo: >-
   {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
@@ -57,22 +21,12 @@ base_library_repo: >-
 
   {%- endif %}
 
-
 ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.1.1-rc.1
+  master
   {%- endif %}
-
-# Containers
-# In some cases, we need a way to set --registry-mirror or --insecure-registry for docker,
-# it helps a lot for local private development or bare metal environment.
-# So you need define --registry-mirror or --insecure-registry, and modify the following url address.
-# example:
-# You need to deploy Kubernetes cluster on local private development.
-# Also provide the address of your own private registry.
-# And use --insecure-registry options for docker
 
 #KubeSphere:
 ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-apiserver"
@@ -81,16 +35,22 @@ ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kub
 ks_controller_manager_tag: "{{ ks_version }}"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
+<<<<<<< HEAD
 ks_devops_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-devops"
 ks_devops_migration_tag: "flyway-v3.0.0"
 ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-alerting-migration"
+=======
+ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-alerting-migration"
+>>>>>>> upstream/master
 ks_alerting_migration_tag: "v3.1.0"
 ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-console"
 ks_console_tag: "{{ ks_version }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
-ks_kubectl_tag: v1.0.0
+ks_kubectl_tag: v1.22.0
 # kubectl versions
 ks_kubectl_versions:
+  v1.22.0: v1.22.0
+  v1.21.0: v1.21.0
   v1.20.0: v1.20.0
   v1.19.0: v1.19.1
   v1.18.0: v1.18.0
@@ -98,90 +58,91 @@ ks_kubectl_versions:
   v1.16.0: v1.16.0
   v1.15.0: v1.0.0
 
+ks_installer_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-installer"
+ks_installer_tag: "{{ ks_version }}"
+
 ks_image_pull_policy: Always
 # ks_image_pull_policy: IfNotPresent
-
-#ks-notification
-notification_flyway_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification"
-notification_flyway_tag: "flyway_v2.1.2"
-notification_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification"
-notification_tag: "v2.1.2"
-alerting_dbinit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/alerting-dbinit"
-alerting_dbinit_tag: "v3.0.0"
-ks_alerting_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/alerting"
-ks_alerting_tag: "v2.1.2"
-ks_alerting_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/alert-adapter"
-ks_alerting_adapter_tag: "v3.0.0"
 
 # kubefed, KubeSphere multiple cluster component
 kubefed_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 kubefed_image: kubefed
-kubefed_image_tag: v0.7.0
+kubefed_image_tag: v0.8.1
 tower_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 tower_image: tower
 tower_image_tag: "v0.2.0"
 post_install_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 post_install_job_image: kubectl
-post_install_job_tag: "v1.19.1"
+# post_install_job_tag: "v1.19.1"
 
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
+<<<<<<< HEAD
 cloudcore_tag: "v1.6.2"
 edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher"
 edge_watcher_tag: "v0.1.0"
 edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher-agent"
+=======
+cloudcore_tag: "v1.7.2"
+edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher"
+edge_watcher_tag: "v0.1.1"
+edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/edge-watcher-agent"
+>>>>>>> upstream/master
 edge_watcher_agent_tag: "v0.1.0"
 
+# gatekeeper
+gatekeeper_repo: "{{ base_repo }}{{ namespace_override | default('openpolicyagent') }}/gatekeeper"
+gatekeeper_release: "v3.5.2"
+
 #openpitrix:
+<<<<<<< HEAD
 openpitrix_job_tag: "v3.1.1"
 openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/openpitrix-jobs"
+=======
+openpitrix_job_tag: "v3.2.1"
+openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/openpitrix-jobs"
+>>>>>>> upstream/master
 
 minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
 mc_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/mc"
 mc_tag: RELEASE.2019-08-07T23-14-43Z
 
-#ks-hostnic
 snapshot_controller_repo: "{{ base_repo }}{{ namespace_override | default('csiplugin') }}/snapshot-controller"
 snapshot_controller_tag: "v4.0.0"
 
+# ks-devops
+ks_devops_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+ks_devops_controller_tag: "{{ ks_version }}"
+ks_devops_apiserver_tag: "{{ ks_version }}"
+ks_devops_tools_tag: "{{ ks_version }}"
+
 #jenkins:
-jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-jenkins"
-jenkins_tag: 2.249.1
+jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-jenkins"
+jenkins_tag: v3.2.0-2.249.1
 jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/jnlp-slave"
 jnlp_slave_tag: 3.27-1
-builder_base_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-base"
-builder_base_tag: v3.1.0
-builder_nodejs_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-nodejs"
-builder_nodejs_tag: v3.1.0
-builder_maven_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-maven"
-builder_maven_tag: v3.1.0
-builder_go_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/builder-go"
-builder_go_tag: v3.1.0
+
+builder_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+builder_base_tag: v3.2.0
+builder_nodejs_tag: v3.2.0
+builder_maven_tag: v3.2.0
+builder_python_tag: v3.2.0
+builder_go_tag: v3.2.0
+builder_go16_tag: v3.2.0
+
+builder_base_podman_tag: v3.2.0-podman
+builder_nodejs_podman_tag: v3.2.0-podman
+builder_maven_podman_tag: v3.2.0-podman
+builder_python_podman_tag: v3.2.0-podman
+builder_go_podman_tag: v3.2.0-podman
+builder_go16_podman_tag: v3.2.0-podman
 
 #s2i
-s2ioperator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2ioperator"
-s2ioperator_tag: "v3.1.0"
-s2irun_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2irun"
-s2irun_tag: "v2.1.1"
-
-s2itemplates_tag: v2.1.0
-binary_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/s2i-binary"
-tomcat85_java11_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java11-centos7"
-tomcat85_java11_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java11-runtime"
-tomcat85_java8_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java8-centos7"
-tomcat85_java8_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/tomcat85-java8-runtime"
-java11centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-11-centos7"
-java8centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-8-centos7"
-java8_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-8-runtime"
-java11_runtime_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/java-11-runtime"
-nodejs8centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-8-centos7"
-nodejs6centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-6-centos7"
-nodejs4centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nodejs-4-centos7"
-python36centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-36-centos7"
-python35centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-35-centos7"
-python34centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-34-centos7"
-python27centos7_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/python-27-centos7"
+s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+s2ioperator_tag: "v3.2.0"
+s2irun_tag: "v3.2.0"
+s2itemplates_tag: "v3.2.0"
 
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
@@ -189,9 +150,9 @@ configmap_reload_tag: v0.3.0
 prometheus_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/prometheus"
 prometheus_tag: v2.26.0
 prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-config-reloader"
-prometheus_config_reloader_tag: v0.42.1
+prometheus_config_reloader_tag: v0.43.2
 prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-operator"
-prometheus_operator_tag: v0.42.1
+prometheus_operator_tag: v0.43.2
 kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.8.0
 kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
@@ -210,10 +171,19 @@ grafana_tag: 7.4.3
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 notification_manager_operator_proxy_tag: v0.8.0
+<<<<<<< HEAD
 notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager-operator"
 notification_manager_operator_tag: v1.0.0
 notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager"
 notification_manager_tag: v1.0.0
+=======
+notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager-operator"
+notification_manager_operator_tag: v1.4.0
+notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager"
+notification_manager_tag: v1.4.0
+notification_tenant_sidecar_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-tenant-sidecar"
+notification_tenant_sidecar_tag: v3.2.0
+>>>>>>> upstream/master
 
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-curator"
@@ -221,12 +191,20 @@ docker_elasticsearch_curator_tag: v5.7.6
 elasticsearch_oss_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-oss"
 elasticsearch_oss_tag: 6.7.0-1
 fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluentbit-operator"
+<<<<<<< HEAD
 fluentbit_operator_tag: v0.5.0
 fluentbit_operator_migrator_tag: migrator
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
 ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluent-bit"
 ks_fluent_bit_tag: "v1.6.9"
+=======
+fluentbit_operator_tag: v0.11.0
+docker_repo: "{{ base_library_repo }}docker"
+docker_tag: 19.03
+ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluent-bit"
+ks_fluent_bit_tag: "v1.8.3"
+>>>>>>> upstream/master
 ks_log_sidecar_injector_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.1
 filebeat_repo: "{{ base_repo }}{{ namespace_override | default('elastic') }}/filebeat"
@@ -234,21 +212,21 @@ filebeat_tag: 6.7.0
 
 #ks-events
 kube_events_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-operator"
-kube_events_operator_tag: v0.1.0
+kube_events_operator_tag: v0.3.0
 kube_events_exporter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-exporter"
-kube_events_exporter_tag: v0.1.0
+kube_events_exporter_tag: v0.3.0
 kube_events_ruler_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-ruler"
-kube_events_ruler_tag: v0.2.0
+kube_events_ruler_tag: v0.3.0
 
 #ks-auditing
 auditing_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-auditing-operator"
-auditing_operator_tag: v0.1.2
+auditing_operator_tag: v0.2.0
 auditing_webhook_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-auditing-webhook"
-auditing_webhook_tag: v0.1.2
+auditing_webhook_tag: v0.2.0
 
 #ingress:
 nginx_ingress_controller_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nginx-ingress-controller"
-nginx_ingress_controller_tag: v0.35.0
+nginx_ingress_controller_tag: v0.48.1
 defaultbackend_repo: "{{ base_repo }}{{ namespace_override | default('mirrorgooglecontainers') }}/defaultbackend-amd64"
 defaultbackend_tag: 1.4
 
@@ -258,52 +236,59 @@ metrics_server_tag: v0.4.2
 
 #istio
 istio_hub: "{{ base_repo }}{{ namespace_override | default('istio') }}"
-istio_tag: 1.6.10
+istio_tag: 1.11.1
 jaeger_operator_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-operator"
-jaeger_operator_tag: 1.17.1
+jaeger_operator_tag: 1.27
 jaeger_agent_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-agent"
-jaeger_agent_tag: 1.17
+jaeger_agent_tag: 1.27
 jaeger_collector_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-collector"
-jaeger_collector_tag: 1.17
+jaeger_collector_tag: 1.27
 jaeger_query_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-query"
-jaeger_query_tag: 1.17
+jaeger_query_tag: 1.27
 jaeger_es_cleaner_repo: "{{ base_repo }}{{ namespace_override | default('jaegertracing') }}/jaeger-es-index-cleaner"
+<<<<<<< HEAD
 jaeger_es_cleaner_tag: 1.17
 kiali_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali-operator"
 kiali_operator_tag: v1.26.1
 kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali"
 kiali_tag: v1.24
+=======
+jaeger_es_cleaner_tag: 1.27
+kiali_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali-operator"
+kiali_operator_tag: v1.38.1
+kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali"
+kiali_tag: v1.38
+>>>>>>> upstream/master
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
-redis_tag: 5.0.12-alpine
+redis_tag: 5.0.14-alpine
 haproxy_repo: "{{ base_library_repo }}haproxy"
-haproxy_tag: 2.0.22-alpine
-busybox_repo: "{{ base_library_repo }}alpine"
-busybox_tag: 3.14
-etcd_image_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/etcd"
-etcd_image_tag: "{{ etcd_version }}{%- if image_arch != 'amd64' -%}-{{ image_arch }}{%- endif -%}"
-mysql_repo: "{{ base_library_repo }}mysql"
-mysql_tag: 8.0.11
-xtrabackup_repo: "{{ base_repo }}{{ namespace_override | default('googlecontainer') }}/xtrabackup"
-xtrabackup_tag: 1.0
+haproxy_tag: 2.0.25-alpine
+alpine_repo: "{{ base_library_repo }}alpine"
+alpine_tag: 3.14
+busybox_repo: "{{ base_library_repo }}busybox"
+busybox_tag: 1.31.1
 nginx_repo: "{{ base_library_repo }}nginx"
 nginx_tag: 1.14-alpine
-postgres_repo: "{{ base_library_repo }}postgres"
-postgres_tag: 9.6.8 #Notice
 openldap_repo: "{{ base_repo }}{{ namespace_override | default('osixia') }}/openldap"
 openldap_tag: 1.3.0
 wget_repo: "{{ base_repo }}{{ namespace_override | default('joosthofman') }}/wget"
 wget_tag: 1.0
-
-#VPA:
-vpa_version: 0.5.0
-vpa_admission_controller_repo: dockerhub.qingcloud.com/google_containers/vpa-admission-controller
-vpa_admission_controller_tag: "{{ vpa_version }}"
-vpa_recommender_repo: dockerhub.qingcloud.com/google_containers/vpa-recommender
-vpa_recommender_tag: "{{ vpa_version }}"
-vpa_updater_repo: dockerhub.qingcloud.com/google_containers/vpa-updater
-vpa_updater_tag: "{{ vpa_version }}"
+netshoot_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/netshoot"
+netshoot_tag: v1.0
+hello_repo: "{{ base_repo }}{{ namespace_override | default('nginxdemos') }}/hello"
+hello_tag: plain-text
+wordpress_repo: "{{ base_library_repo }}wordpress"
+wordpress_tag: 4.8-apache
+hpa_example_repo: "{{ base_repo }}{{ namespace_override | default('mirrorgooglecontainers') }}/hpa-example"
+hpa_example_tag: latest
+java_repo: "{{ base_library_repo }}java"
+java_tag: openjdk-8-jre-alpine
+fluentd_repo: "{{ base_repo }}{{ namespace_override | default('fluent') }}/fluentd"
+fluentd_tag: v1.4.2-2.0
+perl_repo: "{{ base_library_repo }}perl"
+perl_tag: latest
 
 #examples-bookinfo
 examples_bookinfo_version: 1.16.2
@@ -323,520 +308,669 @@ bookinfo_ratings_v1_tag: "{{ examples_ratings_version }}"
 waveworks_scop_repo: "{{ base_repo }}{{ namespace_override | default('weaveworks') }}/scope"
 waveworks_scop_tag: "1.13.0"
 
-downloads:
+images:
   ks_installer:
-    enabled: true
-    container: true
-    repo: "{{ks_installer_repo }}"
+    repo: "{{ ks_installer_repo }}"
     tag: "{{ ks_installer_tag }}"
-    sha256: "{{ ks_installer|default(None) }}"
-    groups:
-      - k8s-cluster
-
-  busybox:
-    enabled: true
-    container: true
-    repo: "{{ busybox_repo }}"
-    tag: "{{ busybox_tag }}"
-    sha256: "{{ busybox_checksum|default(None) }}"
-    groups:
-      - k8s-cluster
-
-  mysql:
-    enabled: true
-    container: true
-    repo: "{{ mysql_repo }}"
-    tag: "{{ mysql_tag }}"
-    sha256: "{{ mysql_checksum|default(None) }}"
-    groups:
-      - k8s-cluster
-
-  #  xtrabackup:
-  #    enabled: true
-  #    container: true
-  #    repo: "{{ xtrabackup_repo }}"
-  #    tag: "{{ xtrabackup_tag }}"
-  #    sha256: "{{ xtrabackup_checksum|default(None) }}"
-  #    groups:
-  #      - k8s-cluster
-
-  redis:
-    enabled: true
-    container: true
-    repo: "{{ redis_repo }}"
-    tag: "{{ redis_tag }}"
-    sha256: "{{ redis_checksum|default(None) }}"
-    groups:
-      - k8s-cluster
-
-  haproxy:
-    enabled: true
-    container: true
-    repo: "{{ haproxy_repo }}"
-    tag: "{{ haproxy_tag }}"
-    sha256: "{{ haproxy_checksum|default(None) }}"
-    groups:
-      - k8s-cluster
-
-  nginx:
-    enabled: "true"
-    container: true
-    repo: "{{ nginx_repo }}"
-    tag: "{{ nginx_tag }}"
-    sha256: "{{ nginx_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  metrics_server:
-    enabled: "{{ metrics_server_enabled }}"
-    container: true
-    repo: "{{ metrics_server_repo }}"
-    tag: "{{ metrics_server_tag }}"
-    sha256: "{{ metrics_server_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  postgres:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ postgres_repo }}"
-    tag: "{{ postgres_tag }}"
-    sha256: "{{ postgres_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  alerting_dbinit:
-    enabled: "{{ alerting_enabled }}"
-    container: true
-    repo: "{{ alerting_dbinit_repo }}"
-    tag: "{{ alerting_dbinit_tag }}"
-    sha256: "{{ alerting_dbinit_checksum|default(None) }}"
-    groups:
-      - kube-node
+    sha256: "{{ ks_installer_checksum|default(None) }}"
+    group: "kubesphere-images"
 
   ks_apiserver:
-    enabled: true
-    container: true
     repo: "{{ ks_apiserver_repo }}"
     tag: "{{ ks_apiserver_tag }}"
     sha256: "{{ ks_apiserver_checksum|default(None) }}"
-    groups:
-      - kube-master
-
-  ks_devops_flyway:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ ks_devops_flyway_repo }}"
-    tag: "{{ ks_devops_flyway_tag }}"
-    sha256: "{{ ks_devops_flyway_checksum|default(None) }}"
-    groups:
-      - kube-node
+    group: "kubesphere-images"
 
   ks_console:
-    enabled: true
-    container: true
     repo: "{{ ks_console_repo }}"
     tag: "{{ ks_console_tag }}"
     sha256: "{{ ks_console_checksum|default(None) }}"
-    groups:
-      - kube-master
+    group: "kubesphere-images"
 
-  openldap:
-    enabled: true
-    container: true
-    repo: "{{ openldap_repo }}"
-    tag: "{{ openldap_tag }}"
-    sha256: "{{ openldap_checksum|default(None) }}"
-    groups:
-      - k8s-cluster
+  ks_controller_manager:
+    repo: "{{ ks_controller_manager_repo }}"
+    tag: "{{ ks_controller_manager_tag }}"
+    sha256: "{{ ks_controller_manager_checksum|default(None) }}"
+    group: "kubesphere-images"
 
-  jenkins_uc:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ jenkins_uc_repo }}"
-    tag: "{{ jenkins_uc_tag }}"
-    sha256: "{{ jenkins_uc_checksum|default(None) }}"
-    groups:
-      - kube-node
+  ks_kubectl:
+    repo: "{{ ks_kubectl_repo }}"
+    tag: "{{ ks_kubectl_versions['v1.20.0'] }}"
+    sha256: "{{ ks_kubectl_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  kubefed:
+    repo: "{{ kubefed_repo }}/{{ kubefed_image }}"
+    tag: "{{ kubefed_image_tag }}"
+    sha256: "{{ kubefed_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  tower:
+    repo: "{{ tower_repo }}/{{ tower_image }}"
+    tag: "{{ tower_image_tag }}"
+    sha256: "{{ tower_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  post_install_job:
+    repo: "{{ post_install_job_repo }}/{{ post_install_job_image }}"
+    tag: "{{ post_install_job_tag }}"
+    sha256: "{{ post_install_job_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  cloudcore:
+    repo: "{{ cloudcore_repo }}"
+    tag: "{{ cloudcore_tag }}"
+    sha256: "{{ cloudcore_checksum|default(None) }}"
+    group: "kubeedge-images"
+
+  edge_watcher:
+    repo: "{{ edge_watcher_repo }}"
+    tag: "{{ edge_watcher_tag }}"
+    sha256: "{{ edge_watcher_checksum|default(None) }}"
+    group: "kubeedge-images"
+
+  edge_watcher_agent:
+    repo: "{{ edge_watcher_agent_repo }}"
+    tag: "{{ edge_watcher_agent_tag }}"
+    sha256: "{{ edge_watcher_agent_checksum|default(None) }}"
+    group: "kubeedge-images"
+
+  gatekeeper:
+    repo: "{{ gatekeeper_repo }}"
+    tag: "{{ gatekeeper_release }}"
+    sha256: "{{ gatekeeper_checksum|default(None) }}"
+    group: "gatekeeper-images"
+
+  openpitrix_job:
+    repo: "{{ openpitrix_job_repo }}"
+    tag: "{{ openpitrix_job_tag }}"
+    sha256: "{{ openpitrix_job_checksum|default(None) }}"
+    group: "openpitrix-images"
+
+  minio:
+    repo: "{{ minio_repo }}"
+    tag: "{{ minio_tag }}"
+    sha256: "{{ minio_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  mc:
+    repo: "{{ mc_repo }}"
+    tag: "{{ mc_tag }}"
+    sha256: "{{ mc_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  snapshot_controller:
+    repo: "{{ snapshot_controller_repo }}"
+    tag: "{{ snapshot_controller_tag }}"
+    sha256: "{{ snapshot_controller_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  ks_devops_apiserver:
+    repo: "{{ ks_devops_registry }}/devops-apiserver"
+    tag: "{{ ks_devops_apiserver_tag }}"
+    sha256: "{{ ks_devops_apiserver_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  ks_devops_controller:
+    repo: "{{ ks_devops_registry }}/devops-controller"
+    tag: "{{ ks_devops_controller_tag }}"
+    sha256: "{{ ks_devops_apiserver_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  ks_devops_tools:
+    repo: "{{ ks_devops_registry }}/devops-tools"
+    tag: "{{ ks_devops_controller_tag }}"
+    sha256: "{{ ks_devops_tools_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
 
   jenkins:
-    enabled: "{{ devops_enabled }}"
-    container: true
     repo: "{{ jenkins_repo }}"
     tag: "{{ jenkins_tag }}"
     sha256: "{{ jenkins_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  csi_provisioner:
-    enabled: "{{ qingcloud_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ csi_provisioner_repo }}"
-    tag: "{{ csi_provisioner_tag }}"
-    sha256: "{{ csi_provisioner_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  csi_attacher:
-    enabled: "{{ qingcloud_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ csi_attacher_repo }}"
-    tag: "{{ csi_attacher_tag }}"
-    sha256: "{{ csi_attacher_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  csi_qingcloud:
-    enabled: "{{ qingcloud_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ csi_qingcloud_repo }}"
-    tag: "{{ csi_qingcloud_tag }}"
-    sha256: "{{ csi_qingcloud_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  driver_registrar:
-    enabled: "{{ qingcloud_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ driver_registrar_repo }}"
-    tag: "{{ driver_registrar_tag }}"
-    sha256: "{{ driver_registrar_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  csi_snapshotter:
-    enabled: "{{ qingcloud_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ csi_snapshotter_repo }}"
-    tag: "{{ csi_snapshotter_tag }}"
-    sha256: "{{ csi_snapshotter_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  csi_resizer:
-    enabled: "{{ qingcloud_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ csi_resizer_repo }}"
-    tag: "{{ csi_resizer_tag }}"
-    sha256: "{{ csi_resizer_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  neonsan_driver_registrar:
-    enabled: "{{ neonsan_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ neonsan_driver_registrar_repo }}"
-    tag: "{{ neonsan_driver_registrar_tag }}"
-    sha256: "{{ neonsan_driver_registrar_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  csi_neonsan:
-    enabled: "{{ neonsan_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ csi_neonsan_repo }}"
-    tag: "{{ csi_neonsan_tag }}"
-    sha256: "{{ csi_neonsan_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  neonsan_csi_provisioner:
-    enabled: "{{ neonsan_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ neonsan_csi_provisioner_repo }}"
-    tag: "{{ neonsan_csi_provisioner_tag }}"
-    sha256: "{{ neonsan_csi_provisioner_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  neonsan_csi_attacher:
-    enabled: "{{ neonsan_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ neonsan_csi_attacher_repo }}"
-    tag: "{{ neonsan_csi_attacher_tag }}"
-    sha256: "{{ neonsan_csi_attacher_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  neonsan_csi_snapshotter:
-    enabled: "{{ neonsan_csi_enabled | default(false) }}"
-    container: true
-    repo: "{{ neonsan_csi_snapshotter_repo }}"
-    tag: "{{ neonsan_csi_snapshotter_tag }}"
-    sha256: "{{ neonsan_csi_snapshotter_checksum|default(None) }}"
-    groups:
-      - kube-node
-
-  nfs_client_provisioner:
-    enabled: "{{ nfs_client_enabled }}"
-    container: true
-    repo: "{{ nfs_client_provisioner_repo }}"
-    tag: "{{ nfs_client_provisioner_tag }}"
-    sha256: "{{ nfs_client_provisioner_checksum|default(None) }}"
-    groups:
-      - kube-node
+    group: "kubesphere-devops-images"
 
   jnlp_slave:
-    enabled: "{{ devops_enabled }}"
-    container: true
     repo: "{{ jnlp_slave_repo }}"
     tag: "{{ jnlp_slave_tag }}"
     sha256: "{{ jnlp_slave_checksum|default(None) }}"
-    groups:
-      - kube-node
+    group: "kubesphere-devops-images"
 
   builder_base:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ builder_base_repo }}"
+    repo: "{{ builder_registry }}/builder-base"
     tag: "{{ builder_base_tag }}"
     sha256: "{{ builder_base_checksum|default(None) }}"
-    groups:
-      - kube-node
+    group: "kubesphere-devops-images"
 
   builder_nodejs:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ builder_nodejs_repo }}"
+    repo: "{{ builder_registry }}/builder-nodejs"
     tag: "{{ builder_nodejs_tag }}"
     sha256: "{{ builder_nodejs_checksum|default(None) }}"
-    groups:
-      - kube-node
+    group: "kubesphere-devops-images"
 
   builder_maven:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ builder_maven_repo }}"
+    repo: "{{ builder_registry }}/builder-maven"
     tag: "{{ builder_maven_tag }}"
     sha256: "{{ builder_maven_checksum|default(None) }}"
-    groups:
-      - kube-node
+    group: "kubesphere-devops-images"
+
+  builder_python:
+    repo: "{{ builder_registry }}/builder-python"
+    tag: "{{ builder_python_tag }}"
+    sha256: "{{ builder_python_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
 
   builder_go:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ builder_go_repo }}"
+    repo: "{{ builder_registry }}/builder-go"
     tag: "{{ builder_go_tag }}"
     sha256: "{{ builder_go_checksum|default(None) }}"
-    groups:
-      - kube-node
+    group: "kubesphere-devops-images"
 
-  sonarqube:
-    enabled: "{{ devops_enabled }}"
-    container: true
-    repo: "{{ sonarqube_repo }}"
-    tag: "{{ sonarqube_tag }}"
-    sha256: "{{ sonarqube_checksum|default(None) }}"
-    groups:
-      - kube-node
+  builder_go16:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go16_tag }}"
+    sha256: "{{ builder_go16_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_base_podman:
+    repo: "{{ builder_registry }}/builder-base"
+    tag: "{{ builder_base_podman_tag }}"
+    sha256: "{{ builder_base_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_nodejs_podman:
+    repo: "{{ builder_registry }}/builder-nodejs"
+    tag: "{{ builder_nodejs_podman_tag }}"
+    sha256: "{{ builder_nodejs_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_maven_podman:
+    repo: "{{ builder_registry }}/builder-maven"
+    tag: "{{ builder_maven_podman_tag }}"
+    sha256: "{{ builder_maven_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_python_podman:
+    repo: "{{ builder_registry }}/builder-python"
+    tag: "{{ builder_python_podman_tag }}"
+    sha256: "{{ builder_python_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go_podman:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go_podman_tag }}"
+    sha256: "{{ builder_go_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go16_podman:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go16_podman_tag }}"
+    sha256: "{{ builder_go16_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  s2ioperator:
+    repo: "{{ s2i_registry }}/s2ioperator"
+    tag: "{{ s2ioperator_tag }}"
+    sha256: "{{ s2ioperator_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  s2irun:
+    repo: "{{ s2i_registry }}/s2irun"
+    tag: "{{ s2irun_tag }}"
+    sha256: "{{ s2irun_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  s2i_binary:
+    repo: "{{ s2i_registry }}/s2i-binary"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ s2i_binary_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  tomcat85_java11_centos7:
+    repo: "{{ s2i_registry }}/tomcat85-java11-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ tomcat85_java11_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  tomcat85_java11_runtime:
+    repo: "{{ s2i_registry }}/tomcat85-java11-runtime"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ tomcat85_java11_runtime_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  tomcat85_java8_centos7:
+    repo: "{{ s2i_registry }}/tomcat85-java8-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ tomcat85_java8_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  tomcat85_java8_runtime:
+    repo: "{{ s2i_registry }}/tomcat85-java8-runtime"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ tomcat85_java8_runtime_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  java_11_centos7:
+    repo: "{{ s2i_registry }}/java-11-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ java_11_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  java_8_centos7:
+    repo: "{{ s2i_registry }}/java-8-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ java_8_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  java_8_runtime:
+    repo: "{{ s2i_registry }}/java-8-runtime"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ java_8_runtime_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  java_11_runtime:
+    repo: "{{ s2i_registry }}/java-11-runtime"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ java_11_runtime_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  nodejs_8_centos7:
+    repo: "{{ s2i_registry }}/nodejs-8-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ nodejs_8_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  nodejs_6_centos7:
+    repo: "{{ s2i_registry }}/nodejs-6-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ nodejs_6_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  nodejs_4_centos7:
+    repo: "{{ s2i_registry }}/nodejs-4-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ nodejs_4_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  python_36_centos7:
+    repo: "{{ s2i_registry }}/python-36-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ python_36_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  python_35_centos7:
+    repo: "{{ s2i_registry }}/python-35-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ python_35_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  python_34_centos7:
+    repo: "{{ s2i_registry }}/python-34-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ python_34_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  python_27_centos7:
+    repo: "{{ s2i_registry }}/python-27-centos7"
+    tag: "{{ s2itemplates_tag }}"
+    sha256: "{{ python_27_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  configmap_reload:
+    repo: "{{ configmap_reload_repo }}"
+    tag: "{{ configmap_reload_tag }}"
+    sha256: "{{ configmap_reload_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  prometheus:
+    repo: "{{ prometheus_repo }}"
+    tag: "{{ prometheus_tag }}"
+    sha256: "{{ prometheus_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  prometheus_config_reloader:
+    repo: "{{ prometheus_config_reloader_repo }}"
+    tag: "{{ prometheus_config_reloader_tag }}"
+    sha256: "{{ prometheus_config_reloader_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  prometheus_operator:
+    repo: "{{ prometheus_operator_repo }}"
+    tag: "{{ prometheus_operator_tag }}"
+    sha256: "{{ prometheus_operator_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  kube_rbac_proxy:
+    repo: "{{ kube_rbac_proxy_repo }}"
+    tag: "{{ kube_rbac_proxy_tag }}"
+    sha256: "{{ kube_rbac_proxy_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  kube_state_metrics:
+    repo: "{{ kube_state_metrics_repo }}"
+    tag: "{{ kube_state_metrics_tag }}"
+    sha256: "{{ kube_state_metrics_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  node_exporter:
+    repo: "{{ node_exporter_repo }}"
+    tag: "{{ node_exporter_tag }}"
+    sha256: "{{ node_exporter_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  prometheus_adapter:
+    repo: "{{ prometheus_adapter_repo }}"
+    tag: "{{ prometheus_adapter_tag }}"
+    sha256: "{{ prometheus_adapter_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  alertmanager:
+    repo: "{{ alertmanager_repo }}"
+    tag: "{{ alertmanager_tag }}"
+    sha256: "{{ alertmanager_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  thanos:
+    repo: "{{ thanos_repo }}"
+    tag: "{{ thanos_tag }}"
+    sha256: "{{ thanos_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  grafana:
+    repo: "{{ grafana_repo }}"
+    tag: "{{ grafana_tag }}"
+    sha256: "{{ thanos_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  notification_manager_operator_proxy:
+    repo: "{{ notification_manager_operator_proxy_repo }}"
+    tag: "{{ notification_manager_operator_proxy_tag }}"
+    sha256: "{{ notification_manager_operator_proxy_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  notification_manager_operator:
+    repo: "{{ notification_manager_operator_repo }}"
+    tag: "{{ notification_manager_operator_tag }}"
+    sha256: "{{ notification_manager_operator_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  notification_manager:
+    repo: "{{ notification_manager_repo }}"
+    tag: "{{ notification_manager_tag }}"
+    sha256: "{{ notification_manager_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  notification_tenant_sidecar:
+    repo: "{{ notification_tenant_sidecar_repo }}"
+    tag: "{{ notification_tenant_sidecar_tag }}"
+    sha256: "{{ notification_tenant_sidecar_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  docker_elasticsearch_curator:
+    repo: "{{ docker_elasticsearch_curator_repo }}"
+    tag: "{{ docker_elasticsearch_curator_tag }}"
+    sha256: "{{ docker_elasticsearch_curator_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
+
+  elasticsearch_oss:
+    repo: "{{ elasticsearch_oss_repo }}"
+    tag: "{{ elasticsearch_oss_tag }}"
+    sha256: "{{ elasticsearch_oss_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
   fluentbit_operator:
-    enabled: "{{ logging_enabled }}"
-    container: true
     repo: "{{ fluentbit_operator_repo }}"
     tag: "{{ fluentbit_operator_tag }}"
-    sha256: "{{ fluentbit_operator|default(None) }}"
-    groups:
-      - kube-node
+    sha256: "{{ fluentbit_operator_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  fluentbit_operator_migrator:
-    enabled: "{{ logging_enabled }}"
-    container: true
-    repo: "{{ fluentbit_operator_repo }}"
-    tag: "{{ fluentbit_operator_migrator_tag }}"
-    sha256: "{{ fluentbit_operator|default(None) }}"
-    groups:
-      - kube-node
+  docker:
+    repo: "{{ docker_repo }}"
+    tag: "{{ docker_tag }}"
+    sha256: "{{ docker_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  vpa_admission_controller:
-    enabled: false
-    container: true
-    repo: "{{ vpa_admission_controller_repo }}"
-    tag: "{{ vpa_admission_controller_tag }}"
-    sha256: "{{ vpa_admission_controller|default(None) }}"
-    groups:
-      - kube-node
+  ks_fluent_bit:
+    repo: "{{ ks_fluent_bit_repo }}"
+    tag: "{{ ks_fluent_bit_tag }}"
+    sha256: "{{ ks_fluent_bit_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  vpa_recommender:
-    enabled: false
-    container: true
-    repo: "{{ vpa_recommender_repo }}"
-    tag: "{{ vpa_recommender_tag }}"
-    sha256: "{{ vpa_recommender|default(None) }}"
-    groups:
-      - kube-node
+  ks_log_sidecar_injector:
+    repo: "{{ ks_log_sidecar_injector_repo }}"
+    tag: "{{ ks_log_sidecar_injector_tag }}"
+    sha256: "{{ ks_log_sidecar_injector_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  vpa_updater:
-    enabled: false
-    container: true
-    repo: "{{ vpa_updater_repo }}"
-    tag: "{{ vpa_updater_tag }}"
-    sha256: "{{ vpa_updater|default(None) }}"
-    groups:
-      - kube-node
-      -
-  openebs_provisioner:
-    enabled: true
-    container: true
-    repo: "{{ openebs_provisioner_localpv_repo }}"
-    tag: "{{ openebs_provisioner_localpv_tag }}"
-    sha256: "{{ openebs_provisioner|default(None) }}"
-    groups:
-      - kube-cluster
+  filebeat:
+    repo: "{{ filebeat_repo }}"
+    tag: "{{ filebeat_tag }}"
+    sha256: "{{ filebeat_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  openebs_openebs_tools:
-    enabled: true
-    container: true
-    repo: "{{ openebs_openebs_tools_repo }}"
-    tag: "{{ openebs_openebs_tools_tag }}"
-    sha256: "{{ openebs_openebs_tools|default(None) }}"
-    groups:
-      - kube-cluster
+  kube_events_operator:
+    repo: "{{ kube_events_operator_repo }}"
+    tag: "{{ kube_events_operator_tag }}"
+    sha256: "{{ kube_events_operator_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  openebs_node_disk_manager_amd64:
-    enabled: true
-    container: true
-    repo: "{{ openebs_node_disk_manager_amd64_repo }}"
-    tag: "{{ openebs_node_disk_manager_amd64_tag }}"
-    sha256: "{{ openebs_node_disk_manager_amd64|default(None) }}"
-    groups:
-      - kube-cluster
+  kube_events_exporter:
+    repo: "{{ kube_events_exporter_repo }}"
+    tag: "{{ kube_events_exporter_tag }}"
+    sha256: "{{ kube_events_exporter_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  openebs_node_disk_operator_amd64:
-    enabled: true
-    container: true
-    repo: "{{ openebs_node_disk_operator_amd64_repo }}"
-    tag: "{{ openebs_node_disk_operator_amd64_tag }}"
-    sha256: "{{ openebs_node_disk_operator_amd64|default(None) }}"
-    groups:
-      - kube-cluster
+  kube_events_ruler:
+    repo: "{{ kube_events_ruler_repo }}"
+    tag: "{{ kube_events_ruler_tag }}"
+    sha256: "{{ kube_events_ruler_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  openebs_linux_utils:
-    enabled: true
-    container: true
-    repo: "{{ openebs_linux_utils_repo }}"
-    tag: "{{ openebs_linux_utils_tag }}"
-    sha256: "{{ openebs_linux_utils|default(None) }}"
-    groups:
-      - kube-cluster
+  auditing_operator:
+    repo: "{{ auditing_operator_repo }}"
+    tag: "{{ auditing_operator_tag }}"
+    sha256: "{{ auditing_operator_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  nginx_photon:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ nginx_photon_repo }}"
-    tag: "{{ nginx_photon_tag }}"
-    sha256: "{{ nginx_photon|default(None) }}"
-    groups:
-      - kube-node
+  auditing_webhook:
+    repo: "{{ auditing_webhook_repo }}"
+    tag: "{{ auditing_webhook_tag }}"
+    sha256: "{{ auditing_webhook_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
 
-  chartmuseum_photon:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ chartmuseum_photon_repo }}"
-    tag: "{{ chartmuseum_photon_tag }}"
-    sha256: "{{ chartmuseum_photon|default(None) }}"
-    groups:
-      - kube-node
+  nginx_ingress_controller:
+    repo: "{{ nginx_ingress_controller_repo }}"
+    tag: "{{ nginx_ingress_controller_tag }}"
+    sha256: "{{ nginx_ingress_controller_checksum|default(None) }}"
+    group: "kubesphere-images"
 
-  notary_server_photon:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ notary_server_photon_repo }}"
-    tag: "{{ notary_server_photon_tag }}"
-    sha256: "{{ notary_server_photon|default(None) }}"
-    groups:
-      - kube-node
+  defaultbackend:
+    repo: "{{ defaultbackend_repo }}"
+    tag: "{{ defaultbackend_tag }}"
+    sha256: "{{ defaultbackend_checksum|default(None) }}"
+    group: "kubesphere-images"
 
-  harbor_registryctl:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ harbor_registryctl_repo }}"
-    tag: "{{ harbor_registryctl_tag }}"
-    sha256: "{{ harbor_registryctl|default(None) }}"
-    groups:
-      - kube-node
+  metrics_server:
+    repo: "{{ metrics_server_repo }}"
+    tag: "{{ metrics_server_tag }}"
+    sha256: "{{ metrics_server_checksum|default(None) }}"
+    group: "kubesphere-images"
 
-  registry_photon:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ registry_photon_repo }}"
-    tag: "{{ registry_photon_tag }}"
-    sha256: "{{ registry_photon|default(None) }}"
-    groups:
-      - kube-node
+  istio_pilot:
+    repo: "{{ istio_hub }}/pilot"
+    tag: "{{ istio_tag }}"
+    sha256: "{{ istio_pilot_checksum|default(None) }}"
+    group: "istio-images"
 
-  harbor_jobservice:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ harbor_jobservice_repo }}"
-    tag: "{{ harbor_jobservice_tag }}"
-    sha256: "{{ harbor_jobservice|default(None) }}"
-    groups:
-      - kube-node
+  istio_proxyv2:
+    repo: "{{ istio_hub }}/proxyv2"
+    tag: "{{ istio_tag }}"
+    sha256: "{{ istio_proxyv2_checksum|default(None) }}"
+    group: "istio-images"
 
-  harbor_portal:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ harbor_portal_repo }}"
-    tag: "{{ harbor_portal_tag }}"
-    sha256: "{{ harbor_portal|default(None) }}"
-    groups:
-      - kube-node
+  jaeger_operator:
+    repo: "{{ jaeger_operator_repo }}"
+    tag: "{{ jaeger_operator_tag }}"
+    sha256: "{{ jaeger_operator_checksum|default(None) }}"
+    group: "istio-images"
 
-  harbor_db:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ harbor_db_repo }}"
-    tag: "{{ harbor_db_tag }}"
-    sha256: "{{ harbor_db|default(None) }}"
-    groups:
-      - kube-node
+  jaeger_agent:
+    repo: "{{ jaeger_agent_repo }}"
+    tag: "{{ jaeger_agent_tag }}"
+    sha256: "{{ jaeger_agent_checksum|default(None) }}"
+    group: "istio-images"
 
-  clair_photon:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ clair_photon_repo }}"
-    tag: "{{ clair_photon_tag }}"
-    sha256: "{{ clair_photon|default(None) }}"
-    groups:
-      - kube-node
+  jaeger_collector:
+    repo: "{{ jaeger_collector_repo }}"
+    tag: "{{ jaeger_collector_tag }}"
+    sha256: "{{ jaeger_collector_checksum|default(None) }}"
+    group: "istio-images"
 
-  notary_signer_photon:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ notary_signer_photon_repo }}"
-    tag: "{{ notary_signer_photon_tag }}"
-    sha256: "{{ notary_signer_photon|default(None) }}"
-    groups:
-      - kube-node
+  jaeger_query:
+    repo: "{{ jaeger_query_repo }}"
+    tag: "{{ jaeger_query_tag }}"
+    sha256: "{{ jaeger_query_checksum|default(None) }}"
+    group: "istio-images"
 
-  redis_photon:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ redis_photon_repo }}"
-    tag: "{{ redis_photon_tag }}"
-    sha256: "{{ redis_photon|default(None) }}"
-    groups:
-      - kube-node
+  jaeger_es_cleaner:
+    repo: "{{ jaeger_es_cleaner_repo }}"
+    tag: "{{ jaeger_es_cleaner_tag }}"
+    sha256: "{{ jaeger_es_cleaner_checksum|default(None) }}"
+    group: "istio-images"
 
-  harbor_core:
-    enabled: "{{ harbor_enabled | default(false) }}"
-    container: true
-    repo: "{{ harbor_core_repo }}"
-    tag: "{{ harbor_core_tag }}"
-    sha256: "{{ harbor_core|default(None) }}"
-    groups:
-      - kube-node
+  kiali_operator:
+    repo: "{{ kiali_operator_repo }}"
+    tag: "{{ kiali_operator_tag }}"
+    sha256: "{{ kiali_operator_checksum|default(None) }}"
+    group: "istio-images"
 
-download_defaults:
-  container: false
-  file: false
-  repo: None
-  tag: None
-  enabled: false
-  dest: None
-  version: None
-  url: None
-  unarchive: false
-  owner: kube
-  mode: None
+  kiali:
+    repo: "{{ kiali_repo }}"
+    tag: "{{ kiali_tag }}"
+    sha256: "{{ kiali_checksum|default(None) }}"
+    group: "istio-images"
+
+  redis:
+    repo: "{{ redis_repo }}"
+    tag: "{{ redis_tag }}"
+    sha256: "{{ redis_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  haproxy:
+    repo: "{{ haproxy_repo }}"
+    tag: "{{ haproxy_tag }}"
+    sha256: "{{ haproxy_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  alpine:
+    repo: "{{ alpine_repo }}"
+    tag: "{{ alpine_tag }}"
+    sha256: "{{ alpine_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  busybox:
+    repo: "{{ busybox_repo }}"
+    tag: "{{ busybox_tag }}"
+    sha256: "{{ busybox_checksum|default(None) }}"
+    group: "example-images"
+
+  nginx:
+    repo: "{{ nginx_repo }}"
+    tag: "{{ nginx_tag }}"
+    sha256: "{{ nginx_checksum|default(None) }}"
+    group: "example-images"
+
+  openldap:
+    repo: "{{ openldap_repo }}"
+    tag: "{{ openldap_tag }}"
+    sha256: "{{ openldap_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  wget:
+    repo: "{{ wget_repo }}"
+    tag: "{{ wget_tag }}"
+    sha256: "{{ wget_checksum|default(None) }}"
+    group: "example-images"
+
+  netshoot:
+    repo: "{{ netshoot_repo }}"
+    tag: "{{ netshoot_tag }}"
+    sha256: "{{ netshoot_checksum|default(None) }}"
+    group: "kubesphere-images"
+
+  hello:
+    repo: "{{ hello_repo }}"
+    tag: "{{ hello_tag }}"
+    sha256: "{{ hello_checksum|default(None) }}"
+    group: "example-images"
+
+  wordpress:
+    repo: "{{ wordpress_repo }}"
+    tag: "{{ wordpress_tag }}"
+    sha256: "{{ wordpress_checksum|default(None) }}"
+    group: "example-images"
+
+  hpa_example:
+    repo: "{{ hpa_example_repo }}"
+    tag: "{{ hpa_example_tag }}"
+    sha256: "{{ hpa_example_checksum|default(None) }}"
+    group: "example-images"
+
+  java:
+    repo: "{{ java_repo }}"
+    tag: "{{ java_tag }}"
+    sha256: "{{ java_checksum|default(None) }}"
+    group: "example-images"
+
+  fluentd:
+    repo: "{{ fluentd_repo }}"
+    tag: "{{ fluentd_tag }}"
+    sha256: "{{ fluentd_checksum|default(None) }}"
+    group: "example-images"
+
+  perl:
+    repo: "{{ perl_repo }}"
+    tag: "{{ perl_tag }}"
+    sha256: "{{ perl_checksum|default(None) }}"
+    group: "example-images"
+
+  bookinfo_productpage_v1:
+    repo: "{{ bookinfo_productpage_v1_repo }}"
+    tag: "{{ bookinfo_productpage_v1_tag }}"
+    sha256: "{{ bookinfo_productpage_v1_checksum|default(None) }}"
+    group: "example-images"
+
+  bookinfo_reviews_v1:
+    repo: "{{ bookinfo_reviews_v1_repo }}"
+    tag: "{{ bookinfo_reviews_v1_tag }}"
+    sha256: "{{ bookinfo_reviews_v1_checksum|default(None) }}"
+    group: "example-images"
+
+  bookinfo_reviews_v2:
+    repo: "{{ bookinfo_reviews_v2_repo }}"
+    tag: "{{ bookinfo_reviews_v2_tag }}"
+    sha256: "{{ bookinfo_reviews_v2_checksum|default(None) }}"
+    group: "example-images"
+
+  bookinfo_details_v1:
+    repo: "{{ bookinfo_details_v1_repo }}"
+    tag: "{{ bookinfo_details_v1_tag }}"
+    sha256: "{{ bookinfo_details_v1_checksum|default(None) }}"
+    group: "example-images"
+
+  bookinfo_ratings_v1:
+    repo: "{{ bookinfo_ratings_v1_repo }}"
+    tag: "{{ bookinfo_ratings_v1_tag }}"
+    sha256: "{{ bookinfo_ratings_v1_checksum|default(None) }}"
+    group: "example-images"
+
+  waveworks_scop:
+    repo: "{{ waveworks_scop_repo }}"
+    tag: "{{ waveworks_scop_tag }}"
+    sha256: "{{ waveworks_scop_checksum|default(None) }}"
+    group: "weave-scope-images"
+
+image_default:
+  repo: ""
+  tag: ""
+  sha256: ""
+  group: ""

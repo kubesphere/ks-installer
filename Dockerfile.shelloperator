@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine3.13
+FROM golang:1.16-alpine3.14
 
 ARG appVersion=latest
 
@@ -12,12 +12,14 @@ WORKDIR /go/src/github.com/flant/shell-operator
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w -X 'github.com/flant/shell-operator/pkg/app.Version=$appVersion'" -o shell-operator ./cmd/shell-operator
 
 
-FROM python:3.9.6-alpine3.13
+FROM python:3.9.7-alpine3.14
 
-RUN apk --no-cache add jq gcc bash libffi-dev openssl-dev curl unzip musl-dev openssl && \
+RUN apk --no-cache add jq bash curl unzip openssl && \
+    apk --no-cache add gcc libffi-dev openssl-dev musl-dev && \
     export CRYPTOGRAPHY_DONT_BUILD_RUST=1 && \
-    pip install --no-cache-dir ansible_runner==2.0.1 ansible==2.9.23 kubernetes && \
-    wget https://get.helm.sh/helm-v3.6.2-linux-amd64.tar.gz && \
+    pip install --no-cache-dir ansible_runner==2.0.1 ansible==2.9.23 kubernetes && \ 
+    apk del gcc libffi-dev openssl-dev musl-dev && \
+    wget https://get.helm.sh/helm-v3.6.3-linux-amd64.tar.gz && \
     tar -zxf helm-v3.6.3-linux-amd64.tar.gz && \
     mv linux-amd64/helm /bin/helm && \
     rm -rf *linux-amd64* && \
@@ -30,13 +32,12 @@ RUN apk --no-cache add jq gcc bash libffi-dev openssl-dev curl unzip musl-dev op
     adduser -D -g kubesphere -u 1002 kubesphere
 
 COPY --from=0 /go/src/github.com/flant/shell-operator/shell-operator /
+ADD controller/* /hooks/kubesphere/
 
 RUN chown -R kubesphere:kubesphere /shell-operator && \
     chown -R kubesphere:kubesphere /hooks && \
-    chown -R kubesphere:kubesphere /kubesphere
-
-ADD controller/* /hooks/kubesphere/
-RUN chmod +x -R /hooks/kubesphere
+    chown -R kubesphere:kubesphere /kubesphere && \
+    chmod +x -R /hooks/kubesphere
 
 ENV SHELL_OPERATOR_WORKING_DIR /hooks
 

@@ -1,0 +1,87 @@
+validatingWebhookCheckIgnoreFailurePolicy: Ignore
+
+image:
+  repository: {{ gatekeeper_repo }}
+  release: {{ gatekeeper_release }}
+
+controllerManager:
+  resources:
+    limits:
+      cpu: {{ gatekeeper.controller_manager.resources.limits.cpu | default("1000m") }}
+      memory: {{ gatekeeper.controller_manager.resources.limits.memory | default("512Mi") }}
+    requests:
+      cpu: {{ gatekeeper.controller_manager.resources.resources.cpu | default("100m") }}
+      memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("256Mi") }}
+{% if gatekeeper.affinity is defined and gatekeeper.affinity is not none %}
+  affinity:
+    {{ gatekeeper.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  affinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: gatekeeper.sh/operation
+                  operator: In
+                  values:
+                    - webhook
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+{% endif %}
+{% if gatekeeper.nodeSelector is defined and gatekeeper.nodeSelector is not none %}
+  nodeSelector:
+    {{ gatekeeper.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  nodeSelector: {}
+{% endif %}
+{% if gatekeeper.tolerations is defined and gatekeeper.tolerations is not none %}
+  tolerations:
+    {{ gatekeeper.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  tolerations: []
+{% endif %}
+audit:
+  resources:
+    limits:
+      cpu: {{ gatekeeper.controller_manager.resources.resources.memory | default("1000m") }}
+      memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("512Mi") }}
+    requests:
+      cpu: {{ gatekeeper.controller_manager.resources.resources.memory | default("100m") }}
+      memory: {{ gatekeeper.controller_manager.resources.resources.memory | default("256Mi") }}
+{% if gatekeeper.affinity is defined and gatekeeper.affinity is not none %}
+  affinity:
+    {{ gatekeeper.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  affinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  affinity: {}
+{% endif %}
+{% if gatekeeper.nodeSelector is defined and gatekeeper.nodeSelector is not none %}
+  nodeSelector:
+    {{ gatekeeper.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  nodeSelector: {}
+{% endif %}
+{% if gatekeeper.tolerations is defined and gatekeeper.tolerations is not none %}
+  tolerations:
+    {{ gatekeeper.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+  tolerations: []
+{% endif %}

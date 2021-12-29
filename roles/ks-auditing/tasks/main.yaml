@@ -32,7 +32,7 @@
   retries: 3
   delay: 10
   when:
-    - (auditing_check.stdout.find("deployed") == -1) or (auditing_check.stdout.find("0.1.0") == -1)
+    - (auditing_check.stdout.find("deployed") == -1) or (auditing_check.stdout.find("0.2.0") == -1)
 
 
 - import_tasks: fluentbit-operator.yaml

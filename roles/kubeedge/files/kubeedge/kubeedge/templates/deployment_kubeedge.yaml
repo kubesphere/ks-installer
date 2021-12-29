@@ -53,6 +53,7 @@ spec:
           mountPath: /var/lib/kubeedge
         - mountPath: /etc/localtime
           name: host-time
+          readOnly: true
       restartPolicy: Always
       {{- with .Values.cloudCore.affinity }}
       affinity: {{ toYaml . | nindent 8 }}

@@ -40,8 +40,8 @@ image:
   #   - registry-secret
 
 initImage:
-  repository: {{ busybox_repo }}
-  tag: {{ busybox_tag }}
+  repository: {{ alpine_repo }}
+  tag: {{ alpine_tag }}
   pullPolicy: "IfNotPresent"
 
 cluster:
@@ -58,6 +58,7 @@ cluster:
   # Command to run at the end of deployment
   bootstrapShellCommand: ""
   env:
+    FORMAT_MESSAGES_PATTERN_DISABLE_LOOKUPS: true
     # IMPORTANT: https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html#minimum_master_nodes
     # To prevent data loss, it is vital to configure the discovery.zen.minimum_master_nodes setting so that each master-eligible
     # node knows the minimum number of master-eligible nodes that must be visible in order to form a cluster.
@@ -73,9 +74,9 @@ master:
   name: master
   exposeHttp: false
 {% if nodeNum is defined and nodeNum < 5 %}
-  replicas: {{ common.es.elasticsearchMasterReplicas | default(1) }}
+  replicas: {{ common.es.master.replicas | default(1) }}
 {% else %}
-  replicas: {{ common.es.elasticsearchMasterReplicas | default(3) }}
+  replicas: {{ common.es.master.replicas | default(3) }}
 {% endif %}
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
@@ -83,7 +84,7 @@ master:
     enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: {% if es_master_pv_size is defined %}{{ es_master_pv_size }}{% else %}{{ common.es.elasticsearchMasterVolumeSize }}{% endif %}
+    size: {% if es_master_pv_size is defined %}{{ es_master_pv_size }}{% else %}{{ common.es.master.volumeSize | default("4Gi") }}{% endif %}
 
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"
@@ -94,9 +95,30 @@ master:
       port: 9200
     initialDelaySeconds: 5
   antiAffinity: "soft"
+{% if common.es.nodeAffinity is defined and common.es.nodeAffinity is not none %}
+  nodeAffinity:
+    {{ common.es.nodeAffinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeAffinity: {}
+{% endif %}
+{% if common.es.nodeSelector is defined and common.es.nodeSelector is not none %}
+  nodeSelector:
+    {{ common.es.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeSelector: {}
+{% endif %}
+{% if common.es.tolerations is defined and common.es.tolerations is not none %}
+  tolerations:
+    {{ common.es.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   tolerations: []
+{% endif %}
   initResources: {}
     # limits:
     #   cpu: "25m"
@@ -106,11 +128,11 @@ master:
     #   memory: "128Mi"
   resources:
     limits:
-      cpu: "2"
-      # memory: "1024Mi"
+      cpu: {{ common.es.master.resources.limits.cpu | default("2") }}
+      memory: {{ common.es.master.resources.limits.memory | default("1024Mi") }}
     requests:
-      cpu: "25m"
-      memory: "512Mi"
+      cpu: {{ common.es.master.resources.requests.cpu | default("25m") }}
+      memory: {{ common.es.master.resources.requests.memory | default("512Mi") }}
   priorityClassName: ""
   ## (dict) If specified, apply these annotations to each master Pod
   # podAnnotations:
@@ -128,10 +150,12 @@ data:
   serviceType: ClusterIP
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
-{% if nodeNum is defined and nodeNum < 5 %}
-  replicas: {{ common.es.elasticsearchDataReplicas | default(2) }}
+{% if nodeNum is defined and nodeNum == 1 %}
+  replicas: {{ common.es.data.replicas | default(1) }}
+{% elif nodeNum is defined and nodeNum > 1 and nodeNum < 5 %}
+  replicas: {{ common.es.data.replicas | default(2) }}
 {% else %}
-  replicas: {{ common.es.elasticsearchDataReplicas | default(3) }}
+  replicas: {{ common.es.data.replicas | default(3) }}
 {% endif %}
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
@@ -139,7 +163,7 @@ data:
     enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: {% if es_data_pv_size is defined %}{{ es_data_pv_size }}{% else %}{{ common.es.elasticsearchDataVolumeSize }}{% endif %}
+    size: {% if es_data_pv_size is defined %}{{ es_data_pv_size }}{% else %}{{ common.es.data.volumeSize | default("20Gi") }}{% endif %}
 
 {% if persistence.storageClass is defined and persistence.storageClass != "" %}
     storageClass: "{{ persistence.storageClass }}"
@@ -151,9 +175,30 @@ data:
     initialDelaySeconds: 5
   terminationGracePeriodSeconds: 120
   antiAffinity: "soft"
+{% if common.es.nodeAffinity is defined and common.es.nodeAffinity is not none %}
+  nodeAffinity:
+    {{ common.es.nodeAffinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeAffinity: {}
+{% endif %}
+{% if common.es.nodeSelector is defined and common.es.nodeSelector is not none %}
+  nodeSelector:
+    {{ common.es.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeSelector: {}
+{% endif %}
+{% if common.es.tolerations is defined and common.es.tolerations is not none %}
+  tolerations:
+    {{ common.es.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   tolerations: [{key: "CriticalAddonsOnly", operator: "Exists"}, {key: "dedicated", value: "log", effect: "NoSchedule"}]
+{% endif %}
   initResources: {}
     # limits:
     #   cpu: "25m"
@@ -163,11 +208,11 @@ data:
     #   memory: "128Mi"
   resources:
     limits:
-      cpu: "4"
-      # memory: "2048Mi"
+      cpu: {{ common.es.master.resources.limits.cpu | default("4") }}
+      memory: {{ common.es.master.resources.limits.memory | default("2048Mi") }}
     requests:
-      cpu: "25m"
-      memory: "1536Mi"
+      cpu: {{ common.es.master.resources.requests.cpu | default("25m") }}
+      memory: {{ common.es.master.resources.requests.memory | default("1536Mi") }}
   priorityClassName: ""
   ## (dict) If specified, apply these annotations to each data Pod
   # podAnnotations:

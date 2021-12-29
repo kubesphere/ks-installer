@@ -7,14 +7,38 @@ operator:
   imagePullSecrets: []
   resources:
     limits:
-      cpu: 200m
-      memory: 200Mi
+      cpu: {{ auditing.operator.resources.limits.cpu | default("200m") }}
+      memory: {{ auditing.operator.resources.limits.memory | default("200Mi") }}
     requests:
-      cpu: 20m
-      memory: 20Mi
+      cpu: {{ auditing.operator.resources.requests.cpu | default("20m") }}
+      memory: {{ auditing.operator.resources.requests.memory | default("20Mi") }}
+{% if auditing.nodeSelector is defined and auditing.nodeSelector is not none %}
+  nodeSelector:
+    {{ auditing.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeSelector: {}
+{% endif %}
+{% if auditing.tolerations is defined and auditing.tolerations is not none %}
+  tolerations:
+    {{ auditing.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   tolerations: []
+{% endif %}
+{% if auditing.affinity is defined and auditing.affinity is not none %}
+  affinity:
+    {{ auditing.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  affinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   affinity: {}
+{% endif %}
 
 
 # value of kube-auditing webhook
@@ -28,14 +52,38 @@ webhook:
   imagePullSecrets: []
   resources:
     limits:
-      cpu: 200m
-      memory: 500Mi
+      cpu: {{ auditing.webhook.resources.limits.memory | default("200m") }}
+      memory: {{ auditing.webhook.resources.limits.memory | default("500Mi") }}
     requests:
-      cpu: 20m
-      memory: 50Mi
+      cpu: {{ auditing.webhook.resources.requests.memory | default("20m") }}
+      memory: {{ auditing.webhook.resources.requests.memory | default("50Mi") }}
+{% if auditing.nodeSelector is defined and auditing.nodeSelector is not none %}
+  nodeSelector:
+    {{ auditing.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+  nodeSelector:
+    {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   nodeSelector: {}
+{% endif %}
+{% if auditing.tolerations is defined and auditing.tolerations is not none %}
+  tolerations:
+    {{ auditing.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+  tolerations:
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   tolerations: []
+{% endif %}
+{% if auditing.affinity is defined and auditing.affinity is not none %}
+  affinity:
+    {{ auditing.affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% elif affinity is defined and affinity is not none %}
+  affinity:
+    {{ affinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
   affinity: {}
+{% endif %}
   receivers:
     - name: alert
       type: alertmanager
@@ -46,6 +94,6 @@ webhook:
           port: 9093
   archivingPriority: DEBUG
   alertingPriority: WARNING
-  auditType: dynamic
   auditLevel: Metadata
   k8sAuditingEnabled: false
+  useHTTPS: true

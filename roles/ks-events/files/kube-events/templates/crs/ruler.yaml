@@ -12,8 +12,22 @@ spec:
   imagePullPolicy: {{ .Values.ruler.image.pullPolicy }}
 {{- end }}
   replicas: {{ .Values.ruler.replicas }}
+  {{- if .Values.ruler.affinity }}
+  affinity:
+{{ toYaml .Values.ruler.affinity | indent 4 }}
+  {{- end }}
+  {{- if .Values.ruler.nodeSelector }}
+  nodeSelector:
+{{ toYaml .Values.ruler.nodeSelector | indent 4 }}
+  {{- end }}
+  {{- if .Values.ruler.tolerations }}
+  tolerations:
+{{ toYaml .Values.ruler.tolerations | indent 4 }}
+  {{- end }}
+  {{- if .Values.ruler.resources }}
   resources:
 {{ toYaml .Values.ruler.resources | indent 4 }}
+  {{- end }}
   ruleNamespaceSelector:
 {{ toYaml .Values.ruler.ruleNamespaceSelector | indent 4 }}
   ruleSelector:

@@ -1,4 +1,8 @@
+{% if master_num is defined and master_num != "0" %}
 replicaCount: {{ master_num }}
+{% else %}
+replicaCount: 1
+{% endif %}
 
 image:
   ks_controller_manager_repo: {{ ks_controller_manager_repo }}
@@ -27,26 +31,28 @@ config:
   create: false
 
 console:
-  type: {{ console.type | default('NodePort') }}
-  port: {{ console.port }}
+  type: {{ common.core.console.type | default('NodePort') }}
+  port: {{ common.core.console.port | default(30880)}}
 
 kube_version: {{ kube_version }}
 
-apiserverResources:
-  limits:
-    cpu: {{ common.apiserver.resources.limits.cpu | default('1') }}
-    memory: {{ common.apiserver.resources.limits.memory | default('1024Mi') }}
-  requests:
-    cpu: {{ common.apiserver.resources.requests.cpu | default('20m') }}
-    memory: {{ common.apiserver.resources.requests.memory | default('100Mi') }}
+apiserver:
+  resources:
+    limits:
+      cpu: {{ common.core.apiserver.resources.limits.cpu | default('1') }}
+      memory: {{ common.core.apiserver.resources.limits.memory | default('1024Mi') }}
+    requests:
+      cpu: {{ common.core.apiserver.resources.requests.cpu | default('20m') }}
+      memory: {{ common.core.apiserver.resources.requests.memory | default('100Mi') }}
 
-controllerManagerResources:
-  limits:
-    cpu: {{ common.controllerManager.resources.limits.cpu | default('1') }}
-    memory: {{ common.controllerManager.resources.limits.memory | default('1000Mi') }}
-  requests:
-    cpu: {{ common.controllerManager.resources.requests.cpu | default('30m') }}
-    memory: {{ common.controllerManager.resources.requests.memory | default('50Mi') }}
+controller:
+  resources:
+    limits:
+      cpu: {{ common.core.controllerManager.resources.limits.cpu | default('1') }}
+      memory: {{ common.core.controllerManager.resources.limits.memory | default('1000Mi') }}
+    requests:
+      cpu: {{ common.core.controllerManager.resources.requests.cpu | default('30m') }}
+      memory: {{ common.core.controllerManager.resources.requests.memory | default('50Mi') }}
 {% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or (enableHA is defined and enableHA) %}
 env:
 - name: KUBESPHERE_REDIS_PASSWORD
@@ -54,4 +60,50 @@ env:
     secretKeyRef:
       name: redis-secret
       key: auth
+{% endif %}
+
+{% if common.core.nodeAffinity is defined and common.core.nodeAffinity is not none %}
+nodeAffinity:
+  {{ common.core.nodeAffinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+nodeAffinity:
+  preferredDuringSchedulingIgnoredDuringExecution:
+  - weight: 100
+    preference:
+      matchExpressions:
+      - key: node-role.kubernetes.io/master
+        operator: In
+        values:
+        - ""
+{% endif %}
+
+{% if common.core.nodeSelector is defined and common.core.nodeSelector is not none %}
+nodeSelector:
+  {{ common.core.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+nodeSelector: {}
+{% endif %}
+{% if common.core.tolerations is defined and common.core.tolerations is not none %}
+tolerations:
+  {{ common.core.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 60
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 60
 {% endif %}

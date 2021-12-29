@@ -351,10 +351,13 @@ items:
               volumeMounts:
                 - name: scope-plugins
                   mountPath: /var/run/scope/plugins
+                  readOnly: true
                 - name: sys-kernel-debug
                   mountPath: /sys/kernel/debug
+                  readOnly: true
                 - name: docker-socket
                   mountPath: /var/run/docker.sock
+                  readOnly: true
           dnsPolicy: ClusterFirstWithHostNet
           hostNetwork: true
           hostPID: true

@@ -1,16 +1,16 @@
 ---
 
 
-- name: KubeSphere | Getting Kubernetes version
-  shell: >
-    {{ bin_dir }}/kubectl version -o json | jq '.serverVersion.gitVersion' | sed s/\"//g
-  register: kubernetes_version
-  failed_when: false
+#- name: KubeSphere | Getting Kubernetes version
+#  shell: >
+#    {{ bin_dir }}/kubectl version -o json | jq -r '.serverVersion.gitVersion'
+#  register: kubernetes_version
+#  failed_when: false
 
 
 - name: KubeSphere | Setting Kubernetes version
   set_fact:
-    kube_version: "{{ kubernetes_version.stdout }}"
+    kube_version: "{{ kubernetes_version }}"
   failed_when: false
 
 
@@ -33,6 +33,13 @@
   when:
     - master_num is defined and (master_num == "1" or master_num == "0")
     - enableHA is defined and enableHA
+
+- name: KubeSphere | Setting enableHA
+  set_fact:
+    enableHA: >-
+      {% if masters is defined and masters.stdout is defined and masters.stdout != "0" and masters.stdout != "1" %}true{% else %}false{% endif %}
+  when:
+    - enableHA is not defined
 
 - name: KubeSphere | Checking ks-core Helm Release
   shell: >
@@ -74,11 +81,18 @@
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "users.iam.kubesphere.io", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "resourcesquotas.quota.kubesphere.io", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "network.kubesphere.io", release: "ks-core"}
-    - {ns: "kubesphere-system", kind: "users", resource: "admin", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "users.iam.kubesphere.io", resource: "admin", release: "ks-core"}
   when:
     - helm_release.stdout == "0" and ks_crds.stdout != "0"
   register: source_state
   failed_when: "source_state.stderr and 'NotFound' not in source_state.stderr"
+
+- name: KubeSphere | Patch admin user
+  shell: >
+    {{ bin_dir }}/kubectl annotate --overwrite users.iam.kubesphere.io admin helm.sh/resource-policy=keep
+  when:
+    - ks_crds.stdout != "0"
+  failed_when: false
 
 - name: KubeSphere | Getting ks-core helm charts
   copy:
@@ -93,6 +107,13 @@
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: ks-core, file: custom-values-ks-core.yaml}
+
+
+- name: KubeSphere | Upgrade CRDs
+  shell: "{{ bin_dir }}/kubectl apply -f {{ item }}"
+  ignore_errors: false
+  with_fileglob:
+    - "{{ kubesphere_dir }}/ks-core/crds/*"
 
 - name: KubeSphere | Creating ks-core
   shell: >

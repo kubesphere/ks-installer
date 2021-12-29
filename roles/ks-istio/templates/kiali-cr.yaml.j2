@@ -7,7 +7,7 @@ metadata:
 spec:
   istio_namespace: istio-system
   auth:
-    strategy: "anonymous"
+    strategy: "token"
   deployment:
     accessible_namespaces: [ "**" ]
     image_name: "{{ kiali_repo }}"
@@ -15,6 +15,7 @@ spec:
     image_version: "{{ kiali_tag }}"
     namespace: "istio-system"
     service_type: "ClusterIP"
+    ingress_enabled: false
   external_services:
     prometheus:
       url: http://prometheus-k8s.kubesphere-monitoring-system:9090
@@ -26,5 +27,4 @@ spec:
       exclude:
         - "kube-.*"
         - "kubesphere-.*system"
-        - "istio-system"
         - "openpitrix-system"

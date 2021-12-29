@@ -158,7 +158,26 @@ securityContext:
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+{% if common.redis.nodeSelector is defined and common.redis.nodeSelector is not none %}
+nodeSelector:
+  {{ common.redis.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 nodeSelector: {}
+{% endif %}
+{% if common.redis.tolerations is defined and common.redis.tolerations is not none %}
+tolerations:
+  {{ common.redis.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+tolerations: []
+{% endif %}
+
+
 
 ## Whether the Redis server pods should be forced to run on separate nodes.
 ## This is accomplished by setting their AntiAffinity with requiredDuringSchedulingIgnoredDuringExecution as opposed to preferred.
@@ -181,6 +200,11 @@ hardAntiAffinity: true
 ##
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
+
+{% if common.redis.nodeAffinity is defined and common.redis.nodeAffinity is not none %}
+additionalAffinities:
+  {{ common.redis.nodeAffinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 additionalAffinities:
   nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -191,6 +215,7 @@ additionalAffinities:
                 operator: In
                 values:
                   - ""
+{% endif %}
 
 ## Override all other affinity settings for the Redis server pods with a string.
 affinity: |
@@ -241,7 +266,7 @@ persistentVolume:
 {% endif %}
   accessModes:
     - ReadWriteOnce
-  size: {% if redis_ha_pv_size is defined %}{{ redis_ha_pv_size }}{% else %}{{ common.redisVolumSize }}{% endif %}
+  size: {% if redis_ha_pv_size is defined %}{{ redis_ha_pv_size }}{% else %}{{ common.redis.volumeSize | default("2Gi") }}{% endif %}
 
   annotations: {}
 init:

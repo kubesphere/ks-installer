@@ -17,14 +17,16 @@ data:
   tls.crt: {{ b64enc $cert.Cert }}
   tls.key: {{ b64enc $cert.Key }}
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: {{ template "kube-events.admission.fullname" . }}-mutate
   labels:
 {{ include "kube-events.labels" . | indent 4 }}
 webhooks:
-  - clientConfig:
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
       caBundle: {{ b64enc $ca.Cert }}
       service:
         name: {{ template "kube-events.admission.fullname" . }}
@@ -42,15 +44,18 @@ webhooks:
           - UPDATE
         resources:
           - rules
+    sideEffects: None
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: {{ template "kube-events.admission.fullname" . }}-validate
   labels:
 {{ include "kube-events.labels" . | indent 4 }}
 webhooks:
-  - clientConfig:
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
       caBundle: {{ b64enc $ca.Cert }}
       service:
         name: {{ template "kube-events.admission.fullname" . }}
@@ -68,6 +73,7 @@ webhooks:
           - UPDATE
         resources:
           - rules
+    sideEffects: None
 ---
 apiVersion: v1
 kind: Service

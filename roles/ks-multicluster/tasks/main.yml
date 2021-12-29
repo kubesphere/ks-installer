@@ -7,6 +7,21 @@
   loop:
     - "kubefed"
 
+- debug:
+    msg: Current Kubernetes version is {{ kubernetes_version }}
+
+# Get the matched kubectl image
+- name: KubeSphere | Setting kubectl image version
+  set_fact:
+    ks_kubectl_tag: "{{ item.value }}"
+    kubectl_break: true
+  loop: "{{ query('dict', ks_kubectl_versions) }}"
+  when:
+    - kubectl_break is undefined and kubernetes_version is defined and kubernetes_version is version(item.key, '>=')
+
+- debug:
+    msg: Current kubectl image version is {{ ks_kubectl_tag }}
+
 - name: Kubefed | Creating manifests
   template:
     src: "{{ item.file }}.j2"
@@ -27,6 +42,11 @@
         {{ bin_dir }}/kubectl -n kubesphere-system apply -f {{ kubesphere_dir }}/kubefed/tower.yaml
       register: tower_result
       failed_when: false
+
+    - name: Kubefed | Upgrade crd manually #see https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+      shell: >
+        {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/kubefed/kubefed/charts/controllermanager/crds/
+      ignore_errors: true
 
     - name: Kubefed | Initing kube-federation-system
       shell: >
@@ -52,12 +72,8 @@
 
 
 - name: Kubefed | Creating MultiCluster crds
-  shell: "{{ bin_dir }}/kubectl create -f {{ item }} -n kube-federation-system"
-  register: crds_result
-  failed_when: "crds_result.stderr and 'AlreadyExists' not in crds_result.stderr"
-  until: crds_result is succeeded
-  retries: 5
-  delay: 5
+  shell: "{{ bin_dir }}/kubectl apply -f {{ item }} -n kube-federation-system"
+  ignore_errors: true
   with_fileglob:
     - "{{ kubesphere_dir }}/kubefed/federatedcrds/*"
 

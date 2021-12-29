@@ -5,6 +5,21 @@
     src: "kube-events"
     dest: "{{ kubesphere_dir }}/ks-events/"
 
+- debug:
+    msg: Current Kubernetes version is {{ kubernetes_version }}
+
+# Get the matched kubectl image
+- name: KubeSphere | Setting kubectl image version
+  set_fact:
+    ks_kubectl_tag: "{{ item.value }}"
+    kubectl_break: true
+  loop: "{{ query('dict', ks_kubectl_versions) }}"
+  when:
+    - kubectl_break is undefined and kubernetes_version is defined and kubernetes_version is version(item.key, '>=')
+
+- debug:
+    msg: Current kubectl image version is {{ ks_kubectl_tag }}
+
 - name: ks-events | Getting ks-events installation files
   template:
     src: "{{ item.file }}.j2"
@@ -20,24 +35,43 @@
 
 - name: ks-events | Checking ks-events
   shell: >
-    {{ bin_dir }}/kubectl -n kubesphere-logging-system get rulers.events.kubesphere.io ks-events-ruler -o jsonpath='{.spec.image}'
+    {{ bin_dir }}/helm get values ks-events -n kubesphere-logging-system -o json | jq '.ruler.enabled'
   register: events_ruler_check
-  when:
-    - (events_check.stdout.find("deployed") != -1) and (events_check.stdout.find("0.1.0") != -1)
   failed_when: false
 
-- name: ks-events | Deploying ks-events
-  shell: >
-    {{ bin_dir }}/helm upgrade --install ks-events
-    {{ kubesphere_dir }}/ks-events/kube-events
-    -f {{ kubesphere_dir }}/ks-events/custom-values-events.yaml
-    -n kubesphere-logging-system
-  register: deploy_result
-  until: deploy_result is succeeded
-  retries: 3
-  delay: 10
+- block:
+  - name: ks-events | Deploying ks-events
+    shell: >
+      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-events/kube-events/crds --force &&
+      {{ bin_dir }}/helm upgrade --install ks-events
+      {{ kubesphere_dir }}/ks-events/kube-events
+      -f {{ kubesphere_dir }}/ks-events/custom-values-events.yaml
+      -n kubesphere-logging-system --force
+    register: events_result
+    failed_when: false
+
+  - name: ks-events | Deploying ks-events
+    shell: >
+      {{ bin_dir }}/helm del ks-events -n kubesphere-logging-system
+    when:
+      - "events_result.stderr and 'field is immutable' in events_result.stderr"
+
+  - name: ks-events | Deploying ks-events
+    shell: >
+      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-events/kube-events/crds --force &&
+      {{ bin_dir }}/helm upgrade --install ks-events
+      {{ kubesphere_dir }}/ks-events/kube-events
+      -f {{ kubesphere_dir }}/ks-events/custom-values-events.yaml
+      -n kubesphere-logging-system --force
+    register: events_re_result
+    until: events_re_result is succeeded
+    retries: 3
+    delay: 10
+    when:
+      - "events_result.stderr and 'field is immutable' in events_result.stderr"
+
   when:
-    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.1.0") == -1) or (events_ruler_check.stdout.find("v0.1.0") != -1)
+    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.3.0") == -1) or (events_ruler_check.stdout != 'true' and events.ruler is defined and events.ruler.enabled is defined and events.ruler.enabled == True)
 
 
 - import_tasks: fluentbit-operator.yaml

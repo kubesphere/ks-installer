@@ -6,15 +6,27 @@ data:
       authenticateRateLimiterDuration: {{ authentication.authenticationRateLimiterDuration | default("10m0s") }}
       loginHistoryRetentionPeriod: {{ authentication.loginHistoryRetentionPeriod | default("168h") }}
       maximumClockSkew: {{ authentication.maximumClockSkew | default("10s") }}
-      multipleLogin: {{ console.enableMultiLogin | default(true) }}
+      multipleLogin: {{ common.core.console.enableMultiLogin | default(true) }}
       kubectlImage: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
       jwtSecret: "{{ ks_secret_str.stdout }}"
-{% if authentication.oauthOptions is defined %}
       oauthOptions:
-        {{ authentication.oauthOptions |  to_nice_yaml(indent=2) | trim | indent(8) }}
-{% elif multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
-      oauthOptions:
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
         accessTokenMaxAge: 0
+{% elif authentication.oauthOptions is defined %}
+        {{ authentication.oauthOptions |  to_nice_yaml(indent=2) | trim | indent(8) }}
+{% if authentication.oauthOptions.clients is not defined %}
+        clients:
+        - name: kubesphere
+          secret: kubesphere
+          redirectURIs:
+          - '*'
+{% endif %}
+{% else %}
+        clients:
+        - name: kubesphere
+          secret: kubesphere
+          redirectURIs:
+          - '*'
 {% endif %}
 
 {% if (common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled) or devops.enabled %}
@@ -70,10 +82,11 @@ data:
 {% endif %}
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:
-      host: http://ks-jenkins.kubesphere-devops-system.svc/
+      host: http://devops-jenkins.kubesphere-devops-system.svc/
       username: admin
       password: {{ ks_token_str.stdout }}
       maxConnections: 100
+      endpoint: http://devops-apiserver.kubesphere-devops-system:9090
 {% if sonarQubeHost is defined and sonarQubeToken is defined %}
     sonarQube:
       host: {{ sonarQubeHost }}
@@ -106,6 +119,12 @@ data:
 {% if multicluster.proxyPublishAddress is defined and multicluster.proxyPublishAddress != "" %}
       proxyPublishAddress: {{ multicluster.proxyPublishAddress }}
 {% endif %}
+{% if multicluster.clusterControllerResyncPeriod is defined and multicluster.clusterControllerResyncPeriod != "" %}
+      clusterControllerResyncPeriod: {{ multicluster.clusterControllerResyncPeriod }}
+{% endif %}
+{% if multicluster.hostClusterName is defined and multicluster.hostClusterName != "" %}
+      hostClusterName: {{ multicluster.hostClusterName }}
+{% endif %}
 {% endif %}
     monitoring:
 {% if common.monitoring is defined and common.monitoring.endpoint is defined %}
@@ -113,12 +132,32 @@ data:
 {% else %}
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
 {% endif %}
+{% if common.monitoring.GPUMonitoring is defined and common.monitoring.GPUMonitoring.enabled == true %}
+      enableGPUMonitoring: true
+{% else %}
+      enableGPUMonitoring: false
+{% endif %}
+{% if common.gpu is defined and common.gpu.kinds is defined %}
+    gpu:
+      kinds:
+{% for kind in common.gpu.kinds %}
+      - resourceName: {{ kind.resourceName }}
+        resourceType: {{ kind.resourceType }}
+{% if kind.default is defined %}
+        default: {{ kind.default }}
+{% endif %}
+{% endfor %}
+{% endif %}
+    notification:
+{% if common.notification is defined and common.notification.endpoint is defined %}
+      endpoint: {{ common.notification.endpoint }}
+{% else %}
+      endpoint: http://notification-manager-svc.kubesphere-monitoring-system.svc:19093
+{% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
-{% if esHost is defined %}
-      host: {{ esHost }}
-{% elif common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
-      host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -135,8 +174,8 @@ data:
 {% endif %}
 {% if events.enabled is defined and events.enabled == true %}
     events:
-{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
-      host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -150,8 +189,9 @@ data:
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
       enable: true
-{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
-      host: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+      webhookURL: https://kube-auditing-webhook-svc.kubesphere-logging-system.svc:6443/audit/webhook/event
+{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -178,6 +218,17 @@ data:
     kubeedge:
       endpoint: http://edge-watcher.kubeedge.svc/api/
 {% endif %}
+
+    gateway:
+      watchesPath: /var/helm-charts/watches.yaml
+      repository: {{ nginx_ingress_controller_repo }}
+      tag: {{ nginx_ingress_controller_tag }}
+{% if gateway is defined and gateway.namespace is defined %}
+      namespace: {{ gateway.namespace }}
+{% else %}
+      namespace: kubesphere-controls-system
+{% endif %}
+
 kind: ConfigMap
 metadata:
   name: kubesphere-config

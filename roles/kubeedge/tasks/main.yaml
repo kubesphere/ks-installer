@@ -1,44 +1,9 @@
 ---
-- name: KubeEdge | Getting KubeEdge installation files
-  copy:
-    src: "kubeedge"
-    dest: "{{ kubesphere_dir }}/"
-
-- name: KubeEdge | Getting NodeIp
-  shell: "{{ bin_dir }}/kubectl get node -o wide | awk '{if(NR == 2){print $6}}'"
-  register: ks_kubeedge_nodeIP
-
-- name: KubeEdge | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
-  with_items:
-    - { path: kubeedge/kubeedge, file: values.yaml }
-    - { path: kubeedge, file: custom-values-kubeedge.yaml }
-
-- name: KubeEdge | Installing KubeEdge
+- name: KubeSphere | Comparing Kubernetes version
   shell: >
-    {{ bin_dir }}/helm upgrade --install kubeedge
-    {{ kubesphere_dir }}/kubeedge/kubeedge
-    --namespace kubeedge
-    --create-namespace
-    -f {{ kubesphere_dir }}/kubeedge/custom-values-kubeedge.yaml
-  register: result
-  until: result is succeeded
-  retries: 3
+    [ "$(echo \"$({{ bin_dir }}/kubectl get nodes -o jsonpath='{.items[0].status.nodeInfo.kubeletVersion}' -l '!node-role.kubernetes.io/edge') v1.22\" | tr \" \" \"\\n\" | sort -V | head -n 1)" = "v1.22" ] && echo "false" || echo "true"
+  register: is_kubernetes_version_satisfied
 
-- name: KubeEdge | Labeling kubeedge namespace
-  shell: >
-    {{ bin_dir }}/kubectl label namespace kubeedge kubesphere.io/workspace=system-workspace --overwrite
-
-- name: KubeEdge | Importing kubeEdge status
-  shell: >
-    {{ bin_dir }}/kubectl patch cc ks-installer
-    --type merge
-    -p '{"status": {"kubeedge": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
-    -n kubesphere-system
-  register: cc_result
-  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
-  until: cc_result is succeeded
-  retries: 5
-  delay: 3
+- import_tasks: kubeedge.yaml
+  when:
+    - 'is_kubernetes_version_satisfied.stdout == "true"'

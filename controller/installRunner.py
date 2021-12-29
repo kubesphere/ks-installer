@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "v3.1.1"
+            "version": "master"
         },
     },
 }
@@ -390,7 +390,7 @@ def resultInfo(resultState=False, api=None):
             exit()
 
     if not resultState:
-        with open(os.path.join(playbookBasePath,'kubesphere_running'), 'r') as f:
+        with open(os.path.join(playbookBasePath, 'kubesphere_running'), 'r') as f:
             info = f.read()
             logging.info(info)
 
@@ -418,6 +418,7 @@ def generateConfig(api):
     nodesObj = json.loads(nodesStr)
 
     cluster_config['nodeNum'] = len(nodesObj["items"])
+    cluster_config['kubernetes_version'] = client.VersionApi().get_code().git_version
 
     try:
         with open(configFile, 'w', encoding='utf-8') as f:
@@ -459,11 +460,73 @@ def generate_new_cluster_configuration(api):
             cluster_configuration_spec["common"]["redis"] = {
                 "enabled": True
             }
+        else:
+            cluster_configuration_spec["common"]["redis"] = {
+                "enabled": False
+            }
+
         if cluster_configuration_status is not None and "openldap" in cluster_configuration_status and "status" in cluster_configuration_status[
                 "openldap"] and cluster_configuration_status["openldap"]["status"] == "enabled":
             cluster_configuration_spec["common"]["openldap"] = {
                 "enabled": True
             }
+        else:
+            cluster_configuration_spec["common"]["openldap"] = {
+                "enabled": False
+            }
+
+        if "redisVolumSize" in cluster_configuration_spec["common"]:
+            cluster_configuration_spec["common"]["redis"][
+                "volumeSize"] = cluster_configuration_spec["common"]["redisVolumSize"]
+            del cluster_configuration_spec["common"]["redisVolumSize"]
+        if "openldapVolumeSize" in cluster_configuration_spec["common"]:
+            cluster_configuration_spec["common"]["openldap"][
+                "volumeSize"] = cluster_configuration_spec["common"]["openldapVolumeSize"]
+            del cluster_configuration_spec["common"]["openldapVolumeSize"]
+        if "minio" not in cluster_configuration_spec["common"]:
+            if "minioVolumeSize" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["minio"] = {
+                    "volumeSize": cluster_configuration_spec["common"]["minioVolumeSize"]
+                }
+                del cluster_configuration_spec["common"]["minioVolumeSize"]
+        else:
+            if "minioVolumeSize" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["minio"]["volumeSize"] = cluster_configuration_spec["common"]["minioVolumeSize"]
+                del cluster_configuration_spec["common"]["minioVolumeSize"]
+
+        # Migrate the configuration of es elasticsearch
+        if "es" in cluster_configuration_spec["common"]:
+            if "master" not in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["master"] = {
+                    "volumeSize": "4Gi"
+                }
+            if "data" not in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["data"] = {
+                    "volumeSize": "20Gi"
+                }
+            if "elasticsearchMasterReplicas" in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["master"]["replicas"] = cluster_configuration_spec["common"]["es"]["elasticsearchMasterReplicas"]
+                del cluster_configuration_spec["common"]["es"]["elasticsearchMasterReplicas"]
+            if "elasticsearchDataReplicas" in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["data"]["replicas"] = cluster_configuration_spec["common"]["es"]["elasticsearchDataReplicas"]
+                del cluster_configuration_spec["common"]["es"]["elasticsearchDataReplicas"]
+            if "elasticsearchMasterVolumeSize" in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["master"]["volumeSize"] = cluster_configuration_spec["common"]["es"]["elasticsearchMasterVolumeSize"]
+                del cluster_configuration_spec["common"]["es"]["elasticsearchMasterVolumeSize"]
+            if "elasticsearchDataVolumeSize" in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["data"]["volumeSize"] = cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
+                del cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
+            if "externalElasticsearchHost" not in cluster_configuration_spec["common"]["es"] and "externalElasticsearchUrl" in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["externalElasticsearchHost"] = cluster_configuration_spec["common"]["es"]["externalElasticsearchUrl"]
+
+        if "console" in cluster_configuration_spec:
+            if "core" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["core"]["console"]=cluster_configuration_spec["console"]
+            else:
+                cluster_configuration_spec["common"]["core"] = {
+                    "console": cluster_configuration_spec["console"]
+                }
+            del cluster_configuration_spec["console"]
 
     if "logging" in cluster_configuration_spec and "logsidecarReplicas" in cluster_configuration_spec[
             "logging"]:
@@ -536,14 +599,16 @@ def generate_new_cluster_configuration(api):
             }
         del cluster_configuration_spec["networkpolicy"]
 
-    if isinstance(cluster_configuration_status, dict) and "core" in cluster_configuration_status:
+    if isinstance(cluster_configuration_status,
+                  dict) and "core" in cluster_configuration_status:
         if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=
                 cluster_configuration["metadata"]["labels"]["version"]) or "version" not in cluster_configuration_status["core"]:
             upgrade_flag = True
 
     if upgrade_flag:
         cluster_configuration["spec"] = cluster_configuration_spec
-        if isinstance(cluster_configuration_status, dict) and "clusterId" in cluster_configuration_status:
+        if isinstance(cluster_configuration_status,
+                      dict) and "clusterId" in cluster_configuration_status:
             cluster_configuration["status"] = {
                 "clusterId": cluster_configuration_status["clusterId"]
             }
@@ -558,8 +623,8 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--config":
         print(ks_hook)
         return
-    
-    if len(sys.argv) > 1 and sys.argv[1] == "--debug": 
+
+    if len(sys.argv) > 1 and sys.argv[1] == "--debug":
         privateDataDir = os.path.abspath('./results')
         playbookBasePath = os.path.abspath('./playbooks')
         configFile = os.path.abspath('./results/ks-config.json')

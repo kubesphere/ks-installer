@@ -86,7 +86,7 @@ persistence:
 {% endif %}
   # VolumeName: ""
   accessMode: ReadWriteOnce
-  size: {% if minio_storage_pv_size is defined %}{{ minio_storage_pv_size }}{% else %}{{ common.minioVolumeSize }}{% endif %}
+  size: {% if minio_storage_pv_size is defined %}{{ minio_storage_pv_size }}{% else %}{{ common.minio.volumeSize | default("20Gi") }}{% endif %}
 
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
@@ -134,9 +134,33 @@ ingress:
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
+{% if common.minio.nodeSelector is defined and common.minio.nodeSelector is not none %}
+nodeSelector:
+  {{ common.minio.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 nodeSelector: {}
+{% endif %}
+{% if common.minio.tolerations is defined and common.minio.tolerations is not none %}
+tolerations:
+  {{ common.minio.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 tolerations: []
+{% endif %}
+{% if common.minio.affinity is defined and common.minio.affinity is not none %}
+affinity:
+   {{ common.minio.affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% elif affinity is defined and affinity is not none %}
+affinity:
+  {{ affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
 affinity: {}
+{% endif %}
 
 # Additational pod annotations
 podAnnotations: {}

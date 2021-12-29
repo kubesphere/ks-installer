@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 FROM kubesphere/shell-operator:v1.0.0-beta.5-alpine3.13
+=======
+FROM kubespheredev/shell-operator:v1.0.0-beta.5-alpine3.14
+>>>>>>> upstream/master
 
 ENV  ANSIBLE_ROLES_PATH /kubesphere/installer/roles
 WORKDIR /kubesphere

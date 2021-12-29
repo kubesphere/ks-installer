@@ -1,0 +1,156 @@
+---
+- name: ks-devops | Waiting for ks-sonarqube
+  shell: >
+    curl -I -s -u {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }} -X POST {{ sonar_server_url_internal }}/api/user_tokens/generate|awk '{if(NR==1){print $2}}'
+  register: result
+  until:
+    - result is succeeded
+    - result.stdout == "400"
+  retries: 30
+  delay: 3
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Checking ks-sonarqube token
+  uri:
+    url: "{{ sonar_server_url_internal }}/api/user_tokens/search"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+    body_format: json
+  register: checkinfo
+  until:
+    - checkinfo is succeeded
+  retries: 30
+  delay: 3
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Deleting ks-sonarqube old token
+  uri:
+    url: "{{ sonar_server_url_internal }}/api/user_tokens/revoke?name=jenkins"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+  register: result
+  failed_when: "result.msg and 'OK' not in result.msg"
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+    - checkinfo.json.userTokens|length != 0
+
+
+- name: ks-devops | Generating ks-sonarqube token
+  uri:
+    url: "{{ sonar_server_url_internal }}/api/user_tokens/generate?name=jenkins"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+    body_format: json
+  register: userinfo
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Setting user permission(admin)
+  uri:
+    url: "{{ sonar_server_url_internal }}/api/permissions/add_user"
+    method: POST
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      login: "{{ sonarqube_user_name }}"
+      permission: admin
+    status_code: 204
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Setting user permission(gateadmin)
+  uri:
+    url: "{{ sonar_server_url_internal }}/api/permissions/add_user"
+    method: POST
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      login: "{{ sonarqube_user_name }}"
+      permission: gateadmin
+    status_code: 204
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Setting user permission(profileadmin)
+  uri:
+    url: "{{ sonar_server_url_internal }}/api/permissions/add_user"
+    method: POST
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      login: "{{ sonarqube_user_name }}"
+      permission: profileadmin
+    status_code: 204
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Creating ks-jenkins webhook(internal)
+  shell: >
+    curl {{ sonar_server_url_internal }}/api/webhooks/list -u  {{ sonarqube_user_name }}:{{ sonarqube_user_passwd }}
+  register: webhooks_list
+  failed_when: false
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+
+
+- name: ks-devops | Creating ks-jenkins webhook(internal)
+  uri:
+    url: "{{ sonar_server_url_internal }}/api/webhooks/create"
+    method: POST
+    user: "{{ sonarqube_user_name }}"
+    password: "{{ sonarqube_user_passwd }}"
+    force_basic_auth: yes
+    body_format: form-urlencoded
+    body:
+      name: ks-jenkins
+      url: 'http://devops-jenkins.kubesphere-devops-system.svc.cluster.local/sonarqube-webhook/'
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined
+    - webhooks_list.stdout.find("devops-jenkins.kubesphere-devops-system") == -1
+
+
+- name: ks-devops | Setting ks-sonarqube token
+  set_fact:
+    externalSonarToken: "{{ userinfo.json.token }}"
+  when:
+    - devops.sonarqube.enabled is defined
+    - devops.sonarqube.enabled == true
+    - devops.sonarqube.externalSonarToken is not defined

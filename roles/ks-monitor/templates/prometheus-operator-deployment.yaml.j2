@@ -24,7 +24,6 @@ spec:
       - args:
         - --kubelet-service=kube-system/kubelet
         - --logtostderr=true
-        - --config-reloader-image={{ configmap_reload_repo }}:{{ configmap_reload_tag }}
         - --prometheus-config-reloader={{ prometheus_config_reloader_repo }}:{{ prometheus_config_reloader_tag }}
         - --config-reloader-cpu=0
         image: {{ prometheus_operator_repo }}:{{ prometheus_operator_tag }}
@@ -34,11 +33,11 @@ spec:
           name: http
         resources:
           limits:
-            cpu: 200m
-            memory: 200Mi
+            cpu: {{ monitoring.prometheus.operator.resources.limits.cpu | default("200m") }}
+            memory: {{ monitoring.prometheus.operator.resources.limits.memory | default("200Mi") }}
           requests:
-            cpu: 100m
-            memory: 100Mi
+            cpu: {{ monitoring.prometheus.operator.resources.requests.cpu | default("100m") }}
+            memory: {{ monitoring.prometheus.operator.resources.requests.memory | default("100Mi") }}
         securityContext:
           allowPrivilegeEscalation: false
       - args:
@@ -50,11 +49,11 @@ spec:
         name: kube-rbac-proxy
         resources:
           limits:
-            cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
-            memory: {{ monitoring.kube_rbac_proxy.limits.memory | default("100Mi") }}
+            cpu: {{ monitoring.kube_rbac_proxy.resources.limits.cpu | default(monitoring.kube_rbac_proxy.limits.cpu) | default("1") }}
+            memory: {{ monitoring.kube_rbac_proxy.resources.limits.memory | default(monitoring.kube_rbac_proxy.limits.memory) | default("100Mi") }}
           requests:
-            cpu: {{ monitoring.kube_rbac_proxy.requests.cpu | default("10m") }}
-            memory: {{ monitoring.kube_rbac_proxy.requests.memory| default("20Mi") }}
+            cpu: {{ monitoring.kube_rbac_proxy.resources.requests.cpu | default(monitoring.kube_rbac_proxy.requests.cpu) | default("10m") }}
+            memory: {{ monitoring.kube_rbac_proxy.resources.requests.memory | default(monitoring.kube_rbac_proxy.requests.memory) | default("20Mi") }}
         ports:
         - containerPort: 8443
           name: https
@@ -62,8 +61,34 @@ spec:
           runAsGroup: 65532
           runAsNonRoot: true
           runAsUser: 65532
+{% if monitoring.nodeSelector is defined and monitoring.nodeSelector is not none %}
       nodeSelector:
-        beta.kubernetes.io/os: linux
+        {{ monitoring.nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+      nodeSelector:
+        {{ nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      nodeSelector:
+        kubernetes.io/os: linux
+{% endif %}
+{% if monitoring.tolerations is defined and monitoring.tolerations is not none %}
+      tolerations:
+        {{ monitoring.tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% elif tolerations is defined and tolerations is not none %}
+      tolerations:
+        {{ tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      tolerations: []
+{% endif %}
+{% if monitoring.affinity is defined and monitoring.affinity is not none %}
+      affinity:
+        {{  monitoring.affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% elif affinity is defined and affinity is not none %}
+      affinity:
+        {{ affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      affinity: {}
+{% endif %}
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534

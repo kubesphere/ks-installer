@@ -9,11 +9,11 @@ image:
 
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: {{ monitoring.gpu.nvidia_dcgm_exporter.resources.limits.cpu | default("100m") }}
+    memory: {{ monitoring.gpu.nvidia_dcgm_exporter.resources.limits.memory | default("128Mi") }}
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: {{ monitoring.gpu.nvidia_dcgm_exporter.resources.requests.cpu | default("100m") }}
+    memory: {{ monitoring.gpu.nvidia_dcgm_exporter.resources.requests.memory | default("128Mi") }}
 
 imagePullSecrets: []
 
@@ -23,11 +23,11 @@ tolerations: []
 nodeSelector: {}
   # node: gpu
 
-affinity: 
+affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       nodeSelectorTerms:
       - matchExpressions:
-        - key: nvidia-gpu
+        - key: nvidia.com/gpu.present
           operator: Exists
 

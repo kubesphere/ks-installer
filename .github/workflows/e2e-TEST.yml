@@ -25,9 +25,20 @@ jobs:
     - name: Clean up
       run: kind delete cluster --name chart-testing && docker image prune -f
 
-    - name: Build image
-      run: docker build . --file Dockerfile --tag ks-installer
-
+    - name: Build image (pr)
+      if: ${{ github.event_name == 'pull_request' }}
+      run: |
+        echo ${{ github.base_ref }}
+        tag=${{ github.base_ref }} && sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml && sed -i "/    \"version\"/s/\:.*/\: \"$tag\"/g" controller/installRunner.py
+        docker build . --file Dockerfile --tag ks-installer
+      
+    - name: Build image (push)
+      if: ${{ github.event_name == 'push' }}
+      run: |
+        echo ${GITHUB_REF#refs/heads/}
+        tag=${GITHUB_REF#refs/heads/} && sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml && sed -i "/    \"version\"/s/\:.*/\: \"$tag\"/g" controller/installRunner.py
+        docker build . --file Dockerfile --tag ks-installer
+      
     - name: Create kind cluster
       uses: helm/kind-action@v1.2.0
       with:
@@ -41,7 +52,6 @@ jobs:
         sed -i 's/image: .*/image: ks-installer/g' deploy/kubesphere-installer.yaml
         sed -i 's/imagePullPolicy: .*/imagePullPolicy: IfNotPresent/g' deploy/kubesphere-installer.yaml
         sed -i 's/jenkinsMemoryReq: .*/jenkinsMemoryReq: 200Mi/g' deploy/cluster-configuration.yaml
-        sed -i 's/# elasticsearchDataReplicas: .*/elasticsearchDataReplicas: 1/g' deploy/cluster-configuration.yaml
         kubectl apply -f deploy/kubesphere-installer.yaml
         kubectl apply -f deploy/cluster-configuration.yaml
         bash scripts/check_cluster_status.sh
@@ -50,6 +60,28 @@ jobs:
       run: |
         kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true},"devops":{"enabled":true},"alerting":{"enabled":true},"auditing":{"enabled":true},"console":{"enableMultiLogin":true},"events":{"enabled":true},"logging":{"enabled":true},"metrics_server":{"enabled":true},"network":{"networkpolicy":{"enabled":true}},"openpitrix":{"store":{"enabled":true}}}}'
         bash scripts/check_cluster_status.sh
+
+#    - name: Clean up (servicemesh / devops / gatekeeper)
+#      run: kind delete cluster --name chart-testing
+#
+#    - name: Create kind cluster (servicemesh / devops / gatekeeper)
+#      uses: helm/kind-action@v1.2.0
+#      with:
+#        config: .github/workflows/kind/kind.yaml
+#
+#    - name: Load image to kind (servicemesh / devops / gatekeeper)
+#      run: kind load docker-image ks-installer --name chart-testing
+#
+#    - name: Deploy KubeSphere to Kind (servicemesh / devops / gatekeeper)
+#      run: |
+#        kubectl apply -f deploy/kubesphere-installer.yaml
+#        kubectl apply -f deploy/cluster-configuration.yaml
+#        bash scripts/check_cluster_status.sh
+#
+#    - name: Test plugin (servicemesh / devops / gatekeeper)
+#      run: |
+#        kubectl -n kubesphere-system patch cc ks-installer --type merge --patch '{"spec":{"servicemesh":{"enabled":true},"devops":{"enabled":true},"gatekeeper":{"enabled":true}}}'
+#        bash scripts/check_cluster_status.sh
 
     - name: Check DOCKER_PASSWORD secret
       id: checksecret_job
@@ -83,7 +115,7 @@ jobs:
 
       - name: Push image
         run: |
-          IMAGE=$IMAGE_REPO/$IMAGE_NAME:$([ "$GITHUB_REF" = refs/heads/master ] && echo "latest" || echo "${{ steps.get_version.outputs.VERSION }}")
+          IMAGE=$IMAGE_REPO/$IMAGE_NAME:${{ steps.get_version.outputs.VERSION }}
           docker build . --file Dockerfile --tag $IMAGE
           echo $IMAGE
           docker push $IMAGE

@@ -37,18 +37,18 @@ spec:
         name: node-exporter
         resources:
           limits:
-            cpu: {{ monitoring.node_exporter.limits.cpu | default("1") }}
-            memory: {{ monitoring.node_exporter.limits.memory | default("500Mi") }}
+            cpu: {{ monitoring.node_exporter.resources.limits.cpu | default(monitoring.node_exporter.limits.cpu) | default("1") }}
+            memory: {{ monitoring.node_exporter.resources.limits.memory | default(monitoring.node_exporter.limits.memory) | default("500Mi") }}
           requests:
-            cpu: {{ monitoring.node_exporter.requests.cpu | default("102m")  }}
-            memory: {{ monitoring.node_exporter.requests.memory | default("180Mi")  }}
+            cpu: {{ monitoring.node_exporter.resources.requests.cpu | default(monitoring.node_exporter.requests.cpu) | default("102m")  }}
+            memory: {{ monitoring.node_exporter.resources.requests.memory | default(monitoring.node_exporter.requests.memory) | default("180Mi")  }}
         volumeMounts:
         - mountPath: /host/proc
           name: proc
-          readOnly: false
+          readOnly: true
         - mountPath: /host/sys
           name: sys
-          readOnly: false
+          readOnly: true
         - mountPath: /host/root
           mountPropagation: HostToContainer
           name: root
@@ -75,21 +75,21 @@ spec:
           runAsUser: 65532
         resources:
           limits:
-            cpu: {{ monitoring.kube_rbac_proxy.limits.cpu | default("1") }}
-            memory: {{ monitoring.kube_rbac_proxy.limits.memory | default("100Mi") }}
+            cpu: {{ monitoring.kube_rbac_proxy.resources.limits.cpu | default(monitoring.kube_rbac_proxy.limits.cpu) | default("1") }}
+            memory: {{ monitoring.kube_rbac_proxy.resources.limits.memory | default(monitoring.kube_rbac_proxy.limits.memory) | default("100Mi") }}
           requests:
-            cpu: {{ monitoring.kube_rbac_proxy.requests.cpu | default("10m") }}
-            memory: {{ monitoring.kube_rbac_proxy.requests.memory| default("20Mi") }}
+            cpu: {{ monitoring.kube_rbac_proxy.resources.requests.cpu | default(monitoring.kube_rbac_proxy.requests.cpu) | default("10m") }}
+            memory: {{ monitoring.kube_rbac_proxy.resources.requests.memory | default(monitoring.kube_rbac_proxy.requests.memory) | default("20Mi") }}
       hostNetwork: true
       hostPID: true
       nodeSelector:
         kubernetes.io/os: linux
+      tolerations:
+      - operator: Exists
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
       serviceAccountName: node-exporter
-      tolerations:
-      - operator: Exists
       volumes:
       - hostPath:
           path: /proc

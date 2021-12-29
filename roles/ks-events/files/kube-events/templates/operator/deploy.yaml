@@ -18,6 +18,18 @@ spec:
         app: {{ template "kube-events.operator.fullname" . }}
 {{ include "kube-events.labels" . | indent 8 }}
     spec:
+      {{- with .Values.operator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.operator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.operator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: events-operator
         image: {{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}
@@ -33,14 +45,17 @@ spec:
         - containerPort: 9443
           name: webhook-server
           protocol: TCP
+        {{- if .Values.operator.resources }}
         resources:
 {{ toYaml .Values.operator.resources | indent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: cert
           readOnly: true
         - mountPath: /etc/localtime
           name: host-time
+          readOnly: true
       serviceAccountName: {{ template "kube-events.operator.fullname" . }}
       terminationGracePeriodSeconds: 10
       volumes:

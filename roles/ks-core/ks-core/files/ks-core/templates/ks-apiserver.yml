@@ -39,16 +39,18 @@ spec:
         - containerPort: 9090
           protocol: TCP
         resources:
-          {{- toYaml .Values.apiserverResources | nindent 12 }}
+          {{- toYaml .Values.apiserver.resources | nindent 12 }}
         volumeMounts:
-        - mountPath: /var/run/docker.sock
-          name: docker-sock
         - mountPath: /etc/kubesphere/ingress-controller
           name: ks-router-config
         - mountPath: /etc/kubesphere/
           name: kubesphere-config
         - mountPath: /etc/localtime
           name: host-time
+          readOnly: true
+        {{- if .Values.apiserver.extraVolumeMounts }}
+          {{- toYaml .Values.apiserver.extraVolumeMounts | nindent 8 }}
+        {{- end }}
         env:
         {{- if .Values.env }}
         {{- toYaml .Values.env | nindent 8 }}
@@ -66,17 +68,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            preference:
-              matchExpressions:
-              - key: node-role.kubernetes.io/master
-                operator: In
-                values:
-                - ""
-{{- if gt .Values.replicaCount 1.0 }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - topologyKey: kubernetes.io/hostname
@@ -87,13 +83,12 @@ spec:
                 values:
                 - ks-apiserver
             namespaces:
-            - {{ .Release.Namespace }}
+            - kubesphere-system
+{{- with .Values.nodeAffinity }}
+        nodeAffinity:
+{{ toYaml . | indent 10 }}
 {{- end }}
       volumes:
-      - hostPath:
-          path: /var/run/docker.sock
-          type: ""
-        name: docker-sock
       - configMap:
           defaultMode: 420
           name: ks-router-config
@@ -106,7 +101,9 @@ spec:
           path: /etc/localtime
           type: ""
         name: host-time
-
+      {{- if .Values.apiserver.extraVolumes }}
+        {{ toYaml .Values.apiserver.extraVolumes | nindent 6 }}
+      {{- end }}
 ---
 
 apiVersion: v1

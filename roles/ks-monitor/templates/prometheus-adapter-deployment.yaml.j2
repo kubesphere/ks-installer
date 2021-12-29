@@ -29,11 +29,11 @@ spec:
         name: prometheus-adapter
         resources:
           limits:
-            cpu: {{ monitoring.prometheus_adapter.limits.cpu | default("600m") }}
-            memory: {{ monitoring.prometheus_adapter.limits.memory | default("500Mi") }}
+            cpu: {{ monitoring.prometheus.adapter.resources.limits.cpu | default(monitoring.prometheus_adapter.limits.cpu) | default("600m") }}
+            memory: {{ monitoring.prometheus.adapter.resources.limits.memory | default(monitoring.prometheus_adapter.limits.memory) | default("500Mi") }}
           requests:
-            cpu: {{ monitoring.prometheus_adapter.requests.cpu | default("200m") }}
-            memory: {{ monitoring.prometheus_adapter.requests.memory | default("250Mi") }}
+            cpu: {{ monitoring.prometheus.adapter.resources.requests.cpu | default(monitoring.prometheus_adapter.requests.cpu) | default("200m") }}
+            memory: {{ monitoring.prometheus.adapter.resources.requests.memory | default(monitoring.prometheus_adapter.requests.memory) | default("250Mi") }}
         ports:
         - containerPort: 6443
         volumeMounts:
@@ -46,8 +46,34 @@ spec:
         - mountPath: /etc/adapter
           name: config
           readOnly: false
+{% if monitoring.nodeSelector is defined and monitoring.nodeSelector is not none %}
+      nodeSelector:
+        {{ monitoring.nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+      nodeSelector:
+        {{ nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
       nodeSelector:
         kubernetes.io/os: linux
+{% endif %}
+{% if monitoring.tolerations is defined and monitoring.tolerations is not none %}
+      tolerations:
+        {{ monitoring.tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% elif tolerations is defined and tolerations is not none %}
+      tolerations:
+        {{ tolerations | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      tolerations: []
+{% endif %}
+{% if monitoring.affinity is defined and monitoring.affinity is not none %}
+      affinity:
+        {{  monitoring.affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% elif affinity is defined and affinity is not none %}
+      affinity:
+        {{ affinity | to_nice_yaml(indent=2) | indent(8) }}
+{% else %}
+      affinity: {}
+{% endif %}
       serviceAccountName: prometheus-adapter
       volumes:
       - emptyDir: {}

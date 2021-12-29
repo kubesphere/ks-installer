@@ -18,7 +18,7 @@ skopeo_copy() {
     if skopeo copy --insecure-policy --src-tls-verify=false --dest-tls-verify=false -q docker://$1 docker://$2; then
         echo -e "$GREEN_COL Progress: ${CURRENT_NUM}/${TOTAL_NUMS} sync $1 successful $NORMAL_COL"
     else
-        echo -e "$RED_COL Sync $1 failed $NORMAL_CO"
+        echo -e "$RED_COL Sync $1 failed $NORMAL_COL"
     fi
 }
 

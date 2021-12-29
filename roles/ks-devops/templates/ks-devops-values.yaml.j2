@@ -1,0 +1,141 @@
+# ks-devops helm chart values patch
+
+## ks-devops chart values
+image:
+  # support 'ghcr.io/kubesphere-sigs' or 'kubespheresig'
+  registry: "{{ ks_devops_registry }}"
+  pullPolicy: {{ ks_image_pull_policy }}
+  controller:
+    tag: "{{ ks_devops_controller_tag }}"
+  apiserver:
+    tag: "{{ ks_devops_apiserver_tag }}"
+  tools:
+    tag: "{{ ks_devops_tools_tag }}"
+
+authentication:
+  # If not set, jwt tools will generate and set it automatically
+  jwtSecret: "{{ ks_jwt_secret.stdout }}"
+
+serviceAccount:
+  create: true
+
+resources: {}
+  # limits:
+  #   cpu: {{ devops.resources.limits.memory | default("200m") }}
+  #   memory: {{ devops.resources.limits.memory | default("200Mi") }}
+  # requests:
+  #   cpu: {{ devops.resources.requests.memory | default("20m") }}
+  #   memory: {{ devops.resources.requests.memory | default("50Mi") }}
+
+{% if devops.nodeSelector is defined and devops.nodeSelector is not none %}
+nodeSelector:
+  {{ devops.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+nodeSelector: {}
+{% endif %}
+{% if devops.tolerations is defined and devops.tolerations is not none %}
+tolerations:
+  {{ devops.tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+tolerations: []
+{% endif %}
+{% if devops.affinity is defined and devops.affinity is not none %}
+affinity:
+   {{ devops.affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% elif affinity is defined and affinity is not none %}
+affinity:
+  {{ affinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+affinity: {}
+{% endif %}
+
+## s2i chart values
+s2i:
+  image:
+    registry: "{{ s2i_registry }}"
+  prometheus:
+    namespace: "kubesphere-monitoring-system"
+
+# Jenkins chart values
+jenkins:
+  ksAuth:
+    enabled: true
+  Master:
+    Image: "{{ jenkins_repo }}"
+    ImagePullPolicy: {{ ks_image_pull_policy }}
+    resources:
+      requests:
+        cpu: "0.1"
+        memory: "{{ devops.jenkinsMemoryReq }}"
+      limits:
+        cpu: "1"
+        memory: "{{ devops.jenkinsMemoryLim }}"
+    JavaOpts: "{{ JavaOpts }}"
+  Agent:
+    Image: "{{ jnlp_slave_repo }}"
+    Builder:
+      Registry: "{{ builder_registry }}"
+      ContainerRuntime: "{{ builder_container_runtime }}"
+  securityRealm:
+    type: ldap
+    ldap:
+      host: openldap.kubesphere-system.svc:389
+  ContainerEnv:
+    - name: CASC_JENKINS_CONFIG
+      value: /var/jenkins_home/casc_configs/jenkins.yaml
+    - name: com.sun.jndi.ldap.connect.timeout
+      value: "15000"
+    - name: com.sun.jndi.ldap.read.timeout
+      value: "60000"
+    - name: kubernetes.connection.timeout
+      value: "60000"
+    - name: kubernetes.request.timeout
+      value: "60000"
+    - name: EMAIL_SMTP_HOST
+      value: "{{ EMAIL_SMTP_HOST }}"
+    - name: EMAIL_SMTP_PORT
+      value: "{{ EMAIL_SMTP_PORT }}"
+    - name: EMAIL_USE_SSL
+      value: "{{ EMAIL_USE_SSL }}"
+    - name: EMAIL_FROM_NAME
+      value: "{{ EMAIL_FROM_NAME }}"
+    - name: EMAIL_FROM_ADDR
+      value: "{{ EMAIL_FROM_ADDR }}"
+    - name: EMAIL_FROM_PASS
+      value: "{{ EMAIL_FROM_PASS }}"
+{% if sonarQubeHost is defined and sonarQubeToken is defined %}
+    - name: SONAR_ENABLED
+      value: "true"
+    - name: SONAR_RUNNER_VERSION
+      value: "3.3.0.1492"
+    - name: SONAR_SERVER_URL
+      value: "{{ sonarQubeHost }}"
+    - name: SONAR_AUTH_TOKEN
+      value: "{{ sonarQubeToken }}"
+{% endif %}
+
+  Persistence:
+    ExistingClaim: "{{ KS_JENKINS_PVC }}"
+    Enabled: true
+{% if persistence.storageClass is defined and persistence.storageClass != "" %}
+    StorageClass: "{{ persistence.storageClass }}"
+{% endif %}
+    AccessMode: ReadWriteOnce
+    Size: {% if jenkins_pv_size is defined %}{{ jenkins_pv_size }}{% else %}{{ devops.jenkinsVolumeSize }}{% endif %}
+
+    volumes:
+    - name: casc-config
+      configMap:
+        name: jenkins-casc-config
+    mounts:
+    - name: casc-config
+      mountPath: /var/jenkins_home/casc_configs
+      readOnly: true
+  prometheus:
+    namespace: "kubesphere-monitoring-system"
