@@ -146,32 +146,23 @@ spec:
       enabled: false # Enable or disable the KubeSphere App Store.
   servicemesh:         # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
     enabled: false     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
-  kubeedge:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
-    enabled: false   # Enable or disable KubeEdge.
-    cloudCore:
-      nodeSelector: {"node-role.kubernetes.io/worker": ""}
-      tolerations: []
-      cloudhubPort: "10000"
-      cloudhubQuicPort: "10001"
-      cloudhubHttpsPort: "10002"
-      cloudstreamPort: "10003"
-      tunnelPort: "10004"
-      cloudHub:
-        advertiseAddress: # At least a public IP address or an IP address which can be accessed by edge nodes must be provided.
-          - ""            # Note that once KubeEdge is enabled, CloudCore will malfunction if the address is not provided.
-        nodeLimit: "100"
-      service:
-        cloudhubNodePort: "30000"
-        cloudhubQuicNodePort: "30001"
-        cloudhubHttpsNodePort: "30002"
-        cloudstreamNodePort: "30003"
-        tunnelNodePort: "30004"
-    edgeWatcher:
-      nodeSelector: {"node-role.kubernetes.io/worker": ""}
-      tolerations: []
-      edgeWatcherAgent:
-        nodeSelector: {"node-role.kubernetes.io/worker": ""}
-        tolerations: []
+  edgeruntime:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
+    enabled: fasle
+    kubeedge:        # kubeedge configurations
+      enabled: false 
+      cloudCore:
+        # resources: {}
+        cloudHub:
+          advertiseAddress: # At least a public IP address or an IP address which can be accessed by edge nodes must be provided.
+            - ""            # Note that once KubeEdge is enabled, CloudCore will malfunction if the address is not provided.
+        service:
+          cloudhubNodePort: "30000"
+          cloudhubQuicNodePort: "30001"
+          cloudhubHttpsNodePort: "30002"
+          cloudstreamNodePort: "30003"
+          tunnelNodePort: "30004"
+      # edgeService:
+      #   resources: {}
   gatekeeper:        # Provide admission policy and rule management, A validating (mutating TBA) webhook that enforces CRD-based policies executed by Open Policy Agent.
     enabled: false   # Enable or disable Gatekeeper.
     # controller_manager:

@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  {{- with .Values.edgeService.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.edgeService.labels }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: edgeservice
+spec:
+  replicas: {{ .Values.edgeService.replicaCount }}
+  selector:
+    matchLabels:
+      {{- with .Values.edgeService.labels }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+  template:
+    metadata:
+      {{- with .Values.edgeService.labels }}
+      labels: {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccount: edgeservice-sa
+      containers:
+      - name: edgeservice
+        image: {{ .Values.edgeService.image.repository }}:{{ .Values.edgeService.image.tag }}
+        ports:
+        - name: http
+          protocol: TCP
+          containerPort: 8081
+        command:
+        - edgeservice
+        imagePullPolicy: {{ .Values.edgeService.image.pullPolicy }}
+        {{- with .Values.edgeService.resources }}
+        resources: {{ toYaml . | nindent 10 }}
+        {{- end }} 
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: host-time
+          readOnly: true
+      restartPolicy: Always
+      {{- with .Values.edgeService.affinity }}
+      affinity: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.edgeService.tolerations }}
+      tolerations: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.edgeService.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - hostPath:
+          path: /etc/localtime
+          type: ""
+        name: host-time
