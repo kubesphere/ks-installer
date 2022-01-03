@@ -164,7 +164,7 @@ notification_tenant_sidecar_tag: v3.2.0
 docker_elasticsearch_curator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-curator"
 docker_elasticsearch_curator_tag: v5.7.6
 elasticsearch_oss_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-oss"
-elasticsearch_oss_tag: 6.7.0-1
+elasticsearch_oss_tag: 6.8.22
 fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluentbit-operator"
 fluentbit_operator_tag: v0.11.0
 docker_repo: "{{ base_library_repo }}docker"
