@@ -114,8 +114,6 @@ spec:
     #   resources: {}
     #   operator:
     #     resources: {}
-    #   adapter:
-    #     resources: {}
     # node_exporter:
     #   resources: {}
     # alertmanager:

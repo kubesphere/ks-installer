@@ -2,17 +2,23 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    k8s-app: prometheus
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: k8s
+    app.kubernetes.io/name: prometheus
+    app.kubernetes.io/part-of: kube-prometheus
     app.kubernetes.io/vendor: kubesphere
-  name: prometheus
+    app.kubernetes.io/version: 2.32.1
+  name: prometheus-k8s
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-  - interval: 1m
+  - interval: 30s
     port: web
-    relabelings:
-    - action: labeldrop
-      regex: (service|endpoint)
+  - interval: 30s
+    port: reloader-web
   selector:
     matchLabels:
-      prometheus: k8s
+      app.kubernetes.io/component: prometheus
+      app.kubernetes.io/instance: k8s
+      app.kubernetes.io/name: prometheus
+      app.kubernetes.io/part-of: kube-prometheus

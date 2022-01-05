@@ -2,7 +2,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   labels:
-    prometheus: k8s
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: k8s
+    app.kubernetes.io/name: prometheus
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: {{ prometheus_tag | replace("v", "") }}
   name: k8s
   namespace: kubesphere-monitoring-system
 spec:
@@ -28,11 +32,11 @@ spec:
       preferredDuringSchedulingIgnoredDuringExecution:
       - podAffinityTerm:
           labelSelector:
-            matchExpressions:
-            - key: prometheus
-              operator: In
-              values:
-              - k8s
+            matchLabels:
+              app.kubernetes.io/component: prometheus
+              app.kubernetes.io/instance: k8s
+              app.kubernetes.io/name: prometheus
+              app.kubernetes.io/part-of: kube-prometheus
           namespaces:
           - kubesphere-monitoring-system
           topologyKey: kubernetes.io/hostname
@@ -45,6 +49,13 @@ spec:
       port: web
   evaluationInterval: 1m
   image: {{ prometheus_repo }}:{{ prometheus_tag }}
+  podMetadata:
+    labels:
+      app.kubernetes.io/component: prometheus
+      app.kubernetes.io/instance: k8s
+      app.kubernetes.io/name: prometheus
+      app.kubernetes.io/part-of: kube-prometheus
+      app.kubernetes.io/version: {{ prometheus_tag | replace("v", "") }}
 {% if monitoring.nodeSelector is defined and monitoring.nodeSelector is not none %}
   nodeSelector:
     {{ monitoring.nodeSelector | to_nice_yaml(indent=2) | indent(8) }}
@@ -86,6 +97,7 @@ spec:
       memory: {{ monitoring.prometheus.resources.requests.memory | default(monitoring.prometheus.requests.memory) | default("400Mi") }}
   retention: {% if prometheus_retention_duration is defined %}{{ prometheus_retention_duration }}{% else %}7d{% endif %}
 
+  ruleNamespaceSelector: {}
   ruleSelector:
     matchLabels:
       prometheus: k8s
@@ -101,7 +113,9 @@ spec:
     runAsUser: 0
   serviceAccountName: prometheus-k8s
   serviceMonitorNamespaceSelector: {}
-  serviceMonitorSelector: {}
+  serviceMonitorSelector:
+    matchLabels:
+      app.kubernetes.io/vendor: kubesphere
   storage:
     volumeClaimTemplate:
       spec:

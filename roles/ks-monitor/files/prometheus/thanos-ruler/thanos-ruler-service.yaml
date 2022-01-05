@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: thanos-ruler
+    app.kubernetes.io/instance: kubesphere
+    app.kubernetes.io/name: thanos-ruler
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 0.23.2
+  name: thanos-ruler-kubesphere
+  namespace: kubesphere-monitoring-system
+spec:
+  ports:
+  - name: web
+    port: 10902
+    targetPort: web
+  selector:
+    app.kubernetes.io/component: thanos-ruler
+    app.kubernetes.io/instance: kubesphere
+    app.kubernetes.io/name: thanos-ruler
+    app.kubernetes.io/part-of: kube-prometheus
+  sessionAffinity: ClientIP
