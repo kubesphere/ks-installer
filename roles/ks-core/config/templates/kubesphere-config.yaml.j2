@@ -221,6 +221,16 @@ data:
 {% endif %}
 {% endif %}
 
+{% if terminal is defined %}
+    terminal:
+{% if terminal.image is defined %}
+      image: {{ terminal.image }}
+{% endif %}
+{% if terminal.timeout is defined %}
+      timeout: {{ terminal.timeout }}
+{% endif %}
+{% endif %}
+
     gateway:
       watchesPath: /var/helm-charts/watches.yaml
       repository: {{ nginx_ingress_controller_repo }}
