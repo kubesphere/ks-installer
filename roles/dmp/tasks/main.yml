@@ -14,12 +14,25 @@
     - { path: pg, file: custom-values-pg-operator.yaml }
     - { path: pg, file: custom-values-pg-cluster.yaml }
 
+- name: DMP | Installing pg operator
+  shell: >
+    {{ bin_dir }}/helm upgrade --install pg-operator
+    {{ kubesphere_dir }}/dmp/pg/pg-operator
+    -f {{ kubesphere_dir }}/dmp/pg/custom-values-pg-operator.yaml
+    --namespace dmp-system
+    --set namespace=dmp-system
+    --set pgo_operator_namespace=dmp-system
+    --create-namespace
+  register: result
+  until: result is succeeded
+  retries: 3
+
 - name: DMP | Installing clickhouse operator
   shell: >
     {{ bin_dir }}/helm upgrade --install clickhouse-operator
     {{ kubesphere_dir }}/dmp/clickhouse/clickhouse-operator
     -f {{ kubesphere_dir }}/dmp/clickhouse/custom-values-clickhouse-operator.yaml
-    --namespace kube-system
+    --namespace dmp-system
     --create-namespace
   register: result
   until: result is succeeded
@@ -31,19 +44,6 @@
     {{ kubesphere_dir }}/dmp/mysql/mysql-operator
     -f {{ kubesphere_dir }}/dmp/mysql/custom-values-mysql-operator.yaml
     --namespace dmp-system
-    --create-namespace
-  register: result
-  until: result is succeeded
-  retries: 3
-
-- name: DMP | Installing pg operator
-  shell: >
-    {{ bin_dir }}/helm upgrade --install pg-operator
-    {{ kubesphere_dir }}/dmp/pg/pg-operator
-    -f {{ kubesphere_dir }}/dmp/pg/custom-values-pg-operator.yaml
-    --namespace dmp-system
-    --set namespace=dmp-system
-    --set pgo_operator_namespace=dmp-system
     --create-namespace
   register: result
   until: result is succeeded

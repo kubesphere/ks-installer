@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: clickhouse-operator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: clickhouse-operator
+spec:
+  selector:
+    matchLabels:
+      app: clickhouse-operator
+  endpoints:
+    - path: /metrics
+      port: clickhouse-operator-metrics

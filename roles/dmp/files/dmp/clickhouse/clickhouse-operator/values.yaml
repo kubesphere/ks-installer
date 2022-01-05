@@ -1,8 +1,8 @@
 # Default values for ClickHouse-operator
 
 operator:
-  image: radondb/chronus-operator:2.1
+  image: radondb/chronus-operator:2.1.1
   imagePullPolicy: IfNotPresent
 metrics_operator:
-  image: radondb/chronus-metrics-operator:2.1
+  image: radondb/chronus-metrics-operator:2.1.1
   imagePullPolicy: IfNotPresent
