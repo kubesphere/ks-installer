@@ -3,6 +3,7 @@ kind: OperatorApplicationVersion
 metadata:
   name: clickhouse
   labels:
+    application.kubesphere.io/app-id: app-clickhouse
     application.kubesphere.io/app-category-id: radondb
     kubesphere.io/workspace: system-workspace
 spec:

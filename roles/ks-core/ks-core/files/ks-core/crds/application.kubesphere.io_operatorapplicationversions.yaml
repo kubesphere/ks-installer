@@ -84,6 +84,9 @@ spec:
             properties:
               state:
                 type: string
+              updateTime:
+                format: date-time
+                type: string
             type: object
         type: object
     served: true
