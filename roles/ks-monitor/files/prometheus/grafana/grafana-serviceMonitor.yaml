@@ -11,7 +11,7 @@ metadata:
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-  - interval: 15s
+  - interval: 1m
     port: http
   selector:
     matchLabels:

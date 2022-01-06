@@ -10,7 +10,7 @@ metadata:
 spec:
   endpoints:
   - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-    interval: 15s
+    interval: 1m
     metricRelabelings:
     - action: drop
       regex: coredns_cache_misses_total
