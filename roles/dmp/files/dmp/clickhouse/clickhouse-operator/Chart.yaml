@@ -2,7 +2,7 @@ apiVersion: v2
 appVersion: "v2.1"
 name: clickhouse-operator
 type: application
-version: v2.1
+version: v2.1.1
 description: Helm chart for deploying ClickHouse Operator on Kubernetes
 home: https://github.com/radondb/radondb-clickhouse-kubernetes
 
