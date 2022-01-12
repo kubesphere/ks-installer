@@ -35,7 +35,7 @@ spec:
     - 磁盘扩容兼容了 qingcloud-csi
     - 兼容了 kubernetes api extension v1 版本
     - 支持自动创建 / 删除 / 配置 ZooKeeper 集群依赖
-  operatorVersion: "2.1.0"
+  operatorVersion: "2.1.1"
   appVersion: "21.1.3.32"
   owner: "RadonDB"
 status:
