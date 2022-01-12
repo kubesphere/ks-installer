@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "v3.2.1-rc.0"
+            "version": "qkcp-v3.2.1-rc.0"
         },
     },
 }
@@ -564,7 +564,16 @@ def generate_new_cluster_configuration(api):
                         "enabled": False
                     }
                 }
-
+    if "dmp" not in cluster_configuration_spec:
+        cluster_configuration_spec["dmp"] = {
+            "enabled": True
+        }
+    if "notification" not in cluster_configuration_spec:
+        cluster_configuration_spec["notification"] = {
+            "history": {
+                "enabled": True
+            }
+        }
     if "networkpolicy" in cluster_configuration_spec:
         upgrade_flag = True
         if "enabled" in cluster_configuration_spec[
