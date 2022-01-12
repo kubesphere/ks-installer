@@ -404,6 +404,7 @@ rules:
       - workspacerolebindings
       - groups
       - groupbindings
+      - manifests
     verbs:
       - '*'
   - apiGroups:
@@ -2291,6 +2292,7 @@ role:
         - snapshot.storage.k8s.io
         - monitoring.coreos.com
         - networking.k8s.io
+        - manifests
       resources:
         - '*'
       verbs:
@@ -2761,6 +2763,7 @@ role:
         - s2ibuildertemplates
         - s2iruns
         - horizontalpodautoscalers
+        - manifests
       verbs:
         - get
         - list
@@ -2814,6 +2817,7 @@ role:
         - s2ibuildertemplates
         - s2iruns
         - horizontalpodautoscalers
+        - manifests
       verbs:
         - '*'
     - apiGroups:
