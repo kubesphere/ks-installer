@@ -24,7 +24,7 @@ spec:
           - kubesphere-monitoring-system
           topologyKey: kubernetes.io/hostname
         weight: 100
-  image: quay.io/prometheus/alertmanager:v0.23.0
+  image: prom/alertmanager:v0.23.0
   nodeSelector:
     kubernetes.io/os: linux
   podMetadata:

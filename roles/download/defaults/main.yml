@@ -131,13 +131,13 @@ configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidys
 configmap_reload_tag: v0.5.0
 prometheus_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/prometheus"
 prometheus_tag: v2.32.1
-prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/prometheus-operator') }}/prometheus-config-reloader"
+prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-config-reloader"
 prometheus_config_reloader_tag: v0.53.1
-prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/prometheus-operator') }}/prometheus-operator"
+prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-operator"
 prometheus_operator_tag: v0.53.1
-kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('quay.io/brancz') }}/kube-rbac-proxy"
+kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.11.0
-kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('k8s.gcr.io/kube-state-metrics') }}/kube-state-metrics"
+kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
 kube_state_metrics_tag: v2.3.0
 node_exporter_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/node-exporter"
 node_exporter_tag: v1.3.1
