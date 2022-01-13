@@ -17,6 +17,7 @@ data:
       redisTimeout: 5000
       sessionTimeout: 7200000
     client:
+      showOutSiteLink: true
       version:
         kubesphere: {{ .Chart.AppVersion }}
         kubernetes: {{ .Values.kube_version }}
