@@ -20,7 +20,7 @@ fi
 
 delete_sure
 
-# delete ks-install
+# delete ks-installer
 kubectl delete deploy ks-installer -n kubesphere-system 2>/dev/null
 
 # delete helm
