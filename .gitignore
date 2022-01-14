@@ -3,3 +3,5 @@ results
 
 # GitHub Codespaces
 .venv/
+
+.vscode/
