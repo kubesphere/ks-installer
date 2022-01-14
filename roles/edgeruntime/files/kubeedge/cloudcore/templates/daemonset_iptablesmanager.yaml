@@ -33,10 +33,18 @@ spec:
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
       restartPolicy: Always
+      {{- with .Values.iptablesManager.image.pullSecrets }} 
+      imagePullSecrets: {{ toYaml . | nindent 8 }} 
+      {{- end }}  
       containers:
       - name: iptables-manager
         command: ['iptables-manager']
         image: {{ .Values.iptablesManager.image.repository }}:{{ .Values.iptablesManager.image.tag }}
+        env:
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
         imagePullPolicy: {{ .Values.iptablesManager.image.pullPolicy }}
         {{- with .Values.iptablesManager.securityContext }}
         securityContext: {{ toYaml . | nindent 10 }}

@@ -20,7 +20,7 @@ spec:
       labels: {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- if and (eq .Values.cloudCore.hostNetWork "true") (.Values.iptablesManager.enable) (eq .Values.iptablesManager.mode "internal") }}
+      {{- if eq .Values.cloudCore.hostNetWork "true" }}
       hostNetwork: {{ .Values.cloudCore.hostNetWork }}
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
@@ -35,8 +35,8 @@ spec:
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
       serviceAccount: cloudcore
-      {{- with .Values.imagePullSecrets }} 
-      imagePullSecrets: {{- toYaml . | indent 8 }} 
+      {{- with .Values.cloudCore.image.pullSecrets }} 
+      imagePullSecrets: {{ toYaml . | nindent 8 }} 
       {{- end }}  
       containers:
       - name: cloudcore
