@@ -10,9 +10,6 @@ metadata:
   name: k8s
   namespace: kubesphere-monitoring-system
 spec:
-  additionalScrapeConfigs:
-    key: prometheus-additional.yaml
-    name: additional-scrape-configs
 {% if monitoring.affinity is defined and monitoring.affinity is not none %}
   affinity:
     {{  monitoring.affinity | to_nice_yaml(indent=2) | indent(4) }}

@@ -140,7 +140,7 @@ spec:
              !=
             0
           ) or (
-            kube_daemonset_updated_number_scheduled{job="kube-state-metrics"}
+            kube_daemonset_status_updated_number_scheduled{job="kube-state-metrics"}
              !=
             kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics"}
           ) or (
@@ -149,7 +149,7 @@ spec:
             kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics"}
           )
         ) and (
-          changes(kube_daemonset_updated_number_scheduled{job="kube-state-metrics"}[5m])
+          changes(kube_daemonset_status_updated_number_scheduled{job="kube-state-metrics"}[5m])
             ==
           0
         )
@@ -700,18 +700,6 @@ spec:
       for: 15m
       labels:
         severity: critical
-  - name: kubernetes-system-kube-proxy
-    rules:
-    - alert: KubeProxyDown
-      annotations:
-        description: KubeProxy has disappeared from Prometheus target discovery.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeproxydown
-        summary: Target disappeared from Prometheus target discovery.
-      expr: |
-        absent(up{job="kube-proxy"} == 1)
-      for: 15m
-      labels:
-        severity: critical
   - name: k8s.rules
     rules:
     - expr: |
@@ -728,14 +716,14 @@ spec:
       record: namespace:container_memory_usage_bytes_wo_cache:sum
     - expr: |
         sum by (namespace, label_name) (
-            sum(kube_pod_container_resource_requests_memory_bytes{job="kube-state-metrics"} * on (endpoint, instance, job, namespace, pod, service) group_left(phase) (kube_pod_status_phase{phase=~"Pending|Running"} == 1)) by (namespace, pod)
+            sum(kube_pod_container_resource_requests{resource="memory", job="kube-state-metrics"} * on (endpoint, instance, job, namespace, pod, service) group_left(phase) (kube_pod_status_phase{phase=~"Pending|Running"} == 1)) by (namespace, pod)
           * on (namespace, pod)
             group_left(label_name) kube_pod_labels{job="kube-state-metrics"}
         )
       record: namespace:kube_pod_container_resource_requests_memory_bytes:sum
     - expr: |
         sum by (namespace, label_name) (
-            sum(kube_pod_container_resource_requests_cpu_cores{job="kube-state-metrics"} * on (endpoint, instance, job, namespace, pod, service) group_left(phase) (kube_pod_status_phase{phase=~"Pending|Running"} == 1)) by (namespace, pod)
+            sum(kube_pod_container_resource_requests{resource="cpu", job="kube-state-metrics"} * on (endpoint, instance, job, namespace, pod, service) group_left(phase) (kube_pod_status_phase{phase=~"Pending|Running"} == 1)) by (namespace, pod)
           * on (namespace, pod)
             group_left(label_name) kube_pod_labels{job="kube-state-metrics"}
         )
@@ -860,7 +848,7 @@ spec:
         sum by (node, host_ip, role) ((kube_pod_status_scheduled{job="kube-state-metrics", condition="true"} > 0)  * on (namespace, pod) group_left(node, host_ip, role) node_namespace_pod:kube_pod_info:)
       record: node:pod_count:sum
     - expr: |
-        (sum(kube_node_status_capacity_pods{job="kube-state-metrics"}) by (node) * on(node) group_left(host_ip, role) max by(node, host_ip, role) (node_namespace_pod:kube_pod_info:))
+        (sum(kube_node_status_capacity{resource="pods", job="kube-state-metrics"}) by (node) * on(node) group_left(host_ip, role) max by(node, host_ip, role) (node_namespace_pod:kube_pod_info:))
       record: node:pod_capacity:sum
     - expr: |
         node:pod_running:count / node:pod_capacity:sum
@@ -901,7 +889,7 @@ spec:
         count(kube_pod_info{job="kube-state-metrics"} and on (pod, namespace) (kube_pod_status_phase{job="kube-state-metrics", phase="Running"}>0))
       record: cluster:pod_running:count
     - expr: |
-        cluster:pod_running:count / sum(kube_node_status_capacity_pods)
+        cluster:pod_running:count / sum(kube_node_status_capacity{resource="pods", job="kube-state-metrics"})
       record: cluster:pod_utilization:ratio
     - expr: |
         1 - sum(max(node_filesystem_avail_bytes{device=~"/dev/.*", device!~"/dev/loop\\d+", job="node-exporter"}) by (device, instance)) / sum(max(node_filesystem_size_bytes{device=~"/dev/.*", device!~"/dev/loop\\d+", job="node-exporter"}) by (device, instance))
@@ -918,7 +906,7 @@ spec:
   - name: namespace.rules
     rules:
     - expr: |
-        (count(kube_pod_info{job="kube-state-metrics", node!=""}) by (namespace) - sum(kube_pod_status_phase{job="kube-state-metrics", phase="Succeeded"}) by (namespace)  - sum(kube_pod_status_ready{job="kube-state-metrics", condition="true"} * on (pod, namespace) kube_pod_status_phase{job="kube-state-metrics", phase="Running"}) by (namespace) - sum(kube_pod_container_status_waiting_reason{job="kube-state-metrics", reason="ContainerCreating"}) by (namespace)) * on (namespace) group_left(workspace)(kube_namespace_labels{job="kube-state-metrics"})
+        (count by(namespace) (kube_pod_info{job="kube-state-metrics"} unless on(pod, namespace) (kube_pod_status_phase{job="kube-state-metrics",phase="Succeeded"} > 0) unless on(pod, namespace) ((kube_pod_status_ready{condition="true",job="kube-state-metrics"} > 0) and on(pod, namespace) (kube_pod_status_phase{job="kube-state-metrics",phase="Running"} > 0)) unless on(pod, namespace) kube_pod_container_status_waiting_reason{job="kube-state-metrics",reason="ContainerCreating"} > 0) or on(namespace) (group by(namespace) (kube_pod_info{job="kube-state-metrics"}) * 0)) * on(namespace) group_left(workspace) (kube_namespace_labels{job="kube-state-metrics"}) > 0
       record: namespace:pod_abnormal:count
     - expr: |
         namespace:pod_abnormal:count / (sum(kube_pod_status_phase{job="kube-state-metrics", phase!="Succeeded", namespace!=""}) by (namespace) * on (namespace) group_left(workspace)(kube_namespace_labels{job="kube-state-metrics"}))

@@ -173,9 +173,6 @@ spec:
         sum(label_replace(sum(etcd_server_proposals_pending{job=~".*etcd.*"}) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
       record: etcd:etcd_server_proposals_pending:sum
     - expr: |
-        sum(label_replace(etcd_debugging_mvcc_db_total_size_in_bytes{job=~".*etcd.*"},"node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_debugging_mvcc_db_total_size:sum
-    - expr: |
         sum(label_replace(etcd_mvcc_db_total_size_in_bytes{job=~".*etcd.*"},"node", "$1", "instance", "(.*):.*")) by (node)
       record: etcd:etcd_mvcc_db_total_size:sum
     - expr: |
