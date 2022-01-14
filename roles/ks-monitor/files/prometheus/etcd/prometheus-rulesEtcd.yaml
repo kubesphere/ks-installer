@@ -2,124 +2,44 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   labels:
+    app.kubernetes.io/name: etcd
     prometheus: k8s
     role: alert-rules
   name: prometheus-k8s-etcd-rules
   namespace: kubesphere-monitoring-system
 spec:
   groups:
-  - name: etcd.rules
-    rules:
-    - expr: |
-        sum(up{job="etcd"} == 1)
-      record: etcd:up:sum
-    - expr: |
-        sum(label_replace(sum(changes(etcd_server_leader_changes_seen_total{job="etcd"}[1h])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_server_leader_changes_seen:sum_changes
-    - expr: |
-        sum(label_replace(sum(irate(etcd_server_proposals_failed_total{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_server_proposals_failed:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(etcd_server_proposals_applied_total{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_server_proposals_applied:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(etcd_server_proposals_committed_total{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_server_proposals_committed:sum_irate
-    - expr: |
-        sum(label_replace(sum(etcd_server_proposals_pending{job="etcd"}) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_server_proposals_pending:sum
-    - expr: |
-        sum(label_replace(etcd_debugging_mvcc_db_total_size_in_bytes{job="etcd"},"node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_debugging_mvcc_db_total_size:sum
-    - expr: |
-        sum(label_replace(etcd_mvcc_db_total_size_in_bytes{job="etcd"},"node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_mvcc_db_total_size:sum
-    - expr: |
-        sum(label_replace(sum(irate(etcd_network_client_grpc_received_bytes_total{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_network_client_grpc_received_bytes:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(etcd_network_client_grpc_sent_bytes_total{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_network_client_grpc_sent_bytes:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(grpc_server_started_total{job="etcd",grpc_type="unary"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:grpc_server_started:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(grpc_server_handled_total{job="etcd",grpc_type="unary",grpc_code!="OK"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:grpc_server_handled:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(grpc_server_msg_received_total{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:grpc_server_msg_received:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(grpc_server_msg_sent_total{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:grpc_server_msg_sent:sum_irate
-    - expr: |
-        sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_sum{job="etcd"}[5m])) by (instance) / sum(irate(etcd_disk_wal_fsync_duration_seconds_count{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_disk_wal_fsync_duration:avg
-    - expr: |
-        sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_sum{job="etcd"}[5m])) by (instance) / sum(irate(etcd_disk_backend_commit_duration_seconds_count{job="etcd"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
-      record: etcd:etcd_disk_backend_commit_duration:avg
-  - name: etcd_histogram.rules
-    rules:
-    - expr: |
-        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
-      labels:
-        quantile: "0.99"
-      record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
-    - expr: |
-        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
-      labels:
-        quantile: "0.9"
-      record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
-    - expr: |
-        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
-      labels:
-        quantile: "0.5"
-      record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
-    - expr: |
-        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
-      labels:
-        quantile: "0.99"
-      record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
-    - expr: |
-        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
-      labels:
-        quantile: "0.9"
-      record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
-    - expr: |
-        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
-      labels:
-        quantile: "0.5"
-      record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
   - name: etcd
     rules:
     - alert: etcdMembersDown
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": members are down ({{ $value }}).'
+        description: 'etcd cluster "{{ $labels.job }}": members are down ({{ $value }}).'
+        summary: etcd cluster members are down.
       expr: |
-        max by (job) (
-          sum by (job) (up{job=~".*etcd.*"} == bool 0)
+        max without (endpoint) (
+          sum without (instance) (up{job=~".*etcd.*"} == bool 0)
         or
-          count by (job,endpoint) (
-            sum by (job,endpoint,To) (rate(etcd_network_peer_sent_failures_total{job=~".*etcd.*"}[3m])) > 0.01
+          count without (To) (
+            sum without (instance) (rate(etcd_network_peer_sent_failures_total{job=~".*etcd.*"}[120s])) > 0.01
           )
         )
         > 0
-      for: 3m
+      for: 10m
       labels:
         severity: critical
     - alert: etcdInsufficientMembers
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": insufficient members ({{ $value
-          }}).'
+        description: 'etcd cluster "{{ $labels.job }}": insufficient members ({{ $value }}).'
+        summary: etcd cluster has insufficient number of members.
       expr: |
-        sum(up{job=~".*etcd.*"} == bool 1) by (job) < ((count(up{job=~".*etcd.*"}) by (job) + 1) / 2)
+        sum(up{job=~".*etcd.*"} == bool 1) without (instance) < ((count(up{job=~".*etcd.*"}) without (instance) + 1) / 2)
       for: 3m
       labels:
         severity: critical
     - alert: etcdNoLeader
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": member {{ $labels.instance }}
-          has no leader.'
+        description: 'etcd cluster "{{ $labels.job }}": member {{ $labels.instance }} has no leader.'
+        summary: etcd cluster has no leader.
       expr: |
         etcd_server_has_leader{job=~".*etcd.*"} == 0
       for: 1m
@@ -127,52 +47,51 @@ spec:
         severity: critical
     - alert: etcdHighNumberOfLeaderChanges
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": {{ $value }} leader changes within
-          the last 15 minutes. Frequent elections may be a sign of insufficient resources,
-          high network latency, or disruptions by other components and should be investigated.'
+        description: 'etcd cluster "{{ $labels.job }}": {{ $value }} leader changes within the last 15 minutes. Frequent elections may be a sign of insufficient resources, high network latency, or disruptions by other components and should be investigated.'
+        summary: etcd cluster has high number of leader changes.
       expr: |
-        increase((max by (job) (etcd_server_leader_changes_seen_total{job=~".*etcd.*"}) or 0*absent(etcd_server_leader_changes_seen_total{job=~".*etcd.*"}))[15m:1m]) >= 3
+        increase((max without (instance) (etcd_server_leader_changes_seen_total{job=~".*etcd.*"}) or 0*absent(etcd_server_leader_changes_seen_total{job=~".*etcd.*"}))[15m:1m]) >= 4
       for: 5m
       labels:
         severity: warning
     - alert: etcdHighNumberOfFailedGRPCRequests
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": {{ $value }}% of requests for
-          {{ $labels.grpc_method }} failed on etcd instance {{ $labels.instance }}.'
+        description: 'etcd cluster "{{ $labels.job }}": {{ $value }}% of requests for {{ $labels.grpc_method }} failed on etcd instance {{ $labels.instance }}.'
+        summary: etcd cluster has high number of failed grpc requests.
       expr: |
-        100 * sum(rate(grpc_server_handled_total{job=~".*etcd.*", grpc_code!="OK",grpc_service!="etcdserverpb.Watch"}[5m])) BY (job, instance, grpc_service, grpc_method)
+        100 * sum(rate(grpc_server_handled_total{job=~".*etcd.*", grpc_code=~"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded"}[5m])) without (grpc_type, grpc_code)
           /
-        sum(rate(grpc_server_handled_total{job=~".*etcd.*",grpc_service!="etcdserverpb.Watch"}[5m])) BY (job, instance, grpc_service, grpc_method)
+        sum(rate(grpc_server_handled_total{job=~".*etcd.*"}[5m])) without (grpc_type, grpc_code)
           > 1
       for: 10m
       labels:
         severity: warning
     - alert: etcdHighNumberOfFailedGRPCRequests
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": {{ $value }}% of requests for
-          {{ $labels.grpc_method }} failed on etcd instance {{ $labels.instance }}.'
+        description: 'etcd cluster "{{ $labels.job }}": {{ $value }}% of requests for {{ $labels.grpc_method }} failed on etcd instance {{ $labels.instance }}.'
+        summary: etcd cluster has high number of failed grpc requests.
       expr: |
-        100 * sum(rate(grpc_server_handled_total{job=~".*etcd.*", grpc_code!="OK",grpc_service!="etcdserverpb.Watch"}[5m])) BY (job, instance, grpc_service, grpc_method)
+        100 * sum(rate(grpc_server_handled_total{job=~".*etcd.*", grpc_code=~"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded"}[5m])) without (grpc_type, grpc_code)
           /
-        sum(rate(grpc_server_handled_total{job=~".*etcd.*",grpc_service!="etcdserverpb.Watch"}[5m])) BY (job, instance, grpc_service, grpc_method)
+        sum(rate(grpc_server_handled_total{job=~".*etcd.*"}[5m])) without (grpc_type, grpc_code)
           > 5
       for: 5m
       labels:
         severity: critical
     - alert: etcdGRPCRequestsSlow
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": gRPC requests to {{ $labels.grpc_method
-          }} are taking {{ $value }}s on etcd instance {{ $labels.instance }}.'
+        description: 'etcd cluster "{{ $labels.job }}": 99th percentile of gRPC requests is {{ $value }}s on etcd instance {{ $labels.instance }} for {{ $labels.grpc_method }} method.'
+        summary: etcd grpc requests are slow
       expr: |
-        histogram_quantile(0.99, sum(rate(grpc_server_handling_seconds_bucket{job=~".*etcd.*", grpc_type="unary"}[5m])) by (job, instance, grpc_service, grpc_method, le))
+        histogram_quantile(0.99, sum(rate(grpc_server_handling_seconds_bucket{job=~".*etcd.*", grpc_method!="Defragment", grpc_type="unary"}[5m])) without(grpc_type))
         > 0.15
       for: 10m
       labels:
         severity: critical
     - alert: etcdMemberCommunicationSlow
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": member communication with {{ $labels.To
-          }} is taking {{ $value }}s on etcd instance {{ $labels.instance }}.'
+        description: 'etcd cluster "{{ $labels.job }}": member communication with {{ $labels.To }} is taking {{ $value }}s on etcd instance {{ $labels.instance }}.'
+        summary: etcd cluster member communication is slow.
       expr: |
         histogram_quantile(0.99, rate(etcd_network_peer_round_trip_time_seconds_bucket{job=~".*etcd.*"}[5m]))
         > 0.15
@@ -181,8 +100,8 @@ spec:
         severity: warning
     - alert: etcdHighNumberOfFailedProposals
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": {{ $value }} proposal failures
-          within the last 30 minutes on etcd instance {{ $labels.instance }}.'
+        description: 'etcd cluster "{{ $labels.job }}": {{ $value }} proposal failures within the last 30 minutes on etcd instance {{ $labels.instance }}.'
+        summary: etcd cluster has high number of proposal failures.
       expr: |
         rate(etcd_server_proposals_failed_total{job=~".*etcd.*"}[15m]) > 5
       for: 15m
@@ -190,51 +109,125 @@ spec:
         severity: warning
     - alert: etcdHighFsyncDurations
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": 99th percentile fync durations
-          are {{ $value }}s on etcd instance {{ $labels.instance }}.'
+        description: 'etcd cluster "{{ $labels.job }}": 99th percentile fsync durations are {{ $value }}s on etcd instance {{ $labels.instance }}.'
+        summary: etcd cluster 99th percentile fsync durations are too high.
       expr: |
         histogram_quantile(0.99, rate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m]))
         > 0.5
       for: 10m
       labels:
         severity: warning
+    - alert: etcdHighFsyncDurations
+      annotations:
+        description: 'etcd cluster "{{ $labels.job }}": 99th percentile fsync durations are {{ $value }}s on etcd instance {{ $labels.instance }}.'
+      expr: |
+        histogram_quantile(0.99, rate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m]))
+        > 1
+      for: 10m
+      labels:
+        severity: critical
     - alert: etcdHighCommitDurations
       annotations:
-        message: 'etcd cluster "{{ $labels.job }}": 99th percentile commit durations
-          {{ $value }}s on etcd instance {{ $labels.instance }}.'
+        description: 'etcd cluster "{{ $labels.job }}": 99th percentile commit durations {{ $value }}s on etcd instance {{ $labels.instance }}.'
+        summary: etcd cluster 99th percentile commit durations are too high.
       expr: |
         histogram_quantile(0.99, rate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m]))
         > 0.25
       for: 10m
       labels:
         severity: warning
-    - alert: etcdHighNumberOfFailedHTTPRequests
+    - alert: etcdBackendQuotaLowSpace
       annotations:
-        message: '{{ $value }}% of requests for {{ $labels.method }} failed on etcd
-          instance {{ $labels.instance }}'
+        description: 'etcd cluster "{{ $labels.job }}": database size exceeds the defined quota on etcd instance {{ $labels.instance }}, please defrag or increase the quota as the writes to etcd will be disabled when it is full.'
       expr: |
-        sum(rate(etcd_http_failed_total{job=~".*etcd.*", code!="404"}[5m])) BY (method) / sum(rate(etcd_http_received_total{job=~".*etcd.*"}[5m]))
-        BY (method) > 0.01
-      for: 10m
-      labels:
-        severity: warning
-    - alert: etcdHighNumberOfFailedHTTPRequests
-      annotations:
-        message: '{{ $value }}% of requests for {{ $labels.method }} failed on etcd
-          instance {{ $labels.instance }}.'
-      expr: |
-        sum(rate(etcd_http_failed_total{job=~".*etcd.*", code!="404"}[5m])) BY (method) / sum(rate(etcd_http_received_total{job=~".*etcd.*"}[5m]))
-        BY (method) > 0.05
+        (etcd_mvcc_db_total_size_in_bytes/etcd_server_quota_backend_bytes)*100 > 95
       for: 10m
       labels:
         severity: critical
-    - alert: etcdHTTPRequestsSlow
+    - alert: etcdExcessiveDatabaseGrowth
       annotations:
-        message: etcd instance {{ $labels.instance }} HTTP requests to {{ $labels.method
-          }} are slow.
+        description: 'etcd cluster "{{ $labels.job }}": Observed surge in etcd writes leading to 50% increase in database size over the past four hours on etcd instance {{ $labels.instance }}, please check as it might be disruptive.'
       expr: |
-        histogram_quantile(0.99, rate(etcd_http_successful_duration_seconds_bucket[5m]))
-        > 0.15
+        increase(((etcd_mvcc_db_total_size_in_bytes/etcd_server_quota_backend_bytes)*100)[240m:1m]) > 50
       for: 10m
       labels:
         severity: warning
+  - name: etcd.rules
+    rules:
+    - expr: |
+        sum(up{job=~".*etcd.*"} == 1)
+      record: etcd:up:sum
+    - expr: |
+        sum(label_replace(sum(changes(etcd_server_leader_changes_seen_total{job=~".*etcd.*"}[1h])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_server_leader_changes_seen:sum_changes
+    - expr: |
+        sum(label_replace(sum(irate(etcd_server_proposals_failed_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_server_proposals_failed:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(etcd_server_proposals_applied_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_server_proposals_applied:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(etcd_server_proposals_committed_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_server_proposals_committed:sum_irate
+    - expr: |
+        sum(label_replace(sum(etcd_server_proposals_pending{job=~".*etcd.*"}) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_server_proposals_pending:sum
+    - expr: |
+        sum(label_replace(etcd_mvcc_db_total_size_in_bytes{job=~".*etcd.*"},"node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_mvcc_db_total_size:sum
+    - expr: |
+        sum(label_replace(sum(irate(etcd_network_client_grpc_received_bytes_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_network_client_grpc_received_bytes:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(etcd_network_client_grpc_sent_bytes_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_network_client_grpc_sent_bytes:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(grpc_server_started_total{job=~".*etcd.*",grpc_type="unary"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:grpc_server_started:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(grpc_server_handled_total{job=~".*etcd.*",grpc_type="unary",grpc_code!="OK"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:grpc_server_handled:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(grpc_server_msg_received_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:grpc_server_msg_received:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(grpc_server_msg_sent_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:grpc_server_msg_sent:sum_irate
+    - expr: |
+        sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_sum{job=~".*etcd.*"}[5m])) by (instance) / sum(irate(etcd_disk_wal_fsync_duration_seconds_count{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_disk_wal_fsync_duration:avg
+    - expr: |
+        sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_sum{job=~".*etcd.*"}[5m])) by (instance) / sum(irate(etcd_disk_backend_commit_duration_seconds_count{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+      record: etcd:etcd_disk_backend_commit_duration:avg
+  - name: etcd_histogram.rules
+    rules:
+    - expr: |
+        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+      labels:
+        quantile: "0.99"
+      record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
+    - expr: |
+        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+      labels:
+        quantile: "0.9"
+      record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
+    - expr: |
+        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+      labels:
+        quantile: "0.5"
+      record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
+    - expr: |
+        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+      labels:
+        quantile: "0.99"
+      record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
+    - expr: |
+        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+      labels:
+        quantile: "0.9"
+      record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
+    - expr: |
+        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+      labels:
+        quantile: "0.5"
+      record: etcd:etcd_disk_backend_commit_duration:histogram_quantile

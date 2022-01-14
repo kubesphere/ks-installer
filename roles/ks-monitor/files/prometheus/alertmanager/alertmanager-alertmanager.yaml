@@ -2,7 +2,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
   labels:
-    alertmanager: main
+    app.kubernetes.io/component: alert-router
+    app.kubernetes.io/instance: main
+    app.kubernetes.io/name: alertmanager
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 0.23.0
   name: main
   namespace: kubesphere-monitoring-system
 spec:
@@ -11,22 +15,36 @@ spec:
       preferredDuringSchedulingIgnoredDuringExecution:
       - podAffinityTerm:
           labelSelector:
-            matchExpressions:
-            - key: alertmanager
-              operator: In
-              values:
-              - main
+            matchLabels:
+              app.kubernetes.io/component: alert-router
+              app.kubernetes.io/instance: main
+              app.kubernetes.io/name: alertmanager
+              app.kubernetes.io/part-of: kube-prometheus
           namespaces:
           - kubesphere-monitoring-system
           topologyKey: kubernetes.io/hostname
         weight: 100
-  image: prom/alertmanager:v0.21.0
+  image: prom/alertmanager:v0.23.0
   nodeSelector:
     kubernetes.io/os: linux
+  podMetadata:
+    labels:
+      app.kubernetes.io/component: alert-router
+      app.kubernetes.io/instance: main
+      app.kubernetes.io/name: alertmanager
+      app.kubernetes.io/part-of: kube-prometheus
+      app.kubernetes.io/version: 0.23.0
   replicas: 3
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 20m
+      memory: 30Mi
   securityContext:
     fsGroup: 2000
     runAsNonRoot: true
     runAsUser: 1000
   serviceAccountName: alertmanager-main
-  version: v0.21.0
+  version: 0.23.0

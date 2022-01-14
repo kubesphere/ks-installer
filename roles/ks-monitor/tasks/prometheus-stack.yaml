@@ -15,8 +15,6 @@
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
-# - import_tasks: prometheus-adapter.yaml
-
 - import_tasks: grafana.yaml
   when:
     - monitoring.grafana is defined
@@ -29,7 +27,7 @@
 
 - import_tasks: etcd.yaml
 
-- import_tasks: prometheus-rules.yaml
+- import_tasks: k8s-monitor.yaml
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 

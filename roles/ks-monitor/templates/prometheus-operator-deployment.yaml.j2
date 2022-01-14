@@ -4,7 +4,8 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: prometheus-operator
-    app.kubernetes.io/version: {{ prometheus_operator_tag }}
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: {{ prometheus_operator_tag | replace("v", "") }}
   name: prometheus-operator
   namespace: kubesphere-monitoring-system
 spec:
@@ -13,19 +14,21 @@ spec:
     matchLabels:
       app.kubernetes.io/component: controller
       app.kubernetes.io/name: prometheus-operator
+      app.kubernetes.io/part-of: kube-prometheus
   template:
     metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: prometheus-operator
       labels:
         app.kubernetes.io/component: controller
         app.kubernetes.io/name: prometheus-operator
+        app.kubernetes.io/part-of: kube-prometheus
         app.kubernetes.io/version: {{ prometheus_operator_tag }}
     spec:
       containers:
       - args:
         - --kubelet-service=kube-system/kubelet
-        - --logtostderr=true
         - --prometheus-config-reloader={{ prometheus_config_reloader_repo }}:{{ prometheus_config_reloader_tag }}
-        - --config-reloader-cpu=0
         image: {{ prometheus_operator_repo }}:{{ prometheus_operator_tag }}
         name: prometheus-operator
         ports:

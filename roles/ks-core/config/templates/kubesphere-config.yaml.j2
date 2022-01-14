@@ -211,7 +211,7 @@ data:
       prometheusEndpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
 {% endif %}
       thanosRulerEndpoint: http://thanos-ruler-operated.kubesphere-monitoring-system.svc:10902
-      thanosRuleResourceLabels: thanosruler=thanos-ruler,role=thanos-alerting-rules
+      thanosRuleResourceLabels: thanos-ruler=kubesphere,role=alert-rules
 {% endif %}
 
 {% if edgeruntime.enabled is defined and edgeruntime.enabled == true %}

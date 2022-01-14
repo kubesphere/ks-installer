@@ -1,8 +1,7 @@
 ---
 - name: Monitoring | Installing etcd monitoring
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/{{ item }}"
-  loop:
-    - "etcd"
+  shell: "{{ bin_dir }}/kubectl apply -f {{ item }} --force"
+  loop: '{{ query("fileglob", "{{ kubesphere_dir }}/prometheus/etcd/*.yaml") }}'
   register: etcd_result
   failed_when: "etcd_result.stderr and 'Warning' not in etcd_result.stderr and 'spec.clusterIP' not in etcd_result.stderr"
   until: etcd_result is succeeded
@@ -11,3 +10,4 @@
   when:
     - etcd.monitoring is defined
     - etcd.monitoring == true
+    - item.find('secret') == -1 # ignoring the secret yaml

@@ -128,27 +128,25 @@ s2itemplates_tag: "v3.2.0"
 
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
-configmap_reload_tag: v0.3.0
+configmap_reload_tag: v0.5.0
 prometheus_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/prometheus"
-prometheus_tag: v2.26.0
+prometheus_tag: v2.32.1
 prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-config-reloader"
-prometheus_config_reloader_tag: v0.43.2
+prometheus_config_reloader_tag: v0.53.1
 prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-operator"
-prometheus_operator_tag: v0.43.2
+prometheus_operator_tag: v0.53.1
 kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
-kube_rbac_proxy_tag: v0.8.0
+kube_rbac_proxy_tag: v0.11.0
 kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
-kube_state_metrics_tag: v1.9.7
+kube_state_metrics_tag: v2.3.0
 node_exporter_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/node-exporter"
-node_exporter_tag: v0.18.1
-prometheus_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/k8s-prometheus-adapter-amd64"
-prometheus_adapter_tag: v0.6.0
+node_exporter_tag: v1.3.1
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
-alertmanager_tag: v0.21.0
+alertmanager_tag: v0.23.0
 thanos_repo: "{{ base_repo }}{{ namespace_override | default('thanosio') }}/thanos"
-thanos_tag: v0.18.0
+thanos_tag: v0.23.2
 grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
-grafana_tag: 7.4.3
+grafana_tag: 8.3.3
 
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
@@ -613,12 +611,6 @@ images:
     repo: "{{ node_exporter_repo }}"
     tag: "{{ node_exporter_tag }}"
     sha256: "{{ node_exporter_checksum|default(None) }}"
-    group: "kubesphere-monitoring-images"
-
-  prometheus_adapter:
-    repo: "{{ prometheus_adapter_repo }}"
-    tag: "{{ prometheus_adapter_tag }}"
-    sha256: "{{ prometheus_adapter_checksum|default(None) }}"
     group: "kubesphere-monitoring-images"
 
   alertmanager:
