@@ -3169,6 +3169,7 @@ role:
         - 'pipelines/consolelog'
         - 'pipelines/scan'
         - 'pipelines/sonarstatus'
+        - 'jenkins/labelsData'
       verbs:
         - '*'
 
