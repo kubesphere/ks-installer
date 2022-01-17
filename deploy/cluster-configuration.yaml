@@ -145,11 +145,10 @@ spec:
   servicemesh:         # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
     enabled: false     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
   edgeruntime:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
-    enabled: fasle
+    enabled: false
     kubeedge:        # kubeedge configurations
       enabled: false 
       cloudCore:
-        # resources: {}
         cloudHub:
           advertiseAddress: # At least a public IP address or an IP address which can be accessed by edge nodes must be provided.
             - ""            # Note that once KubeEdge is enabled, CloudCore will malfunction if the address is not provided.
@@ -159,6 +158,12 @@ spec:
           cloudhubHttpsNodePort: "30002"
           cloudstreamNodePort: "30003"
           tunnelNodePort: "30004"
+        # resources: {}
+        # hostNetWork: false
+      iptables-manager:
+        enabled: true 
+        mode: "external"
+        # resources: {}
       # edgeService:
       #   resources: {}
   gatekeeper:        # Provide admission policy and rule management, A validating (mutating TBA) webhook that enforces CRD-based policies executed by Open Policy Agent.
