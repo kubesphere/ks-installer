@@ -123,6 +123,18 @@ rules:
       - update
       - create
       - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - update
+      - get
+      - list
+      - patch
+      - watch
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

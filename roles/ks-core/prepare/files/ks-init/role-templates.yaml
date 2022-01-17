@@ -246,6 +246,12 @@ rules:
     verbs:
       - list
       - get
+  - apiGroups:
+      - application.kubesphere.io
+    resources:
+      - '*'
+    verbs:
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -405,6 +411,7 @@ rules:
       - groups
       - groupbindings
       - manifests
+      - mysqlusers
     verbs:
       - '*'
   - apiGroups:
@@ -2139,6 +2146,12 @@ role:
         - namespaces
       verbs:
         - list
+    - apiGroups:
+        - ''
+      resources:
+        - namespaces
+      verbs:
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2269,6 +2282,12 @@ role:
         - list
         - watch
     - apiGroups:
+        - mysql.radondb.com
+      resources:
+        - mysqlusers
+      verbs:
+        - '*'
+    - apiGroups:
         - ""
         - apps
         - extensions
@@ -2293,6 +2312,7 @@ role:
         - monitoring.coreos.com
         - networking.k8s.io
         - manifests
+        - mysqlusers
       resources:
         - '*'
       verbs:
@@ -2764,6 +2784,7 @@ role:
         - s2iruns
         - horizontalpodautoscalers
         - manifests
+        - mysqlusers
       verbs:
         - get
         - list
@@ -2818,6 +2839,7 @@ role:
         - s2iruns
         - horizontalpodautoscalers
         - manifests
+        - mysqlusers
       verbs:
         - '*'
     - apiGroups:
