@@ -273,21 +273,21 @@ metadata:
   name: ks-installer
   namespace: kubesphere-system
   labels:
-    app: ks-install
+    app: ks-installer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ks-install
+      app: ks-installer
   template:
     metadata:
       labels:
-        app: ks-install
+        app: ks-installer
     spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: registry.cn-beijing.aliyuncs.com/qkcp/ks-installer:v3.2.1-rc.1
+        image: registry.cn-beijing.aliyuncs.com/qkcp/ks-installer:v3.2.1-rc.2
         imagePullPolicy: "Always"
         resources:
           limits:
