@@ -1,0 +1,4 @@
+{% if servicemesh.istio is defined %}
+spec:
+  {{ servicemesh.istio | to_nice_yaml | indent(2) }}
+{% endif %}
