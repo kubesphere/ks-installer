@@ -252,6 +252,16 @@ rules:
       - '*'
     verbs:
       - watch
+  - apiGroups:
+    - snapshot.storage.k8s.io
+    resources:
+    - volumesnapshotclasses
+    verbs:
+    - list
+  - nonResourceURLs:
+    - "/kapis/clusters/host/version"
+    verbs:
+    - get
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
