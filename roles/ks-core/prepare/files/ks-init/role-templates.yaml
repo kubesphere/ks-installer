@@ -247,15 +247,21 @@ rules:
       - list
       - get
   - apiGroups:
-    - snapshot.storage.k8s.io
+      - application.kubesphere.io
     resources:
-    - volumesnapshotclasses
+      - '*'
     verbs:
-    - list
+      - watch
+  - apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
+      - volumesnapshotclasses
+    verbs:
+      - list
   - nonResourceURLs:
-    - "/kapis/clusters/host/version"
+      - "/kapis/clusters/host/version"
     verbs:
-    - get
+      - get
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -415,6 +421,7 @@ rules:
       - groups
       - groupbindings
       - manifests
+      - mysqlusers
       - replicaschedulingpreferences
     verbs:
       - '*'
@@ -2150,6 +2157,12 @@ role:
         - namespaces
       verbs:
         - list
+    - apiGroups:
+        - ''
+      resources:
+        - namespaces
+      verbs:
+        - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2280,6 +2293,12 @@ role:
         - list
         - watch
     - apiGroups:
+        - mysql.radondb.com
+      resources:
+        - mysqlusers
+      verbs:
+        - '*'
+    - apiGroups:
         - ""
         - apps
         - extensions
@@ -2304,6 +2323,7 @@ role:
         - monitoring.coreos.com
         - networking.k8s.io
         - manifests
+        - mysqlusers
       resources:
         - '*'
       verbs:
@@ -2775,6 +2795,7 @@ role:
         - s2iruns
         - horizontalpodautoscalers
         - manifests
+        - mysqlusers
       verbs:
         - get
         - list
@@ -2829,6 +2850,7 @@ role:
         - s2iruns
         - horizontalpodautoscalers
         - manifests
+        - mysqlusers
       verbs:
         - '*'
     - apiGroups:
