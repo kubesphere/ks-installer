@@ -39,10 +39,10 @@ spec:
     monitoring:
       # type: external   # Whether to specify the external prometheus stack, and need to modify the endpoint at the next line.
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data.
-      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero. 
+      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero.
         enabled: false
-    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs. 
-      kinds:         
+    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs.
+      kinds:
       - resourceName: "nvidia.com/gpu"
         resourceType: "GPU"
         default: true
@@ -125,7 +125,7 @@ spec:
     #     resources: {}
     #   proxy:
     #     resources: {}
-    gpu:                           # GPU monitoring-related plug-in installation. 
+    gpu:                           # GPU monitoring-related plug-in installation.
       nvidia_dcgm_exporter:        # Ensure that gpu resources on your hosts can be used normally, otherwise this plug-in will not work properly.
         enabled: false             # Check whether the labels on the GPU hosts contain "nvidia.com/gpu.present=true" to ensure that the DCGM pod is scheduled to these nodes.
         # resources: {}
@@ -147,7 +147,7 @@ spec:
   edgeruntime:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
     enabled: false
     kubeedge:        # kubeedge configurations
-      enabled: false 
+      enabled: false
       cloudCore:
         cloudHub:
           advertiseAddress: # At least a public IP address or an IP address which can be accessed by edge nodes must be provided.
@@ -172,3 +172,6 @@ spec:
     #   resources: {}
     # audit:
     #   resources: {}
+  terminal:
+    image: 'alpine:3.15' # There must be an nsenter program in the image
+    timeout: 600         # Container timeout, if set to 0, no timeout will be used. The unit is seconds
