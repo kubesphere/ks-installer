@@ -11,6 +11,13 @@ spec:
   collector:
     image: {{ jaeger_collector_repo }}:{{ jaeger_collector_tag }}
     maxReplicas: 5
+    resources:
+      limits:
+        cpu: {{ servicemesh.jaeger.resources.limits.cpu | default("100m") }}
+        memory: {{ servicemesh.jaeger.resources.limits.memory | default("128Mi") }}
+      requests:
+        cpu: {{ servicemesh.jaeger.resources.requests.cpu | default("20m") }}
+        memory: {{ servicemesh.jaeger.resources.requests.memory | default("50Mi") }}
   query:
     image: {{ jaeger_query_repo }}:{{ jaeger_query_tag }}
   storage:
