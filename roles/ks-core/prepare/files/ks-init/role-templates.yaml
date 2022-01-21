@@ -422,6 +422,7 @@ rules:
       - groupbindings
       - manifests
       - mysqlusers
+      - replicaschedulingpreferences
     verbs:
       - '*'
   - apiGroups:
