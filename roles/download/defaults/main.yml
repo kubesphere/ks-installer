@@ -270,9 +270,9 @@ waveworks_scop_tag: "1.13.0"
 
 #DMP
 chronus_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-operator"
-chronus_operator_tag: "2.1.1"
+chronus_operator_tag: "dmp"
 chronus_metrics_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
-chronus_metrics_operator_tag: "2.1.1"
+chronus_metrics_operator_tag: "dmp"
 mysql_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mysql-operator"
 mysql_operator_tag: "v2.1.0"
 pg_cluster_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/postgresqlcluster"
