@@ -258,8 +258,10 @@ rules:
       - volumesnapshotclasses
     verbs:
       - list
-  - nonResourceURLs:
-      - "/kapis/clusters/host/version"
+  - apiGroups:
+      - monitoring.kubesphere.io
+    resources:
+      - targets
     verbs:
       - get
 
