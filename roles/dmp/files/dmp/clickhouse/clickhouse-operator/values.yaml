@@ -10,7 +10,9 @@ operator:
   watchNamespaces:
     - (.*?)
 
-  defaultClickHouseLogContainerImage: "busybox:1.32"
+  defaultClickHouseLogContainerImage: "library/busybox:1.32"
   defaultClickHouseLogContainerImagePullPolicy: "IfNotPresent"
   defaultMetricsExporterContainerImage: "radondb/chronus-metrics-operator:dmp"
   defaultMetricsExporterContainerImagePullPolicy: "IfNotPresent"
+
+  imagePrefix: docker.io
