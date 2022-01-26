@@ -30,7 +30,7 @@
   register: update_crds
   when:
     - notification_check.rc == 0
-    - notification_check.stdout.find("1.0.0") != -1
+    - notification_check.stdout.find("1.4.0") != -1
   failed_when: update_crds is not succeeded
 
 - name: notification-manager | Deploying notification-manager
