@@ -155,11 +155,11 @@ notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override 
 notification_manager_operator_proxy_tag: v0.8.0
 notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager-operator"
 notification_manager_operator_tag: v1.4.1
-notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager"
+notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-manager"
 notification_manager_tag: v1.4.1
-notification_tenant_sidecar_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-tenant-sidecar"
+notification_tenant_sidecar_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-tenant-sidecar"
 notification_tenant_sidecar_tag: v3.2.0
-notification_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-adapter"
+notification_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-adapter"
 notification_adapter_tag: v0.2.0
 
 #ks-logger
