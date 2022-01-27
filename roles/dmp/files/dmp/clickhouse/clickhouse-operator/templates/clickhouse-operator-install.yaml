@@ -202,6 +202,9 @@ spec:
                     - "disabled"
                     - "Enabled"
                     - "enabled"
+                imagePrefix:
+                  type: string
+                  description: "custom image prefix which will add to the front of the image used by the clickhouse cluster"
                 namespaceDomainPattern:
                   type: string
                   description: "custom domain suffix which will add to end of `Service` or `Pod` name, use it when you use custom cluster domain in your Kubernetes cluster"
@@ -1498,6 +1501,9 @@ spec:
                     - "disabled"
                     - "Enabled"
                     - "enabled"
+                imagePrefix:
+                  type: string
+                  description: "custom image prefix which will add to the front of the image used by the clickhouse cluster"
                 namespaceDomainPattern:
                   type: string
                   description: "custom domain suffix which will add to end of `Service` or `Pod` name, use it when you use custom cluster domain in your Kubernetes cluster"
@@ -2787,6 +2793,9 @@ spec:
                 defaultMetricsExporterContainerImagePullPolicy:
                   type: string
                   description: "ClickHouse metrics exporter container image pull policy, default `IfNotPresent`"
+                imagePrefix:
+                  type: string
+                  description: "custom image prefix which will add to the front of the image used by the clickhouse cluster, if the parameter is also defined in CHI, CHI has higher priority"
 ---
 # Possible Template Parameters:
 #
@@ -3122,6 +3131,8 @@ data:
     defaultClickHouseLogContainerImagePullPolicy: {{ .Values.operator.defaultClickHouseLogContainerImagePullPolicy }}
     defaultMetricsExporterContainerImage: {{ .Values.operator.defaultMetricsExporterContainerImage }}
     defaultMetricsExporterContainerImagePullPolicy: {{ .Values.operator.defaultMetricsExporterContainerImagePullPolicy }}
+
+    imagePrefix: {{ .Values.operator.imagePrefix }}
 ---
 # Possible Template Parameters:
 #
@@ -3400,7 +3411,7 @@ spec:
             name: etc-clickhouse-operator-usersd-files
       containers:
         - name: clickhouse-operator
-          image: {{ .Values.operator.image | default "radondb/chronus-operator:2.1.1" }}
+          image: {{ .Values.operator.image | default "radondb/chronus-operator:dmp" }}
           imagePullPolicy: {{ .Values.operator.imagePullPolicy | default "IfNotPresent" }}
           volumeMounts:
             - name: etc-clickhouse-operator-folder

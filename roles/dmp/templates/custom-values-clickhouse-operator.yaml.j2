@@ -14,3 +14,5 @@ operator:
   defaultClickHouseLogContainerImagePullPolicy: "IfNotPresent"
   defaultMetricsExporterContainerImage: {{ chronus_metrics_operator_repo }}:{{ chronus_metrics_operator_tag }}
   defaultMetricsExporterContainerImagePullPolicy: "IfNotPresent"
+
+  imagePrefix: {{ chronus_image_prefix }}
