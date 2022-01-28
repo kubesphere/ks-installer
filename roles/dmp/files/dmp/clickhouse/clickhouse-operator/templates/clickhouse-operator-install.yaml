@@ -3411,7 +3411,11 @@ spec:
             name: etc-clickhouse-operator-usersd-files
       containers:
         - name: clickhouse-operator
+          {{- if .Values.operator.imagePrefix }}
+          image: {{ .Values.operator.imagePrefix }}/{{ .Values.operator.image }}
+          {{- else }}
           image: {{ .Values.operator.image | default "radondb/chronus-operator:dmp" }}
+          {{- end }}
           imagePullPolicy: {{ .Values.operator.imagePullPolicy | default "IfNotPresent" }}
           volumeMounts:
             - name: etc-clickhouse-operator-folder
