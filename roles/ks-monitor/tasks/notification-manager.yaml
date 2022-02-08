@@ -30,7 +30,6 @@
   register: update_crds
   when:
     - notification_check.rc == 0
-    - notification_check.stdout.find("1.4.0") != -1
   failed_when: update_crds is not succeeded
 
 - name: notification-manager | Deploying notification-manager
@@ -39,7 +38,6 @@
     {{ kubesphere_dir }}/notification-manager
     -f {{ kubesphere_dir }}/notification-manager/custom-values-notification.yaml
     -n kubesphere-monitoring-system
-    --force
   register: deploy_result
   until: deploy_result is succeeded
   retries: 3
