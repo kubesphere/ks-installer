@@ -28,6 +28,13 @@ ks_version: >-
   v3.2.1-rc.3
   {%- endif %}
 
+chronus_image_prefix: >-
+  {% if local_registry is defined and local_registry != "" -%}
+  {{ local_registry }}
+  {%- else -%}
+  docker.io
+  {%- endif %}
+
 #KubeSphere:
 ks_apiserver_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-apiserver"
 ks_apiserver_tag: "v3.2.1-rc.3"
@@ -269,7 +276,6 @@ waveworks_scop_repo: "{{ base_repo }}{{ namespace_override | default('weaveworks
 waveworks_scop_tag: "1.13.0"
 
 #DMP
-chronus_image_prefix: "{{ base_repo }}"
 chronus_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-operator"
 chronus_operator_tag: "dmp"
 chronus_metrics_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
