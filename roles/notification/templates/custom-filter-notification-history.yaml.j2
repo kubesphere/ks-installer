@@ -15,5 +15,14 @@ spec:
         keyName: log
 {% endif %}
         parser: json
+    - modify:
+        conditions:
+          - keyDoesNotExist:
+              notificationTime: ''
+        rules:
+          - add:
+              ignore: 'true'
+    - grep:
+        exclude: ignore true
   match: kube_notification
 
