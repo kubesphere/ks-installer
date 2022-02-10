@@ -29,7 +29,7 @@ spec:
     - 基于分布式一致性协议的高可用方案
     - 支持同步/异步的流复制
     - 丰富的监控指标展示
-  operatorVersion: "2.0"
+  operatorVersion: "2.1.0"
   appVersion: "13.3"
   owner: "RadonDB"
 status:
