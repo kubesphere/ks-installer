@@ -35,6 +35,7 @@
     dest: "{{ kubesphere_dir }}/servicemesh/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: istio, file: istio-profile.yaml }
+    - { path: istio, file: istio-custom-profile.yaml }
     - { path: jaeger, file: custom-values-jaeger.yaml }
     - { path: jaeger, file: jaeger-cr.yaml }
     - { path: kiali, file: custom-values-kiali.yaml }
@@ -49,9 +50,15 @@
   when:
     istio_old_version_check.stdout.find('istiod') != -1
 
+- name: servicemesh | Merge Profile
+  shell: >
+    yq ea '. as $item ireduce ({}; . * $item )' {{ kubesphere_dir }}/servicemesh/istio/istio-profile.yaml 
+    {{ kubesphere_dir }}/servicemesh/istio/istio-custom-profile.yaml
+    >  {{ kubesphere_dir }}/servicemesh/istio/profile.yaml
+
 - name: servicemesh | Installing istiod-1.11.2
   shell: >
-    {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/istio-profile.yaml --set revision=1-11-2 -y
+    {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/profile.yaml --set revision=1-11-2 -y
   register: istio_result
   failed_when: false
   retries: 3

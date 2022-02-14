@@ -5,14 +5,13 @@ appVersion: "0.1.0"
 
 cloudCore:
   replicaCount: 1
-  hostNetWork: "true"
+  hostNetWork: "{{ edgeruntime.kubeedge.cloudCore.hostNetWork | default("false", true) }}"
   image:
     repository: "kubeedge/cloudcore"
-    tag: "v1.8.2"
+    tag: "v1.9.1"
     pullPolicy: "IfNotPresent"
-    imagePullSecrets: []
-  securityContext: 
-    privileged: true
+    pullSecrets: []
+  securityContext: {}
   labels:
     k8s-app: kubeedge
     kubeedge: cloudcore
@@ -66,21 +65,21 @@ cloudCore:
       enable: "false"
   service:
     type: "NodePort"
-    cloudhubNodePort: {{ edgeruntime.kubeedge.cloudCore.service.cloudhubNodePort | default("30000") }}
-    cloudhubQuicNodePort: {{ edgeruntime.kubeedge.cloudCore.service.cloudhubQuicNodePort | default("30001") }}
-    cloudhubHttpsNodePort: {{ edgeruntime.kubeedge.cloudCore.service.cloudhubHttpsNodePort | default("30002") }}
-    cloudstreamNodePort: {{ edgeruntime.kubeedge.cloudCore.service.cloudstreamNodePort | default("30003") }}
-    tunnelNodePort: {{ edgeruntime.kubeedge.cloudCore.service.tunnelNodePort | default("30003") }}
+    cloudhubNodePort: "{{ edgeruntime.kubeedge.cloudCore.service.cloudhubNodePort | default("30000") }}"
+    cloudhubQuicNodePort: "{{ edgeruntime.kubeedge.cloudCore.service.cloudhubQuicNodePort | default("30001") }}"
+    cloudhubHttpsNodePort: "{{ edgeruntime.kubeedge.cloudCore.service.cloudhubHttpsNodePort | default("30002") }}"
+    cloudstreamNodePort: "{{ edgeruntime.kubeedge.cloudCore.service.cloudstreamNodePort | default("30003") }}"
+    tunnelNodePort: "{{ edgeruntime.kubeedge.cloudCore.service.tunnelNodePort | default("30003") }}"
 
 iptablesManager:
-  enable: {{ edgeruntime.kubeedge.iptablesManager.enable | default("true") }}
-  mode: {{ edgeruntime.kubeedge.iptablesManager.mode | default("internal") }}
+  enable: "{{ edgeruntime.kubeedge.iptablesManager.enabled | default("true", true)}}"
+  mode: "{{ edgeruntime.kubeedge.iptablesManager.mode | default("external") }}"
   hostNetWork: true
   image:
-    repository: "kubespheredev/iptables-manager"
-    tag: "v1.8.2"
+    repository: "kubeedge/iptables-manager"
+    tag: "v1.9.1"
     pullPolicy: "IfNotPresent"
-    imagePullSecrets: []
+    pullSecrets: []
   securityContext: 
     capabilities:
       add:
@@ -99,7 +98,7 @@ iptablesManager:
             operator: DoesNotExist
   tolerations: {}
   nodeSelector: {}
-{% if edgeruntime.kubeedge.edgeService.resources is not defined %}
+{% if edgeruntime.kubeedge.iptablesManager.resources is not defined %}
   resources:
     limits:
       cpu: 200m
@@ -107,7 +106,7 @@ iptablesManager:
     requests:
       cpu: 100m
       memory: 25Mi
-{% elif edgeruntime.kubeedge.edgeService.resources.limits %}
+{% elif edgeruntime.kubeedge.iptablesManager.resources.limits %}
   resources:
     limits:
       cpu: {{ edgeruntime.kubeedge.iptablesManager.resources.limits.cpu }}
@@ -124,7 +123,7 @@ edgeService:
     repository: "kubespheredev/edgeservice"
     tag: "v0.1.0"
     pullPolicy: "IfNotPresent"
-    imagePullSecrets: []
+    pullSecrets: []
   securityContext: {}
   labels:
     k8s-app: edgeservice

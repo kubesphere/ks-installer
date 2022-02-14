@@ -39,10 +39,10 @@ spec:
     monitoring:
       # type: external   # Whether to specify the external prometheus stack, and need to modify the endpoint at the next line.
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data.
-      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero. 
+      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero.
         enabled: false
-    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs. 
-      kinds:         
+    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs.
+      kinds:
       - resourceName: "nvidia.com/gpu"
         resourceType: "GPU"
         default: true
@@ -114,8 +114,6 @@ spec:
     #   resources: {}
     #   operator:
     #     resources: {}
-    #   adapter:
-    #     resources: {}
     # node_exporter:
     #   resources: {}
     # alertmanager:
@@ -127,7 +125,7 @@ spec:
     #     resources: {}
     #   proxy:
     #     resources: {}
-    gpu:                           # GPU monitoring-related plug-in installation. 
+    gpu:                           # GPU monitoring-related plug-in installation.
       nvidia_dcgm_exporter:        # Ensure that gpu resources on your hosts can be used normally, otherwise this plug-in will not work properly.
         enabled: false             # Check whether the labels on the GPU hosts contain "nvidia.com/gpu.present=true" to ensure that the DCGM pod is scheduled to these nodes.
         # resources: {}
@@ -146,12 +144,18 @@ spec:
       enabled: false # Enable or disable the KubeSphere App Store.
   servicemesh:         # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
     enabled: false     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
+    istio:  # Customizing the istio installation configuration, refer to https://istio.io/latest/docs/setup/additional-setup/customize-installation/
+      components:
+        ingressGateways:
+        - name: istio-ingressgateway
+          enabled: false
+        cni:
+          enabled: false
   edgeruntime:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
-    enabled: fasle
+    enabled: false
     kubeedge:        # kubeedge configurations
-      enabled: false 
+      enabled: false
       cloudCore:
-        # resources: {}
         cloudHub:
           advertiseAddress: # At least a public IP address or an IP address which can be accessed by edge nodes must be provided.
             - ""            # Note that once KubeEdge is enabled, CloudCore will malfunction if the address is not provided.
@@ -161,6 +165,12 @@ spec:
           cloudhubHttpsNodePort: "30002"
           cloudstreamNodePort: "30003"
           tunnelNodePort: "30004"
+        # resources: {}
+        # hostNetWork: false
+      iptables-manager:
+        enabled: true 
+        mode: "external"
+        # resources: {}
       # edgeService:
       #   resources: {}
   gatekeeper:        # Provide admission policy and rule management, A validating (mutating TBA) webhook that enforces CRD-based policies executed by Open Policy Agent.
@@ -169,3 +179,6 @@ spec:
     #   resources: {}
     # audit:
     #   resources: {}
+  terminal:
+    image: 'alpine:3.15' # There must be an nsenter program in the image
+    timeout: 600         # Container timeout, if set to 0, no timeout will be used. The unit is seconds

@@ -13,13 +13,12 @@
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
-    - { path: prometheus/init, file: prometheus-operator-deployment.yaml }
+    - { path: prometheus/prometheus-operator, file: prometheus-operator-deployment.yaml }
     - { path: prometheus/prometheus, file: prometheus-prometheus.yaml }
     - { path: prometheus/kube-state-metrics, file: kube-state-metrics-deployment.yaml }
     - { path: prometheus/node-exporter, file: node-exporter-daemonset.yaml }
     - { path: prometheus/alertmanager, file: alertmanager-alertmanager.yaml }
-    - { path: prometheus/prometheus-adapter, file: prometheus-adapter-deployment.yaml }
     - { path: prometheus/grafana, file: grafana-deployment.yaml }
     - { path: prometheus/etcd, file: prometheus-serviceMonitorEtcd.yaml }
     - { path: prometheus/etcd, file: prometheus-endpointsEtcd.yaml }
-    - { path: prometheus/thanosruler, file: thanosruler.yaml }
+    - { path: prometheus/thanos-ruler, file: thanos-ruler-thanosRuler.yaml }

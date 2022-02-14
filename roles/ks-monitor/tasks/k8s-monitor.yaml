@@ -1,0 +1,4 @@
+---
+- name: Monitoring | Installing k8s monitoring
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/prometheus/kubernetes --force
