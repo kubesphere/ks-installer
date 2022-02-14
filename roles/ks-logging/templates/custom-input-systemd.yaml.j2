@@ -1,16 +1,16 @@
 apiVersion: logging.kubesphere.io/v1alpha2
 kind: Input
 metadata:
-  name: {{ logging.containerruntime | default('docker') }}
+  name: {{ logging_container_runtime | default('docker') }}
   namespace: kubesphere-logging-system
   labels:
     logging.kubesphere.io/enabled: "true"
     logging.kubesphere.io/component: logging
 spec:
   systemd:
-    tag: service.{{ logging.containerruntime | default('docker') }}
+    tag: service.{{ logging_container_runtime | default('docker') }}
     path: /var/log/journal
     db: /fluent-bit/tail/docker.db
     dbSync: Normal
     systemdFilter:
-      - _SYSTEMD_UNIT={{ logging.containerruntime | default('docker') }}.service
+      - _SYSTEMD_UNIT={{ logging_container_runtime | default('docker') }}.service
