@@ -25,7 +25,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.2.1-rc.3
+  v3.2.1-rc.4
   {%- endif %}
 
 chronus_image_prefix: >-
@@ -44,15 +44,15 @@ mysql_image_prefix: >-
 
 #KubeSphere:
 ks_apiserver_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-apiserver"
-ks_apiserver_tag: "v3.2.1-rc.3"
+ks_apiserver_tag: "{{ ks_version }}"
 ks_controller_manager_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-controller-manager"
-ks_controller_manager_tag: "v3.2.1-rc.3"
+ks_controller_manager_tag: "{{ ks_version }}"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
 ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
 ks_console_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-console"
-ks_console_tag: "v3.2.1-rc.3"
+ks_console_tag: "{{ ks_version }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
 ks_kubectl_tag: v1.22.0
 # kubectl versions
