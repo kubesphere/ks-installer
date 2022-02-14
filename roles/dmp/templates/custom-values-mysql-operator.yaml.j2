@@ -12,6 +12,7 @@ installCRDS: true
 imagePullPolicy: IfNotPresent
 nameOverride: ""
 fullnameOverride: ""
+imagePrefix: {{ mysql_image_prefix }}
 
 manager:
   image: {{ mysql_operator_repo }}
@@ -40,8 +41,8 @@ rbac:
 
 rbacProxy:
   create: true
-  image: {{ kube_rbac_proxy_repo }}
-  tag: {{ kube_rbac_proxy_tag }}
+  image: {{ mysql_rbac_proxy_repo }}
+  tag: {{ mysql_rbac_proxy_tag }}
 
 leaderElection:
   create: true

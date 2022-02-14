@@ -27,7 +27,7 @@ spec:
     - 支持磁盘动态扩容
     - 优化优雅启停逻辑
     - 丰富集群状态粒度
-  operatorVersion: "2.1.0"
+  operatorVersion: "2.1.2"
   appVersion: "5.7.34"
   owner: "RadonDB"
 status:

@@ -35,6 +35,13 @@ chronus_image_prefix: >-
   docker.io
   {%- endif %}
 
+mysql_image_prefix: >-
+  {% if local_registry is defined and local_registry != "" -%}
+  {{ local_registry }}
+  {%- else -%}
+
+  {%- endif %}
+
 #KubeSphere:
 ks_apiserver_repo: "registry.cn-beijing.aliyuncs.com/{{ namespace_override | default('qkcp') }}/ks-apiserver"
 ks_apiserver_tag: "v3.2.1-rc.3"
@@ -276,12 +283,16 @@ waveworks_scop_repo: "{{ base_repo }}{{ namespace_override | default('weaveworks
 waveworks_scop_tag: "1.13.0"
 
 #DMP
-chronus_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-operator"
+chronus_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-operator"
 chronus_operator_tag: "dmp"
-chronus_metrics_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
+chronus_metrics_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
 chronus_metrics_operator_tag: "dmp"
-mysql_operator_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mysql-operator"
-mysql_operator_tag: "v2.1.0"
+chronus_busybox_repo: "library/busybox"
+chronus_busybox_tag: 1.31.1
+mysql_operator_repo: "{{ namespace_override | default('radondb') }}/mysql-operator"
+mysql_operator_tag: "v2.1.2"
+mysql_rbac_proxy_repo: "{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
+mysql_rbac_proxy_tag: v0.8.0
 pg_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
 pg_cluster_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/postgresqlcluster"
 pg_cluster_tag: "v0.2"

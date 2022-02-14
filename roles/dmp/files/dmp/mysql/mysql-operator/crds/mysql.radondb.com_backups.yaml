@@ -48,7 +48,7 @@ spec:
                 description: HostName represents the host for which to take backup
                 type: string
               image:
-                default: radondb/mysql-sidecar:v2.1.0
+                default: radondb/mysql-sidecar:v2.1.2
                 description: To specify the image that will be used for sidecar container.
                 type: string
             required:

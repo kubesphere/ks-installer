@@ -12,10 +12,11 @@ installCRDS: true
 imagePullPolicy: IfNotPresent
 nameOverride: ""
 fullnameOverride: ""
+imagePrefix: ""
 
 manager:
   image: radondb/mysql-operator
-  tag: v2.1.0
+  tag: v2.1.2
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -40,8 +41,7 @@ rbac:
 
 rbacProxy:
   create: true
-  image: gcr.azk8s.cn/kubebuilder/kube-rbac-proxy
-  tag: v0.8.0
+  image: radondb/kube-rbac-proxy:v0.8.0
 
 leaderElection:
   create: true

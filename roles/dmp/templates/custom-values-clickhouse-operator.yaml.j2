@@ -10,7 +10,7 @@ operator:
   watchNamespaces:
     - (.*?)
 
-  defaultClickHouseLogContainerImage: {{ busybox_repo }}:{{ busybox_tag }}
+  defaultClickHouseLogContainerImage: {{ chronus_busybox_repo }}:{{ chronus_busybox_tag }}
   defaultClickHouseLogContainerImagePullPolicy: "IfNotPresent"
   defaultMetricsExporterContainerImage: {{ chronus_metrics_operator_repo }}:{{ chronus_metrics_operator_tag }}
   defaultMetricsExporterContainerImagePullPolicy: "IfNotPresent"

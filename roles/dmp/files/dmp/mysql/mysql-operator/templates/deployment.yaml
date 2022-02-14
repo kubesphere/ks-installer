@@ -24,7 +24,11 @@ spec:
       containers:
       {{- if .Values.rbacProxy.create }}
       - name: kube-rbac-proxy
+      {{- if not .Values.imagePrefix }}
         image: "{{ .Values.rbacProxy.image }}:{{ .Values.rbacProxy.tag }}"
+      {{- else }}
+        image: "{{ .Values.imagePrefix }}/{{ .Values.rbacProxy.image }}:{{ .Values.rbacProxy.tag }}"
+      {{- end }}
         args:
         - "--secure-listen-address=0.0.0.0:8443"
         - "--upstream=http://127.0.0.1:8080/"
@@ -41,8 +45,15 @@ spec:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
+      {{- if not .Values.imagePrefix }}
         image: "{{ .Values.manager.image }}:{{ .Values.manager.tag }}"
+      {{- else }}
+        image: "{{ .Values.imagePrefix }}/{{ .Values.manager.image }}:{{ .Values.manager.tag }}"
+      {{- end }}
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        env:
+        - name: IMAGE_PREFIX
+          value: {{ .Values.imagePrefix }}
         securityContext:
           allowPrivilegeEscalation: false
         livenessProbe:
