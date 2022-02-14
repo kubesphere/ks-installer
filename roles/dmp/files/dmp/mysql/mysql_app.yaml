@@ -33,5 +33,5 @@ spec:
   icon: "/assets/radondb_logo.svg"
   owner: "RadonDB"
 status:
-  latestVersion: "2.1.0"
+  latestVersion: "2.1.2"
   state: active
