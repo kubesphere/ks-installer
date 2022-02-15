@@ -12,7 +12,7 @@ spec:
   authentication:
     jwtSecret: ""           # Keep the jwtSecret consistent with the Host Cluster. Retrieve the jwtSecret by executing "kubectl -n kubesphere-system get cm kubesphere-config -o yaml | grep -v "apiVersion" | grep jwtSecret" on the Host Cluster.
   local_registry: ""        # Add your private registry address if it is needed.
-  # dev_tag: ""               # Add your kubesphere image tag you want to install, by default it's same as ks-install release version.
+  # dev_tag: ""               # Add your kubesphere image tag you want to install, by default it's same as ks-installer release version.
   etcd:
     monitoring: false       # Enable or disable etcd monitoring dashboard installation. You have to create a Secret for etcd before you enable it.
     endpointIps: localhost  # etcd cluster EndpointIps. It can be a bunch of IPs here.

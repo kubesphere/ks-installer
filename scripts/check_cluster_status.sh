@@ -7,7 +7,7 @@ set -o pipefail
 function check_installer_ok(){
     echo "waiting for ks-installer pod ready"
     kubectl -n kubesphere-system wait --timeout=180s --for=condition=Available deployment/ks-installer
-    kubectl -n kubesphere-system wait --timeout=180s --for=condition=Ready $(kubectl -n kubesphere-system get pod -l app=ks-install -oname)
+    kubectl -n kubesphere-system wait --timeout=180s --for=condition=Ready $(kubectl -n kubesphere-system get pod -l app=ks-installer -oname)
     echo "waiting for KubeSphere ready"
     while IFS= read -r line; do
         echo "$line"
@@ -16,7 +16,7 @@ function check_installer_ok(){
                 return
         fi
     done < <(timeout 1800 kubectl logs -n kubesphere-system deploy/ks-installer -f --tail 1)
-    echo "ks-install not output 'Welcome to KubeSphere'"
+    echo "ks-installer not output 'Welcome to KubeSphere'"
     exit 1
 }
 
