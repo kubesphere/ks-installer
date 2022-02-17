@@ -82,7 +82,7 @@ gatekeeper_repo: "{{ base_repo }}{{ namespace_override | default('openpolicyagen
 gatekeeper_release: "v3.5.2"
 
 #openpitrix:
-openpitrix_job_tag: "v3.2.1"
+openpitrix_job_tag: "v3.2.2"
 openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/openpitrix-jobs"
 
 minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
