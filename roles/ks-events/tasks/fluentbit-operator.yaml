@@ -3,6 +3,26 @@
     path: "{{ kubesphere_dir }}/fluentbit-operator"
     state: directory
 
+
+- name: ks-events | Getting Kubernetes Node info
+  shell: |
+    kubectl get node -ojson | jq '.items[0].status.nodeInfo.containerRuntimeVersion'
+  register: node_container_runtime
+
+
+- name: ks-events | Setting container runtime of kubernetes
+  set_fact:
+    logging_container_runtime: "{{ node_container_runtime.stdout is search('docker://') | ternary('docker', 'containerd') }}"
+
+- name: ks-events | Setting container runtime of kubernetes
+  set_fact:
+    logging_container_runtime: "{{ node_container_runtime.stdout is search('containerd://') | ternary('containerd', 'crio') }}"
+  when: logging_container_runtime == 'containerd'
+
+- name: ks-events | Debug logging_container_runtime
+  debug:
+    msg: "{{logging_container_runtime}}"
+
 - name: ks-events | Creating manifests
   template:
     src: "{{ item.file }}.j2"

@@ -8,6 +8,7 @@
 - debug:
     msg: Current Kubernetes version is {{ kubernetes_version }}
 
+
 # Get the matched kubectl image
 - name: KubeSphere | Setting kubectl image version
   set_fact:

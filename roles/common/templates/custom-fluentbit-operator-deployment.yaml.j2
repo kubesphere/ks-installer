@@ -21,18 +21,7 @@ spec:
       - name: env
         emptyDir: {}
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
-      - name: containerdsock
-        hostPath:
-          path: /var/run/containerd/containerd.sock
-      - name: crictl
-        hostPath:
-          path: {{ logging.crictlPath | default('/usr/bin/crictl') }}
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
-      - name: crisock
-        hostPath:
-          path: /var/run/crio/crio.sock
-{% else %}
+{% elif logging_container_runtime == 'docker' %}
       - name: dockersock
         hostPath:
           path: /var/run/docker.sock
@@ -46,9 +35,7 @@ spec:
         - set -ex;
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
           echo CONTAINER_ROOT_DIR={{ common.containersLogMountedPath }} > /fluentbit-operator/fluent-bit.env
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
-          echo CONTAINER_ROOT_DIR=$(crictl info --output go-template --template {{'{{.config.containerdRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
+{% elif (logging_container_runtime== 'containerd') or (logging_container_runtime== 'crio') %}
           echo CONTAINER_ROOT_DIR=/var/log > /fluentbit-operator/fluent-bit.env
 {% else %}
           echo CONTAINER_ROOT_DIR=$(docker info -f {{'{{.DockerRootDir}}'}}) > /fluentbit-operator/fluent-bit.env
@@ -57,18 +44,7 @@ spec:
         - name: env
           mountPath: /fluentbit-operator
 {% if common.containersLogMountedPath is defined and common.containersLogMountedPath != "" %}
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'containerd') %}
-        - name: containerdsock
-          readOnly: true
-          mountPath: /var/run/containerd/containerd.sock
-        - name: crictl
-          readOnly: true
-          mountPath: {{ logging.crictlPath | default('/usr/bin/crictl') }}
-{% elif (logging.containerruntime is defined) and (logging.containerruntime == 'crio') %}
-        - name: crisock
-          readOnly: true
-          mountPath: /var/run/crio/crio.sock
-{% else %}
+{% elif logging_container_runtime == 'docker' %}
         - name: dockersock
           readOnly: true
           mountPath: /var/run/docker.sock
