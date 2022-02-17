@@ -8,7 +8,7 @@ metadata:
     kubesphere.io/workspace: system-workspace
 spec:
   maintainers:
-    - email: dpg_database@yunify.com
+    - email: radondb@yunify.com
       name: RadonDB
   name: "RadonDB PostgreSQL"
   screenshots: |
