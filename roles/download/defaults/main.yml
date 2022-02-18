@@ -295,7 +295,7 @@ mysql_rbac_proxy_repo: "{{ namespace_override | default('kubesphere') }}/kube-rb
 mysql_rbac_proxy_tag: v0.8.0
 pg_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
 pg_cluster_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/postgresqlcluster"
-pg_cluster_tag: "v0.2"
+pg_cluster_tag: "v0.3"
 pgo_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
 pgo_image_tag: "centos8-4.7.1"
 
