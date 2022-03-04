@@ -222,6 +222,13 @@ rules:
       - list
       - get
   - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - clustertemplates
+    verbs:
+      - list
+      - get
+  - apiGroups:
       - alerting.kubesphere.io
     resources:
       - comment
