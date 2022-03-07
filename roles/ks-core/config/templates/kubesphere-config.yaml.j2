@@ -111,8 +111,12 @@ data:
         secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
         bucket: {{ common.s3.openpitrixBucket | default('app-store') }}
 {% endif %}
-{% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
     multicluster:
+      clusterRole: {{ multicluster.clusterRole }}
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
+      enable: false
+{% endif %}
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
       enable: true
       agentImage: {{ tower_repo }}/{{ tower_image }}:{{ tower_image_tag }}
       proxyPublishService: tower.kubesphere-system.svc
