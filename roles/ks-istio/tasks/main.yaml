@@ -11,7 +11,9 @@
 
 - name: servicemesh | Unarchive istio files
   shell: >
-    tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2-linux-amd64.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
+    ARCH=amd64 &&
+    if [[ $(arch) == "aarch64*" ]]; then ARCH=arm64; fi &&
+    tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2-linux-${ARCH}.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
 
 - name: servicemesh | Grant privileges to ks-installer
   shell: >

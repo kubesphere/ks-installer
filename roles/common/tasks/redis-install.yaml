@@ -7,7 +7,7 @@
       shell: >
         {{ bin_dir }}/kubectl -n kubesphere-system create secret generic redis-secret --from-literal=auth={{redis_password}}
       register: secret
-      failed_when: "secret.stderr and 'AlreadyExists' not in secret.stderr"
+      failed_when: "secret.stderr and 'already exists' not in secret.stderr"
 
 - name: KubeSphere | Deploying ha redis
   block:
