@@ -71,7 +71,7 @@
   loop:
     - "role-templates.yaml"
   register: init_ks_result
-  failed_when: "init_ks_result.stderr and 'AlreadyExists' not in init_ks_result.stderr and 'Warning' not in init_ks_result.stderr"
+  failed_when: "init_ks_result.stderr and 'already exists' not in init_ks_result.stderr and 'Warning' not in init_ks_result.stderr"
 
 
 - name: KubeSphere | Generating kubeconfig-admin

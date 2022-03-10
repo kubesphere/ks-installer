@@ -105,6 +105,6 @@
   loop:
     - "kubesphere-config.yaml"
   register: init_result
-  failed_when: "init_result.stderr and 'AlreadyExists' not in init_result.stderr"
+  failed_when: "init_result.stderr and 'already exists' not in init_result.stderr"
 
 - import_tasks: ks-restart.yaml

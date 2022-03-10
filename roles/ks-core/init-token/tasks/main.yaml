@@ -67,4 +67,4 @@
     --from-literal=secret={{ ks_secret_str }}
     -n kubesphere-system
   register: secret_status
-  failed_when: "secret_status.stderr and 'AlreadyExists' not in secret_status.stderr"
+  failed_when: "secret_status.stderr and 'already exists' not in secret_status.stderr"

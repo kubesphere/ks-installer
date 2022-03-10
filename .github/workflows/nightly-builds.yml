@@ -20,23 +20,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build image
-        run: |
-          tag=nightly-$(date '+%Y%m%d')
-          sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml
-          docker build . --file Dockerfile --tag $IMAGE_NAME
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: all
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Log into registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Push image
+      - name: Build image
         run: |
-          IMAGE_ID=$IMAGE_REPO/$IMAGE_NAME
-          
           tag=nightly-$(date '+%Y%m%d')
-
-          docker tag $IMAGE_NAME $IMAGE_ID:${tag}
-          docker push $IMAGE_ID:${tag}
+          sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml
+          docker buildx build --platform linux/amd64,linux/arm64 --push -f Dockerfile.complete -t $IMAGE_REPO/$IMAGE_NAME:$tag .
 
       - name: slack
         uses: 8398a7/action-slack@v3
