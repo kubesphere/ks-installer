@@ -39,10 +39,10 @@ spec:
     monitoring:
       # type: external   # Whether to specify the external prometheus stack, and need to modify the endpoint at the next line.
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data.
-      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero. 
+      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero.
         enabled: false
-    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs. 
-      kinds:         
+    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs.
+      kinds:
       - resourceName: "nvidia.com/gpu"
         resourceType: "GPU"
         default: true
@@ -104,6 +104,9 @@ spec:
     enabled: false                   # Enable or disable metrics-server.
   monitoring:
     storageClass: ""                 # If there is an independent StorageClass you need for Prometheus, you can specify it here. The default StorageClass is used by default.
+    node_exporter:
+      port: 9100
+      # resources: {}
     # kube_rbac_proxy:
     #   resources: {}
     # kube_state_metrics:
@@ -116,8 +119,6 @@ spec:
     #     resources: {}
     #   adapter:
     #     resources: {}
-    # node_exporter:
-    #   resources: {}
     # alertmanager:
     #   replicas: 1          # AlertManager Replicas.
     #   resources: {}
@@ -127,7 +128,7 @@ spec:
     #     resources: {}
     #   proxy:
     #     resources: {}
-    gpu:                           # GPU monitoring-related plug-in installation. 
+    gpu:                           # GPU monitoring-related plug-in installation.
       nvidia_dcgm_exporter:        # Ensure that gpu resources on your hosts can be used normally, otherwise this plug-in will not work properly.
         enabled: false             # Check whether the labels on the GPU hosts contain "nvidia.com/gpu.present=true" to ensure that the DCGM pod is scheduled to these nodes.
         # resources: {}
