@@ -103,6 +103,9 @@ spec:
     enabled: false                   # Enable or disable metrics-server.
   monitoring:
     storageClass: ""                 # If there is an independent StorageClass you need for Prometheus, you can specify it here. The default StorageClass is used by default.
+    node_exporter:
+      port: 9100
+      # resources: {}
     # kube_rbac_proxy:
     #   resources: {}
     # kube_state_metrics:
@@ -113,8 +116,6 @@ spec:
     #   resources: {}
     #   operator:
     #     resources: {}
-    # node_exporter:
-    #   resources: {}
     # alertmanager:
     #   replicas: 1          # AlertManager Replicas.
     #   resources: {}
