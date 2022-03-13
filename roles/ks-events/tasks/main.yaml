@@ -72,7 +72,7 @@
       - "events_result.stderr and 'field is immutable' in events_result.stderr"
 
   when:
-    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.3.0") == -1) or (events_ruler_check.stdout != 'true' and events.ruler is defined and events.ruler.enabled is defined and events.ruler.enabled == True)
+    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.4.0") == -1) or (events_ruler_check.stdout != 'true' and events.ruler is defined and events.ruler.enabled is defined and events.ruler.enabled == True)
 
 
 - import_tasks: fluentbit-operator.yaml

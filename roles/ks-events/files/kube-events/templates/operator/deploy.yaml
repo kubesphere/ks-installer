@@ -18,17 +18,17 @@ spec:
         app: {{ template "kube-events.operator.fullname" . }}
 {{ include "kube-events.labels" . | indent 8 }}
     spec:
-      {{- with .Values.operator.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.operator.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.operator.affinity }}
+      {{- if .Values.operator.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
+{{ toYaml .Values.operator.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.operator.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.operator.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.operator.tolerations }}
+      tolerations:
+{{ toYaml .Values.operator.tolerations | indent 8 }}
       {{- end }}
       containers:
       - name: events-operator

@@ -72,8 +72,11 @@ ruler:
   sinks:
     alertmanager:
       namespace: kubesphere-monitoring-system
-      name: alertmanager-main
-    webhooks: []
+      name: alertmanager-operated
+    # alertmanagers:
+    # - namespace: kubesphere-monitoring-system
+    #   name: alertmanager-operated
+    # webhooks:
     # - type:
     #   url:
     #   service:
@@ -81,7 +84,9 @@ ruler:
     #     name:
     #     port:
     #     path:
-
+    ## 'stdout' sink type can be either 'notification' or 'alert'
+    # stdout:
+    #   type: notification
 rule:
   createDefaults: true
   overrideDefaults: false
