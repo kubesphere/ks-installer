@@ -176,11 +176,11 @@ filebeat_tag: 6.7.0
 
 #ks-events
 kube_events_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-operator"
-kube_events_operator_tag: v0.3.0
+kube_events_operator_tag: v0.4.0
 kube_events_exporter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-exporter"
-kube_events_exporter_tag: v0.3.0
+kube_events_exporter_tag: v0.4.0
 kube_events_ruler_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-events-ruler"
-kube_events_ruler_tag: v0.3.0
+kube_events_ruler_tag: v0.4.0
 
 #ks-auditing
 auditing_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-auditing-operator"
