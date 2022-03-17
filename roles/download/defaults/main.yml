@@ -164,11 +164,11 @@ docker_elasticsearch_curator_tag: v5.7.6
 elasticsearch_oss_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-oss"
 elasticsearch_oss_tag: 6.8.22
 fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluentbit-operator"
-fluentbit_operator_tag: v0.11.0
+fluentbit_operator_tag: v0.13.0
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
 ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluent-bit"
-ks_fluent_bit_tag: "v1.8.3"
+ks_fluent_bit_tag: "v1.8.11"
 ks_log_sidecar_injector_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.1
 filebeat_repo: "{{ base_repo }}{{ namespace_override | default('elastic') }}/filebeat"
