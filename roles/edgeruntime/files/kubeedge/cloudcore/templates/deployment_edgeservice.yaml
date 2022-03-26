@@ -32,6 +32,11 @@ spec:
           containerPort: 8081
         command:
         - edgeservice
+        env:
+          - name: REGION
+            value: "zh"
+          - name: VERSION 
+            value: "v1.9.2"
         imagePullPolicy: {{ .Values.edgeService.image.pullPolicy }}
         {{- with .Values.edgeService.resources }}
         resources: {{ toYaml . | nindent 10 }}
