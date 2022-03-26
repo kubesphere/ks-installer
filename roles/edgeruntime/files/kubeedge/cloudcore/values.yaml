@@ -66,7 +66,7 @@ iptablesManager:
   hostNetWork: true
   image:
     repository: "kubeedge/iptables-manager"
-    tag: "v1.8.2"
+    tag: "v1.9.2"
     pullPolicy: "IfNotPresent"
     pullSecrets: []
   securityContext: 
@@ -98,8 +98,8 @@ iptablesManager:
 edgeService:
   replicaCount: 1
   image:
-    repository: "kubespheredev/edgeservice"
-    tag: "v0.1.0"
+    repository: "kubesphere/edgeservice"
+    tag: "v0.2.0"
     pullPolicy: "IfNotPresent"
     imagePullSecrets: []
   securityContext: {}
