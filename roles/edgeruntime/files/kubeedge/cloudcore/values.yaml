@@ -1,7 +1,7 @@
 # Default values for kubeedge.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-appVersion: "1.8.2"
+appVersion: "1.9.2"
 
 cloudCore:
   replicaCount: 1
