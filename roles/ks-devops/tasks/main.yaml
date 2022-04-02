@@ -159,6 +159,17 @@
   when:
     - helm_release.stdout == "0"
 
+- name: ks-devops | Upgrading or installing Argo CD
+  args:
+    executable: /bin/bash
+  shell: |
+    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/argo-cd-4.4.0.tgz \
+    -n argocd --create-namespace
+  register: argocd_upgrade_result
+  until: argocd_upgrade_result is succeeded
+  retries: 3
+  delay: 10
+
 - name: ks-devops | Upgrading or installing ks-devops
   args:
     executable: /bin/bash
@@ -166,7 +177,7 @@
     # Delete Job migrate because 'helm upgrade' will try to update immutable fields of Job, which is not allowed. 
     {{ bin_dir }}/kubectl delete job -n kubesphere-devops-system migrate --ignore-not-found
 
-    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.9.tgz \
+    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.10.tgz \
     -n kubesphere-devops-system \
     -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
   register: devops_upgrade_result
