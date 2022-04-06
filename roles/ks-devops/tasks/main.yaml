@@ -61,6 +61,18 @@
   debug:
     var: ks_jwt_secret
 
+- name: Get Argo CD installation
+  shell: >
+     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.installation}'
+  register: argocd_installation
+  ignore_errors: true
+
+- name: Get Argo CD namespace
+  shell: >
+     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.namespace}' | echo -n argocd
+  register: argocd_namespace
+  ignore_errors: true
+
 - name: ks-devops | Getting devops installation charts
   copy:
     src: "{{ item }}"
@@ -158,18 +170,6 @@
   ignore_errors: True
   when:
     - helm_release.stdout == "0"
-
-- name: Get Argo CD installation
-  shell: >
-     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.installation}'
-  register: argocd_installation
-  ignore_errors: true
-
-- name: Get Argo CD namespace
-  shell: >
-     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.namespace}' | echo -n argocd
-  register: argocd_namespace
-  ignore_errors: true
 
 - name: ks-devops | Upgrading or installing Argo CD
   args:
