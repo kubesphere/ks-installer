@@ -139,3 +139,7 @@ jenkins:
       readOnly: true
   prometheus:
     namespace: "kubesphere-monitoring-system"
+
+argocd:
+  enabled: true
+  namespace: "{{ argocd_namespace.stdout }}"

@@ -159,6 +159,18 @@
   when:
     - helm_release.stdout == "0"
 
+- name: Get Argo CD installation
+  shell: >
+     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.installation}'
+  register: argocd_installation
+  ignore_errors: true
+
+- name: Get Argo CD namespace
+  shell: >
+     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.namespace}' | echo -n argocd
+  register: argocd_namespace
+  ignore_errors: true
+
 - name: ks-devops | Upgrading or installing Argo CD
   args:
     executable: /bin/bash
@@ -167,6 +179,8 @@
     -n argocd --create-namespace
   register: argocd_upgrade_result
   until: argocd_upgrade_result is succeeded
+  when:
+    - argocd_installation.stdout != "custom"
   retries: 3
   delay: 10
 
