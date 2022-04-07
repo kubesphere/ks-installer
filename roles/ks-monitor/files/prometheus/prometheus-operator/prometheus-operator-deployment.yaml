@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 0.53.1
+    app.kubernetes.io/version: 0.55.1
   name: prometheus-operator
   namespace: kubesphere-monitoring-system
 spec:
@@ -23,13 +23,13 @@ spec:
         app.kubernetes.io/component: controller
         app.kubernetes.io/name: prometheus-operator
         app.kubernetes.io/part-of: kube-prometheus
-        app.kubernetes.io/version: 0.53.1
+        app.kubernetes.io/version: 0.55.1
     spec:
       containers:
       - args:
         - --kubelet-service=kube-system/kubelet
-        - --prometheus-config-reloader=kubesphere/prometheus-config-reloader:v0.53.1
-        image: kubesphere/prometheus-operator:v0.53.1
+        - --prometheus-config-reloader=kubesphere/prometheus-config-reloader:v0.55.1
+        image: kubesphere/prometheus-operator:v0.55.1
         name: prometheus-operator
         ports:
         - containerPort: 8080
