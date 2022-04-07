@@ -68,7 +68,7 @@
   ignore_errors: true
 
 - name: Get Argo CD namespace
-  shell: >
+  shell: |
      ns=$({{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.namespace}')
      echo -n ${ns:-argocd}
   register: argocd_namespace
