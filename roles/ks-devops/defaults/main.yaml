@@ -14,20 +14,9 @@ JavaOpts: >
   -Dhudson.model.LoadStatistics.clock=5000
   -Dhudson.model.LoadStatistics.decay=0.2
   -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000
+  -Dhudson.security.csrf.DefaultCrumbIssuer.EXCLUDE_SESSION_ID=true
   -Dio.jenkins.plugins.casc.ConfigurationAsCode.initialDelay=10000
-  -verbose:gc
-  -Xloggc:/var/jenkins_home/gc-%t.log
-  -XX:NumberOfGCLogFiles=2
-  -XX:+UseGCLogFileRotation
-  -XX:GCLogFileSize=100m
-  -XX:+PrintGC
-  -XX:+PrintGCDateStamps
-  -XX:+PrintGCDetails
-  -XX:+PrintHeapAtGC
-  -XX:+PrintGCCause
-  -XX:+PrintTenuringDistribution
-  -XX:+PrintReferenceGC
-  -XX:+PrintAdaptiveSizePolicy
+  -Djenkins.install.runSetupWizard=false
   -XX:+UseG1GC
   -XX:+UseStringDeduplication
   -XX:+ParallelRefProcEnabled
