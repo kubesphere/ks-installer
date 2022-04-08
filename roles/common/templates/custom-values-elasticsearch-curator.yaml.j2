@@ -35,19 +35,92 @@ configMaps:
     actions:
       1:
         action: delete_indices
-        description: "Clean up ES by deleting old indices"
+        description: "Clean up ES by deleting old logging indices"
         options:
           timeout_override:
           continue_if_exception: False
           disable_action: False
           ignore_empty_list: True
         filters:
+        - filtertype: pattern
+          kind: prefix
+          value: ks-{{ common.es.elkPrefix }}-log
+          exclude: False
         - filtertype: age
           source: name
           direction: older
           timestring: '%Y.%m.%d'
           unit: days
           unit_count: {{ common.es.logMaxAge }}
+          field:
+          stats_result:
+          epoch:
+          exclude: False
+      2:
+        action: delete_indices
+        description: "Clean up ES by deleting old events indices"
+        options:
+          timeout_override:
+          continue_if_exception: False
+          disable_action: False
+          ignore_empty_list: True
+        filters:
+        - filtertype: pattern
+          kind: prefix
+          value: ks-{{ common.es.elkPrefix }}-events
+          exclude: False
+        - filtertype: age
+          source: name
+          direction: older
+          timestring: '%Y.%m.%d'
+          unit: days
+          unit_count: {{ common.es.eventMaxAge | default(common.es.logMaxAge) }}
+          field:
+          stats_result:
+          epoch:
+          exclude: False
+      3:
+        action: delete_indices
+        description: "Clean up ES by deleting old auditing indices"
+        options:
+          timeout_override:
+          continue_if_exception: False
+          disable_action: False
+          ignore_empty_list: True
+        filters:
+        - filtertype: pattern
+          kind: prefix
+          value: ks-{{ common.es.elkPrefix }}-auditing
+          exclude: False
+        - filtertype: age
+          source: name
+          direction: older
+          timestring: '%Y.%m.%d'
+          unit: days
+          unit_count: {{ common.es.auditingMaxAge | default(common.es.logMaxAge) }}
+          field:
+          stats_result:
+          epoch:
+          exclude: False
+      4:
+        action: delete_indices
+        description: "Clean up ES by deleting old istio indices"
+        options:
+          timeout_override:
+          continue_if_exception: False
+          disable_action: False
+          ignore_empty_list: True
+        filters:
+        - filtertype: pattern
+          kind: prefix
+          value: {{ common.es.elkPrefix }}
+          exclude: False
+        - filtertype: age
+          source: name
+          direction: older
+          timestring: '%Y.%m.%d'
+          unit: days
+          unit_count: {{ common.es.istioMaxAge | default(common.es.logMaxAge) }}
           field:
           stats_result:
           epoch:
