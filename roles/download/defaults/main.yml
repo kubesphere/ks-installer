@@ -122,7 +122,7 @@ builder_go16_podman_tag: v3.2.0-podman
 
 #s2i
 s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
-s2ioperator_tag: "v3.2.0"
+s2ioperator_tag: "v3.2.1"
 s2irun_tag: "v3.2.0"
 s2itemplates_tag: "v3.2.0"
 
