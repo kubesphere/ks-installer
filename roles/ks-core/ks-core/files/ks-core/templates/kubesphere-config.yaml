@@ -21,6 +21,11 @@ data:
 {{- else if eq (default .Values.config.multicluster.clusterRole "none") "member" }}
       oauthOptions:
         accessTokenMaxAge: 0
+        clients:
+          - name: kubesphere
+            secret: kubesphere
+            redirectURIs:
+              - '*'
 {{- end }}
     monitoring:
       endpoint: {{ .Values.config.monitoring.endpoint | default "http://prometheus-operated.kubesphere-monitoring-system.svc:9090" }}
