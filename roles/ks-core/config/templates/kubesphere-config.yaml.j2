@@ -214,9 +214,7 @@ data:
 
 {% if terminal is defined %}
     terminal:
-{% if terminal.image is defined %}
-      image: {{ terminal.image }}
-{% endif %}
+      image: {{ terminal.image | default(alpine_repo + ':' + alpine_tag|string) }}
 {% if terminal.timeout is defined %}
       timeout: {{ terminal.timeout }}
 {% endif %}
