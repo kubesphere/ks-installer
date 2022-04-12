@@ -106,25 +106,41 @@ jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/i
 jnlp_slave_tag: 3.27-1
 
 builder_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
-builder_base_tag: v3.2.0
+builder_base_tag: v3.2.1
 builder_nodejs_tag: v3.2.0
 builder_maven_tag: v3.2.0
+builder_maven_jdk11_tag: v3.2.1-jdk11
 builder_python_tag: v3.2.0
 builder_go_tag: v3.2.0
-builder_go16_tag: v3.2.0
+builder_go16_tag: v3.2.1-1.16
+builder_go17_tag: v3.2.1-1.17
+builder_go18_tag: v3.2.1-1.18
 
-builder_base_podman_tag: v3.2.0-podman
+builder_base_podman_tag: v3.2.1-podman
 builder_nodejs_podman_tag: v3.2.0-podman
 builder_maven_podman_tag: v3.2.0-podman
+builder_maven_jdk11_podman_tag: v3.2.1-jdk11-podman
 builder_python_podman_tag: v3.2.0-podman
 builder_go_podman_tag: v3.2.0-podman
-builder_go16_podman_tag: v3.2.0-podman
+builder_go16_podman_tag: v3.2.1-1.16-podman
+builder_go17_podman_tag: v3.2.1-1.17-podman
+builder_go18_podman_tag: v3.2.1-1.18-podman
 
 #s2i
 s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
 s2ioperator_tag: "v3.2.1"
 s2irun_tag: "v3.2.0"
 s2itemplates_tag: "v3.2.0"
+
+#argocd
+argocd_repo: "{{ base_repo | default('quay.io/') }}{{ namespace_override | default('argoproj') }}/argocd"
+argocd_tag: v2.3.3
+argocd_applicationset_repo: "{{ base_repo | default('quay.io/') }}{{ namespace_override | default('argoproj') }}/argocd-applicationset"
+argocd_applicationset_tag: v0.4.1
+argocd_dex_repo: "{{ base_repo | default('ghcr.io/') }}{{ namespace_override | default('dexidp') }}/dex"
+argocd_dex_tag: v2.30.2
+argocd_redis_repo: "{{ base_repo }}{{ namespace_override }}/redis"
+argocd_redis_tag: 6.2.6-alpine
 
 #ks-monitor:
 configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
@@ -409,6 +425,12 @@ images:
     sha256: "{{ builder_maven_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
+  builder_maven_jdk11:
+    repo: "{{ builder_registry }}/builder-maven"
+    tag: "{{ builder_maven_jdk11_tag }}"
+    sha256: "{{ builder_maven_jdk11_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
   builder_python:
     repo: "{{ builder_registry }}/builder-python"
     tag: "{{ builder_python_tag }}"
@@ -425,6 +447,18 @@ images:
     repo: "{{ builder_registry }}/builder-go"
     tag: "{{ builder_go16_tag }}"
     sha256: "{{ builder_go16_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go17:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go17_tag }}"
+    sha256: "{{ builder_go17_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go18:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go18_tag }}"
+    sha256: "{{ builder_go18_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   builder_base_podman:
@@ -445,6 +479,12 @@ images:
     sha256: "{{ builder_maven_podman_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
+  builder_maven_jdk11_podman:
+    repo: "{{ builder_registry }}/builder-maven"
+    tag: "{{ builder_maven_jdk11_podman_tag }}"
+    sha256: "{{ builder_maven_jdk11_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
   builder_python_podman:
     repo: "{{ builder_registry }}/builder-python"
     tag: "{{ builder_python_podman_tag }}"
@@ -461,6 +501,18 @@ images:
     repo: "{{ builder_registry }}/builder-go"
     tag: "{{ builder_go16_podman_tag }}"
     sha256: "{{ builder_go16_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go17_podman:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go17_podman_tag }}"
+    sha256: "{{ builder_go17_podman_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  builder_go18_podman:
+    repo: "{{ builder_registry }}/builder-go"
+    tag: "{{ builder_go18_podman_tag }}"
+    sha256: "{{ builder_go18_podman_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   s2ioperator:
@@ -569,6 +621,30 @@ images:
     repo: "{{ s2i_registry }}/python-27-centos7"
     tag: "{{ s2itemplates_tag }}"
     sha256: "{{ python_27_centos7_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  argocd_repo:
+    repo: "{{ argocd_repo }}"
+    tag: "{{ argocd_repo_tag }}"
+    sha256: "{{ argocd_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  argocd_applicationset_repo:
+    repo: "{{ argocd_applicationset_repo }}"
+    tag: "{{ argocd_applicationset_tag }}"
+    sha256: "{{ argocd_applicationset_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  argocd_dex_repo:
+    repo: "{{ argocd_dex_repo }}"
+    tag: "{{ argocd_dex_tag }}"
+    sha256: "{{ argocd_dex_checksum|default(None) }}"
+    group: "kubesphere-devops-images"
+
+  argocd_redis_repo:
+    repo: "{{ argocd_redis_repo }}"
+    tag: "{{ argocd_redis_tag }}"
+    sha256: "{{ argocd_redis_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
   configmap_reload:
