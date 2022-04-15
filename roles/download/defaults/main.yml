@@ -106,25 +106,25 @@ jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/i
 jnlp_slave_tag: 3.27-1
 
 builder_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
-builder_base_tag: v3.2.1
+builder_base_tag: v3.2.2
 builder_nodejs_tag: v3.2.0
 builder_maven_tag: v3.2.0
 builder_maven_jdk11_tag: v3.2.1-jdk11
 builder_python_tag: v3.2.0
 builder_go_tag: v3.2.0
-builder_go16_tag: v3.2.1-1.16
-builder_go17_tag: v3.2.1-1.17
-builder_go18_tag: v3.2.1-1.18
+builder_go16_tag: v3.2.2-1.16
+builder_go17_tag: v3.2.2-1.17
+builder_go18_tag: v3.2.2-1.18
 
-builder_base_podman_tag: v3.2.1-podman
+builder_base_podman_tag: v3.2.2-podman
 builder_nodejs_podman_tag: v3.2.0-podman
 builder_maven_podman_tag: v3.2.0-podman
 builder_maven_jdk11_podman_tag: v3.2.1-jdk11-podman
 builder_python_podman_tag: v3.2.0-podman
 builder_go_podman_tag: v3.2.0-podman
-builder_go16_podman_tag: v3.2.1-1.16-podman
-builder_go17_podman_tag: v3.2.1-1.17-podman
-builder_go18_podman_tag: v3.2.1-1.18-podman
+builder_go16_podman_tag: v3.2.2-1.16-podman
+builder_go17_podman_tag: v3.2.2-1.17-podman
+builder_go18_podman_tag: v3.2.2-1.18-podman
 
 #s2i
 s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
