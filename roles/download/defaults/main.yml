@@ -25,7 +25,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.3.0-alpha.0
+  v3.3.0-alpha.1
   {%- endif %}
 
 #KubeSphere:
@@ -139,7 +139,7 @@ argocd_applicationset_repo: "{{ base_repo | default('quay.io/') }}{{ namespace_o
 argocd_applicationset_tag: v0.4.1
 argocd_dex_repo: "{{ base_repo | default('ghcr.io/') }}{{ namespace_override | default('dexidp') }}/dex"
 argocd_dex_tag: v2.30.2
-argocd_redis_repo: "{{ base_repo }}{{ namespace_override }}/redis"
+argocd_redis_repo: "{{ base_library_repo }}redis"
 argocd_redis_tag: 6.2.6-alpine
 
 #ks-monitor:
@@ -625,7 +625,7 @@ images:
 
   argocd_repo:
     repo: "{{ argocd_repo }}"
-    tag: "{{ argocd_repo_tag }}"
+    tag: "{{ argocd_tag }}"
     sha256: "{{ argocd_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
