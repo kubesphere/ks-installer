@@ -229,6 +229,18 @@ rules:
       - list
       - get
   - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - clustertemplates/render
+    verbs:
+      - create
+  - apiGroups:
+      - gitops.kubesphere.io
+    resources:
+      - clusters
+    verbs:
+      - list
+  - apiGroups:
       - alerting.kubesphere.io
     resources:
       - comment
@@ -3181,6 +3193,8 @@ role:
         - 'pipelines/consolelog'
         - 'pipelines/scan'
         - 'pipelines/sonarstatus'
+        - 'clustertemplates'
+        - 'clustertemplates/render'
       verbs:
         - '*'
 
@@ -3279,6 +3293,12 @@ role:
         - 'get'
         - 'list'
         - 'watch'
+    - apiGroups:
+        - ''
+      resources:
+        - 'events'
+      verbs:
+        - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -3306,6 +3326,12 @@ role:
         - applications
       verbs:
         - '*'
+    - apiGroups:
+        - 'gitops.kubesphere.io'
+      resources:
+        - clusters
+      verbs:
+        - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -3331,6 +3357,7 @@ role:
         - 'gitops.kubesphere.io'
       resources:
         - 'applications'
+        - 'application-summary'
       verbs:
         - 'get'
         - 'list'
@@ -3351,7 +3378,7 @@ role:
       iam.kubesphere.io/dependencies: '["role-template-view-gitrepositories"]'
       iam.kubesphere.io/module: Code Repositories Management
       kubesphere.io/alias-name: Code Repositories Management
-      iam.kubesphere.io/role-template-rules: '{"applications": "manage"}'
+      iam.kubesphere.io/role-template-rules: '{"gitrepositories": "manage"}'
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-gitrepositories
@@ -3375,6 +3402,7 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
       iam.kubesphere.io/module: Code Repositories Management
       kubesphere.io/alias-name: Code Repositories View
       iam.kubesphere.io/role-template-rules: '{"gitrepositories": "view"}'
@@ -3416,6 +3444,7 @@ role:
         - 'pipelineruns'
         - 'pipelines/runs'
         - 'pipelines/pipelineruns'
+        - 'pipelineruns/artifacts'
         - 'pipelineruns/nodedetails'
         - 'pipelineruns/status'
       verbs:
