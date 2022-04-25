@@ -103,7 +103,7 @@ ks_devops_tools_tag: "{{ ks_version }}"
 jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-jenkins"
 jenkins_tag: v3.2.0-2.249.1
 jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/inbound-agent"
-jnlp_slave_tag: 3.27-1
+jnlp_slave_tag: 4.10-2
 
 builder_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
 builder_base_tag: v3.2.2
