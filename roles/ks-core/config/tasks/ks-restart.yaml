@@ -1,18 +1,3 @@
-- name: ks-upgrade | Restarting ks-apiserver
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-apiserver"
-  failed_when: false
-
-
-# - name: ks-upgrade | Restarting ks-console
-#   shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-console"
-#   ignore_errors: True
-
-
-- name: ks-upgrade | Restarting ks-controller-manager
-  shell: "{{ bin_dir }}/kubectl -n kubesphere-system rollout restart deployment ks-controller-manager"
-  failed_when: false
-
-
 # upgrade legacy openpitix
 - block:
     - name: OpenPitrix | Getting openpitrix jobs installation files
