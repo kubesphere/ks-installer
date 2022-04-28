@@ -21,6 +21,27 @@ base_library_repo: >-
 
   {%- endif %}
 
+# quay image repo define
+quay_image_repo: >-
+  {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
+  registry.cn-beijing.aliyuncs.com/
+  {%- elif local_registry is defined and local_registry != "" -%}
+  {{ local_registry }}/
+  {%- else -%}
+  quay.io/
+  {%- endif %}
+
+# ghcr image repo define
+ghcr_image_repo: >-
+  {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
+  registry.cn-beijing.aliyuncs.com/
+  {%- elif local_registry is defined and local_registry != "" -%}
+  {{ local_registry }}/
+  {%- else -%}
+  ghcr.io/
+  {%- endif %}
+
+
 ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
@@ -133,11 +154,11 @@ s2irun_tag: "v3.2.0"
 s2itemplates_tag: "v3.2.0"
 
 #argocd
-argocd_repo: "{{ base_repo | default('quay.io/') }}{{ namespace_override | default('argoproj') }}/argocd"
+argocd_repo: "{{ quay_image_repo }}{{ namespace_override | default('argoproj') }}/argocd"
 argocd_tag: v2.3.3
-argocd_applicationset_repo: "{{ base_repo | default('quay.io/') }}{{ namespace_override | default('argoproj') }}/argocd-applicationset"
+argocd_applicationset_repo: "{{ quay_image_repo }}{{ namespace_override | default('argoproj') }}/argocd-applicationset"
 argocd_applicationset_tag: v0.4.1
-argocd_dex_repo: "{{ base_repo | default('ghcr.io/') }}{{ namespace_override | default('dexidp') }}/dex"
+argocd_dex_repo: "{{ ghcr_image_repo }}{{ namespace_override | default('dexidp') }}/dex"
 argocd_dex_tag: v2.30.2
 argocd_redis_repo: "{{ base_library_repo }}redis"
 argocd_redis_tag: 6.2.6-alpine
