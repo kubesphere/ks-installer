@@ -599,6 +599,27 @@ def generate_new_cluster_configuration(api):
             }
         del cluster_configuration_spec["networkpolicy"]
 
+    # add edgeruntime configuration migration
+    if "kubeedge" in cluster_configuration_spec:
+        upgrade_flag = True
+        if "enabled" in cluster_configuration_spec["kubeedge"]:
+            cluster_configuration_spec["edgeruntime"] = {
+                "enabled": cluster_configuration_spec["kubeedge"]["enabled"],
+                "kubeedge": cluster_configuration_spec["kubeedge"]
+            }
+
+            cluster_configuration_spec["edgeruntime"]["kubeedge"]["iptables-manager"] = {
+                "enabled": True,
+                "mode": "external"
+            }
+
+        try:
+            del cluster_configuration_spec["edgeruntime"]["kubeedge"]["edgeWatcher"]
+        except:
+            pass
+        
+        del cluster_configuration_spec["kubeedge"]
+
     if isinstance(cluster_configuration_status,
                   dict) and "core" in cluster_configuration_status:
         if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=
