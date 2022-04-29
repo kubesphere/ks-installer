@@ -16,7 +16,7 @@ base_library_repo: >-
   {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
   {{ base_repo }}{{ namespace_override | default('kubesphereio') }}/
   {%- elif local_registry is defined and local_registry != "" -%}
-  {{ base_repo }}library/
+  {{ base_repo }}{{ namespace_override | default('library') }}/
   {%- else -%}
 
   {%- endif %}
