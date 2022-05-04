@@ -2269,7 +2269,7 @@ role:
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-pipelineruns","role-template-manage-pipelineruns",
-        "role-template-view-credentials","role-template-manage-credentials"
+        "role-template-view-credentials","role-template-manage-credentials",
         "role-template-view-gitrepositories","role-template-manage-gitrepositories",
         "role-template-view-gitops-applications","role-template-manage-gitops-applications"]'
       kubesphere.io/creator: system
@@ -2300,6 +2300,7 @@ role:
         - servicemesh.kubesphere.io
         - operations.kubesphere.io
         - devops.kubesphere.io
+        - gitops.kubesphere.io
         - resources.kubesphere.io
         - config.istio.io
         - events.k8s.io
