@@ -20,7 +20,7 @@ curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.4.8 sh - && cd istio-1.
 2. Get custom setting files from ks-installer
 
 ```bash
-pod=$(kubectl get pod -n kubesphere-system -l app=ks-installer -o jsonpath={.items[0].metadata.name})
+pod=$(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath={.items[0].metadata.name})
 kubectl -n kubesphere-system exec $pod cat /etc/kubesphere/istio/custom-values-istio-init.yaml > custom-values-istio-init.yaml
 kubectl -n kubesphere-system exec $pod cat /etc/kubesphere/istio/custom-values-istio.yaml > custom-values-istio.yaml
 kubectl -n kubesphere-system exec $pod  sed -i 's/1.3.3/1.4.8/g' /kubesphere/installer/roles/download/defaults
