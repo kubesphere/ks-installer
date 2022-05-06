@@ -49,7 +49,7 @@ kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3
 kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0-alpha.2/cluster-configuration.yaml
 
  # 查看部署进度及日志
- $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-installer -o jsonpath='{.items[0].metadata.name}') -f
+ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
 部署完成后可执行如下命令查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
@@ -95,7 +95,7 @@ kubectl edit cc ks-installer -n kubesphere-system
 > 按功能需求编辑配置文件之后，退出等待生效即可，如长时间未生效请使用如下命令查看相关日志:
 
 ```bash
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-installer -o jsonpath='{.items[0].metadata.name}') -f
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
 > 如果你正在启用 KubeEdge ，在运行或重启 ks-installer 之前，需要配置集群外网访问地址advertiseAddress，暴露相应的访问端口，更多内容请参考[Kubeedge 指南](https://kubesphere.io/docs/pluggable-components/kubeedge/)：
