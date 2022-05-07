@@ -21,7 +21,7 @@ RUN apk --no-cache add jq yq bash curl unzip openssl && \
     export CRYPTOGRAPHY_DONT_BUILD_RUST=1 && \
     pip install --no-cache-dir ansible_runner==2.1.2 ansible==2.9.27 kubernetes && \
     apk del gcc libffi-dev openssl-dev musl-dev && \
-    if [[ $(arch) == "aarch64*" ]]; then ARCH=arm64; fi && \
+    if [[ $(arch) == aarch64* ]]; then ARCH=arm64; fi && \
     wget https://get.helm.sh/helm-v3.6.3-linux-${ARCH}.tar.gz && \
     tar -zxf helm-v3.6.3-linux-${ARCH}.tar.gz && \
     mv linux-${ARCH}/helm /bin/helm && \
