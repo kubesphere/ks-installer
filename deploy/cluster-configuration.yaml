@@ -30,6 +30,7 @@ spec:
     #  resources: {}
     redis:
       enabled: false
+      enabledHA: false
       volumeSize: 2Gi # Redis PVC size.
     openldap:
       enabled: false
