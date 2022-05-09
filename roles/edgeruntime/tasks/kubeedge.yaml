@@ -1,3 +1,27 @@
+---
+- name: KubeEdge | check kubeedge
+  shell: >
+    {{ bin_dir }}/helm list -f kubeedge -n kubeedge
+  register: kubeedge_check
+  failed_when: false
+
+- block:
+    - name: KubeEdge | Remove old kubeedge
+      shell: |
+        {{ bin_dir }}/helm uninstall kubeedge -n kubeedge
+        {{ bin_dir }}/kubectl patch iptables -n kubeedge iptables  -p '{"metadata":{"finalizers":null}}' --type merge
+        {{ bin_dir }}/kubectl delete ds -n kubeedge iptables
+      failed_when: false
+    - name: KubeEdge | Remove old kubeedge crds
+      shell: |
+        {{ bin_dir }}/kubectl delete crd {{ item }}
+      loop:
+        - "iptables.kubeedge.kubesphere.io"
+        - "iptablesrules.kubeedge.kubesphere.io"
+      failed_when: false
+  when:
+    - (kubeedge_check.stdout.find("deployed") != -1) and (kubeedge_check.stdout.find("0.1.0") != -1)
+
 - name: KubeEdge | Getting KubeEdge installation files
   copy:
     src: "kubeedge"
