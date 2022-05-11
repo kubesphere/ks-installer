@@ -201,9 +201,21 @@
     {{ bin_dir }}/kubectl apply -f $charts_folder/ks-devops/crds
     {{ bin_dir }}/kubectl apply -f $charts_folder/ks-devops/charts/s2i/crds
 
+    # Import the templates seperately due the potential webhook issues
+    rm -rf s2i-templates
+    helm template  $charts_folder/ks-devops/charts/s2i/ \
+      -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml \
+      -s templates/binary.yaml \
+      -s templates/java.yaml \
+      -s templates/nodejs.yaml \
+      -s templates/python.yaml \
+      -s templates/tomcat.yaml > s2i-templates\templates.yaml
+
     {{ bin_dir }}/helm upgrade --install devops $ks_devops_chart \
     -n kubesphere-devops-system \
-    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
+    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml --wait
+
+    {{ bin_dir }}/kubectl apply -f s2i-templates\templates.yaml
   register: devops_upgrade_result
   until: devops_upgrade_result is succeeded
   retries: 3
