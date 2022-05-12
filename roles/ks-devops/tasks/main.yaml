@@ -210,6 +210,11 @@
       -s templates/nodejs.yaml \
       -s templates/python.yaml \
       -s templates/tomcat.yaml > s2i-templates\templates.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/binary.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/java.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/nodejs.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/python.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/tomcat.yaml
 
     {{ bin_dir }}/helm upgrade --install devops $ks_devops_chart \
     -n kubesphere-devops-system \
