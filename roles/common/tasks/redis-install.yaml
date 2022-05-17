@@ -68,7 +68,7 @@
 #        - old_redis_exist.stdout != "0"
 
   when:
-    - common.redis.enabledHA is defined and common.redis.enabledHA
+    - common.redis.enableHA is defined and common.redis.enableHA
 
 
 - name: KubeSphere | Deploying redis
@@ -81,7 +81,7 @@
     - "redis_result.stderr and 'bound claims' not in redis_result.stderr"
     - "redis_result.stderr and 'is forbidden' not in redis_result.stderr"
   when:
-    - (common.redis.enabledHA is defined and not common.redis.enableHA) or (common.redis.enabledHA is not defined)
+    - (common.redis.enableHA is defined and not common.redis.enableHA) or (common.redis.enableHA is not defined)
 
 
 - name: KubeSphere | Importing redis status
