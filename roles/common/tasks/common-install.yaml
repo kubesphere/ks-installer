@@ -1,13 +1,13 @@
 - name: KubeSphere | Checking KubeSphere Config is Exists
   shell: >
-    {{ bin_dir }}/kubectl get kubectl get configmaps kubesphere-config -n kubesphere-system | wc -l
+    {{ bin_dir }}/kubectl get cm -n kubesphere-system | grep "kubesphere-config" | wc -l
   register: ksconfig_exist
 
 - import_tasks: redis-install.yaml
   when:
-    - (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or enableHA
+    - common.redis is defined and common.redis.enabled is defined and common.redis.enabled
     - "status.redis is not defined or status.redis.status is not defined or status.redis.status != 'enabled'"
-    - ksconfig_exit.stdout != "0"
+    - ksconfig_exist.stdout == "0"
 
 - import_tasks: openldap-install.yaml
   when:
