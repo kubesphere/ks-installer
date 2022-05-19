@@ -32,8 +32,26 @@ done
 # delete kubefed
 kubectl get cc -n kubesphere-system ks-installer -o jsonpath="{.status.multicluster}" | grep enable
 if [[ $? -eq 0 ]]; then
+  # delete kubefed types resources
+  for kubefed in `kubectl api-resources --namespaced=true --api-group=types.kubefed.io -o name`
+  do
+    kubectl delete -n kube-federation-system $kubefed --all 2>/dev/null
+  done
+  for kubefed in `kubectl api-resources --namespaced=false --api-group=types.kubefed.io -o name`
+  do
+    kubectl delete $kubefed --all 2>/dev/null
+  done
+  # delete kubefed core resouces
+  for kubefed in `kubectl api-resources --namespaced=true --api-group=core.kubefed.io -o name`
+  do
+    kubectl delete -n kube-federation-system $kubefed --all 2>/dev/null
+  done
+  for kubefed in `kubectl api-resources --namespaced=false --api-group=core.kubefed.io -o name`
+  do
+    kubectl delete $kubefed --all 2>/dev/null
+  done
+  # uninstall kubefed chart
   helm uninstall -n kube-federation-system kubefed 2>/dev/null
-  #kubectl delete ns kube-federation-system 2>/dev/null
 fi
 
 
@@ -181,7 +199,7 @@ done
 # delete crds
 for crd in `kubectl get crds -o jsonpath="{.items[*].metadata.name}"`
 do
-  if [[ $crd == *kubesphere.io ]]; then kubectl delete crd $crd 2>/dev/null; fi
+  if [[ $crd == *kubesphere.io ]] || [[ $crd == *kubefed.io ]] ; then kubectl delete crd $crd 2>/dev/null; fi
 done
 
 # delete relevance ns
