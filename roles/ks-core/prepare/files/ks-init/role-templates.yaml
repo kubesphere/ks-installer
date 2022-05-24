@@ -453,6 +453,7 @@ rules:
       - alerting.kubesphere.io
       - network.kubesphere.io
       - resources.kubesphere.io
+      - gitops.kubesphere.io
     resources:
       - '*'
     verbs:
