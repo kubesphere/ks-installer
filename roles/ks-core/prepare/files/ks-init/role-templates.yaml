@@ -76,7 +76,13 @@ rules:
     verbs:
       - get
       - create
-
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - webhooks
+    verbs:
+      - get
+      - create
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
