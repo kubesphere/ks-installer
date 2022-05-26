@@ -71,6 +71,7 @@ jenkins:
     enabled: true
   Master:
     Image: "{{ jenkins_repo }}"
+    ImageTag: "{{ jenkins_tag }}"
     ImagePullPolicy: {{ ks_image_pull_policy }}
     resources:
       requests:
