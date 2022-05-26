@@ -453,6 +453,7 @@ rules:
       - alerting.kubesphere.io
       - network.kubesphere.io
       - resources.kubesphere.io
+      - gitops.kubesphere.io
     resources:
       - '*'
     verbs:
@@ -577,6 +578,7 @@ rules:
       - alerting.kubesphere.io
       - cluster.kubesphere.io
       - types.kubefed.io
+      - gitops.kubesphere.io
     resources:
       - '*'
     verbs:
@@ -704,6 +706,7 @@ rules:
       - workloads
       - groups
       - groupbindings
+      - applications/sync
     verbs:
       - get
       - list
