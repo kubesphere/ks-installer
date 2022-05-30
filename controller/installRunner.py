@@ -599,6 +599,29 @@ def generate_new_cluster_configuration(api):
             }
         del cluster_configuration_spec["networkpolicy"]
 
+    if "terminal" not in cluster_configuration_spec:
+        upgrade_flag = True
+        cluster_configuration_spec["terminal"] = {
+            "timeout": 600
+        }
+
+    # add servicemesh configuration migration
+    if "servicemesh" in cluster_configuration_spec and "istio" not in cluster_configuration_spec["servicemesh"]:
+        upgrade_flag = True
+        cluster_configuration_spec["servicemesh"]["istio"] = {
+            "components": {
+                "ingressGateways": [
+                    {
+                        "name": "istio-ingressgateway",
+                        "enabled": False
+                    }
+                ],
+                "cni": {
+                    "enabled": False
+                }
+            }
+        }
+
     # add edgeruntime configuration migration
     if "kubeedge" in cluster_configuration_spec:
         upgrade_flag = True
