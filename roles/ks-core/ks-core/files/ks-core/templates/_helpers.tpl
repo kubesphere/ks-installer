@@ -63,6 +63,13 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Create the name of the secret of sa token.
+*/}}
+{{- define "ks-core.serviceAccountTokenName" -}}
+{{-  printf "%s-%s" ( include "ks-core.serviceAccountName" . )   "sa-token" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Returns user's password or use default
 */}}
 {{- define "getOrDefaultPass" }}
