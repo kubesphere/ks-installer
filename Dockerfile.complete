@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine
+FROM golang:1.17-alpine
 
 ARG appVersion=latest
 
@@ -19,15 +19,15 @@ ENV ARCH=amd64
 RUN apk --no-cache add jq yq bash curl unzip openssl && \
     apk --no-cache add gcc libffi-dev openssl-dev musl-dev && \
     export CRYPTOGRAPHY_DONT_BUILD_RUST=1 && \
-    pip install --no-cache-dir ansible_runner==2.1.2 ansible==2.9.27 kubernetes && \
+    pip install --no-cache-dir ansible_runner==2.2.0 ansible==2.9.27 kubernetes && \
     apk del gcc libffi-dev openssl-dev musl-dev && \
     if [[ $(arch) == aarch64* ]]; then ARCH=arm64; fi && \
-    wget https://get.helm.sh/helm-v3.6.3-linux-${ARCH}.tar.gz && \
-    tar -zxf helm-v3.6.3-linux-${ARCH}.tar.gz && \
+    wget https://get.helm.sh/helm-v3.9.0-linux-${ARCH}.tar.gz && \
+    tar -zxf helm-v3.9.0-linux-${ARCH}.tar.gz && \
     mv linux-${ARCH}/helm /bin/helm && \
     rm -rf *linux-${ARCH}* && \
     chmod +x /bin/helm && \
-    wget https://storage.googleapis.com/kubernetes-release/release/v1.21.10/bin/linux/${ARCH}/kubectl -O /bin/kubectl && \
+    wget https://storage.googleapis.com/kubernetes-release/release/v1.23.7/bin/linux/${ARCH}/kubectl -O /bin/kubectl && \
     chmod +x /bin/kubectl && \
     ln -s /bin/kubectl /usr/local/bin/kubectl && \
     ln -s /bin/helm /usr/local/bin/helm && \
