@@ -35,6 +35,10 @@ spec:
     - sourceLabels: [__meta_kubernetes_pod_name]
       action: replace
       targetLabel: pod_name
+    metricRelabelings:
+    - action: keep
+      regex: "(istio_response_messages_total|istio_request_messages_total|istio_requests_total|istio_request_duration_milliseconds_(.+)|istio_request_bytes_(.+)|istio_response_bytes_(.+)|istio_tcp_received_bytes_total|istio_tcp_sent_bytes_total|istio_tcp_connections_opened_total|istio_tcp_connections_closed_total)"
+      sourceLabels: ['__name__']
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
