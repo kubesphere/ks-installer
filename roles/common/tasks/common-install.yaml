@@ -1,6 +1,6 @@
 - name: KubeSphere | Checking KubeSphere Config is Exists
   shell: >
-    {{ bin_dir }}/kubectl get cm -n kubesphere-system | grep "kubesphere-config" | wc -l
+    {{ bin_dir }}/kubectl get secret -n kubesphere-system | grep "redis-secret" | wc -l
   register: ksconfig_exist
 
 - import_tasks: redis-install.yaml
