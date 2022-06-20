@@ -1,0 +1,11 @@
+---
+- name: Monitoring | Getting ks-istio monitoring installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "ks-istio-monitoring"
+
+- name: Monitoring | Installing ks-istio monitoring
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-istio-monitoring --force
