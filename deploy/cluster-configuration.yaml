@@ -30,6 +30,7 @@ spec:
     #  resources: {}
     redis:
       enabled: false
+      enableHA: false
       volumeSize: 2Gi # Redis PVC size.
     openldap:
       enabled: false
@@ -39,10 +40,10 @@ spec:
     monitoring:
       # type: external   # Whether to specify the external prometheus stack, and need to modify the endpoint at the next line.
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090 # Prometheus endpoint to get metrics data.
-      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero. 
+      GPUMonitoring:     # Enable or disable the GPU-related metrics. If you enable this switch but have no GPU resources, Kubesphere will set it to zero.
         enabled: false
-    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs. 
-      kinds:         
+    gpu:                 # Install GPUKinds. The default GPU kind is nvidia.com/gpu. Other GPU kinds can be added here according to your needs.
+      kinds:
       - resourceName: "nvidia.com/gpu"
         resourceType: "GPU"
         default: true
@@ -76,15 +77,12 @@ spec:
     #   resources: {}
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
     enabled: false             # Enable or disable the KubeSphere DevOps System.
-    # resources: {}
     jenkinsMemoryLim: 2Gi      # Jenkins memory limit.
     jenkinsMemoryReq: 1500Mi   # Jenkins memory request.
     jenkinsVolumeSize: 8Gi     # Jenkins volume size.
     jenkinsJavaOpts_Xms: 512m  # The following three fields are JVM parameters.
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
-  dmp:
-    enabled: true
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
     # operator:
@@ -106,6 +104,9 @@ spec:
     enabled: false                   # Enable or disable metrics-server.
   monitoring:
     storageClass: ""                 # If there is an independent StorageClass you need for Prometheus, you can specify it here. The default StorageClass is used by default.
+    node_exporter:
+      port: 9100
+      # resources: {}
     # kube_rbac_proxy:
     #   resources: {}
     # kube_state_metrics:
@@ -116,10 +117,6 @@ spec:
     #   resources: {}
     #   operator:
     #     resources: {}
-    #   adapter:
-    #     resources: {}
-    # node_exporter:
-    #   resources: {}
     # alertmanager:
     #   replicas: 1          # AlertManager Replicas.
     #   resources: {}
@@ -129,9 +126,9 @@ spec:
     #     resources: {}
     #   proxy:
     #     resources: {}
-    gpu:                           # GPU monitoring-related plugins installation.
-      nvidia_dcgm_exporter:
-        enabled: false
+    gpu:                           # GPU monitoring-related plug-in installation.
+      nvidia_dcgm_exporter:        # Ensure that gpu resources on your hosts can be used normally, otherwise this plug-in will not work properly.
+        enabled: false             # Check whether the labels on the GPU hosts contain "nvidia.com/gpu.present=true" to ensure that the DCGM pod is scheduled to these nodes.
         # resources: {}
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the Host or Member Cluster.
@@ -148,35 +145,41 @@ spec:
       enabled: true # Enable or disable the KubeSphere App Store.
   servicemesh:         # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
     enabled: false     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
-  kubeedge:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
-    enabled: false   # Enable or disable KubeEdge.
-    cloudCore:
-      nodeSelector: {"node-role.kubernetes.io/worker": ""}
-      tolerations: []
-      cloudhubPort: "10000"
-      cloudhubQuicPort: "10001"
-      cloudhubHttpsPort: "10002"
-      cloudstreamPort: "10003"
-      tunnelPort: "10004"
-      cloudHub:
-        advertiseAddress: # At least a public IP address or an IP address which can be accessed by edge nodes must be provided.
-          - ""            # Note that once KubeEdge is enabled, CloudCore will malfunction if the address is not provided.
-        nodeLimit: "100"
-      service:
-        cloudhubNodePort: "30000"
-        cloudhubQuicNodePort: "30001"
-        cloudhubHttpsNodePort: "30002"
-        cloudstreamNodePort: "30003"
-        tunnelNodePort: "30004"
-    edgeWatcher:
-      nodeSelector: {"node-role.kubernetes.io/worker": ""}
-      tolerations: []
-      edgeWatcherAgent:
-        nodeSelector: {"node-role.kubernetes.io/worker": ""}
-        tolerations: []
+    istio:  # Customizing the istio installation configuration, refer to https://istio.io/latest/docs/setup/additional-setup/customize-installation/
+      components:
+        ingressGateways:
+        - name: istio-ingressgateway
+          enabled: false
+        cni:
+          enabled: false
+  edgeruntime:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
+    enabled: false
+    kubeedge:        # kubeedge configurations
+      enabled: false
+      cloudCore:
+        cloudHub:
+          advertiseAddress: # At least a public IP address or an IP address which can be accessed by edge nodes must be provided.
+            - ""            # Note that once KubeEdge is enabled, CloudCore will malfunction if the address is not provided.
+        service:
+          cloudhubNodePort: "30000"
+          cloudhubQuicNodePort: "30001"
+          cloudhubHttpsNodePort: "30002"
+          cloudstreamNodePort: "30003"
+          tunnelNodePort: "30004"
+        # resources: {}
+        # hostNetWork: false
+      iptables-manager:
+        enabled: true
+        mode: "external"
+        # resources: {}
+      # edgeService:
+      #   resources: {}
   notification:
     history:
       enabled: true
+  terminal:
+    # image: 'alpine:3.15' # There must be an nsenter program in the image
+    timeout: 600         # Container timeout, if set to 0, no timeout will be used. The unit is seconds
 #  springcloud:
 #    enabled: false
 #    # Refer to https://raw.githubusercontent.com/nacos-group/nacos-k8s/master/helm/values.yaml

@@ -517,6 +517,8 @@ def generate_new_cluster_configuration(api):
             if "elasticsearchDataVolumeSize" in cluster_configuration_spec["common"]["es"]:
                 cluster_configuration_spec["common"]["es"]["data"]["volumeSize"] = cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
                 del cluster_configuration_spec["common"]["es"]["elasticsearchDataVolumeSize"]
+            if "externalElasticsearchHost" not in cluster_configuration_spec["common"]["es"] and "externalElasticsearchUrl" in cluster_configuration_spec["common"]["es"]:
+                cluster_configuration_spec["common"]["es"]["externalElasticsearchHost"] = cluster_configuration_spec["common"]["es"]["externalElasticsearchUrl"]
 
         if "console" in cluster_configuration_spec:
             if "core" in cluster_configuration_spec["common"]:
@@ -566,7 +568,7 @@ def generate_new_cluster_configuration(api):
                 }
     if "dmp" not in cluster_configuration_spec:
         cluster_configuration_spec["dmp"] = {
-            "enabled": True
+            "enabled": False
         }
     if "notification" not in cluster_configuration_spec:
         cluster_configuration_spec["notification"] = {
@@ -602,6 +604,50 @@ def generate_new_cluster_configuration(api):
                 },
             }
         del cluster_configuration_spec["networkpolicy"]
+
+    if "terminal" not in cluster_configuration_spec:
+        upgrade_flag = True
+        cluster_configuration_spec["terminal"] = {
+            "timeout": 600
+        }
+
+    # add servicemesh configuration migration
+    if "servicemesh" in cluster_configuration_spec and "istio" not in cluster_configuration_spec["servicemesh"]:
+        upgrade_flag = True
+        cluster_configuration_spec["servicemesh"]["istio"] = {
+            "components": {
+                "ingressGateways": [
+                    {
+                        "name": "istio-ingressgateway",
+                        "enabled": False
+                    }
+                ],
+                "cni": {
+                    "enabled": False
+                }
+            }
+        }
+
+    # add edgeruntime configuration migration
+    if "kubeedge" in cluster_configuration_spec:
+        upgrade_flag = True
+        if "enabled" in cluster_configuration_spec["kubeedge"]:
+            cluster_configuration_spec["edgeruntime"] = {
+                "enabled": cluster_configuration_spec["kubeedge"]["enabled"],
+                "kubeedge": cluster_configuration_spec["kubeedge"]
+            }
+
+            cluster_configuration_spec["edgeruntime"]["kubeedge"]["iptables-manager"] = {
+                "enabled": True,
+                "mode": "external"
+            }
+
+        try:
+            del cluster_configuration_spec["edgeruntime"]["kubeedge"]["edgeWatcher"]
+        except:
+            pass
+
+        del cluster_configuration_spec["kubeedge"]
 
     if isinstance(cluster_configuration_status,
                   dict) and "core" in cluster_configuration_status:

@@ -10,6 +10,21 @@
     src: "fluentbit-operator-cri"
     dest: "{{ kubesphere_dir }}/"
 
+- name: ks-logging | Getting Kubernetes Node info
+  shell: |
+    kubectl get node -ojson | jq '.items[0].status.nodeInfo.containerRuntimeVersion'
+  register: node_container_runtime
+
+
+- name: ks-logging | Setting container runtime of kubernetes
+  set_fact:
+    logging_container_runtime: "{{ node_container_runtime.stdout is search('docker://') | ternary('docker', 'containerd') }}"
+
+- name: ks-logging | Setting container runtime of kubernetes
+  set_fact:
+    logging_container_runtime: "{{ node_container_runtime.stdout is search('containerd://') | ternary('containerd', 'crio') }}"
+  when: logging_container_runtime == 'containerd'
+
 
 - name: ks-logging | Checking fluent-bit migrating
   shell: >
@@ -47,12 +62,13 @@
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator
 
 
+
 - name: ks-logging | Apply fluent-bit operator cri custom resources
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator-cri
   when:
-    - logging is defined and logging.enabled and logging.containerruntime is defined
-    - logging.containerruntime == 'containerd' or logging.containerruntime == 'crio'
+    - logging is defined and logging.enabled
+    - logging_container_runtime == 'containerd' or logging_container_runtime == 'crio'
 
 
 - import_tasks: logsidecar.yaml

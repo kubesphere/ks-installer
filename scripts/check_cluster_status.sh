@@ -16,7 +16,7 @@ function check_installer_ok(){
                 return
         fi
     done < <(timeout 1800 kubectl logs -n kubesphere-system deploy/ks-installer -f --tail 1)
-    echo "ks-install not output 'Welcome to KubeSphere'"
+    echo "ks-installer not output 'Welcome to KubeSphere'"
     exit 1
 }
 

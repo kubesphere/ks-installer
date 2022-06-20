@@ -141,7 +141,7 @@
 #    --from-file={{ kubesphere_dir }}/common/password.txt
 #    -n kubesphere-system
 #  register: import
-#  failed_when: "import.stderr and 'AlreadyExists' not in import.stderr"
+#  failed_when: "import.stderr and 'already exists' not in import.stderr"
 
 - name: KubeSphere | Deploying common component
   block:

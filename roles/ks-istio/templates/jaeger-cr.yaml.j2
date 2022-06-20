@@ -11,6 +11,13 @@ spec:
   collector:
     image: {{ jaeger_collector_repo }}:{{ jaeger_collector_tag }}
     maxReplicas: 5
+    resources:
+      limits:
+        cpu: {{ servicemesh.jaeger.resources.limits.cpu | default("100m") }}
+        memory: {{ servicemesh.jaeger.resources.limits.memory | default("128Mi") }}
+      requests:
+        cpu: {{ servicemesh.jaeger.resources.requests.cpu | default("20m") }}
+        memory: {{ servicemesh.jaeger.resources.requests.memory | default("50Mi") }}
   query:
     image: {{ jaeger_query_repo }}:{{ jaeger_query_tag }}
   storage:
@@ -22,8 +29,8 @@ spec:
     options:
       es:
         index-prefix: {{ common.es.elkPrefix }}
-{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
-        server-urls: http://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+        server-urls: http://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
         server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}

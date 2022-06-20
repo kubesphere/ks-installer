@@ -1,12 +1,18 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
+  labels:
+    app.kubernetes.io/component: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/vendor: kubesphere
+    app.kubernetes.io/version: 8.3.3
   name: grafana
   namespace: kubesphere-monitoring-system
 spec:
   endpoints:
-  - interval: 15s
+  - interval: 1m
     port: http
   selector:
     matchLabels:
-      app: grafana
+      app.kubernetes.io/name: grafana

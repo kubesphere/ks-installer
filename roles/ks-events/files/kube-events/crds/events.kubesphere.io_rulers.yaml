@@ -765,8 +765,8 @@ spec:
                 description: Sinks defines sinks detail of this ruler
                 properties:
                   alertmanager:
-                    description: Alertmanager is an alertmanager sink to which only
-                      alerts can sink.
+                    description: An alertmanager sink to which events alerts will
+                      be sent. Deprecated, please use alertmanagers instead.
                     properties:
                       name:
                         description: '`name` is the name of the alertmanager service.'
@@ -789,6 +789,35 @@ spec:
                     - name
                     - namespace
                     type: object
+                  alertmanagers:
+                    description: Alertmanager sinks to which events alerts will be
+                      sent.
+                    items:
+                      description: RulerAlertmanagerSink is a sink to alertmanager
+                        service on k8s
+                      properties:
+                        name:
+                          description: '`name` is the name of the alertmanager service.'
+                          type: string
+                        namespace:
+                          description: '`namespace` is the namespace of the alertmanager
+                            service.'
+                          type: string
+                        port:
+                          description: '`port` is the port on the alertmanager service.
+                            Default to 9093. `port` should be a valid port number
+                            (1-65535, inclusive).'
+                          type: integer
+                        targetPort:
+                          description: TargetPort is the port to access on the backend
+                            instances targeted by the alertmanager service. If this
+                            is not specified, the value of the 'port' field is used.
+                          type: integer
+                      required:
+                      - name
+                      - namespace
+                      type: object
+                    type: array
                   stdout:
                     description: Stdout can config write notifications or alerts to
                       stdout; do nothing when no configuration

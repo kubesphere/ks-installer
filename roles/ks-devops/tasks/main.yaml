@@ -61,6 +61,19 @@
   debug:
     var: ks_jwt_secret
 
+- name: Get Argo CD installation
+  shell: >
+     {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.installation}'
+  register: argocd_installation
+  ignore_errors: true
+
+- name: Get Argo CD namespace
+  shell: |
+     ns=$({{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.namespace}')
+     echo -n ${ns:-argocd}
+  register: argocd_namespace
+  ignore_errors: true
+
 - name: ks-devops | Getting devops installation charts
   copy:
     src: "{{ item }}"
@@ -152,12 +165,25 @@
 
 - name: ks-devops | Stop the existing Jenkins
   shell: |
-    {{ bin_dir }}/kubectl -n kubesphere-devops-system delete service ks-jenkins-agent
-    {{ bin_dir }}/kubectl -n kubesphere-devops-system delete service ks-jenkins
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system delete service ks-jenkins-agent --ignore-not-found
+    {{ bin_dir }}/kubectl -n kubesphere-devops-system delete service ks-jenkins --ignore-not-found
     {{ bin_dir }}/kubectl -n kubesphere-devops-system scale deployment ks-jenkins --replicas=0
   ignore_errors: True
   when:
     - helm_release.stdout == "0"
+
+- name: ks-devops | Upgrading or installing Argo CD
+  args:
+    executable: /bin/bash
+  shell: |
+    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/argo-cd-4.4.0.tgz \
+    -n argocd --create-namespace --reuse-values
+  register: argocd_upgrade_result
+  until: argocd_upgrade_result is succeeded
+  when:
+    - argocd_installation.stdout != "custom"
+  retries: 3
+  delay: 10
 
 - name: ks-devops | Upgrading or installing ks-devops
   args:
@@ -165,10 +191,36 @@
   shell: |
     # Delete Job migrate because 'helm upgrade' will try to update immutable fields of Job, which is not allowed. 
     {{ bin_dir }}/kubectl delete job -n kubesphere-devops-system migrate --ignore-not-found
+    
+    ks_devops_chart_version=0.1.10
+    charts_folder={{ kubesphere_dir }}/ks-devops/charts
+    ks_devops_chart=$charts_folder/ks-devops-$ks_devops_chart_version.tgz
+    
+    # Create or update CRDs manually
+    tar xzvf $ks_devops_chart -C $charts_folder
+    {{ bin_dir }}/kubectl apply -f $charts_folder/ks-devops/crds
+    {{ bin_dir }}/kubectl apply -f $charts_folder/ks-devops/charts/s2i/crds
 
-    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/ks-devops-0.1.9.tgz \
+    # Import the templates seperately due the potential webhook issues
+    rm -rf s2i-templates
+    helm template  $charts_folder/ks-devops/charts/s2i/ \
+      -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml \
+      -s templates/binary.yaml \
+      -s templates/java.yaml \
+      -s templates/nodejs.yaml \
+      -s templates/python.yaml \
+      -s templates/tomcat.yaml > s2i-templates\templates.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/binary.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/java.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/nodejs.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/python.yaml
+    rm -rf $charts_folder/ks-devops/charts/s2i/templates/tomcat.yaml
+
+    {{ bin_dir }}/helm upgrade --install devops $ks_devops_chart \
     -n kubesphere-devops-system \
-    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml
+    -f {{ kubesphere_dir }}/ks-devops/ks-devops-values.yaml --wait
+
+    {{ bin_dir }}/kubectl apply -f s2i-templates\templates.yaml
   register: devops_upgrade_result
   until: devops_upgrade_result is succeeded
   retries: 3

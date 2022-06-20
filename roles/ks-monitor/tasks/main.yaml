@@ -22,7 +22,7 @@
   retries: 5
   delay: 3
 
-- import_tasks: thanosruler.yaml
+- import_tasks: thanos-ruler.yaml
   when:
     - alerting is defined
     - alerting.enabled is defined

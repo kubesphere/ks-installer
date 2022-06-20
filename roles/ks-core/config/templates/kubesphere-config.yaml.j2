@@ -10,25 +10,17 @@ data:
       kubectlImage: {{ ks_kubectl_repo }}:{{ ks_kubectl_tag }}
       jwtSecret: "{{ ks_secret_str.stdout }}"
       oauthOptions:
+{% if authentication.oauthOptions is defined %}
+        {{ authentication.oauthOptions |  to_nice_yaml(indent=2) | trim | indent(8) }}
+{% endif %}
 {% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
         accessTokenMaxAge: 0
-{% elif authentication.oauthOptions is defined %}
-        {{ authentication.oauthOptions |  to_nice_yaml(indent=2) | trim | indent(8) }}
-{% if authentication.oauthOptions.clients is not defined %}
+{% endif %}
         clients:
         - name: kubesphere
           secret: kubesphere
           redirectURIs:
           - '*'
-{% endif %}
-{% else %}
-        clients:
-        - name: kubesphere
-          secret: kubesphere
-          redirectURIs:
-          - '*'
-{% endif %}
-
 {% if (common.openldap is defined and common.openldap.enabled is defined and common.openldap.enabled) or devops.enabled %}
     ldap:
       host: openldap.kubesphere-system.svc:389
@@ -37,15 +29,13 @@ data:
       userSearchBase: ou=Users,dc=kubesphere,dc=io
       groupSearchBase: ou=Groups,dc=kubesphere,dc=io
 {% endif %}
-
-{% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or enableHA %}
+{% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) %}
     redis:
       host: redis.kubesphere-system.svc
       port: 6379
       password: KUBESPHERE_REDIS_PASSWORD
       db: 0
 {% endif %}
-
 {% if OPMigrate is defined and OPMigrate %}
     mysql:
       host: mysql.kubesphere-system.svc:3306
@@ -55,7 +45,6 @@ data:
       maxOpenConnections: 100
       maxConnectionLifeTime: 10s
 {% endif %}
-
 {% if devops.enabled %}
     s3:
       endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
@@ -66,7 +55,6 @@ data:
       secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
       bucket: s2i-binaries
 {% endif %}
-
 {% if network is defined or networkpolicy is defined %}
     network:
 {% if ((networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled) or
@@ -111,8 +99,12 @@ data:
         secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
         bucket: {{ common.s3.openpitrixBucket | default('app-store') }}
 {% endif %}
-{% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
     multicluster:
+      clusterRole: {{ multicluster.clusterRole }}
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "member" %}
+      enable: false
+{% endif %}
+{% if multicluster.clusterRole is defined and multicluster.clusterRole == "host" %}
       enable: true
       agentImage: {{ tower_repo }}/{{ tower_image }}:{{ tower_image_tag }}
       proxyPublishService: tower.kubesphere-system.svc
@@ -171,8 +163,8 @@ data:
 {% endif %}
 {% if logging.enabled is defined and logging.enabled == true %}
     logging:
-{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
-      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -189,8 +181,8 @@ data:
 {% endif %}
 {% if events.enabled is defined and events.enabled == true %}
     events:
-{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
-      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -205,8 +197,8 @@ data:
     auditing:
       enable: true
       webhookURL: https://kube-auditing-webhook-svc.kubesphere-logging-system.svc:6443/audit/webhook/event
-{% if common.es.externalElasticsearchUrl is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchUrl != "" and common.es.externalElasticsearchPort != "" %}
-      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchUrl }}:{{ common.es.externalElasticsearchPort }}
+{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+      host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
 {% else %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
 {% endif %}
@@ -217,7 +209,6 @@ data:
 {% endif %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
-
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
 {% if common.monitoring is defined and common.monitoring.endpoint is defined %}
@@ -226,14 +217,23 @@ data:
       prometheusEndpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
 {% endif %}
       thanosRulerEndpoint: http://thanos-ruler-operated.kubesphere-monitoring-system.svc:10902
-      thanosRuleResourceLabels: thanosruler=thanos-ruler,role=thanos-alerting-rules
+      thanosRuleResourceLabels: thanos-ruler=kubesphere,role=alert-rules
 {% endif %}
 
-{% if kubeedge.enabled is defined and kubeedge.enabled == true %}
-    kubeedge:
-      endpoint: http://edge-watcher.kubeedge.svc/api/
+{% if edgeruntime.enabled is defined and edgeruntime.enabled == true %}
+{% if edgeruntime.kubeedge.enabled is defined and edgeruntime.kubeedge.enabled == true %}
+    edgeruntime:
+      endpoint: http://edgeservice.kubeedge.svc/api/
+{% endif %}
 {% endif %}
 
+{% if terminal is defined %}
+    terminal:
+      image: {{ terminal.image | default(alpine_repo + ':' + alpine_tag|string) }}
+{% if terminal.timeout is defined %}
+      timeout: {{ terminal.timeout }}
+{% endif %}
+{% endif %}
     gateway:
       watchesPath: /var/helm-charts/watches.yaml
       repository: {{ nginx_ingress_controller_repo }}
@@ -243,7 +243,6 @@ data:
 {% else %}
       namespace: kubesphere-controls-system
 {% endif %}
-
 kind: ConfigMap
 metadata:
   name: kubesphere-config

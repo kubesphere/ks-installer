@@ -2,7 +2,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
   labels:
-    alertmanager: main
+    app.kubernetes.io/component: alert-router
+    app.kubernetes.io/instance: main
+    app.kubernetes.io/name: alertmanager
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: {{ alertmanager_tag | replace("v", "") }}
   name: main
   namespace: kubesphere-monitoring-system
 spec:
@@ -48,6 +52,13 @@ spec:
   tolerations: []
 {% endif %}
   image: {{ alertmanager_repo }}:{{ alertmanager_tag }}
+  podMetadata:
+    labels:
+      app.kubernetes.io/component: alert-router
+      app.kubernetes.io/instance: main
+      app.kubernetes.io/name: alertmanager
+      app.kubernetes.io/part-of: kube-prometheus
+      app.kubernetes.io/version: {{ alertmanager_tag | replace("v", "") }}
   resources:
     limits:
       cpu: {{ monitoring.alertmanager.resources.limits.cpu | default(monitoring.alertmanager.limits.cpu) | default("200m") }}

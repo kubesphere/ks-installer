@@ -32,13 +32,6 @@ monitoring:
     requests:
       cpu: 50m
       memory: 150Mi
-  prometheus_adapter:
-    limits:
-      cpu: 600m
-      memory: 500Mi
-    requests:
-      cpu: 200m
-      memory: 250Mi
   alertmanager:
     limits:
       cpu: 500m

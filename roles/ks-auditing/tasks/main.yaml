@@ -5,6 +5,7 @@
     src: "kube-auditing"
     dest: "{{ kubesphere_dir }}/ks-auditing/"
 
+
 - name: ks-auditing | getting ks-auditing installation files
   template:
     src: "{{ item.file }}.j2"

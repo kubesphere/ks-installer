@@ -59,6 +59,9 @@ affinity: {}
 s2i:
   image:
     registry: "{{ s2i_registry }}"
+  s2ioperator:
+    image:
+      tag: "{{ s2ioperator_tag }}"
   prometheus:
     namespace: "kubesphere-monitoring-system"
 
@@ -68,6 +71,7 @@ jenkins:
     enabled: true
   Master:
     Image: "{{ jenkins_repo }}"
+    ImageTag: "{{ jenkins_tag }}"
     ImagePullPolicy: {{ ks_image_pull_policy }}
     resources:
       requests:
@@ -139,3 +143,7 @@ jenkins:
       readOnly: true
   prometheus:
     namespace: "kubesphere-monitoring-system"
+
+argocd:
+  enabled: true
+  namespace: "{{ argocd_namespace.stdout }}"

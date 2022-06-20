@@ -1,0 +1,74 @@
+---
+- name: KubeEdge | check kubeedge
+  shell: >
+    {{ bin_dir }}/helm list -f kubeedge -n kubeedge
+  register: kubeedge_check
+  failed_when: false
+
+- block:
+    - name: KubeEdge | Remove old kubeedge
+      shell: |
+        {{ bin_dir }}/helm uninstall kubeedge -n kubeedge
+        {{ bin_dir }}/kubectl patch iptables -n kubeedge iptables  -p '{"metadata":{"finalizers":null}}' --type merge
+        {{ bin_dir }}/kubectl delete ds -n kubeedge iptables
+      failed_when: false
+    - name: KubeEdge | Remove old kubeedge crds
+      shell: |
+        {{ bin_dir }}/kubectl delete crd {{ item }}
+      loop:
+        - "iptables.kubeedge.kubesphere.io"
+        - "iptablesrules.kubeedge.kubesphere.io"
+      failed_when: false
+  when:
+    - (kubeedge_check.stdout.find("deployed") != -1) and (kubeedge_check.stdout.find("0.1.0") != -1)
+
+- name: KubeEdge | Getting KubeEdge installation files
+  copy:
+    src: "kubeedge"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: KubeEdge | Getting NodeIp
+  shell: "{{ bin_dir }}/kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}' -l '!node-role.kubernetes.io/edge'"
+  register: ks_kubeedge_nodeIP
+
+- name: KubeEdge | Getting NodeName
+  shell: "{{ bin_dir }}/kubectl get nodes -o jsonpath='{.items[0].metadata.name}' -l '!node-role.kubernetes.io/edge'"
+  register: ks_kubeedge_nodename
+
+# - name: Print
+#   ansible.builtin.debug:
+#     msg: NodeIp {{ ks_kubeedge_nodeIP.stdout }} nodename {{ ks_kubeedge_nodename.stdout }}
+
+- name: KubeEdge | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/kubeedge/cloudcore/{{ item.file }}"
+  with_items: 
+    - { name: custom-values-kubeedge, file: custom-values-kubeedge.yaml }
+
+- name: KubeEdge | Installing CloudCore
+  shell: >
+    {{ bin_dir }}/helm upgrade --install cloudcore
+    {{ kubesphere_dir }}/kubeedge/cloudcore
+    --namespace kubeedge
+    --create-namespace
+    -f {{ kubesphere_dir }}/kubeedge/cloudcore/custom-values-kubeedge.yaml --set cloudCore.cloudHub.advertiseAddress[0]={{ ks_kubeedge_nodeIP.stdout }}
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: KubeEdge | Labeling kubeedge namespace
+  shell: >
+    {{ bin_dir }}/kubectl label namespace kubeedge kubesphere.io/workspace=system-workspace --overwrite
+
+- name: KubeEdge | Importing EdgeRuntime status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"edgeruntime": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3

@@ -34,6 +34,16 @@ console:
   type: {{ common.core.console.type | default('NodePort') }}
   port: {{ common.core.console.port | default(30880)}}
 
+{% if common.core.console.extraVolumeMounts is defined and common.core.console.extraVolumeMounts is not none %}
+  extraVolumeMounts:
+    {{ common.core.console.extraVolumeMounts | to_nice_yaml(indent=2) | indent(4) }}
+{% endif %}
+
+{% if common.core.console.extraVolumes is defined and common.core.console.extraVolumes is not none %}
+  extraVolumes:
+    {{ common.core.console.extraVolumes | to_nice_yaml(indent=2) | indent(4) }}
+{% endif %}
+
 kube_version: {{ kube_version }}
 
 apiserver:
