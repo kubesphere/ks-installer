@@ -7,7 +7,6 @@
     - "istio"
     - "kiali"
     - "jaeger"
-    - "prometheus"
 
 - name: servicemesh | Unarchive istio files
   shell: >
@@ -81,16 +80,6 @@
 
 - import_tasks: kiali-install.yaml
 
-# create prometheus config by PodMonitor and SerivceMonitor CR
-# wait until PodMonitor kind created.
-- name: servicemesh | Creating prometheus config
-  shell: >
-    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/prometheus/prometheus-operator.yaml
-  register: prom_result
-  failed_when: false
-  until: prom_result is succeeded
-  retries: 5
-  delay: 5
 
 - name: servicemesh | set servicemesh status enabled
   shell: >
