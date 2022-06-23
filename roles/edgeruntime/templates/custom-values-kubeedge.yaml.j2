@@ -7,8 +7,8 @@ cloudCore:
   replicaCount: 1
   hostNetWork: "{{ edgeruntime.kubeedge.cloudCore.hostNetWork | default("false", true) }}"
   image:
-    repository: "kubeedge/cloudcore"
-    tag: "v1.9.2"
+    repository: {{ cloudcore_repo }}
+    tag: {{ cloudcore_tag }}
     pullPolicy: "IfNotPresent"
     pullSecrets: []
   securityContext: {}
@@ -76,8 +76,8 @@ iptablesManager:
   mode: "{{ edgeruntime.kubeedge.iptablesManager.mode | default("external") }}"
   hostNetWork: true
   image:
-    repository: "kubeedge/iptables-manager"
-    tag: "v1.9.2"
+    repository: {{ iptables_manager_repo }}
+    tag: {{ iptables_manager_tag }}
     pullPolicy: "IfNotPresent"
     pullSecrets: []
   securityContext: 
@@ -120,8 +120,8 @@ iptablesManager:
 edgeService:
   replicaCount: 1
   image:
-    repository: "kubesphere/edgeservice"
-    tag: "v0.2.0"
+    repository: {{ edge_service_repo }}
+    tag: {{ edge_service_tag }}
     pullPolicy: "IfNotPresent"
     pullSecrets: []
   securityContext: {}
