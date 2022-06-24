@@ -1,0 +1,15 @@
+global:
+  image:
+    repository: "{{ argocd_repo }}"
+
+dex:
+  image:
+    repository: "{{ argocd_dex_repo }}"
+
+applicationSet:
+  image:
+    repository: "{{ argocd_applicationset_repo }}"
+
+redis:
+  image:
+    repository: "{{ argocd_redis_repo }}"
