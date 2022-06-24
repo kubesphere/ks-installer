@@ -6,7 +6,7 @@ KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://ku
 
 ## 准备工作
 
-1. 确认现有的 `Kubernetes` 版本为 `1.19.x, 1.20.x, 1.21.x, 1.22.x (experimental)`，可以执行 `kubectl version` 来确认 :
+1. 确认现有的 `Kubernetes` 版本为 `1.20.x, 1.21.x, 1.23.x, 1.23.x`，可以执行 `kubectl version` 来确认 :
 
 ```bash
 $ kubectl version
@@ -45,8 +45,8 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 ### 最小化快速部署
 
 ```bash
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0-rc.3/kubesphere-installer.yaml
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0-rc.3/cluster-configuration.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0/cluster-configuration.yaml
 
  # 查看部署进度及日志
  $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-installer -o jsonpath='{.items[0].metadata.name}') -f
@@ -113,8 +113,8 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 ```bash
 # 注意: ks-installer会自动迁移cluster-configuration. 请勿自行修改.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.1/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0/kubesphere-installer.yaml
 ```
 
 
-> 注意: 如果当前集群中部署的 KubeSphere 版本是 v3.0.0 或更早的版本，请先升级到 v3.1.x。
+> 注意: 如果当前集群中部署的 KubeSphere 版本是 v3.1.0 或更早的版本，请先升级到 v3.2.x。

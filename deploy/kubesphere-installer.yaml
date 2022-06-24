@@ -282,12 +282,12 @@ spec:
   template:
     metadata:
       labels:
-        app: ks-install
+        app: ks-installer
     spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: kubespheredev/ks-installer:v3.3.0-rc.3
+        image: kubesphere/ks-installer:v3.3.0
         imagePullPolicy: "Always"
         resources:
           limits:
