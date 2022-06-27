@@ -113,7 +113,7 @@ Deploy the new version of ks-installer:
 ```bash
 # Notice: ks-installer will automatically migrate the configuration. Do not modify the cluster configuration by yourself.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0/kubesphere-installer.yaml --force
 ```
 
 > Note: If your KubeSphere version is v3.1.0 or eariler, please upgrade to v3.2.x first.
