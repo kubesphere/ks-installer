@@ -454,6 +454,7 @@ rules:
       - federatedstatefulsets
       - federatedworkspaces
       - workspaces
+      - workspacetemplates
       - workspaceroles
       - workspacemembers
       - workspacemembers/namespaces
@@ -753,6 +754,7 @@ rules:
       - federatedstatefulsets
       - federatedworkspaces
       - workspaces
+      - workspacetemplates
       - workspaceroles
       - workspacemembers
       - workspacemembers/namespaces
@@ -891,6 +893,7 @@ rules:
       - federatedstatefulsets
       - federatedworkspaces
       - workspaces
+      - workspacetemplates
       - workspaceroles
       - workspacemembers
       - workspacemembers/namespaces
