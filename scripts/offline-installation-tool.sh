@@ -156,6 +156,7 @@ if [[ ${save} == "true" ]] && [[ -n "${ImagesList}" ]]; then
            continue
         fi
 
+        image=$(echo "${image}" |tr -d '\r')
         docker pull "${image}"
         images=${images}" "${image}
 
