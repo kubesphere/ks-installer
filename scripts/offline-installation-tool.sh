@@ -198,6 +198,8 @@ elif [ -n "${ImagesList}" ]; then
           fi
 
           ## push image
+          image=$(echo "${image}" |tr -d '\r')
+          imageurl=$(echo "${imageurl}" |tr -d '\r')
           echo $imageurl
           docker tag $image $imageurl
           docker push $imageurl
