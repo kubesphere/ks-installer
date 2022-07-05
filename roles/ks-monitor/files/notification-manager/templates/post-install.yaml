@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-post-install
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-post-install
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+rules:
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - '*'
+    verbs:
+      - '*'
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Release.Name }}-post-install
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-post-install
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ .Release.Name }}-post-install
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-post-install
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "4"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  backoffLimit: {{ .Values.hook.postInstall.backoffLimit }}
+  template:
+    metadata:
+      name: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ .Release.Name }}-post-install
+      containers:
+        - name: post-install-job
+          image: "bitnami/kubectl:1.23.6"
+          command:
+            - /bin/sh
+            - -c
+            - |
+
+              caBundle=$(kubectl get validatingWebhookConfiguration notification-manager-validating-webhook -o jsonpath='{.webhooks[0].clientConfig.caBundle}')
+
+              cat > /tmp/patch.yaml <<EOF
+              spec:
+                conversion:
+                  webhook:
+                    clientConfig:
+                      caBundle: ${caBundle}
+                      service:
+                        namespace: {{ .Release.Namespace }}
+              EOF
+
+              kubectl patch crd configs.notification.kubesphere.io --type=merge --patch-file /tmp/patch.yaml
+              kubectl patch crd receivers.notification.kubesphere.io --type=merge --patch-file /tmp/patch.yaml
