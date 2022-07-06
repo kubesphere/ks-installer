@@ -189,9 +189,9 @@ grafana_tag: 8.3.3
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 notification_manager_operator_proxy_tag: v0.8.0
 notification_manager_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager-operator"
-notification_manager_operator_tag: v1.4.0
+notification_manager_operator_tag: v2.0.1
 notification_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/notification-manager"
-notification_manager_tag: v1.4.0
+notification_manager_tag: v2.0.1
 notification_tenant_sidecar_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/notification-tenant-sidecar"
 notification_tenant_sidecar_tag: v3.2.0
 

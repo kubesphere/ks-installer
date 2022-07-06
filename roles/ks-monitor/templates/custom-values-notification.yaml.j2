@@ -1,6 +1,10 @@
 # Whether Notification manager is running at the kubesphere.
 kubesphere: true
 
+hook:
+  postInstall:
+    backoffLimit: 3
+
 # notification-manager-operator
 operator: 
   containers:
@@ -134,9 +138,10 @@ notificationmanager:
         name: notification-manager-template
       name: notification-manager-template
   defaultSecretNamespace: kubesphere-monitoring-federated
-  sidecars:
-    tenant:
-      image: {{ notification_tenant_sidecar_repo }}:{{ notification_tenant_sidecar_tag }}
-      name: tenant
-      type: kubesphere
+  groupLabels:
+    - alertname
+    - namespace
+  template:
+    text:
+      name: notification-manager-template
 
