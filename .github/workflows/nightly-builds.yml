@@ -10,13 +10,13 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: ks-installer
-  IMAGE_REPO: kubespheredev
+  IMAGE_REPO: registry.cn-beijing.aliyuncs.com/qkcp
   IMAGE_VERSION: latest
 
 jobs:
   push:
     runs-on: ubuntu-latest
-    if: github.repository	== 'kubesphere/ks-installer'
+    if: github.repository	== 'kubesphere/qkcp-installer'
     steps:
       - uses: actions/checkout@v2
 
@@ -29,7 +29,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Log into registry
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin registry.cn-beijing.aliyuncs.com
 
       - name: Build image
         run: |
@@ -37,11 +37,3 @@ jobs:
           sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml
           docker buildx build --platform linux/amd64,linux/arm64 --push -f Dockerfile.complete -t $IMAGE_REPO/$IMAGE_NAME:$tag .
 
-      - name: slack
-        uses: 8398a7/action-slack@v3
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_NIGHTLY }}
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        if: ${{ failure() }}
