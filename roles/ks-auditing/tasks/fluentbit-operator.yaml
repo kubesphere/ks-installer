@@ -29,7 +29,7 @@
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
   with_items:
-    - { name: custom-output-elasticsearch-auditing, file: custom-output-elasticsearch-auditing.yaml }
+    - { name: custom-output-opensearch-auditing, file: custom-output-opensearch-auditing.yaml }
     - { name: custom-input-auditing, file: custom-input-auditing.yaml }
     - { name: custom-filter-auditing, file: custom-filter-auditing.yaml }
 

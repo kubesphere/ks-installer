@@ -39,12 +39,8 @@
   with_items:
     - { name: custom-input-logging, file: custom-input-logging.yaml }
     - { name: custom-input-systemd, file: custom-input-systemd.yaml }
-    - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
+    - { name: custom-output-opensearch-logging, file: custom-output-opensearch-logging.yaml }
 
-- name: genrateId patch to es of Output
-  shell: >
-    {{ bin_dir }}/kubectl patch Output es --type merge -p '{"spec":{"es":{"generateID":'true'}}}' -n kubesphere-logging-system
-  ignore_errors: true
 
 - name: ks-logging | Apply fluent-bit operator custom resources
   shell: >

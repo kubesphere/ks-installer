@@ -18,6 +18,15 @@ common:
     # externalElasticsearchHost:
     # externalElasticsearchPort:
 
+  opensearch:
+    opensearchsearchMasterReplicas: 1
+    opensearchsearchDataReplicas: 1
+    opensearchMasterVolumeSize: 4Gi
+    opensearchDataVolumeSize: 20Gi
+    logMaxAge: 7
+    opensearchPrefix: logstash
+    # externalOpensearchHost:
+    # externalOpensearchPort:
 
 op_minio_accesskey: openpitrixminioaccesskey
 op_minio_secretkey: openpitrixminiosecretkey

@@ -84,30 +84,30 @@
     - redis_ha_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking es-master PersistentVolumeClaim
+- name: KubeSphere | Checking opensearch-master PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-discovery-0 -o jsonpath='{.spec.resources.requests.storage}'
-  register: es_master_pvc
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system opensearch-cluster-master-opensearch-cluster-master-0 -o jsonpath='{.spec.resources.requests.storage}'
+  register: opensearch_master_pvc
   failed_when: false
 
-- name: KubeSphere | Setting es master pv size
+- name: KubeSphere | Setting opensearch master pv size
   set_fact:
-    es_master_pv_size: "{{ es_master_pvc.stdout }}"
+    es_master_pv_size: "{{ opensearch_master_pvc.stdout }}"
   when:
-    - es_master_pvc.rc == 0
-    - es_master_pvc.stdout != ""
+    - opensearch_master_pvc.rc == 0
+    - opensearch_master_pvc.stdout != ""
   failed_when: false
 
-- name: KubeSphere | Checking es data PersistentVolumeClaim
+- name: KubeSphere | Checking opensearch data PersistentVolumeClaim
   shell: >
-    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system data-elasticsearch-logging-data-0 -o jsonpath='{.spec.resources.requests.storage}'
-  register: es_data_pvc
+    {{ bin_dir }}/kubectl get pvc -n kubesphere-logging-system opensearch-cluster-data-opensearch-cluster-data-0 -o jsonpath='{.spec.resources.requests.storage}'
+  register: opensearch_data_pvc
   failed_when: false
 
-- name: KubeSphere | Setting es data pv size
+- name: KubeSphere | Setting opensearch data pv size
   set_fact:
-    es_data_pv_size: "{{ es_data_pvc.stdout }}"
+    es_data_pv_size: "{{ opensearch_data_pvc.stdout }}"
   when:
-    - es_data_pvc.rc == 0
-    - es_data_pvc.stdout != ""
+    - opensearch_data_pvc.rc == 0
+    - opensearch_data_pvc.stdout != ""
   failed_when: false

@@ -1,0 +1,156 @@
+- name: KubeSphere | Getting opensearch and curator installation files
+  copy:
+    src: "opensearch"
+    dest: "{{ kubesphere_dir }}/"
+
+
+- name: KubeSphere | Creating custom manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/opensearch/{{ item.file }}"
+  with_items:
+    - { name: custom-values-opensearch-master, file: custom-values-opensearch-master.yaml }
+    - { name: custom-values-opensearch-data, file: custom-values-opensearch-data.yaml }
+    - { name: custom-values-elasticsearch-curator, file: custom-values-elasticsearch-curator.yaml }
+
+
+# Update check
+- block:
+  - name: KubeSphere | Checking elasticsearch data StatefulSet
+    shell: >
+      {{ bin_dir }}/kubectl get sts -n kubesphere-logging-system  | grep "opensearch-cluster-data" | wc -l
+    register: sts_number
+
+  - name: KubeSphere | Checking opensearch storageclass
+    shell: >
+      {{ bin_dir }}/kubectl get sts -n kubesphere-logging-system opensearch-cluster-data -o yaml | grep "storageClassName" | wc -l
+    register: sc_number
+
+  - name: KubeSphere | Commenting opensearch storageclass parameter
+    shell: >
+      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/opensearch/custom-values-opensearch-master.yaml
+      &&
+      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/opensearch/custom-values-opensearch-data.yaml
+    when:
+      - sts_number.stdout != "0"
+      - sc_number.stdout == "0"
+
+# Creating elasticsearch-credentials secret used to connect external es with basic auth enabled.
+- name: KubeSphere | Creating elasticsearch credentials secret
+  shell: >
+    {{ bin_dir }}/kubectl create secret generic opensearch-credentials --from-literal="username={{ common.opensearch.basicAuth.username }}" --from-literal="password={{ common.opensearch.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system
+  register: secret
+  failed_when: "secret.stderr and 'already exists' not in secret.stderr"
+  until: secret is succeeded
+  retries: 5
+  delay: 10
+  when:
+    - "common.opensearch.basicAuth.enabled is defined"
+    - "common.opensearch.basicAuth.enabled == true"
+    - "common.opensearch.basicAuth.password is defined and common.opensearch.basicAuth.password != ''"
+    - "common.opensearch.basicAuth.username is defined and common.opensearch.basicAuth.username != ''"
+
+# Deploy opensearch
+- name: KubeSphere | Checking internal es
+  shell: >
+    {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "logging:" -A 2 | grep "host" | awk '{print $2}'
+  register: opensearch_host
+  failed_when: false
+
+- name: ks-logging | Debug opensearch_host
+  debug:
+    msg: "{{opensearch_host}}"
+
+- block:
+  - name: KubeSphere | Deploying opensearch-logging
+    shell: >
+      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/opensearch/opensearch-2.1.0.tgz -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
+      &&
+      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/opensearch/opensearch-2.1.0.tgz  -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
+    register: opensearch_result
+
+  - name: KubeSphere | Getting PersistentVolume Name
+    shell: >
+      kubectl get pv | grep "kubesphere-logging-system/opensearch-cluster" | awk '{print $1}'
+    register: opensearch_pv_name
+    when:
+      - "opensearch_result.stderr and 'no matches for kind' in opensearch_result.stderr"
+
+  - name: ks-logging | Debug opensearch_host
+    debug:
+      msg: "{{opensearch_pv_name}}"
+
+  - name: KubeSphere | Patching PersistentVolume (persistentVolumeReclaimPolicy)
+    shell: >
+      kubectl patch pv {{ item }}
+      -p '{"spec":{"persistentVolumeReclaimPolicy": "Retain"}}'
+    loop: "{{ opensearch_pv_name.stdout_lines }}"
+    when:
+      - "opensearch_result.stderr and 'no matches for kind' in opensearch_result.stderr"
+
+  - name: KubeSphere | Deleting opensearch
+    shell: >
+      {{ bin_dir }}/helm del opensearch-master -n kubesphere-logging-system
+      &&
+       {{ bin_dir }}/helm del opensearch-data -n kubesphere-logging-system
+    when:
+      - "opensearch_result.stderr and 'no matches for kind' in opensearch_result.stderr"
+
+  - name: KubeSphere | Waiting for seconds
+    wait_for: timeout=20
+    when:
+      - "opensearch_result.stderr and 'no matches for kind' in opensearch_result.stderr"
+
+  - name: KubeSphere | Deploying elasticsearch-logging
+    shell: >
+      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/opensearch/opensearch-2.1.0.tgz -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
+      &&
+      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/opensearch/opensearch-2.1.0.tgz  -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
+    register: opensearch_result
+    when:
+      - "opensearch_result.stderr and 'no matches for kind' in opensearch_result.stderr"
+
+  - name: ks-logging | Debug opensearch_result
+    debug:
+      msg: "{{opensearch_result}}"
+
+  # Update clusterconfig (cc) status
+  - name: KubeSphere | Importing opensearch status
+    shell: >
+      {{ bin_dir }}/kubectl patch cc ks-installer
+      --type merge
+      -p '{"status": {"opensearch": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+      -n kubesphere-system
+    register: cc_result
+    failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+    until: cc_result is succeeded
+    retries: 5
+    delay: 3
+
+  when:
+    - common.es.externalElasticsearchHost is not defined or (common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchHost == "")
+    - common.es.externalElasticsearchPort is not defined or (common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchPort == "")
+    - common.opensearch.externalOpensearchHost is not defined or (common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchHost == "")
+    - common.opensearch.externalOpensearchPort is not defined or (common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchPort == "")
+    - opensearch_host.stdout is defined
+    - opensearch_host.stdout == "" or opensearch_host.stdout == "https://opensearch-cluster-master.kubesphere-logging-system.svc:9200"
+
+
+
+# Deploy elasticsearch curator
+- block:
+  # - name: KubeSphere | Checking elasticsearch-logging-curator
+  #   shell: >
+  #     {{ bin_dir }}/helm list elasticsearch-logging-curator
+  #   register: curator_check
+  #   ignore_errors: True
+
+
+  - name: KubeSphere | Deploying elasticsearch-logging-curator
+    shell: >
+      {{ bin_dir }}/helm upgrade --install elasticsearch-logging-curator
+      {{ kubesphere_dir }}/opensearch/elasticsearch-curator-1.3.3.tgz
+      -f {{ kubesphere_dir }}/opensearch/custom-values-elasticsearch-curator.yaml
+      --namespace kubesphere-logging-system
+    # when:
+    #   - (curator_check.stdout.find("DEPLOYED") == -1) or (curator_check.stdout.find("5.5.4-0217") == -1)

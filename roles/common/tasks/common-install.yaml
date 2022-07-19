@@ -19,10 +19,10 @@
     - (devops.enabled or (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled)) and common.s3 is not defined
     - "status.minio is not defined or status.minio.status is not defined or status.minio.status != 'enabled'"
 
-- import_tasks: es-install.yaml
+- import_tasks: opensearch-install.yaml
   when:
     - logging.enabled or events.enabled or auditing.enabled or servicemesh.enabled
-    - "status.es is not defined or status.es.status is not defined or status.es.status != 'enabled'"
+    - "status.opensearch is not defined or status.opensearch.status is not defined or status.opensearch.status != 'enabled'"
 
 - import_tasks: fluentbit-install.yaml
   when:
