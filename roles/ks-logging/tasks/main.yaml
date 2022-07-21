@@ -32,22 +32,6 @@
   register: migrating_completed
   failed_when: false
 
-
-- name: ks-logging | Creating manifests
-  template:
-    src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
-  with_items:
-    - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
-  when: migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
-
-
-- name: genrateId patch to es of Output
-  shell: >
-    {{ bin_dir }}/kubectl patch Output es --type merge -p '{"spec":{"es":{"generateID":'true'}}}' -n kubesphere-logging-system
-  ignore_errors: true
-
-
 - name: ks-logging | Creating input configuration
   template:
     src: "{{ item.file }}.j2"
@@ -55,13 +39,16 @@
   with_items:
     - { name: custom-input-logging, file: custom-input-logging.yaml }
     - { name: custom-input-systemd, file: custom-input-systemd.yaml }
+    - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
 
+- name: genrateId patch to es of Output
+  shell: >
+    {{ bin_dir }}/kubectl patch Output es --type merge -p '{"spec":{"es":{"generateID":'true'}}}' -n kubesphere-logging-system
+  ignore_errors: true
 
 - name: ks-logging | Apply fluent-bit operator custom resources
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/fluentbit-operator
-
-
 
 - name: ks-logging | Apply fluent-bit operator cri custom resources
   shell: >
