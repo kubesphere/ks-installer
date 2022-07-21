@@ -75,6 +75,8 @@ spec:
     #   resources: {}
     # webhook:
     #   resources: {}
+  dmp:
+    enabled: true
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
     enabled: false             # Enable or disable the KubeSphere DevOps System.
     jenkinsMemoryLim: 2Gi      # Jenkins memory limit.
