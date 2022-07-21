@@ -154,3 +154,173 @@ webhooks:
           - persistentvolumeclaims
         scope: '*'
     sideEffects: None
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: rulegroups.alerting.kubesphere.io
+webhooks:
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: {{ b64enc $ca.Cert | quote }}
+      service:
+        name: ks-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /validate-alerting-kubesphere-io-v2beta1-rulegroup
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: rulegroups.alerting.kubesphere.io
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - alerting.kubesphere.io
+        apiVersions:
+          - v2beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - rulegroups
+        scope: '*'
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: {{ b64enc $ca.Cert | quote }}
+      service:
+        name: ks-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /validate-alerting-kubesphere-io-v2beta1-clusterrulegroup
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: clusterrulegroups.alerting.kubesphere.io
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - alerting.kubesphere.io
+        apiVersions:
+          - v2beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clusterrulegroups
+        scope: '*'
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: {{ b64enc $ca.Cert | quote }}
+      service:
+        name: ks-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /validate-alerting-kubesphere-io-v2beta1-globalrulegroup
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: globalrulegroups.alerting.kubesphere.io
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - alerting.kubesphere.io
+        apiVersions:
+          - v2beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - globalrulegroups
+        scope: '*'
+    sideEffects: None
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: rulegroups.alerting.kubesphere.io
+webhooks:
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: {{ b64enc $ca.Cert | quote }}
+      service:
+        name: ks-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /mutate-alerting-kubesphere-io-v2beta1-rulegroup
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: rulegroups.alerting.kubesphere.io
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - alerting.kubesphere.io
+        apiVersions:
+          - v2beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - rulegroups
+        scope: '*'
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: {{ b64enc $ca.Cert | quote }}
+      service:
+        name: ks-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /mutate-alerting-kubesphere-io-v2beta1-clusterrulegroup
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: clusterrulegroups.alerting.kubesphere.io
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - alerting.kubesphere.io
+        apiVersions:
+          - v2beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - clusterrulegroups
+        scope: '*'
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: {{ b64enc $ca.Cert | quote }}
+      service:
+        name: ks-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /mutate-alerting-kubesphere-io-v2beta1-globalrulegroup
+        port: 443
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    name: globalrulegroups.alerting.kubesphere.io
+    namespaceSelector: {}
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - alerting.kubesphere.io
+        apiVersions:
+          - v2beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - globalrulegroups
+        scope: '*'
+    sideEffects: None
