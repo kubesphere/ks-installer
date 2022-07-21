@@ -1,0 +1,34 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  schedule:
+    # This is a UTC time
+    - cron: "0 16 * * *"
+
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: master
+
+      # Runs a single command using the runners shell
+      - name: Sync kubesphere master branch
+        run: |
+          git config --global user.email kubesphere@kubesphere.io
+          git config --global user.name kubesphere
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/kubesphere/qkcp-installer
+          git remote add kubesphere https://github.com/kubesphere/ks-installer.git
+          git fetch kubesphere  
+          git rebase kubesphere/master
+          rm -rf .github
+          git add .
+          git commit -m "Sync kubesphere master branch"
+          git push origin master:master --force
