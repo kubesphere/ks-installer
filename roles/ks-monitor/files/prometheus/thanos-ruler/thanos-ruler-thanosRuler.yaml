@@ -44,8 +44,12 @@ spec:
     requests:
       cpu: 100m
       memory: 200Mi
-  ruleNamespaceSelector: {}
+  ruleNamespaceSelector: null
   ruleSelector:
-    matchLabels:
-      role: alert-rules
-      thanos-ruler: kubesphere
+    matchExpressions:
+    - key: alerting.kubesphere.io/rule_level
+      operator: In
+      values:
+      - namespace
+      - cluster
+      - global

@@ -79,8 +79,11 @@ spec:
     requests:
       cpu: {{ alerting.thanosruler.resources.requests.cpu | default("100m") }}
       memory: {{ alerting.thanosruler.resources.requests.memory | default("100Mi") }}
-  ruleNamespaceSelector: {}
   ruleSelector:
-    matchLabels:
-      role: alert-rules
-      thanos-ruler: kubesphere
+    matchExpressions:
+    - key: alerting.kubesphere.io/rule_level
+      operator: In
+      values:
+      - namespace
+      - cluster
+      - global
