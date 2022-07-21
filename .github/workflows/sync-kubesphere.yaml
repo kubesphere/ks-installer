@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${MASTER_BRANCH}
+          ref: $MASTER_BRANCH
           
       - name: Sync kubesphere master branch
         run: |
@@ -30,11 +30,11 @@ jobs:
           git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/kubesphere/qkcp-installer
           git remote add kubesphere https://github.com/kubesphere/ks-installer.git
           git fetch kubesphere  
-          git rebase kubesphere/${MASTER_BRANCH}
+          git rebase kubesphere/$MASTER_BRANCH
           rm -rf .github
           git add .
-          git commit -m "Sync kubesphere ${MASTER_BRANCH} branch"
-          git push origin ${MASTER_BRANCH}:${MASTER_BRANCH} --force
+          git commit -m "Sync kubesphere $MASTER_BRANCH branch"
+          git push origin $MASTER_BRANCH:$MASTER_BRANCH --force
           
   Sync-kubesphere-release-branch:
     runs-on: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${RELEASE_BRANCH}
+          ref: $RELEASE_BRANCH
           
       - name: Sync kubesphere master branch
         run: |
@@ -51,8 +51,8 @@ jobs:
           git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/kubesphere/qkcp-installer
           git remote add kubesphere https://github.com/kubesphere/ks-installer.git
           git fetch kubesphere  
-          git rebase kubesphere/${RELEASE_BRANCH}
+          git rebase kubesphere/$RELEASE_BRANCH
           rm -rf .github
           git add .
-          git commit -m "Sync kubesphere ${RELEASE_BRANCH} branch"
-          git push origin ${RELEASE_BRANCH}:${RELEASE_BRANCH} --force
+          git commit -m "Sync kubesphere $RELEASE_BRANCH branch"
+          git push origin $RELEASE_BRANCH:$RELEASE_BRANCH --force
