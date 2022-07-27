@@ -67,6 +67,9 @@ data:
 {% if network.topology is defined and network.topology.type is defined and network.topology.type == "weave-scope"  %}
       weaveScopeHost: weave-scope-app.weave
 {% endif %}
+{% if network.multus_cni is defined and network.multus_cni.enabled is defined and network.multus_cni.enabled %}
+      multusCni: true
+{% endif %}
 {% endif %}
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:

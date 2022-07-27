@@ -1,0 +1,42 @@
+---
+
+- name: multus-cni | Getting multus-cni installation files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "multus-cni"
+
+
+- name: multus-cni | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/multus-cni/{{ item.file }}"
+  with_items:
+    - { type: ds, file: multus-cni.yaml }
+
+
+- name: multus-cni | Deploying multus-cni
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/multus-cni/multus-cni.yaml
+  register: multus_result
+  failed_when: "multus_result.stderr and 'NotFound' not in multus_result.stderr"
+  until: multus_result is succeeded
+  retries: 5
+  delay: 3
+
+- name: multus-cni | Importing multus-cni status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"network": {"multus-cni": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3
+
+
+
+
