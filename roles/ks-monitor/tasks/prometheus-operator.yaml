@@ -2,7 +2,11 @@
 - name: Monitoring | Initing prometheus-operator (crds)
   # Client-side apply may fail because of large crds, so do server-side apply as a complement
   # Refer to https://github.com/prometheus-operator/prometheus-operator/pull/4349 and https://github.com/kubernetes/kubernetes/issues/82292 
-  shell: "{{ bin_dir }}/kubectl apply -f {{ item }} --force || {{ bin_dir }}/kubectl apply -f {{ item }} --force-conflicts --server-side"
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ item }} || 
+    {{ bin_dir }}/kubectl apply -f {{ item }} --force-conflicts --server-side || 
+    {{ bin_dir }}/kubectl replace -f {{ item }}
+    
   loop: '{{ query("fileglob", "{{ kubesphere_dir }}/prometheus/prometheus-operator/*CustomResourceDefinition.yaml") }}'
   register: prom_result
   failed_when: "prom_result.stderr and 'Warning' not in prom_result.stderr and 'spec.clusterIP' not in prom_result.stderr"
