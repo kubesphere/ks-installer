@@ -8,3 +8,7 @@
       when:
         - "network is defined and network.topology is defined and network.topology.type == 'weave-scope'"
         - "status.network is not defined or status.network.topology is not defined or status.network.topology.status != 'enabled' "
+    - role: ks-network/multus-cni
+      when:
+        - "network is defined and network.multus_cni is defined and network.multus_cni.enabled == true"
+        - "status.network is not defined or status.network.multus_cni is not defined or status.network.multus_cni.status != 'enabled'"

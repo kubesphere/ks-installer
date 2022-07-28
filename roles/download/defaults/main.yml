@@ -323,6 +323,10 @@ bookinfo_ratings_v1_tag: "{{ examples_ratings_version }}"
 waveworks_scop_repo: "{{ base_repo }}{{ namespace_override | default('weaveworks') }}/scope"
 waveworks_scop_tag: "1.13.0"
 
+#multus_cni
+multus_cni_repo: "{{ ghcr_image_repo }}{{ namespace_override | default('k8snetworkplumbingwg') }}/multus-cni"
+multus_cni_tag: "v3.9"
+
 #DMP
 chronus_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-operator"
 chronus_operator_tag: "dmp"
@@ -1055,6 +1059,12 @@ images:
     tag: "{{ waveworks_scop_tag }}"
     sha256: "{{ waveworks_scop_checksum|default(None) }}"
     group: "weave-scope-images"
+
+  multus_cni:
+    repo: "{{ multus_cni_repo }}"
+    tag: "{{ multus_cni_tag }}"
+    sha256: "{{ multus_cni_checksum|default(None) }}"
+    group: "multus_cni-images"
 
 image_default:
   repo: ""
