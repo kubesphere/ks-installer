@@ -5,9 +5,7 @@ devops:
   jenkinsMemoryReq: "{{ jenkins_memory_req |default('4Gi') }}"
 
 JavaOpts: >
-  -Xms{{ devops.jenkinsJavaOpts_Xms | default('3g') }}
-  -Xmx{{ devops.jenkinsJavaOpts_Xmx | default('6g') }}
-  -XX:MaxRAM={{ devops.jenkinsJavaOpts_MaxRAM | default('8g') }}
+  -XX:MaxRAMPercentage=80 -XX:MinRAMPercentage=60
   -Dhudson.slaves.NodeProvisioner.initialDelay=20
   -Dhudson.slaves.NodeProvisioner.MARGIN=50
   -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
@@ -17,6 +15,8 @@ JavaOpts: >
   -Dhudson.security.csrf.DefaultCrumbIssuer.EXCLUDE_SESSION_ID=true
   -Dio.jenkins.plugins.casc.ConfigurationAsCode.initialDelay=10000
   -Djenkins.install.runSetupWizard=false
+  -XX:+AlwaysPreTouch
+  -XX:+HeapDumpOnOutOfMemoryError
   -XX:+UseG1GC
   -XX:+UseStringDeduplication
   -XX:+ParallelRefProcEnabled
