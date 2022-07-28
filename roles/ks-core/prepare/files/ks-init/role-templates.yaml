@@ -252,6 +252,12 @@ rules:
     verbs:
       - list
   - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - ci
+    verbs:
+      - get
+  - apiGroups:
       - resources.kubesphere.io
     resources:
       - namespaces
