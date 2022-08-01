@@ -141,7 +141,14 @@ notificationmanager:
     text:
       name: notification-manager-template
       namespace: kubesphere-monitoring-system
-  volumes: []
-  volumeMounts: []
+  volumes:
+    - hostPath:
+        path: /etc/localtime
+        type: ""
+      name: host-time
+  volumeMounts:
+    - mountPath: /etc/localtime
+      name: host-time
+      readOnly: true
 
 
