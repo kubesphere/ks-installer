@@ -129,19 +129,19 @@ notificationmanager:
         notificationTimeout: 5
       wechat:
         notificationTimeout: 5
-  volumeMounts:
-    - mountPath: /etc/notification-manager/
-      name: notification-manager-template
-  volumes:
-    - configMap:
-        defaultMode: 420
-        name: notification-manager-template
-      name: notification-manager-template
   defaultSecretNamespace: kubesphere-monitoring-federated
   groupLabels:
     - alertname
     - namespace
   template:
+    language: English
+    languagePack:
+      - name: zh-cn
+        namespace: kubesphere-monitoring-system
     text:
       name: notification-manager-template
+      namespace: kubesphere-monitoring-system
+  volumes: []
+  volumeMounts: []
+
 
