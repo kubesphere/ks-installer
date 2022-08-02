@@ -4,7 +4,7 @@
 
 Console: http://{{ ks_nodeIP.stdout }}:{{ ks_console_svc_port.stdout }}
 Account: admin
-Password: P@88w0rd
+Password: {% if ks_init_admin_password.stdout is defined and ks_init_admin_password.stdout != '' %}{{ ks_init_admin_password.stdout | b64decode }}{% else %}P@88w0rd{% endif %}
 
 NOTES：
   1. After you log into the console, please check the
