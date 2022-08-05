@@ -94,6 +94,12 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/namespace-by-workload
           name: grafana-dashboard-namespace-by-workload
           readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/node-cluster-rsrc-use
+          name: grafana-dashboard-node-cluster-rsrc-use
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/node-rsrc-use
+          name: grafana-dashboard-node-rsrc-use
+          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/nodes
           name: grafana-dashboard-nodes
           readOnly: false
@@ -117,9 +123,6 @@ spec:
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/workload-total
           name: grafana-dashboard-workload-total
-          readOnly: false
-        - mountPath: /etc/grafana
-          name: grafana-config
           readOnly: false
         - mountPath: /etc/grafana
           name: grafana-config
@@ -181,6 +184,12 @@ spec:
           name: grafana-dashboard-namespace-by-workload
         name: grafana-dashboard-namespace-by-workload
       - configMap:
+          name: grafana-dashboard-node-cluster-rsrc-use
+        name: grafana-dashboard-node-cluster-rsrc-use
+      - configMap:
+          name: grafana-dashboard-node-rsrc-use
+        name: grafana-dashboard-node-rsrc-use
+      - configMap:
           name: grafana-dashboard-nodes
         name: grafana-dashboard-nodes
       - configMap:
@@ -204,9 +213,6 @@ spec:
       - configMap:
           name: grafana-dashboard-workload-total
         name: grafana-dashboard-workload-total
-      - name: grafana-config
-        secret:
-          secretName: grafana-config
       - name: grafana-config
         secret:
           secretName: grafana-config
