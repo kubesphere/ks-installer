@@ -958,7 +958,6 @@ kind: GlobalRole
 metadata:
   annotations:
     iam.kubesphere.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
     kubesphere.io/alias-name: Users Management
   labels:
@@ -1002,7 +1001,6 @@ kind: GlobalRole
 metadata:
   annotations:
     iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Roles Management
   labels:
@@ -1612,7 +1610,6 @@ kind: WorkspaceRole
 metadata:
   annotations:
     iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Workspace Roles Management
   labels:
@@ -2859,7 +2856,6 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-      iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
       kubesphere.io/alias-name: Project Roles Management
     labels:
