@@ -73,10 +73,14 @@ Create the name of the secret of sa token.
 Returns user's password or use default
 */}}
 {{- define "getOrDefaultPass" }}
-{{- $pws := (lookup "iam.kubesphere.io/v1alpha2" "User" "" .Name) -}}
+{{- $pws := (lookup "iam.kubesphere.io/v1alpha2" "User" "" "admin") -}}
 {{- if $pws }}
 {{- $pws.spec.password  -}}
 {{- else -}}
-{{- .Default -}}
+{{- if not .Values.adminPassword -}}
+{{- printf "$2a$10$zcHepmzfKPoxCVCYZr5K7ORPZZ/ySe9p/7IUb/8u./xHrnSX2LOCO" -}}
+{{- else -}}
+{{- printf "%s" .Values.adminPassword -}}
+{{- end -}}
 {{- end -}}
 {{- end }}
