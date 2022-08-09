@@ -1639,7 +1639,6 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"members": "view"}'
     kubesphere.io/alias-name: Workspace Members View
   labels:
@@ -1688,7 +1687,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+    iam.kubesphere.io/role-template-rules: '{"basic": "view", "members": "view"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-basic
@@ -1720,7 +1719,9 @@ rules:
     resources:
       - workspacemembers
     verbs:
+      - get
       - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
