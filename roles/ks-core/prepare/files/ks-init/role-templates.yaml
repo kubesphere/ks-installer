@@ -1662,7 +1662,6 @@ kind: WorkspaceRole
 metadata:
   annotations:
     iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
     kubesphere.io/alias-name: Workspace Members Management
   labels:
@@ -2723,7 +2722,6 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
-      iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
       kubesphere.io/alias-name: Project Members Management
     labels:
