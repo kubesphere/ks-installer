@@ -1,0 +1,105 @@
+{{- with .Values.nfsBackup -}}
+## installServer & (specifiedPVC | createLocalPV)
+{{- if (and .installServer (or (not (empty .volume.specifiedPVC)) .volume.createLocalPV )) -}}
+{{- if (and (empty .volume.specifiedPVC) .volume.createLocalPV) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: radondb-nfs-pvc
+spec:
+  storageClassName: radondb-nfs-hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .volume.localPVCapacity }}
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+  name: radondb-nfs-hostpath
+provisioner: kubernetes.io/no-provisioner
+reclaimPolicy: {{ .volume.reclaimPolicy }}
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: radondb-nfs-pv
+  labels:
+    type: local
+spec:
+  storageClassName: radondb-nfs-hostpath
+{{ if not (empty .volume.hostName)}}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - {{ .volume.hostName }}
+{{- end }}
+  capacity:
+    storage: {{ .volume.localPVCapacity }}
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "{{ .volume.hostPath }}"
+{{- end }}
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: radondb-nfs-server
+spec:
+  replicas: 1
+  selector:
+    role: nfs-server
+  template:
+    metadata:
+      labels:
+        role: nfs-server
+    spec:
+      containers:
+      - name: nfs-server
+        ## TODO: radondb/volume-nfs:0.8
+        image: "{{ .nfsServerImage }}"
+        ports:
+          - name: nfs
+            containerPort: 2049
+          - name: mountd
+            containerPort: 20048
+          - name: rpcbind
+            containerPort: 111
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - mountPath: /exports
+            name: nfs-export-fast
+      volumes:
+        - name: nfs-export-fast
+          persistentVolumeClaim:
+      {{- if not (empty .volume.specifiedPVC) }}
+            claimName: {{ .volume.specifiedPVC }}
+      {{- else }} 
+            claimName: radondb-nfs-pvc
+      {{- end }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: radondb-nfs-server
+spec:
+  ports:
+    - name: nfs
+      port: 2049
+    - name: mountd
+      port: 20048
+    - name: rpcbind
+      port: 111
+  selector:
+    role: nfs-server
+{{- end }}
+{{- end }}

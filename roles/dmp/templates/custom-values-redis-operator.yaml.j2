@@ -1,0 +1,24 @@
+redisOperator:
+  name: redis-operator
+  imageName: {{ redis_operator_image }}
+  imageTag: {{ redis_operator_image_tag }}
+  imagePullPolicy: IfNotPresent
+  imagePrefix: {{ redis_image_prefix }}
+
+  # Additional pod annotations
+  podAnnotations: { }
+  # Additional Pod labels (e.g. for filtering Pod by custom labels)
+  podLabels:
+    app.kubernetes.io/name: redis-operator
+
+resources: { }
+
+replicas: 1
+
+serviceAccountName: redis-operator
+
+priorityClassName: ""
+nodeSelector: { }
+tolerateAllTaints: false
+tolerations: [ ]
+affinity: { }

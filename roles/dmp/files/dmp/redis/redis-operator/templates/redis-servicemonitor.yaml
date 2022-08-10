@@ -1,0 +1,59 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis-cluster-monitoring
+  namespace: {{ .Release.Namespace }}
+  labels:
+    redis-operator: "true"
+    env: production
+spec:
+  selector:
+    matchLabels:
+      redis_setup_type: cluster
+  namespaceSelector:
+    any: true
+  endpoints:
+    - port: redis-exporter
+      path: /metrics
+      interval: 10s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis-sentinel-monitoring
+  namespace: {{ .Release.Namespace }}
+  labels:
+    redis-operator: "true"
+    env: production
+spec:
+  selector:
+    matchLabels:
+      redis_setup_type: sentinel
+  namespaceSelector:
+    any: true
+  endpoints:
+  - port: redis-exporter
+    path: /metrics
+    interval: 10s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: redis-proxy-monitoring
+  namespace: {{ .Release.Namespace }}
+  labels:
+    redis-operator: "true"
+    env: production
+spec:
+  selector:
+    matchLabels:
+      redis_setup_type: proxy
+  namespaceSelector:
+    any: true
+  endpoints:
+  - port: predixy-exporter
+    path: /metrics
+    interval: 10s

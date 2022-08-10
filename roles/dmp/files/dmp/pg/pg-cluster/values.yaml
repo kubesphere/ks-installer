@@ -7,7 +7,7 @@ replicaCount: 1
 manager:
   image: radondb/postgresqlcluster
   pullPolicy: IfNotPresent
-  tag: "v0.3"
+  tag: "v0.4"
 
 rbacProxy:
   image: gcr.io/kubebuilder/kube-rbac-proxy

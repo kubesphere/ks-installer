@@ -81,17 +81,34 @@ metadata:
   name: postgresqlcluster-manager-cluster-role
 rules:
   - apiGroups:
-      - storage.k8s.io
+      - apps
     resources:
-      - storageclasses
+      - deployments
     verbs:
-      - create
-      - update
       - delete
-      - patch
-      - watch
       - get
       - list
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - persistentvolumeclaims
+      - secrets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
   - apiGroups:
       - pgcluster.kubesphere.io
     resources:
@@ -124,17 +141,17 @@ rules:
       - create
       - watch
   - apiGroups:
-      - ""
+      - storage.k8s.io
     resources:
-      - configmaps
+      - storageclasses
     verbs:
       - create
-      - update
+      - delete
       - get
       - list
       - patch
+      - update
       - watch
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

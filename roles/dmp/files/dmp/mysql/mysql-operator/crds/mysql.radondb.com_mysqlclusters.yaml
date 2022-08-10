@@ -20,13 +20,21 @@ spec:
   versions:
   - additionalPrinterColumns:
     - description: The cluster status
-      jsonPath: .status.conditions[?(@.type == 'Ready')].status
-      name: Ready
+      jsonPath: .status.state
+      name: State
       type: string
-    - description: The number of desired nodes
+    - description: The number of desired replicas
       jsonPath: .spec.replicas
-      name: Replicas
+      name: Desired
       type: integer
+    - description: The number of current replicas
+      jsonPath: .status.readyNodes
+      name: Current
+      type: integer
+    - description: Name of the leader node
+      jsonPath: .status.nodes[?(@.raftStatus.role == 'LEADER')].name
+      name: Leader
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -50,6 +58,14 @@ spec:
           spec:
             description: MysqlClusterSpec defines the desired state of MysqlCluster
             properties:
+              backupSchedule:
+                description: Specify under crontab format interval to take backups
+                  leave it empty to deactivate the backup process Defaults to ""
+                type: string
+              backupScheduleJobsHistoryLimit:
+                default: 6
+                description: If set keeps last BackupScheduleJobsHistoryLimit Backups
+                type: integer
               backupSecretName:
                 description: Represents the name of the secret that contains credentials
                   to connect to the storage provider to store backups.
@@ -118,7 +134,7 @@ spec:
               mysqlOpts:
                 default:
                   database: radondb
-                  initTokuDB: true
+                  initTokuDB: false
                   password: RadonDB@123
                   resources:
                     limits:
@@ -137,7 +153,7 @@ spec:
                     description: Name for new database to create.
                     type: string
                   initTokuDB:
-                    default: true
+                    default: false
                     description: InitTokuDB represents if install tokudb engine.
                     type: boolean
                   mysqlConf:
@@ -215,6 +231,9 @@ spec:
                   Based on this version the operator can take decisions which features
                   can be used.'
                 type: string
+              nfsServerAddress:
+                description: Represents NFS ip address where cluster restore from.
+                type: string
               persistence:
                 default:
                   accessModes:
@@ -252,7 +271,7 @@ spec:
                       cpu: 10m
                       memory: 32Mi
                   imagePullPolicy: IfNotPresent
-                  sidecarImage: radondb/mysql-sidecar:v2.1.2
+                  sidecarImage: radondb/mysql57-sidecar:v2.2.0
                 description: PodPolicy defines the policy to extra specification.
                 properties:
                   affinity:
@@ -1182,7 +1201,7 @@ spec:
                   schedulerName:
                     type: string
                   sidecarImage:
-                    default: radondb/mysql-sidecar:v2.1.2
+                    default: radondb/mysql57-sidecar:v2.2.0
                     description: To specify the image that will be used for sidecar
                       container.
                     type: string
@@ -1243,7 +1262,11 @@ spec:
                 type: integer
               restoreFrom:
                 description: Represents the name of the cluster restore from backup
-                  path
+                  path.
+                type: string
+              tlsSecretName:
+                description: Containing CA (ca.crt) and server cert (tls.crt) ,server
+                  private key (tls.key) for SSL
                 type: string
               xenonOpts:
                 default:

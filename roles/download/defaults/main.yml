@@ -69,6 +69,13 @@ mysql_image_prefix: >-
 
   {%- endif %}
 
+eck_image_registry: >-
+  {% if local_registry is defined and local_registry != "" -%}
+  {{ local_registry }}
+  {%- else -%}
+  docker.io
+  {%- endif %}
+
 #KubeSphere:
 ks_apiserver_repo: "{{ qkcp_images_repo }}/{{ namespace_override | default('qkcp') }}/ks-apiserver"
 ks_apiserver_tag: "{{ ks_version }}"
@@ -328,22 +335,43 @@ multus_cni_repo: "{{ ghcr_image_repo }}{{ namespace_override | default('k8snetwo
 multus_cni_tag: "v3.9"
 
 #DMP
+#DMP clickhouse-operator
 chronus_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-operator"
 chronus_operator_tag: "dmp"
 chronus_metrics_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
 chronus_metrics_operator_tag: "dmp"
-chronus_busybox_repo: "library/busybox"
-chronus_busybox_tag: 1.31.1
-mysql_operator_repo: "{{ namespace_override | default('radondb') }}/mysql-operator"
-mysql_operator_tag: "v2.1.2"
-mysql_rbac_proxy_repo: "{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
-mysql_rbac_proxy_tag: v0.8.0
+chronus_busybox_repo: "{{ namespace_override | default('library') }}/busybox"
+chronus_busybox_tag: "1.31.1"
+
+#DMP mysql-operator
+mysql_operator_image: "{{ namespace_override | default('radondb') }}/mysql-operator"
+mysql_operator_image_tag: "v2.2.0"
+mysql_rbac_proxy_image: "{{ namespace_override | default('radondb') }}/kube-rbac-proxy:v0.8.0"
+
+#DMP pg-operator
 pg_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
 pg_cluster_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/postgresqlcluster"
-pg_cluster_tag: "v0.3"
+pg_cluster_tag: "v0.4"
 pgo_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
-pgo_image_tag: "centos8-4.7.1"
+pgo_image_tag: "debian-2.1.1"
 
+#DMP redis-operator
+redis_operator_image: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis-operator"
+redis_operator_image_tag: "v1.0.0"
+redis_image_prefix: "{{ base_repo }}{{ namespace_override | default('') }}"
+
+#DMP mongodb-operator
+mongodb_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
+mongodb_operator_image_tag: "v1.0.4"
+mongodb_agent_image_tag: "11.12.0.7388-1"
+mongodb_hook_image_tag: "1.0.4"
+mongodb_readiness_image_tag: "1.0.9"
+
+#DMP eck-operator
+eck_operator_image: "{{ base_repo }}{{ namespace_override | default('radondb') }}/eck-operator"
+eck_operator_image_tag: "2.2.0-beta.6"
+eck_image_namespace: "{{ namespace_override | default('library') }}"
+eck_exporter_image: "{{ base_repo }}{{ namespace_override | default('prometheuscommunity') }}/elasticsearch-exporter:v1.3.0"
 
 images:
   ks_installer:

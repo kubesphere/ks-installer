@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "eck-operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "eck-operator.labels" . | nindent 4 }}
+data:
+  eck.yaml: |-
+    log-verbosity: {{ int .Values.config.logVerbosity }}
+    metrics-port: {{ int .Values.config.metricsPort }}
+    container-registry: {{ .Values.config.containerRegistry }}
+    max-concurrent-reconciles: {{ int .Values.config.maxConcurrentReconciles }}
+    ca-cert-validity: {{ .Values.config.caValidity }}
+    ca-cert-rotate-before: {{ .Values.config.caRotateBefore }}
+    cert-validity: {{ .Values.config.certificatesValidity }}
+    cert-rotate-before: {{ .Values.config.certificatesRotateBefore }}
+    {{- if .Values.config.exposedNodeLabels }}
+    exposed-node-labels: [{{ join "," .Values.config.exposedNodeLabels  }}]
+    {{- end }}
+    set-default-security-context: {{ .Values.config.setDefaultSecurityContext }}
+    kube-client-timeout: {{ .Values.config.kubeClientTimeout }}
+    elasticsearch-client-timeout: {{ .Values.config.elasticsearchClientTimeout }}
+    disable-telemetry: {{ .Values.telemetry.disabled }}
+    distribution-channel: {{ .Values.telemetry.distributionChannel }}
+    {{- if .Values.telemetry.interval }}
+    telemetry-interval: {{ .Values.telemetry.interval }}
+    {{- end }}
+    validate-storage-class: {{ .Values.config.validateStorageClass }}
+    {{- if .Values.tracing.enabled }}
+    enable-tracing: true
+    {{- end }}
+    {{- if .Values.refs.enforceRBAC }}
+    enforce-rbac-on-refs: true
+    {{- end }}
+    enable-webhook: {{ .Values.webhook.enabled }}
+    {{- if .Values.webhook.enabled }}
+    webhook-name: {{ include "eck-operator.webhookName" . }}
+      {{- if not .Values.webhook.manageCerts }}
+    manage-webhook-certs: false
+    webhook-cert-dir: {{ .Values.webhook.certsDir }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.managedNamespaces }}
+    namespaces: [{{ join "," .Values.managedNamespaces  }}]
+    {{- end }}
+    {{- if .Values.exporter.exporterImageUrl }}
+    exporter-image-url: {{ .Values.exporter.exporterImageUrl }}
+    {{- end }}
+    {{- if hasKey .Values.exporter "exporterAll" }}
+    exporter-es-all: {{ .Values.exporter.exporterAll }}
+    {{- end }}
+    {{- if hasKey .Values.exporter "exporterClusterSettings" }}
+    exporter-es-cluster-settings: {{ .Values.exporter.exporterClusterSettings }}
+    {{- end }}
+    {{- if hasKey .Values.exporter "exporterIndices" }}
+    exporter-es-indices: {{ .Values.exporter.exporterIndices }}
+    {{- end }}
+    {{- if hasKey .Values.exporter "exporterIndicesSettings" }}
+    exporter-es-indices-settings: {{ .Values.exporter.exporterIndicesSettings }}
+    {{- end }}
+    {{- if hasKey .Values.exporter "exporterIndicesMappings" }}
+    exporter-es-indices-mappings: {{ .Values.exporter.exporterIndicesMappings }}
+    {{- end }}
+    {{- if hasKey .Values.exporter "exporterShards" }}
+    exporter-es-shards: {{ .Values.exporter.exporterShards }}
+    {{- end }}
+    {{- if .Values.exporter.exporterSnapshots }}
+    exporter-es-snapshots: {{ .Values.exporter.exporterSnapshots }}
+    {{- end }}
+    {{- if .Values.config.nsApm }}
+    ns-apm: {{ .Values.config.nsApm }}
+    {{- end}}
+    {{- if .Values.config.nsElasticsearch }}
+    ns-elasticsearch: {{ .Values.config.nsElasticsearch }}
+    {{- end}}
+    {{- if .Values.config.nsKibana }}
+    ns-kibana: {{ .Values.config.nsKibana }}
+    {{- end}}
+    {{- if .Values.config.nsEnterpiseSearch }}
+    ns-enterprise-search: {{ .Values.config.nsEnterpiseSearch }}
+    {{- end}}
+    {{- if .Values.config.nsBeats }}
+    ns-beats: {{ .Values.config.nsBeats }}
+    {{- end}}
+    {{- if .Values.config.nsMaps }}
+    ns-maps: {{ .Values.config.nsMaps }}
+    {{- end}}

@@ -1,0 +1,34 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplicationVersion
+metadata:
+  name: redis-sentinel
+  labels:
+    application.kubesphere.io/app-id: app-redis-sentinel
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  maintainers:
+    - email: duanduanyang@yunify.com
+      name: RadonDB
+  name: "RadonDB Redis Sentinel"
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/redis_sentinel_create.jpg,/assets/screenshots/redis_sentinel_detail.jpg,/assets/screenshots/redis_sentinel_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/redis_sentinel_create_zh.jpg,/assets/screenshots/redis_sentinel_detail_zh.jpg,/assets/screenshots/redis_sentinel_monitor_zh.jpg
+  changeLog: |
+    - WIP
+  changeLog_zh: |
+    - 基于 Redis Operator 0.10.0版本构建，支持 Redis 6.2.5版本
+    - 支持Redis哨兵模式部署
+    - 支持Redis Sentinel 故障转移和恢复
+    - 支持对接prometheus，提供基于 Exporter 的资源状态监控功能
+    - 使用 PVC 模板的动态存储置备
+    - 支持k8s 请求和限制的资源限制
+    - 支持对群集的密码/无密码设置
+    - Redis 管理配置参数热更新
+    - 支持 x86 和 arm 架构部署
+  operatorVersion: "1.0.0"
+  appVersion: "6.2.5"
+  owner: "RadonDB"
+status:
+  state: active

@@ -23,6 +23,22 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "validating-webhook-configuration.name" -}}
+    {{ default "radondb-mysql-validation" }}
+{{- end }}
+
+{{- define "certificate.name" -}}
+    {{ default "radondb-mysql-certificate" }}
+{{- end }}
+
+{{- define "issuer.name" -}}
+    {{ default "radondb-mysql-issuer" }}
+{{- end }}
+
+{{- define "webhook.name" -}}
+    {{ default "radondb-mysql-webhook" }}
+{{- end }}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}

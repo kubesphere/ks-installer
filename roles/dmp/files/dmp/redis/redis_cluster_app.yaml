@@ -1,0 +1,29 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplication
+metadata:
+  annotations:
+    kubesphere.io/creator: RadonDB
+  name: redis-cluster
+  labels:
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  # app name
+  name: "RadonDB Redis Cluster"
+  # app description
+  description_zh: "一款基于 Redis 提供的企业级缓存数据库。"
+  description: "WIP"
+  # app description
+  abstraction_zh: |
+    - RadonDB Redis Cluster 完全基于云原生技术的缓存数据库服务，将在 Kubernetes 之上进行 Redis Cluster 模式设置，为您提供即开即用、安全可靠、弹性扩容、便捷易用的在线分布式缓存能力
+  abstraction: |
+    - WIP
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/redis_cluster_create.jpg,/assets/screenshots/redis_cluster_detail.jpg,/assets/screenshots/redis_cluster_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/redis_cluster_create_zh.jpg,/assets/screenshots/redis_cluster_detail_zh.jpg,/assets/screenshots/redis_cluster_monitor_zh.jpg
+  icon: "/assets/radondb_logo.svg"
+  owner: "RadonDB"
+status:
+  latestVersion: "1.0.0"
+  state: active

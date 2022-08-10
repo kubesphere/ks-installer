@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-oss-proxy
+  namespace: dmp-system
+spec:
+  selector:
+    matchLabels:
+      app: nginx-oss-proxy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-oss-proxy
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+          meta.helm.sh/release-name: nginx-oss-proxy
+          meta.helm.sh/release-namespace: dmp-system
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+            - name: nginx-cert
+              mountPath: /etc/nginx/ssl/tls.crt
+              subPath: tls.crt
+              readOnly: true
+            - name: nginx-cert
+              mountPath: /etc/nginx/ssl/tls.key
+              subPath: tls.key
+              readOnly: true
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: nginx-cert
+          secret:
+            secretName: nginx-cert
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key

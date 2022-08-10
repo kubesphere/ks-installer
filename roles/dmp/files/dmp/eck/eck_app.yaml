@@ -1,0 +1,29 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplication
+metadata:
+  annotations:
+    kubesphere.io/creator: RadonDB
+  name: eck
+  labels:
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  # app name
+  name: "RadonDB ECK"
+  # app description
+  description_zh: "一款为用户提供实时日志处理、全文搜索和数据分析等能力的检索分析服务。"
+  description: "WIP"
+  # app description
+  abstraction_zh: |
+    - 基于 Kubernetes Operator 模式构建的 Elastic Cloud on Kubernetes （ECK） 扩展了基本的 Kubernetes 编排功能，支持在 kubernetes 组织和管理 Elastic Stack
+  abstraction: |
+    - WIP
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/eck_create.jpg,/assets/screenshots/eck_detail.jpg,/assets/screenshots/eck_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/eck_create_zh.jpg,/assets/screenshots/eck_detail_zh.jpg,/assets/screenshots/eck_monitor_zh.jpg
+  icon: "/assets/radondb_logo.svg"
+  owner: "RadonDB"
+status:
+  latestVersion: "2.2.0"
+  state: active

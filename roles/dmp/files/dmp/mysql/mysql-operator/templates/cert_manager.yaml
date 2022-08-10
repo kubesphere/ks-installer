@@ -1,0 +1,23 @@
+{{- if .Values.webhook.certManager.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ template "issuer.name" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ template "certificate.name" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  dnsNames:
+  - {{ printf "%s.%s.svc" (include "webhook.name" .) .Release.Namespace }}
+  - {{ printf "%s.%s.svc.cluster.local" (include "webhook.name" .) .Release.Namespace }}
+  issuerRef:
+    kind: Issuer
+    name: {{ template "issuer.name" . }}
+  secretName: "{{ template "webhook.name" . }}-certs"
+{{- end }}
