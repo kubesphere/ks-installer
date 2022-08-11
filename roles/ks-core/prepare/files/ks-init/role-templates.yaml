@@ -969,10 +969,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
-    kubesphere.io/alias-name: Users Management
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-users
@@ -1013,10 +1010,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-    kubesphere.io/alias-name: Roles Management
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-roles
@@ -1623,10 +1617,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-    kubesphere.io/alias-name: Workspace Roles Management
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-roles
@@ -1643,9 +1634,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"members": "view"}'
-    kubesphere.io/alias-name: Workspace Members View
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-members
@@ -1665,10 +1654,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
-    kubesphere.io/alias-name: Workspace Members Management
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-members
@@ -1693,7 +1679,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+    iam.kubesphere.io/role-template-rules: '{"basic": "view", "members": "view"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-basic
@@ -1725,7 +1711,9 @@ rules:
     resources:
       - workspacemembers
     verbs:
+      - get
       - list
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2726,10 +2714,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-members","role-template-view-roles"]'
-      iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
-      kubesphere.io/alias-name: Project Members Management
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-members
@@ -2870,10 +2855,7 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-      iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-      kubesphere.io/alias-name: Project Roles Management
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-roles
