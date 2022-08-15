@@ -80,8 +80,8 @@ spec:
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
     enabled: false             # Enable or disable the KubeSphere DevOps System.
     # resources: {}
-    jenkinsMemoryLim: 4Gi      # Jenkins memory limit.
-    jenkinsMemoryReq: 1500Mi   # Jenkins memory request.
+    jenkinsMemoryLim: 8Gi      # Jenkins memory limit.
+    jenkinsMemoryReq: 4Gi   # Jenkins memory request.
     jenkinsVolumeSize: 8Gi     # Jenkins volume size.
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
