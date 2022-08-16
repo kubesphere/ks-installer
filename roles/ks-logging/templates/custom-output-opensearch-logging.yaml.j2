@@ -1,0 +1,36 @@
+apiVersion: logging.kubesphere.io/v1alpha2
+kind: Output
+metadata:
+  name: opensearch
+  namespace: kubesphere-logging-system
+  labels:
+    logging.kubesphere.io/enabled: "true"
+    logging.kubesphere.io/component: "logging"
+spec:
+  matchRegex: (?:kube|service)\.(.*)
+  opensearch:
+    host: "{% if common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchHost != "" %}{{ common.opensearch.externalOpensearchHost }}{% else %}opensearch-cluster-data.kubesphere-logging-system.svc{% endif %}"
+    port: {% if common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchPort != "" %}{{ common.opensearch.externalOpensearchPort }}{% else %}9200{% endif %}
+
+{% if common.opensearch.basicAuth is defined and common.opensearch.basicAuth.enabled is defined and common.opensearch.basicAuth.enabled %}
+{% if common.opensearch.basicAuth.username is defined and common.opensearch.basicAuth.username != "" %}
+    httpUser:
+      valueFrom:
+        secretKeyRef:
+          key: "username"
+          name: "opensearch-credentials"
+{% endif %}
+{% if common.opensearch.basicAuth.password is defined and common.opensearch.basicAuth.password != "" %}
+    httpPassword:
+      valueFrom:
+        secretKeyRef:
+          key: "password"
+          name: "opensearch-credentials"
+{% endif %}
+{% endif %}
+    logstashPrefix: "ks-{{ common.opensearch.opensearchPrefix }}-logging"
+    logstashFormat: true
+    timeKey: "@timestamp"
+    suppressTypeName: true
+    tls:
+      verify: false

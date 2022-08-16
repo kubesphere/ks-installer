@@ -1,0 +1,310 @@
+clusterName: "opensearch-cluster"
+nodeGroup: "data"
+
+# The service that non master groups will try to connect to when joining the cluster
+# This should be set to clusterName + "-" + nodeGroup for your master group
+masterService: "opensearch-cluster-master"
+
+# OpenSearch roles that will be applied to this nodeGroup
+# These will be set as environment variable "node.roles". E.g. node.roles=master,ingest,data,remote_cluster_client
+roles:
+  - ingest
+  - data
+  - remote_cluster_client
+
+{% if nodeNum is defined and nodeNum == 1 %}
+replicas: {{ common.opensearch.data.replicas | default(1) }}
+{% elif nodeNum is defined and nodeNum > 1 and nodeNum < 5 %}
+replicas: {{ common.opensearch.data.replicas | default(2) }}
+{% else %}
+replicas: {{ common.opensearch.data.replicas | default(3) }}
+{% endif %}
+
+
+
+majorVersion: ""
+
+global:
+  dockerRegistry: ""
+
+
+opensearchHome: /usr/share/opensearch
+
+config:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+    network.host: 0.0.0.0
+    plugins:
+      security:
+        ssl:
+          transport:
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+            enforce_hostname_verification: false
+          http:
+            enabled: true
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+        allow_unsafe_democertificates: true
+        allow_default_init_securityindex: true
+        authcz:
+          admin_dn:
+            - CN=kirk,OU=client,O=client,L=test,C=de
+        audit.type: internal_opensearch
+        enable_snapshot_restore_privilege: true
+        check_snapshot_restore_write_privileges: true
+        restapi:
+          roles_enabled: ["all_access", "security_rest_api_access"]
+        system_indices:
+          enabled: true
+          indices:
+            [
+              ".opendistro-alerting-config",
+              ".opendistro-alerting-alert*",
+              ".opendistro-anomaly-results*",
+              ".opendistro-anomaly-detector*",
+              ".opendistro-anomaly-checkpoints",
+              ".opendistro-anomaly-detection-state",
+              ".opendistro-reports-*",
+              ".opendistro-notifications-*",
+              ".opendistro-notebooks",
+              ".opendistro-asynchronous-search-response*",
+            ]
+
+
+
+extraEnvs: []
+
+
+
+envFrom: []
+
+
+
+secretMounts: []
+
+hostAliases: []
+
+
+image:
+  repository: {{ opensearch_repo }}
+  tag: {{ opensearch_tag }}
+  pullPolicy: "IfNotPresent"
+
+podAnnotations: {}
+
+labels: {}
+
+opensearchJavaOpts: "-Xmx1536M -Xms1536M"
+
+resources:
+  requests:
+    cpu: {{ common.opensearch.data.resources.requests.cpu | default("25m") }}
+    memory: {{ common.opensearch.data.resources.requests.memory | default("1536Mi") }}
+
+initResources: {}
+
+sidecarResources: {}
+
+networkHost: "0.0.0.0"
+
+rbac:
+  create: false
+  serviceAccountAnnotations: {}
+  serviceAccountName: ""
+
+podSecurityPolicy:
+  create: false
+  name: ""
+  spec:
+    privileged: true
+    fsGroup:
+      rule: RunAsAny
+    runAsUser:
+      rule: RunAsAny
+    seLinux:
+      rule: RunAsAny
+    supplementalGroups:
+      rule: RunAsAny
+    volumes:
+      - secret
+      - configMap
+      - persistentVolumeClaim
+      - emptyDir
+
+persistence:
+  enabled: true
+  enableInitChown: true
+  labels:
+    enabled: false
+
+{% if persistence.storageClass is defined and persistence.storageClass != "" %}
+  storageClass: "{{ persistence.storageClass }}"
+{% endif %}
+  accessModes:
+    - ReadWriteOnce
+  size: {% if opensearch_data_pv_size is defined %}{{ opensearch_data_pv_size }}{% else %}{{ common.opensearch.data.volumeSize | default("20Gi") }}{% endif %}
+
+  annotations: {}
+
+extraVolumes: []
+
+extraVolumeMounts: []
+
+extraContainers: []
+
+extraInitContainers: []
+
+
+priorityClassName: ""
+
+
+antiAffinityTopologyKey: "kubernetes.io/hostname"
+
+
+antiAffinity: "soft"
+
+
+{% if common.opensearch.nodeAffinity is defined and common.opensearch.nodeAffinity is not none %}
+nodeAffinity:
+  {{ common.opensearch.nodeAffinity | to_nice_yaml(indent=2) | indent(2) }}
+{% else %}
+nodeAffinity: {}
+{% endif %}
+
+
+topologySpreadConstraints: []
+
+
+podManagementPolicy: "Parallel"
+
+
+enableServiceLinks: true
+
+protocol: {{ common.opensearch.protocol | default("https") }}
+httpPort: 9200
+transportPort: 9300
+
+service:
+  labels: {}
+  labelsHeadless: {}
+  headless:
+    annotations: {}
+  type: ClusterIP
+  nodePort: ""
+  annotations: {}
+  httpPortName: http
+  transportPortName: transport
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  externalTrafficPolicy: ""
+
+updateStrategy: RollingUpdate
+
+
+maxUnavailable: 1
+
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  runAsNonRoot: true
+  runAsUser: 1000
+
+securityConfig:
+  enabled: true
+  path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+  actionGroupsSecret:
+  configSecret:
+  internalUsersSecret:
+  rolesSecret:
+  rolesMappingSecret:
+  tenantsSecret:
+  config:
+    securityConfigSecret: ""
+    dataComplete: true
+    data: {}
+
+terminationGracePeriod: 120
+
+sysctlVmMaxMapCount: 262144
+
+startupProbe:
+  tcpSocket:
+    port: 9200
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 30
+readinessProbe:
+  tcpSocket:
+    port: 9200
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+schedulerName: ""
+
+imagePullSecrets: []
+
+{% if common.opensearch.nodeSelector is defined and common.opensearch.nodeSelector is not none %}
+nodeSelector:
+  {{ common.opensearch.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+nodeSelector: {}
+{% endif %}
+
+{% if common.opensearch.tolerations is defined and common.opensearch.tolerations is not none %}
+tolerations:
+  {{ common.opensearch.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+tolerations: []
+{% endif %}
+
+ingress:
+  enabled: false
+
+  annotations: {}
+  path: /
+  hosts:
+    - chart-example.local
+  tls: []
+nameOverride: ""
+fullnameOverride: ""
+
+masterTerminationFix: false
+
+lifecycle: {}
+
+
+keystore: []
+
+
+networkPolicy:
+  create: false
+  http:
+    enabled: true
+
+
+fsGroup: ""
+
+sysctl:
+  enabled: false
+
+plugins:
+  enabled: false
+  installList: []
+
+extraObjects: []
