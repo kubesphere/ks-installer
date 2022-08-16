@@ -23,8 +23,7 @@
   debug:
     msg: "{{logging_container_runtime}}"
 
-
-- name: ks-auditing | Creating manifests
+- name: ks-auditing | Creating es manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
@@ -32,7 +31,17 @@
     - { name: custom-output-elasticsearch-auditing, file: custom-output-elasticsearch-auditing.yaml }
     - { name: custom-input-auditing, file: custom-input-auditing.yaml }
     - { name: custom-filter-auditing, file: custom-filter-auditing.yaml }
+  when: "common.es is defined and common.es.enabled is defined and common.es.enabled"
 
+- name: ks-auditing | Creating opensearch manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
+  with_items:
+    - { name: custom-output-opensearch-auditing, file: custom-output-opensearch-auditing.yaml }
+    - { name: custom-input-auditing, file: custom-input-auditing.yaml }
+    - { name: custom-filter-auditing, file: custom-filter-auditing.yaml }
+  when: "common.opensearch is defined and common.opensearch.enabled is defined and common.opensearch.enabled"
 
 - name: ks-auditing | Apply fluentbit operator custom resources
   shell: >

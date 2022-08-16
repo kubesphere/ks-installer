@@ -519,6 +519,31 @@ def generate_new_cluster_configuration(api):
             if "externalElasticsearchHost" not in cluster_configuration_spec["common"]["es"] and "externalElasticsearchUrl" in cluster_configuration_spec["common"]["es"]:
                 cluster_configuration_spec["common"]["es"]["externalElasticsearchHost"] = cluster_configuration_spec["common"]["es"]["externalElasticsearchUrl"]
 
+        # Migrate the configuration of  opensearch
+        if "opensearch" in cluster_configuration_spec["common"]:
+            if "master" not in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["master"] = {
+                    "volumeSize": "4Gi"
+                }
+            if "data" not in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["data"] = {
+                    "volumeSize": "20Gi"
+                }
+            if "opensearchMasterReplicas" in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["master"]["replicas"] = cluster_configuration_spec["common"]["opensearch"]["elasticsearchMasterReplicas"]
+                del cluster_configuration_spec["common"]["opensearch"]["opensearchMasterReplicas"]
+            if "opensearchDataReplicas" in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["data"]["replicas"] = cluster_configuration_spec["common"]["opensearch"]["opensearchDataReplicas"]
+                del cluster_configuration_spec["common"]["opensearch"]["opensearchDataReplicas"]
+            if "opensearchMasterVolumeSize" in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["master"]["volumeSize"] = cluster_configuration_spec["common"]["opensearch"]["opensearchMasterVolumeSize"]
+                del cluster_configuration_spec["common"]["opensearch"]["opensearchMasterVolumeSize"]
+            if "opensearchDataVolumeSize" in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["data"]["volumeSize"] = cluster_configuration_spec["common"]["opensearch"]["opensearchDataVolumeSize"]
+                del cluster_configuration_spec["common"]["opensearch"]["opensearchDataVolumeSize"]
+            if "externalOpensearchHost" not in cluster_configuration_spec["common"]["opensearch"] and "externalOpensearchUrl" in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["externalOpensearchHost"] = cluster_configuration_spec["common"]["opensearch"]["externalOpensearchUrl"]
+
         if "console" in cluster_configuration_spec:
             if "core" in cluster_configuration_spec["common"]:
                 cluster_configuration_spec["common"]["core"]["console"]=cluster_configuration_spec["console"]
