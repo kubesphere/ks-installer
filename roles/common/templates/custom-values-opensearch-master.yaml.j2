@@ -1,0 +1,329 @@
+clusterName: "opensearch-cluster"
+nodeGroup: "master"
+
+# The service that non master groups will try to connect to when joining the cluster
+# This should be set to clusterName + "-" + nodeGroup for your master group
+masterService: "opensearch-cluster-master"
+
+# OpenSearch roles that will be applied to this nodeGroup
+# These will be set as environment variable "node.roles". E.g. node.roles=master,ingest,data,remote_cluster_client
+roles:
+  - master
+
+{% if nodeNum is defined and nodeNum < 5 %}
+replicas: {{ common.opensearch.master.replicas | default(1) }}
+{% else %}
+replicas: {{ common.opensearch.master.replicas | default(3) }}
+{% endif %}
+
+# if not set, falls back to parsing .Values.imageTag, then .Chart.appVersion.
+majorVersion: ""
+
+global:
+  dockerRegistry: ""
+
+# Allows you to add any config files
+opensearchHome: /usr/share/opensearch
+# such as opensearch.yml and log4j2.properties
+config:
+  opensearch.yml: |
+    cluster.name: opensearch-cluster
+
+    # Bind to all interfaces because we don't know what IP address Docker will assign to us.
+    network.host: 0.0.0.0
+    plugins:
+      security:
+        ssl:
+          transport:
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+            enforce_hostname_verification: false
+          http:
+            enabled: true
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
+        allow_unsafe_democertificates: true
+        allow_default_init_securityindex: true
+        authcz:
+          admin_dn:
+            - CN=kirk,OU=client,O=client,L=test,C=de
+        audit.type: internal_opensearch
+        enable_snapshot_restore_privilege: true
+        check_snapshot_restore_write_privileges: true
+        restapi:
+          roles_enabled: ["all_access", "security_rest_api_access"]
+        system_indices:
+          enabled: true
+          indices:
+            [
+              ".opendistro-alerting-config",
+              ".opendistro-alerting-alert*",
+              ".opendistro-anomaly-results*",
+              ".opendistro-anomaly-detector*",
+              ".opendistro-anomaly-checkpoints",
+              ".opendistro-anomaly-detection-state",
+              ".opendistro-reports-*",
+              ".opendistro-notifications-*",
+              ".opendistro-notebooks",
+              ".opendistro-asynchronous-search-response*",
+            ]
+
+
+extraEnvs: []
+
+
+
+envFrom: []
+
+
+# A list of secrets and their paths to mount inside the pod
+# This is useful for mounting certificates for security and for mounting
+# the X-Pack license
+secretMounts: []
+
+hostAliases: []
+# - ip: "127.0.0.1"
+#   hostnames:
+#   - "foo.local"
+#   - "bar.local"
+
+image:
+  repository: {{ opensearch_repo }}
+  # override image tag, which is .Chart.AppVersion by default
+  tag: {{ opensearch_tag }}
+  pullPolicy: "IfNotPresent"
+
+podAnnotations: {}
+  # iam.amazonaws.com/role: es-cluster
+
+# additionals labels
+labels: {}
+
+opensearchJavaOpts: "-Xmx512M -Xms512M"
+
+resources:
+  requests:
+    cpu: {{ common.opensearch.master.resources.requests.cpu | default("25m") }}
+    memory: {{ common.opensearch.master.resources.requests.memory | default("512Mi") }}
+
+initResources: {}
+#  limits:
+#     cpu: "25m"
+#     memory: "128Mi"
+#  requests:
+#     cpu: "25m"
+#     memory: "128Mi"
+
+sidecarResources: {}
+#   limits:
+#     cpu: "25m"
+#     memory: "128Mi"
+#   requests:
+#     cpu: "25m"
+#     memory: "128Mi"
+
+networkHost: "0.0.0.0"
+
+rbac:
+  create: false
+  serviceAccountAnnotations: {}
+  serviceAccountName: ""
+
+podSecurityPolicy:
+  create: false
+  name: ""
+  spec:
+    privileged: true
+    fsGroup:
+      rule: RunAsAny
+    runAsUser:
+      rule: RunAsAny
+    seLinux:
+      rule: RunAsAny
+    supplementalGroups:
+      rule: RunAsAny
+    volumes:
+      - secret
+      - configMap
+      - persistentVolumeClaim
+      - emptyDir
+
+persistence:
+  enabled: true
+  enableInitChown: true
+  labels:
+    enabled: false
+{% if persistence.storageClass is defined and persistence.storageClass != "" %}
+  storageClass: "{{ persistence.storageClass }}"
+{% endif %}
+
+  accessModes:
+    - ReadWriteOnce
+  size: {% if opensearch_master_pv_size is defined %}{{ opensearch_master_pv_size }}{% else %}{{ common.opensearch.master.volumeSize | default("4Gi") }}{% endif %}
+
+  annotations: {}
+
+extraVolumes: []
+  # - name: extras
+  #   emptyDir: {}
+
+extraVolumeMounts: []
+
+
+extraContainers: []
+
+extraInitContainers: []
+
+priorityClassName: ""
+
+# By default this will make sure two pods don't end up on the same node
+# Changing this to a region would allow you to spread pods across regions
+antiAffinityTopologyKey: "kubernetes.io/hostname"
+
+# Hard means that by default pods will only be scheduled if there are enough nodes for them
+# and that they will never end up on the same node. Setting this to soft will do this "best effort"
+antiAffinity: "soft"
+
+
+{% if common.es.nodeAffinity is defined and common.es.nodeAffinity is not none %}
+nodeAffinity:
+  {{ common.opensearch.nodeAffinity | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+nodeAffinity: {}
+{% endif %}
+
+topologySpreadConstraints: []
+
+podManagementPolicy: "Parallel"
+
+
+enableServiceLinks: true
+
+protocol: {{ common.opensearch.protocol | default("https") }}
+httpPort: 9200
+transportPort: 9300
+
+service:
+  labels: {}
+  labelsHeadless: {}
+  headless:
+    annotations: {}
+  type: ClusterIP
+  nodePort: ""
+  annotations: {}
+  httpPortName: http
+  transportPortName: transport
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  externalTrafficPolicy: ""
+
+updateStrategy: RollingUpdate
+
+# This is the max unavailable setting for the pod disruption budget
+# The default value of 1 will make sure that kubernetes won't allow more than 1
+# of your pods to be unavailable during maintenance
+maxUnavailable: 1
+
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  # readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+
+securityConfig:
+  enabled: true
+  path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+  actionGroupsSecret:
+  configSecret:
+  internalUsersSecret:
+  rolesSecret:
+  rolesMappingSecret:
+  tenantsSecret:
+  config:
+    securityConfigSecret: ""
+    dataComplete: true
+    data: {}
+
+# How long to wait for opensearch to stop gracefully
+terminationGracePeriod: 120
+
+sysctlVmMaxMapCount: 262144
+
+startupProbe:
+  tcpSocket:
+    port: 9200
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 30
+readinessProbe:
+  tcpSocket:
+    port: 9200
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+schedulerName: ""
+
+imagePullSecrets: []
+{% if common.opensearch.nodeSelector is defined and common.opensearch.nodeSelector is not none %}
+nodeSelector:
+  {{ common.opensearch.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% elif nodeSelector is defined and nodeSelector is not none %}
+nodeSelector:
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+nodeSelector: {}
+{% endif %}
+
+{% if common.opensearch.tolerations is defined and common.opensearch.tolerations is not none %}
+tolerations:
+  {{ common.opensearch.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% elif tolerations is defined and tolerations is not none %}
+tolerations:
+  {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+{% else %}
+tolerations: []
+{% endif %}
+
+ingress:
+  enabled: false
+  annotations: {}
+  path: /
+  hosts:
+    - chart-example.local
+  tls: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+masterTerminationFix: false
+
+lifecycle: {}
+
+keystore: []
+
+networkPolicy:
+  create: false
+  http:
+    enabled: true
+
+fsGroup: ""
+
+sysctl:
+  enabled: false
+
+plugins:
+  enabled: false
+  installList: []
+
+extraObjects: []
