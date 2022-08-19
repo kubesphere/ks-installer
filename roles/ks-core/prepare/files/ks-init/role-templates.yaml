@@ -968,7 +968,7 @@ metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-users
 rules:
   - apiGroups:
@@ -1009,7 +1009,7 @@ metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-roles
 rules:
   - apiGroups:
@@ -1616,7 +1616,7 @@ metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-roles
 rules:
   - apiGroups:
@@ -1633,7 +1633,7 @@ metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"members": "view"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.kubesphere.io/role-template: "false"
   name: role-template-view-members
 rules:
   - apiGroups:
@@ -1653,7 +1653,7 @@ metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-members
 rules:
   - apiGroups:
@@ -2794,7 +2794,7 @@ role:
     annotations:
       iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.kubesphere.io/role-template: "false"
     name: role-template-manage-members
   rules:
     - apiGroups:
