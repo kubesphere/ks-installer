@@ -2940,7 +2940,7 @@ role:
       iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
       kubesphere.io/alias-name: Project Roles Management
     labels:
-      iam.kubesphere.io/role-template: "true"
+      iam.kubesphere.io/role-template: "false"
     name: role-template-manage-roles
   rules:
     - apiGroups:
