@@ -1009,6 +1009,7 @@ kind: GlobalRole
 metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+    kubesphere.io/alias-name: Roles Management
   labels:
     iam.kubesphere.io/role-template: "false"
   name: role-template-manage-roles
@@ -1616,6 +1617,7 @@ kind: WorkspaceRole
 metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+    kubesphere.io/alias-name: Workspace Roles Management
   labels:
     iam.kubesphere.io/role-template: "false"
   name: role-template-manage-roles
