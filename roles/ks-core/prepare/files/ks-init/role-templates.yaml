@@ -967,6 +967,7 @@ kind: GlobalRole
 metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
+    kubesphere.io/alias-name: Users Management
   labels:
     iam.kubesphere.io/role-template: "false"
   name: role-template-manage-users
@@ -1632,6 +1633,7 @@ kind: WorkspaceRole
 metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"members": "view"}'
+    kubesphere.io/alias-name: Workspace Members View
   labels:
     iam.kubesphere.io/role-template: "false"
   name: role-template-view-members
@@ -1652,6 +1654,7 @@ kind: WorkspaceRole
 metadata:
   annotations:
     iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+    kubesphere.io/alias-name: Workspace Members Management
   labels:
     iam.kubesphere.io/role-template: "false"
   name: role-template-manage-members
@@ -2793,6 +2796,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+      kubesphere.io/alias-name: Project Members Management
     labels:
       iam.kubesphere.io/role-template: "false"
     name: role-template-manage-members
@@ -2934,6 +2938,7 @@ role:
   metadata:
     annotations:
       iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+      kubesphere.io/alias-name: Project Roles Management
     labels:
       iam.kubesphere.io/role-template: "true"
     name: role-template-manage-roles
