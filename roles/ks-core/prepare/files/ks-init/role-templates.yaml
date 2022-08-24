@@ -33,7 +33,13 @@ metadata:
       "role-template-view-storageclasses",
       "role-template-view-volume-snapshots",
       "role-template-view-volume-snapshot-classes",
-      "role-template-view-volumes"]'
+      "role-template-view-volumes",
+      "role-template-view-configmaps",
+      "role-template-manage-configmaps",
+      "role-template-view-secrets",
+      "role-template-manage-secrets",
+      "role-template-view-service-accounts",
+      "role-template-manage-service-accounts"]'
   name: cluster-admin
 rules:
   - apiGroups:
@@ -68,7 +74,10 @@ metadata:
       "role-template-view-storageclasses",
       "role-template-view-volume-snapshots",
       "role-template-view-volume-snapshot-classes",
-      "role-template-view-volumes"]'
+      "role-template-view-volumes",
+      "role-template-view-configmaps",
+      "role-template-view-secrets",
+      "role-template-view-service-accounts"]'
   name: cluster-viewer
 rules:
   - apiGroups:
@@ -2223,6 +2232,87 @@ metadata:
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-volumes
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Configration Management
+    kubesphere.io/alias-name: ConfigMap View
+    iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-configmaps
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
+    iam.kubesphere.io/module: Configration Management
+    kubesphere.io/alias-name: ConfigMap Management
+    iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-configmaps
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Configration Management
+    kubesphere.io/alias-name: Secret View
+    iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-secrets
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
+    iam.kubesphere.io/module: Configration Management
+    kubesphere.io/alias-name: Secret Management
+    iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-secrets
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Configration Management
+    kubesphere.io/alias-name: ServiceAccount View
+    iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-view-service-accounts
+rules: []
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    iam.kubesphere.io/dependencies: '["role-template-view-service-accounts"]'
+    iam.kubesphere.io/module: Configration Management
+    kubesphere.io/alias-name: ServiceAccount Management
+    iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
+  labels:
+    iam.kubesphere.io/role-template: "true"
+  name: role-template-manage-service-accounts
 rules: []
 
 ---
