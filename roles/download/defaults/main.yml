@@ -46,7 +46,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.3.1-rc.0
+  v3.3.1-rc.1
   {%- endif %}
 
 #KubeSphere:
@@ -76,8 +76,8 @@ ks_kubectl_versions:
 ks_installer_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-installer"
 ks_installer_tag: "{{ ks_version }}"
 
-ks_image_pull_policy: Always
-# ks_image_pull_policy: IfNotPresent
+#ks_image_pull_policy: Always
+ks_image_pull_policy: IfNotPresent
 
 # kubefed, KubeSphere multiple cluster component
 kubefed_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
@@ -103,8 +103,8 @@ gatekeeper_repo: "{{ base_repo }}{{ namespace_override | default('openpolicyagen
 gatekeeper_release: "v3.5.2"
 
 #openpitrix:
-openpitrix_job_tag: "v3.2.1"
-openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/openpitrix-jobs"
+openpitrix_job_tag: "v3.3.1-rc.0"
+openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/openpitrix-jobs"
 
 minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
 minio_tag: RELEASE.2019-08-07T01-59-21Z
@@ -116,9 +116,9 @@ snapshot_controller_tag: "v4.0.0"
 
 # ks-devops
 ks_devops_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
-ks_devops_controller_tag: "v3.3.0"
-ks_devops_apiserver_tag: "v3.3.0"
-ks_devops_tools_tag: "v3.3.0"
+ks_devops_controller_tag: "{{ ks_version }}"
+ks_devops_apiserver_tag: "{{ ks_version }}"
+ks_devops_tools_tag: "{{ ks_version }}"
 
 #jenkins:
 jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-jenkins"
