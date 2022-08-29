@@ -4,6 +4,24 @@
     src: "dmp"
     dest: "{{ kubesphere_dir }}/"
 
+
+- name: DMP |  Create dmp-managed-s3-secret.yaml
+  shell: >
+    chmod +x {{ kubesphere_dir }}/dmp/minio/make-dmp-managed-s3-secret.sh;
+    bash  -x {{ kubesphere_dir }}/dmp/minio/make-dmp-managed-s3-secret.sh;
+  register: status
+  until: status is succeeded
+  retries: 3
+
+- name: DMP |  Create minio DMP buckets relevant
+  shell: >
+    kubectl apply -f {{ kubesphere_dir }}/dmp/minio/configmap.yaml -n kubesphere-system;
+    kubectl apply -f {{ kubesphere_dir }}/dmp/minio/minio-make-bucket-job.yaml -n kubesphere-system;
+    kubectl apply -f {{ kubesphere_dir }}/dmp/minio/dmp-managed-s3-secret.yaml -n dmp-system;
+  register: minio_buckets_status
+  until: minio_buckets_status is succeeded
+  retries: 3
+
 - name: DMP | Creating manifests
   template:
     src: "{{ item.file }}.j2"
@@ -13,6 +31,9 @@
     - { path: mysql, file: custom-values-mysql-operator.yaml }
     - { path: pg, file: custom-values-pg-operator.yaml }
     - { path: pg, file: custom-values-pg-cluster.yaml }
+    - { path: redis, file: custom-values-redis-operator.yaml }
+    - { path: mongodb, file: custom-values-mongodb-operator.yaml }
+    - { path: eck, file: custom-values-eck-operator.yaml }
 
 - name: DMP | Installing pg operator
   shell: >
@@ -60,16 +81,57 @@
   until: result is succeeded
   retries: 3
 
+- name: DMP | Installing redis operator
+  shell: >
+    {{ bin_dir }}/helm upgrade --install redis-operator
+    {{ kubesphere_dir }}/dmp/redis/redis-operator
+    -f {{ kubesphere_dir }}/dmp/redis/custom-values-redis-operator.yaml
+    --namespace dmp-system
+    --create-namespace
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: DMP | Installing mongodb operator
+  shell: >
+    {{ bin_dir }}/helm upgrade --install mongodb-operator
+    {{ kubesphere_dir }}/dmp/mongodb/mongodb-operator
+    -f {{ kubesphere_dir }}/dmp/mongodb/custom-values-mongodb-operator.yaml
+    --namespace dmp-system
+    --create-namespace
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: DMP | Installing eck operator
+  shell: >
+    {{ bin_dir }}/helm upgrade --install eck-operator
+    {{ kubesphere_dir }}/dmp/eck/eck-operator
+    -f {{ kubesphere_dir }}/dmp/eck/custom-values-eck-operator.yaml
+    --namespace dmp-system
+    --create-namespace
+  register: result
+  until: result is succeeded
+  retries: 3
+
 - name: DMP | Creating applications
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/dmp/{{ item.path }}/{{ item.file }}
   loop:
-    - {path: "clickhouse", file: "clickhouse_app.yaml"}
-    - {path: "clickhouse", file: "clickhouse_app_version.yaml"}
-    - {path: "mysql", file: "mysql_app.yaml"}
-    - {path: "mysql", file: "mysql_app_version.yaml"}
-    - {path: "pg", file: "pg_app.yaml"}
-    - {path: "pg", file: "pg_app_version.yaml"}
+    - { path: "clickhouse", file: "clickhouse_app.yaml" }
+    - { path: "clickhouse", file: "clickhouse_app_version.yaml" }
+    - { path: "mysql", file: "mysql_app.yaml" }
+    - { path: "mysql", file: "mysql_app_version.yaml" }
+    - { path: "pg", file: "pg_app.yaml" }
+    - { path: "pg", file: "pg_app_version.yaml" }
+    - { path: "redis", file: "redis_cluster_app.yaml" }
+    - { path: "redis", file: "redis_cluster_app_version.yaml" }
+    - { path: "redis", file: "redis_sentinel_app.yaml" }
+    - { path: "redis", file: "redis_sentinel_app_version.yaml" }
+    - { path: "mongodb", file: "mongodb_app.yaml" }
+    - { path: "mongodb", file: "mongodb_app_version.yaml" }
+    - { path: "eck", file: "eck_app.yaml" }
+    - { path: "eck", file: "eck_app_version.yaml" }
   register: result
   until: result is succeeded
   retries: 3
@@ -78,10 +140,27 @@
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
-    -p '{"status": {"dmp": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -p '{"status": {"dmp": {"status": "enabled", "version": "DMP-v1.1", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
     -n kubesphere-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded
   retries: 5
   delay: 3
+
+
+- name: DMP | Installing nginx proxy
+  shell: >
+    {{ bin_dir }}/helm  upgrade --install  nginx-oss-proxy  {{ kubesphere_dir }}/dmp/nginxproxy    --namespace dmp-system;
+  register: result
+  until: result is succeeded
+  retries: 2
+  delay: 3
+
+
+- name: DMP | Delete create minio DMP buckets job
+  shell: >
+    kubectl -n kubesphere-system delete job minio-make-bucket-job;
+  register: minio_buckets_delete_status
+  until: minio_buckets_delete_status is succeeded
+  retries: 3

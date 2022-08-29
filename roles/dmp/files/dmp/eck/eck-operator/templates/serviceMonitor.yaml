@@ -1,0 +1,19 @@
+{{ if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" -}}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "eck-operator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "eck-operator.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - port: http
+    path: /metrics
+  namespaceSelector:
+    any: true
+  selector:
+    matchExpressions:
+      - {key: elasticsearch.k8s.elastic.co/exporter_deployment-name, operator: Exists}
+{{ end }}

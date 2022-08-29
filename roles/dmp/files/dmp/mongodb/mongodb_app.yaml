@@ -1,0 +1,29 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplication
+metadata:
+  annotations:
+    kubesphere.io/creator: RadonDB
+  name: mongodb
+  labels:
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  # app name
+  name: "RadonDB MongoDB"
+  # app description
+  description_zh: "一款基于 MongoDB 提供的企业级文档数据库。"
+  description: "WIP"
+  # app description
+  abstraction_zh: |
+    - RadonDB MongoDB 是一款基于 MongoDB 副本集技术构建的分布式文档数据库，支持在 Kubernetes 对 MongoDB 进行应用部署及全生命周期管理等
+  abstraction: |
+    - WIP
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/mongo_create.jpg,/assets/screenshots/mongo_detail.jpg,/assets/screenshots/mongo_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mongo_create_zh.jpg,/assets/screenshots/mongo_detail_zh.jpg,/assets/screenshots/mongo_monitor_zh.jpg
+  icon: "/assets/radondb_logo.svg"
+  owner: "RadonDB"
+status:
+  latestVersion: "1.0.0"
+  state: active

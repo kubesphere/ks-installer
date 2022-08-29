@@ -1,0 +1,31 @@
+---
+redisOperator:
+  name: redis-operator
+  imageName: radondb/redis-operator
+  imageTag: v1.0.0
+  imagePullPolicy: Always
+  imagePrefix: docker.io
+
+  # Additional pod annotations
+  podAnnotations: {}
+  # Additional Pod labels (e.g. for filtering Pod by custom labels)
+  podLabels:
+    app.kubernetes.io/name: redis-operator
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 500Mi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+
+replicas: 1
+
+serviceAccountName: redis-operator
+
+priorityClassName: ""
+nodeSelector: {}
+tolerateAllTaints: false
+tolerations: []
+affinity: {}

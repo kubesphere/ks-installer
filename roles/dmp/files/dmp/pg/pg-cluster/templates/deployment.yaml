@@ -41,13 +41,6 @@ spec:
               port: 8081
             initialDelaySeconds: 5
             periodSeconds: 10
-          resources:
-            limits:
-              cpu: 100m
-              memory: 30Mi
-            requests:
-              cpu: 100m
-              memory: 20Mi
         - name: kube-rbac-proxy
           image: "{{ .Values.rbacProxy.image }}:{{ .Values.rbacProxy.tag }}"
           args:

@@ -1,0 +1,30 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplicationVersion
+metadata:
+  name: mongodb
+  labels:
+    application.kubesphere.io/app-id: app-mongodb
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  maintainers:
+    - email: radondb@yunify.com
+      name: RadonDB
+  name: "RadonDB MongoDB"
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/mongo_create.jpg,/assets/screenshots/mongo_detail.jpg,/assets/screenshots/mongo_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mongo_create_zh.jpg,/assets/screenshots/mongo_detail_zh.jpg,/assets/screenshots/mongo_monitor_zh.jpg
+  changeLog: |
+    - WIP
+  changeLog_zh: |
+    - 基于 MongoDB Operator v0.7.4版本构建，支持 MongoDB 4.2.19版本
+    - 支持 MongoDB 副本集模式部署
+    - 支持 MongoDB 故障转移和恢复
+    - 使用 TLS 保护客户端到服务器和服务器到服务器的连接
+    - 支持对接prometheus，提供基于 Exporter 的资源状态监控功能
+  operatorVersion: "1.0.0"
+  appVersion: "4.2.19"
+  owner: "RadonDB"
+status:
+  state: active

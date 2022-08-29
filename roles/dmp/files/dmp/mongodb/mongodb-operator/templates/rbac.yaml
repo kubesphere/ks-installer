@@ -1,0 +1,84 @@
+{{- if and .Values.serviceAccount.create .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ if eq (.Values.operator.watchNamespace | default "") "*" }} ClusterRole {{ else }} Role {{ end }}
+metadata:
+  name: {{ include "mongodb-operator.serviceAccountName" . }}
+  labels:
+    {{- include "mongodb-operator.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - services
+      - configmaps
+      - secrets
+      - serviceaccounts
+      - persistentvolumeclaims
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - mongodbcommunity.mongodb.com
+    resources:
+      - mongodbcommunity
+      - mongodbcommunity/status
+      - mongodbcommunity/spec
+      - mongodbcommunity/finalizers
+    verbs:
+      - get
+      - patch
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+      - rolebindings
+    verbs:
+      - get
+      - list
+      - create
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ if eq (.Values.operator.watchNamespace | default "") "*" }} ClusterRoleBinding {{ else }} RoleBinding {{ end }}
+metadata:
+  name: {{ include "mongodb-operator.serviceAccountName" . }}
+  labels:
+    {{- include "mongodb-operator.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "mongodb-operator.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: {{ if eq (.Values.operator.watchNamespace | default "") "*" }} ClusterRole {{ else }} Role {{ end }}
+  name: {{ include "mongodb-operator.serviceAccountName" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

@@ -14,9 +14,14 @@ nameOverride: ""
 fullnameOverride: ""
 imagePrefix: {{ mysql_image_prefix }}
 
+## node.kubernetes.io/not-ready:NoExecute
+## node.kubernetes.io/unreachable:NoExecute
+## operator`s toleration time of the above two taints.
+tolerationSeconds: 30
+
 manager:
-  image: {{ mysql_operator_repo }}
-  tag: {{ mysql_operator_tag }}
+  image: {{ mysql_operator_image }}
+  tag: {{ mysql_operator_image_tag }}
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -41,8 +46,7 @@ rbac:
 
 rbacProxy:
   create: true
-  image: {{ mysql_rbac_proxy_repo }}
-  tag: {{ mysql_rbac_proxy_tag }}
+  image: {{ mysql_rbac_proxy_image }}
 
 leaderElection:
   create: true
@@ -64,3 +68,32 @@ serviceMonitor:
       app.kubernetes.io/managed-by: mysql.radondb.com
       app.kubernetes.io/name: mysql
 
+nfsBackup:
+  installServer: false
+  nfsServerImage: gcr.azk8s.cn/google_containers/volume-nfs:0.8
+
+  ## You can specify a pvc which you created by yourself or use local pv created by chart.
+  volume:
+    # specifiedPVC: ""
+
+    ## If true, chart will create:
+    ## 1. storage class named `radondb-nfs-local`.
+    ## 2. a pvc which size is `localPVCapacity`.
+    ## 3. a pv which source is `hostPath`.
+    createLocalPV: false
+    ## PV will be deleted when delete release using `helm delete`, use Retain can hold data in the host.
+    reclaimPolicy: Retain
+    localPVCapacity: 50G
+    hostName: ""
+    hostPath: "/mnt/radondb-nfs-backup"
+
+webhook:
+  certManager:
+    # If true, make sure that cert-manager has been installed.
+    enabled: false
+  # If empty and disable certManager, Helm will auto-generate these fields.
+  caBundlePEM: |
+
+  crtPEM: |
+
+  keyPEM: |

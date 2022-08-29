@@ -21,13 +21,23 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+      volumes:
+      {{- if .Values.manager.enableWebhooks }}
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: "{{ template "webhook.name" . }}-certs"
+      {{- end }}
+      - name: timezone
+        hostPath:
+          path: /etc/localtime
       containers:
       {{- if .Values.rbacProxy.create }}
       - name: kube-rbac-proxy
       {{- if not .Values.imagePrefix }}
-        image: "{{ .Values.rbacProxy.image }}:{{ .Values.rbacProxy.tag }}"
+        image: "{{ .Values.rbacProxy.image }}"
       {{- else }}
-        image: "{{ .Values.imagePrefix }}/{{ .Values.rbacProxy.image }}:{{ .Values.rbacProxy.tag }}"
+        image: "{{ .Values.imagePrefix }}/{{ .Values.rbacProxy.image }}"
       {{- end }}
         args:
         - "--secure-listen-address=0.0.0.0:8443"
@@ -37,8 +47,23 @@ spec:
         ports:
         - containerPort: 8443
           name: https
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
       {{- end }}
       - name: manager
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        volumeMounts:
+        {{- if .Values.manager.enableWebhooks }}
+        - name: cert
+          mountPath: /tmp/k8s-webhook-server/serving-certs/
+          readOnly: true
+        {{- end }}
+        - name: timezone
+          mountPath: /etc/localtime
         command:
         - /manager
         args:
@@ -54,6 +79,8 @@ spec:
         env:
         - name: IMAGE_PREFIX
           value: {{ .Values.imagePrefix }}
+        - name: ENABLE_WEBHOOKS
+          value: {{ .Values.manager.enableWebhooks | quote }}
         securityContext:
           allowPrivilegeEscalation: false
         livenessProbe:
@@ -72,3 +99,22 @@ spec:
 {{ toYaml .Values.manager.resources | indent 10 }}
       serviceAccountName: {{ template "serviceAccountName" . }}
       terminationGracePeriodSeconds: 10
+      tolerations:
+      - key: node.kubernetes.io/not-ready
+        operator: Exists
+        effect: NoExecute
+        tolerationSeconds: {{ .Values.tolerationSeconds }}
+      - key: node.kubernetes.io/unreachable
+        operator: Exists
+        effect: NoExecute
+        tolerationSeconds: {{ .Values.tolerationSeconds }}
+      affinity: 
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ template "mysql-operator.name" . }} 
+            topologyKey: "kubernetes.io/hostname"

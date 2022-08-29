@@ -1,0 +1,33 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplicationVersion
+metadata:
+  name: eck
+  labels:
+    application.kubesphere.io/app-id: app-eck
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  maintainers:
+    - email: radondb@yunify.com
+      name: RadonDB
+  name: "RadonDB ECK"
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/eck_create.jpg,/assets/screenshots/eck_detail.jpg,/assets/screenshots/eck_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/eck_create_zh.jpg,/assets/screenshots/eck_detail_zh.jpg,/assets/screenshots/eck_monitor_zh.jpg
+  changeLog: |
+    - WIP
+  changeLog_zh: |
+    - 基于 ECK Operator 2.2.0版本构建（支持版本 Easticsearch/Kibana 7.10+ 8.0+）
+    - 支持Elasticsearch、Kibana 等节点的部署和管理
+    - 管理和监控多个集群
+    - 通过滚动升级执行安全的配置更改
+    - 支持对接prometheus，提供基于 Exporter 的资源状态监控功能
+    - 使用 TLS 证书保护集群
+    - 扩展集群容量和存储
+    - 设置具有可用性区域感知的热-温-冷体系结构
+  operatorVersion: "2.2.0"
+  appVersion: "7.17.5|8.2.3"
+  owner: "RadonDB"
+status:
+  state: active

@@ -16,7 +16,20 @@ spec:
     singular: backup
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - description: The Backup name
+      jsonPath: .status.backupName
+      name: BackupName
+      type: string
+    - description: The Backup Date time
+      jsonPath: .status.backupDate
+      name: BackupDate
+      type: string
+    - description: The Backup Type
+      jsonPath: .status.backupType
+      name: Type
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: Backup is the Schema for the backups API
@@ -34,9 +47,10 @@ spec:
           metadata:
             type: object
           spec:
-            description: BackupSpec defines the desired state of Backup
+            description: This is the backup Job CRD. BackupSpec defines the desired
+              state of Backup
             properties:
-              clustname:
+              clusterName:
                 description: ClusterName represents the cluster name to backup
                 type: string
               historyLimit:
@@ -44,20 +58,32 @@ spec:
                 description: History Limit of job
                 format: int32
                 type: integer
-              hostname:
+              hostName:
                 description: HostName represents the host for which to take backup
+                  If is empty, is use leader HostName
                 type: string
               image:
-                default: radondb/mysql-sidecar:v2.1.2
+                default: radondb/mysql57-sidecar:v2.2.0
                 description: To specify the image that will be used for sidecar container.
                 type: string
+              nfsServerAddress:
+                description: Represents the ip address of the nfs server.
+                type: string
             required:
-            - clustname
-            - hostname
+            - clusterName
             type: object
           status:
             description: BackupStatus defines the observed state of Backup
             properties:
+              backupDate:
+                description: Get the backup Date
+                type: string
+              backupName:
+                description: Get the backup path.
+                type: string
+              backupType:
+                description: Get the backup Type
+                type: string
               completed:
                 description: Completed indicates whether the backup is in a final
                   state, no matter whether its' corresponding job failed or succeeded

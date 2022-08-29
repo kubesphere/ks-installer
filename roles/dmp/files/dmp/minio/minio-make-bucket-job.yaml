@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  labels:
+    app: minio-make-bucket-job
+    chart: minio-2.5.16
+    heritage: Helm
+    release: ks-minio
+  name: minio-make-bucket-job
+  namespace: kubesphere-system
+spec:
+  backoffLimit: 100
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: minio-job
+        job-name: minio-make-bucket-job
+        release: ks-minio
+    spec:
+      containers:
+      - command:
+        - /bin/sh
+        - /config/initialize
+        env:
+        - name: MINIO_ENDPOINT
+          value: minio
+        - name: MINIO_PORT
+          value: "9000"
+        image: minio/mc:RELEASE.2019-08-07T23-14-43Z
+        imagePullPolicy: IfNotPresent
+        name: minio-mc
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /config
+          name: minio-configuration
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: minio-configuration
+        projected:
+          defaultMode: 420
+          sources:
+          - configMap:
+              name: minio
+          - secret:
+              name: minio
+

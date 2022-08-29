@@ -486,9 +486,14 @@ rules:
       - workspacerolebindings
       - groups
       - groupbindings
+      - replicaschedulingpreferences
+      # dmp start
       - manifests
       - mysqlusers
-      - replicaschedulingpreferences
+      - backups
+      - postgresqlclusters
+      - kibanas
+      # dmp end
     verbs:
       - '*'
   - apiGroups:
@@ -2463,12 +2468,27 @@ role:
         - get
         - list
         - watch
+    # dmp start
     - apiGroups:
         - mysql.radondb.com
       resources:
         - mysqlusers
+        - backups
       verbs:
         - '*'
+    - apiGroups:
+        - pgcluster.kubesphere.io
+      resources:
+        - postgresqlclusters
+      verbs:
+        - '*'
+    - apiGroups:
+        - kibana.k8s.elastic.co
+      resources:
+        - kibanas
+      verbs:
+        - '*'
+    # dmp end
     - apiGroups:
         - ""
         - apps
@@ -2495,8 +2515,6 @@ role:
         - monitoring.coreos.com
         - networking.k8s.io
         - networking.k8s.io
-        - manifests
-        - mysqlusers
       resources:
         - '*'
       verbs:
@@ -2968,8 +2986,13 @@ role:
         - s2ibuildertemplates
         - s2iruns
         - horizontalpodautoscalers
+        # dmp start
         - manifests
         - mysqlusers
+        - backups
+        - postgresqlclusters
+        - kibanas
+        # dmp end
       verbs:
         - get
         - list
@@ -3023,8 +3046,13 @@ role:
         - s2ibuildertemplates
         - s2iruns
         - horizontalpodautoscalers
+        # dmp start
         - manifests
         - mysqlusers
+        - backups
+        - postgresqlclusters
+        - kibanas
+        # dmp end
       verbs:
         - '*'
     - apiGroups:

@@ -1,0 +1,40 @@
+{{ if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "mongodb-operator.fullname" . }}
+  labels:
+    {{- include "mongodb-operator.labels" . | nindent 4 }}
+spec:
+  # Service labels to match
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mongodb
+      app.kubernetes.io/component: database
+
+  endpoints:
+    # Configuring a Prometheus Endpoint with basic Auth.
+    # `prom-secret` is a Secret containing a `username` and `password` entries.
+    - basicAuth:
+        password:
+          key: password
+          name: {{ include "mongodb-operator.fullname" . }}-metrics-password
+        username:
+          key: username
+          name: {{ include "mongodb-operator.fullname" . }}-metrics-password
+
+      # This port matches what we created in our MongoDB Service.
+      port: prometheus
+
+      # If using HTTPS enabled endpoint, change scheme to https
+      scheme: http
+
+      # Configure different TLS related settings. For more information, see:
+      # https://github.com/prometheus-operator/prometheus-operator/blob/main/pkg/apis/monitoring/v1/types.go#L909
+      # tlsConfig:
+      #    insecureSkipVerify: true
+
+  # What namespace to watch
+  namespaceSelector:
+    any: true
+{{ end }}
