@@ -357,14 +357,23 @@ rules: []
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-basic
-rules: []
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-basic
+    rules: []
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -529,576 +538,675 @@ rules:
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Clusters Management
-    iam.kubesphere.io/role-template-rules: '{"clusters": "view"}'
-    kubesphere.io/alias-name: Clusters View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-clusters
-rules:
-  - apiGroups:
-      - ""
-      - apiextensions.k8s.io
-      - app.k8s.io
-      - apps
-      - autoscaling
-      - batch
-      - config.istio.io
-      - devops.kubesphere.io
-      - devops.kubesphere.io
-      - events.k8s.io
-      - events.kubesphere.io
-      - extensions
-      - istio.kubesphere.io
-      - jaegertracing.io
-      - logging.kubesphere.io
-      - metrics.k8s.io
-      - monitoring.coreos.com
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
-      - network.kubesphere.io
-      - networking.istio.io
-      - networking.k8s.io
-      - node.k8s.io
-      - rbac.istio.io
-      - scheduling.k8s.io
-      - security.istio.io
-      - servicemesh.kubesphere.io
-      - snapshot.storage.k8s.io
-      - storage.k8s.io
-      - storage.k8s.io
-      - storage.kubesphere.io
-      - resources.kubesphere.io
-      - notification.kubesphere.io
-      - alerting.kubesphere.io
-      - cluster.kubesphere.io
-      - types.kubefed.io
-      - gateway.kubesphere.io
-    resources:
-      - '*'
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - tenant.kubesphere.io
-    resources:
-      - workspaces
-      - workspacetemplates
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - iam.kubesphere.io
-    resources:
-      - clustermembers
-      - clusterroles
-    verbs:
-      - get
-      - list
-      - watch
-  - nonResourceURLs:
-      - '*'
-    verbs:
-      - 'GET'
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Clusters Management
+        iam.kubesphere.io/role-template-rules: '{"clusters": "view"}'
+        kubesphere.io/alias-name: Clusters View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-clusters
+    rules:
+      - apiGroups:
+          - ""
+          - apiextensions.k8s.io
+          - app.k8s.io
+          - apps
+          - autoscaling
+          - batch
+          - config.istio.io
+          - devops.kubesphere.io
+          - devops.kubesphere.io
+          - events.k8s.io
+          - events.kubesphere.io
+          - extensions
+          - istio.kubesphere.io
+          - jaegertracing.io
+          - logging.kubesphere.io
+          - metrics.k8s.io
+          - monitoring.coreos.com
+          - monitoring.kubesphere.io
+          - metering.kubesphere.io
+          - network.kubesphere.io
+          - networking.istio.io
+          - networking.k8s.io
+          - node.k8s.io
+          - rbac.istio.io
+          - scheduling.k8s.io
+          - security.istio.io
+          - servicemesh.kubesphere.io
+          - snapshot.storage.k8s.io
+          - storage.k8s.io
+          - storage.k8s.io
+          - storage.kubesphere.io
+          - resources.kubesphere.io
+          - notification.kubesphere.io
+          - alerting.kubesphere.io
+          - cluster.kubesphere.io
+          - types.kubefed.io
+          - gateway.kubesphere.io
+        resources:
+          - '*'
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - tenant.kubesphere.io
+        resources:
+          - workspaces
+          - workspacetemplates
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - iam.kubesphere.io
+        resources:
+          - clustermembers
+          - clusterroles
+        verbs:
+          - get
+          - list
+          - watch
+      - nonResourceURLs:
+          - '*'
+        verbs:
+          - 'GET'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-clusters"]'
-    iam.kubesphere.io/module: Clusters Management
-    iam.kubesphere.io/role-template-rules: '{"clusters": "manage"}'
-    kubesphere.io/alias-name: Clusters Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-clusters
-rules:
-  - apiGroups:
-      - ""
-      - apiextensions.k8s.io
-      - app.k8s.io
-      - apps
-      - autoscaling
-      - batch
-      - config.istio.io
-      - devops.kubesphere.io
-      - devops.kubesphere.io
-      - events.k8s.io
-      - events.kubesphere.io
-      - extensions
-      - istio.kubesphere.io
-      - jaegertracing.io
-      - logging.kubesphere.io
-      - metrics.k8s.io
-      - monitoring.coreos.com
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
-      - network.kubesphere.io
-      - networking.istio.io
-      - networking.k8s.io
-      - node.k8s.io
-      - rbac.istio.io
-      - scheduling.k8s.io
-      - security.istio.io
-      - servicemesh.kubesphere.io
-      - snapshot.storage.k8s.io
-      - storage.k8s.io
-      - storage.k8s.io
-      - storage.kubesphere.io
-      - resources.kubesphere.io
-      - notification.kubesphere.io
-      - alerting.kubesphere.io
-      - cluster.kubesphere.io
-      - types.kubefed.io
-      - gitops.kubesphere.io
-      - gateway.kubesphere.io
-    resources:
-      - '*'
-    verbs:
-      - '*'
-  - apiGroups:
-      - tenant.kubesphere.io
-    resources:
-      - workspaces
-      - workspacetemplates
-    verbs:
-      - update
-      - patch
-  - apiGroups:
-      - iam.kubesphere.io
-    resources:
-      - clustermembers
-      - clusterroles
-    verbs:
-      - '*'
-  - nonResourceURLs:
-      - '*'
-    verbs:
-      - 'GET'
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-clusters"]'
+        iam.kubesphere.io/module: Clusters Management
+        iam.kubesphere.io/role-template-rules: '{"clusters": "manage"}'
+        kubesphere.io/alias-name: Clusters Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-clusters
+    rules:
+      - apiGroups:
+          - ""
+          - apiextensions.k8s.io
+          - app.k8s.io
+          - apps
+          - autoscaling
+          - batch
+          - config.istio.io
+          - devops.kubesphere.io
+          - devops.kubesphere.io
+          - events.k8s.io
+          - events.kubesphere.io
+          - extensions
+          - istio.kubesphere.io
+          - jaegertracing.io
+          - logging.kubesphere.io
+          - metrics.k8s.io
+          - monitoring.coreos.com
+          - monitoring.kubesphere.io
+          - metering.kubesphere.io
+          - network.kubesphere.io
+          - networking.istio.io
+          - networking.k8s.io
+          - node.k8s.io
+          - rbac.istio.io
+          - scheduling.k8s.io
+          - security.istio.io
+          - servicemesh.kubesphere.io
+          - snapshot.storage.k8s.io
+          - storage.k8s.io
+          - storage.k8s.io
+          - storage.kubesphere.io
+          - resources.kubesphere.io
+          - notification.kubesphere.io
+          - alerting.kubesphere.io
+          - cluster.kubesphere.io
+          - types.kubefed.io
+          - gitops.kubesphere.io
+          - gateway.kubesphere.io
+        resources:
+          - '*'
+        verbs:
+          - '*'
+      - apiGroups:
+          - tenant.kubesphere.io
+        resources:
+          - workspaces
+          - workspacetemplates
+        verbs:
+          - update
+          - patch
+      - apiGroups:
+          - iam.kubesphere.io
+        resources:
+          - clustermembers
+          - clusterroles
+        verbs:
+          - '*'
+      - nonResourceURLs:
+          - '*'
+        verbs:
+          - 'GET'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"workspaces": "view"}'
-    kubesphere.io/alias-name: Workspaces View
-  labels:
-    iam.kubesphere.io/role-template: "true"
-    kubefed.io/managed: "true"
   name: role-template-view-workspaces
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - abnormalworkloads
-      - quotas
-      - workloads
-      - volumesnapshots
-      - dashboards
-      - configmaps
-      - endpoints
-      - events
-      - limitranges
-      - namespaces
-      - persistentvolumeclaims
-      - pods
-      - podtemplates
-      - replicationcontrollers
-      - resourcequotas
-      - secrets
-      - serviceaccounts
-      - services
-      - applications
-      - controllerrevisions
-      - deployments
-      - replicasets
-      - statefulsets
-      - daemonsets
-      - meshpolicies
-      - cronjobs
-      - jobs
-      - devopsprojects
-      - devops
-      - pipelines
-      - pipelines/runs
-      - pipelines/pipelineruns
-      - pipelines/branches
-      - pipelines/checkScriptCompile
-      - pipelines/consolelog
-      - pipelines/scan
-      - pipelines/sonarstatus
-      - pipelineruns
-      - pipelineruns/nodedetails
-      - checkCron
-      - credentials
-      - credentials/usage
-      - s2ibinaries
-      - s2ibinaries/file
-      - s2ibuilders
-      - s2ibuildertemplates
-      - s2iruns
-      - horizontalpodautoscalers
-      - events
-      - ingresses
-      - router
-      - filters
-      - pods
-      - pods/log
-      - pods/containers
-      - namespacenetworkpolicies
-      - workspacenetworkpolicies
-      - networkpolicies
-      - podsecuritypolicies
-      - rolebindings
-      - roles
-      - members
-      - servicepolicies
-      - federatedconfigmaps
-      - federateddeployments
-      - federatedingresses
-      - federatedjobs
-      - federatedlimitranges
-      - federatednamespaces
-      - federatedpersistentvolumeclaims
-      - federatedreplicasets
-      - federatedsecrets
-      - federatedserviceaccounts
-      - federatedservices
-      - federatedservicestatuses
-      - federatedstatefulsets
-      - federatedworkspaces
-      - workspaces
-      - workspacetemplates
-      - workspaceroles
-      - workspacemembers
-      - workspacemembers/namespaces
-      - workspacemembers/devops
-      - workspacerolebindings
-      - repos
-      - repos/action
-      - repos/events
-      - apps
-      - apps/versions
-      - categories
-      - apps/audits
-      - clusters/applications
-      - workloads
-      - groups
-      - groupbindings
-      - applications/sync
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - monitoring.kubesphere.io
-      - monitoring.coreos.com
-      - metering.kubesphere.io
-      - servicemesh.kubesphere.io
-      - alerting.kubesphere.io
-      - network.kubesphere.io
-      - resources.kubesphere.io
-    resources:
-      - '*'
-    verbs:
-      - list
-      - get
-      - watch
-  - apiGroups:
-      - '*'
-    resources:
-      - clusters
-      - cluster
-    verbs:
-      - list
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"workspaces": "view"}'
+        kubesphere.io/alias-name: Workspaces View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+        kubefed.io/managed: "true"
+      name: role-template-view-workspaces
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - abnormalworkloads
+          - quotas
+          - workloads
+          - volumesnapshots
+          - dashboards
+          - configmaps
+          - endpoints
+          - events
+          - limitranges
+          - namespaces
+          - persistentvolumeclaims
+          - pods
+          - podtemplates
+          - replicationcontrollers
+          - resourcequotas
+          - secrets
+          - serviceaccounts
+          - services
+          - applications
+          - controllerrevisions
+          - deployments
+          - replicasets
+          - statefulsets
+          - daemonsets
+          - meshpolicies
+          - cronjobs
+          - jobs
+          - devopsprojects
+          - devops
+          - pipelines
+          - pipelines/runs
+          - pipelines/pipelineruns
+          - pipelines/branches
+          - pipelines/checkScriptCompile
+          - pipelines/consolelog
+          - pipelines/scan
+          - pipelines/sonarstatus
+          - pipelineruns
+          - pipelineruns/nodedetails
+          - checkCron
+          - credentials
+          - credentials/usage
+          - s2ibinaries
+          - s2ibinaries/file
+          - s2ibuilders
+          - s2ibuildertemplates
+          - s2iruns
+          - horizontalpodautoscalers
+          - events
+          - ingresses
+          - router
+          - filters
+          - pods
+          - pods/log
+          - pods/containers
+          - namespacenetworkpolicies
+          - workspacenetworkpolicies
+          - networkpolicies
+          - podsecuritypolicies
+          - rolebindings
+          - roles
+          - members
+          - servicepolicies
+          - federatedconfigmaps
+          - federateddeployments
+          - federatedingresses
+          - federatedjobs
+          - federatedlimitranges
+          - federatednamespaces
+          - federatedpersistentvolumeclaims
+          - federatedreplicasets
+          - federatedsecrets
+          - federatedserviceaccounts
+          - federatedservices
+          - federatedservicestatuses
+          - federatedstatefulsets
+          - federatedworkspaces
+          - workspaces
+          - workspacetemplates
+          - workspaceroles
+          - workspacemembers
+          - workspacemembers/namespaces
+          - workspacemembers/devops
+          - workspacerolebindings
+          - repos
+          - repos/action
+          - repos/events
+          - apps
+          - apps/versions
+          - categories
+          - apps/audits
+          - clusters/applications
+          - workloads
+          - groups
+          - groupbindings
+          - applications/sync
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - monitoring.kubesphere.io
+          - monitoring.coreos.com
+          - metering.kubesphere.io
+          - servicemesh.kubesphere.io
+          - alerting.kubesphere.io
+          - network.kubesphere.io
+          - resources.kubesphere.io
+        resources:
+          - '*'
+        verbs:
+          - list
+          - get
+          - watch
+      - apiGroups:
+          - '*'
+        resources:
+          - clusters
+          - cluster
+        verbs:
+          - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-workspaces"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"workspaces": "manage"}'
-    kubesphere.io/alias-name: Workspaces Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-workspaces
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - abnormalworkloads
-      - quotas
-      - workloads
-      - volumesnapshots
-      - dashboards
-      - configmaps
-      - endpoints
-      - events
-      - limitranges
-      - namespaces
-      - persistentvolumeclaims
-      - podtemplates
-      - replicationcontrollers
-      - resourcequotas
-      - secrets
-      - serviceaccounts
-      - services
-      - applications
-      - controllerrevisions
-      - deployments
-      - replicasets
-      - statefulsets
-      - daemonsets
-      - meshpolicies
-      - cronjobs
-      - jobs
-      - devopsprojects
-      - devops
-      - pipelines
-      - pipelines/runs
-      - pipelines/pipelineruns
-      - pipelines/branches
-      - pipelines/checkScriptCompile
-      - pipelines/consolelog
-      - pipelines/scan
-      - pipelines/sonarstatus
-      - pipelineruns
-      - pipelineruns/nodedetails
-      - checkCron
-      - credentials
-      - credentials/usage
-      - s2ibinaries
-      - s2ibinaries/file
-      - s2ibuilders
-      - s2ibuildertemplates
-      - s2iruns
-      - horizontalpodautoscalers
-      - events
-      - ingresses
-      - router
-      - filters
-      - pods
-      - pods/log
-      - pods/exec
-      - pods/containers
-      - namespacenetworkpolicies
-      - workspacenetworkpolicies
-      - networkpolicies
-      - podsecuritypolicies
-      - rolebindings
-      - roles
-      - members
-      - servicepolicies
-      - federatedapplications
-      - federatedconfigmaps
-      - federateddeployments
-      - federatedingresses
-      - federatedjobs
-      - federatedlimitranges
-      - federatednamespaces
-      - federatedpersistentvolumeclaims
-      - federatedreplicasets
-      - federatedsecrets
-      - federatedserviceaccounts
-      - federatedservices
-      - federatedservicestatuses
-      - federatedstatefulsets
-      - federatedworkspaces
-      - workspaces
-      - workspacetemplates
-      - workspaceroles
-      - workspacemembers
-      - workspacemembers/namespaces
-      - workspacemembers/devops
-      - workspacerolebindings
-      - repos
-      - repos/action
-      - repos/events
-      - apps
-      - apps/versions
-      - categories
-      - apps/audits
-      - workloads
-    verbs:
-      - '*'
-  - apiGroups:
-      - '*'
-    resources:
-      - clusters
-    verbs:
-      - list
-  - apiGroups:
-      - monitoring.kubesphere.io
-      - monitoring.coreos.com
-      - metering.kubesphere.io
-      - servicemesh.kubesphere.io
-      - alerting.kubesphere.io
-      - network.kubesphere.io
-      - resources.kubesphere.io
-    resources:
-      - '*'
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-workspaces"]'
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"workspaces": "manage"}'
+        kubesphere.io/alias-name: Workspaces Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-workspaces
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - abnormalworkloads
+          - quotas
+          - workloads
+          - volumesnapshots
+          - dashboards
+          - configmaps
+          - endpoints
+          - events
+          - limitranges
+          - namespaces
+          - persistentvolumeclaims
+          - podtemplates
+          - replicationcontrollers
+          - resourcequotas
+          - secrets
+          - serviceaccounts
+          - services
+          - applications
+          - controllerrevisions
+          - deployments
+          - replicasets
+          - statefulsets
+          - daemonsets
+          - meshpolicies
+          - cronjobs
+          - jobs
+          - devopsprojects
+          - devops
+          - pipelines
+          - pipelines/runs
+          - pipelines/pipelineruns
+          - pipelines/branches
+          - pipelines/checkScriptCompile
+          - pipelines/consolelog
+          - pipelines/scan
+          - pipelines/sonarstatus
+          - pipelineruns
+          - pipelineruns/nodedetails
+          - checkCron
+          - credentials
+          - credentials/usage
+          - s2ibinaries
+          - s2ibinaries/file
+          - s2ibuilders
+          - s2ibuildertemplates
+          - s2iruns
+          - horizontalpodautoscalers
+          - events
+          - ingresses
+          - router
+          - filters
+          - pods
+          - pods/log
+          - pods/exec
+          - pods/containers
+          - namespacenetworkpolicies
+          - workspacenetworkpolicies
+          - networkpolicies
+          - podsecuritypolicies
+          - rolebindings
+          - roles
+          - members
+          - servicepolicies
+          - federatedapplications
+          - federatedconfigmaps
+          - federateddeployments
+          - federatedingresses
+          - federatedjobs
+          - federatedlimitranges
+          - federatednamespaces
+          - federatedpersistentvolumeclaims
+          - federatedreplicasets
+          - federatedsecrets
+          - federatedserviceaccounts
+          - federatedservices
+          - federatedservicestatuses
+          - federatedstatefulsets
+          - federatedworkspaces
+          - workspaces
+          - workspacetemplates
+          - workspaceroles
+          - workspacemembers
+          - workspacemembers/namespaces
+          - workspacemembers/devops
+          - workspacerolebindings
+          - repos
+          - repos/action
+          - repos/events
+          - apps
+          - apps/versions
+          - categories
+          - apps/audits
+          - workloads
+        verbs:
+          - '*'
+      - apiGroups:
+          - '*'
+        resources:
+          - clusters
+        verbs:
+          - list
+      - apiGroups:
+          - monitoring.kubesphere.io
+          - monitoring.coreos.com
+          - metering.kubesphere.io
+          - servicemesh.kubesphere.io
+          - alerting.kubesphere.io
+          - network.kubesphere.io
+          - resources.kubesphere.io
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"users": "view"}'
-    kubesphere.io/alias-name: Users View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-users
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - users
-      - users/loginrecords
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"users": "view"}'
+        kubesphere.io/alias-name: Users View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-users
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - users
+          - users/loginrecords
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
-    kubesphere.io/alias-name: Users Management
-  labels:
-    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-users
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - users
-      - users/password
-      - users/loginrecords
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
+        kubesphere.io/alias-name: Users Management
+      labels:
+        iam.kubesphere.io/role-template: "false"
+      name: role-template-manage-users
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - users
+          - users/password
+          - users/loginrecords
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
-    kubesphere.io/alias-name: Roles View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-roles
-rules:
-  - apiGroups:
-      - iam.kubesphere.io
-    resources:
-      - globalroles
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-users"]'
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+        kubesphere.io/alias-name: Roles View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-roles
+    rules:
+      - apiGroups:
+          - iam.kubesphere.io
+        resources:
+          - globalroles
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-    kubesphere.io/alias-name: Roles Management
-  labels:
-    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-roles
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - globalroles
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+        kubesphere.io/alias-name: Roles Management
+      labels:
+        iam.kubesphere.io/role-template: "false"
+      name: role-template-manage-roles
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - globalroles
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
-    kubesphere.io/alias-name: App Templates View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-app-templates
-rules:
-  - apiGroups:
-      - openpitrix.io
-    resources:
-      - apps
-      - apps/versions
-      - categories
-    verbs:
-      - get
-      - list
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Apps Management
+        iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
+        kubesphere.io/alias-name: App Templates View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-app-templates
+    rules:
+      - apiGroups:
+          - openpitrix.io
+        resources:
+          - apps
+          - apps/versions
+          - categories
+        verbs:
+          - get
+          - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
-    kubesphere.io/alias-name: App Templates Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-app-templates
-rules:
-  - apiGroups:
-      - openpitrix.io
-    resources:
-      - '*'
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
+        iam.kubesphere.io/module: Apps Management
+        iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
+        kubesphere.io/alias-name: App Templates Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-app-templates
+    rules:
+      - apiGroups:
+          - openpitrix.io
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Platform Settings
-    iam.kubesphere.io/role-template-rules: '{"platform-settings": "manage"}'
-    kubesphere.io/alias-name: Platform Settings Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-platform-settings
-rules:
-  - apiGroups:
-      - logging.kubesphere.io
-    resources:
-      - '*'
-    verbs:
-      - '*'
-  - apiGroups:
-      - notification.kubesphere.io
-    resources:
-      - '*'
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/global: ""
+spec:
+  templateScope: global
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: GlobalRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Platform Settings
+        iam.kubesphere.io/role-template-rules: '{"platform-settings": "manage"}'
+        kubesphere.io/alias-name: Platform Settings Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-platform-settings
+    rules:
+      - apiGroups:
+          - logging.kubesphere.io
+        resources:
+          - '*'
+        verbs:
+          - '*'
+      - apiGroups:
+          - notification.kubesphere.io
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -1188,1137 +1296,1642 @@ metadata:
 spec:
   manager: admin
   networkIsolation: false
----
-apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
-metadata:
-  annotations:
-    iam.kubesphere.io/module: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
-    kubesphere.io/alias-name: Projects View
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-view-projects
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - namespaces
-      - configmaps
-      - endpoints
-      - events
-      - limitranges
-      - persistentvolumeclaims
-      - podtemplates
-      - replicationcontrollers
-      - resourcequotas
-      - secrets
-      - serviceaccounts
-      - services
-      - applications
-      - controllerrevisions
-      - deployments
-      - replicasets
-      - statefulsets
-      - daemonsets
-      - meshpolicies
-      - cronjobs
-      - jobs
-      - s2ibinaries
-      - s2ibinaries/file
-      - s2ibuilders
-      - s2ibuildertemplates
-      - s2iruns
-      - events
-      - ingresses
-      - router
-      - pods
-      - pods/log
-      - pods/containers
-      - namespacenetworkpolicies
-      - networkpolicies
-      - podsecuritypolicies
-      - rolebindings
-      - roles
-      - members
-      - servicepolicies
-      - federatedapplications
-      - federatedconfigmaps
-      - federateddeployments
-      - federatedingresses
-      - federatedjobs
-      - federatedlimitranges
-      - federatednamespaces
-      - federatedpersistentvolumeclaims
-      - federatedreplicasets
-      - federatedsecrets
-      - federatedserviceaccounts
-      - federatedservices
-      - federatedservicestatuses
-      - federatedstatefulsets
-      - workspaces
-      - quotas
-      - abnormalworkloads
-      - workloads
-      - router
-      - dashboards
-      - strategies
-      - volumesnapshots
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - metering.kubesphere.io
-      - apps
-      - extensions
-      - batch
-      - logging.kubesphere.io
-      - monitoring.kubesphere.io
-      - monitoring.coreos.com
-      - autoscaling
-      - app.k8s.io
-      - servicemesh.kubesphere.io
-      - operations.kubesphere.io
-      - resources.kubesphere.io
-    resources:
-      - '*'
-    verbs:
-      - list
-      - get
-      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "create"}'
-    kubesphere.io/alias-name: Projects Create
+  name: role-template-view-projects
   labels:
-    iam.kubesphere.io/role-template: "true"
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Projects Management
+        iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
+        kubesphere.io/alias-name: Projects View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-projects
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - namespaces
+          - configmaps
+          - endpoints
+          - events
+          - limitranges
+          - persistentvolumeclaims
+          - podtemplates
+          - replicationcontrollers
+          - resourcequotas
+          - secrets
+          - serviceaccounts
+          - services
+          - applications
+          - controllerrevisions
+          - deployments
+          - replicasets
+          - statefulsets
+          - daemonsets
+          - meshpolicies
+          - cronjobs
+          - jobs
+          - s2ibinaries
+          - s2ibinaries/file
+          - s2ibuilders
+          - s2ibuildertemplates
+          - s2iruns
+          - events
+          - ingresses
+          - router
+          - pods
+          - pods/log
+          - pods/containers
+          - namespacenetworkpolicies
+          - networkpolicies
+          - podsecuritypolicies
+          - rolebindings
+          - roles
+          - members
+          - servicepolicies
+          - federatedapplications
+          - federatedconfigmaps
+          - federateddeployments
+          - federatedingresses
+          - federatedjobs
+          - federatedlimitranges
+          - federatednamespaces
+          - federatedpersistentvolumeclaims
+          - federatedreplicasets
+          - federatedsecrets
+          - federatedserviceaccounts
+          - federatedservices
+          - federatedservicestatuses
+          - federatedstatefulsets
+          - workspaces
+          - quotas
+          - abnormalworkloads
+          - workloads
+          - router
+          - dashboards
+          - strategies
+          - volumesnapshots
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - metering.kubesphere.io
+          - apps
+          - extensions
+          - batch
+          - logging.kubesphere.io
+          - monitoring.kubesphere.io
+          - monitoring.coreos.com
+          - autoscaling
+          - app.k8s.io
+          - servicemesh.kubesphere.io
+          - operations.kubesphere.io
+          - resources.kubesphere.io
+        resources:
+          - '*'
+        verbs:
+          - list
+          - get
+          - watch
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
+metadata:
   name: role-template-create-projects
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - workspaces
-      - workspacemembers
-      - quotas
-      - abnormalworkloads
-      - pods
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - '*'
-    resources:
-      - 'namespaces'
-      - 'federatednamespaces'
-    verbs:
-      - create
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Projects Management
+        iam.kubesphere.io/role-template-rules: '{"projects": "create"}'
+        kubesphere.io/alias-name: Projects Create
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-create-projects
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - workspaces
+          - workspacemembers
+          - quotas
+          - abnormalworkloads
+          - pods
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - '*'
+        resources:
+          - 'namespaces'
+          - 'federatednamespaces'
+        verbs:
+          - create
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-members","role-template-create-projects"]'
-    iam.kubesphere.io/module: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
-    kubesphere.io/alias-name: Projects Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-projects
-rules:
-  - apiGroups:
-      - apps
-      - extensions
-      - batch
-      - logging.kubesphere.io
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
-      - monitoring.coreos.com
-      - autoscaling
-      - app.k8s.io
-      - servicemesh.kubesphere.io
-      - operations.kubesphere.io
-      - resources.kubesphere.io
-    resources:
-      - "*"
-    verbs:
-      - '*'
-  - apiGroups:
-      - '*'
-    resources:
-      - namespaces
-      - configmaps
-      - endpoints
-      - events
-      - limitranges
-      - persistentvolumeclaims
-      - podtemplates
-      - replicationcontrollers
-      - resourcequotas
-      - secrets
-      - serviceaccounts
-      - services
-      - applications
-      - controllerrevisions
-      - deployments
-      - replicasets
-      - statefulsets
-      - daemonsets
-      - meshpolicies
-      - cronjobs
-      - jobs
-      - s2ibinaries
-      - s2ibinaries/file
-      - s2ibuilders
-      - s2ibuildertemplates
-      - s2iruns
-      - events
-      - ingresses
-      - router
-      - pods
-      - pods/log
-      - pods/exec
-      - pods/containers
-      - namespacenetworkpolicies
-      - networkpolicies
-      - podsecuritypolicies
-      - rolebindings
-      - roles
-      - members
-      - servicepolicies
-      - federatedapplications
-      - federatedconfigmaps
-      - federateddeployments
-      - federatedingresses
-      - federatedjobs
-      - federatedlimitranges
-      - federatednamespaces
-      - federatedpersistentvolumeclaims
-      - federatedreplicasets
-      - federatedsecrets
-      - federatedserviceaccounts
-      - federatedservices
-      - federatedservicestatuses
-      - federatedstatefulsets
-      - workspaces
-      - quotas
-      - abnormalworkloads
-      - workloads
-      - router
-      - dashboards
-      - strategies
-      - volumesnapshots
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-members","role-template-create-projects"]'
+        iam.kubesphere.io/module: Projects Management
+        iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
+        kubesphere.io/alias-name: Projects Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-projects
+    rules:
+      - apiGroups:
+          - apps
+          - extensions
+          - batch
+          - logging.kubesphere.io
+          - monitoring.kubesphere.io
+          - metering.kubesphere.io
+          - monitoring.coreos.com
+          - autoscaling
+          - app.k8s.io
+          - servicemesh.kubesphere.io
+          - operations.kubesphere.io
+          - resources.kubesphere.io
+        resources:
+          - "*"
+        verbs:
+          - '*'
+      - apiGroups:
+          - '*'
+        resources:
+          - namespaces
+          - configmaps
+          - endpoints
+          - events
+          - limitranges
+          - persistentvolumeclaims
+          - podtemplates
+          - replicationcontrollers
+          - resourcequotas
+          - secrets
+          - serviceaccounts
+          - services
+          - applications
+          - controllerrevisions
+          - deployments
+          - replicasets
+          - statefulsets
+          - daemonsets
+          - meshpolicies
+          - cronjobs
+          - jobs
+          - s2ibinaries
+          - s2ibinaries/file
+          - s2ibuilders
+          - s2ibuildertemplates
+          - s2iruns
+          - events
+          - ingresses
+          - router
+          - pods
+          - pods/log
+          - pods/exec
+          - pods/containers
+          - namespacenetworkpolicies
+          - networkpolicies
+          - podsecuritypolicies
+          - rolebindings
+          - roles
+          - members
+          - servicepolicies
+          - federatedapplications
+          - federatedconfigmaps
+          - federateddeployments
+          - federatedingresses
+          - federatedjobs
+          - federatedlimitranges
+          - federatednamespaces
+          - federatedpersistentvolumeclaims
+          - federatedreplicasets
+          - federatedsecrets
+          - federatedserviceaccounts
+          - federatedservices
+          - federatedservicestatuses
+          - federatedstatefulsets
+          - workspaces
+          - quotas
+          - abnormalworkloads
+          - workloads
+          - router
+          - dashboards
+          - strategies
+          - volumesnapshots
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: DevOps Management
-    iam.kubesphere.io/role-template-rules: '{"devops": "view"}'
-    kubesphere.io/alias-name: DevOps View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-devops
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - 'pipelines'
-      - 'pipelines/runs'
-      - 'pipelines/pipelineruns'
-      - 'pipelines/branches'
-      - 'pipelines/checkScriptCompile'
-      - 'pipelines/consolelog'
-      - 'pipelines/scan'
-      - 'pipelines/sonarstatus'
-      - 'pipelineruns'
-      - 'pipelineruns/nodedetails'
-      - 'checkCron'
-      - 'credentials'
-      - 'credentials/usage'
-      - 'roles'
-      - 'members'
-      - 'devops'
-      - 'devopsprojects'
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: DevOps Management
+        iam.kubesphere.io/role-template-rules: '{"devops": "view"}'
+        kubesphere.io/alias-name: DevOps View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-devops
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pipelines'
+          - 'pipelines/runs'
+          - 'pipelines/pipelineruns'
+          - 'pipelines/branches'
+          - 'pipelines/checkScriptCompile'
+          - 'pipelines/consolelog'
+          - 'pipelines/scan'
+          - 'pipelines/sonarstatus'
+          - 'pipelineruns'
+          - 'pipelineruns/nodedetails'
+          - 'checkCron'
+          - 'credentials'
+          - 'credentials/usage'
+          - 'roles'
+          - 'members'
+          - 'devops'
+          - 'devopsprojects'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: DevOps Management
-    iam.kubesphere.io/role-template-rules: '{"devops": "create"}'
-    kubesphere.io/alias-name: DevOps Create
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-create-devops
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - 'devops'
-      - 'devopsprojects'
-    verbs:
-      - create
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: DevOps Management
+        iam.kubesphere.io/role-template-rules: '{"devops": "create"}'
+        kubesphere.io/alias-name: DevOps Create
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-create-devops
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'devops'
+          - 'devopsprojects'
+        verbs:
+          - create
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-view-members","role-template-create-devops"]'
-    iam.kubesphere.io/module: DevOps Management
-    iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
-    kubesphere.io/alias-name: DevOps Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-devops
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - 'pipelines'
-      - 'pipelines/runs'
-      - 'pipelines/pipelineruns'
-      - 'pipelines/branches'
-      - 'pipelines/checkScriptCompile'
-      - 'pipelines/consolelog'
-      - 'pipelines/scan'
-      - 'pipelines/sonarstatus'
-      - 'pipelineruns'
-      - 'pipelineruns/nodedetails'
-      - 'checkCron'
-      - 'credentials'
-      - 'credentials/usage'
-      - 'roles'
-      - 'members'
-      - 'devops'
-      - 'devopsprojects'
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-view-members","role-template-create-devops"]'
+        iam.kubesphere.io/module: DevOps Management
+        iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
+        kubesphere.io/alias-name: DevOps Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-devops
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pipelines'
+          - 'pipelines/runs'
+          - 'pipelines/pipelineruns'
+          - 'pipelines/branches'
+          - 'pipelines/checkScriptCompile'
+          - 'pipelines/consolelog'
+          - 'pipelines/scan'
+          - 'pipelines/sonarstatus'
+          - 'pipelineruns'
+          - 'pipelineruns/nodedetails'
+          - 'checkCron'
+          - 'credentials'
+          - 'credentials/usage'
+          - 'roles'
+          - 'members'
+          - 'devops'
+          - 'devopsprojects'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-repos": "view"}'
-    kubesphere.io/alias-name: Workspace App Repos View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-app-repos
-rules:
-  - apiGroups:
-      - openpitrix.io
-    resources:
-      - repos
-      - repos/events
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Apps Management
+        iam.kubesphere.io/role-template-rules: '{"app-repos": "view"}'
+        kubesphere.io/alias-name: Workspace App Repos View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-app-repos
+    rules:
+      - apiGroups:
+          - openpitrix.io
+        resources:
+          - repos
+          - repos/events
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-repos"]'
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-repos": "manage"}'
-    kubesphere.io/alias-name: Workspace App Repos Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-app-repos
-rules:
-  - apiGroups:
-      - 'openpitrix.io'
-    resources:
-      - 'repos'
-      - 'repos/events'
-      - 'repos/action'
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-app-repos"]'
+        iam.kubesphere.io/module: Apps Management
+        iam.kubesphere.io/role-template-rules: '{"app-repos": "manage"}'
+        kubesphere.io/alias-name: Workspace App Repos Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-app-repos
+    rules:
+      - apiGroups:
+          - 'openpitrix.io'
+        resources:
+          - 'repos'
+          - 'repos/events'
+          - 'repos/action'
+        verbs:
+          - '*'
 
 
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
-    kubesphere.io/alias-name: Workspace App Templates View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-app-templates
-rules:
-  - apiGroups:
-      - 'openpitrix.io'
-    resources:
-      - '*'
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Apps Management
+        iam.kubesphere.io/role-template-rules: '{"app-templates": "view"}'
+        kubesphere.io/alias-name: Workspace App Templates View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-app-templates
+    rules:
+      - apiGroups:
+          - 'openpitrix.io'
+        resources:
+          - '*'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
-    iam.kubesphere.io/module: Apps Management
-    iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
-    kubesphere.io/alias-name: Workspace App Templates Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-app-templates
-rules:
-  - apiGroups:
-      - 'openpitrix.io'
-    resources:
-      - '*'
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
+        iam.kubesphere.io/module: Apps Management
+        iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
+        kubesphere.io/alias-name: Workspace App Templates Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-app-templates
+    rules:
+      - apiGroups:
+          - 'openpitrix.io'
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
-    kubesphere.io/alias-name: Workspace Roles View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-roles
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - workspaceroles
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-members"]'
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+        kubesphere.io/alias-name: Workspace Roles View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-roles
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - workspaceroles
+        verbs:
+          - get
+          - list
+          - watch
 
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-    kubesphere.io/alias-name: Workspace Roles Management
-  labels:
-    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-roles
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - workspaceroles
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+        kubesphere.io/alias-name: Workspace Roles Management
+      labels:
+        iam.kubesphere.io/role-template: "false"
+      name: role-template-manage-roles
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - workspaceroles
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/role-template-rules: '{"members": "view"}'
-    kubesphere.io/alias-name: Workspace Members View
-  labels:
-    iam.kubesphere.io/role-template: "false"
   name: role-template-view-members
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - 'workspacemembers'
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"members": "view"}'
+        kubesphere.io/alias-name: Workspace Members View
+      labels:
+        iam.kubesphere.io/role-template: "false"
+      name: role-template-view-members
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'workspacemembers'
+        verbs:
+          - get
+          - list
+          - watch
 
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
-    kubesphere.io/alias-name: Workspace Members Management
-  labels:
-    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-members
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - 'workspacemembers'
-    verbs:
-      - '*'
-  - apiGroups:
-      - '*'
-    resources:
-      - workspaceroles
-    verbs:
-      - list
-      - get
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+        kubesphere.io/alias-name: Workspace Members Management
+      labels:
+        iam.kubesphere.io/role-template: "false"
+      name: role-template-manage-members
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'workspacemembers'
+        verbs:
+          - '*'
+      - apiGroups:
+          - '*'
+        resources:
+          - workspaceroles
+        verbs:
+          - list
+          - get
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/role-template-rules: '{"basic": "view", "members": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-basic
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - workspaces
-    verbs:
-      - get
-  - apiGroups:
-      - monitoring.kubesphere.io
-      - metering.kubesphere.io
-      - monitoring.coreos.com
-    resources:
-      - namespaces
-      - workloads
-    verbs:
-      - get
-      - list
-  - apiGroups:
-      - '*'
-    resources:
-      - namespaces
-    verbs:
-      - watch
-  - apiGroups:
-      - iam.kubesphere.io
-    resources:
-      - workspacemembers
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"basic": "view", "members": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-basic
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - workspaces
+        verbs:
+          - get
+      - apiGroups:
+          - monitoring.kubesphere.io
+          - metering.kubesphere.io
+          - monitoring.coreos.com
+        resources:
+          - namespaces
+          - workloads
+        verbs:
+          - get
+          - list
+      - apiGroups:
+          - '*'
+        resources:
+          - namespaces
+        verbs:
+          - watch
+      - apiGroups:
+          - iam.kubesphere.io
+        resources:
+          - workspacemembers
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Workspace Settings
-    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "manage"}'
-    kubesphere.io/alias-name: Workspace Settings Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-workspace-settings
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - 'workspaces'
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Workspace Settings
+        iam.kubesphere.io/role-template-rules: '{"workspace-settings": "manage"}'
+        kubesphere.io/alias-name: Workspace Settings Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-workspace-settings
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'workspaces'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Workspace Settings
-    iam.kubesphere.io/role-template-rules: '{"workspace-settings": "view"}'
-    kubesphere.io/alias-name: Workspace Settings View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-workspace-settings
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - 'workspaces'
-    verbs:
-      - 'get'
-      - 'list'
-      - 'watch'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Workspace Settings
+        iam.kubesphere.io/role-template-rules: '{"workspace-settings": "view"}'
+        kubesphere.io/alias-name: Workspace Settings View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-workspace-settings
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'workspaces'
+        verbs:
+          - 'get'
+          - 'list'
+          - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-groups","role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"groups": "manage"}'
-    kubesphere.io/alias-name: Workspace Groups Management
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-groups
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - groups
-      - groupbindings
-      - rolebindings
-      - workspacerolebindings
-    verbs:
-      - '*'
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-groups","role-template-view-roles"]'
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"groups": "manage"}'
+        kubesphere.io/alias-name: Workspace Groups Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-groups
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - groups
+          - groupbindings
+          - rolebindings
+          - workspacerolebindings
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: WorkspaceRole
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    iam.kubesphere.io/role-template-rules: '{"groups": "view"}'
-    kubesphere.io/alias-name: Workspace Groups View
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-groups
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - groups
-      - groupbindings
-      - roles
-      - rolebindings
-      - workspacerolebindings
-      - namespaces
-    verbs:
-      - get
-      - list
-      - watch
+  labels:
+    scope.kubesphere.io/workspace: ""
+spec:
+  templateScope: workspace
+  role:
+    apiVersion: iam.kubesphere.io/v1alpha2
+    kind: WorkspaceRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"groups": "view"}'
+        kubesphere.io/alias-name: Workspace Groups View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-groups
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - groups
+          - groupbindings
+          - roles
+          - rolebindings
+          - workspacerolebindings
+          - namespaces
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: CRD View
-    iam.kubesphere.io/role-template-rules: '{"customresources": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-crds
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Cluster Resources Management
+        kubesphere.io/alias-name: CRD View
+        iam.kubesphere.io/role-template-rules: '{"customresources": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-crds
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: CRD Management
-    iam.kubesphere.io/role-template-rules: '{"customresources": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-crds
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Cluster Resources Management
+        kubesphere.io/alias-name: CRD Management
+        iam.kubesphere.io/role-template-rules: '{"customresources": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-crds
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '[role-template-view-alerting-messages"]'
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Messages Management
-    iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-alerting-messages
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '[role-template-view-alerting-messages"]'
+        iam.kubesphere.io/module: Monitoring & Alerting
+        kubesphere.io/alias-name: Alerting Messages Management
+        iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-alerting-messages
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Policies Management
-    iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-alerting-policies
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
+        iam.kubesphere.io/module: Monitoring & Alerting
+        kubesphere.io/alias-name: Alerting Policies Management
+        iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-alerting-policies
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-project-resources", "role-template-view-projects"]'
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Project Resources Management
-    iam.kubesphere.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-project-resources
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-project-resources", "role-template-view-projects"]'
+        iam.kubesphere.io/module: Project Resources Management
+        kubesphere.io/alias-name: Project Resources Management
+        iam.kubesphere.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-project-resources
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Cluster Settings
-    kubesphere.io/alias-name: Cluster Settings View
-    iam.kubesphere.io/role-template-rules: '{"cluster-settings": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-cluster-settings
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Cluster Settings
+        kubesphere.io/alias-name: Cluster Settings View
+        iam.kubesphere.io/role-template-rules: '{"cluster-settings": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-cluster-settings
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Cluster Settings
-    kubesphere.io/alias-name: Cluster Settings Management
-    iam.kubesphere.io/role-template-rules: '{"cluster-settings": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-cluster-settings
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Cluster Settings
+        kubesphere.io/alias-name: Cluster Settings Management
+        iam.kubesphere.io/role-template-rules: '{"cluster-settings": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-cluster-settings
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: Components View
-    iam.kubesphere.io/role-template-rules: '{"components": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-components
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Cluster Resources Management
+        kubesphere.io/alias-name: Components View
+        iam.kubesphere.io/role-template-rules: '{"components": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-components
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles", "role-template-view-members"]'
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Members Management
-    iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-members
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-roles", "role-template-view-members"]'
+        iam.kubesphere.io/module: Access Control
+        kubesphere.io/alias-name: Cluster Members Management
+        iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-members
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-network-resources"]'
-    iam.kubesphere.io/module: Network Management
-    kubesphere.io/alias-name: Network Resources Management
-    iam.kubesphere.io/role-template-rules: '{"networkpolicies": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-network-resources
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-network-resources"]'
+        iam.kubesphere.io/module: Network Management
+        kubesphere.io/alias-name: Network Resources Management
+        iam.kubesphere.io/role-template-rules: '{"networkpolicies": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-network-resources
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-nodes"]'
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: Nodes Management
-    iam.kubesphere.io/role-template-rules: '{"nodes": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-nodes
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-nodes"]'
+        iam.kubesphere.io/module: Cluster Resources Management
+        kubesphere.io/alias-name: Nodes Management
+        iam.kubesphere.io/role-template-rules: '{"nodes": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-nodes
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Projects Management
-    iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-projects
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
+        iam.kubesphere.io/module: Project Resources Management
+        kubesphere.io/alias-name: Projects Management
+        iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-projects
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Roles Management
-    iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-roles
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+        iam.kubesphere.io/module: Access Control
+        kubesphere.io/alias-name: Cluster Roles Management
+        iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-roles
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: StorageClasses Management
-    iam.kubesphere.io/role-template-rules: '{"storageclasses": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-storageclasses
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: StorageClasses Management
+        iam.kubesphere.io/role-template-rules: '{"storageclasses": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-storageclasses
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volumes Management
-    iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-volumes
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: Volumes Management
+        iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-volumes
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Messages View
-    iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-alerting-messages
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Monitoring & Alerting
+        kubesphere.io/alias-name: Alerting Messages View
+        iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-alerting-messages
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Policies View
-    iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-alerting-policies
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
+        iam.kubesphere.io/module: Monitoring & Alerting
+        kubesphere.io/alias-name: Alerting Policies View
+        iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-alerting-policies
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Project Resources View
-    iam.kubesphere.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-project-resources
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
+        iam.kubesphere.io/module: Project Resources Management
+        kubesphere.io/alias-name: Project Resources View
+        iam.kubesphere.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-project-resources
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Cluster Monitoring View
-    iam.kubesphere.io/role-template-rules: '{"monitoring": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-cluster-monitoring
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Monitoring & Alerting
+        kubesphere.io/alias-name: Cluster Monitoring View
+        iam.kubesphere.io/role-template-rules: '{"monitoring": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-cluster-monitoring
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Cluster Monitoring Management
-    iam.kubesphere.io/role-template-rules: '{"monitoring": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-cluster-monitoring
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Monitoring & Alerting
+        kubesphere.io/alias-name: Cluster Monitoring Management
+        iam.kubesphere.io/role-template-rules: '{"monitoring": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-cluster-monitoring
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Members View
-    iam.kubesphere.io/role-template-rules: '{"members": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-members
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Access Control
+        kubesphere.io/alias-name: Cluster Members View
+        iam.kubesphere.io/role-template-rules: '{"members": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-members
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Network Management
-    kubesphere.io/alias-name: Network Resources View
-    iam.kubesphere.io/role-template-rules: '{"networkpolicies": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-network-resources
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Network Management
+        kubesphere.io/alias-name: Network Resources View
+        iam.kubesphere.io/role-template-rules: '{"networkpolicies": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-network-resources
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Cluster Resources Management
-    kubesphere.io/alias-name: Nodes View
-    iam.kubesphere.io/role-template-rules: '{"nodes": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-nodes
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Cluster Resources Management
+        kubesphere.io/alias-name: Nodes View
+        iam.kubesphere.io/role-template-rules: '{"nodes": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-nodes
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Project Resources Management
-    kubesphere.io/alias-name: Projects View
-    iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-projects
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Project Resources Management
+        kubesphere.io/alias-name: Projects View
+        iam.kubesphere.io/role-template-rules: '{"projects": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-projects
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
-    iam.kubesphere.io/module: Access Control
-    kubesphere.io/alias-name: Cluster Roles View
-    iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-roles
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-members"]'
+        iam.kubesphere.io/module: Access Control
+        kubesphere.io/alias-name: Cluster Roles View
+        iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-roles
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: StorageClasses View
-    iam.kubesphere.io/role-template-rules: '{"storageclasses": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-storageclasses
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: StorageClasses View
+        iam.kubesphere.io/role-template-rules: '{"storageclasses": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-storageclasses
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volume Snapshots View
-    iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-volume-snapshots
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: Volume Snapshots View
+        iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-volume-snapshots
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volume-snapshots"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volume Snapshots Management
-    iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-volume-snapshots
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volume-snapshots"]'
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: Volume Snapshots Management
+        iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-volume-snapshots
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volume Snapshot Classes View
-    iam.kubesphere.io/role-template-rules: '{"volume-snapshot-classes": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-volume-snapshot-classes
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: Volume Snapshot Classes View
+        iam.kubesphere.io/role-template-rules: '{"volume-snapshot-classes": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-volume-snapshot-classes
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volume-snapshot-classes"]'
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volume Snapshot Classes Management
-    iam.kubesphere.io/role-template-rules: '{"volume-snapshot-classes": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-volume-snapshot-classes
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volume-snapshot-classes"]'
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: Volume Snapshot Classes Management
+        iam.kubesphere.io/role-template-rules: '{"volume-snapshot-classes": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-volume-snapshot-classes
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Storage Management
-    kubesphere.io/alias-name: Volumes View
-    iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-volumes
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Storage Management
+        kubesphere.io/alias-name: Volumes View
+        iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-volumes
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ConfigMap View
-    iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-configmaps
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Configration Management
+        kubesphere.io/alias-name: ConfigMap View
+        iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-configmaps
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ConfigMap Management
-    iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-configmaps
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
+        iam.kubesphere.io/module: Configration Management
+        kubesphere.io/alias-name: ConfigMap Management
+        iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-configmaps
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: Secret View
-    iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-secrets
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Configration Management
+        kubesphere.io/alias-name: Secret View
+        iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-secrets
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: Secret Management
-    iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-secrets
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
+        iam.kubesphere.io/module: Configration Management
+        kubesphere.io/alias-name: Secret Management
+        iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-secrets
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ServiceAccount View
-    iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-view-service-accounts
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Configration Management
+        kubesphere.io/alias-name: ServiceAccount View
+        iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-service-accounts
+    rules: []
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: RoleTemplate
 metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-service-accounts"]'
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ServiceAccount Management
-    iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
   name: role-template-manage-service-accounts
-rules: []
+  labels:
+    scope.kubesphere.io/cluster: ""
+spec:
+  templateScope: cluster
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-service-accounts"]'
+        iam.kubesphere.io/module: Configration Management
+        kubesphere.io/alias-name: ServiceAccount Management
+        iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-service-accounts
+    rules: []
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2593,1130 +3206,1202 @@ role:
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-alerting-messages
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
-      kubesphere.io/alias-name: Alerting Messages View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-alerting-messages
-  rules:
-    - apiGroups:
-        - 'alerting.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Monitoring & Alerting
+        iam.kubesphere.io/role-template-rules: '{"alerts": "view"}'
+        kubesphere.io/alias-name: Alerting Messages View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-alerting-messages
+    rules:
+      - apiGroups:
+          - 'alerting.kubesphere.io'
+        resources:
+          - '*'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-alerting-messages
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
-      kubesphere.io/alias-name: Alerting Messages Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-alerting-messages
-  rules:
-    - apiGroups:
-        - 'alerting.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
+        iam.kubesphere.io/module: Monitoring & Alerting
+        iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
+        kubesphere.io/alias-name: Alerting Messages Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-alerting-messages
+    rules:
+      - apiGroups:
+          - 'alerting.kubesphere.io'
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-alerting-policies
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
-      kubesphere.io/alias-name: Alerting Policies View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-alerting-policies
-  rules:
-    - apiGroups:
-        - 'alerting.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - get
-        - list
-        - watch
-    - apiGroups:
-        - 'resources.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - list
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Monitoring & Alerting
+        iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
+        kubesphere.io/alias-name: Alerting Policies View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-alerting-policies
+    rules:
+      - apiGroups:
+          - 'alerting.kubesphere.io'
+        resources:
+          - '*'
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - 'resources.kubesphere.io'
+        resources:
+          - '*'
+        verbs:
+          - list
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-alerting-policies
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies"]'
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
-      kubesphere.io/alias-name: Alerting Policies Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-alerting-policies
-  rules:
-    - apiGroups:
-        - 'alerting.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies"]'
+        iam.kubesphere.io/module: Monitoring & Alerting
+        iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
+        kubesphere.io/alias-name: Alerting Policies Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-alerting-policies
+    rules:
+      - apiGroups:
+          - 'alerting.kubesphere.io'
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-custom-monitoring
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "view"}'
-      kubesphere.io/alias-name: Custom Monitoring View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-custom-monitoring
-  rules:
-    - apiGroups:
-        - 'monitoring.kubesphere.io'
-        - 'metering.kubesphere.io'
-        - 'monitoring.coreos.com'
-      resources:
-        - '*'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Monitoring & Alerting
+        iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "view"}'
+        kubesphere.io/alias-name: Custom Monitoring View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-custom-monitoring
+    rules:
+      - apiGroups:
+          - 'monitoring.kubesphere.io'
+          - 'metering.kubesphere.io'
+          - 'monitoring.coreos.com'
+        resources:
+          - '*'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-custom-monitoring
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-custom-monitoring"]'
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "manage"}'
-      kubesphere.io/alias-name: Custom Monitoring Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-custom-monitoring
-  rules:
-    - apiGroups:
-        - 'monitoring.kubesphere.io'
-        - 'metering.kubesphere.io'
-        - 'monitoring.coreos.com'
-      resources:
-        - '*'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-custom-monitoring"]'
+        iam.kubesphere.io/module: Monitoring & Alerting
+        iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "manage"}'
+        kubesphere.io/alias-name: Custom Monitoring Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-custom-monitoring
+    rules:
+      - apiGroups:
+          - 'monitoring.kubesphere.io'
+          - 'metering.kubesphere.io'
+          - 'monitoring.coreos.com'
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-members
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Access Control
-      iam.kubesphere.io/role-template-rules: '{"members": "view"}'
-      kubesphere.io/alias-name: Project Members View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-members
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'members'
-        - 'rolebindings'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"members": "view"}'
+        kubesphere.io/alias-name: Project Members View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-members
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'members'
+          - 'rolebindings'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-members
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
-      kubesphere.io/alias-name: Project Members Management
-    labels:
-      iam.kubesphere.io/role-template: "false"
-    name: role-template-manage-members
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'members'
-        - 'rolebindings'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
+        kubesphere.io/alias-name: Project Members Management
+      labels:
+        iam.kubesphere.io/role-template: "false"
+      name: role-template-manage-members
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'members'
+          - 'rolebindings'
+        verbs:
+          - '*'
 
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-namespace-basic
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-basic
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'namespaces'
-        - 'quotas'
-        - 'abnormalworkloads'
-        - 'workloads'
-        - 'limitranges'
-        - 'events'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-basic
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'namespaces'
+          - 'quotas'
+          - 'abnormalworkloads'
+          - 'workloads'
+          - 'limitranges'
+          - 'events'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-devops-basic
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-basic
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'devops'
-        - 'devopsprojects'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"basic": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-basic
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'devops'
+          - 'devopsprojects'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-project-settings
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Project Settings
-      iam.kubesphere.io/role-template-rules: '{"project-settings": "manage"}'
-      kubesphere.io/alias-name: Project Settings
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-project-settings
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - '*'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Project Settings
+        iam.kubesphere.io/role-template-rules: '{"project-settings": "manage"}'
+        kubesphere.io/alias-name: Project Settings
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-project-settings
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-roles
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-members"]'
-      iam.kubesphere.io/module: Access Control
-      iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
-      kubesphere.io/alias-name: Project Roles View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-roles
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'roles'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-members"]'
+        iam.kubesphere.io/module: Access Control
+        iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
+        kubesphere.io/alias-name: Project Roles View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-roles
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'roles'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-roles
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
-      kubesphere.io/alias-name: Project Roles Management
-    labels:
-      iam.kubesphere.io/role-template: "false"
-    name: role-template-manage-roles
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'roles'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
+        kubesphere.io/alias-name: Project Roles Management
+      labels:
+        iam.kubesphere.io/role-template: "false"
+      name: role-template-manage-roles
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'roles'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-app-workloads
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
-      iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications":"view","deployments":"view","statefulsets":"view",
-        "daemonsets":"view","jobs":"view","cronjobs":"view","pods":"view","services":"view","ingresses":"view"}'
-      kubesphere.io/alias-name: Application Workloads View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-app-workloads
-  rules:
-    - apiGroups:
-        - 'monitoring.kubesphere.io'
-        - 'metering.kubesphere.io'
-        - 'monitoring.coreos.com'
-        - 'servicemesh.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - get
-        - list
-        - watch
-    - apiGroups:
-        - '*'
-      resources:
-        - services
-        - applications
-        - controllerrevisions
-        - deployments
-        - replicasets
-        - statefulsets
-        - daemonsets
-        - jobs
-        - cronjobs
-        - pods
-        - pods/log
-        - pods/containers
-        - services
-        - ingresses
-        - router
-        - s2ibinaries
-        - s2ibinaries/file
-        - s2ibuilders
-        - s2ibuildertemplates
-        - s2iruns
-        - horizontalpodautoscalers
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
+        iam.kubesphere.io/module: Application Workloads
+        iam.kubesphere.io/role-template-rules: '{"applications":"view","deployments":"view","statefulsets":"view",
+          "daemonsets":"view","jobs":"view","cronjobs":"view","pods":"view","services":"view","ingresses":"view"}'
+        kubesphere.io/alias-name: Application Workloads View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-app-workloads
+    rules:
+      - apiGroups:
+          - 'monitoring.kubesphere.io'
+          - 'metering.kubesphere.io'
+          - 'monitoring.coreos.com'
+          - 'servicemesh.kubesphere.io'
+        resources:
+          - '*'
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - '*'
+        resources:
+          - services
+          - applications
+          - controllerrevisions
+          - deployments
+          - replicasets
+          - statefulsets
+          - daemonsets
+          - jobs
+          - cronjobs
+          - pods
+          - pods/log
+          - pods/containers
+          - services
+          - ingresses
+          - router
+          - s2ibinaries
+          - s2ibinaries/file
+          - s2ibuilders
+          - s2ibuildertemplates
+          - s2iruns
+          - horizontalpodautoscalers
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-app-workloads
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-app-workloads"]'
-      iam.kubesphere.io/module: Application Workloads
-      iam.kubesphere.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
-        "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage",
-        "s2ibuilders":"manage","grayscale-release": "manage"}'
-      kubesphere.io/alias-name: Application Workloads Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-app-workloads
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - services
-        - applications
-        - controllerrevisions
-        - deployments
-        - replicasets
-        - statefulsets
-        - daemonsets
-        - jobs
-        - cronjobs
-        - pods
-        - pods/log
-        - pods/exec
-        - pods/containers
-        - services
-        - ingresses
-        - router
-        - workloads
-        - s2ibinaries
-        - s2ibinaries/file
-        - s2ibuilders
-        - s2ibuildertemplates
-        - s2iruns
-        - horizontalpodautoscalers
-      verbs:
-        - '*'
-    - apiGroups:
-        - '*'
-      resources:
-        - 'secrets'
-      verbs:
-        - list
-    - apiGroups:
-        - 'servicemesh.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-app-workloads"]'
+        iam.kubesphere.io/module: Application Workloads
+        iam.kubesphere.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
+          "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage",
+          "s2ibuilders":"manage","grayscale-release": "manage"}'
+        kubesphere.io/alias-name: Application Workloads Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-app-workloads
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - services
+          - applications
+          - controllerrevisions
+          - deployments
+          - replicasets
+          - statefulsets
+          - daemonsets
+          - jobs
+          - cronjobs
+          - pods
+          - pods/log
+          - pods/exec
+          - pods/containers
+          - services
+          - ingresses
+          - router
+          - workloads
+          - s2ibinaries
+          - s2ibinaries/file
+          - s2ibuilders
+          - s2ibuildertemplates
+          - s2iruns
+          - horizontalpodautoscalers
+        verbs:
+          - '*'
+      - apiGroups:
+          - '*'
+        resources:
+          - 'secrets'
+        verbs:
+          - list
+      - apiGroups:
+          - 'servicemesh.kubesphere.io'
+        resources:
+          - '*'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-configmaps
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
-      kubesphere.io/alias-name: ConfigMaps View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-configmaps
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'configmaps'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Configuration Center
+        iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
+        kubesphere.io/alias-name: ConfigMaps View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-configmaps
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'configmaps'
+        verbs:
+          - get
+          - list
+          - watch
 
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-configmaps
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
-      kubesphere.io/alias-name: ConfigMaps Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-configmaps
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'configmaps'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
+        iam.kubesphere.io/module: Configuration Center
+        iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
+        kubesphere.io/alias-name: ConfigMaps Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-configmaps
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'configmaps'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-secrets
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
-      kubesphere.io/alias-name: Secrets View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-secrets
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'secrets'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Configuration Center
+        iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
+        kubesphere.io/alias-name: Secrets View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-secrets
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'secrets'
+        verbs:
+          - get
+          - list
+          - watch
 
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-secrets
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
-      kubesphere.io/alias-name: Secrets Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-secrets
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'secrets'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
+        iam.kubesphere.io/module: Configuration Center
+        iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
+        kubesphere.io/alias-name: Secrets Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-secrets
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'secrets'
+        verbs:
+          - '*'
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-serviceaccount
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-roles","role-template-view-secrets"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
-      kubesphere.io/alias-name: ServiceAccount View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-serviceaccount
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'serviceaccounts'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-roles","role-template-view-secrets"]'
+        iam.kubesphere.io/module: Configuration Center
+        iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
+        kubesphere.io/alias-name: ServiceAccount View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-serviceaccount
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'serviceaccounts'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-serviceaccount
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-serviceaccount"]'
-      iam.kubesphere.io/module: Configuration Center
-      iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
-      kubesphere.io/alias-name: ServiceAccount Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-serviceaccount
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'serviceaccounts'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-serviceaccount"]'
+        iam.kubesphere.io/module: Configuration Center
+        iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
+        kubesphere.io/alias-name: ServiceAccount Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-serviceaccount
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'serviceaccounts'
+        verbs:
+          - '*'
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-volumes
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
-      kubesphere.io/alias-name: Volumes View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-volumes
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'persistentvolumeclaims'
-      verbs:
-        - get
-        - list
-        - watch
-    - apiGroups:
-        - '*'
-      resources:
-        - 'pods'
-      verbs:
-        - 'list'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
+        iam.kubesphere.io/module: Storage Management
+        iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
+        kubesphere.io/alias-name: Volumes View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-volumes
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'persistentvolumeclaims'
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pods'
+        verbs:
+          - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-volumes
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-manage-snapshots"]'
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
-      kubesphere.io/alias-name: Volumes Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-volumes
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'persistentvolumeclaims'
-      verbs:
-        - '*'
-    - apiGroups:
-        - '*'
-      resources:
-        - 'pods'
-      verbs:
-        - 'list'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-manage-snapshots"]'
+        iam.kubesphere.io/module: Storage Management
+        iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
+        kubesphere.io/alias-name: Volumes Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-volumes
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'persistentvolumeclaims'
+        verbs:
+          - '*'
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pods'
+        verbs:
+          - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-snapshots
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
-      kubesphere.io/alias-name: Volume Snapshots View
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-snapshots
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'volumesnapshots'
-      verbs:
-        - get
-        - list
-        - watch
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Storage Management
+        iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
+        kubesphere.io/alias-name: Volume Snapshots View
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-snapshots
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'volumesnapshots'
+        verbs:
+          - get
+          - list
+          - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-snapshots
   labels:
     scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
-      iam.kubesphere.io/module: Storage Management
-      iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
-      kubesphere.io/alias-name: Volume Snapshots Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-snapshots
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'volumesnapshots'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
+        iam.kubesphere.io/module: Storage Management
+        iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
+        kubesphere.io/alias-name: Volume Snapshots Management
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-snapshots
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'volumesnapshots'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-credentials
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
-      iam.kubesphere.io/module: Credentials Management
-      kubesphere.io/alias-name: Credentials Management
-      iam.kubesphere.io/role-template-rules: '{"credentials": "manage"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-credentials
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - credentials
-        - credentials/usage
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
+        iam.kubesphere.io/module: Credentials Management
+        kubesphere.io/alias-name: Credentials Management
+        iam.kubesphere.io/role-template-rules: '{"credentials": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-credentials
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - credentials
+          - credentials/usage
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-pipelines
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-manage-pipelineruns", "role-template-view-credentials"]'
-      iam.kubesphere.io/module: Pipelines Management
-      kubesphere.io/alias-name: Pipelines Management
-      iam.kubesphere.io/role-template-rules: '{"pipelines": "manage", "pipelineruns": "manage"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-pipelines
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'pipelines'
-        - 'pipelines/runs'
-        - 'pipelines/branches'
-        - 'pipelines/checkScriptCompile'
-        - 'pipelines/consolelog'
-        - 'pipelines/scan'
-        - 'pipelines/sonarstatus'
-        - 'clustertemplates'
-        - 'clustertemplates/render'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-manage-pipelineruns", "role-template-view-credentials"]'
+        iam.kubesphere.io/module: Pipelines Management
+        kubesphere.io/alias-name: Pipelines Management
+        iam.kubesphere.io/role-template-rules: '{"pipelines": "manage", "pipelineruns": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-pipelines
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pipelines'
+          - 'pipelines/runs'
+          - 'pipelines/branches'
+          - 'pipelines/checkScriptCompile'
+          - 'pipelines/consolelog'
+          - 'pipelines/scan'
+          - 'pipelines/sonarstatus'
+          - 'clustertemplates'
+          - 'clustertemplates/render'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-pipelineruns
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-pipelineruns"]'
-      iam.kubesphere.io/module: Pipelines Management
-      kubesphere.io/alias-name: PipelineRuns Management
-      iam.kubesphere.io/role-template-rules: '{"pipelineruns": "manage"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-pipelineruns
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'pipelineruns'
-        - 'pipelines/runs'
-        - 'pipelines/pipelineruns'
-        - 'pipelineruns/nodedetails'
-        - 'pipelineruns/status'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-pipelineruns"]'
+        iam.kubesphere.io/module: Pipelines Management
+        kubesphere.io/alias-name: PipelineRuns Management
+        iam.kubesphere.io/role-template-rules: '{"pipelineruns": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-pipelineruns
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pipelineruns'
+          - 'pipelines/runs'
+          - 'pipelines/pipelineruns'
+          - 'pipelineruns/nodedetails'
+          - 'pipelineruns/status'
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-credentials
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Credentials Management
-      kubesphere.io/alias-name: Credentials View
-      iam.kubesphere.io/role-template-rules: '{"credentials": "view"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-credentials
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - credentials
-        - credentials/usage
-      verbs:
-        - 'get'
-        - 'list'
-        - 'watch'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Credentials Management
+        kubesphere.io/alias-name: Credentials View
+        iam.kubesphere.io/role-template-rules: '{"credentials": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-credentials
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - credentials
+          - credentials/usage
+        verbs:
+          - 'get'
+          - 'list'
+          - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-pipelines
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-pipelineruns", "role-template-view-gitrepositories"]'
-      iam.kubesphere.io/module: Pipelines Management
-      kubesphere.io/alias-name: Pipelines View
-      iam.kubesphere.io/role-template-rules: '{"pipelines": "view", "pipelineruns": "view"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-pipelines
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'pipelines'
-        - 'pipelines/runs'
-        - 'pipelines/branches'
-        - 'pipelines/checkScriptCompile'
-        - 'pipelines/consolelog'
-        - 'pipelines/scan'
-        - 'pipelines/sonarstatus'
-        - 'jenkins/labelsData'
-      verbs:
-        - 'get'
-        - 'list'
-        - 'watch'
-    - apiGroups:
-        - ''
-      resources:
-        - 'events'
-      verbs:
-        - 'list'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-pipelineruns", "role-template-view-gitrepositories"]'
+        iam.kubesphere.io/module: Pipelines Management
+        kubesphere.io/alias-name: Pipelines View
+        iam.kubesphere.io/role-template-rules: '{"pipelines": "view", "pipelineruns": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-pipelines
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pipelines'
+          - 'pipelines/runs'
+          - 'pipelines/branches'
+          - 'pipelines/checkScriptCompile'
+          - 'pipelines/consolelog'
+          - 'pipelines/scan'
+          - 'pipelines/sonarstatus'
+          - 'jenkins/labelsData'
+        verbs:
+          - 'get'
+          - 'list'
+          - 'watch'
+      - apiGroups:
+          - ''
+        resources:
+          - 'events'
+        verbs:
+          - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-gitops-applications
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-gitops-applications"]'
-      iam.kubesphere.io/module: Continuous Deployments Management
-      kubesphere.io/alias-name: Continuous Deployments Management
-      iam.kubesphere.io/role-template-rules: '{"applications": "manage"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-gitops-applications
-  rules:
-    - apiGroups:
-        - 'gitops.kubesphere.io'
-      resources:
-        - applications
-      verbs:
-        - '*'
-    - apiGroups:
-        - 'gitops.kubesphere.io'
-      resources:
-        - clusters
-      verbs:
-        - 'list'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-gitops-applications"]'
+        iam.kubesphere.io/module: Continuous Deployments Management
+        kubesphere.io/alias-name: Continuous Deployments Management
+        iam.kubesphere.io/role-template-rules: '{"applications": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-gitops-applications
+    rules:
+      - apiGroups:
+          - 'gitops.kubesphere.io'
+        resources:
+          - applications
+        verbs:
+          - '*'
+      - apiGroups:
+          - 'gitops.kubesphere.io'
+        resources:
+          - clusters
+        verbs:
+          - 'list'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-gitops-applications
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-gitrepositories"]'
-      iam.kubesphere.io/module: Continuous Deployments Management
-      kubesphere.io/alias-name: Continuous Deployments View
-      iam.kubesphere.io/role-template-rules: '{"applications": "view"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-gitops-applications
-  rules:
-    - apiGroups:
-        - 'gitops.kubesphere.io'
-      resources:
-        - 'applications'
-        - 'application-summary'
-      verbs:
-        - 'get'
-        - 'list'
-        - 'watch'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-gitrepositories"]'
+        iam.kubesphere.io/module: Continuous Deployments Management
+        kubesphere.io/alias-name: Continuous Deployments View
+        iam.kubesphere.io/role-template-rules: '{"applications": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-gitops-applications
+    rules:
+      - apiGroups:
+          - 'gitops.kubesphere.io'
+        resources:
+          - 'applications'
+          - 'application-summary'
+        verbs:
+          - 'get'
+          - 'list'
+          - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-gitrepositories
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-gitrepositories"]'
-      iam.kubesphere.io/module: Code Repositories Management
-      kubesphere.io/alias-name: Code Repositories Management
-      iam.kubesphere.io/role-template-rules: '{"gitrepositories": "manage"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-gitrepositories
-  rules:
-    - apiGroups:
-        - 'devops.kubesphere.io'
-      resources:
-        - gitrepositories
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-gitrepositories"]'
+        iam.kubesphere.io/module: Code Repositories Management
+        kubesphere.io/alias-name: Code Repositories Management
+        iam.kubesphere.io/role-template-rules: '{"gitrepositories": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-gitrepositories
+    rules:
+      - apiGroups:
+          - 'devops.kubesphere.io'
+        resources:
+          - gitrepositories
+        verbs:
+          - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-gitrepositories
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
-      iam.kubesphere.io/module: Code Repositories Management
-      kubesphere.io/alias-name: Code Repositories View
-      iam.kubesphere.io/role-template-rules: '{"gitrepositories": "view"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-gitrepositories
-  rules:
-    - apiGroups:
-        - 'devops.kubesphere.io'
-      resources:
-        - 'gitrepositories'
-      verbs:
-        - 'get'
-        - 'list'
-        - 'watch'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
+        iam.kubesphere.io/module: Code Repositories Management
+        kubesphere.io/alias-name: Code Repositories View
+        iam.kubesphere.io/role-template-rules: '{"gitrepositories": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-gitrepositories
+    rules:
+      - apiGroups:
+          - 'devops.kubesphere.io'
+        resources:
+          - 'gitrepositories'
+        verbs:
+          - 'get'
+          - 'list'
+          - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-view-pipelineruns
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: Pipelines Management
-      kubesphere.io/alias-name: PipelineRuns View
-      iam.kubesphere.io/role-template-rules: '{"pipelineruns": "view"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-view-pipelineruns
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'pipelineruns'
-        - 'pipelines/runs'
-        - 'pipelines/pipelineruns'
-        - 'pipelineruns/artifacts'
-        - 'pipelineruns/nodedetails'
-        - 'pipelineruns/status'
-      verbs:
-        - 'get'
-        - 'list'
-        - 'watch'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: Pipelines Management
+        kubesphere.io/alias-name: PipelineRuns View
+        iam.kubesphere.io/role-template-rules: '{"pipelineruns": "view"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-view-pipelineruns
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'pipelineruns'
+          - 'pipelines/runs'
+          - 'pipelines/pipelineruns'
+          - 'pipelineruns/artifacts'
+          - 'pipelineruns/nodedetails'
+          - 'pipelineruns/status'
+        verbs:
+          - 'get'
+          - 'list'
+          - 'watch'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
+kind: RoleTemplate
 metadata:
   name: role-template-manage-devops-settings
   labels:
     scope.kubesphere.io/devops: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/module: DevOps Settings
-      kubesphere.io/alias-name: DevOps Settings
-      iam.kubesphere.io/role-template-rules: '{"devops-settings": "manage"}'
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-devops-settings
-  rules:
-    - apiGroups:
-        - '*'
-      resources:
-        - 'devops'
-        - 'devopsprojects'
-      verbs:
-        - '*'
+spec:
+  templateScope: namespace
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      annotations:
+        iam.kubesphere.io/module: DevOps Settings
+        kubesphere.io/alias-name: DevOps Settings
+        iam.kubesphere.io/role-template-rules: '{"devops-settings": "manage"}'
+      labels:
+        iam.kubesphere.io/role-template: "true"
+      name: role-template-manage-devops-settings
+    rules:
+      - apiGroups:
+          - '*'
+        resources:
+          - 'devops'
+          - 'devopsprojects'
+        verbs:
+          - '*'
