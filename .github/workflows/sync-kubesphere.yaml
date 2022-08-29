@@ -9,10 +9,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  MASTER_BRANCH: master
-  RELEASE_BRANCH: release-3.3
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   Sync-kubesphere-master-branch:
@@ -28,8 +24,8 @@ jobs:
       - name: Merge from upstream repo
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.2
         with:
-          target_sync_branch: $MASTER_BRANCH
-          upstream_sync_branch: $MASTER_BRANCH
+          target_sync_branch: master
+          upstream_sync_branch: master
           upstream_sync_repo: kubesphere/ks-installer
 
       - name: New commits found
@@ -56,8 +52,8 @@ jobs:
       - name: Merge from upstream repo
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.2
         with:
-          target_sync_branch: $RELEASE_BRANCH
-          upstream_sync_branch: $RELEASE_BRANCH
+          target_sync_branch: release-3.3
+          upstream_sync_branch: release-3.3
           upstream_sync_repo: kubesphere/ks-installer
 
       - name: New commits found
