@@ -359,7 +359,7 @@ rules: []
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-basic
+  name: global-view-basic
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -521,7 +521,7 @@ rules:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-clusters
+  name: global-view-clusters
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -609,7 +609,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-clusters
+  name: global-manage-clusters
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -694,7 +694,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-workspaces
+  name: global-view-workspaces
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -841,7 +841,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-workspaces
+  name: global-manage-workspaces
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -981,7 +981,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-users
+  name: global-view-users
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -1012,7 +1012,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-users
+  name: global-manage-users
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -1041,7 +1041,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-roles
+  name: global-view-roles
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -1072,7 +1072,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-roles
+  name: global-manage-roles
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -1099,7 +1099,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-app-templates
+  name: global-view-app-templates
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -1130,7 +1130,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-app-templates
+  name: global-manage-app-templates
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -1159,7 +1159,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-platform-settings
+  name: global-manage-platform-settings
   labels:
     scope.kubesphere.io/global: ""
 spec:
@@ -1282,7 +1282,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-projects
+  name: workspace-view-projects
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1391,7 +1391,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-create-projects
+  name: workspace-create-projects
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1433,7 +1433,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-projects
+  name: workspace-manage-projects
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1540,7 +1540,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-devops
+  name: workspace-view-devops
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1586,7 +1586,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-create-devops
+  name: workspace-create-devops
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1616,7 +1616,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-devops
+  name: workspace-manage-devops
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1661,7 +1661,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-app-repos
+  name: workspace-view-app-repos
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1692,7 +1692,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-app-repos
+  name: workspace-manage-app-repos
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1725,7 +1725,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-app-templates
+  name: workspace-view-app-templates
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1755,7 +1755,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-app-templates
+  name: workspace-manage-app-templates
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1784,7 +1784,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-roles
+  name: workspace-view-roles
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1816,7 +1816,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-roles
+  name: workspace-manage-roles
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1843,7 +1843,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-members
+  name: workspace-view-members
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1873,7 +1873,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-members
+  name: workspace-manage-members
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1908,7 +1908,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-basic
+  name: workspace-view-basic
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1958,7 +1958,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-workspace-settings
+  name: workspace-manage-workspace-settings
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -1986,7 +1986,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-workspace-settings
+  name: workspace-view-workspace-settings
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -2016,7 +2016,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-groups
+  name: workspace-manage-groups
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -2048,7 +2048,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-groups
+  name: workspace-view-groups
   labels:
     scope.kubesphere.io/workspace: ""
 spec:
@@ -2084,7 +2084,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-crds
+  name: cluster-view-crds
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2106,7 +2106,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-crds
+  name: cluster-manage-crds
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2128,7 +2128,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-alerting-messages
+  name: cluster-manage-alerting-messages
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2151,7 +2151,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-alerting-policies
+  name: cluster-manage-alerting-policies
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2174,7 +2174,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-project-resources
+  name: cluster-manage-project-resources
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2197,7 +2197,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-cluster-settings
+  name: cluster-view-cluster-settings
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2219,7 +2219,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-cluster-settings
+  name: cluster-manage-cluster-settings
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2241,7 +2241,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-components
+  name: cluster-view-components
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2263,7 +2263,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-members
+  name: cluster-manage-members
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2286,7 +2286,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-network-resources
+  name: cluster-manage-network-resources
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2309,7 +2309,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-nodes
+  name: cluster-manage-nodes
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2332,7 +2332,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-projects
+  name: cluster-manage-projects
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2355,7 +2355,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-roles
+  name: cluster-manage-roles
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2378,7 +2378,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-storageclasses
+  name: cluster-manage-storageclasses
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2401,7 +2401,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-volumes
+  name: cluster-manage-volumes
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2424,7 +2424,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-alerting-messages
+  name: cluster-view-alerting-messages
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2446,7 +2446,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-alerting-policies
+  name: cluster-view-alerting-policies
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2469,7 +2469,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-project-resources
+  name: cluster-view-project-resources
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2492,7 +2492,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-cluster-monitoring
+  name: cluster-view-cluster-monitoring
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2514,7 +2514,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-cluster-monitoring
+  name: cluster-manage-cluster-monitoring
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2536,7 +2536,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-members
+  name: cluster-view-members
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2558,7 +2558,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-network-resources
+  name: cluster-view-network-resources
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2580,7 +2580,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-nodes
+  name: cluster-view-nodes
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2602,7 +2602,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-projects
+  name: cluster-view-projects
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2624,7 +2624,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-roles
+  name: cluster-view-roles
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2647,7 +2647,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-storageclasses
+  name: cluster-view-storageclasses
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2670,7 +2670,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-volume-snapshots
+  name: cluster-view-volume-snapshots
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2693,7 +2693,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-volume-snapshots
+  name: cluster-manage-volume-snapshots
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2716,7 +2716,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-volume-snapshot-classes
+  name: cluster-view-volume-snapshot-classes
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2738,7 +2738,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-volume-snapshot-classes
+  name: cluster-manage-volume-snapshot-classes
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2761,7 +2761,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-volumes
+  name: cluster-view-volumes
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2783,7 +2783,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-configmaps
+  name: cluster-view-configmaps
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2805,7 +2805,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-configmaps
+  name: cluster-manage-configmaps
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2828,7 +2828,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-secrets
+  name: cluster-view-secrets
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2850,7 +2850,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-secrets
+  name: cluster-manage-secrets
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2873,7 +2873,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-service-accounts
+  name: cluster-view-service-accounts
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -2895,7 +2895,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-service-accounts
+  name:cluster-manage-service-accounts
   labels:
     scope.kubesphere.io/cluster: ""
 spec:
@@ -3189,7 +3189,7 @@ role:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-alerting-messages
+  name: namespace-view-alerting-messages
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3219,7 +3219,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-alerting-messages
+  name: namespace-manage-alerting-messages
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3248,7 +3248,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-alerting-policies
+  name: namespace-view-alerting-policies
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3284,7 +3284,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-alerting-policies
+  name: namespace-manage-alerting-policies
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3313,7 +3313,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-custom-monitoring
+  name: namespace-view-custom-monitoring
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3345,7 +3345,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-custom-monitoring
+  name: namespace-manage-custom-monitoring
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3376,7 +3376,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-members
+  name: namespace-view-members
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
@@ -3408,7 +3408,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-members
+  name: namespace-manage-members
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
@@ -3438,7 +3438,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-namespace-basic
+  name: namespace-namespace-basic
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3471,7 +3471,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-devops-basic
+  name: namespace-devops-basic
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -3500,7 +3500,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-project-settings
+  name: namespace-manage-project-settings
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3528,7 +3528,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-roles
+  name: namespace-view-roles
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
@@ -3560,7 +3560,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-roles
+  name: namespace-manage-roles
   labels:
     scope.kubesphere.io/namespace: ""
     scope.kubesphere.io/devops: ""
@@ -3588,7 +3588,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-app-workloads
+  name: namespace-view-app-workloads
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3651,7 +3651,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-app-workloads
+  name: namespace-manage-app-workloads
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3716,7 +3716,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-configmaps
+  name: namespace-view-configmaps
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3747,7 +3747,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-configmaps
+  name: namespace-manage-configmaps
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3776,7 +3776,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-secrets
+  name: namespace-view-secrets
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3807,7 +3807,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-secrets
+  name: namespace-manage-secrets
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3835,7 +3835,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-serviceaccount
+  name: namespace-view-serviceaccount
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3866,7 +3866,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-serviceaccount
+  name: namespace-manage-serviceaccount
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3894,7 +3894,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-volumes
+  name: namespace-view-volumes
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3931,7 +3931,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-volumes
+  name: namespace-manage-volumes
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3966,7 +3966,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-snapshots
+  name: namespace-view-snapshots
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -3996,7 +3996,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-snapshots
+  name: namespace-manage-snapshots
   labels:
     scope.kubesphere.io/namespace: ""
 spec:
@@ -4025,7 +4025,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-credentials
+  name: namespace-manage-credentials
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4055,7 +4055,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-pipelines
+  name: namespace-manage-pipelines
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4092,7 +4092,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-pipelineruns
+  name: namespace-manage-pipelineruns
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4125,7 +4125,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-credentials
+  name: namespace-view-credentials
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4156,7 +4156,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-pipelines
+  name: namespace-view-pipelines
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4200,7 +4200,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-gitops-applications
+  name: namespace-manage-gitops-applications
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4235,7 +4235,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-gitops-applications
+  name: namespace-view-gitops-applications
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4267,7 +4267,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-gitrepositories
+  name: namespace-manage-gitrepositories
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4296,7 +4296,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-gitrepositories
+  name: namespace-view-gitrepositories
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4327,7 +4327,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-view-pipelineruns
+  name: namespace-view-pipelineruns
   labels:
     scope.kubesphere.io/devops: ""
 spec:
@@ -4362,7 +4362,7 @@ spec:
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: RoleTemplate
 metadata:
-  name: role-template-manage-devops-settings
+  name: namespace-manage-devops-settings
   labels:
     scope.kubesphere.io/devops: ""
 spec:
