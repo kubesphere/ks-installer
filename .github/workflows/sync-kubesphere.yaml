@@ -18,41 +18,55 @@ jobs:
   Sync-kubesphere-master-branch:
     runs-on: ubuntu-latest
     
-    steps:
-      - uses: actions/checkout@v3
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           ref: master
-          
-      - name: Sync kubesphere master branch
-        run: |
-          git config --global user.email kubesphere@kubesphere.io
-          git config --global user.name kubesphere
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/kubesphere/qkcp-installer
-          git remote add kubesphere https://github.com/kubesphere/ks-installer.git
-          git fetch kubesphere  
-          git rebase kubesphere/$MASTER_BRANCH
-          rm -rf .github
-          git add .
-          git commit -m "Sync kubesphere $MASTER_BRANCH branch"
-          git push origin $MASTER_BRANCH:$MASTER_BRANCH --force
-          
+          fetch-depth: 0
+
+      - name: Merge from upstream repo
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.2
+        with:
+          target_sync_branch: $MASTER_BRANCH
+          upstream_sync_branch: $MASTER_BRANCH
+          upstream_sync_repo: kubesphere/ks-installer
+
+      - name: New commits found
+        if: steps.sync.outputs.has_new_commits == 'true'
+        run: echo "New commits were found to sync."
+      
+      - name: No new commits
+        if: steps.sync.outputs.has_new_commits == 'false'
+        run: echo "There were no new commits."
+        
+      - name: Show value of 'has_new_commits'
+        run: echo ${{ steps.sync.outputs.has_new_commits }}
+        
   Sync-kubesphere-release-branch:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           ref: release-3.3
-          
-      - name: Sync kubesphere master branch
-        run: |
-          git config --global user.email kubesphere@kubesphere.io
-          git config --global user.name kubesphere
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/kubesphere/qkcp-installer
-          git remote add kubesphere https://github.com/kubesphere/ks-installer.git
-          git fetch kubesphere  
-          git rebase kubesphere/$RELEASE_BRANCH
-          rm -rf .github
-          git add .
-          git commit -m "Sync kubesphere $RELEASE_BRANCH branch"
-          git push origin $RELEASE_BRANCH:$RELEASE_BRANCH --force
+          fetch-depth: 0
+
+      - name: Merge from upstream repo
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.2
+        with:
+          target_sync_branch: $RELEASE_BRANCH
+          upstream_sync_branch: $RELEASE_BRANCH
+          upstream_sync_repo: kubesphere/ks-installer
+
+      - name: New commits found
+        if: steps.sync.outputs.has_new_commits == 'true'
+        run: echo "New commits were found to sync."
+      
+      - name: No new commits
+        if: steps.sync.outputs.has_new_commits == 'false'
+        run: echo "There were no new commits."
+        
+      - name: Show value of 'has_new_commits'
+        run: echo ${{ steps.sync.outputs.has_new_commits }}
