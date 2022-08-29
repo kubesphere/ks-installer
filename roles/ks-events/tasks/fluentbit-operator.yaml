@@ -23,7 +23,7 @@
   debug:
     msg: "{{logging_container_runtime}}"
 
-- name: ks-events | Creating manifests
+- name: ks-events | Creating es manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
@@ -31,7 +31,17 @@
     - { name: custom-output-elasticsearch-events, file: custom-output-elasticsearch-events.yaml }
     - { name: custom-input-events, file: custom-input-events.yaml }
     - { name: custom-filter-events, file: custom-filter-events.yaml }
+  when: "common.es is defined and common.es.enabled is defined and common.es.enabled"
 
+- name: ks-events | Creating opensearch manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/fluentbit-operator/{{ item.file }}"
+  with_items:
+    - { name: custom-output-opensearch-events, file: custom-output-opensearch-events.yaml }
+    - { name: custom-input-events, file: custom-input-events.yaml }
+    - { name: custom-filter-events, file: custom-filter-events.yaml }
+  when: "common.opensearch is defined and common.opensearch.enabled is defined and common.opensearch.enabled"
 
 - name: ks-events | Apply fluentbit operator custom resources
   shell: >

@@ -58,6 +58,7 @@ spec:
       #   volumeSize: 20Gi  # The volume size of Elasticsearch data nodes.
       #   replicas: 1       # The total number of data nodes.
       #   resources: {}
+      enabled: false
       logMaxAge: 7             # Log retention time in built-in Elasticsearch. It is 7 days by default.
       elkPrefix: logstash      # The string making up index names. The index name will be formatted as ks-<elk_prefix>-log.
       basicAuth:
@@ -66,6 +67,24 @@ spec:
         password: ""
       externalElasticsearchHost: ""
       externalElasticsearchPort: ""
+    opensearch:   # Storage backend for logging, events and auditing.
+      # master:
+      #   volumeSize: 4Gi  # The volume size of Opensearch master nodes.
+      #   replicas: 1      # The total number of master nodes. Even numbers are not allowed.
+      #   resources: {}
+      # data:
+      #   volumeSize: 20Gi  # The volume size of Opensearch data nodes.
+      #   replicas: 1       # The total number of data nodes.
+      #   resources: {}
+      enabled: true
+      logMaxAge: 7             # Log retention time in built-in Opensearch. It is 7 days by default.
+      opensearchPrefix: whizard      # The string making up index names. The index name will be formatted as ks-<opensearchPrefix>-logging.
+      basicAuth:
+        enabled: true
+        username: "admin"
+        password: "admin"
+      externalOpensearchHost: ""
+      externalOpensearchPort: ""
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false         # Enable or disable the KubeSphere Alerting System.
     # thanosruler:
