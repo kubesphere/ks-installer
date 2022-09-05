@@ -175,11 +175,6 @@ metadata:
         allowedVerbs := ["get","list","watch"]
         allowedVerbs[_] == input.Verb
       }
-      allow = true {
-        input.APIGroup == "tenant.kubesphere.io"
-        input.Resource == "workspacetemplates"
-        input.Verb == "patch"
-      }
   name: authenticated
 rules:
   - apiGroups:
@@ -317,6 +312,12 @@ rules:
     verbs:
       - list
       - create
+  - apiGroups:
+      - tenant.kubesphere.io
+    resources:
+      - workspacetemplates
+    verbs:
+      - patch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
