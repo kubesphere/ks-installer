@@ -19,7 +19,7 @@
   when:
     - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.27.0") == -1)
 
-- name: servicemesh | Deploying jaeger-secret
+- name: servicemesh | Deploying es jaeger-secret
   shell: >
     {{ bin_dir }}/kubectl create secret generic jaeger-secret
     --from-literal=ES_PASSWORD={{ common.es.basicAuth.password }}
@@ -35,6 +35,25 @@
     - "common.es.basicAuth.enabled == true"
     - "common.es.basicAuth.password is defined and common.es.basicAuth.password != ''"
     - "common.es.basicAuth.username is defined and common.es.basicAuth.username != ''"
+    - "common.es is defined and common.es.enabled is defined and common.es.enabled"
+
+- name: servicemesh | Deploying opensearch jaeger-secret
+  shell: >
+    {{ bin_dir }}/kubectl create secret generic jaeger-secret
+    --from-literal=ES_PASSWORD={{ common.opensearch.basicAuth.password }}
+    --from-literal=ES_USERNAME={{ common.opensearch.basicAuth.username }}
+    --namespace istio-system
+    --dry-run=client -oyaml | {{ bin_dir }}/kubectl apply -f -
+  register: jaeger_result
+  until: jaeger_result is succeeded
+  retries: 5
+  delay: 10
+  when:
+    - "common.opensearch.basicAuth.enabled is defined"
+    - "common.opensearch.basicAuth.enabled == true"
+    - "common.opensearch.basicAuth.password is defined and common.opensearch.basicAuth.password != ''"
+    - "common.opensearch.basicAuth.username is defined and common.opensearch.basicAuth.username != ''"
+    - "common.opensearch is defined and common.opensearch.enabled is defined and common.opensearch.enabled"
 
 - name: servicemesh | Deploying jaeger-cr
   shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-cr.yaml --namespace istio-system"

@@ -227,14 +227,18 @@ notification_adapter_tag: v0.2.0
 #ks-logger
 docker_elasticsearch_curator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-curator"
 docker_elasticsearch_curator_tag: v5.7.6
+docker_opensearch_curator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/opensearch-curator"
+docker_opensearch_curator_tag: v0.0.5
 elasticsearch_oss_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/elasticsearch-oss"
 elasticsearch_oss_tag: 6.8.22
 fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluentbit-operator"
 fluentbit_operator_tag: v0.13.0
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
+opensearch_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/opensearch"
+opensearch_tag: 2.1.0
 ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluent-bit"
-ks_fluent_bit_tag: "v1.8.11"
+ks_fluent_bit_tag: "v1.9.4"
 ks_log_sidecar_injector_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/log-sidecar-injector"
 ks_log_sidecar_injector_tag: 1.1
 filebeat_repo: "{{ base_repo }}{{ namespace_override | default('elastic') }}/filebeat"
@@ -830,10 +834,22 @@ images:
     sha256: "{{ docker_elasticsearch_curator_checksum|default(None) }}"
     group: "kubesphere-logging-images"
 
+  docker_opensearch_curator:
+    repo: "{{ docker_opensearch_curator_repo }}"
+    tag: "{{ docker_opensearch_curator_tag }}"
+    sha256: "{{ docker_opensearch_curator_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
+
   elasticsearch_oss:
     repo: "{{ elasticsearch_oss_repo }}"
     tag: "{{ elasticsearch_oss_tag }}"
     sha256: "{{ elasticsearch_oss_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
+
+  opensearch:
+    repo: "{{ opensearch_repo }}"
+    tag: "{{ opensearch_tag }}"
+    sha256: "{{ opensearch_checksum|default(None) }}"
     group: "kubesphere-logging-images"
 
   fluentbit_operator:

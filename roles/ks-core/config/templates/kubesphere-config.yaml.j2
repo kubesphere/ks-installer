@@ -168,16 +168,26 @@ data:
     logging:
 {% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
       host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
-{% else %}
+{% elif common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchHost != "" and common.opensearch.externalOpensearchPort != "" %}
+      host: {{ common.opensearch.externalOpensearchProtocol | default('https') }}://{{ common.opensearch.externalOpensearchHost }}:{{ common.opensearch.externalOpensearchPort }}
+{% elif common.es is defined and common.es.enabled is defined and common.es.enabled  %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+{% else %}
+      host: https://opensearch-cluster-data.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.basicAuth.username | default("") }}"
       password: "{{ common.es.basicAuth.password | default("") }}"
+{% elif common.opensearch.basicAuth is defined and common.opensearch.basicAuth.enabled == true %}
+      basicAuth: {{ common.opensearch.basicAuth.enabled }}
+      username: "{{ common.opensearch.basicAuth.username | default("admin") }}"
+      password: "{{ common.opensearch.basicAuth.password | default("admin") }}"
 {% endif %}
 {% if esIndexPrefix is defined %}
       indexPrefix: {{ esIndexPrefix }}
+{% elif common.opensearch.opensearchPrefix is defined %}
+      indexPrefix: ks-{{ common.opensearch.opensearchPrefix }}-logging
 {% else %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-log
 {% endif %}
@@ -186,15 +196,27 @@ data:
     events:
 {% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
       host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
-{% else %}
+{% elif common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchHost != "" and common.opensearch.externalOpensearchPort != "" %}
+      host: {{ common.opensearch.externalOpensearchProtocol | default('https') }}://{{ common.opensearch.externalOpensearchHost }}:{{ common.opensearch.externalOpensearchPort }}
+{% elif common.es is defined and common.es.enabled is defined and common.es.enabled  %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+{% else %}
+      host: https://opensearch-cluster-data.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.basicAuth.username | default("") }}"
       password: "{{ common.es.basicAuth.password | default("") }}"
+{% elif common.opensearch.basicAuth is defined and common.opensearch.basicAuth.enabled == true %}
+      basicAuth: {{ common.opensearch.basicAuth.enabled }}
+      username: "{{ common.opensearch.basicAuth.username | default("admin") }}"
+      password: "{{ common.opensearch.basicAuth.password | default("admin") }}"
 {% endif %}
+{% if common.opensearch.opensearchPrefix is defined %}
+      indexPrefix: ks-{{ common.opensearch.opensearchPrefix }}-events
+{% else %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-events
+{% endif %}
 {% endif %}
 {% if auditing.enabled is defined and auditing.enabled == true %}
     auditing:
@@ -202,15 +224,27 @@ data:
       webhookURL: https://kube-auditing-webhook-svc.kubesphere-logging-system.svc:6443/audit/webhook/event
 {% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
       host: {{ common.es.externalElasticsearchProtocol | default('http') }}://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
-{% else %}
+{% elif common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchHost != "" and common.opensearch.externalOpensearchPort != "" %}
+      host: {{ common.opensearch.externalOpensearchProtocol | default('https') }}://{{ common.opensearch.externalOpensearchHost }}:{{ common.opensearch.externalOpensearchPort }}
+{% elif common.es is defined and common.es.enabled is defined and common.es.enabled  %}
       host: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
+{% else %}
+      host: https://opensearch-cluster-data.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled == true %}
       basicAuth: {{ common.es.basicAuth.enabled }}
       username: "{{ common.es.basicAuth.username | default("") }}"
       password: "{{ common.es.basicAuth.password | default("") }}"
+{% elif common.opensearch.basicAuth is defined and common.opensearch.basicAuth.enabled == true %}
+      basicAuth: {{ common.opensearch.basicAuth.enabled }}
+      username: "{{ common.opensearch.basicAuth.username | default("admin") }}"
+      password: "{{ common.opensearch.basicAuth.password | default("admin") }}"
 {% endif %}
+{% if common.opensearch.opensearchPrefix is defined %}
+      indexPrefix: ks-{{ common.opensearch.opensearchPrefix }}-auditing
+{% else %}
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
+{% endif %}
 {% endif %}
 {% if alerting.enabled is defined and alerting.enabled == true %}
     alerting:
