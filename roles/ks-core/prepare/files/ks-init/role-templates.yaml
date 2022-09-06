@@ -373,7 +373,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '["global-view-workspaces","global-manage-workspaces","role-template-view-users"]'
+    iam.kubesphere.io/aggregation-roles: '["global-view-workspaces","global-manage-workspaces","global-view-users"]'
     kubesphere.io/creator: admin
   name: workspaces-manager
 rules:
@@ -994,7 +994,7 @@ kind: RoleTemplate
 metadata:
   name: global-view-roles
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-users"]'
+    iam.kubesphere.io/dependencies: '["global-view-users"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
     kubesphere.io/alias-name: Roles View
@@ -1062,7 +1062,7 @@ kind: RoleTemplate
 metadata:
   name: global-manage-app-templates
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
+    iam.kubesphere.io/dependencies: '["global-view-app-templates"]'
     iam.kubesphere.io/module: Apps Management
     iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
     kubesphere.io/alias-name: App Templates Management
@@ -1337,7 +1337,7 @@ kind: RoleTemplate
 metadata:
   name: workspace-manage-projects
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects","role-template-view-members","role-template-create-projects"]'
+    iam.kubesphere.io/dependencies: '["workspace-view-projects","workspace-view-members","workspace-create-projects"]'
     iam.kubesphere.io/module: Projects Management
     iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
     kubesphere.io/alias-name: Projects Management
@@ -1499,7 +1499,7 @@ kind: RoleTemplate
 metadata:
   name: workspace-manage-devops
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-devops","role-template-view-members","role-template-create-devops"]'
+    iam.kubesphere.io/dependencies: '["workspace-view-devops","workspace-view-members","workspace-create-devops"]'
     iam.kubesphere.io/module: DevOps Management
     iam.kubesphere.io/role-template-rules: '{"devops": "manage"}'
     kubesphere.io/alias-name: DevOps Management
@@ -1561,7 +1561,7 @@ kind: RoleTemplate
 metadata:
   name: workspace-manage-app-repos
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-repos"]'
+    iam.kubesphere.io/dependencies: '["workspace-view-app-repos"]'
     iam.kubesphere.io/module: Apps Management
     iam.kubesphere.io/role-template-rules: '{"app-repos": "manage"}'
     kubesphere.io/alias-name: Workspace App Repos Management
@@ -1610,7 +1610,7 @@ kind: RoleTemplate
 metadata:
   name: workspace-manage-app-templates
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-templates"]'
+    iam.kubesphere.io/dependencies: '["workspace-view-app-templates"]'
     iam.kubesphere.io/module: Apps Management
     iam.kubesphere.io/role-template-rules: '{"app-templates": "manage"}'
     kubesphere.io/alias-name: Workspace App Templates Management
@@ -1632,7 +1632,7 @@ kind: RoleTemplate
 metadata:
   name: workspace-view-roles
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
+    iam.kubesphere.io/dependencies: '["workspace-view-members"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
     kubesphere.io/alias-name: Workspace Roles View
@@ -1815,7 +1815,7 @@ kind: RoleTemplate
 metadata:
   name: workspace-manage-groups
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-groups","role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["workspace-view-groups","workspace-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"groups": "manage"}'
     kubesphere.io/alias-name: Workspace Groups Management
@@ -1840,7 +1840,7 @@ kind: RoleTemplate
 metadata:
   name: workspace-view-groups
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["workspace-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"groups": "view"}'
     kubesphere.io/alias-name: Workspace Groups View
@@ -1915,7 +1915,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-alerting-policies
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-alerting-policies", "cluster-view-alerting-messages"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     kubesphere.io/alias-name: Alerting Policies Management
     iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
@@ -1931,7 +1931,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-project-resources
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-project-resources", "role-template-view-projects"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-project-resources", "cluster-view-projects"]'
     iam.kubesphere.io/module: Project Resources Management
     kubesphere.io/alias-name: Project Resources Management
     iam.kubesphere.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage"}'
@@ -1992,7 +1992,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-members
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles", "role-template-view-members"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-roles", "cluster-view-members"]'
     iam.kubesphere.io/module: Access Control
     kubesphere.io/alias-name: Cluster Members Management
     iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
@@ -2008,7 +2008,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-network-resources
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-network-resources"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-network-resources"]'
     iam.kubesphere.io/module: Network Management
     kubesphere.io/alias-name: Network Resources Management
     iam.kubesphere.io/role-template-rules: '{"networkpolicies": "manage"}'
@@ -2024,7 +2024,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-nodes
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-nodes"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-nodes"]'
     iam.kubesphere.io/module: Cluster Resources Management
     kubesphere.io/alias-name: Nodes Management
     iam.kubesphere.io/role-template-rules: '{"nodes": "manage"}'
@@ -2040,7 +2040,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-projects
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-projects"]'
     iam.kubesphere.io/module: Project Resources Management
     kubesphere.io/alias-name: Projects Management
     iam.kubesphere.io/role-template-rules: '{"projects": "manage"}'
@@ -2056,7 +2056,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-roles
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-roles"]'
     iam.kubesphere.io/module: Access Control
     kubesphere.io/alias-name: Cluster Roles Management
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
@@ -2072,7 +2072,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-storageclasses
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-volumes", "cluster-view-storageclasses"]'
     iam.kubesphere.io/module: Storage Management
     kubesphere.io/alias-name: StorageClasses Management
     iam.kubesphere.io/role-template-rules: '{"storageclasses": "manage"}'
@@ -2088,7 +2088,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-volumes
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes", "role-template-view-storageclasses"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-volumes", "cluster-view-storageclasses"]'
     iam.kubesphere.io/module: Storage Management
     kubesphere.io/alias-name: Volumes Management
     iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
@@ -2119,7 +2119,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-view-alerting-policies
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-alerting-messages"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     kubesphere.io/alias-name: Alerting Policies View
     iam.kubesphere.io/role-template-rules: '{"alert-rules": "view"}'
@@ -2135,7 +2135,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-view-project-resources
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-projects"]'
     iam.kubesphere.io/module: Project Resources Management
     kubesphere.io/alias-name: Project Resources View
     iam.kubesphere.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view"}'
@@ -2241,7 +2241,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-view-roles
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-members"]'
     iam.kubesphere.io/module: Access Control
     kubesphere.io/alias-name: Cluster Roles View
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
@@ -2257,7 +2257,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-view-storageclasses
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-volumes"]'
     iam.kubesphere.io/module: Storage Management
     kubesphere.io/alias-name: StorageClasses View
     iam.kubesphere.io/role-template-rules: '{"storageclasses": "view"}'
@@ -2273,7 +2273,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-view-volume-snapshots
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-volumes"]'
     iam.kubesphere.io/module: Storage Management
     kubesphere.io/alias-name: Volume Snapshots View
     iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "view"}'
@@ -2289,7 +2289,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-volume-snapshots
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volume-snapshots"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-volume-snapshots"]'
     iam.kubesphere.io/module: Storage Management
     kubesphere.io/alias-name: Volume Snapshots Management
     iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
@@ -2320,7 +2320,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-volume-snapshot-classes
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volume-snapshot-classes"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-volume-snapshot-classes"]'
     iam.kubesphere.io/module: Storage Management
     kubesphere.io/alias-name: Volume Snapshot Classes Management
     iam.kubesphere.io/role-template-rules: '{"volume-snapshot-classes": "manage"}'
@@ -2366,7 +2366,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-configmaps
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-configmaps"]'
     iam.kubesphere.io/module: Configration Management
     kubesphere.io/alias-name: ConfigMap Management
     iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
@@ -2397,7 +2397,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-secrets
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-secrets"]'
     iam.kubesphere.io/module: Configration Management
     kubesphere.io/alias-name: Secret Management
     iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
@@ -2428,7 +2428,7 @@ kind: RoleTemplate
 metadata:
   name: cluster-manage-service-accounts
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-service-accounts"]'
+    iam.kubesphere.io/dependencies: '["cluster-view-service-accounts"]'
     iam.kubesphere.io/module: Configration Management
     kubesphere.io/alias-name: ServiceAccount Management
     iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
@@ -2448,7 +2448,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-manage-workspace-settings","role-template-view-workspace-settings","role-template-manage-projects","role-template-view-projects","role-template-create-projects","role-template-create-devops","role-template-view-devops","role-template-manage-devops","role-template-manage-app-templates","role-template-view-app-templates","role-template-manage-app-repos","role-template-view-app-repos","role-template-view-members","role-template-manage-members","role-template-manage-roles","role-template-view-roles","role-template-manage-groups","role-template-view-groups"]'
+      iam.kubesphere.io/aggregation-roles: '["workspace-manage-workspace-settings","workspace-view-workspace-settings","workspace-manage-projects","workspace-view-projects","workspace-create-projects","workspace-create-devops","workspace-view-devops","workspace-manage-devops","workspace-manage-app-templates","workspace-view-app-templates","workspace-manage-app-repos","workspace-view-app-repos","workspace-view-members","workspace-manage-members","workspace-manage-roles","workspace-view-roles","workspace-manage-groups","workspace-view-groups"]'
       kubesphere.io/creator: system
     name: admin
   rules:
@@ -2469,7 +2469,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-projects","role-template-view-devops","role-template-view-app-templates","role-template-view-app-repos","role-template-view-members","role-template-view-roles","role-template-view-groups","role-template-view-workspace-settings"]'
+      iam.kubesphere.io/aggregation-roles: '["workspace-view-projects","workspace-view-devops","workspace-view-app-templates","workspace-view-app-repos","workspace-view-members","workspace-view-roles","workspace-view-groups","workspace-view-workspace-settings"]'
       kubesphere.io/creator: system
     name: viewer
   rules:
@@ -2492,7 +2492,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-workspace-settings"]'
+      iam.kubesphere.io/aggregation-roles: '["workspace-view-workspace-settings"]'
       kubesphere.io/creator: system
     name: regular
   rules:
@@ -2524,7 +2524,7 @@ role:
   kind: WorkspaceRole
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-create-projects","role-template-create-devops","role-template-view-app-templates","role-template-manage-app-templates","role-template-view-workspace-settings"]'
+      iam.kubesphere.io/aggregation-roles: '["workspace-create-projects","workspace-create-devops","workspace-view-app-templates","workspace-manage-app-templates","workspace-view-workspace-settings"]'
       kubesphere.io/creator: system
     name: self-provisioner
   rules:
@@ -2579,23 +2579,23 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-manage-members",
-        "role-template-view-roles","role-template-manage-roles",
-        "role-template-view-app-workloads","role-template-manage-app-workloads",
-        "role-template-view-volumes","role-template-manage-volumes",
-        "role-template-view-snapshots","role-template-manage-snapshots",
-        "role-template-view-secrets","role-template-manage-secrets",
-        "role-template-view-serviceaccount","role-template-manage-serviceaccount",
-        "role-template-view-configmaps","role-template-manage-configmaps",
-        "role-template-view-alerting-policies","role-template-manage-alerting-policies",
-        "role-template-view-alerting-messages","role-template-manage-alerting-messages",
-        "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
-        "role-template-view-pipelines","role-template-manage-pipelines",
-        "role-template-view-pipelineruns","role-template-manage-pipelineruns",
-        "role-template-view-credentials","role-template-manage-credentials",
-        "role-template-view-gitrepositories","role-template-manage-gitrepositories",
-        "role-template-view-gitops-applications","role-template-manage-gitops-applications",
-        "role-template-manage-project-settings"'
+      iam.kubesphere.io/aggregation-roles: '["namespace-view-members","namespace-manage-members",
+        "namespace-view-roles","namespace-manage-roles",
+        "namespace-view-app-workloads","namespace-manage-app-workloads",
+        "namespace-view-volumes","namespace-manage-volumes",
+        "namespace-view-snapshots","namespace-manage-snapshots",
+        "namespace-view-secrets","namespace-manage-secrets",
+        "namespace-view-serviceaccount","namespace-manage-serviceaccount",
+        "namespace-view-configmaps","namespace-manage-configmaps",
+        "namespace-view-alerting-policies","namespace-manage-alerting-policies",
+        "namespace-view-alerting-messages","namespace-manage-alerting-messages",
+        "namespace-view-custom-monitoring","namespace-manage-custom-monitoring",
+        "namespace-view-pipelines","namespace-manage-pipelines",
+        "namespace-view-pipelineruns","namespace-manage-pipelineruns",
+        "namespace-view-credentials","namespace-manage-credentials",
+        "namespace-view-gitrepositories","namespace-manage-gitrepositories",
+        "namespace-view-gitops-applications","namespace-manage-gitops-applications",
+        "namespace-manage-project-settings"'
       kubesphere.io/creator: system
     name: admin
   rules:
@@ -2618,21 +2618,21 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
-        "role-template-view-app-workloads","role-template-manage-app-workloads",
-        "role-template-view-volumes","role-template-manage-volumes",
-        "role-template-view-snapshots","role-template-manage-snapshots",
-        "role-template-view-secrets","role-template-manage-secrets",
-        "role-template-view-serviceaccount","role-template-manage-serviceaccount",
-        "role-template-view-configmaps","role-template-manage-configmaps",
-        "role-template-view-alerting-policies","role-template-manage-alerting-policies",
-        "role-template-view-alerting-messages","role-template-manage-alerting-messages",
-        "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
-        "role-template-view-pipelines","role-template-manage-pipelines",
-        "role-template-view-pipelineruns","role-template-manage-pipelineruns",
-        "role-template-view-credentials","role-template-manage-credentials",
-        "role-template-view-gitrepositories","role-template-manage-gitrepositories",
-        "role-template-view-gitops-applications","role-template-manage-gitops-applications"]'
+      iam.kubesphere.io/aggregation-roles: '["namespace-view-members","namespace-view-roles",
+        "namespace-view-app-workloads","namespace-manage-app-workloads",
+        "namespace-view-volumes","namespace-manage-volumes",
+        "namespace-view-snapshots","namespace-manage-snapshots",
+        "namespace-view-secrets","namespace-manage-secrets",
+        "namespace-view-serviceaccount","namespace-manage-serviceaccount",
+        "namespace-view-configmaps","namespace-manage-configmaps",
+        "namespace-view-alerting-policies","namespace-manage-alerting-policies",
+        "namespace-view-alerting-messages","namespace-manage-alerting-messages",
+        "namespace-view-custom-monitoring","namespace-manage-custom-monitoring",
+        "namespace-view-pipelines","namespace-manage-pipelines",
+        "namespace-view-pipelineruns","namespace-manage-pipelineruns",
+        "namespace-view-credentials","namespace-manage-credentials",
+        "namespace-view-gitrepositories","namespace-manage-gitrepositories",
+        "namespace-view-gitops-applications","namespace-manage-gitops-applications"]'
       kubesphere.io/creator: system
     name: operator
   rules:
@@ -2686,13 +2686,13 @@ role:
   kind: Role
   metadata:
     annotations:
-      iam.kubesphere.io/aggregation-roles: '["role-template-view-members","role-template-view-roles",
-        "role-template-view-app-workloads","role-template-view-custom-monitoring",
-        "role-template-view-volumes","role-template-view-snapshots",
-        "role-template-view-secrets","role-template-view-configmaps","role-template-view-serviceaccount",
-        "role-template-view-alerting-policies","role-template-view-alerting-messages",
-        "role-template-view-pipelines","role-template-view-pipelineruns","role-template-view-credentials",
-        "role-template-view-gitrepositories", "role-template-view-gitops-applications"]'
+      iam.kubesphere.io/aggregation-roles: '["namespace-view-members","namespace-view-roles",
+        "namespace-view-app-workloads","namespace-view-custom-monitoring",
+        "namespace-view-volumes","namespace-view-snapshots",
+        "namespace-view-secrets","namespace-view-configmaps","namespace-view-serviceaccount",
+        "namespace-view-alerting-policies","namespace-view-alerting-messages",
+        "namespace-view-pipelines","namespace-view-pipelineruns","namespace-view-credentials",
+        "namespace-view-gitrepositories", "namespace-view-gitops-applications"]'
       kubesphere.io/creator: system
     name: viewer
   rules:
@@ -2742,7 +2742,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-alerting-messages
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-alerting-messages"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
     kubesphere.io/alias-name: Alerting Messages Management
@@ -2793,7 +2793,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-alerting-policies
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-alerting-policies"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     iam.kubesphere.io/role-template-rules: '{"alert-rules": "manage"}'
     kubesphere.io/alias-name: Alerting Policies Management
@@ -2840,7 +2840,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-custom-monitoring
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-custom-monitoring"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-custom-monitoring"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     iam.kubesphere.io/role-template-rules: '{"custom-monitoring": "manage"}'
     kubesphere.io/alias-name: Custom Monitoring Management
@@ -2980,7 +2980,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-view-roles
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-members"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-members"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "view"}'
     kubesphere.io/alias-name: Project Roles View
@@ -3026,7 +3026,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-view-app-workloads
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-view-secrets","role-template-view-configmaps"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-volumes","namespace-view-secrets","namespace-view-configmaps"]'
     iam.kubesphere.io/module: Application Workloads
     iam.kubesphere.io/role-template-rules: '{"applications":"view","deployments":"view","statefulsets":"view",
       "daemonsets":"view","jobs":"view","cronjobs":"view","pods":"view","services":"view","ingresses":"view"}'
@@ -3082,7 +3082,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-app-workloads
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-app-workloads"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-app-workloads"]'
     iam.kubesphere.io/module: Application Workloads
     iam.kubesphere.io/role-template-rules: '{"applications":"manage","deployments":"manage","statefulsets":"manage",
       "daemonsets":"manage","jobs":"manage","cronjobs":"manage","pods":"manage","services":"manage","ingresses":"manage",
@@ -3164,7 +3164,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-configmaps
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-configmaps"]'
     iam.kubesphere.io/module: Configuration Center
     iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
     kubesphere.io/alias-name: ConfigMaps Management
@@ -3210,7 +3210,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-secrets
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-secrets"]'
     iam.kubesphere.io/module: Configuration Center
     iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
     kubesphere.io/alias-name: Secrets Management
@@ -3231,7 +3231,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-view-serviceaccount
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-roles","role-template-view-secrets"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-roles","namespace-view-secrets"]'
     iam.kubesphere.io/module: Configuration Center
     iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
     kubesphere.io/alias-name: ServiceAccount View
@@ -3255,7 +3255,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-serviceaccount
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-serviceaccount"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-serviceaccount"]'
     iam.kubesphere.io/module: Configuration Center
     iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
     kubesphere.io/alias-name: ServiceAccount Management
@@ -3276,7 +3276,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-view-volumes
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-snapshots"]'
     iam.kubesphere.io/module: Storage Management
     iam.kubesphere.io/role-template-rules: '{"volumes": "view"}'
     kubesphere.io/alias-name: Volumes View
@@ -3306,7 +3306,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-volumes
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-volumes","role-template-manage-snapshots"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-volumes","namespace-manage-snapshots"]'
     iam.kubesphere.io/module: Storage Management
     iam.kubesphere.io/role-template-rules: '{"volumes": "manage"}'
     kubesphere.io/alias-name: Volumes Management
@@ -3357,7 +3357,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-snapshots
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-snapshots"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-snapshots"]'
     iam.kubesphere.io/module: Storage Management
     iam.kubesphere.io/role-template-rules: '{"volume-snapshots": "manage"}'
     kubesphere.io/alias-name: Volume Snapshots Management
@@ -3379,7 +3379,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-credentials
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-credentials"]'
     iam.kubesphere.io/module: Credentials Management
     kubesphere.io/alias-name: Credentials Management
     iam.kubesphere.io/role-template-rules: '{"credentials": "manage"}'
@@ -3402,7 +3402,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-pipelines
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-manage-pipelineruns", "role-template-view-credentials"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-pipelines", "namespace-manage-pipelineruns", "namespace-view-credentials"]'
     iam.kubesphere.io/module: Pipelines Management
     kubesphere.io/alias-name: Pipelines Management
     iam.kubesphere.io/role-template-rules: '{"pipelines": "manage", "pipelineruns": "manage"}'
@@ -3432,7 +3432,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-pipelineruns
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-pipelines", "role-template-view-pipelineruns"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-pipelines", "namespace-view-pipelineruns"]'
     iam.kubesphere.io/module: Pipelines Management
     kubesphere.io/alias-name: PipelineRuns Management
     iam.kubesphere.io/role-template-rules: '{"pipelineruns": "manage"}'
@@ -3482,7 +3482,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-view-pipelines
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-pipelineruns", "role-template-view-gitrepositories"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-pipelineruns", "namespace-view-gitrepositories"]'
     iam.kubesphere.io/module: Pipelines Management
     kubesphere.io/alias-name: Pipelines View
     iam.kubesphere.io/role-template-rules: '{"pipelines": "view", "pipelineruns": "view"}'
@@ -3519,7 +3519,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-gitops-applications
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-gitops-applications"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-gitops-applications"]'
     iam.kubesphere.io/module: Continuous Deployments Management
     kubesphere.io/alias-name: Continuous Deployments Management
     iam.kubesphere.io/role-template-rules: '{"applications": "manage"}'
@@ -3547,7 +3547,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-view-gitops-applications
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-gitrepositories"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-gitrepositories"]'
     iam.kubesphere.io/module: Continuous Deployments Management
     kubesphere.io/alias-name: Continuous Deployments View
     iam.kubesphere.io/role-template-rules: '{"applications": "view"}'
@@ -3572,7 +3572,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-manage-gitrepositories
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-gitrepositories"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-gitrepositories"]'
     iam.kubesphere.io/module: Code Repositories Management
     kubesphere.io/alias-name: Code Repositories Management
     iam.kubesphere.io/role-template-rules: '{"gitrepositories": "manage"}'
@@ -3594,7 +3594,7 @@ kind: RoleTemplate
 metadata:
   name: namespace-view-gitrepositories
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-credentials"]'
+    iam.kubesphere.io/dependencies: '["namespace-view-credentials"]'
     iam.kubesphere.io/module: Code Repositories Management
     kubesphere.io/alias-name: Code Repositories View
     iam.kubesphere.io/role-template-rules: '{"gitrepositories": "view"}'
