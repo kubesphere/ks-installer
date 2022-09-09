@@ -1,32 +1,34 @@
 ---
-- name: SpringCloud | Getting Nacos installation files
+- name: SpringCloud | Getting installation files
   copy:
-    src: "nacos"
+    src: "{{ item }}"
     dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "springcloud-controller"
 
 - name: SpringCloud | Creating manifests
   template:
     src: "{{ item.file }}.j2"
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
-    - { path: nacos, file: custom-values-nacos.yaml }
+    - { path: springcloud-controller, file: custom-values-springcloud.yaml }
 
-- name: SpringCloud | Installing Nacos
+- name: SpringCloud | Installing springcloud-controller
   shell: >
-    {{ bin_dir }}/helm upgrade --install nacos
-    {{ kubesphere_dir }}/nacos
-    --namespace nacos-system
+    {{ bin_dir }}/helm upgrade --install springcloud-controller
+    {{ kubesphere_dir }}/springcloud-controller
+    --namespace kubesphere-spring-cloud-system
     --create-namespace
-    -f {{ kubesphere_dir }}/nacos/custom-values-nacos.yaml
+    -f {{ kubesphere_dir }}/springcloud-controller/custom-values-springcloud.yaml
   register: result
   until: result is succeeded
   retries: 3
 
-- name: SpringCloud | Labeling Nacos namespace
+- name: SpringCloud | Labeling namespace
   shell: >
-    {{ bin_dir }}/kubectl label namespace nacos-system kubesphere.io/workspace=system-workspace --overwrite
+    {{ bin_dir }}/kubectl label namespace kubesphere-spring-cloud-system kubesphere.io/workspace=system-workspace --overwrite
 
-- name: SpringCloud | Importing Nacos status
+- name: SpringCloud | Importing springcloud status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge

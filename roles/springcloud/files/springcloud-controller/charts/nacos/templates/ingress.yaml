@@ -29,7 +29,7 @@ spec:
         {{- range .paths }}
           - path: {{ . }}
             backend:
-              serviceName: nacos-cs
+              serviceName: nacos
               servicePort: http
         {{- end }}
   {{- end }}

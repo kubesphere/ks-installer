@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nacos-hs
+  name: nacos
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
 spec:
@@ -31,7 +31,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nacos-cs
+  name: nacos
   labels:
   {{- toYaml .Values.service.labels | nindent 4 }}
   annotations:
@@ -43,6 +43,9 @@ spec:
       targetPort: {{ .Values.nacos.serverPort }}
       protocol: TCP
       name: http
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.nodePort }}
+  {{- end }}
     - port: {{ add .Values.service.port 1000}}
       name: client-rpc
       targetPort: {{add .Values.nacos.serverPort 1000}}
@@ -54,9 +57,6 @@ spec:
       name: old-raft-rpc
       targetPort: 7848
       protocol: TCP
-      {{- if eq .Values.service.type "NodePort" }}
-      nodePort: {{ .Values.service.nodePort }}
-  {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "nacos.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "nacos.fullname" . }}
+  name: nacos
   annotations:
   {{- toYaml .Values.annotations | indent 4 }}
 spec:
   {{- if eq .Values.global.mode "cluster" }}
-  serviceName: nacos-hs
+  serviceName: nacos
   {{- else }}
-  serviceName: nacos-cs
+  serviceName: nacos
   {{- end }}
   replicas: {{ .Values.nacos.replicaCount }}
   selector:
@@ -66,13 +66,21 @@ spec:
               value: {{ .Values.nacos.serverPort | quote }}
             - name: PREFER_HOST_MODE
               value: {{ .Values.nacos.preferhostmode | quote }}
+            - name: NACOS_AUTH_ENABLE
+              value: {{ .Values.nacos.auth.enabled | quote }}
+            - name: NACOS_AUTH_TOKEN_EXPIRE_SECONDS
+              value: {{ .Values.nacos.auth.tokenExpireSeconds | quote }}
+            - name: NACOS_AUTH_TOKEN
+              value: {{ .Values.nacos.auth.token | quote }}
+            - name: NACOS_AUTH_CACHE_ENABLE
+              value: {{ .Values.nacos.auth.cacheEnabled | quote }}
             {{- if eq .Values.global.mode "standalone" }}
             - name: MODE
               value: "standalone"
 
             {{- else if eq .Values.global.mode "cluster" }}
             - name: SERVICE_NAME
-              value: "nacos-hs"
+              value: "nacos"
             - name: DOMAIN_NAME
               value: {{ .Values.nacos.domainName | quote }}
             - name: POD_NAMESPACE

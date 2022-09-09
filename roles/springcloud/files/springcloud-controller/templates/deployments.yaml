@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-cloud-controller-manager
+  labels:
+    control-plane: controller-manager
+spec:
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+    spec:
+      initContainers:
+        - name: wait-nacos
+          image: busybox:1.32
+          imagePullPolicy: IfNotPresent
+          command: [ 'sh', '-c', 'until nc -z nacos.{{ .Release.Namespace }}.svc {{ .Values.nacos.service.port | default 8848 }}; do echo "waiting for nacos"; sleep 2; done;' ]
+      containers:
+        - command:
+            - /manager
+          args:
+            - "--nacos-server-host=nacos.{{ .Release.Namespace }}.svc"
+            - "--nacos-server-username=$(NACOS_USER)"
+            - "--nacos-server-password=$(NACOS_PASSWORD)"
+            - "--health-probe-bind-address=:8081"
+            - "--metrics-bind-address=127.0.0.1:8080"
+            - "--leader-election"
+            {{- if .Values.nacos.service.port }}
+            - "--nacos-server-port={{ .Values.nacos.service.port }}"
+            {{- end }}
+            {{- if .Values.nacos.nacos.auth.enabled }}
+            - "--nacos-generate-account=true"
+            {{- end }}
+          env:
+            - name: NACOS_USER
+              valueFrom:
+                secretKeyRef:
+                  name: nacos-secret
+                  key: username
+            - name: NACOS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nacos-secret
+                  key: password
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          name: manager
+          ports:
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+      serviceAccountName: spring-cloud-controller-manager
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: controller-manager-server-cert

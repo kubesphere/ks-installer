@@ -23,6 +23,11 @@ nacos:
   serverPort: 8848
   health:
     enabled: false
+  auth:
+    enabled: false
+    tokenExpireSeconds: 18000
+    token: SecretKey012345678901234567890123456789012345678901234567890123456789
+    cacheEnabled: false
   storage:
     type: embedded
 #    type: mysql

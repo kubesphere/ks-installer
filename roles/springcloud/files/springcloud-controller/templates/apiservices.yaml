@@ -1,0 +1,14 @@
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1alpha1.aggregated.springcloud.kubesphere.io
+spec:
+  group: aggregated.springcloud.kubesphere.io
+  groupPriorityMinimum: 1000
+  insecureSkipTLSVerify: true
+  service:
+    name: spring-cloud-controller-manager
+    namespace: {{ .Release.Namespace }}
+    port: 443
+  version: v1alpha1
+  versionPriority: 100
