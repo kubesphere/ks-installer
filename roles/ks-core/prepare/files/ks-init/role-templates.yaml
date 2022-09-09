@@ -804,6 +804,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"workspaces": "create"}'
     kubesphere.io/alias-name: Workspaces Create
   labels:
