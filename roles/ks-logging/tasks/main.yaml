@@ -39,7 +39,6 @@
   with_items:
     - { name: custom-output-elasticsearch-logging, file: custom-output-elasticsearch-logging.yaml }
   when:
-  - migrating_completed.rc != 0 or migrating_completed.stdout.find("es") == -1
   - "common.es is defined and common.es.enabled is defined and common.es.enabled"
 
 - name: ks-logging | Creating opensearch manifests

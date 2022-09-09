@@ -1,6 +1,10 @@
 # Whether Notification manager is running at the kubesphere.
 kubesphere: true
 
+hook:
+  postInstall:
+    backoffLimit: 3
+
 # notification-manager-operator
 operator: 
   containers:
@@ -115,9 +119,6 @@ notificationmanager:
       matchLabels:
         type: tenant
     options:
-      global:
-        templateFile:
-        - /etc/notification-manager/template
       email:
         notificationTimeout: 5
         deliveryType: bulk
@@ -126,19 +127,28 @@ notificationmanager:
       wechat:
         notificationTimeout: 5
   volumeMounts:
-    - mountPath: /etc/notification-manager/
-      name: notification-manager-template
+    - mountPath: /etc/localtime
+      name: host-time
+      readOnly: true
   volumes:
-    - configMap:
-        defaultMode: 420
-        name: notification-manager-template
-      name: notification-manager-template
+    - hostPath:
+        path: /etc/localtime
+        type: ""
+      name: host-time
+  volumeMounts: []
+  volumes: []
   defaultSecretNamespace: kubesphere-monitoring-federated
-  sidecars:
-    tenant:
-      image: {{ notification_tenant_sidecar_repo }}:{{ notification_tenant_sidecar_tag }}
-      name: tenant
-      type: kubesphere
+  groupLabels:
+      - alertname
+      - namespace
+  template:
+    language: English
+    languagePack:
+      - name: zh-cn
+        namespace: kubesphere-monitoring-system
+    text:
+      name: notification-manager-template
+      namespace: kubesphere-monitoring-system
   history:
     webhook:
       enabled: true

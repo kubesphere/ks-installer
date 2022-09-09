@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  zh-cn: |
+    - name: zh-cn
+      dictionary:
+        alert: "告警"
+        alerts: "告警" 
+        firing: "触发中"
+        resolved: "已解决"
+        alertname: "告警名称"
+        alerttype: "告警类型"
+        alerttime: "告警时间"
+        cluster: "集群"
+        namespace: "项目"
+        severity: "告警级别"
+        container: "容器"
+        pod: "容器组"
+        service: "服务"
+        deployment: "部署"
+        job: "任务"
+        daemonset: "守护进程集"
+        statefulset: "有状态副本集"
+        instance: "实例"
+        resource: "资源"
+        user: "用户"
+        verb: "操作"
+        group: "用户组"
+        requestReceivedTimestamp: "请求接收时间"
+        role: "角色"
+        host_ip: "主机IP"
+        node: "节点"
+        rule_id: "告警规则"
+        owner_kind: "目标类型"
+        workload: "工作负载"
+kind: ConfigMap
+metadata:
+  name: zh-cn
+  namespace: kubesphere-monitoring-system

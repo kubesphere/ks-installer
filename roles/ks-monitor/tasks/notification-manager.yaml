@@ -44,7 +44,7 @@
   delay: 10
   when:
     - notification_check.rc == 0
-    - notification_check.stdout.find("1.4.1") == -1
+    - notification_check.stdout.find("2.1.0-rc.1") == -1
 
 - name: notification-manager | Checking federatednamespace crd installed
   shell: >
@@ -62,6 +62,11 @@
   when:
     - multicluster is defined and multicluster.clusterRole == 'host'
     - crd_installed.rc != 0 or crd_installed.stdout.find("federatednamespaces.types.kubefed.io") == -1
+
+- name: notification-manager | Update federated crds
+  shell: "bash {{ kubesphere_dir }}/federated/update_federated_crds.sh"
+  when:
+    - multicluster is defined and multicluster.clusterRole == 'host'
 
 - name: notification-manager | Checking federated namespace deployed
   shell: >
