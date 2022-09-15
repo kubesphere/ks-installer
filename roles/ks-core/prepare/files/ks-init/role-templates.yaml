@@ -312,6 +312,12 @@ rules:
     verbs:
       - list
       - create
+  - apiGroups:
+      - tenant.kubesphere.io
+    resources:
+      - workspacetemplates
+    verbs:
+      - patch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -353,6 +359,24 @@ metadata:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-basic
 rules: []
+
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/aggregation-roles: '["role-template-create-workspaces"]'
+    kubesphere.io/creator: admin
+  name: platform-self-provisioner
+rules:
+  - apiGroups:
+      - tenant.kubesphere.io
+    resources:
+      - workspaces
+      - workspacetemplates
+    verbs:
+      - create
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -775,6 +799,26 @@ rules:
     verbs:
       - '*'
 
+---
+apiVersion: iam.kubesphere.io/v1alpha2
+kind: GlobalRole
+metadata:
+  annotations:
+    iam.kubesphere.io/module: Access Control
+    iam.kubesphere.io/role-template-rules: '{"workspaces": "create"}'
+    kubesphere.io/alias-name: Workspaces Create
+  labels:
+    iam.kubesphere.io/role-template: "false"
+  name: role-template-create-workspaces
+rules:
+  - apiGroups:
+      - tenant.kubesphere.io
+    resources:
+      - workspaces
+      - workspacetemplates
+    verbs:
+      - create
+      - watch
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
