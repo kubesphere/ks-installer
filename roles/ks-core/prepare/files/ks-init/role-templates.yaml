@@ -371,25 +371,6 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
-    iam.kubesphere.io/aggregation-roles: '["role-template-view-users","role-template-manage-users","role-template-view-roles","role-template-manage-roles"]'
-    kubesphere.io/creator: admin
-  name: users-manager
-rules:
-  - apiGroups:
-      - '*'
-    resources:
-      - users
-      - users/password
-      - users/loginrecords
-      - globalroles
-    verbs:
-      - '*'
-
----
-apiVersion: iam.kubesphere.io/v1alpha2
-kind: GlobalRole
-metadata:
-  annotations:
     iam.kubesphere.io/module: Clusters Management
     iam.kubesphere.io/role-template-rules: '{"clusters": "view"}'
     kubesphere.io/alias-name: Clusters View
