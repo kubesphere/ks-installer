@@ -13,7 +13,7 @@ spec:
   - name: k8s.rules
     rules:
     - expr: |
-        sum((container_cpu_usage_seconds_total{job="kubelet", image!="", container!=""} * on(namespace) group_left(workspace) kube_namespace_labels{job="kube-state-metrics"} - container_cpu_usage_seconds_total{job="kubelet", image!="", container!=""} offset 90s * on(namespace) group_left(workspace) kube_namespace_labels{job="kube-state-metrics"}) / 90) by (namespace, workspace)
+        sum (irate(container_cpu_usage_seconds_total{job="kubelet", image!="", container!=""}[5m]) * on(namespace) group_left(workspace) kube_namespace_labels{job="kube-state-metrics"}) by (namespace, workspace)
         or on(namespace, workspace) max by(namespace, workspace) (kube_namespace_labels * 0)
       record: namespace:container_cpu_usage_seconds_total:sum_rate
     - expr: |
@@ -43,6 +43,13 @@ spec:
     - expr: |
         sum (node_cpu_seconds_total{job="node-exporter", mode=~"user|nice|system|iowait|irq|softirq"}) by (cpu, instance, job, namespace, pod)
       record: node_cpu_used_seconds_total
+    - expr: |
+        max by (namespace,pod,node,owner_name,owner_kind,qos)(kube_pod_info{job="kube-state-metrics"}
+          * on (namespace, pod) group_left(owner_kind, owner_name) kube_pod_owner{job="kube-state-metrics"}
+          * on (namespace,pod) group_left(qos) max by (namespace,pod,qos)
+            ((label_replace(container_memory_working_set_bytes{job="kubelet", container="",pod!="",id=~".*(burstable|besteffort).*"},"qos","$1","id",".*(burstable|besteffort).*")
+            or label_replace(container_memory_working_set_bytes{job="kubelet", container="",pod!="",id!~".*(burstable|besteffort).*"},"qos","guaranteed","id",".*")) > bool 0))
+      record: 'qos_owner_node:kube_pod_info:'
     - expr: |
         max(kube_pod_info{job="kube-state-metrics"} * on(node) group_left(role) kube_node_role{job="kube-state-metrics", role="master"} or on(pod, namespace) kube_pod_info{job="kube-state-metrics"}) by (node, namespace, host_ip, role, pod)
       record: 'node_namespace_pod:kube_pod_info:'
