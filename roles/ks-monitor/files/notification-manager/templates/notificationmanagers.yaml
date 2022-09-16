@@ -1,4 +1,3 @@
-
 apiVersion: notification.kubesphere.io/v2beta2
 kind: NotificationManager
 metadata:
@@ -13,15 +12,15 @@ spec:
   imagePullPolicy: {{ .Values.notificationmanager.image.pullPolicy }}
   serviceAccountName: notification-manager-sa
   portName: webhook
-  nodeSelector: 
+  nodeSelector:
     {{- toYaml .Values.notificationmanager.nodeSelector | nindent 4 }}
-  affinity: 
+  affinity:
     {{- toYaml .Values.notificationmanager.affinity | nindent 4 }}
-  tolerations: 
+  tolerations:
     {{- toYaml .Values.notificationmanager.tolerations | nindent 4 }}
-  resources: 
+  resources:
     {{- toYaml .Values.notificationmanager.resources | nindent 4 }}
-  receivers: 
+  receivers:
     {{- toYaml .Values.notificationmanager.receivers | nindent 4 }}
   defaultConfigSelector:
     {{- toYaml .Values.notificationmanager.defaultConfigSelector | nindent 4 }}
@@ -31,8 +30,17 @@ spec:
     {{- toYaml .Values.notificationmanager.volumes | nindent 4 }}
   defaultSecretNamespace:
     {{- toYaml .Values.notificationmanager.defaultSecretNamespace | nindent 4 }}
+  {{- if eq .Values.kubesphere true }}
   sidecars:
-    {{- toYaml .Values.notificationmanager.sidecars | nindent 4 }}
+    tenant:
+      image: kubesphere/notification-tenant-sidecar:v3.2.0
+      name: tenant
+      type: kubesphere
+  {{- end}}
+  template:
+    {{- toYaml .Values.notificationmanager.template | nindent 4 }}
+  groupLabels:
+    {{- toYaml .Values.notificationmanager.groupLabels | nindent 4 }}
   history:
     {{- toYaml .Values.notificationmanager.history | nindent 4 }}
 
