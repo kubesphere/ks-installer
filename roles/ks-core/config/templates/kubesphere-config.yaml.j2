@@ -68,7 +68,7 @@ data:
       weaveScopeHost: weave-scope-app.weave
 {% endif %}
 {% if network.multus_cni is defined and network.multus_cni.enabled is defined and network.multus_cni.enabled %}
-      multusCni: true
+      enableMultusCni: true
 {% endif %}
 {% endif %}
 {% if devops.enabled is defined and devops.enabled == true %}
