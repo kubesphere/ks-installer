@@ -91,8 +91,11 @@ data:
       servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
       kialiQueryHost: http://kiali.istio-system:20001
 {% endif %}
-{% if openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled %}
+{% if ( (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled) or
+    ( openpitrix.nativehelmrelease is defined  and openpitrix.nativehelmrelease.enabled is defined ) )
+  %}
     openpitrix:
+    {% if openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled) }
       s3:
         endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
         region: {{ common.s3.region | default('us-east-1') }}
@@ -101,6 +104,11 @@ data:
         accessKeyID: {{ common.s3.accessKeyID | default('openpitrixminioaccesskey') }}
         secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
         bucket: {{ common.s3.openpitrixBucket | default('app-store') }}
+    {% endif %}
+    {% if openpitrix.nativehelmrelease is defined  and openpitrix.nativehelmrelease.enabled is defined %}
+      nativehelmrelease:
+        enable: {{ openpitrix.nativehelmrelease.enabled }}
+    {% endif %}
 {% endif %}
     multicluster:
       clusterRole: {{ multicluster.clusterRole }}
