@@ -1,0 +1,24 @@
+{{- if and .Values.storage.create .Values.storage.s3 -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: Storage
+metadata:
+  name: {{ include "whizard.storage.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.storage.blockManager }}
+  blockManager: 
+    enable: {{ .Values.storage.blockManager.enable }}
+    image: "{{ .Values.storage.blockManager.image.repository }}:{{ .Values.storage.blockManager.image.tag }}"
+    {{- if .Values.storage.blockManager.serviceAccountName }}
+    serviceAccountName: {{ .Values.storage.blockManager.serviceAccountName }}
+    {{- else }}
+    serviceAccountName: {{ include "whizard.manager.serviceAccountName" . }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.storage.s3 }}
+  s3:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

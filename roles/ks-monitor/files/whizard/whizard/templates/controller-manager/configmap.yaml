@@ -1,0 +1,153 @@
+{{- if and .Values.controllerManager.enabled .Values.controllerManager.config.create }}
+{{- $config := .Values.controllerManager.config }}
+{{- $whizardImage := printf "%s:%s" .Values.global.whizard.image.repository .Values.global.whizard.image.tag }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "whizard.fullname" . }}-config
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- include "whizard.labels" . | nindent 4 }}
+data:   
+  whizard.yaml: |
+    monitoring: 
+      {{- $adapter := $config.kubeSphereAdapter }}
+      enableKubeSphereAdapter: {{ $adapter.enabled }}
+      {{- if $adapter.defaultServiceReference }}
+      kubeSphereAdapterService: {{ $adapter.defaultServiceReference.namespace }}.{{ $adapter.defaultServiceReference.name }}
+      {{- else if .Values.service.enabled }}
+      kubeSphereAdapterService: {{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}
+      {{- end }}
+
+      {{- $gateway := $config.gateway }}
+      gateway: 
+        image: {{ $gateway.image.repository }}:{{ $gateway.image.tag | default .Chart.AppVersion }}
+        replicas: {{ $gateway.replicas }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+
+      {{- $router := $config.router }}
+      router: 
+        {{- if $router.image }}
+        image: {{ $router.image.repository }}:{{ $router.image.tag }}
+        {{- else }}
+        image: {{ $whizardImage }}
+        {{- end }}
+
+        replicas: {{ $router.replicas }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+        replicationFactor: {{ $router.replicationFactor }}
+
+      {{- $queryFrontend := $config.queryFrontend }}
+      queryFrontend: 
+        {{- if $queryFrontend.image }}
+        image: {{ $queryFrontend.image.repository }}:{{ $queryFrontend.image.tag }}
+        {{- else }}
+        image: {{ $whizardImage }}
+        {{- end }}
+
+        replicas: {{ $queryFrontend.replicas }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+        {{- with $queryFrontend.cacheConfig }}
+        cacheConfig:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+      {{- $query := $config.query }}
+      query: 
+        {{- if $query.image }}
+        image: {{ $query.image.repository }}:{{ $query.image.tag }}
+        {{- else }}
+        image: {{ $whizardImage }}
+        {{- end }}
+
+        replicas: {{ $query.replicas }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+
+        envoy: 
+          image: {{ $query.envoy.image.repository }}:{{ $query.envoy.image.tag | default .Chart.AppVersion }}
+
+      {{- $ingester := $config.ingester }}
+      ingester: 
+        {{- if $ingester.image }}
+        image: {{ $ingester.image.repository }}:{{ $ingester.image.tag }}
+        {{- else }}
+        image: {{ $whizardImage }}
+        {{- end }}
+
+        replicas: {{ $ingester.replicas }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+        localTsdbRetention: {{ $ingester.localTsdbRetention }}
+
+        {{- with $ingester.dataVolume }}
+        dataVolume:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+      {{- $store := $config.store }}
+      store: 
+        {{- if $store.image }}
+        image: {{ $store.image.repository }}:{{ $store.image.tag }}
+        {{- else }}
+        image: {{ $whizardImage }}
+        {{- end }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+        {{- with $store.indexCacheConfig }}
+        indexCacheConfig:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+      {{- $compactor := $config.compactor }}
+      compactor: 
+        {{- if $compactor.image }}
+        image: {{ $compactor.image.repository }}:{{ $compactor.image.tag }}
+        {{- else }}
+        image: {{ $whizardImage }}
+        {{- end }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+
+      {{- $ruler := $config.ruler }}
+      ruler: 
+        {{- if $ruler.image }}
+        image: {{ $ruler.image.repository }}:{{ $ruler.image.tag }}
+        {{- else }}
+        image: {{ $whizardImage }}
+        {{- end }}
+
+        shards: {{ $ruler.shards }}
+        replicas: {{ $ruler.replicas }}
+
+        logLevel: {{ .Values.global.whizard.log.level }}
+        logFormat: {{ .Values.global.whizard.log.format }}
+        evaluationInterval: {{ $ruler.evaluationInterval }}
+        {{- with $ruler.ruleSelectors }}
+        ruleSelectors:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $ruler.ruleNamespaceSelector }}
+        ruleNamespaceSelector:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $ruler.alertmanagersUrl }}
+        alertmanagersUrl:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+        prometheusConfigReloader:
+          image: {{ $ruler.prometheusConfigReloader.image.repository }}:{{ $ruler.prometheusConfigReloader.image.tag }}
+        rulerQueryProxy: 
+          image: {{ $gateway.image.repository }}:{{ $gateway.image.tag | default .Chart.AppVersion }}
+{{ end }}

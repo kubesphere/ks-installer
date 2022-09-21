@@ -1,0 +1,337 @@
+# Default values for whizard.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+namespaceOverride: ""
+
+global:
+
+  whizard:
+    image:
+      repository: thanosio/thanos
+      tag: v0.28.0
+    log: 
+      level: info # Possible options: error, warn, info, debug.
+      format: logfmt # Possible options: logfmt or json.
+  
+# Create a Storage instance
+storage: 
+  create: false
+  blockManager: 
+    enable: false
+    image: 
+      repository: kubesphere/whizard-monitoring-block-manager
+      # Overrides the image tag whose default is the chart appVersion.
+      tag: ""
+    serviceAccountName: "" # If null or unset, the controllerManager serviceAccountName is used.
+  s3: {}
+
+## Manages Service, Query, QueryFrontend, Router, Ingester, Store, Compactor and Ruler instances and components
+##
+controllerManager: 
+  enabled: true
+
+  resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  image:
+    repository: kubesphere/whizard-controller-manager
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  rbac:
+    create: true
+
+  config: 
+    create: true
+
+    kubeSphereAdapter:
+      enabled: true
+      ## If null or unset, the enabled Service instance is used.
+      defaultServiceReference: null
+        # namespace:
+        # name:
+    
+    storage:
+      blockManager:
+        image: 
+          repository: kubesphere/whizard-monitoring-block-manager
+          # Overrides the image tag whose default is the chart appVersion.
+          tag: ""
+
+    gateway:
+      image:
+        repository: kubesphere/whizard-monitoring-gateway
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: ""
+      
+      replicas: 2
+
+    router: 
+      ## If null or unset, the global.whizardImage is used.
+      image: null
+      # repository: thanosio/thanos
+      # tag: v0.28.0
+
+      replicas: 2
+
+      replicationFactor: 1
+
+    queryFrontend: 
+      ## If null or unset, the global.whizardImage is used.
+      image: null
+      # repository: thanosio/thanos
+      # tag: v0.28.0
+
+      replicas: 2
+
+      cacheConfig: {}
+
+    query:
+      ## If null or unset, the global.whizardImage is used.
+      image: null
+      # repository: thanosio/thanos
+      # tag: v0.28.0
+
+      replicas: 2
+
+      envoy:
+        image: 
+          repository: envoyproxy/envoy
+          tag: v1.20.2
+    
+    ingester: 
+      ## If null or unset, the global.whizardImage is used.
+      image: null
+      # repository: thanosio/thanos
+      # tag: v0.28.0
+
+      replicas: 2
+
+      ## how long to retain raw samples on local storage.
+      localTsdbRetention: 15d
+
+      dataVolume: {}
+
+    store: 
+      ## If null or unset, the global.whizardImage is used.
+      image: null
+      # repository: thanosio/thanos
+      # tag: v0.28.0
+
+      indexCacheConfig: {}
+
+    compactor: 
+      ## If null or unset, the global.whizardImage is used.
+      image: null
+      # repository: thanosio/thanos
+      # tag: v0.28.0
+
+    ruler: 
+      ## If null or unset, the global.whizardImage is used.
+      image: null
+      # repository: thanosio/thanos
+      # tag: v0.28.0
+
+      replicas: 1
+
+      shards: 1
+
+      evaluationInterval: 1m
+      ruleSelectors: []
+      alertmanagersUrl: []
+
+      prometheusConfigReloader:
+        image:
+          repository: kubesphere/prometheus-config-reloader
+          tag: v0.55.1
+
+# Deploy a Service instance
+service: 
+  enabled: true
+  
+  tenantHeader: cluster
+  defaultTenantId: unknown
+  tenantLabelName: cluster
+
+  ## If null or unset, the value is determined based on the created Storage instance.
+  storage: null 
+  # namespace: 
+  # name: 
+
+# Deploy an Gateway instance
+gateway: 
+  enabled: true
+
+  ## If null or unset, the value is determined based on enabled Service instance
+  serviceReference: null
+    # namespace: 
+    # name: 
+
+  image: 
+    repository: kubesphere/whizard-monitoring-gateway
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  replicas: 1
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  nodePort: 0
+
+# Deploy an Query instance
+query: 
+  enabled: true
+
+  ## If null or unset, the value is determined based on enabled Service instance
+  serviceReference: null
+    # namespace: 
+    # name: 
+
+  ## If null or unset, the global.whizardImage is used.
+  image: null
+    # repository: thanosio/thanos
+    # tag: v0.28.0
+  
+  replicas: 1
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  
+  replicaLabelNames:
+  - prometheus_replica
+  - receive_replica
+  - ruler_replica
+  additionalFlags: []
+
+  envoy: 
+    image:
+      repository: envoyproxy/envoy
+      tag: v1.20.2 
+    resources: {}
+
+# Deploy an Router instance
+router: 
+  enabled: true
+
+  ## If null or unset, the value is determined based on enabled Service instance
+  serviceReference: null
+    # namespace: 
+    # name: 
+
+  ## If null or unset, the global.whizardImage is used.
+  image: null
+    # repository: thanosio/thanos
+    # tag: v0.28.0
+
+  replicas: 1
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  replicationFactor: 1
+  additionalFlags: []
+
+# Deploy an QueryFrontend instance
+queryFrontend: 
+  enabled: true
+
+  ## If null or unset, the value is determined based on enabled Service instance
+  serviceReference: null
+    # namespace: 
+    # name: 
+
+  ## If null or unset, the global.whizardImage is used.
+  image: null
+    # repository: thanosio/thanos
+    # tag: v0.28.0
+
+  replicas: 1
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  
+  cacheConfig: {}
+  additionalFlags: 
+  - --no-query-range.align-range-with-step #
+
+# Deploy a Ruler instance
+ruler: 
+  enabled: true
+
+  ## If null or unset, the value is determined based on enabled Service instance
+  serviceReference: null
+    # namespace: 
+    # name: 
+
+  ## If null or unset, the global.whizardImage is used.
+  image: null
+    # repository: thanosio/thanos
+    # tag: v0.28.0
+
+  replicas: 1
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  shards: 1
+
+  tenant: ''
+  
+  dataVolume: null
+
+  evaluationInterval: 1m
+
+  additionalFlags: []
+
+  ruleSelectors: 
+  - matchExpressions:
+    - key: alerting.kubesphere.io/rule_level
+      operator: In
+      values:
+      - global
+  ruleNamespaceSeletor: 
+    matchExpressions:
+    - key: kubesphere.io/namespace
+      operator: In
+      values:
+      - kubesphere-monitoring-system
+
+  ## If null or unset, the global.alertmanagersUrl is used.
+  alertmanagersUrl: 
+  - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: whizard-agent-proxy
+    app.kubernetes.io/name: whizard-agent-proxy
+  name: whizard-agent-proxy
+  namespace: kubesphere-monitoring-system
+spec:
+  ports:
+  - name: http
+    port: 9090
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: whizard-agent-proxy
+    app.kubernetes.io/name: whizard-agent-proxy
+  sessionAffinity: ClientIP

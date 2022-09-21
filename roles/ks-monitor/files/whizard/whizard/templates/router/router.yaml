@@ -1,0 +1,42 @@
+{{- if .Values.router.enabled -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: Router
+metadata:
+  name: {{ include "whizard.router.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- if .Values.router.serviceReference }}
+    "monitoring.whizard.io/service": "{{ .Values.router.serviceReference.namespace }}.{{ .Values.router.serviceReference.name }}"
+    {{- else if .Values.service.enabled }}
+    "monitoring.whizard.io/service": "{{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}"
+    {{- end }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  image: "{{ .Values.global.whizard.image.repository }}:{{ .Values.global.whizard.image.tag }}"
+  replicas: {{ .Values.router.replicas }}
+
+  {{- with .Values.router.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.router.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.router.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.router.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  logLevel: {{ .Values.global.whizard.log.level }}
+  logFormat: {{ .Values.global.whizard.log.format }}
+  replicationFactor: {{ .Values.router.replicationFactor }}
+  {{- with .Values.router.additionalFlags }}
+  flags:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

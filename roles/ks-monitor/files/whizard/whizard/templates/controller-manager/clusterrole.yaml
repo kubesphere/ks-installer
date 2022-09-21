@@ -1,0 +1,411 @@
+{{- if and .Values.controllerManager.enabled .Values.controllerManager.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "whizard.manager.fullname" . }}
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cluster.kubesphere.io
+  resources:
+  - clusters
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - serviceaccounts
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - prometheusrules
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - compactors
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - compactors/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - compactors/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - gateways
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - gateways/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - gateways/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - ingesters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - ingesters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - ingesters/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - queries
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - queries/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - queries/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - queryfrontends
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - queryfrontends/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - queryfrontends/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - routers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - routers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - routers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - rulers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - rulers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - rulers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - service
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - storage
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - storages
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - stores
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - stores/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - stores/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - tenants
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - tenants/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - monitoring.whizard.io
+  resources:
+  - tenants/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  - roles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+
+{{- end }}

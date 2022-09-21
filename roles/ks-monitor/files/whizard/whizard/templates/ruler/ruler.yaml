@@ -1,0 +1,67 @@
+{{- if .Values.ruler.enabled -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: Ruler
+metadata:
+  name: {{ include "whizard.ruler.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- if .Values.ruler.serviceReference }}
+    "monitoring.whizard.io/service": "{{ .Values.ruler.serviceReference.namespace }}.{{ .Values.ruler.serviceReference.name }}"
+    {{- else if .Values.service.enabled }}
+    "monitoring.whizard.io/service": "{{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}"
+    {{- end }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  image: "{{ .Values.global.whizard.image.repository }}:{{ .Values.global.whizard.image.tag }}"
+  replicas: {{ .Values.ruler.replicas }}
+
+  {{- with .Values.ruler.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ruler.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ruler.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ruler.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  shards: {{ .Values.ruler.shards }}
+
+  {{- if .Values.ruler.tenant }}
+  tenant: {{ .Values.ruler.tenant }}
+  {{- end }}
+
+  logLevel: {{ .Values.global.whizard.log.level }}
+  logFormat: {{ .Values.global.whizard.log.format }}
+  evaluationInterval: {{ .Values.ruler.evaluationInterval }}
+  {{- with .Values.ruler.additionalFlags }}
+  flags:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.ruler.dataVolume }}
+  dataVolume:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.ruler.ruleNamespaceSelector }}
+  ruleNamespaceSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ruler.ruleSelectors }}
+  ruleSelectors:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.ruler.alertmanagersUrl }}
+  alertmanagersUrl:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

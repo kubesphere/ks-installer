@@ -1,0 +1,21 @@
+{{- if .Values.service.enabled -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: Service
+metadata:
+  name: {{ include "whizard.service.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  tenantHeader: {{ .Values.service.tenantHeader }}
+  defaultTenantId: {{ .Values.service.defaultTenantId }}
+  tenantLabelName: {{ .Values.service.tenantLabelName }}
+  {{- if .Values.service.storage }}
+  storage:
+    {{- toYaml .Values.service.storage | nindent 4 }}
+  {{- else if and .Values.storage.create .Values.storage.s3 }}
+  storage:
+    name: {{ include "whizard.storage.crname" . }}
+    namespace: {{ include "whizard.namespace" . }}
+  {{- end }}
+{{- end }}

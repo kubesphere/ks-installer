@@ -1,0 +1,51 @@
+{{- if .Values.query.enabled -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: Query
+metadata:
+  name: {{ include "whizard.query.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- if .Values.query.serviceReference }}
+    "monitoring.whizard.io/service": "{{ .Values.query.serviceReference.namespace }}.{{ .Values.query.serviceReference.name }}"
+    {{- else if .Values.service.enabled }}
+    "monitoring.whizard.io/service": "{{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}"
+    {{- end }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  image: "{{ .Values.global.whizard.image.repository }}:{{ .Values.global.whizard.image.tag }}"
+  replicas: {{ .Values.query.replicas }}
+
+  {{- with .Values.query.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.query.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.query.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.query.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  logLevel: {{ .Values.global.whizard.log.level }}
+  logFormat: {{ .Values.global.whizard.log.format }}
+  {{- with .Values.query.replicaLabelNames }}
+  replicaLabelNames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.query.additionalFlags }}
+  flags:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  envoy: 
+    image: "{{ .Values.query.envoy.image.repository }}:{{ .Values.query.envoy.image.tag }}"
+    {{- with .Values.query.resources }}
+    resources:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}

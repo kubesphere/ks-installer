@@ -38,3 +38,10 @@
 - import_tasks: notification-manager.yaml
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
+
+- import_tasks: whizard.yaml
+  when:
+    - status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'
+    - multicluster is defined and (multicluster.clusterRole == 'host' or multicluster.clusterRole == 'member')
+    - monitoring is defined and monitoring.whizard is defined and monitoring.whizard.enabled == true
+    
