@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: ks-apiserver
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/vendor: kubesphere
+  name: ks-apiserver
+  namespace: kubesphere-monitoring-system
+spec:
+  endpoints:
+  - interval: 1m
+    path: /kapis/metrics
+    relabelings:
+    - action: labeldrop
+      regex: (endpoint)
+    targetPort: 9090
+  namespaceSelector:
+    matchNames:
+    - kubesphere-system
+  selector:
+    matchLabels:
+      app: ks-apiserver
