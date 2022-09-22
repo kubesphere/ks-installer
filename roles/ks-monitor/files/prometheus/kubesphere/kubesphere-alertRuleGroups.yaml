@@ -1,0 +1,98 @@
+apiVersion: v1
+items:
+- apiVersion: alerting.kubesphere.io/v2beta1
+  kind: GlobalRuleGroup
+  metadata:
+    annotations:
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksApiSlow","annotations":{"message":"99th percentile of requests is {{ $value }}s on ks-apiserver instance {{ $labels.instance }} for {{ $labels.verb }} {{ $labels.resource }}.{{ $labels.group }}/{{ $labels.version }}","summary":"ks-apiserver requests are slow."},"expr":"histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le) (rate(ks_server_request_duration_seconds_bucket{group!=\"terminal.kubesphere.io\", job=\"ks-apiserver\"}[5m]))) > 5\n","for":"10m","labels":{},"severity":"critical"},{"alert":"ksApiserverDown","annotations":{"description":"ksApiserver has disappeared from Prometheus target discovery.","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-apiserver\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+    labels:
+      alerting.kubesphere.io/builtin: "true"
+      alerting.kubesphere.io/enable: "true"
+    name: ks-apiserver
+    namespace: kubesphere-monitoring-system
+  spec:
+    rules:
+    - alert: ksApiSlow
+      annotations:
+        message: 99th percentile of requests is {{ $value }}s on ks-apiserver instance {{ $labels.instance }} for {{ $labels.verb }} {{ $labels.resource }}.{{ $labels.group }}/{{ $labels.version }}
+        summary: ks-apiserver requests are slow.
+      expr: |
+        histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le) (rate(ks_server_request_duration_seconds_bucket{group!="terminal.kubesphere.io", job="ks-apiserver"}[5m]))) > 5
+      for: 10m
+      labels: {}
+      severity: critical
+    - alert: ksApiserverDown
+      annotations:
+        description: ksApiserver has disappeared from Prometheus target discovery.
+        summary: Target disappeared from Prometheus target discovery.
+      expr: |
+        absent(up{job="ks-apiserver"} == 1)
+      for: 15m
+      labels: {}
+      severity: critical
+- apiVersion: alerting.kubesphere.io/v2beta1
+  kind: GlobalRuleGroup
+  metadata:
+    annotations:
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-controller-manager","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksControllerManagerDown","annotations":{"description":"ksControllerManager has disappeared from Prometheus target discovery.","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-controller-manager\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+    labels:
+      alerting.kubesphere.io/builtin: "true"
+      alerting.kubesphere.io/enable: "true"
+    name: ks-controller-manager
+    namespace: kubesphere-monitoring-system
+  spec:
+    rules:
+    - alert: ksControllerManagerDown
+      annotations:
+        description: ksControllerManager has disappeared from Prometheus target discovery.
+        summary: Target disappeared from Prometheus target discovery.
+      expr: |
+        absent(up{job="ks-controller-manager"} == 1)
+      for: 15m
+      labels: {}
+      severity: critical
+- apiVersion: alerting.kubesphere.io/v2beta1
+  kind: GlobalRuleGroup
+  metadata:
+    annotations:
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubesphere-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeConfigCertificateExpiration","annotations":{"description":"{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 7.0 days.","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  604800\n","labels":{},"severity":"warning"},{"alert":"KubeConfigCertificateExpiration","annotations":{"description":"{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 24.0 hours.","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"},{"alert":"KubeSphereLicenseExpiration","annotations":{"description":"KubeSphere license is expiring in less than 7.0 days.","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  604800\n","labels":{},"severity":"warning"},{"alert":"KubeSphereLicenseExpiration","annotations":{"description":"KubeSphere license is expiring in less than 24.0 hours.","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"}]}}'
+    labels:
+      alerting.kubesphere.io/builtin: "true"
+      alerting.kubesphere.io/enable: "true"
+    name: kubesphere-system
+    namespace: kubesphere-monitoring-system
+  spec:
+    rules:
+    - alert: KubeConfigCertificateExpiration
+      annotations:
+        description: '{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 7.0 days.'
+        summary: kubeconfig certificate is about to expire.
+      expr: |
+        kubesphere_enterprise_cluster_certificate_validity_seconds{job="ks-controller-manager"} <  604800
+      labels: {}
+      severity: warning
+    - alert: KubeConfigCertificateExpiration
+      annotations:
+        description: '{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 24.0 hours.'
+        summary: kubeconfig certificate is about to expire.
+      expr: |
+        kubesphere_enterprise_cluster_certificate_validity_seconds{job="ks-controller-manager"} <  86400
+      labels: {}
+      severity: critical
+    - alert: KubeSphereLicenseExpiration
+      annotations:
+        description: KubeSphere license is expiring in less than 7.0 days.
+        summary: KubeSphere license is about to expire.
+      expr: |
+        kubesphere_enterprise_license_validity_seconds{job="ks-controller-manager"} <  604800
+      labels: {}
+      severity: warning
+    - alert: KubeSphereLicenseExpiration
+      annotations:
+        description: KubeSphere license is expiring in less than 24.0 hours.
+        summary: KubeSphere license is about to expire.
+      expr: |
+        kubesphere_enterprise_license_validity_seconds{job="ks-controller-manager"} <  86400
+      labels: {}
+      severity: critical
+kind: List
