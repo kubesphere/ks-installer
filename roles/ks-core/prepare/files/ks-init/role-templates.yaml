@@ -1649,12 +1649,11 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-groups","role-template-view-roles"]'
     iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"groups": "manage"}'
     kubesphere.io/alias-name: Workspace Groups Management
   labels:
-    iam.kubesphere.io/role-template: "true"
+    iam.kubesphere.io/role-template: "false"
   name: role-template-manage-groups
 rules:
   - apiGroups:
