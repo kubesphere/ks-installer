@@ -664,6 +664,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"workspaces": "manage"}'
     kubesphere.io/alias-name: Workspaces Management
   labels:
@@ -815,6 +816,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"users": "manage"}'
     kubesphere.io/alias-name: Users Management
   labels:
@@ -857,6 +859,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
 metadata:
   annotations:
+    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Roles Management
   labels:
@@ -1465,6 +1468,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
+    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
     kubesphere.io/alias-name: Workspace Roles Management
   labels:
@@ -1483,6 +1487,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
+    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"members": "view"}'
     kubesphere.io/alias-name: Workspace Members View
   labels:
@@ -1504,6 +1509,7 @@ apiVersion: iam.kubesphere.io/v1alpha2
 kind: WorkspaceRole
 metadata:
   annotations:
+    iam.kubesphere.io/module: Access Control
     iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
     kubesphere.io/alias-name: Workspace Members Management
   labels:
@@ -2646,6 +2652,7 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"members": "manage"}'
       kubesphere.io/alias-name: Project Members Management
     labels:
@@ -2788,6 +2795,7 @@ role:
   kind: Role
   metadata:
     annotations:
+      iam.kubesphere.io/module: Access Control
       iam.kubesphere.io/role-template-rules: '{"roles": "manage"}'
       kubesphere.io/alias-name: Project Roles Management
     labels:
