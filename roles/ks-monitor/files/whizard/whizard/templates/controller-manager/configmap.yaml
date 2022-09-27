@@ -19,6 +19,25 @@ data:
       kubeSphereAdapterService: {{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}
       {{- end }}
 
+      {{- $storage := $config.storage }}
+      storage:
+        {{- if $storage.blockManager }}
+        blockManager: 
+          enable: {{ $storage.blockManager.enable }}
+          {{- if $storage.image }}
+          image: {{ $storage.image.repository }}:{{ $storage.image.tag }}
+          {{- else }}
+          image: {{ $whizardImage }}
+          {{- end }}
+          {{- if $storage.blockManager.serviceAccountName }}
+          serviceAccountName: {{ $storage.blockManager.serviceAccountName }}
+          {{- else }}
+          serviceAccountName: {{ include "whizard.manager.serviceAccountName" . }}
+          {{- end }}
+          gc:
+            image: "{{ $storage.blockManager.gc.image.repository }}:{{ $storage.blockManager.gc.image.tag | default .Chart.AppVersion }}"
+        {{- end }}
+
       {{- $gateway := $config.gateway }}
       gateway: 
         image: {{ $gateway.image.repository }}:{{ $gateway.image.tag | default .Chart.AppVersion }}
@@ -41,6 +60,11 @@ data:
         logFormat: {{ .Values.global.whizard.log.format }}
         replicationFactor: {{ $router.replicationFactor }}
 
+        {{- with $router.additionalFlags }}
+        flags:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
       {{- $queryFrontend := $config.queryFrontend }}
       queryFrontend: 
         {{- if $queryFrontend.image }}
@@ -55,6 +79,11 @@ data:
         logFormat: {{ .Values.global.whizard.log.format }}
         {{- with $queryFrontend.cacheConfig }}
         cacheConfig:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+        {{- with $queryFrontend.additionalFlags }}
+        flags:
           {{- toYaml . | nindent 10 }}
         {{- end }}
 
@@ -73,6 +102,11 @@ data:
 
         envoy: 
           image: {{ $query.envoy.image.repository }}:{{ $query.envoy.image.tag | default .Chart.AppVersion }}
+
+        {{- with $query.additionalFlags }}
+        flags:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
 
       {{- $ingester := $config.ingester }}
       ingester: 
@@ -93,6 +127,14 @@ data:
           {{- toYaml . | nindent 10 }}
         {{- end }}
 
+        disableTSDBCleanup: {{ $ingester.disableTSDBCleanup }}
+        tsdbCleanupImage: {{ $ingester.tsdbCleanupImage.repository }}:{{ $ingester.tsdbCleanupImage.tag }}
+
+        {{- with $ingester.additionalFlags }}
+        flags:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
       {{- $store := $config.store }}
       store: 
         {{- if $store.image }}
@@ -108,6 +150,11 @@ data:
           {{- toYaml . | nindent 10 }}
         {{- end }}
 
+        {{- with $store.additionalFlags }}
+        flags:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
       {{- $compactor := $config.compactor }}
       compactor: 
         {{- if $compactor.image }}
@@ -118,6 +165,16 @@ data:
 
         logLevel: {{ .Values.global.whizard.log.level }}
         logFormat: {{ .Values.global.whizard.log.format }}
+
+        {{- with $compactor.retention }}
+        retention:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+        {{- with $compactor.additionalFlags }}
+        flags:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
 
       {{- $ruler := $config.ruler }}
       ruler: 
@@ -150,4 +207,9 @@ data:
           image: {{ $ruler.prometheusConfigReloader.image.repository }}:{{ $ruler.prometheusConfigReloader.image.tag }}
         rulerQueryProxy: 
           image: {{ $gateway.image.repository }}:{{ $gateway.image.tag | default .Chart.AppVersion }}
+
+        {{- with $ruler.additionalFlags }}
+        flags:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
 {{ end }}

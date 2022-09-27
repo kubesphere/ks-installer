@@ -1,0 +1,52 @@
+{{- if .Values.ingester.enabled -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: Ingester
+metadata:
+  name: {{ include "whizard.ingester.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- if .Values.ingester.serviceReference }}
+    "monitoring.whizard.io/service": {{ .Values.ingester.serviceReference.namespace }}.{{ .Values.ingester.serviceReference.name }}
+    {{- else if .Values.service.enabled }}
+    "monitoring.whizard.io/service": {{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}
+    {{- end }}
+    {{- if and .Values.storage.create .Values.storage.s3 }}
+    "monitoring.whizard.io/storage": {{ include "whizard.namespace" . }}.{{ include "whizard.storage.crname" . }}
+    {{- else }}
+    "monitoring.whizard.io/storage": "local"
+    {{- end }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  image: "{{ .Values.global.whizard.image.repository }}:{{ .Values.global.whizard.image.tag }}"
+  replicas: {{ .Values.ingester.replicas }}
+
+  {{- with .Values.ingester.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ingester.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ingester.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ingester.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  logLevel: {{ .Values.global.whizard.log.level }}
+  logFormat: {{ .Values.global.whizard.log.format }}
+  localTsdbRetention: {{ .Values.ingester.localTsdbRetention }}
+  {{- with .Values.ingester.additionalFlags }}
+  flags:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.ingester.dataVolume }}
+  dataVolume:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

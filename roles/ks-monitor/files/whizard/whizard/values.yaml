@@ -21,12 +21,17 @@ global:
 storage: 
   create: false
   blockManager: 
-    enable: false
-    image: 
-      repository: kubesphere/whizard-monitoring-block-manager
-      # Overrides the image tag whose default is the chart appVersion.
-      tag: ""
-    serviceAccountName: "" # If null or unset, the controllerManager serviceAccountName is used.
+    enable: true
+    ## If null or unset, the global.whizardImage is used.
+    image: null
+    # repository: thanosio/thanos
+    # tag: v0.28.0
+    serviceAccountName: "" # If null or unset, the created controllerManager serviceAccountName is used.
+    gc:
+      image: 
+        repository: kubesphere/whizard-monitoring-block-manager
+        # Overrides the image tag whose default is the chart appVersion.
+        tag: ""
   s3: {}
 
 ## Manages Service, Query, QueryFrontend, Router, Ingester, Store, Compactor and Ruler instances and components
@@ -78,10 +83,17 @@ controllerManager:
     
     storage:
       blockManager:
-        image: 
-          repository: kubesphere/whizard-monitoring-block-manager
-          # Overrides the image tag whose default is the chart appVersion.
-          tag: ""
+        enable: true
+        ## If null or unset, the global.whizardImage is used.
+        image: null
+        # repository: thanosio/thanos
+        # tag: v0.28.0
+        serviceAccountName: "" # If null or unset, the created controllerManager serviceAccountName is used.
+        gc: 
+          image: 
+            repository: kubesphere/whizard-monitoring-block-manager
+            # Overrides the image tag whose default is the chart appVersion.
+            tag: ""
 
     gateway:
       image:
@@ -133,9 +145,16 @@ controllerManager:
       replicas: 2
 
       ## how long to retain raw samples on local storage.
-      localTsdbRetention: 15d
+      localTsdbRetention: 7d
 
       dataVolume: {}
+
+      # if disableTSDBCleanup is false, will delete the blocks 
+      # that belong to deleted tenants in the data directory of ingester TSDB.
+      disableTSDBCleanup: false
+      tsdbCleanupImage: 
+        repository: bash
+        tag: 5.1.16
 
     store: 
       ## If null or unset, the global.whizardImage is used.
@@ -150,6 +169,11 @@ controllerManager:
       image: null
       # repository: thanosio/thanos
       # tag: v0.28.0
+      retention: {}
+      # retentionRaw:
+      # retention5m:
+      # retention1h:
+      additionalFlags: []
 
     ruler: 
       ## If null or unset, the global.whizardImage is used.
@@ -335,3 +359,35 @@ ruler:
   ## If null or unset, the global.alertmanagersUrl is used.
   alertmanagersUrl: 
   - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
+
+# Deploy an Ingester instance
+ingester: 
+  enabled: true
+
+  ## If null or unset, the value is determined based on enabled Service instance
+  serviceReference: null
+    # namespace: 
+    # name: 
+
+  ## If null or unset, the global.whizardImage is used.
+  image: null
+    # repository: thanosio/thanos
+    # tag: v0.28.0
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  tenants: []
+  
+  logLevel: info
+  logFormat: logfmt
+  ## how long to retain raw samples on local storage.
+  localTsdbRetention: 7d
+
+  dataVolume: {}
+
+  additionalFlags: []

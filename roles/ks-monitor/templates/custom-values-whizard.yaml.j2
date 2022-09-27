@@ -21,6 +21,13 @@ controllerManager:
   config: 
     create: true
 
+    storage:
+      blockManager:
+        gc:
+          image:
+            repository: {{ whizard_monitoring_block_manager_repo }}
+            tag: {{ whizard_monitoring_block_manager_tag }}
+
     gateway:
       image:
         repository: {{ whizard_monitoring_gateway_repo }}
@@ -53,7 +60,14 @@ controllerManager:
             resources:
               requests: 
                 storage: 10Gi
+      tsdbCleanupImage:
+        image: {{ bash_repo }}
+        tag: {{ bash_tag }}
 
+    compactor: 
+      additionalFlags:
+      - --block-files-concurrency=20
+      - --compact.blocks-fetch-concurrency=5
 
     ruler: 
       replicas: 1
@@ -156,3 +170,20 @@ ruler:
 
   alertmanagersUrl: 
   - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
+
+ingester: 
+  enabled: true
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  dataVolume:
+    persistentVolumeClaim: 
+      spec: 
+        resources:
+          requests: 
+            storage: 10Gi
