@@ -1,0 +1,190 @@
+# Copyright OpenSearch Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# Default values for opensearch-dashboards.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+opensearchHosts: "https://opensearch-cluster-master:9200"
+replicaCount: 1
+
+image:
+  repository: "opensearchproject/opensearch-dashboards"
+  # override image tag, which is .Chart.AppVersion by default
+  tag: ""
+  pullPolicy: "IfNotPresent"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+rbac:
+  create: true
+
+# A list of secrets and their paths to mount inside the pod
+# This is useful for mounting certificates for security and for mounting
+# the X-Pack license
+secretMounts: []
+#  - name: certs
+#    secretName: dashboard-certs
+#    path: /usr/share/dashboards/certs
+
+podAnnotations: {}
+
+extraEnvs: []
+#  - name: "NODE_OPTIONS"
+#    value: "--max-old-space-size=1800"
+
+envFrom: []
+
+extraVolumes: []
+  # - name: extras
+  #   emptyDir: {}
+
+extraVolumeMounts: []
+  # - name: extras
+  #   mountPath: /usr/share/extras
+  #   readOnly: true
+
+extraInitContainers: ""
+
+extraContainers: ""
+
+podSecurityContext: {}
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  # readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+config: {}
+  # Default OpenSearch Dashboards configuration from docker image of Dashboards
+  #  opensearch_dashboards.yml: |
+  #   server:
+  #     name: dashboards
+  #     host: 0.0.0.0
+
+  # Dashboards TLS Config (Ensure the cert files are present before enabling SSL
+      # ssl:
+      #   enabled: true
+      #   key: /usr/share/opensearch-dashboards/certs/dashboards-key.pem
+      #   certificate: /usr/share/opensearch-dashboards/certs/dashboards-crt.pem
+
+    # determines how dashboards will verify certificates (needs to be none for default opensearch certificates to work)
+    # opensearch:
+    #   ssl:
+    #     certificateAuthorities: /usr/share/opensearch-dashboards/certs/dashboards-root-ca.pem
+    #     if utilizing custom CA certs for connection to opensearch, provide the CA here
+
+priorityClassName: ""
+
+opensearchAccount:
+  secret: ""
+  keyPassphrase:
+    enabled: false
+
+labels: {}
+
+hostAliases: []
+# - ip: "127.0.0.1"
+#   hostnames:
+#   - "foo.local"
+#   - "bar.local"
+
+serverHost: "0.0.0.0"
+
+service:
+  type: ClusterIP
+  port: 5601
+  loadBalancerIP: ""
+  nodePort: ""
+  labels: {}
+  annotations: {}
+  loadBalancerSourceRanges: []
+  # 0.0.0.0/0
+  httpPortName: http
+
+ingress:
+  enabled: false
+  # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+  # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+  # ingressClassName: nginx
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          backend:
+            serviceName: chart-example.local
+            servicePort: 80
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512M"
+  limits:
+    cpu: "100m"
+    memory: "512M"
+
+autoscaling:
+  # This requires metrics server to be installed, to install use kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  # See https://github.com/kubernetes-sigs/metrics-server
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+updateStrategy:
+  type: "Recreate"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# -- Array of extra K8s manifests to deploy
+extraObjects: []
+  # - apiVersion: secrets-store.csi.x-k8s.io/v1
+  #   kind: SecretProviderClass
+  #   metadata:
+  #     name: argocd-secrets-store
+  #   spec:
+  #     provider: aws
+  #     parameters:
+  #       objects: |
+  #         - objectName: "argocd"
+  #           objectType: "secretsmanager"
+  #           jmesPath:
+  #               - path: "client_id"
+  #                 objectAlias: "client_id"
+  #               - path: "client_secret"
+  #                 objectAlias: "client_secret"
+  #     secretObjects:
+  #     - data:
+  #       - key: client_id
+  #         objectName: client_id
+  #       - key: client_secret
+  #         objectName: client_secret
+  #       secretName: argocd-secrets-store
+  #       type: Opaque
+  #       labels:
+  #         app.kubernetes.io/part-of: argocd

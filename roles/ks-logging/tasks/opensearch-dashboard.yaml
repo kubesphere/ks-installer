@@ -1,0 +1,33 @@
+---
+- name: opensearch-dashboard | Getting opensearch-dashboard installation files
+  copy:
+    src: "opensearch-dashboard"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: logsidecar-injector | Creating manifests
+  template:
+    src: "custom-values-opensearch-dashboard.yaml.j2"
+    dest: "{{ kubesphere_dir }}/opensearch-dashboard/custom-values-opensearch-dashboard.yaml"
+
+
+- block:
+  - name: opensearch-dashbord | Deploying opensearch-dashabord
+    shell: >
+      {{ bin_dir }}/helm upgrade --install opensearch-dashboard
+      {{ kubesphere_dir }}/opensearch-dashboard
+      -f {{ kubesphere_dir }}/opensearch-dashboard/custom-values-opensearch-dashboard.yaml
+      -n kubesphere-logging-system
+      --force
+    register: deploy_result
+    failed_when: false
+
+  - name: opensearch-dashbord | Deploying opensearch-dashabord
+    shell: >
+      {{ bin_dir }}/helm upgrade --install opensearch-dashboard
+      {{ kubesphere_dir }}/opensearch-dashboard
+      -f {{ kubesphere_dir }}/opensearch-dashboard/custom-values-opensearch-dashboard.yaml
+      -n kubesphere-logging-system
+      --force
+    when:
+      - "deploy_result.stderr and 'missing key' in deploy_result.stderr"
+

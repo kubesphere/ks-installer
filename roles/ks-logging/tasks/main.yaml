@@ -74,6 +74,10 @@
   when:
     - logging is defined and logging.logsidecar is defined and logging.logsidecar.enabled is defined and logging.logsidecar.enabled
 
+- import_tasks: opensearch-dashboard.yaml
+  when:
+    - common.opensearch.dashboard is defined and common.opensearch.dashboard.enabled is defined and common.opensearch.dashboard.enabled
+
 - name: ks-logging | Importing logging status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
