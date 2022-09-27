@@ -139,6 +139,12 @@
   # register: source_state
   # failed_when: "source_state.stderr and 'already exists' not in source_state.stderr"
 
+- name: KubeSphere | Upgrade GlobalRolebindings
+  shell: >
+    {{ bin_dir }}/kubectl get globalrolebindings -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.roleRef.name}{"\n"}' 
+    | grep -e "users-manager$" -e "workspaces-manager$" | awk '{print $1}' 
+    | xargs -i {{ bin_dir }}/kubectl patch globalrolebindings {} --type merge -p '{"roleRef":{"name":"platform-regular"}}'
+
 - name: KubeSphere | Importing ks-core status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
