@@ -205,15 +205,19 @@ spec:
                     type: object
                   rootHost:
                     default: localhost
-                    description: The root user's host.
+                    description: 'Unchangeable: Use super users instead. The root
+                      user''s host.'
+                    enum:
+                    - localhost
                     type: string
                   rootPassword:
                     default: ""
-                    description: 'Password for the root user, can be empty or 8~32
-                      characters long. Only be a combination of uppercase letters,
-                      lowercase letters, numbers or special characters. Special characters
-                      are supported: @#$%^&*_+-=.'
-                    pattern: ^$|^[A-Za-z0-9@#$%^&*_+\-=]{8,32}$
+                    description: 'Unchangeable: Use super users instead Password for
+                      the root user, can be empty or 8~32 characters long. Only be
+                      a combination of uppercase letters, lowercase letters, numbers
+                      or special characters. Special characters are supported: @#$%^&*_+-=.'
+                    enum:
+                    - ""
                     type: string
                   user:
                     default: radondb_usr
@@ -271,7 +275,7 @@ spec:
                       cpu: 10m
                       memory: 32Mi
                   imagePullPolicy: IfNotPresent
-                  sidecarImage: radondb/mysql57-sidecar:v2.2.0
+                  sidecarImage: radondb/mysql57-sidecar:v2.2.1
                 description: PodPolicy defines the policy to extra specification.
                 properties:
                   affinity:
@@ -1201,7 +1205,7 @@ spec:
                   schedulerName:
                     type: string
                   sidecarImage:
-                    default: radondb/mysql57-sidecar:v2.2.0
+                    default: radondb/mysql57-sidecar:v2.2.1
                     description: To specify the image that will be used for sidecar
                       container.
                     type: string
@@ -1265,14 +1269,14 @@ spec:
                   path.
                 type: string
               tlsSecretName:
-                description: Containing CA (ca.crt) and server cert (tls.crt) ,server
+                description: Containing CA (ca.crt) and server cert (tls.crt), server
                   private key (tls.key) for SSL
                 type: string
               xenonOpts:
                 default:
                   admitDefeatHearbeatCount: 5
                   electionTimeout: 10000
-                  image: radondb/xenon:1.1.5-alpha
+                  image: radondb/xenon:v2.2.1
                   resources:
                     limits:
                       cpu: 100m
@@ -1293,8 +1297,13 @@ spec:
                       is millisecond.
                     format: int32
                     type: integer
+                  enableAutoRebuild:
+                    default: false
+                    description: If true, when the data is inconsistent, Xenon will
+                      automatically rebuild the invalid node.
+                    type: boolean
                   image:
-                    default: radondb/xenon:1.1.5-alpha
+                    default: radondb/xenon:v2.2.1
                     description: To specify the image that will be used for xenon
                       container.
                     type: string

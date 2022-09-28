@@ -1,3 +1,4 @@
+---
 redisOperator:
   name: redis-operator
   imageName: {{ redis_operator_image }}
@@ -6,19 +7,25 @@ redisOperator:
   imagePrefix: {{ redis_image_prefix }}
 
   # Additional pod annotations
-  podAnnotations: { }
+  podAnnotations: {}
   # Additional Pod labels (e.g. for filtering Pod by custom labels)
   podLabels:
     app.kubernetes.io/name: redis-operator
 
-resources: { }
+resources:
+  limits:
+    cpu: 500m
+    memory: 500Mi
+  requests:
+    cpu: 500m
+    memory: 500Mi
 
 replicas: 1
 
 serviceAccountName: redis-operator
 
 priorityClassName: ""
-nodeSelector: { }
+nodeSelector: {}
 tolerateAllTaints: false
-tolerations: [ ]
-affinity: { }
+tolerations: []
+affinity: {}

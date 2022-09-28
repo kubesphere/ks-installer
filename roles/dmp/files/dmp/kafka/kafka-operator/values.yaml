@@ -1,0 +1,151 @@
+# Default values for strimzi-kafka-operator.
+
+# If you set `watchNamespaces` to the same value as ``.Release.Namespace` (e.g. `helm ... --namespace $NAMESPACE`),
+# the chart will fail because duplicate RoleBindings will be attempted to be created in the same namespace
+watchNamespaces: []
+watchAnyNamespace: false
+
+defaultImageRegistry: quay.io
+defaultImageRepository: strimzi
+defaultImageTag: 0.30.0
+
+image:
+  registry: ""
+  repository: ""
+  name: operator
+  tag: ""
+logVolume: co-config-volume
+logConfigMap: strimzi-cluster-operator
+logConfiguration: ""
+logLevel: ${env:STRIMZI_LOG_LEVEL:-INFO}
+fullReconciliationIntervalMs: 120000
+operationTimeoutMs: 300000
+kubernetesServiceDnsDomain: cluster.local
+featureGates: ""
+tmpDirSizeLimit: 1Mi
+
+# Example on how to configure extraEnvs
+# extraEnvs:
+#   - name: JAVA_OPTS
+#     value: "-Xms256m -Xmx256m"
+
+extraEnvs: []
+
+tolerations: []
+affinity: {}
+annotations: {}
+labels: {}
+nodeSelector: {}
+priorityClassName: ""
+
+podSecurityContext: {}
+securityContext: {}
+
+# Docker images that operator uses to provision various components of Strimzi. To use your own registry prefix the
+# repository name with your registry URL.
+# Ex) repository: registry.xyzcorp.com/strimzi/kafka
+kafka:
+  image:
+    registry: ""
+    repository: ""
+    name: kafka
+    tagPrefix: ""
+kafkaConnect:
+  image:
+    registry: ""
+    repository: ""
+    name: kafka
+    tagPrefix: ""
+topicOperator:
+  image:
+    registry: ""
+    repository: ""
+    name: operator
+    tag: ""
+userOperator:
+  image:
+    registry:
+    repository:
+    name: operator
+    tag: ""
+kafkaInit:
+  image:
+    registry: ""
+    repository: ""
+    name: operator
+    tag: ""
+tlsSidecarEntityOperator:
+  image:
+    registry: ""
+    repository: ""
+    name: kafka
+    tagPrefix: ""
+kafkaMirrorMaker:
+  image:
+    registry: ""
+    repository: ""
+    name: kafka
+    tagPrefix: ""
+kafkaBridge:
+  image:
+    registry: ""
+    repository:
+    name: kafka-bridge
+    tag: 0.21.6
+kafkaExporter:
+  image:
+    registry: ""
+    repository: ""
+    name: kafka
+    tagPrefix: ""
+jmxTrans:
+  image:
+    registry: ""
+    repository: ""
+    name: jmxtrans
+    tag: ""
+kafkaMirrorMaker2:
+  image:
+    registry: ""
+    repository: ""
+    name: kafka
+    tagPrefix: ""
+cruiseControl:
+  image:
+    registry: ""
+    repository: ""
+    name: kafka
+    tagPrefix: ""
+kanikoExecutor:
+  image:
+    registry: ""
+    repository: ""
+    name: kaniko-executor
+    tag: ""
+mavenBuilder:
+  image:
+    registry: ""
+    repository: ""
+    name: maven-builder
+    tag: ""
+resources:
+  limits:
+    memory: 384Mi
+    cpu: 1000m
+  requests:
+    memory: 384Mi
+    cpu: 200m
+livenessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 30
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 30
+
+createGlobalResources: true
+# Override the exclude pattern for exclude some labels
+labelsExclusionPattern: ""
+# Controls whether Strimzi generates network policy resources (By default true)
+generateNetworkPolicy: true
+# Override the value for Connect build timeout
+connectBuildTimeoutMs: 300000

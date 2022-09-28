@@ -53,7 +53,7 @@ image:
     name: mongodb
   operator:
     name: mongodb-kubernetes-operator
-    version: v1.0.0
+    version: v1.0.4
 
 serviceAccount:
   # Specifies whether a service account should be created

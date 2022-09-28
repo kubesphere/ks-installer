@@ -34,6 +34,9 @@
     - { path: redis, file: custom-values-redis-operator.yaml }
     - { path: mongodb, file: custom-values-mongodb-operator.yaml }
     - { path: eck, file: custom-values-eck-operator.yaml }
+    - { path: kafka, file: custom-values-kafka-operator.yaml }
+    - { path: opensearch, file: custom-values-opensearch-operator.yaml }
+
 
 - name: DMP | Installing pg operator
   shell: >
@@ -114,6 +117,29 @@
   until: result is succeeded
   retries: 3
 
+
+- name: DMP | Installing kafka operator
+  shell: >
+    {{ bin_dir }}/helm upgrade --install kafka-operator
+    {{ kubesphere_dir }}/dmp/kafka/kafka-operator
+    -f {{ kubesphere_dir }}/dmp/kafka/custom-values-kafka-operator.yaml
+    --namespace dmp-system
+    --create-namespace
+  register: result
+  until: result is succeeded
+  retries: 3
+
+- name: DMP | Installing opensearch operator
+  shell: >
+    {{ bin_dir }}/helm upgrade --install opensearch-operator
+    {{ kubesphere_dir }}/dmp/opensearch/opensearch-operator
+    -f {{ kubesphere_dir }}/dmp/opensearch/custom-values-opensearch-operator.yaml
+    --namespace dmp-system
+    --create-namespace
+  register: result
+  until: result is succeeded
+  retries: 3
+
 - name: DMP | Creating applications
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/dmp/{{ item.path }}/{{ item.file }}
@@ -132,6 +158,8 @@
     - { path: "mongodb", file: "mongodb_app_version.yaml" }
     - { path: "eck", file: "eck_app.yaml" }
     - { path: "eck", file: "eck_app_version.yaml" }
+    - { path: "opensearch", file: "opensearch_app.yaml" }
+    - { path: "opensearch", file: "opensearch_app_version.yaml" }
   register: result
   until: result is succeeded
   retries: 3

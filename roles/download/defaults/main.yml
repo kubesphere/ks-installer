@@ -76,6 +76,13 @@ eck_image_registry: >-
   docker.io
   {%- endif %}
 
+kafka_image_registry: >-
+  {% if local_registry is defined and local_registry != "" -%}
+  {{ local_registry }}
+  {%- else -%}
+  quay.io
+  {%- endif %}
+
 #KubeSphere:
 ks_apiserver_repo: "{{ qkcp_images_repo }}/{{ namespace_override | default('qkcp') }}/ks-apiserver"
 ks_apiserver_tag: "{{ ks_version }}"
@@ -363,7 +370,7 @@ chronus_busybox_tag: "1.31.1"
 
 #DMP mysql-operator
 mysql_operator_image: "{{ namespace_override | default('radondb') }}/mysql-operator"
-mysql_operator_image_tag: "v2.2.0"
+mysql_operator_image_tag: "v2.2.1"
 mysql_rbac_proxy_image: "{{ namespace_override | default('radondb') }}/kube-rbac-proxy:v0.8.0"
 
 #DMP pg-operator
@@ -375,7 +382,7 @@ pgo_image_tag: "debian-2.1.1"
 
 #DMP redis-operator
 redis_operator_image: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis-operator"
-redis_operator_image_tag: "v1.0.0"
+redis_operator_image_tag: "v1.1.1"
 redis_image_prefix: "{{ base_repo }}{{ namespace_override | default('') }}"
 
 #DMP mongodb-operator
@@ -390,6 +397,14 @@ eck_operator_image: "{{ base_repo }}{{ namespace_override | default('radondb') }
 eck_operator_image_tag: "2.2.0-beta.6"
 eck_image_namespace: "{{ namespace_override | default('library') }}"
 eck_exporter_image: "{{ base_repo }}{{ namespace_override | default('prometheuscommunity') }}/elasticsearch-exporter:v1.3.0"
+
+#DMP kafka-operator
+kafka_operator_image: "{{ base_repo }}{{ namespace_override | default('strimzi') }}"
+kafka_operator_image_tag: "0.30.0"
+
+#DMP opensearch-operator
+opensearch_dmp_repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch-operator"
+
 
 images:
   ks_installer:

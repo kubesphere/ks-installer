@@ -21,7 +21,7 @@ tolerationSeconds: 30
 
 manager:
   image: radondb/mysql-operator
-  tag: v2.2.0
+  tag: v2.2.1
   enableWebhooks: true
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious

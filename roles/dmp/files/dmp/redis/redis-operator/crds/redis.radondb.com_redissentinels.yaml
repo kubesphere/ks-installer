@@ -29,7 +29,12 @@ spec:
       jsonPath: .spec.redisReplica.replicas
       name: RedisReplicas
       type: integer
-    - jsonPath: .status.state
+    - description: Redis version
+      jsonPath: .spec.kubernetesConfig.redisVersion
+      name: RedisVersion
+      type: string
+    - description: RedisSentinel state
+      jsonPath: .status.state
       name: State
       type: string
     - description: Age of Cluster
@@ -56,14 +61,95 @@ spec:
           spec:
             description: RedisSentinelSpec defines the desired state of RedisSentinel
             properties:
+              TLS:
+                description: TLS Configuration for redis instances
+                properties:
+                  ca:
+                    type: string
+                  cert:
+                    type: string
+                  key:
+                    type: string
+                  port:
+                    format: int32
+                    type: integer
+                  secret:
+                    description: Reference to secret which contains the certificates
+                    properties:
+                      defaultMode:
+                        description: 'defaultMode is Optional: mode bits used to set
+                          permissions on created files by default. Must be an octal
+                          value between 0000 and 0777 or a decimal value between 0
+                          and 511. YAML accepts both octal and decimal values, JSON
+                          requires decimal values for mode bits. Defaults to 0644.
+                          Directories within the path are not affected by this setting.
+                          This might be in conflict with other options that affect
+                          the file mode, like fsGroup, and the result can be other
+                          mode bits set.'
+                        format: int32
+                        type: integer
+                      items:
+                        description: items If unspecified, each key-value pair in
+                          the Data field of the referenced Secret will be projected
+                          into the volume as a file whose name is the key and content
+                          is the value. If specified, the listed keys will be projected
+                          into the specified paths, and unlisted keys will not be
+                          present. If a key is specified which is not present in the
+                          Secret, the volume setup will error unless it is marked
+                          optional. Paths must be relative and may not contain the
+                          '..' path or start with '..'.
+                        items:
+                          description: Maps a string key to a path within a volume.
+                          properties:
+                            key:
+                              description: key is the key to project.
+                              type: string
+                            mode:
+                              description: 'mode is Optional: mode bits used to set
+                                permissions on this file. Must be an octal value between
+                                0000 and 0777 or a decimal value between 0 and 511.
+                                YAML accepts both octal and decimal values, JSON requires
+                                decimal values for mode bits. If not specified, the
+                                volume defaultMode will be used. This might be in
+                                conflict with other options that affect the file mode,
+                                like fsGroup, and the result can be other mode bits
+                                set.'
+                              format: int32
+                              type: integer
+                            path:
+                              description: path is the relative path of the file to
+                                map the key to. May not be an absolute path. May not
+                                contain the path element '..'. May not start with
+                                the string '..'.
+                              type: string
+                          required:
+                          - key
+                          - path
+                          type: object
+                        type: array
+                      optional:
+                        description: optional field specify whether the Secret or
+                          its keys must be defined
+                        type: boolean
+                      secretName:
+                        description: 'secretName is the name of the secret in the
+                          pod''s namespace to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret'
+                        type: string
+                    type: object
+                  tlsCluster:
+                    type: boolean
+                required:
+                - secret
+                type: object
               aclConfig:
                 properties:
                   aclFile:
                     type: string
                 type: object
               clusterSize:
+                enum:
+                - 3
                 format: int32
-                minimum: 3
                 type: integer
               disableCmd:
                 properties:
@@ -78,6 +164,11 @@ spec:
                 description: KubernetesConfig will be the JSON struct for Basic Redis
                   Config
                 properties:
+                  endpointType:
+                    enum:
+                    - hostname
+                    - ip
+                    type: string
                   image:
                     type: string
                   imagePullPolicy:
@@ -104,6 +195,11 @@ spec:
                       name:
                         type: string
                     type: object
+                  redisVersion:
+                    enum:
+                    - 6.2.5
+                    - 7.0.4
+                    type: string
                   resources:
                     description: ResourceRequirements describes the compute resource
                       requirements.
@@ -133,6 +229,7 @@ spec:
                     type: object
                 required:
                 - image
+                - redisVersion
                 type: object
               nodeSelector:
                 additionalProperties:
@@ -2637,8 +2734,9 @@ spec:
                         type: integer
                     type: object
                   replicas:
+                    enum:
+                    - 3
                     format: int32
-                    minimum: 3
                     type: integer
                   resources:
                     description: ResourceRequirements describes the compute resource
@@ -3366,9 +3464,6 @@ spec:
           status:
             description: RedisSentinelStatus defines the observed state of RedisSentinel
             properties:
-              leader:
-                description: Leader stores the Current Elected Leader from Sentinel
-                type: string
               state:
                 type: string
             type: object

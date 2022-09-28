@@ -1,0 +1,27 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplicationVersion
+metadata:
+  name: opensearch
+  labels:
+    application.kubesphere.io/app-id: app-opensearch
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  maintainers:
+    - email: radondb@yunify.com
+      name: RadonDB
+  name: "opensearch"
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/mysql_create.jpg,/assets/screenshots/mysql_detail.jpg,/assets/screenshots/mysql_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mysql_create_zh.jpg,/assets/screenshots/mysql_detail_zh.jpg,/assets/screenshots/mysql_monitor_zh.jpg
+  changeLog: |
+    - Add MySQL Cluster service monitoring
+  changeLog_zh: |
+    - 增加 MySQL 集群服务监控
+
+  operatorVersion: "2.2.0"
+  appVersion: "5.7.34|8.0"
+  owner: "RadonDB"
+status:
+  state: active

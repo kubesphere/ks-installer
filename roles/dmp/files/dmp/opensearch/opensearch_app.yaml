@@ -1,0 +1,30 @@
+apiVersion: application.kubesphere.io/v1alpha1
+kind: OperatorApplication
+metadata:
+  annotations:
+    kubesphere.io/creator: RadonDB
+  name: opensearch
+  labels:
+    application.kubesphere.io/app-category-id: radondb
+    kubesphere.io/workspace: system-workspace
+spec:
+  # app name
+  name: "opensearch"
+  # app description
+  description_zh: "一款基于 opensearch 提供的企业级数据库。"
+  description: "A cloud-native, enterprise-class database system based on opensearch."
+  # app description
+  abstraction_zh: |
+    - 提供一主多从高可用架构
+  abstraction: |
+    - Provide a high availability architecture with one master and multiple slave nodes.
+
+  screenshots: |
+    /assets/screenshots/radondb_list.jpg,/assets/screenshots/mysql_create.jpg,/assets/screenshots/mysql_detail.jpg,/assets/screenshots/mysql_monitor.jpg
+  screenshots_zh: |
+    /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mysql_create_zh.jpg,/assets/screenshots/mysql_detail_zh.jpg,/assets/screenshots/mysql_monitor_zh.jpg
+  icon: "/assets/radondb_logo.svg"
+  owner: "RadonDB"
+status:
+  latestVersion: "1.0"
+  state: active

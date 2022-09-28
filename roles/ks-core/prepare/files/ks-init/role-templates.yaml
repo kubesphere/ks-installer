@@ -493,6 +493,8 @@ rules:
       - backups
       - postgresqlclusters
       - kibanas
+      - Kafka
+      - opensearch
       # dmp end
     verbs:
       - '*'
@@ -2488,6 +2490,19 @@ role:
         - kibanas
       verbs:
         - '*'
+    - apiGroups:
+        - kafka.strimzi.io
+      resources:
+        - Kafka
+      verbs:
+        - '*'
+    - apiGroups:
+        - opensearch.opster.io
+      resources:
+        - OpenSearchCluster
+      verbs:
+        - '*'
+
     # dmp end
     - apiGroups:
         - ""

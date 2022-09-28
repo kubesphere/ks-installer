@@ -45,6 +45,9 @@ spec:
                     type: string
                   key:
                     type: string
+                  port:
+                    format: int32
+                    type: integer
                   secret:
                     description: Reference to secret which contains the certificates
                     properties:
@@ -108,6 +111,8 @@ spec:
                           pod''s namespace to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret'
                         type: string
                     type: object
+                  tlsCluster:
+                    type: boolean
                 required:
                 - secret
                 type: object
@@ -932,6 +937,11 @@ spec:
                 description: KubernetesConfig will be the JSON struct for Basic Redis
                   Config
                 properties:
+                  endpointType:
+                    enum:
+                    - hostname
+                    - ip
+                    type: string
                   image:
                     type: string
                   imagePullPolicy:
@@ -958,6 +968,11 @@ spec:
                       name:
                         type: string
                     type: object
+                  redisVersion:
+                    enum:
+                    - 6.2.5
+                    - 7.0.4
+                    type: string
                   resources:
                     description: ResourceRequirements describes the compute resource
                       requirements.
@@ -987,6 +1002,7 @@ spec:
                     type: object
                 required:
                 - image
+                - redisVersion
                 type: object
               livenessProbe:
                 description: Probe describes a health check to be performed against
@@ -2104,6 +2120,9 @@ spec:
                         type: string
                       key:
                         type: string
+                      port:
+                        format: int32
+                        type: integer
                       secret:
                         description: Reference to secret which contains the certificates
                         properties:
@@ -2167,6 +2186,8 @@ spec:
                               the pod''s namespace to use. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret'
                             type: string
                         type: object
+                      tlsCluster:
+                        type: boolean
                     required:
                     - secret
                     type: object
@@ -3031,6 +3052,11 @@ spec:
                     description: KubernetesConfig will be the JSON struct for Basic
                       Redis Config
                     properties:
+                      endpointType:
+                        enum:
+                        - hostname
+                        - ip
+                        type: string
                       image:
                         type: string
                       imagePullPolicy:
@@ -3058,6 +3084,11 @@ spec:
                           name:
                             type: string
                         type: object
+                      redisVersion:
+                        enum:
+                        - 6.2.5
+                        - 7.0.4
+                        type: string
                       resources:
                         description: ResourceRequirements describes the compute resource
                           requirements.
@@ -3088,6 +3119,7 @@ spec:
                         type: object
                     required:
                     - image
+                    - redisVersion
                     type: object
                   livenessProbe:
                     description: Probe describes a health check to be performed against

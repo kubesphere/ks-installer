@@ -63,7 +63,7 @@ spec:
                   If is empty, is use leader HostName
                 type: string
               image:
-                default: radondb/mysql57-sidecar:v2.2.0
+                default: radondb/mysql57-sidecar:v2.2.1
                 description: To specify the image that will be used for sidecar container.
                 type: string
               nfsServerAddress:
