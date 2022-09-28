@@ -69,6 +69,13 @@ controllerManager:
       - --block-files-concurrency=20
       - --compact.blocks-fetch-concurrency=5
 
+      dataVolume:
+        persistentVolumeClaim: 
+          spec: 
+            resources:
+              requests: 
+                storage: 10Gi
+
     ruler: 
       replicas: 1
 
