@@ -1,0 +1,39 @@
+{{- if .Values.gateway.enabled -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: Gateway
+metadata:
+  name: {{ include "whizard.gateway.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- if .Values.gateway.serviceReference }}
+    "monitoring.whizard.io/service": "{{ .Values.gateway.serviceReference.namespace }}.{{ .Values.gateway.serviceReference.name }}"
+    {{- else if .Values.service.enabled }}
+    "monitoring.whizard.io/service": "{{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}"
+    {{- end }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  image: "{{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag | default .Chart.AppVersion }}"
+  replicas: {{ .Values.gateway.replicas }}
+  
+  {{- with .Values.gateway.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.gateway.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  nodePort: {{ .Values.gateway.nodePort }}
+
+  logLevel: {{ .Values.global.whizard.log.level }}
+  logFormat: {{ .Values.global.whizard.log.format }}
+{{- end }}

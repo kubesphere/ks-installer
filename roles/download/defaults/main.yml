@@ -208,9 +208,23 @@ node_exporter_tag: v1.3.1
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
 alertmanager_tag: v0.23.0
 thanos_repo: "{{ base_repo }}{{ namespace_override | default('thanosio') }}/thanos"
-thanos_tag: v0.25.2
+thanos_tag: v0.28.0
 grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
 grafana_tag: 8.3.3
+
+# whizard
+whizard_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-controller-manager"
+whizard_controller_manager_tag: latest
+whizard_monitoring_gateway_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-gateway"
+whizard_monitoring_gateway_tag: latest
+whizard_monitoring_agent_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-agent-proxy"
+whizard_monitoring_agent_proxy_tag: latest
+whizard_monitoring_block_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-block-manager"
+whizard_monitoring_block_manager_tag: latest
+envoy_repo: "{{ base_repo }}{{ namespace_override | default('envoyproxy') }}/envoy"
+envoy_tag: v1.20.2
+bash_repo: "{{ base_repo }}{{ namespace_override | default('') }}/bash"
+bash_tag: 5.1.16
 
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"

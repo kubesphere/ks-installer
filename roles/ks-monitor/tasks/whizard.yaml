@@ -1,0 +1,74 @@
+- name: whizard | Getting whizard installation files
+  copy:
+    src: "whizard"
+    dest: "{{ kubesphere_dir }}/"
+
+- block:
+  - name: whizard | Generating whizard installation files
+    template:
+      src: "{{ item.file }}.j2"
+      dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+    with_items:
+      - { path: whizard/whizard, file: custom-values-whizard.yaml }
+
+  - name: whizard | Checking whizard
+    shell: >
+      {{ bin_dir }}/helm list -f whizard -n kubesphere-monitoring-system
+    register: whizard_check
+    failed_when: whizard_check.rc != 0
+
+  - name: whizard | Update whizard crds
+    shell: >
+       {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/whizard/whizard/crds/
+    register: update_crds
+    when:
+      - whizard_check.rc == 0
+    failed_when: update_crds is not succeeded
+
+  - name: whizard | Deploying whizard
+    shell: >
+      {{ bin_dir }}/helm upgrade --install whizard
+      {{ kubesphere_dir }}/whizard/whizard
+      -f {{ kubesphere_dir }}/whizard/whizard/custom-values-whizard.yaml
+      -n kubesphere-monitoring-system
+    register: deploy_result
+    until: deploy_result is succeeded
+    retries: 3
+    delay: 10
+    when:
+      - whizard_check.rc == 0
+      - whizard_check.stdout.find("latest") == -1
+  
+  when:
+    - multicluster.clusterRole == 'host'
+
+# whizard agent proxy
+- name: whizard | Generating whizard agent proxy installation files
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: whizard/agent-proxy, file: whizard-agent-proxy-deployment.yaml }
+- name: whizard | Deploying wizhard agent proxy
+  shell: >
+    kubectl apply -f {{ kubesphere_dir }}/whizard/agent-proxy/
+
+# delete old ThanosRuler instance 'kubesphere-monitoring-system/kubesphere' in solo cluster mode
+- name: Monitoring | Deleting old ThanosRuler instance
+  shell: >
+    {{ bin_dir }}/kubectl delete thanosruler kubesphere -n kubesphere-monitoring-system
+  register: delete_result
+  failed_when: "delete_result.stderr and 'NotFound' not in delete_result.stderr"
+
+# whizard already includes the alerting module, so set alerting status to enabled
+- name: whizard | Importing alerting status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"alerting": {"status": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3

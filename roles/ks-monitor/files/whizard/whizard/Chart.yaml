@@ -1,0 +1,11 @@
+apiVersion: v2
+name: whizard
+description: A Helm chart for Whizard, which is an observability platform for Kubernetes infrastructure and applications.
+type: application
+sources:
+- https://github.com/WhizardTelemetry/whizard
+keywords:
+- operator
+- whizard
+version: 0.1.0
+appVersion: "latest"

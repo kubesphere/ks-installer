@@ -1,3 +1,5 @@
+{% set whizardEnabled = multicluster is defined and (multicluster.clusterRole == "host" or multicluster.clusterRole == "member") and 
+      monitoring is defined and monitoring.whizard is defined and monitoring.whizard.enabled == true %}
 apiVersion: v1
 data:
   kubesphere.yaml: |
@@ -88,14 +90,18 @@ data:
     servicemesh:
       istioPilotHost: http://istiod.istio-system.svc:8080/version
       jaegerQueryHost: http://jaeger-query.istio-system.svc:16686
-      servicemeshPrometheusHost: http://prometheus-k8s.kubesphere-monitoring-system.svc:9090
+{% if whizardEnabled %}
+      servicemeshPrometheusHost: http://whizard-agent-proxy.kubesphere-monitoring-system.svc:9090
+{% else %}
+      servicemeshPrometheusHost: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
+{% endif %}
       kialiQueryHost: http://kiali.istio-system:20001
 {% endif %}
 {% if ( (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled) or
     ( openpitrix.nativehelmrelease is defined  and openpitrix.nativehelmrelease.enabled is defined ) )
   %}
     openpitrix:
-    {% if openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled) }
+{% if openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled %}
       s3:
         endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
         region: {{ common.s3.region | default('us-east-1') }}
@@ -104,11 +110,11 @@ data:
         accessKeyID: {{ common.s3.accessKeyID | default('openpitrixminioaccesskey') }}
         secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
         bucket: {{ common.s3.openpitrixBucket | default('app-store') }}
-    {% endif %}
-    {% if openpitrix.nativehelmrelease is defined  and openpitrix.nativehelmrelease.enabled is defined %}
+{% endif %}
+{% if openpitrix.nativehelmrelease is defined  and openpitrix.nativehelmrelease.enabled is defined %}
       nativehelmrelease:
         enable: {{ openpitrix.nativehelmrelease.enabled }}
-    {% endif %}
+{% endif %}
 {% endif %}
     multicluster:
       clusterRole: {{ multicluster.clusterRole }}
@@ -130,7 +136,9 @@ data:
 {% endif %}
 {% endif %}
     monitoring:
-{% if common.monitoring is defined and common.monitoring.endpoint is defined %}
+{% if whizardEnabled %}
+      endpoint: http://whizard-agent-proxy.kubesphere-monitoring-system.svc:9090
+{% elif common.monitoring is defined and common.monitoring.endpoint is defined %}
       endpoint: {{ common.monitoring.endpoint }}
 {% else %}
       endpoint: http://prometheus-operated.kubesphere-monitoring-system.svc:9090
@@ -139,6 +147,11 @@ data:
       enableGPUMonitoring: true
 {% else %}
       enableGPUMonitoring: false
+{% endif %}
+{% if whizardEnabled and multicluster.clusterRole == "host" %}
+    observability:
+      monitoring:
+        endpoint: http://query-frontend-whizard-operated.kubesphere-monitoring-system.svc:10902
 {% endif %}
 {% if common.gpu is defined and common.gpu.kinds is defined %}
     gpu:
@@ -254,7 +267,14 @@ data:
       indexPrefix: ks-{{ common.es.elkPrefix }}-auditing
 {% endif %}
 {% endif %}
-{% if alerting.enabled is defined and alerting.enabled == true %}
+{% if whizardEnabled %}
+    alerting: 
+{% if multicluster.clusterRole == "host" %}
+      thanosRulerEndpoint: http://query-frontend-whizard-operated.kubesphere-monitoring-system.svc:10902
+{% else %}
+      thanosRulerEndpoint: http://whizard-agent-proxy.kubesphere-monitoring-system.svc:9090
+{% endif %}
+{% elif alerting.enabled is defined and alerting.enabled == true %}
     alerting:
 {% if common.monitoring is defined and common.monitoring.endpoint is defined %}
       prometheusEndpoint: {{ common.monitoring.endpoint }}

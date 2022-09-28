@@ -1,0 +1,189 @@
+
+global:
+
+  whizard:
+    image:
+      repository: {{ thanos_repo }}
+      tag: {{ thanos_tag }}
+  
+controllerManager: 
+  enabled: true
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  image:
+    repository: {{ whizard_controller_manager_repo }}
+    tag: {{ whizard_controller_manager_tag }}
+
+  config: 
+    create: true
+
+    storage:
+      blockManager:
+        gc:
+          image:
+            repository: {{ whizard_monitoring_block_manager_repo }}
+            tag: {{ whizard_monitoring_block_manager_tag }}
+
+    gateway:
+      image:
+        repository: {{ whizard_monitoring_gateway_repo }}
+        tag: {{ whizard_monitoring_gateway_tag }}
+      
+      replicas: 2
+
+    router: 
+      replicas: 2
+
+      replicationFactor: 1
+
+    queryFrontend: 
+      replicas: 2
+
+    query:
+      replicas: 2
+
+      envoy:
+        image: 
+          repository: {{ envoy_repo }}
+          tag: {{ envoy_tag }}
+    
+    ingester: 
+      replicas: 2
+      localTsdbRetention: 15d
+      dataVolume:
+        persistentVolumeClaim: 
+          spec: 
+            resources:
+              requests: 
+                storage: 10Gi
+      tsdbCleanupImage:
+        image: {{ bash_repo }}
+        tag: {{ bash_tag }}
+
+    compactor: 
+      additionalFlags:
+      - --block-files-concurrency=20
+      - --compact.blocks-fetch-concurrency=5
+
+    ruler: 
+      replicas: 1
+
+      shards: 1
+
+      evaluationInterval: 1m
+      ruleSelectors: 
+      - matchLabels:
+          role: alert-rules
+      alertmanagersUrl: 
+      - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
+
+      prometheusConfigReloader:
+        image:
+          repository: {{ prometheus_config_reloader_repo }}
+          tag: {{ prometheus_config_reloader_tag }}
+
+service: 
+  enabled: true
+  
+  tenantHeader: cluster
+  defaultTenantId: unknown
+  tenantLabelName: cluster
+
+gateway: 
+  enabled: true
+
+  image: 
+    repository: {{ whizard_monitoring_gateway_repo }}
+    tag: {{ whizard_monitoring_gateway_tag }}
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  nodePort: {{ monitoring.whizard.server.nodePort }}
+
+query: 
+  enabled: true
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  
+  envoy: 
+    image:
+      repository: {{ envoy_repo }}
+      tag: {{ envoy_tag }}
+    resources: {}
+
+router: 
+  enabled: true
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  replicationFactor: 1
+
+queryFrontend: 
+  enabled: true
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  
+ruler: 
+  enabled: true
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  shards: 1
+
+  evaluationInterval: 1m
+
+  ruleSelectors: 
+  - matchExpressions:
+    - key: alerting.kubesphere.io/rule_level
+      operator: In
+      values:
+      - global
+
+  alertmanagersUrl: 
+  - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
+
+ingester: 
+  enabled: true
+
+  replicas: 2
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  dataVolume:
+    persistentVolumeClaim: 
+      spec: 
+        resources:
+          requests: 
+            storage: 10Gi

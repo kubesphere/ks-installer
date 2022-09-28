@@ -1,0 +1,59 @@
+{{- if .Values.controllerManager.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "whizard.manager.fullname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    app: {{ include "whizard.manager.fullname" . }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "whizard.manager.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "whizard.manager.fullname" . }}
+    spec:
+      serviceAccountName: {{ include "whizard.manager.serviceAccountName" . }}
+      volumes:
+      - name: whizard-config
+        configMap:
+          name: {{ include "whizard.fullname" . }}-config
+          defaultMode: 420
+      containers:
+        - name: manager
+          command:
+          - /manager
+          image: "{{ .Values.controllerManager.image.repository }}:{{ .Values.controllerManager.image.tag | default .Chart.AppVersion }}"
+          volumeMounts:
+          - mountPath: /etc/whizard/
+            name: whizard-config
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+          {{- with .Values.controllerManager.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.controllerManager.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controllerManager.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controllerManager.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -151,6 +151,13 @@ spec:
       nvidia_dcgm_exporter:        # Ensure that gpu resources on your hosts can be used normally, otherwise this plug-in will not work properly.
         enabled: false             # Check whether the labels on the GPU hosts contain "nvidia.com/gpu.present=true" to ensure that the DCGM pod is scheduled to these nodes.
         # resources: {}
+    whizard: # take effect only when multicluster is enabled
+      enabled: false
+      server: # for host cluster
+        nodePort: 30990 # to expose whizard gateway service by this nodePort to member cluster
+      client: # for member cluster
+        gatewayUrl: "" 
+        clusterName: ""
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the Host or Member Cluster.
   network:

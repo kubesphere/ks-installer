@@ -1,0 +1,45 @@
+{{- if .Values.queryFrontend.enabled -}}
+apiVersion: monitoring.whizard.io/v1alpha1
+kind: QueryFrontend
+metadata:
+  name: {{ include "whizard.queryFrontend.crname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    {{- if .Values.queryFrontend.serviceReference }}
+    "monitoring.whizard.io/service": "{{ .Values.queryFrontend.serviceReference.namespace }}.{{ .Values.queryFrontend.serviceReference.name }}"
+    {{- else if .Values.service.enabled }}
+    "monitoring.whizard.io/service": "{{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}"
+    {{- end }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  image: "{{ .Values.global.whizard.image.repository }}:{{ .Values.global.whizard.image.tag }}"
+  replicas: {{ .Values.queryFrontend.replicas }}
+
+  {{- with .Values.queryFrontend.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.queryFrontend.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.queryFrontend.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.queryFrontend.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  logLevel: {{ .Values.global.whizard.log.level }}
+  logFormat: {{ .Values.global.whizard.log.format }}
+  {{- with .Values.queryFrontend.additionalFlags }}
+  flags:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.queryFrontend.cacheConfig }}
+  cacheConfig: 
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

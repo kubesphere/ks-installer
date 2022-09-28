@@ -1,3 +1,5 @@
+{% set whizardEnabled = multicluster is defined and (multicluster.clusterRole == "host" or multicluster.clusterRole == "member") and 
+      monitoring is defined and monitoring.whizard is defined and monitoring.whizard.enabled == true %}
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
@@ -39,12 +41,14 @@ spec:
           topologyKey: kubernetes.io/hostname
         weight: 100
 {% endif %}
+{% if not whizardEnabled %}
   alerting:
     alertmanagers:
     - name: alertmanager-main
       namespace: kubesphere-monitoring-system
       port: web
   evaluationInterval: 1m
+{% endif %}
   image: {{ prometheus_repo }}:{{ prometheus_tag }}
   podMetadata:
     labels:
@@ -92,13 +96,25 @@ spec:
     requests:
       cpu: {{ monitoring.prometheus.resources.requests.cpu | default(monitoring.prometheus.requests.cpu) | default("200m") }}
       memory: {{ monitoring.prometheus.resources.requests.memory | default(monitoring.prometheus.requests.memory) | default("400Mi") }}
+{% if whizardEnabled %}
+  remoteWrite:
+  - url: http://whizard-agent-proxy.kubesphere-monitoring-system.svc:9090/api/v1/receive
+  containers: 
+  - name: prometheus
+    args:
+    - --config.file=/etc/prometheus/config_out/prometheus.env.yaml
+    - --storage.agent.path=/prometheus
+    - --enable-feature=agent
+    - --web.enable-lifecycle
+{% else %}
   retention: {% if prometheus_retention_duration is defined %}{{ prometheus_retention_duration }}{% else %}7d{% endif %}
-
+  
   ruleNamespaceSelector: {}
   ruleSelector:
     matchLabels:
       prometheus: k8s
       role: alert-rules
+{% endif %}
   scrapeInterval: 1m
 {% if etcd.monitoring is defined and etcd.monitoring == true %}
   secrets:

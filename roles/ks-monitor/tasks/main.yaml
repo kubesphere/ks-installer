@@ -23,9 +23,10 @@
   delay: 3
 
 - import_tasks: thanos-ruler.yaml
-  when:
-    - alerting is defined
-    - alerting.enabled is defined
-    - alerting.enabled == true
+  when: 
+    - alerting is defined and alerting.enabled is defined and alerting.enabled == true
     - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
+    # do this task only if multicluster is not enabled or whizard is not enabled, because whizard includes the alerting module.
+    - multicluster is not defined or (multicluster.clusterRole != 'host' and multicluster.clusterRole != 'member')
+    - monitoring is not defined or monitoring.whizard is not defined or monitoring.whizard.enabled != true)
 

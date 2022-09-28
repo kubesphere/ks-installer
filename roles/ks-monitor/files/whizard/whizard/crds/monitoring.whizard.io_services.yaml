@@ -1,0 +1,89 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: services.monitoring.whizard.io
+spec:
+  group: monitoring.whizard.io
+  names:
+    kind: Service
+    listKind: ServiceList
+    plural: services
+    singular: service
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Service is the Schema for the monitoring service API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ServiceSpec defines the desired state of a Service
+            properties:
+              defaultTenantId:
+                description: Default tenant ID to use when none is provided via a
+                  header.
+                type: string
+              retention:
+                description: Retention configs how long to retain samples
+                properties:
+                  retention1h:
+                    description: Retention1h specifies how long to retain samples
+                      of 1h resolution in bucket
+                    pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                    type: string
+                  retention5m:
+                    description: Retention5m specifies how long to retain samples
+                      of 5m resolution in bucket
+                    pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                    type: string
+                  retentionRaw:
+                    description: RetentionRaw specifies how long to retain raw samples
+                      in bucket
+                    pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                    type: string
+                type: object
+              storage:
+                properties:
+                  name:
+                    type: string
+                  namespace:
+                    type: string
+                type: object
+              tenantHeader:
+                description: HTTP header to determine tenant for remote write requests.
+                type: string
+              tenantLabelName:
+                description: Label name through which the tenant will be announced.
+                type: string
+            type: object
+          status:
+            description: ServiceStatus defines the observed state of Service
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
