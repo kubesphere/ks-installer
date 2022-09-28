@@ -362,11 +362,10 @@ multus_cni_tag: "v3.9"
 #DMP
 #DMP clickhouse-operator
 chronus_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-operator"
-chronus_operator_tag: "dmp"
+chronus_operator_tag: "2.1.1"
 chronus_metrics_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
-chronus_metrics_operator_tag: "dmp"
-chronus_busybox_repo: "{{ namespace_override | default('library') }}/busybox"
-chronus_busybox_tag: "1.31.1"
+chronus_metrics_operator_tag: "2.1.1"
+
 
 #DMP mysql-operator
 mysql_operator_image: "{{ namespace_override | default('radondb') }}/mysql-operator"

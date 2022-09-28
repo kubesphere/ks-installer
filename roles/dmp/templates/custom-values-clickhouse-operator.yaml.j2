@@ -3,16 +3,6 @@
 operator:
   image: {{ chronus_operator_repo }}:{{ chronus_operator_tag }}
   imagePullPolicy: IfNotPresent
-
-  # List of namespaces where clickhouse-operator watches for events.
-  # Concurrently running operators should watch on different namespaces
-  # Support to use regular expressions
-  watchNamespaces:
-    - (.*?)
-
-  defaultClickHouseLogContainerImage: {{ chronus_busybox_repo }}:{{ chronus_busybox_tag }}
-  defaultClickHouseLogContainerImagePullPolicy: "IfNotPresent"
-  defaultMetricsExporterContainerImage: {{ chronus_metrics_operator_repo }}:{{ chronus_metrics_operator_tag }}
-  defaultMetricsExporterContainerImagePullPolicy: "IfNotPresent"
-
-  imagePrefix: {{ chronus_image_prefix }}
+metrics_operator:
+  image: {{ chronus_metrics_operator_repo }}:{{ chronus_metrics_operator_tag }}
+  imagePullPolicy: IfNotPresent

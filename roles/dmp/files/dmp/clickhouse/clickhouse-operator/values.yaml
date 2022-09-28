@@ -1,18 +1,8 @@
 # Default values for ClickHouse-operator
 
 operator:
-  image: radondb/chronus-operator:dmp
+  image: radondb/chronus-operator:2.1.1
   imagePullPolicy: IfNotPresent
-
-  # List of namespaces where clickhouse-operator watches for events.
-  # Concurrently running operators should watch on different namespaces
-  # Support to use regular expressions
-  watchNamespaces:
-    - (.*?)
-
-  defaultClickHouseLogContainerImage: "library/busybox:1.32"
-  defaultClickHouseLogContainerImagePullPolicy: "IfNotPresent"
-  defaultMetricsExporterContainerImage: "radondb/chronus-metrics-operator:dmp"
-  defaultMetricsExporterContainerImagePullPolicy: "IfNotPresent"
-
-  imagePrefix: docker.io
+metrics_operator:
+  image: radondb/chronus-metrics-operator:2.1.1
+  imagePullPolicy: IfNotPresent
