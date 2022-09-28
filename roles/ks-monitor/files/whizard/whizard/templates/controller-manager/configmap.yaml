@@ -176,6 +176,11 @@ data:
           {{- toYaml . | nindent 10 }}
         {{- end }}
 
+        {{- with $compactor.dataVolume }}
+        dataVolume:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
       {{- $ruler := $config.ruler }}
       ruler: 
         {{- if $ruler.image }}

@@ -175,6 +175,8 @@ controllerManager:
       # retention1h:
       additionalFlags: []
 
+      dataVolume: {}
+
     ruler: 
       ## If null or unset, the global.whizardImage is used.
       image: null
