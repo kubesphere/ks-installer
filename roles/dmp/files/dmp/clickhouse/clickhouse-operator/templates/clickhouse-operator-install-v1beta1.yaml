@@ -166,38 +166,6 @@ spec:
                 - "disabled"
                 - "Enabled"
                 - "enabled"
-            # Need to be StringBool
-            metricsExporter:
-              type: string
-              description: "Monitoring related, allows adding prometheus exporter containers to each pod"
-              enum:
-                # List StringBoolXXX constants from model
-                - ""
-                - "0"
-                - "1"
-                - "False"
-                - "false"
-                - "True"
-                - "true"
-                - "No"
-                - "no"
-                - "Yes"
-                - "yes"
-                - "Off"
-                - "off"
-                - "On"
-                - "on"
-                - "Disable"
-                - "disable"
-                - "Enable"
-                - "enable"
-                - "Disabled"
-                - "disabled"
-                - "Enabled"
-                - "enabled"
-            imagePrefix:
-              type: string
-              description: "custom image prefix which will add to the front of the image used by the clickhouse cluster"
             namespaceDomainPattern:
               type: string
               description: "custom domain suffix which will add to end of `Service` or `Pod` name, use it when you use custom cluster domain in your Kubernetes cluster"
@@ -1457,38 +1425,6 @@ spec:
                 - "disabled"
                 - "Enabled"
                 - "enabled"
-            # Need to be StringBool
-            metricsExporter:
-              type: string
-              description: "Monitoring related, allows adding prometheus exporter containers to each pod"
-              enum:
-                # List StringBoolXXX constants from model
-                - ""
-                - "0"
-                - "1"
-                - "False"
-                - "false"
-                - "True"
-                - "true"
-                - "No"
-                - "no"
-                - "Yes"
-                - "yes"
-                - "Off"
-                - "off"
-                - "On"
-                - "on"
-                - "Disable"
-                - "disable"
-                - "Enable"
-                - "enable"
-                - "Disabled"
-                - "disabled"
-                - "Enabled"
-                - "enabled"
-            imagePrefix:
-              type: string
-              description: "custom image prefix which will add to the front of the image used by the clickhouse cluster"
             namespaceDomainPattern:
               type: string
               description: "custom domain suffix which will add to end of `Service` or `Pod` name, use it when you use custom cluster domain in your Kubernetes cluster"
@@ -2760,21 +2696,6 @@ spec:
                 - "LabelClusterScopeCycleSize"
                 - "LabelClusterScopeCycleIndex"
                 - "LabelClusterScopeCycleOffset"
-            defaultClickHouseLogContainerImage:
-              type: string
-              description: "ClickHouse log container image, default `busybox`"
-            defaultClickHouseLogContainerImagePullPolicy:
-              type: string
-              description: "ClickHouse log container image pull policy, default `IfNotPresent`"
-            defaultMetricsExporterContainerImage:
-              type: string
-              description: "ClickHouse metrics exporter container image, default `radondb/chronus-metrics-operator`"
-            defaultMetricsExporterContainerImagePullPolicy:
-              type: string
-              description: "ClickHouse metrics exporter container image pull policy, default `IfNotPresent`"
-            imagePrefix:
-              type: string
-              description: "custom image prefix which will add to the front of the image used by the clickhouse cluster, if the parameter is also defined in CHI, CHI has higher priority"
 ---
 # Possible Template Parameters:
 #
@@ -2959,10 +2880,11 @@ data:
 
     # List of namespaces where clickhouse-operator watches for events.
     # Concurrently running operators should watch on different namespaces
-    watchNamespaces:
-    {{- range .Values.operator.watchNamespaces }}
-    - {{ . }}
-    {{- end }}
+    #watchNamespaces:
+    #  - dev
+    #  - test
+    #  - info
+    #  - onemore
 
     ################################################
     ##
@@ -3105,13 +3027,6 @@ data:
     #  LabelClusterScopeCycleIndex
     #  LabelClusterScopeCycleOffset
     appendScopeLabels: "no"
-
-    defaultClickHouseLogContainerImage: {{ .Values.operator.defaultClickHouseLogContainerImage }}
-    defaultClickHouseLogContainerImagePullPolicy: {{ .Values.operator.defaultClickHouseLogContainerImagePullPolicy }}
-    defaultMetricsExporterContainerImage: {{ .Values.operator.defaultMetricsExporterContainerImage }}
-    defaultMetricsExporterContainerImagePullPolicy: {{ .Values.operator.defaultMetricsExporterContainerImagePullPolicy }}
-
-    imagePrefix: {{ .Values.operator.imagePrefix }}
 ---
 # Possible Template Parameters:
 #
@@ -3385,11 +3300,7 @@ spec:
             name: etc-clickhouse-operator-usersd-files
       containers:
         - name: clickhouse-operator
-          {{- if .Values.operator.imagePrefix }}
-          image: {{ .Values.operator.imagePrefix }}/{{ .Values.operator.image }}
-          {{- else }}
-          image: {{ .Values.operator.image | default "radondb/chronus-operator:dmp" }}
-          {{- end }}
+          image: {{ .Values.operator.image | default "radondb/chronus-operator:2.1.1" }}
           imagePullPolicy: {{ .Values.operator.imagePullPolicy | default "IfNotPresent" }}
           volumeMounts:
             - name: etc-clickhouse-operator-folder
@@ -3451,4 +3362,41 @@ spec:
                 resourceFieldRef:
                   containerName: clickhouse-operator
                   resource: limits.memory
+        - name: metrics-exporter
+          image: {{ .Values.metrics_operator.image | default "radondb/chronus-metrics-operator:2.1.1" }}
+          imagePullPolicy: {{ .Values.metrics_operator.imagePullPolicy | default "IfNotPresent" }}
+          volumeMounts:
+            - name: etc-clickhouse-operator-folder
+              mountPath: /etc/clickhouse-operator
+            - name: etc-clickhouse-operator-confd-folder
+              mountPath: /etc/clickhouse-operator/conf.d
+            - name: etc-clickhouse-operator-configd-folder
+              mountPath: /etc/clickhouse-operator/config.d
+            - name: etc-clickhouse-operator-templatesd-folder
+              mountPath: /etc/clickhouse-operator/templates.d
+            - name: etc-clickhouse-operator-usersd-folder
+              mountPath: /etc/clickhouse-operator/users.d
+---
+# Possible Template Parameters:
+#
+# {{ .Release.Namespace }}
+#
+# Setup ClusterIP Service to provide monitoring metrics for Prometheus
+# Service would be created in kubectl-specified namespace
+# In order to get access outside of k8s it should be exposed as:
+# kubectl --namespace prometheus port-forward service/prometheus 9090
+# and point browser to localhost:9090
+kind: Service
+apiVersion: v1
+metadata:
+  name: clickhouse-operator-metrics
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: clickhouse-operator
+spec:
+  ports:
+    - port: 8888
+      name: clickhouse-operator-metrics
+  selector:
+    app: clickhouse-operator
   {{- end }}

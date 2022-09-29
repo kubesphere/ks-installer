@@ -1,25 +1,22 @@
 apiVersion: v2
-appVersion: "v2.1"
-name: clickhouse-operator
-type: application
-version: v2.1.1
+appVersion: v2.1
 description: Helm chart for deploying ClickHouse Operator on Kubernetes
 home: https://github.com/radondb/radondb-clickhouse-kubernetes
-
 keywords:
-  - operator
-  - clickhouse
-  - database
-
-sources:
-  - https://github.com/altinity/clickhouse-operator
-  - https://github.com/radondb/radondb-clickhouse-operator
-  - https://github.com/radondb/radondb-clickhouse-kubernetes
-
+- operator
+- clickhouse
+- database
 maintainers:
-  - name: TCeason
-    email: tai_chong@foxmail.com
-    url: https://tceason.github.io/
-  - name: su-houzhen
-    email: suhouzhen2020@gmail.com
-    url: https://su-houzhen.github.io/
+- email: tai_chong@foxmail.com
+  name: TCeason
+  url: https://tceason.github.io/
+- email: suhouzhen2020@gmail.com
+  name: su-houzhen
+  url: https://su-houzhen.github.io/
+name: clickhouse-operator
+sources:
+- https://github.com/altinity/clickhouse-operator
+- https://github.com/radondb/radondb-clickhouse-operator
+- https://github.com/radondb/radondb-clickhouse-kubernetes
+type: application
+version: v2.1.1
