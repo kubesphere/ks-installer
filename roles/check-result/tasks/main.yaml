@@ -27,7 +27,7 @@
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
     --type merge
-    -p '{"status": {"core": {"version": "qkcp-{{ ks_version }}"}}}'
+    -p '{"status": {"core": {"version": "kse-{{ ks_version }}"}}}'
     -n kubesphere-system
   register: cc_result
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"

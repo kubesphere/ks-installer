@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.cn-beijing.aliyuncs.com/qkcp/spring-cloud-controller
+  repository: registry.cn-beijing.aliyuncs.com/kse/spring-cloud-controller
   tag: master
   pullPolicy: IfNotPresent
 

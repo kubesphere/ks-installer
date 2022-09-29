@@ -52,7 +52,7 @@ The following table lists the configurable parameters of the springcloud-control
 | Parameter                             | Description                                                        | Default                             |
 |---------------------------------------|--------------------------------------------------------------------|-------------------------------------|
 | `replicaCount`             | Number of desired springcloud-controller pods, the number should be 1 as run standalone mode | `1`            |
-| `image.repository`          | springcloud-contrller container image name                   | `registry.cn-beijing.aliyuncs.com/qkcp/spring-cloud-controller` |
+| `image.repository`          | springcloud-contrller container image name                   | `registry.cn-beijing.aliyuncs.com/kse/spring-cloud-controller` |
 | `image.tag`                 | springcloud-controller container image tag                   | `latest`                                                     |
 | `image.pullPolicy`          | springcloud-controller container image pull policy           | `IfNotPresent`                                               |
 | `resources.limits.cpu`      | springcloud-controller limits cpu resource                   | `1`                                                          |

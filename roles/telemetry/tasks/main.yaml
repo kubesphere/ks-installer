@@ -105,7 +105,7 @@
 
 - name: Get essential information
   uri:
-    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks=qkcp-{{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ cluster_str }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
+    url: "https://kubesphere.io/log/?k8s={{ k8s[ 'stdout' ] }}&ks=kse-{{ ks[ 'stdout' ] }}&ha={{ ha[ 'stdout' ] }}&c={{ number[ 'stdout' ] }}&K8st={{ kubetime[ 'stdout' ] }}&Kst={{ kubespheretime[ 'stdout' ] }}&os={{ firstipos[ 'stdout' ] }}&mID={{ mID[ 'stdout' ] }}&clusterId={{ cluster_str }}&mod={{ mod[ 'stdout' ] }}&multi={{ multi[ 'stdout' ] }}"
     method: GET
     validate_certs: false
   ignore_errors: true

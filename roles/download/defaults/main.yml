@@ -12,7 +12,7 @@ base_repo: >-
 
   {%- endif %}
 
-qkcp_images_repo: >-
+kse_images_repo: >-
   {% if local_registry is defined and local_registry != "" -%}
   {{ local_registry }}
   {%- else -%}
@@ -84,15 +84,15 @@ kafka_image_registry: >-
   {%- endif %}
 
 #KubeSphere:
-ks_apiserver_repo: "{{ qkcp_images_repo }}/{{ namespace_override | default('qkcp') }}/ks-apiserver"
+ks_apiserver_repo: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/ks-apiserver"
 ks_apiserver_tag: "{{ ks_version }}"
-ks_controller_manager_repo: "{{ qkcp_images_repo }}/{{ namespace_override | default('qkcp') }}/ks-controller-manager"
+ks_controller_manager_repo: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/ks-controller-manager"
 ks_controller_manager_tag: "{{ ks_version }}"
 ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
 ks_update_tag: v3.0.0
 ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
-ks_console_repo: "{{ qkcp_images_repo }}/{{ namespace_override | default('qkcp') }}/ks-console"
+ks_console_repo: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/ks-console"
 ks_console_tag: "{{ ks_version }}"
 ks_kubectl_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kubectl"
 ks_kubectl_tag: v1.0.0

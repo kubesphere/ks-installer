@@ -10,13 +10,13 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: ks-installer
-  IMAGE_REPO: registry.cn-beijing.aliyuncs.com/qkcp
+  IMAGE_REPO: registry.cn-beijing.aliyuncs.com/kse
   IMAGE_VERSION: latest
 
 jobs:
   push:
     runs-on: self-hosted
-    if: github.repository	== 'kubesphere/qkcp-installer'
+    if: github.repository	== 'kubesphere/kse-installer'
     steps:
       - uses: actions/checkout@v2
 
