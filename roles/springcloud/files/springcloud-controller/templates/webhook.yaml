@@ -1,0 +1,74 @@
+{{- $ca := genCA "controller-manager-server-cert" 3650 }}
+{{- $cn := printf "%s-admission-webhook" .Release.Name }}
+{{- $altName1 := printf "spring-cloud-controller-manager.%s" .Release.Namespace }}
+{{- $altName2 := printf "spring-cloud-controller-manager.%s.svc" .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca }}
+
+apiVersion: v1
+data:
+  ca.crt: {{ b64enc $ca.Cert | quote }}
+  tls.crt: {{ b64enc  $cert.Cert | quote }}
+  tls.key: {{ b64enc  $cert.Key | quote }}
+kind: Secret
+metadata:
+  name: controller-manager-server-cert
+type: Opaque
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: kubesphere-spring-cloud-mutating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: spring-cloud-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /mutate-v1-pod
+      caBundle: {{ b64enc $ca.Cert | quote }}
+    failurePolicy: Ignore
+    name: mpod.kb.io
+    objectSelector:
+      matchExpressions:
+        - key: springcloud.kubesphere.io/app
+          operator: Exists
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - pods
+    sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: kubesphere-spring-cloud-validating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
+      service:
+        name: spring-cloud-controller-manager
+        namespace: {{ .Release.Namespace | quote }}
+        path: /validate-springcloud-kubesphere-io-v1alpha1-configuration
+      caBundle: {{ b64enc $ca.Cert | quote }}
+    failurePolicy: Fail
+    name: vconfiguration.kb.io
+    rules:
+      - apiGroups:
+          - springcloud.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - configurations
+    sideEffects: NoneOnDryRun

@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: kubesphere-spring-cloud-gateway
+rules:
+- apiGroups:
+  - springcloud.kubesphere.io
+  resources:
+  - gatewayrouteconfigs
+  verbs:
+  - get
+  - list
+  - watch

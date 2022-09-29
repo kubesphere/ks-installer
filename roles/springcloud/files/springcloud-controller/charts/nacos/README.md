@@ -16,7 +16,7 @@ This project is based on the Helm Chart packaged by [nacos-k8s](https://github.c
 If you use a custom database, please initialize the database script yourself first.
 <https://github.com/alibaba/nacos/blob/develop/distribution/conf/nacos-mysql.sql>
 
- 
+
 ## Installing the Chart
 
 To install the chart with `release name`:
@@ -81,8 +81,12 @@ The following table lists the configurable parameters of the Skywalking chart an
 | `nacos.plugin.image.repository`                    | Nacos cluster plugin image name                                      | `nacos/nacos-peer-finder-plugin`                   |
 | `nacos.plugin.image.tag`                           | Nacos cluster plugin image tag                                       | `1.1`                                |
 | `nacos.health.enabled`                      | Enable health check or not                                         | `false`                              |
-| `nacos.env.preferhostmode`                  | Enable Nacos cluster node domain name support                      | `hostname`                         |
-| `nacos.env.serverPort`                      | Nacos port                                                         | `8848`                               |
+| `nacos.auth.enabled`                      | Enable auth system or not                                         | `false`                              |
+| `nacos.auth.tokenExpireSeconds`    | The token expiration in seconds          | `18000`                         |
+| `nacos.auth.token`                 | The default token                                            | `SecretKey012345678901234567890123456789012345678901234567890123456789` |
+| `nacos.auth.cacheEnabled`          | Turn on/off caching of auth information. By turning on this switch, the update of auth information would have a 15 seconds delay | `false`                              |
+| `nacos.preferhostmode`                  | Enable Nacos cluster node domain name support                      | `hostname`                         |
+| `nacos.serverPort`                      | Nacos port                                                         | `8848`                               |
 | `nacos.storage.type`                      | Nacos data storage method `mysql` or `embedded`. The `embedded` supports either standalone or cluster mode                                                       | `embedded`                               |
 | `nacos.storage.db.host`                      | mysql  host                                                       |                                |
 | `nacos.storage.db.name`                      | mysql  database name                                                      |                                |
@@ -133,5 +137,5 @@ $ kubectl scale sts `release name`-nacos --replicas=3
 ![img](../images/cluster2.png)
 
  * Use kubectl exec to get the cluster config of the Pods in the nacos StatefulSet after scale StatefulSets
- 
+
 ![img](../images/cluster3.png)

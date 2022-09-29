@@ -1,0 +1,215 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: kubesphere-spring-cloud-manager
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - '*'
+    resources:
+      - namespaces/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - '*'
+    resources:
+      - secrets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - clusterrolebindings
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - configurationhistories
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - configurationhistories/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - configurationhistories/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - configurations
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - configurations/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - configurations/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - gatewayrouteconfigs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - gateways
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - springcloud.kubesphere.io
+    resources:
+      - gateways/status
+    verbs:
+      - get
+      - patch
+      - update
