@@ -1755,7 +1755,7 @@ metadata:
     iam.kubesphere.io/dependencies: '["role-template-view-project-resources", "role-template-view-projects"]'
     iam.kubesphere.io/module: Project Resources Management
     kubesphere.io/alias-name: Project Resources Management
-    iam.kubesphere.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage"}'
+    iam.kubesphere.io/role-template-rules: '{"deployments": "manage", "statefulsets": "manage", "daemonsets": "manage", "jobs": "manage", "cronjobs": "manage", "pods": "manage", "services": "manage", "ingresses": "manage", "serviceaccounts": "manage", "secrets": "manage", "configmaps": "manage"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-manage-project-resources
@@ -1933,7 +1933,7 @@ metadata:
     iam.kubesphere.io/dependencies: '["role-template-view-projects"]'
     iam.kubesphere.io/module: Project Resources Management
     kubesphere.io/alias-name: Project Resources View
-    iam.kubesphere.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view"}'
+    iam.kubesphere.io/role-template-rules: '{"deployments": "view", "statefulsets": "view", "daemonsets": "view", "jobs": "view", "cronjobs": "view", "pods": "view", "services": "view", "ingresses": "view", "serviceaccounts": "view", "secrets": "view", "configmaps": "view"}'
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-project-resources
@@ -2111,87 +2111,6 @@ metadata:
   labels:
     iam.kubesphere.io/role-template: "true"
   name: role-template-view-volumes
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ConfigMap View
-    iam.kubesphere.io/role-template-rules: '{"configmaps": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-view-configmaps
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-configmaps"]'
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ConfigMap Management
-    iam.kubesphere.io/role-template-rules: '{"configmaps": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-manage-configmaps
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: Secret View
-    iam.kubesphere.io/role-template-rules: '{"secrets": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-view-secrets
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-secrets"]'
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: Secret Management
-    iam.kubesphere.io/role-template-rules: '{"secrets": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-manage-secrets
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ServiceAccount View
-    iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "view"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-view-service-accounts
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    iam.kubesphere.io/dependencies: '["role-template-view-service-accounts"]'
-    iam.kubesphere.io/module: Configration Management
-    kubesphere.io/alias-name: ServiceAccount Management
-    iam.kubesphere.io/role-template-rules: '{"serviceaccounts": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-manage-service-accounts
 rules: []
 
 ---
