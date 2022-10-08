@@ -298,7 +298,7 @@ spec:
       serviceAccountName: ks-installer
       containers:
       - name: installer
-        image: registry.cn-beijing.aliyuncs.com/kse/ks-installer:v3.2.1
+        image: registry.cn-beijing.aliyuncs.com/kse/ks-installer:v3.3.0-alpha.0
         imagePullPolicy: "Always"
         resources:
           limits:

@@ -52,7 +52,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.2.1
+  v3.3.0-alpha.0
   {%- endif %}
 
 chronus_image_prefix: >-
