@@ -22,7 +22,7 @@ spec:
       - args:
         - --gateway.address={% if multicluster.clusterRole == "host" %}http://gateway-whizard-operated.kubesphere-monitoring-system.svc:9090{% else %}{{ monitoring.whizard.client.gatewayUrl }}{% endif %}
         
-        - --tenant={% if multicluster.clusterRole == "host" %}{{ multicluster.hostClusterName }}{% else %}{{ monitoring.whizard.client.clusterName }}{% endif %}
+        - --tenant={% if multicluster.clusterRole == "host" %}{{ multicluster.hostClusterName | default("host") }}{% else %}{{ monitoring.whizard.client.clusterName }}{% endif %}
 
         image: {{ whizard_monitoring_agent_proxy_repo }}:{{ whizard_monitoring_agent_proxy_tag }}
         name: agent-proxy
