@@ -139,10 +139,24 @@
   # register: source_state
   # failed_when: "source_state.stderr and 'already exists' not in source_state.stderr"
 
+- name: KubeSphere | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.file }}"
+  with_items:
+    - { path: ks-core, file: ks-upgrade.yaml }
+
 - name: Kubesphere | Checking Users Manger and Workspaces Manger
-    shell:
-      {{ bin_dir }}/kubectl get globalroles.iam.kubesphere.io users-manager workspaces-manager --no-header | wc -l
-    register: manager_result
+  shell: >
+    {{ bin_dir }}/kubectl get globalroles.iam.kubesphere.io users-manager workspaces-manager --no-headers | wc -l
+  register: manager_result
+
+- name: Kubesphere | Checking migration job
+  shell: >
+    {{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/ks-upgrade.yaml
+  when:
+    - manager_result.stdout != "0"
+  failed_when: false
 
 - name: KubeSphere | Creating migration job
   shell: >
