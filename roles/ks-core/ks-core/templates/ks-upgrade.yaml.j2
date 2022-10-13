@@ -1,0 +1,22 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ks-upgrade
+  namespace: kubesphere-system
+  labels:
+    job: ks-upgrade
+    version: v3.0.0
+spec:
+  template:
+    spec:
+      serviceAccountName: ks-installer
+      restartPolicy: OnFailure
+      containers:
+        - command:
+            - ks-upgrade
+            - --logtostderr
+            - --v=4
+          image: {{ ks_update_repo }}:{{ ks_update_tag }}
+          imagePullPolicy: IfNotPresent
+          name: ks-upgrade
