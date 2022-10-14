@@ -46,7 +46,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.3.1-rc.3
+  v3.3.1-rc.4
   {%- endif %}
 
 #KubeSphere:
@@ -54,8 +54,8 @@ ks_apiserver_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere')
 ks_apiserver_tag: "{{ ks_version }}"
 ks_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-controller-manager"
 ks_controller_manager_tag: "{{ ks_version }}"
-ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
-ks_update_tag: v3.0.0
+ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-upgrade"
+ks_update_tag: latest
 ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
 ks_console_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-console"
