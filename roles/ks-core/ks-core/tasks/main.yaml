@@ -139,11 +139,30 @@
   # register: source_state
   # failed_when: "source_state.stderr and 'already exists' not in source_state.stderr"
 
-- name: KubeSphere | Upgrade GlobalRolebindings
+- name: KubeSphere | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.file }}"
+  with_items:
+    - { path: ks-core, file: ks-upgrade.yaml }
+
+- name: Kubesphere | Checking Users Manger and Workspaces Manger
   shell: >
-    {{ bin_dir }}/kubectl get globalrolebindings -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.roleRef.name}{"\n"}' 
-    | grep -e "users-manager$" -e "workspaces-manager$" | awk '{print $1}' 
-    | xargs -i {{ bin_dir }}/kubectl patch globalrolebindings {} --type merge -p '{"roleRef":{"name":"platform-regular"}}'
+    {{ bin_dir }}/kubectl get globalroles.iam.kubesphere.io users-manager workspaces-manager --no-headers | wc -l
+  register: manager_result
+
+- name: Kubesphere | Checking migration job
+  shell: >
+    {{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/ks-upgrade.yaml
+  when:
+    - manager_result.stdout != "0"
+  failed_when: false
+
+- name: KubeSphere | Creating migration job
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-upgrade.yaml
+  when:
+    - manager_result.stdout != "0"
 
 - name: KubeSphere | Importing ks-core status
   shell: >
