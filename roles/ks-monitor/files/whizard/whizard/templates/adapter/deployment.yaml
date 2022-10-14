@@ -1,0 +1,51 @@
+{{- if .Values.adapter.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "whizard.adapter.fullname" . }}
+  namespace: {{ include "whizard.namespace" . }}
+  labels:
+    app: {{ include "whizard.adapter.fullname" . }}
+    {{- include "whizard.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "whizard.adapter.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "whizard.adapter.fullname" . }}
+    spec:
+      serviceAccountName: {{ include "whizard.adapter.serviceAccountName" . }}
+      containers:
+        - name: adapter
+          args:
+          {{- if .Values.adapter.defaultServiceReference }}
+          - --default-whizard-service={{ .Values.adapter.defaultServiceReference.namespace }}.{{ .Values.adapter.defaultServiceReference.name }}
+          {{- else if .Values.service.enabled }}
+          - --default-whizard-service={{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}
+          {{- end }}
+          - --kubesphere-adapter-enabled={{ .Values.adapter.kubesphereAdapter.enabled }}
+          image: "{{ .Values.adapter.image.repository }}:{{ .Values.adapter.image.tag | default .Chart.AppVersion }}"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9091
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 9091
+      {{- with .Values.adapter.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.adapter.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.adapter.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

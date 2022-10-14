@@ -37,7 +37,7 @@
     delay: 10
     when:
       - whizard_check.rc == 0
-      - whizard_check.stdout.find("v0.5.0-rc.0") == -1
+      - whizard_check.stdout.find("v0.5.0-rc.1") == -1
   
   when:
     - multicluster.clusterRole == 'host'

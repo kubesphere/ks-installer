@@ -10,11 +10,29 @@ spec:
   {{- if .Values.storage.blockManager }}
   blockManager: 
     enable: {{ .Values.storage.blockManager.enable }}
+    {{- if .Values.storage.blockManager.image }}
     image: "{{ .Values.storage.blockManager.image.repository }}:{{ .Values.storage.blockManager.image.tag }}"
+    {{- end }}
     {{- if .Values.storage.blockManager.serviceAccountName }}
     serviceAccountName: {{ .Values.storage.blockManager.serviceAccountName }}
     {{- else }}
     serviceAccountName: {{ include "whizard.manager.serviceAccountName" . }}
+    {{- end }}
+    {{- if .Values.storage.blockManager.gc }}
+    gc:
+      enable: {{ .Values.storage.blockManager.gc.enable | default false }}
+      {{- if .Values.storage.blockManager.gc.image }}
+      image: "{{ .Values.storage.blockManager.gc.image.repository }}:{{ .Values.storage.blockManager.gc.image.tag }}"
+      {{- end }}
+      imagePullPolicy: {{ .Values.storage.blockManager.gc.imagePullPolicy | default "IfNotPresent" }}
+      {{- if .Values.storage.blockManager.gc.resources }}
+      resources:
+      { { - toYaml .Values.notificationmanager.resources | nindent 8 } }
+      {{- end }}
+      gcInterval: {{ .Values.storage.blockManager.gc.gcInterval | default "10m" }}
+      cleanupTimeout: {{ .Values.storage.blockManager.gc.cleanupTimeout | default "1h" }}
+      defaultTenantId: {{ .Values.service.defaultTenantId }}
+      tenantLabelName: {{ .Values.service.tenantLabelName }}
     {{- end }}
   {{- end }}
   {{- with .Values.storage.s3 }}
