@@ -307,6 +307,14 @@ kiali_operator_tag: v1.38.1
 kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali"
 kiali_tag: v1.38
 
+#springcloud
+ks_springcloud_hub: "{{ base_repo }}{{ namespace_override | default('kse') }}/spring-cloud-controller"
+ks_springcloud_tag: master
+nacos_repo: "{{ namespace_override | default('nacos') }}/nacos-server"
+nacos_tag: latest
+nacos_plugin_repo: "{{ namespace_override | default('nacos') }}/nacos-peer-finder-plugin"
+nacos_plugin_tag: 1.1
+
 #base:
 redis_repo: "{{ base_library_repo }}redis"
 redis_tag: 5.0.14-alpine
@@ -1011,6 +1019,25 @@ images:
     tag: "{{ kiali_tag }}"
     sha256: "{{ kiali_checksum|default(None) }}"
     group: "istio-images"
+
+  springcloud:
+    repo: "{{ springcloud_repo }}"
+    tag: "{{ springcloud_tag }}"
+    sha256: "{{ springcloud_checksum|default(None) }}"
+    group: "springcloud-images"
+
+  nacos:
+    repo: "{{ nacos_repo }}"
+    tag: "{{ nacos_tag }}"
+    sha256: "{{ nacos_checksum|default(None) }}"
+    group: "springcloud-images"
+
+  nacos_plugin:
+    repo: "{{ nacos_plugin_repo }}"
+    tag: "{{ nacos_plugin_tag }}"
+    sha256: "{{ nacos_checksum|default(None) }}"
+    group: "springcloud-images"
+
 
   redis:
     repo: "{{ redis_repo }}"
