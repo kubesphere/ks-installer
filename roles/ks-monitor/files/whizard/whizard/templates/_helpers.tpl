@@ -71,6 +71,20 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 {{- end }}
 
+{{/* Fullname suffixed with adapter */}}
+{{- define "whizard.adapter.fullname" -}}
+{{- printf "%s-adapter" (include "whizard.fullname" .) -}}
+{{- end }}
+
+{{/* Create the name of the service account to use for adapter */}}
+{{- define "whizard.adapter.serviceAccountName" -}}
+{{- if .Values.adapter.serviceAccount.create }}
+{{- default (include "whizard.adapter.fullname" .) .Values.adapter.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.adapter.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
 {{/* Storage custom resource instance name */}}
 {{- define "whizard.storage.crname" -}}
 {{- print (include "whizard.fullname" .) "-default" }}

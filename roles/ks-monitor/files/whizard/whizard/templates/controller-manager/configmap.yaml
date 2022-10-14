@@ -11,13 +11,6 @@ metadata:
 data:   
   whizard.yaml: |
     monitoring: 
-      {{- $adapter := $config.kubeSphereAdapter }}
-      enableKubeSphereAdapter: {{ $adapter.enabled }}
-      {{- if $adapter.defaultServiceReference }}
-      kubeSphereAdapterService: {{ $adapter.defaultServiceReference.namespace }}.{{ $adapter.defaultServiceReference.name }}
-      {{- else if .Values.service.enabled }}
-      kubeSphereAdapterService: {{ include "whizard.namespace" . }}.{{ include "whizard.service.crname" . }}
-      {{- end }}
 
       {{- $storage := $config.storage }}
       storage:
@@ -212,6 +205,8 @@ data:
           image: {{ $ruler.prometheusConfigReloader.image.repository }}:{{ $ruler.prometheusConfigReloader.image.tag }}
         rulerQueryProxy: 
           image: {{ $gateway.image.repository }}:{{ $gateway.image.tag | default .Chart.AppVersion }}
+        rulerWriteProxy: 
+          image: {{ $ruler.writeProxy.image.repository }}:{{ $ruler.writeProxy.image.tag }}
 
         {{- with $ruler.additionalFlags }}
         flags:
