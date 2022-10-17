@@ -93,6 +93,42 @@ webhooks:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
+  name: cluster.kubesphere.io
+webhooks:
+  - admissionReviewVersions:
+      - v1beta1
+    clientConfig:
+      caBundle: {{ b64enc $ca.Cert | quote }}
+      service:
+        name: ks-controller-manager
+        namespace: {{ .Release.Namespace }}
+        path: /validate-cluster-kubesphere-io-v1alpha1
+        port: 443
+    failurePolicy: Fail
+    matchPolicy: Exact
+    name: validating-cluster.kubesphere.io
+    namespaceSelector:
+      matchExpressions:
+        - key: control-plane
+          operator: DoesNotExist
+    objectSelector: {}
+    rules:
+      - apiGroups:
+          - cluster.kubesphere.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - UPDATE
+        resources:
+          - clusters
+        scope: '*'
+    sideEffects: None
+    timeoutSeconds: 30
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
   name: resourcesquotas.quota.kubesphere.io
 webhooks:
   - admissionReviewVersions:
