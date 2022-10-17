@@ -12,7 +12,7 @@ installCRDS: true
 imagePullPolicy: IfNotPresent
 nameOverride: ""
 fullnameOverride: ""
-imagePrefix: {{ mysql_image_prefix }}
+imagePrefix: {{ base_repo }}
 
 ## node.kubernetes.io/not-ready:NoExecute
 ## node.kubernetes.io/unreachable:NoExecute
@@ -20,18 +20,18 @@ imagePrefix: {{ mysql_image_prefix }}
 tolerationSeconds: 30
 
 manager:
-  image: {{ mysql_operator_image }}
-  tag: {{ mysql_operator_image_tag }}
+  image: "{{ namespace_override | default('radondb') }}/mysql-operator"
+  tag: "v2.2.1"
   enableWebhooks: true
-  resources: {}
-          # We usually recommend not to specify default resources and to leave this as a conscious
-          # choice for the user. This also increases chances charts run on environments with little
-          # resources, such as Minikube. If you do want to specify resources, uncomment the following
-          # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-          # limits:
-          #   cpu: 100m
-          #   memory: 30Mi
-          # requests:
+  resources: { }
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 30Mi
+  # requests:
   #   cpu: 100m
   #   memory: 20Mi
 
@@ -47,7 +47,8 @@ rbac:
 
 rbacProxy:
   create: true
-  image: {{ mysql_rbac_proxy_image }}
+  image: "{{ namespace_override | default('radondb') }}/kube-rbac-proxy:v0.8.0"
+
 
 leaderElection:
   create: true

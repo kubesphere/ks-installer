@@ -19,11 +19,12 @@ replicaCount: 1
 
 image:
   # repository is the container image prefixed by the registry name.
-  repository: {{ eck_operator_image }}
+  repository: "{{ namespace_override | default('radondb') }}/eck-operator"
+
   # pullPolicy is the container image pull policy.
   pullPolicy: IfNotPresent
   # tag is the container image tag. If not defined, defaults to chart appVersion.
-  tag: {{ eck_operator_image_tag }}
+  tag: "2.2.0-beta.7"
 
 # imagePullSecrets defines the secrets to use when pulling the operator container image.
 imagePullSecrets: [ ]
@@ -138,14 +139,12 @@ config:
   metricsPort: "0"
 
   # containerRegistry to use for pulling Elasticsearch and other application container images.
-  containerRegistry: {{ eck_image_registry }}
-  nsElasticsearch: {{ eck_image_namespace }}
-  nsKibana: {{ eck_image_namespace }}
+  containerRegistry: {{ base_repo }}
   # namespace of containerRegistry(refer to harbor's terminology, equal to the 'username' of docker.com)
   # all config is commented out and given its default value. Change the value if you don't use the default
   # nsApm: "apm"
-  # nsElasticsearch: "elasticsearch"
-  # nsKibana: "kibana"
+  nsElasticsearch: {{ namespace_override | default('library') }}
+  nsKibana: {{ namespace_override | default('library') }}
   # nsEnterpiseSearch: "enterprise-search"
   # nsBeats: "beats"
   # nsMaps: "elastic-maps-service"
@@ -230,8 +229,11 @@ global:
 
 # elasticsearch-exporter config
 exporter:
-  # elasticsearch-exporter container image uri
-  exporterImageUrl: {{ eck_exporter_image }}
+  # elasticsearch-exporter container image
+  exporterImageRegistry: {{ base_repo }}
+  exporterImageNamespace: "{{ namespace_override | default('prometheuscommunity') }}"
+  exporterImageName: "elasticsearch-exporter"
+  exporterImageTag: "v1.3.0"
   # elasticsearch-exporter config, controlling which type of metrics are exported
   # all config is commented out and given its default value. Change the value if you don't use the default
   # exporterAll: true
@@ -241,3 +243,4 @@ exporter:
   # exporterIndicesMappings: false
   # exporterShards: false
   # exporterSnapshots: false
+

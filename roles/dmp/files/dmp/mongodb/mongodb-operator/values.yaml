@@ -37,8 +37,10 @@ prometheus:
 #  prefix: dockerhub.qingcloud.com/mongodb_op
 #  secret: eyJhdXRocyI6eyJkb2NrZXJodWIucWluZ2Nsb3VkLmNvbSI6eyJ1c2VybmFtZSI6ImNoZW54aW4iLCJwYXNzd29yZCI6Ilhpb25nMDMyMSIsImF1dGgiOiJZMmhsYm5ocGJqcFlhVzl1WnpBek1qRT0ifX19
 
+localRegistry: docker.io
+namespaceOverride: radondb
+
 image:
-  prefix: docker.io/radondb
   pullPolicy: IfNotPresent
   agent:
     name: mongodb-agent

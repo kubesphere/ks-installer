@@ -115,6 +115,7 @@ rules:
   - opensearchuserrolebindings
   - opensearchusers
   - opensearchroles
+  - logstashes
   verbs:
   - create
   - delete
@@ -127,6 +128,7 @@ rules:
   - opensearch.opster.io
   resources:
   - opensearchclusters/finalizers
+  - logstashes/finalizers
   verbs:
   - update
 - apiGroups:
@@ -136,6 +138,7 @@ rules:
   - opensearchuserrolebindings/status
   - opensearchusers/status
   - opensearchroles/status
+  - logstashes/status
   verbs:
   - get
   - patch

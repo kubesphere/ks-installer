@@ -1,0 +1,40 @@
+{{ if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" -}}
+---
+apiVersion: v1
+data:
+  password: {{ .Values.prometheus.username }}
+  username: {{ .Values.prometheus.password }}
+kind: Secret
+metadata:
+  name: {{ .Values.prometheus.secretName }}
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: opensearch-clusters-monitor
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "opensearch-operator.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - basicAuth:
+      password:
+        key: password
+        name: {{ .Values.prometheus.secretName }}
+      username:
+        key: username
+        name: {{ .Values.prometheus.secretName }}
+    path: /_prometheus/metrics
+    port: http
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      opster.io/exporter-monitor: "yes"
+{{ end }}

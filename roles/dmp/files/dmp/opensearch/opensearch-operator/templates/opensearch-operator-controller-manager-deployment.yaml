@@ -20,7 +20,7 @@ spec:
         - --upstream=http://127.0.0.1:8080/
         - --logtostderr=true
         - --v=10
-        image: "docker.io/nosqlpass/kube-rbac-proxy:{{ .Values.kubeProxy.version }}"
+        image: "{{ .Values.localRegistry | default "docker.io"  }}{{"/"}}{{ .Values.namespaceOverride | default "radondb" }}{{"/"}}{{ .Values.kubeProxy.image }}:{{ .Values.kubeProxy.version }}"
         name: kube-rbac-proxy
         ports:
         - containerPort: 8443
@@ -34,9 +34,27 @@ spec:
         {{- end }}
         command:
         - /manager
-        image: "{{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag | default .Chart.AppVersion }}"
+        env:
+          - name: LOCAL_REGISTRY
+            value: {{ .Values.localRegistry | default "docker.io" }}
+          - name: NAMESPACE_OVERRIDE
+            value: {{ .Values.namespaceOverride | default "radondb" }}
+          - name: OPENSEARCH_IMAGE
+            value: {{ .Values.cluster.openSearch.image }}
+          - name: OPENSEARCH_DASHBOARD_IMAGE
+            value: {{ .Values.cluster.openSearchDashboard.image }}
+          - name: LOGSTASH_IMAGE
+            value: {{ .Values.logstash.image }}
+          - name: LOGSTASH_TAG
+            value: {{ .Values.logstash.tag }}
+          - name: BUSYBOX_IMAGE
+            value: {{ .Values.cluster.busybox.image }}
+          - name: BUSYBOX_TAG
+            value: {{ .Values.cluster.busybox.tag }}
+
+        image: "{{ .Values.localRegistry | default "docker.io" }}{{"/"}}{{ .Values.namespaceOverride | default "radondb" }}{{"/"}}{{ .Values.manager.image }}:{{ .Values.manager.tag | default .Chart.AppVersion }}"
         name: operator-controller-manager
-        imagePullPolicy: "{{ .Values.manager.image.pullPolicy }}"
+        imagePullPolicy: "{{ .Values.pullPolicy }}"
         resources:
           {{- toYaml .Values.manager.resources | nindent 12 }}
         securityContext:

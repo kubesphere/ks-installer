@@ -1,16 +1,23 @@
 ---
 redisOperator:
   name: redis-operator
-  imageName: {{ redis_operator_image }}
-  imageTag: {{ redis_operator_image_tag }}
-  imagePullPolicy: IfNotPresent
-  imagePrefix: {{ redis_image_prefix }}
+  imageName: "{{ namespace_override | default('radondb') }}/redis-operator"
+  imageTag: "v1.2.3"
+  imagePullPolicy: Always
+  imagePrefix: {{ base_repo }}
 
   # Additional pod annotations
   podAnnotations: {}
   # Additional Pod labels (e.g. for filtering Pod by custom labels)
   podLabels:
     app.kubernetes.io/name: redis-operator
+
+localRegistry: {{ base_repo }}
+namespaceOverride: {{ namespace_override | default('radondb') }}
+redisImageName: redis
+redisExporterImageName: redis-exporter
+redisProxyImageName: predixy
+redisProxyExporterImageName: predixy-exporter
 
 resources:
   limits:

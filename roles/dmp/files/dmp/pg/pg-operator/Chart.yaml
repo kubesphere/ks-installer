@@ -1,16 +1,20 @@
 apiVersion: v2
-name: postgres-operator
-description: 'PGO: The Postgres Operator from RadonDB Helm Chart for Kubernetes'
-type: application
-version: 0.2.1
-appVersion: 2.1.1
-home: https://github.com/radondb/radondb-postgresql-operator
-icon: https://github.com/radondb/radondb-postgresql-operator/raw/master/docs/static/logos/pgo.svg
+appVersion: v0.9.0
+description: A Helm chart for Kubernetes
+home: https://github.com/radondb/multi-platform-postgresql
 keywords:
-    - PostgreSQL
-    - Operator
-    - Database
-    - Postgres
-    - SQL
-    - NoSQL
-    - RDBMS
+- operator
+- postgresql
+- database
+maintainers:
+- email: lianzhuangzhang@yunify.com
+  name: lzzhang
+  url: https://lzzhang.github.io/
+- email: yanbo2695388808@gmail.com
+  name: yanboer
+  url: https://yanboer.github.io/
+name: postgres-operator
+sources:
+- https://github.com/radondb/multi-platform-postgresql
+type: application
+version: v1.0.0

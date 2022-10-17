@@ -10,7 +10,7 @@ spec:
   maintainers:
     - email: radondb@yunify.com
       name: RadonDB
-  name: "opensearch"
+  name: "RadonDB OpenSearch"
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/mysql_create.jpg,/assets/screenshots/mysql_detail.jpg,/assets/screenshots/mysql_monitor.jpg
   screenshots_zh: |
@@ -20,8 +20,8 @@ spec:
   changeLog_zh: |
     - 增加 MySQL 集群服务监控
 
-  operatorVersion: "2.2.0"
-  appVersion: "5.7.34|8.0"
+  operatorVersion: "1.0.0"
+  appVersion: "1.0.0"
   owner: "RadonDB"
 status:
   state: active
