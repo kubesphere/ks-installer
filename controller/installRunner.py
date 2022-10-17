@@ -636,6 +636,13 @@ def generate_new_cluster_configuration(api):
             "timeout": 600
         }
 
+    # add springcloud configuration migration
+    if "springcloud" not in cluster_configuration_spec:
+        upgrade_flag = True
+        cluster_configuration_spec["springcloud"] = {
+            "enabled": False
+        }
+
     # add servicemesh configuration migration
     if "servicemesh" in cluster_configuration_spec and "istio" not in cluster_configuration_spec["servicemesh"]:
         upgrade_flag = True

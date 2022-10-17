@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksApiSlow","annotations":{"message":"99th percentile of requests is {{ $value }}s on ks-apiserver instance {{ $labels.instance }} for {{ $labels.verb }} {{ $labels.resource }}.{{ $labels.group }}/{{ $labels.version }}","summary":"ks-apiserver requests are slow."},"expr":"histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le) (rate(ks_server_request_duration_seconds_bucket{group!=\"terminal.kubesphere.io\", job=\"ks-apiserver\"}[5m]))) > 5\n","for":"10m","labels":{},"severity":"critical"},{"alert":"ksApiserverDown","annotations":{"description":"ksApiserver has disappeared from Prometheus target discovery.","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-apiserver\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksApiSlow","annotations":{"message":"99th percentile of requests is {{ $value }}s on ks-apiserver instance {{ $labels.instance }} for {{ $labels.verb }} {{ $labels.resource }}.{{ $labels.group }}/{{ $labels.version }}","summary":"ks-apiserver requests are slow."},"expr":"histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le,cluster) (rate(ks_server_request_duration_seconds_bucket{group!=\"terminal.kubesphere.io\", job=\"ks-apiserver\"}[5m]))) > 5\n","for":"10m","labels":{},"severity":"critical"},{"alert":"ksApiserverDown","annotations":{"description":"ksApiserver has disappeared from Prometheus target discovery.","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-apiserver\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -17,7 +17,7 @@ items:
         message: 99th percentile of requests is {{ $value }}s on ks-apiserver instance {{ $labels.instance }} for {{ $labels.verb }} {{ $labels.resource }}.{{ $labels.group }}/{{ $labels.version }}
         summary: ks-apiserver requests are slow.
       expr: |
-        histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le) (rate(ks_server_request_duration_seconds_bucket{group!="terminal.kubesphere.io", job="ks-apiserver"}[5m]))) > 5
+        histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le,cluster) (rate(ks_server_request_duration_seconds_bucket{group!="terminal.kubesphere.io", job="ks-apiserver"}[5m]))) > 5
       for: 10m
       labels: {}
       severity: critical

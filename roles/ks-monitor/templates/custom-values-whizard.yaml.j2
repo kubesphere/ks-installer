@@ -93,6 +93,23 @@ controllerManager:
           repository: {{ prometheus_config_reloader_repo }}
           tag: {{ prometheus_config_reloader_tag }}
 
+      writeProxy:
+        image:
+          repository: {{ cortex_tenant_repo }}
+          tag: {{ cortex_tenant_tag }}
+
+adapter:
+  enabled: true
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  image:
+    repository: {{ whizard_adapter_repo }}
+    tag: {{ whizard_adapter_tag }}  
+
 service: 
   enabled: true
   

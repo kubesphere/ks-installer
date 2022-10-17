@@ -1,0 +1,16 @@
+{{- if and .Values.adapter.enabled .Values.adapter.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "whizard.adapter.fullname" . }}
+  labels:
+    {{- include "whizard.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "whizard.adapter.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "whizard.adapter.serviceAccountName" . }}
+  namespace: {{ include "whizard.namespace" . }}
+{{- end }}

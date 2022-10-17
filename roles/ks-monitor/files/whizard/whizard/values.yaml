@@ -73,13 +73,6 @@ controllerManager:
 
   config: 
     create: true
-
-    kubeSphereAdapter:
-      enabled: true
-      ## If null or unset, the enabled Service instance is used.
-      defaultServiceReference: null
-        # namespace:
-        # name:
     
     storage:
       blockManager:
@@ -195,6 +188,42 @@ controllerManager:
         image:
           repository: kubesphere/prometheus-config-reloader
           tag: v0.55.1
+      
+      writeProxy: 
+        image: 
+          repository: kubesphere/cortex-tenant
+          tag: v1.7.2
+
+adapter:
+  enabled: false
+
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  rbac:
+    create: true
+
+  image:
+    repository: kubesphere/whizard-adapter
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""    
+  ## If null or unset, the enabled Service instance is used.
+  defaultServiceReference: null
+    # namespace:
+    # name:
+  kubesphereAdapter:
+    enabled: true
 
 # Deploy a Service instance
 service: 

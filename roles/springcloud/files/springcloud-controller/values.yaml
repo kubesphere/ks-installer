@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: registry.cn-beijing.aliyuncs.com/kse/spring-cloud-controller
-  tag: master
+  repository: {{ ks_springcloud_hub }}
+  tag: {{ ks_springcloud_tag }}
   pullPolicy: IfNotPresent
 
 resources:
@@ -28,14 +28,14 @@ nacos:
     mode: standalone
   nacos:
     image:
-      repository: nacos/nacos-server
-      tag: latest
+      repository: {{ nacos_repo }}
+      tag: {{ nacos_tag }}
       pullPolicy: IfNotPresent
     plugin:
       enable: true
       image:
-        repository: nacos/nacos-peer-finder-plugin
-        tag: 1.1
+        repository: {{ nacos_plugin_repo }}
+        tag: {{ nacos_plugin_tag }}
     replicaCount: 1
     domainName: cluster.local
     preferhostmode: hostname

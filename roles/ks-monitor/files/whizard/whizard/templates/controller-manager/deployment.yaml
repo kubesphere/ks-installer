@@ -43,7 +43,6 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-
       {{- with .Values.controllerManager.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

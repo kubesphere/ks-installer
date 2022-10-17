@@ -54,14 +54,6 @@ rules:
   - update
   - watch
 - apiGroups:
-  - cluster.kubesphere.io
-  resources:
-  - clusters
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - ""
   resources:
   - configmaps

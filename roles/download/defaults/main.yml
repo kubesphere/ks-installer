@@ -215,24 +215,28 @@ node_exporter_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/n
 node_exporter_tag: v1.3.1
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
 alertmanager_tag: v0.23.0
-thanos_repo: "{{ base_repo }}{{ namespace_override | default('thanosio') }}/thanos"
-thanos_tag: v0.28.0
+thanos_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/thanos"
+thanos_tag: v0.28.5
 grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
 grafana_tag: 8.3.3
 
 # whizard
 whizard_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-controller-manager"
-whizard_controller_manager_tag: v0.5.0-rc.0
+whizard_controller_manager_tag: v0.5.0-rc.1
 whizard_monitoring_gateway_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-gateway"
-whizard_monitoring_gateway_tag: v0.5.0-rc.0
+whizard_monitoring_gateway_tag: v0.5.0-rc.1
 whizard_monitoring_agent_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-agent-proxy"
-whizard_monitoring_agent_proxy_tag: v0.5.0-rc.0
+whizard_monitoring_agent_proxy_tag: v0.5.0-rc.1
 whizard_monitoring_block_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-block-manager"
-whizard_monitoring_block_manager_tag: v0.5.0-rc.0
+whizard_monitoring_block_manager_tag: v0.5.0-rc.1
+whizard_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-adapter"
+whizard_adapter_tag: v0.5.0
 envoy_repo: "{{ base_repo }}{{ namespace_override | default('envoyproxy') }}/envoy"
 envoy_tag: v1.20.2
 bash_repo: "{{ base_repo }}{{ namespace_override | default('') }}/bash"
 bash_tag: 5.1.16
+cortex_tenant_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/cortex-tenant"
+cortex_tenant_tag: v1.7.2
 
 #notification-manager
 notification_manager_operator_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
@@ -257,8 +261,10 @@ fluentbit_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesp
 fluentbit_operator_tag: v0.13.0
 docker_repo: "{{ base_library_repo }}docker"
 docker_tag: 19.03
-opensearch_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/opensearch"
+opensearch_repo: "{{ base_repo }}{{ namespace_override | default('opensearchproject') }}/opensearch"
 opensearch_tag: 2.1.0
+opensearch_dashboards_repo: "{{ base_repo }}{{ namespace_override | default('opensearchproject') }}/opensearch-dashboards"
+opensearch_dashboards_tag: 2.1.0
 ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluent-bit"
 ks_fluent_bit_tag: "v1.9.4"
 ks_log_sidecar_injector_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/log-sidecar-injector"
@@ -307,6 +313,14 @@ kiali_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere
 kiali_operator_tag: v1.38.1
 kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kiali"
 kiali_tag: v1.38
+
+#springcloud
+ks_springcloud_hub: "{{ base_repo }}{{ namespace_override | default('kse') }}/spring-cloud-controller"
+ks_springcloud_tag: master
+nacos_repo: "{{ namespace_override | default('nacos') }}/nacos-server"
+nacos_tag: latest
+nacos_plugin_repo: "{{ namespace_override | default('nacos') }}/nacos-peer-finder-plugin"
+nacos_plugin_tag: 1.1
 
 #base:
 redis_repo: "{{ base_library_repo }}redis"
@@ -881,6 +895,12 @@ images:
     sha256: "{{ opensearch_checksum|default(None) }}"
     group: "kubesphere-logging-images"
 
+  opensearch_dashboards:
+    repo: "{{ opensearch_dashboards_repo }}"
+    tag: "{{ opensearch_dashboards_tag }}"
+    sha256: "{{ opensearch_dashboards_checksum|default(None) }}"
+    group: "kubesphere-logging-images"
+
   fluentbit_operator:
     repo: "{{ fluentbit_operator_repo }}"
     tag: "{{ fluentbit_operator_tag }}"
@@ -1012,6 +1032,25 @@ images:
     tag: "{{ kiali_tag }}"
     sha256: "{{ kiali_checksum|default(None) }}"
     group: "istio-images"
+
+  springcloud:
+    repo: "{{ springcloud_repo }}"
+    tag: "{{ springcloud_tag }}"
+    sha256: "{{ springcloud_checksum|default(None) }}"
+    group: "springcloud-images"
+
+  nacos:
+    repo: "{{ nacos_repo }}"
+    tag: "{{ nacos_tag }}"
+    sha256: "{{ nacos_checksum|default(None) }}"
+    group: "springcloud-images"
+
+  nacos_plugin:
+    repo: "{{ nacos_plugin_repo }}"
+    tag: "{{ nacos_plugin_tag }}"
+    sha256: "{{ nacos_checksum|default(None) }}"
+    group: "springcloud-images"
+
 
   redis:
     repo: "{{ redis_repo }}"

@@ -85,6 +85,8 @@ spec:
         password: "admin"
       externalOpensearchHost: ""
       externalOpensearchPort: ""
+      dashboard:
+        enabled: false
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
     enabled: false         # Enable or disable the KubeSphere Alerting System.
     # thanosruler:
@@ -212,72 +214,73 @@ spec:
   springcloud:
     enabled: false
     # Refer to https://raw.githubusercontent.com/nacos-group/nacos-k8s/master/helm/values.yaml
-    nacos:
-      # Default values for nacos.
-      # This is a YAML-formatted file.
-      # Declare variables to be passed into your templates.
-      global:
-        # mode: cluster
-        mode: standalone
-      ############################nacos###########################
-      nacos:
-        image:
-          repository: nacos/nacos-server
-          tag: latest
-          pullPolicy: IfNotPresent
-        plugin:
-          enable: true
-          image:
-            repository: nacos/nacos-peer-finder-plugin
-            tag: 1.1
-        replicaCount: 1
-        domainName: cluster.local
-        preferhostmode: hostname
-        serverPort: 8848
-        health:
-          enabled: false
-        auth:
-          enabled: false
-          tokenExpireSeconds: 18000
-          token: SecretKey012345678901234567890123456789012345678901234567890123456789
-          cacheEnabled: false
-        storage:
-          type: embedded
-      #    type: mysql
-      #    db:
-      #      host: localhost
-      #      name: nacos
-      #      port: 3306
-      #      username: usernmae
-      #      password: password
-      #      param: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false
-      persistence:
-        enabled: false
-        data:
-          accessModes:
-            - ReadWriteOnce
-          storageClassName: manual
-          resources:
-            requests:
-              storage: 5Gi
-      service:
-        type: ClusterIP
-        port: 8848
-      ingress:
-        enabled: false
-        annotations: { }
-      resources:
-        # We usually recommend not to specify default resources and to leave this as a conscious
-        # choice for the user. This also increases chances charts run on environments with little
-        # resources, such as Minikube. If you do want to specify resources, uncomment the following
-        # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-        # limits:
-        #   cpu: 100m
-        #   memory: 128Mi
-        requests:
-          cpu: 500m
-          memory: 2Gi
-      annotations: {}
-      nodeSelector: {}
-      tolerations: []
-      affinity: {}
+    # https://github.com/kubesphere/kse-installer/blob/kse-3.3/roles/springcloud/files/springcloud-controller/charts/nacos/values.yaml
+#    nacos:
+#      # Default values for nacos.
+#      # This is a YAML-formatted file.
+#      # Declare variables to be passed into your templates.
+#      global:
+#        # mode: cluster
+#        mode: standalone
+#      ############################nacos###########################
+#      nacos:
+#        image:
+#          repository: nacos/nacos-server
+#          tag: latest
+#          pullPolicy: IfNotPresent
+#        plugin:
+#          enable: true
+#          image:
+#            repository: nacos/nacos-peer-finder-plugin
+#            tag: 1.1
+#        replicaCount: 1
+#        domainName: cluster.local
+#        preferhostmode: hostname
+#        serverPort: 8848
+#        health:
+#          enabled: false
+#        auth:
+#          enabled: false
+#          tokenExpireSeconds: 18000
+#          token: SecretKey012345678901234567890123456789012345678901234567890123456789
+#          cacheEnabled: false
+#        storage:
+#          type: embedded
+#      #    type: mysql
+#      #    db:
+#      #      host: localhost
+#      #      name: nacos
+#      #      port: 3306
+#      #      username: usernmae
+#      #      password: password
+#      #      param: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false
+#      persistence:
+#        enabled: false
+#        data:
+#          accessModes:
+#            - ReadWriteOnce
+#          storageClassName: manual
+#          resources:
+#            requests:
+#              storage: 5Gi
+#      service:
+#        type: ClusterIP
+#        port: 8848
+#      ingress:
+#        enabled: false
+#        annotations: { }
+#      resources:
+#        # We usually recommend not to specify default resources and to leave this as a conscious
+#        # choice for the user. This also increases chances charts run on environments with little
+#        # resources, such as Minikube. If you do want to specify resources, uncomment the following
+#        # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+#        # limits:
+#        #   cpu: 100m
+#        #   memory: 128Mi
+#        requests:
+#          cpu: 500m
+#          memory: 2Gi
+#      annotations: {}
+#      nodeSelector: {}
+#      tolerations: []
+#      affinity: {}
