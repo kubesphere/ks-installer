@@ -1,13 +1,4 @@
 ---
-
-
-#- name: KubeSphere | Getting Kubernetes version
-#  shell: >
-#    {{ bin_dir }}/kubectl version -o json | jq -r '.serverVersion.gitVersion'
-#  register: kubernetes_version
-#  failed_when: false
-
-
 - name: KubeSphere | Setting Kubernetes version
   set_fact:
     kube_version: "{{ kubernetes_version }}"
@@ -101,6 +92,30 @@
   loop:
     - "ks-core"
 
+
+- name: KubeSphere | Checking KubeSphere Admin User
+  shell: >
+    {{ bin_dir }}/kubectl get user.iam.kubesphere.io admin --no-headers | wc -l
+  register: kubesphere_admin_user
+
+- name: KubeSphere | Generate init admin password
+  block:
+    - set_fact:
+        adminPassword: >-
+          {% if authentication.adminPassword is defined and authentication.adminPassword == "" -%}
+          {{ lookup('password', '/dev/null chars=ascii_letters,digits length=16') }}
+          {%- elif authentication.adminPassword is defined and authentication.adminPassword != "" -%}
+          {{ authentication.adminPassword }}
+          {%- else -%}
+
+          {%- endif %}
+    - shell: >
+        {{ bin_dir }}/kubectl -n kubesphere-system patch secret kubesphere-secret -p '{"data": {"initAdminPassword": "{{ adminPassword | b64encode }}"}}'
+      when:
+        - adminPassword != ""
+  when:
+    - kubesphere_admin_user.stdout != "1"
+
 - name: KubeSphere | Creating manifests
   template:
     src: "{{ item.file }}.j2"
@@ -123,6 +138,31 @@
     --namespace kubesphere-system
   # register: source_state
   # failed_when: "source_state.stderr and 'already exists' not in source_state.stderr"
+
+- name: KubeSphere | Creating manifests
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.file }}"
+  with_items:
+    - { path: ks-core, file: ks-upgrade.yaml }
+
+- name: Kubesphere | Checking Users Manger and Workspaces Manger
+  shell: >
+    {{ bin_dir }}/kubectl get globalroles.iam.kubesphere.io users-manager workspaces-manager --no-headers | wc -l
+  register: manager_result
+
+- name: Kubesphere | Checking migration job
+  shell: >
+    {{ bin_dir }}/kubectl delete -f {{ kubesphere_dir }}/ks-upgrade.yaml
+  when:
+    - manager_result.stdout != "0"
+  failed_when: false
+
+- name: KubeSphere | Creating migration job
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-upgrade.yaml
+  when:
+    - manager_result.stdout != "0"
 
 - name: KubeSphere | Importing ks-core status
   shell: >

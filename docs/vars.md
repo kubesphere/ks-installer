@@ -26,13 +26,10 @@ alerting:
 auditing:
   enabled: false
 devops:
-  enabled: false
-  jenkinsMemoryLim: 2Gi
-  jenkinsMemoryReq: 1500Mi
-  jenkinsVolumeSize: 8Gi
-  jenkinsJavaOpts_Xms: 512m
-  jenkinsJavaOpts_Xmx: 512m
-  jenkinsJavaOpts_MaxRAM: 2g
+  enabled: false             # Enable or disable the KubeSphere DevOps System.
+  jenkinsMemoryLim: 4Gi      # Jenkins memory limit.
+  jenkinsMemoryReq: 1500Mi   # Jenkins memory request.
+  jenkinsVolumeSize: 8Gi     # Jenkins volume size.
 events:
   enabled: false
 logging:

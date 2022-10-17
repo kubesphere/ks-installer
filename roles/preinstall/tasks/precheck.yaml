@@ -39,3 +39,10 @@
     - persistence.storageClass is defined
     - persistence.storageClass == ""
 
+- name: KubeSphere | Stop if bad admin password
+  assert:
+    that: authentication.adminPassword is match("^(.*[a-z].*[A-Z].*[0-9].*)$|^(.*[a-z].*[0-9].*[A-Z].*)$|^(.*[A-Z].*[a-z].*[0-9].*)$|^(.*[A-Z].*[0-9].*[a-z].*)$|^(.*[0-9].*[a-z].*[A-Z].*)$|^(.*[0-9].*[A-Z].*[a-z].*)$|^(\\$2[ayb]\\$.{56})$")
+    msg: "Admin password must contain at least one number, one lowercase letter, and one uppercase letter. The length must be 8 to 64 characters."
+  when:
+    - authentication.adminPassword is defined
+    - authentication.adminPassword != ""

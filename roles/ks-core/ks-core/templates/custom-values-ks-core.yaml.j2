@@ -30,6 +30,8 @@ image:
 config:
   create: false
 
+adminPassword: {% if adminPassword is defined %}"{{ adminPassword }}"{% else %}""{% endif %}
+
 console:
   type: {{ common.core.console.type | default('NodePort') }}
   port: {{ common.core.console.port | default(30880)}}

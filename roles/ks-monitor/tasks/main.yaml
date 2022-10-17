@@ -6,6 +6,10 @@
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"
 
+- import_tasks: ks-istio-monitoring.yaml
+  when:
+    - "servicemesh.enabled is defined and servicemesh.enabled"
+
 - import_tasks: gpu-monitoring.yaml
   when:
     - "status.monitoring is not defined or status.monitoring.status is not defined or status.monitoring.status != 'enabled'"

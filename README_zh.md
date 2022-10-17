@@ -6,7 +6,7 @@ KubeSphere 支持在已有 Kubernetes 集群之上部署 [KubeSphere](https://ku
 
 ## 准备工作
 
-1. 确认现有的 `Kubernetes` 版本为 `1.19.x, 1.20.x, 1.21.x, 1.22.x (experimental)`，可以执行 `kubectl version` 来确认 :
+1. 确认现有的 `Kubernetes` 版本为 `1.20.x, 1.21.x, 1.23.x, 1.23.x`，可以执行 `kubectl version` 来确认 :
 
 ```bash
 $ kubectl version
@@ -45,11 +45,11 @@ glusterfs                 kubernetes.io/glusterfs   3d4h
 ### 最小化快速部署
 
 ```bash
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0-rc.2/kubesphere-installer.yaml
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.0-rc.2/cluster-configuration.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.1-rc.4/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.1-rc.4/cluster-configuration.yaml
 
  # 查看部署进度及日志
- $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+ $ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-installer -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
 部署完成后可执行如下命令查看控制台的服务端口，使用 `IP:consolePort(default: 30880)` 访问 KubeSphere UI 界面，默认的集群管理员账号为 `admin/P@88w0rd`。
@@ -95,7 +95,7 @@ kubectl edit cc ks-installer -n kubesphere-system
 > 按功能需求编辑配置文件之后，退出等待生效即可，如长时间未生效请使用如下命令查看相关日志:
 
 ```bash
-kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
+kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-installer -o jsonpath='{.items[0].metadata.name}') -f
 ```
 
 > 如果你正在启用 KubeEdge ，在运行或重启 ks-installer 之前，需要配置集群外网访问地址advertiseAddress，暴露相应的访问端口，更多内容请参考[Kubeedge 指南](https://kubesphere.io/docs/pluggable-components/kubeedge/)：
@@ -113,8 +113,8 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 ```bash
 # 注意: ks-installer会自动迁移cluster-configuration. 请勿自行修改.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.2.1/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.1-rc.4/kubesphere-installer.yaml
 ```
 
 
-> 注意: 如果当前集群中部署的 KubeSphere 版本是 v3.0.0 或更早的版本，请先升级到 v3.1.x。
+> 注意: 如果当前集群中部署的 KubeSphere 版本是 v3.1.0 或更早的版本，请先升级到 v3.2.x。

@@ -48,6 +48,7 @@ ghcr_image_repo: >-
   ghcr.io/
   {%- endif %}
 
+
 ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
@@ -88,9 +89,9 @@ ks_apiserver_repo: "{{ kse_images_repo }}/{{ namespace_override | default('kse')
 ks_apiserver_tag: "{{ ks_version }}"
 ks_controller_manager_repo: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/ks-controller-manager"
 ks_controller_manager_tag: "{{ ks_version }}"
-ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-upgrade"
-ks_update_tag: v3.0.0
-ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-alerting-migration"
+ks_update_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-upgrade"
+ks_update_tag: latest
+ks_alerting_migration_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-alerting-migration"
 ks_alerting_migration_tag: "v3.1.0"
 ks_console_repo: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/ks-console"
 ks_console_tag: "{{ ks_version }}"
@@ -126,11 +127,11 @@ post_install_job_image: kubectl
 
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
-cloudcore_tag: "v1.7.2"
-edge_watcher_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher"
-edge_watcher_tag: "v0.1.1"
-edge_watcher_agent_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edge-watcher-agent"
-edge_watcher_agent_tag: "v0.1.0"
+cloudcore_tag: "v1.9.2"
+iptables_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/iptables-manager"
+iptables_manager_tag: "v1.9.2"
+edge_service_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edgeservice"
+edge_service_tag: "v0.2.0"
 
 # gatekeeper
 gatekeeper_repo: "{{ base_repo }}{{ namespace_override | default('openpolicyagent') }}/gatekeeper"
@@ -150,17 +151,17 @@ snapshot_controller_tag: "v4.0.0"
 
 # ks-devops
 ks_devops_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
-ks_devops_controller_tag: "v3.2.1"
-ks_devops_apiserver_tag: "v3.2.1"
-ks_devops_tools_tag: "v3.2.1"
+ks_devops_controller_tag: "v3.3.1-rc.1"
+ks_devops_apiserver_tag: "v3.3.1-rc.1"
+ks_devops_tools_tag: "v3.3.1-rc.1"
 
 #jenkins:
-jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/ks-jenkins"
+jenkins_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/ks-jenkins"
 jenkins_tag: v3.3.0-2.319.1
 jnlp_slave_repo: "{{ base_repo }}{{ namespace_override | default('jenkins') }}/inbound-agent"
 jnlp_slave_tag: 4.10-2
 
-builder_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+builder_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 builder_base_tag: v3.2.2
 builder_nodejs_tag: v3.2.0
 builder_maven_tag: v3.2.0
@@ -182,7 +183,7 @@ builder_go17_podman_tag: v3.2.2-1.17-podman
 builder_go18_podman_tag: v3.2.2-1.18-podman
 
 #s2i
-s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}"
+s2i_registry: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 s2ioperator_tag: "v3.2.1"
 s2irun_tag: "v3.2.0"
 s2itemplates_tag: "v3.2.0"
@@ -460,16 +461,16 @@ images:
     sha256: "{{ cloudcore_checksum|default(None) }}"
     group: "kubeedge-images"
 
-  edge_watcher:
-    repo: "{{ edge_watcher_repo }}"
-    tag: "{{ edge_watcher_tag }}"
-    sha256: "{{ edge_watcher_checksum|default(None) }}"
+  iptables_managerr:
+    repo: "{{ iptables_manager_repo }}"
+    tag: "{{ iptables_manager_tag }}"
+    sha256: "{{ iptables_manager_checksum|default(None) }}"
     group: "kubeedge-images"
 
-  edge_watcher_agent:
-    repo: "{{ edge_watcher_agent_repo }}"
-    tag: "{{ edge_watcher_agent_tag }}"
-    sha256: "{{ edge_watcher_agent_checksum|default(None) }}"
+  edge_service:
+    repo: "{{ edge_service_repo }}"
+    tag: "{{ edge_service_tag }}"
+    sha256: "{{ edge_service_checksum|default(None) }}"
     group: "kubeedge-images"
 
   gatekeeper:
@@ -1078,11 +1079,11 @@ images:
     sha256: "{{ hpa_example_checksum|default(None) }}"
     group: "example-images"
 
-  java:
-    repo: "{{ java_repo }}"
-    tag: "{{ java_tag }}"
-    sha256: "{{ java_checksum|default(None) }}"
-    group: "example-images"
+#  java:
+#    repo: "{{ java_repo }}"
+#    tag: "{{ java_tag }}"
+#    sha256: "{{ java_checksum|default(None) }}"
+#    group: "example-images"
 
   fluentd:
     repo: "{{ fluentd_repo }}"

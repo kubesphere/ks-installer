@@ -22,6 +22,10 @@
   shell: "{{ bin_dir }}/kubectl get svc ks-console -n kubesphere-system -o=jsonpath='{.spec.ports[0].nodePort}'"
   register: ks_console_svc_port
 
+- name: KubeSphere | Getting kubesphere init admin password
+  shell: >
+    {{ bin_dir }}/kubectl get secret kubesphere-secret -n kubesphere-system -o=jsonpath='{.data.initAdminPassword}'
+  register: ks_init_admin_password
 
 - name: KubeSphere | Importing ks-core status
   shell: >

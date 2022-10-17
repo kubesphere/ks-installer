@@ -5,11 +5,12 @@ metadata:
   name: ks-installer
   namespace: kubesphere-system
   labels:
-    version: v3.3.0-alpha.0
+    version: v3.3.1-rc.4
 spec:
   persistence:
     storageClass: ""        # If there is no default StorageClass in your cluster, you need to specify an existing StorageClass here.
   authentication:
+    # adminPassword: ""     # Custom password of the admin user. If the parameter exists but the value is empty, a random password is generated. If the parameter does not exist, P@88w0rd is used.
     jwtSecret: ""           # Keep the jwtSecret consistent with the Host Cluster. Retrieve the jwtSecret by executing "kubectl -n kubesphere-system get cm kubesphere-config -o yaml | grep -v "apiVersion" | grep jwtSecret" on the Host Cluster.
   local_registry: ""        # Add your private registry address if it is needed.
   # dev_tag: ""               # Add your kubesphere image tag you want to install, by default it's same as ks-install release version.
@@ -24,6 +25,7 @@ spec:
         enableMultiLogin: true  # Enable or disable simultaneous logins. It allows different users to log in with the same account at the same time.
         port: 30880
         type: NodePort
+
     # apiserver:            # Enlarge the apiserver and controller manager's resource requests and limits for the large cluster
     #  resources: {}
     # controllerManager:
@@ -63,7 +65,7 @@ spec:
         enabled: false
         username: ""
         password: ""
-      externalElasticsearchUrl: ""
+      externalElasticsearchHost: ""
       externalElasticsearchPort: ""
     opensearch:   # Storage backend for logging, events and auditing.
       # master:
@@ -98,12 +100,10 @@ spec:
     enabled: true
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
     enabled: false             # Enable or disable the KubeSphere DevOps System.
-    jenkinsMemoryLim: 2Gi      # Jenkins memory limit.
-    jenkinsMemoryReq: 1500Mi   # Jenkins memory request.
+    # resources: {}
+    jenkinsMemoryLim: 8Gi      # Jenkins memory limit.
+    jenkinsMemoryReq: 4Gi   # Jenkins memory request.
     jenkinsVolumeSize: 8Gi     # Jenkins volume size.
-    jenkinsJavaOpts_Xms: 512m  # The following three fields are JVM parameters.
-    jenkinsJavaOpts_Xmx: 512m
-    jenkinsJavaOpts_MaxRAM: 2g
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
     # operator:
@@ -116,7 +116,6 @@ spec:
     #   resources: {}
   logging:                 # (CPU: 57 m, Memory: 2.76 G) Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false         # Enable or disable the KubeSphere Logging System.
-    containerruntime: docker
     logsidecar:
       enabled: true
       replicas: 2
@@ -156,7 +155,7 @@ spec:
       server: # for host cluster
         nodePort: 30990 # to expose whizard gateway service by this nodePort to member cluster
       client: # for member cluster
-        gatewayUrl: "" 
+        gatewayUrl: ""
         clusterName: ""
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the Host or Member Cluster.

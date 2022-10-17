@@ -109,6 +109,7 @@
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: ks-devops, file: ks-devops-values.yaml }
+    - { path: ks-devops, file: argo-cd-values.yaml }
 
 - name: ks-devops | Checking if ks-devops has installed
   shell: |
@@ -177,7 +178,9 @@
     executable: /bin/bash
   shell: |
     {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/argo-cd-4.4.0.tgz \
-    -n argocd --create-namespace --reuse-values
+    -n argocd --create-namespace --reuse-values \
+    -f {{ kubesphere_dir }}/ks-devops/argo-cd-values.yaml
+
   register: argocd_upgrade_result
   until: argocd_upgrade_result is succeeded
   when:
@@ -192,7 +195,7 @@
     # Delete Job migrate because 'helm upgrade' will try to update immutable fields of Job, which is not allowed. 
     {{ bin_dir }}/kubectl delete job -n kubesphere-devops-system migrate --ignore-not-found
     
-    ks_devops_chart_version=0.1.10
+    ks_devops_chart_version=0.1.13
     charts_folder={{ kubesphere_dir }}/ks-devops/charts
     ks_devops_chart=$charts_folder/ks-devops-$ks_devops_chart_version.tgz
     

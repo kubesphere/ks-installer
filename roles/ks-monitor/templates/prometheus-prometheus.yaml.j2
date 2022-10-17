@@ -69,10 +69,10 @@ spec:
 {% endif %}
 {% if monitoring.tolerations is defined and monitoring.tolerations is not none %}
   tolerations:
-    {{ monitoring.tolerations | to_nice_yaml(indent=2) | indent(8) }}
+    {{ monitoring.tolerations | to_nice_yaml(indent=2) | indent(4) }}
 {% elif tolerations is defined and tolerations is not none %}
   tolerations:
-    {{ tolerations | to_nice_yaml(indent=2) | indent(8) }}
+    {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
 {% else %}
   tolerations:
   - effect: NoSchedule
