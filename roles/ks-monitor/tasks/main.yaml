@@ -32,5 +32,5 @@
     - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
     # do this task only if multicluster is not enabled or whizard is not enabled, because whizard includes the alerting module.
     - multicluster is not defined or (multicluster.clusterRole != 'host' and multicluster.clusterRole != 'member')
-    - monitoring is not defined or monitoring.whizard is not defined or monitoring.whizard.enabled != true)
+    - monitoring is not defined or monitoring.whizard is not defined or monitoring.whizard.enabled != true
 
