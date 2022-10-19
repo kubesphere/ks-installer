@@ -12,79 +12,79 @@ spec:
   - name: etcd.rules
     rules:
     - expr: |
-        sum(up{job=~".*etcd.*"} == 1)
+        sum by(cluster) (up{job=~".*etcd.*"} == 1)
       record: etcd:up:sum
     - expr: |
-        sum(label_replace(sum(changes(etcd_server_leader_changes_seen_total{job=~".*etcd.*"}[1h])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(changes(etcd_server_leader_changes_seen_total{job=~".*etcd.*"}[1h])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_server_leader_changes_seen:sum_changes
     - expr: |
-        sum(label_replace(sum(irate(etcd_server_proposals_failed_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(etcd_server_proposals_failed_total{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_server_proposals_failed:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(etcd_server_proposals_applied_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(etcd_server_proposals_applied_total{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_server_proposals_applied:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(etcd_server_proposals_committed_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(etcd_server_proposals_committed_total{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_server_proposals_committed:sum_irate
     - expr: |
-        sum(label_replace(sum(etcd_server_proposals_pending{job=~".*etcd.*"}) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(etcd_server_proposals_pending{job=~".*etcd.*"}) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_server_proposals_pending:sum
     - expr: |
-        sum(label_replace(etcd_mvcc_db_total_size_in_bytes{job=~".*etcd.*"},"node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(etcd_mvcc_db_total_size_in_bytes{job=~".*etcd.*"},"node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_mvcc_db_total_size:sum
     - expr: |
-        sum(label_replace(sum(irate(etcd_network_client_grpc_received_bytes_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(etcd_network_client_grpc_received_bytes_total{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_network_client_grpc_received_bytes:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(etcd_network_client_grpc_sent_bytes_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(etcd_network_client_grpc_sent_bytes_total{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_network_client_grpc_sent_bytes:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(grpc_server_started_total{job=~".*etcd.*",grpc_type="unary"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(grpc_server_started_total{job=~".*etcd.*",grpc_type="unary"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:grpc_server_started:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(grpc_server_handled_total{job=~".*etcd.*",grpc_type="unary",grpc_code!="OK"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(grpc_server_handled_total{job=~".*etcd.*",grpc_type="unary",grpc_code!="OK"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:grpc_server_handled:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(grpc_server_msg_received_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(grpc_server_msg_received_total{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:grpc_server_msg_received:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(grpc_server_msg_sent_total{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(grpc_server_msg_sent_total{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:grpc_server_msg_sent:sum_irate
     - expr: |
-        sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_sum{job=~".*etcd.*"}[5m])) by (instance) / sum(irate(etcd_disk_wal_fsync_duration_seconds_count{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_sum{job=~".*etcd.*"}[5m])) by (instance, cluster) / sum(irate(etcd_disk_wal_fsync_duration_seconds_count{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_disk_wal_fsync_duration:avg
     - expr: |
-        sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_sum{job=~".*etcd.*"}[5m])) by (instance) / sum(irate(etcd_disk_backend_commit_duration_seconds_count{job=~".*etcd.*"}[5m])) by (instance), "node", "$1", "instance", "(.*):.*")) by (node)
+        sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_sum{job=~".*etcd.*"}[5m])) by (instance, cluster) / sum(irate(etcd_disk_backend_commit_duration_seconds_count{job=~".*etcd.*"}[5m])) by (instance, cluster), "node", "$1", "instance", "(.*):.*")) by (node, cluster)
       record: etcd:etcd_disk_backend_commit_duration:avg
   - name: etcd_histogram.rules
     rules:
     - expr: |
-        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le, cluster), "node", "$1", "instance", "(.*):.*")) by (node, le, cluster))
       labels:
         quantile: "0.99"
       record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
     - expr: |
-        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le, cluster), "node", "$1", "instance", "(.*):.*")) by (node, le, cluster))
       labels:
         quantile: "0.9"
       record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
     - expr: |
-        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le, cluster), "node", "$1", "instance", "(.*):.*")) by (node, le, cluster))
       labels:
         quantile: "0.5"
       record: etcd:etcd_disk_wal_fsync_duration:histogram_quantile
     - expr: |
-        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+        histogram_quantile(0.99, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le, cluster), "node", "$1", "instance", "(.*):.*")) by (node, le, cluster))
       labels:
         quantile: "0.99"
       record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
     - expr: |
-        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+        histogram_quantile(0.9, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le, cluster), "node", "$1", "instance", "(.*):.*")) by (node, le, cluster))
       labels:
         quantile: "0.9"
       record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
     - expr: |
-        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le), "node", "$1", "instance", "(.*):.*")) by (node, le))
+        histogram_quantile(0.5, sum(label_replace(sum(irate(etcd_disk_backend_commit_duration_seconds_bucket{job=~".*etcd.*"}[5m])) by (instance, le, cluster), "node", "$1", "instance", "(.*):.*")) by (node, le, cluster))
       labels:
         quantile: "0.5"
       record: etcd:etcd_disk_backend_commit_duration:histogram_quantile
