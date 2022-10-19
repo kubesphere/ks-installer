@@ -16,8 +16,8 @@ spec:
   - name: prometheus.rules
     rules:
     - expr: |
-        sum(up{job="prometheus-k8s",namespace="kubesphere-monitoring-system"} == 1)
+        sum by(cluster) (up{job="prometheus-k8s",namespace="kubesphere-monitoring-system"} == 1)
       record: prometheus:up:sum
     - expr: |
-        sum(rate(prometheus_tsdb_head_samples_appended_total{job="prometheus-k8s",namespace="kubesphere-monitoring-system"} [5m])) by (job, pod)
+        sum(rate(prometheus_tsdb_head_samples_appended_total{job="prometheus-k8s",namespace="kubesphere-monitoring-system"} [5m])) by (job, pod, cluster)
       record: prometheus:prometheus_tsdb_head_samples_appended:sum_rate
