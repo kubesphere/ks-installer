@@ -157,6 +157,9 @@ controllerManager:
 
       indexCacheConfig: {}
 
+      additionalFlags: 
+      - --max-time=-24h     #The last 24h data is queried on ingester instead of store.
+
     compactor: 
       ## If null or unset, the global.whizardImage is used.
       image: null
@@ -341,7 +344,7 @@ queryFrontend:
   
   cacheConfig: {}
   additionalFlags: 
-  - --no-query-range.align-range-with-step #
+  - --no-query-range.align-range-with-step #Disable query-range.align-range-with-step, the incoming query parameter remains the same (as required by the frontend), although it may reduce the cache-ability.
 
 # Deploy a Ruler instance
 ruler: 
