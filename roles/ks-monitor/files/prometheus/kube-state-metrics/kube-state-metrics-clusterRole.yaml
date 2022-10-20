@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 2.5.0
+    app.kubernetes.io/version: 2.6.0
   name: kubesphere-kube-state-metrics
 rules:
 - apiGroups:
@@ -16,6 +16,7 @@ rules:
   - nodes
   - pods
   - services
+  - serviceaccounts
   - resourcequotas
   - replicationcontrollers
   - limitranges
@@ -105,6 +106,23 @@ rules:
   - coordination.k8s.io
   resources:
   - leases
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  - clusterroles
+  - rolebindings
+  - roles
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - iam.kubesphere.io
+  resources:
+  - users
   verbs:
   - list
   - watch

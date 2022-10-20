@@ -202,7 +202,7 @@ argocd_redis_tag: 6.2.6-alpine
 configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
 configmap_reload_tag: v0.5.0
 prometheus_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/prometheus"
-prometheus_tag: v2.34.0
+prometheus_tag: v2.39.1
 prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-config-reloader"
 prometheus_config_reloader_tag: v0.55.1
 prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-operator"
@@ -210,7 +210,7 @@ prometheus_operator_tag: v0.55.1
 kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.11.0
 kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
-kube_state_metrics_tag: v2.5.0
+kube_state_metrics_tag: v2.6.0
 node_exporter_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/node-exporter"
 node_exporter_tag: v1.3.1
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
