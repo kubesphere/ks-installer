@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: kubesphere
     app.kubernetes.io/name: thanos-ruler
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 0.25.2
+    app.kubernetes.io/version: 0.28.5
   name: thanos-ruler-kubesphere
   namespace: kubesphere-monitoring-system
 spec:

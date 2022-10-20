@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: kubesphere
     app.kubernetes.io/name: thanos-ruler
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 0.25.2
+    app.kubernetes.io/version: 0.28.5
   name: kubesphere
   namespace: kubesphere-monitoring-system
 spec:
@@ -26,14 +26,14 @@ spec:
         weight: 100
   alertmanagersUrl:
   - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
-  image: quay.io/thanos/thanos:v0.25.2
+  image: kubesphere/thanos:v0.28.5
   podMetadata:
     labels:
       app.kubernetes.io/component: thanos-ruler
       app.kubernetes.io/instance: kubesphere
       app.kubernetes.io/name: thanos-ruler
       app.kubernetes.io/part-of: kube-prometheus
-      app.kubernetes.io/version: 0.25.2
+      app.kubernetes.io/version: 0.28.5
   queryEndpoints:
   - prometheus-operated.kubesphere-monitoring-system.svc:9090
   replicas: 2

@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/part-of: kube-prometheus
     app.kubernetes.io/vendor: kubesphere
-    app.kubernetes.io/version: 2.5.0
+    app.kubernetes.io/version: 2.6.0
   name: kube-state-metrics
   namespace: kubesphere-monitoring-system
 spec:
