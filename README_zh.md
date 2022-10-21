@@ -113,7 +113,7 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 ```bash
 # 注意: ks-installer会自动迁移cluster-configuration. 请勿自行修改.
 
-kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.1-alpha.1/kubesphere-installer.yaml
+kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.1-alpha.2/kubesphere-installer.yaml
 ```
 
 
