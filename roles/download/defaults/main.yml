@@ -222,13 +222,13 @@ grafana_tag: 8.3.3
 
 # whizard
 whizard_controller_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-controller-manager"
-whizard_controller_manager_tag: v0.5.0-rc.1
+whizard_controller_manager_tag: v0.5.0-rc.2
 whizard_monitoring_gateway_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-gateway"
-whizard_monitoring_gateway_tag: v0.5.0-rc.1
+whizard_monitoring_gateway_tag: v0.5.0-rc.2
 whizard_monitoring_agent_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-agent-proxy"
-whizard_monitoring_agent_proxy_tag: v0.5.0-rc.1
+whizard_monitoring_agent_proxy_tag: v0.5.0-rc.2
 whizard_monitoring_block_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-monitoring-block-manager"
-whizard_monitoring_block_manager_tag: v0.5.0-rc.1
+whizard_monitoring_block_manager_tag: v0.5.0-rc.2
 whizard_adapter_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/whizard-adapter"
 whizard_adapter_tag: v0.5.0
 envoy_repo: "{{ base_repo }}{{ namespace_override | default('envoyproxy') }}/envoy"
