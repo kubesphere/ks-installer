@@ -156,7 +156,7 @@ controllerManager:
       # tag: v0.28.0
 
       indexCacheConfig: {}
-
+  
       additionalFlags: 
       - --max-time=-24h     #The last 24h data is queried on ingester instead of store.
 
