@@ -53,13 +53,13 @@ controllerManager:
     
     ingester: 
       replicas: 2
-      localTsdbRetention: 15d
+      localTsdbRetention: 7d
       dataVolume:
         persistentVolumeClaim: 
           spec: 
             resources:
               requests: 
-                storage: 10Gi
+                storage: 20Gi
       tsdbCleanupImage:
         image: {{ bash_repo }}
         tag: {{ bash_tag }}
@@ -210,4 +210,4 @@ ingester:
       spec: 
         resources:
           requests: 
-            storage: 10Gi
+            storage: 20Gi
