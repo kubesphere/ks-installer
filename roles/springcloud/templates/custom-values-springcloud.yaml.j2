@@ -1,1 +1,4 @@
-{{ springcloud | to_nice_yaml }}
+{% if springcloud.nacos is defined %}
+nacos:
+  {{ springcloud.nacos | to_nice_yaml | indent(2) }}
+{% endif %}

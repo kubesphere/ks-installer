@@ -12,6 +12,13 @@
     dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
   with_items:
     - { path: springcloud-controller, file: custom-values-springcloud.yaml }
+    - { path: springcloud-controller, file: springcloud-profile.yaml }
+
+- name: servicemesh | Merge Profile
+  shell: >
+    yq ea '. as $item ireduce ({}; . * $item )' {{ kubesphere_dir }}/springcloud-controller/springcloud-profile.yaml
+    {{ kubesphere_dir }}/springcloud-controller/custom-values-springcloud.yaml
+    >  {{ kubesphere_dir }}/springcloud-controller/profile.yaml
 
 - name: SpringCloud | Installing springcloud-controller
   shell: >
@@ -19,7 +26,7 @@
     {{ kubesphere_dir }}/springcloud-controller
     --namespace kubesphere-spring-cloud-system
     --create-namespace
-    -f {{ kubesphere_dir }}/springcloud-controller/custom-values-springcloud.yaml
+    -f {{ kubesphere_dir }}/springcloud-controller/profile.yaml
   register: result
   until: result is succeeded
   retries: 3

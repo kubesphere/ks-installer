@@ -315,7 +315,7 @@ kiali_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kia
 kiali_tag: v1.38
 
 #springcloud
-ks_springcloud_hub: "{{ base_repo }}{{ namespace_override | default('kse') }}/spring-cloud-controller"
+ks_springcloud_hub: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/spring-cloud-controller"
 ks_springcloud_tag: master
 nacos_repo: "{{ namespace_override | default('nacos') }}/nacos-server"
 nacos_tag: latest
@@ -1034,8 +1034,8 @@ images:
     group: "istio-images"
 
   springcloud:
-    repo: "{{ springcloud_repo }}"
-    tag: "{{ springcloud_tag }}"
+    repo: "{{ ks_springcloud_hub }}"
+    tag: "{{ ks_springcloud_tag }}"
     sha256: "{{ springcloud_checksum|default(None) }}"
     group: "springcloud-images"
 
