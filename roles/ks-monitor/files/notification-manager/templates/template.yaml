@@ -21,7 +21,7 @@ data:
     {{ "  content:" }}
     {{ "    {{ range .Alerts }}" }}
     {{ "    - - tag: text" }}
-    {{ "        text: '{{ template \"nm.default.message\" . }}'{{ range .Labels.SortedPairs }}" }}
+    {{ "        text: \"{{ template \"nm.default.message\" . }}\"{{ range .Labels.SortedPairs }}" }}
     {{ "    - - tag: text" }}
     {{ "        text: '  {{ .Name | translate }}: {{ .Value }}'" }}
     {{ "    {{- end }}" }}
