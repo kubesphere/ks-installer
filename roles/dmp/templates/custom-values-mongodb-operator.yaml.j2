@@ -37,23 +37,25 @@ prometheus:
 #  prefix: dockerhub.qingcloud.com/mongodb_op
 #  secret: eyJhdXRocyI6eyJkb2NrZXJodWIucWluZ2Nsb3VkLmNvbSI6eyJ1c2VybmFtZSI6ImNoZW54aW4iLCJwYXNzd29yZCI6Ilhpb25nMDMyMSIsImF1dGgiOiJZMmhsYm5ocGJqcFlhVzl1WnpBek1qRT0ifX19
 
+localRegistry: {{ base_repo }}
+namespaceOverride: {{ namespace_override | default('radondb') }}
+
 image:
-  prefix: {{ mongodb_image_prefix }}
   pullPolicy: IfNotPresent
   agent:
     name: mongodb-agent
-    version: {{ mongodb_agent_image_tag }}
+    version: "11.12.0.7388-1"
   versionUpgradeHook:
     name: version-hook
-    version: {{ mongodb_hook_image_tag }}
+    version: "1.0.4"
   readinessProbe:
     name: readiness-probe
-    version: {{ mongodb_readiness_image_tag }}
+    version: "1.0.9"
   mongodb:
     name: mongodb
   operator:
     name: mongodb-kubernetes-operator
-    version: {{ mongodb_operator_image_tag }}
+    version: "v1.0.4"
 
 serviceAccount:
   # Specifies whether a service account should be created

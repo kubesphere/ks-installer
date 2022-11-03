@@ -19,4 +19,4 @@ sources:
 - https://github.com/radondb/radondb-clickhouse-operator
 - https://github.com/radondb/radondb-clickhouse-kubernetes
 type: application
-version: v2.1.1
+version: v2.1.3

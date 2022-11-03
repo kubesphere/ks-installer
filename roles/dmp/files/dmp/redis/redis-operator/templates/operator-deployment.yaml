@@ -37,8 +37,41 @@ spec:
         {{ end }}
         imagePullPolicy: {{ .Values.redisOperator.imagePullPolicy }}
         env:
-        - name: IMAGE_PREFIX
-          value: {{ .Values.redisOperator.imagePrefix }}
+{{- if .Values.localRegistry }}
+        - name: LOCAL_REGISTRY
+          value: {{ .Values.localRegistry }}
+{{- end }}
+{{- if .Values.NamespaceOverride }}
+        - name: NAMESPACE_OVERRIDE
+          value: {{ .Values.NamespaceOverride }}
+{{- end }}
+
+
+#redisImageName: redis
+{{- if .Values.redisImageName }}
+        - name: REDIS_IMAGE_NAME
+          value: {{ .Values.redisImageName  }}
+{{- end }}
+
+#redisExporterImageName: redis-exporter
+{{- if .Values.redisExporterImageName }}
+        - name: REDIS_EXPORTER_IMAGE_NAME
+          value: {{ .Values.redisExporterImageName }}
+{{- end }}
+
+#redisProxyImageName: predixy
+{{- if .Values.redisProxyImageName }}
+        - name: REDIS_PROXY_IMAGE_NAME
+          value: {{ .Values.redisProxyImageName }}
+{{- end }}
+
+#redisProxyExporterImageName: predixy-exporter
+{{- if .Values.redisProxyExporterImageName }}
+        - name: REDIS_PROXY_EXPORTER_IMAGE_NAME
+          value: {{ .Values.redisProxyExporterImageName }}
+{{- end }}
+
+
         command:
         - /manager
         args:

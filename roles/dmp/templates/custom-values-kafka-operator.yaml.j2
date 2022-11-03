@@ -5,9 +5,9 @@
 watchNamespaces: [ "dmp-system" ]
 watchAnyNamespace: true
 
-defaultImageRegistry: {{ kafka_image_registry }}
-defaultImageRepository: {{ kafka_operator_image }}
-defaultImageTag: {{ kafka_operator_image_tag }}
+defaultImageRegistry: {{ kafka_image_repo }}
+defaultImageRepository: {{ namespace_override | default('strimzi') }}
+defaultImageTag: "0.30.0"
 
 image:
   registry: ""
@@ -29,17 +29,17 @@ tmpDirSizeLimit: 1Mi
 #   - name: JAVA_OPTS
 #     value: "-Xms256m -Xmx256m"
 
-extraEnvs: [ ]
+extraEnvs: []
 
-tolerations: [ ]
-affinity: { }
-annotations: { }
-labels: { }
-nodeSelector: { }
+tolerations: []
+affinity: {}
+annotations: {}
+labels: {}
+nodeSelector: {}
 priorityClassName: ""
 
-podSecurityContext: { }
-securityContext: { }
+podSecurityContext: {}
+securityContext: {}
 
 # Docker images that operator uses to provision various components of Strimzi. To use your own registry prefix the
 # repository name with your registry URL.

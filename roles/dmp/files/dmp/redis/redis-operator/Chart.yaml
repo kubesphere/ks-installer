@@ -1,20 +1,18 @@
----
 apiVersion: v2
-appVersion: "1.1.1"
+appVersion: 1.2.3
 description: Provides easy redis setup definitions for Kubernetes services, and deployment.
-engine: gotpl
-maintainers:
-  - name: Abhishek Dubey
-  - name: Sandeep Rawat
-name: redis-operator
-sources:
-  - https://github.com/OT-CONTAINER-KIT/redis-operator
-version: 1.1.1
-home: https://github.com/OT-CONTAINER-KIT/redis-operator
-icon: https://github.com/OT-CONTAINER-KIT/redis-operator/raw/master/static/redis-operator-logo.svg
+home: https://github.com/QingCloudAppcenter/Redis-operator
+icon: https://github.com/QingCloudAppcenter/Redis-operator/raw/main/static/redis-operator-logo.png
 keywords:
 - operator
 - redis
-- opstree
+- RadonDB
 - kubernetes
 - openshift
+- KubeSphere
+maintainers:
+- name: RadonDB
+name: redis-operator
+sources:
+- https://github.com/QingCloudAppcenter/Redis-operator
+version: 1.2.3

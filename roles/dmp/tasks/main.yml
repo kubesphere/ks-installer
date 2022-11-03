@@ -30,7 +30,6 @@
     - { path: clickhouse, file: custom-values-clickhouse-operator.yaml }
     - { path: mysql, file: custom-values-mysql-operator.yaml }
     - { path: pg, file: custom-values-pg-operator.yaml }
-    - { path: pg, file: custom-values-pg-cluster.yaml }
     - { path: redis, file: custom-values-redis-operator.yaml }
     - { path: mongodb, file: custom-values-mongodb-operator.yaml }
     - { path: eck, file: custom-values-eck-operator.yaml }
@@ -44,8 +43,6 @@
     {{ kubesphere_dir }}/dmp/pg/pg-operator
     -f {{ kubesphere_dir }}/dmp/pg/custom-values-pg-operator.yaml
     --namespace dmp-system
-    --set namespace=dmp-system
-    --set pgo_operator_namespace=dmp-system
     --create-namespace
   register: result
   until: result is succeeded
@@ -73,16 +70,6 @@
   until: result is succeeded
   retries: 3
 
-- name: DMP | Installing pg cluster
-  shell: >
-    {{ bin_dir }}/helm upgrade --install pg-cluster
-    {{ kubesphere_dir }}/dmp/pg/pg-cluster
-    -f {{ kubesphere_dir }}/dmp/pg/custom-values-pg-cluster.yaml
-    --namespace dmp-system
-    --create-namespace
-  register: result
-  until: result is succeeded
-  retries: 3
 
 - name: DMP | Installing redis operator
   shell: >
@@ -160,6 +147,8 @@
     - { path: "eck", file: "eck_app_version.yaml" }
     - { path: "opensearch", file: "opensearch_app.yaml" }
     - { path: "opensearch", file: "opensearch_app_version.yaml" }
+    - { path: "kafka", file: "kafka_app.yaml" }
+    - { path: "kafka", file: "kafka_app_version.yaml" }
   register: result
   until: result is succeeded
   retries: 3
@@ -174,15 +163,6 @@
   failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
   until: cc_result is succeeded
   retries: 5
-  delay: 3
-
-
-- name: DMP | Installing nginx proxy
-  shell: >
-    {{ bin_dir }}/helm  upgrade --install  nginx-oss-proxy  {{ kubesphere_dir }}/dmp/nginxproxy    --namespace dmp-system;
-  register: result
-  until: result is succeeded
-  retries: 2
   delay: 3
 
 

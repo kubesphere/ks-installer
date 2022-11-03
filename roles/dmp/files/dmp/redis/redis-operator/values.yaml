@@ -2,7 +2,7 @@
 redisOperator:
   name: redis-operator
   imageName: radondb/redis-operator
-  imageTag: v1.1.1
+  imageTag: v1.2.3
   imagePullPolicy: Always
   imagePrefix: docker.io
 
@@ -11,6 +11,13 @@ redisOperator:
   # Additional Pod labels (e.g. for filtering Pod by custom labels)
   podLabels:
     app.kubernetes.io/name: redis-operator
+
+localRegistry: docker.io
+namespaceOverride: radondb
+redisImageName: redis
+redisExporterImageName: redis-exporter
+redisProxyImageName: predixy
+redisProxyExporterImageName: predixy-exporter
 
 resources:
   limits:

@@ -10,7 +10,7 @@ spec:
   maintainers:
     - email: radondb@yunify.com
       name: RadonDB
-  name: "kafka"
+  name: "RadonDB Kafka"
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/mysql_create.jpg,/assets/screenshots/mysql_detail.jpg,/assets/screenshots/mysql_monitor.jpg
   screenshots_zh: |
@@ -18,10 +18,17 @@ spec:
   changeLog: |
     - Add MySQL Cluster service monitoring
   changeLog_zh: |
-    - 增加 MySQL 集群服务监控
+    - 支持Kakfa3.1、3.2版本
+    - 支持通过图形化界面部署和管理 Kafka 节点及 Zookeeper 节点
+    - 支持集群自动故障转移和恢复
+    - 支持动态扩展集群容量和存储
+    - 支持对接 Prometheus，提供基于 Exporter 的资源状态监控功能
+    - 支持TLS，内部访问通过TLS更安全
+    - 支持图形化界面部署和管理用户、topic以及acl控制
+    - 支持通过界面对集群重平衡
 
-  operatorVersion: "2.2.0"
-  appVersion: "5.7.34|8.0"
+  operatorVersion: "1.0.0"
+  appVersion: "1.0.0"
   owner: "RadonDB"
 status:
   state: active

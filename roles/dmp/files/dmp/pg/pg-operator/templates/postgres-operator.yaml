@@ -1,0 +1,478 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: postgresqls.postgres.radondb.io
+  namespace: {{ .Release.Namespace }}
+spec:
+  group: postgres.radondb.io
+  names:
+    kind: PostgreSQL
+    listKind: PostgreSQLList
+    plural: postgresqls
+    singular: postgresql
+    shortNames:
+    - pg
+  scope: Namespaced
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    additionalPrinterColumns:
+#    - jsonPath: .spec.action
+#      description: The cluster action
+#      name: Action
+#      type: string
+#  priority: 0           # show in standard view
+    - jsonPath: .spec.deletepvc
+      description: delete the pvc when cluster is deleted.
+      name: DeletePvc
+      type: boolean
+      priority: 0           # show in standard view
+    - jsonPath: .status.state
+      description: The postgresql cluster status
+      name: State
+      type: string
+      priority: 0           # show in standard view
+    - jsonPath: .spec.autofailover.podspec.containers[0].image
+      description: The autofailover image
+      name: FailoverImage
+      type: string
+      priority: 1           # show in standard view
+    - jsonPath: .spec.postgresql.readwriteinstance.podspec.containers[0].image
+      description: The postgresql image
+      name: PostgresqlImage
+      type: string
+      priority: 1           # show in standard view
+    - jsonPath: .spec.postgresql.readwriteinstance.replicas
+      description: The readwriteinstance nodes
+      name: RWnodes
+      type: integer
+      priority: 1           # show in wide view
+    - jsonPath: .spec.postgresql.readwriteinstance.podspec.containers[0].resources.limits.cpu
+      description: The readwriteinstance cpu
+      name: RWcpu
+      type: string
+      priority: 1           # show in wide view
+    - jsonPath: .spec.postgresql.readwriteinstance.podspec.containers[0].resources.limits.memory
+      description: The readwriteinstance memory
+      name: RWmemory
+      type: string
+      priority: 1           # show in wide view
+    - jsonPath: .spec.postgresql.readonlyinstance.replicas
+      description: The readonlyinstance nodes
+      name: ROnodes
+      type: integer
+      priority: 1           # show in wide view
+    - jsonPath: .spec.postgresql.readonlyinstance.podspec.containers[0].resources.limits.cpu
+      description: The readonlyinstance cpu
+      name: ROcpu
+      type: string
+      priority: 1           # show in wide view
+    - jsonPath: .spec.postgresql.readonlyinstance.podspec.containers[0].resources.limits.memory
+      description: The readonlyinstance memory
+      name: ROmemory
+      type: string
+      priority: 1           # show in wide view
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+          spec:
+            type: object
+            properties:
+              action:
+                type: string
+                enum:
+                - 'start'
+                - 'stop'
+              deletepvc:
+                type: boolean
+                enum:
+                - true
+                - false
+              volume_type:
+                type: string
+                enum:
+                - 'local'
+                - 'cloud'
+              antiaffinity:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+                properties:
+                  policy:
+                    type: string
+                    enum:
+                    - 'preferred'
+                    - 'required'
+                  podAntiAffinityTerm:
+                    type: string
+                    enum:
+                    - 'none'
+                    - 'autofailover-readwrite'
+                    - 'autofailover-readwrite-readonly'
+                  topologyKey:
+                    type: string
+              services:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    selector:
+                      type: string
+                      enum:
+                      - 'autofailover'
+                      - 'primary'
+                      - 'standby'
+                      - 'readonly'
+                      - 'standby-readonly'
+                    vip:
+                      type: string
+                      x-kubernetes-preserve-unknown-fields: true
+                    metadata:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    spec:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+              autofailover:
+                type: object
+                properties:
+                  machines:
+                    type: array
+                    items:
+                      type: string
+                  hbas:
+                    type: array
+                    items:
+                      type: string
+                  #users:
+                  #  type: array
+                  #  items:
+                  #    type: object
+                  #    x-kubernetes-preserve-unknown-fields: true
+                  #    properties:
+                  #      autoctl_node:
+                  #        type: object
+                  #        properties:
+                  #          password:
+                  #            type: string
+                  configs:
+                    type: array
+                    items:
+                      type: string
+                  podspec:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                    properties:
+                      containers:
+                        type: array
+                        x-kubernetes-preserve-unknown-fields: true
+                        items:
+                          type: object
+                          properties:
+                            image:
+                              type: string
+                            name:
+                              type: string
+                            resources:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                              properties:
+                                limits:
+                                  type: object
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                  volumeClaimTemplates:
+                    type: array
+                    items:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+              postgresql:
+                type: object
+                properties:
+                  users:
+                    type: object
+                    properties:
+                      admin:
+                        type: array
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                      maintenance:
+                        type: array
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                      normal:
+                        type: array
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                  hbas:
+                    type: array
+                    items:
+                      type: string
+                  configs:
+                    type: array
+                    items:
+                      type: string
+                  readwriteinstance:
+                    type: object
+                    properties:
+                      replicas:
+                        type: integer
+                      machines:
+                        type: array
+                        items:
+                          type: string
+                      podspec:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          containers:
+                            type: array
+                            x-kubernetes-preserve-unknown-fields: true
+                            items:
+                              type: object
+                              properties:
+                                image:
+                                  type: string
+                                name:
+                                  type: string
+                                resources:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    limits:
+                                      type: object
+                                      properties:
+                                        cpu:
+                                          type: string
+                                        memory:
+                                          type: string
+                      volumeClaimTemplates:
+                        type: array
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                  readonlyinstance:
+                    type: object
+                    properties:
+                      machines:
+                        type: array
+                        items:
+                          type: string
+                      replicas:
+                        type: integer
+                      streaming:
+                        type: string
+                        enum:
+                        - 'sync'
+                        - 'async'
+                      podspec:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                        properties:
+                          containers:
+                            type: array
+                            x-kubernetes-preserve-unknown-fields: true
+                            items:
+                              type: object
+                              properties:
+                                image:
+                                  type: string
+                                name:
+                                  type: string
+                                resources:
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                  properties:
+                                    limits:
+                                      type: object
+                                      properties:
+                                        cpu:
+                                          type: string
+                                        memory:
+                                          type: string
+                      volumeClaimTemplates:
+                        type: array
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+              backup:
+                type: string
+              restore:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+                properties:
+                  fromssh:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                      address:
+                        type: string
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: radondb-postgres-operator-account
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: radondb-postgres-operator-cluster
+rules:
+  # Framework: knowing which other operators are running (i.e. peering).
+  - apiGroups: [kopf.dev]
+    resources: [clusterkopfpeerings]
+    verbs: [list, watch, patch, get]
+
+  # Framework: runtime observation of namespaces & CRDs (addition/deletion).
+  - apiGroups: [apiextensions.k8s.io]
+    resources: [customresourcedefinitions]
+    verbs: [list, watch]
+  - apiGroups: [""]
+    resources: [namespaces]
+    verbs: [list, watch]
+
+  # Framework: admission webhook configuration management.
+  - apiGroups: [admissionregistration.k8s.io/v1, admissionregistration.k8s.io/v1beta1]
+    resources: [validatingwebhookconfigurations, mutatingwebhookconfigurations]
+    verbs: [create, patch]
+
+  # Framework: posting the events about the handlers progress/errors.
+  - apiGroups: [""]
+    resources: [events]
+    verbs: [create]
+
+  # Application: read-only access for watching cluster-wide.
+  - apiGroups: [postgres.radondb.io]
+    resources: [postgresqls]
+    verbs: [list, watch, get, patch, create,]
+
+  - apiGroups: [""]
+    resources: [pods, persistentvolumeclaims, services]
+    verbs: [create, delete, patch, list, get, update, watch]
+
+  - apiGroups: [""]
+    resources: [pods/exec]
+    verbs: ["*"]
+
+  - apiGroups: [apps]
+    resources: [statefulsets, deployments]
+    verbs: [create, delete, patch, list, get, update, watch]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: radondb-postgres-operator-role
+rules:
+
+  # Framework: knowing which other operators are running (i.e. peering).
+  - apiGroups: [kopf.dev]
+    resources: [kopfpeerings]
+    verbs: [list, watch, patch, get]
+
+  # Framework: posting the events about the handlers progress/errors.
+  - apiGroups: [""]
+    resources: [events]
+    verbs: [create]
+
+  # Application: watching & handling for the custom resource we declare.
+  - apiGroups: [postgres.radondb.io]
+    resources: [postgresqls]
+    verbs: [list, watch, get, patch]
+
+  # Application: other resources it produces and manipulates.
+  # Here, we create Jobs+PVCs+Pods, but we do not patch/update/delete them ever.
+  #- apiGroups: [batch, extensions]
+  #  resources: [jobs]
+  #  verbs: [create, delete, patch]
+  - apiGroups: [""]
+    resources: [pods, persistentvolumeclaims, services]
+    verbs: [create, delete, patch, list, get, update, watch]
+
+  - apiGroups: [""]
+    resources: [pods/exec]
+    verbs: ["*"]
+
+  - apiGroups: [apps]
+    resources: [statefulsets, deployments]
+    verbs: [create, delete, patch, list, get, update, watch]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: radondb-postgres-operator-rolebinding-cluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: radondb-postgres-operator-cluster
+subjects:
+  - kind: ServiceAccount
+    name: radondb-postgres-operator-account
+    namespace: {{ .Release.Namespace }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: radondb-postgres-operator-rolebinding-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: radondb-postgres-operator-role
+subjects:
+  - kind: ServiceAccount
+    name: radondb-postgres-operator-account
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.operator.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      operator-name: radondb-postgres-operator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        operator-name: radondb-postgres-operator
+    spec:
+      serviceAccountName: radondb-postgres-operator-account
+      containers:
+      - name: radondb-postgres-operator
+        image: {{ .Values.operator.image }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RADONDB_POSTGRES_OPERATOR_BOOTSTRAP_TIMEOUT
+          value: "3600"
+        - name: RADONDB_POSTGRES_OPERATOR_BOOTSTRAP_RETRY_DELAY
+          value: "60"
+        - name: RADONDB_POSTGRES_OPERATOR_TIMER_INTERVAL
+          value: "10"
+        - name: RADONDB_POSTGRES_OPERATOR_LOG_LEVEL
+          value: "INFO"
+        - name: RADONDB_POSTGRES_OPERATOR_TESTING
+          value: "0"
+        - name: RADONDB_POSTGRES_OPERATOR_DATA_PATH
+          value: /data

@@ -1,6 +1,7 @@
 nodeSelector: {}
 tolerations: []
 kubeProxy:
+  image: kube-rbac-proxy
   version: "v0.8.0"
 manager:
   resources:
@@ -10,11 +11,35 @@ manager:
     requests:
       cpu: 2
       memory: 1Gi
-  image:
-    repository: docker.io/nosqlpass/opensearch-operator
-    ## tag default uses appVersion from Chart.yaml, to override specify tag tag: "v1.1"
-    tag: ""
-    pullPolicy: "Always"
+  image: opensearch-operator
+  ## tag default uses appVersion from Chart.yaml, to override specify tag tag: "v1.1"
+  tag: ""
   # If a watchNamespace is specified, the manager's cache will be restricted to
   # watch objects in the desired namespace. Defaults is to watch all namespaces.
   watchNamespace:
+
+localRegistry: docker.io
+namespaceOverride: radondb
+pullPolicy: Always
+
+cluster:
+  openSearch:
+    image: opensearch
+    tag: ""
+  openSearchDashboard:
+    image: opensearch-dashboards
+    tag: ""
+  busybox:
+    image: busybox
+    tag: 1.27.2-buildx
+
+logstash:
+  image: logstash-oss-with-opensearch-output-plugin
+  tag: 8.4.0
+
+
+prometheus:
+  secretName: "prometheus-credentials-secret"
+  # prometheus/prometheus
+  username: cHJvbWV0aGV1cw==
+  password: cHJvbWV0aGV1cw==

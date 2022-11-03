@@ -1,8 +1,12 @@
 # Default values for ClickHouse-operator
+localRegistry: "docker.io"
+namespaceOverride: ""
+watchAllNamespaces: true
 
 operator:
-  image: radondb/chronus-operator:2.1.1
+  image: radondb/chronus-operator:2.1.3
   imagePullPolicy: IfNotPresent
+
 metrics_operator:
-  image: radondb/chronus-metrics-operator:2.1.1
+  image: radondb/chronus-metrics-operator:2.1.3
   imagePullPolicy: IfNotPresent

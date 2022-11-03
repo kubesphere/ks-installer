@@ -45,8 +45,17 @@ data:
     {{- if .Values.managedNamespaces }}
     namespaces: [{{ join "," .Values.managedNamespaces  }}]
     {{- end }}
-    {{- if .Values.exporter.exporterImageUrl }}
-    exporter-image-url: {{ .Values.exporter.exporterImageUrl }}
+    {{- if .Values.exporter.exporterImageRegistry }}
+    exporter-image-registry: {{ .Values.exporter.exporterImageRegistry }}
+    {{- end }}
+    {{- if .Values.exporter.exporterImageNamespace }}
+    exporter-image-namespace: {{ .Values.exporter.exporterImageNamespace }}
+    {{- end }}
+    {{- if .Values.exporter.exporterImageName }}
+    exporter-image-name: {{ .Values.exporter.exporterImageName }}
+    {{- end }}
+    {{- if .Values.exporter.exporterImageTag }}
+    exporter-image-tag: {{ .Values.exporter.exporterImageTag }}
     {{- end }}
     {{- if hasKey .Values.exporter "exporterAll" }}
     exporter-es-all: {{ .Values.exporter.exporterAll }}

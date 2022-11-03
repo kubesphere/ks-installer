@@ -9,13 +9,14 @@ metadata:
     kubesphere.io/workspace: system-workspace
 spec:
   # app name
-  name: "opensearch"
+  name: "RadonDB OpenSearch"
   # app description
-  description_zh: "一款基于 opensearch 提供的企业级数据库。"
-  description: "A cloud-native, enterprise-class database system based on opensearch."
+  description_zh: "一款全面开源搜索和分析引擎。"
+  description: ""
   # app description
   abstraction_zh: |
-    - 提供一主多从高可用架构
+    - OpenSearch 是一个全面开源搜索和分析引擎，为用户提供实时日志处理、全文搜索和数据分析等基础能力。
+
   abstraction: |
     - Provide a high availability architecture with one master and multiple slave nodes.
 

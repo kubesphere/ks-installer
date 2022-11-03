@@ -23,7 +23,7 @@ image:
   # pullPolicy is the container image pull policy.
   pullPolicy: IfNotPresent
   # tag is the container image tag. If not defined, defaults to chart appVersion.
-  tag: 2.2.0-beta.6
+  tag: 2.2.0-beta.7
 
 # imagePullSecrets defines the secrets to use when pulling the operator container image.
 imagePullSecrets: []
@@ -138,7 +138,7 @@ config:
   metricsPort: "0"
 
   # containerRegistry to use for pulling Elasticsearch and other application container images.
-  containerRegistry: registry.docker.com
+  containerRegistry: docker.io
   # namespace of containerRegistry(refer to harbor's terminology, equal to the 'username' of docker.com)
   # all config is commented out and given its default value. Change the value if you don't use the default
   # nsApm: "apm"
@@ -217,19 +217,22 @@ podMonitor:
 
 # Globals meant for internal use only
 global:
-  # manifestGen specifies whether the chart is running under manifest generator.
+  # manifestGen specifies whether the chart is running under manifest generator. 
   # This is used for tasks specific to generating the all-in-one.yaml file.
   manifestGen: false
   # createOperatorNamespace defines whether the operator namespace manifest should be generated when in manifestGen mode.
-  # Usually we do want that to happen (e.g. all-in-one.yaml) but, sometimes we don't (e.g. E2E tests).
+  # Usually we do want that to happen (e.g. all-in-one.yaml) but, sometimes we don't (e.g. E2E tests). 
   createOperatorNamespace: true
   # kubeVersion is the effective Kubernetes version we target when generating the all-in-one.yaml.
   kubeVersion: 1.16.0
 
 # elasticsearch-exporter config
 exporter:
-  # elasticsearch-exporter container image uri
-  exporterImageUrl: "quay.io/prometheuscommunity/elasticsearch-exporter:v1.3.0"
+  # elasticsearch-exporter container image
+  exporterImageRegistry: "docker.io"
+  exporterImageNamespace: "prometheuscommunity"
+  exporterImageName: "elasticsearch-exporter"
+  exporterImageTag: "v1.3.0"
   # elasticsearch-exporter config, controlling which type of metrics are exported
   # all config is commented out and given its default value. Change the value if you don't use the default
   # exporterAll: true

@@ -56,33 +56,16 @@ ks_version: >-
   v3.3.1-beta.0
   {%- endif %}
 
-chronus_image_prefix: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
-  {%- else -%}
-  docker.io
-  {%- endif %}
-
-mysql_image_prefix: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
-  {%- else -%}
-
-  {%- endif %}
-
-eck_image_registry: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
-  {%- else -%}
-  docker.io
-  {%- endif %}
-
-kafka_image_registry: >-
-  {% if local_registry is defined and local_registry != "" -%}
-  {{ local_registry }}
+# quay image repo define
+kafka_image_repo: >-
+  {% if (local_registry is defined and local_registry == "registry.cn-beijing.aliyuncs.com") or (zone is defined and zone == "cn") -%}
+  registry.cn-beijing.aliyuncs.com/
+  {%- elif local_registry is defined and local_registry != "" -%}
+  {{ local_registry }}/
   {%- else -%}
   quay.io
   {%- endif %}
+
 
 #KubeSphere:
 ks_apiserver_repo: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/ks-apiserver"
@@ -373,52 +356,6 @@ waveworks_scop_tag: "1.13.0"
 #multus_cni
 multus_cni_repo: "{{ ghcr_image_repo }}{{ namespace_override | default('k8snetworkplumbingwg') }}/multus-cni"
 multus_cni_tag: "v3.9"
-
-#DMP
-#DMP clickhouse-operator
-chronus_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-operator"
-chronus_operator_tag: "2.1.1"
-chronus_metrics_operator_repo: "{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
-chronus_metrics_operator_tag: "2.1.1"
-
-
-#DMP mysql-operator
-mysql_operator_image: "{{ namespace_override | default('radondb') }}/mysql-operator"
-mysql_operator_image_tag: "v2.2.1"
-mysql_rbac_proxy_image: "{{ namespace_override | default('radondb') }}/kube-rbac-proxy:v0.8.0"
-
-#DMP pg-operator
-pg_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
-pg_cluster_repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/postgresqlcluster"
-pg_cluster_tag: "v0.4"
-pgo_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
-pgo_image_tag: "debian-2.1.1"
-
-#DMP redis-operator
-redis_operator_image: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis-operator"
-redis_operator_image_tag: "v1.1.1"
-redis_image_prefix: "{{ base_repo }}{{ namespace_override | default('') }}"
-
-#DMP mongodb-operator
-mongodb_image_prefix: "{{ base_repo }}{{ namespace_override | default('radondb') }}"
-mongodb_operator_image_tag: "v1.0.4"
-mongodb_agent_image_tag: "11.12.0.7388-1"
-mongodb_hook_image_tag: "1.0.4"
-mongodb_readiness_image_tag: "1.0.9"
-
-#DMP eck-operator
-eck_operator_image: "{{ base_repo }}{{ namespace_override | default('radondb') }}/eck-operator"
-eck_operator_image_tag: "2.2.0-beta.6"
-eck_image_namespace: "{{ namespace_override | default('library') }}"
-eck_exporter_image: "{{ base_repo }}{{ namespace_override | default('prometheuscommunity') }}/elasticsearch-exporter:v1.3.0"
-
-#DMP kafka-operator
-kafka_operator_image: "{{ base_repo }}{{ namespace_override | default('strimzi') }}"
-kafka_operator_image_tag: "0.30.0"
-
-#DMP opensearch-operator
-opensearch_dmp_repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch-operator"
-
 
 images:
   ks_installer:
@@ -1177,6 +1114,190 @@ images:
     tag: "{{ multus_cni_tag }}"
     sha256: "{{ multus_cni_checksum|default(None) }}"
     group: "multus_cni-images"
+
+
+  mysql:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mysql-operator"
+    tag: "v2.2.1"
+    sha256: ""
+    group: "dmp-mysql-images"
+  mysql-rbac:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/kube-rbac-proxy"
+    tag: "v0.8.0"
+    sha256: ""
+    group: "dmp-mysql-images"
+  mysql57-server:
+    repo: "{{ base_repo }}{{ namespace_override | default('percona') }}/percona-server"
+    tag: "5.7.34"
+    sha256: ""
+    group: "dmp-mysql-images"
+  mysql80-server:
+    repo: "{{ base_repo }}{{ namespace_override | default('percona') }}/percona-server"
+    tag: "8.0.25"
+    sha256: ""
+    group: "dmp-mysql-images"
+  mysql-exporter:
+    repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/mysqld-exporter"
+    tag: "v0.12.1"
+    sha256: ""
+    group: "dmp-mysql-images"
+
+  mysql57-sidecar:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mysql57-sidecar"
+    tag: "v2.2.1"
+    sha256: ""
+    group: "dmp-mysql-images"
+  mysql80-sidecar:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mysql80-sidecar"
+    tag: "v2.2.1"
+    sha256: ""
+    group: "dmp-mysql-images"
+  mysql-xenon:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/xenon"
+    tag: "v2.2.1"
+    sha256: ""
+    group: "dmp-mysql-images"
+
+
+  pg-operator:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/radondb-postgres-operator"
+    tag: "v0.9.0"
+    sha256: ""
+    group: "dmp-pg-images"
+
+
+  ck-chronus-operator:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-operator"
+    tag: "2.1.3"
+    sha256: ""
+    group: "dmp-ck-images"
+  ck-chronus-metrics-operator:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/chronus-metrics-operator"
+    tag: "2.1.3"
+    sha256: ""
+    group: "dmp-ck-images"
+
+  clickhouse-server:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/clickhouse-server"
+    tag: "v21.1.3.32-stable"
+    sha256: ""
+    group: "dmp-ck-images"
+
+  clickhouse-zk:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/zookeeper"
+    tag: "3.6.1"
+    sha256: ""
+    group: "dmp-ck-images"
+
+  redis-operator:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis-operator"
+    tag: "v1.2.3"
+    sha256: ""
+    group: "dmp-reids-images"
+  redis-exporter:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis-exporter"
+    tag: "v1.43.0"
+    sha256: ""
+    group: "dmp-reids-images"
+  dmp-redis6:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis"
+    tag: "v6.2.5"
+    sha256: ""
+    group: "dmp-reids-images"
+  dmp-redis7:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis"
+    tag: "v7.0.4"
+    sha256: ""
+    group: "dmp-reids-images"
+  predixy:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/predixy"
+    tag: "v1.0.0"
+    sha256: ""
+    group: "dmp-reids-images"
+  predixy-exporter:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/predixy-exporter"
+    tag: "v1.0.5"
+    sha256: ""
+    group: "dmp-reids-images"
+
+  dmp-mongo:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mongodb-kubernetes-operator"
+    tag: "v1.0.4"
+    sha256: ""
+    group: "dmp-mongo-images"
+
+  dmp-mongod:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mongod"
+    tag: "4.2.19"
+    sha256: ""
+    group: "dmp-mongo-images"
+
+  dmp-mongodb-agent:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mongodb-agent"
+    tag: "11.12.0.7388-1"
+    sha256: ""
+    group: "dmp-mongo-images"
+
+  dmp-mongod-posthook:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mongod-posthook"
+    tag: "1.0.4"
+    sha256: ""
+    group: "dmp-mongo-images"
+
+  dmp-mongodb-agent-readinessprobe:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mongodb-agent-readinessprobe"
+    tag: "1.0.9"
+    sha256: ""
+    group: "dmp-mongo-images"
+
+  dmp-eck-operator:
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/eck-operator"
+    tag: "2.2.0-beta.7"
+    sha256: ""
+    group: "dmp-eck-images"
+
+  dmp-eck-exporter:
+    repo: "{{ base_repo }}{{ namespace_override | default('prometheuscommunity') }}/elasticsearch-exporter"
+    tag: "v1.3.0"
+    sha256: ""
+    group: "dmp-eck-images"
+
+  dmp-elasticsearch:
+    repo: "{{ base_repo }}{{ namespace_override | default('library') }}/elasticsearch"
+    tag: "7.17.5"
+    sha256: ""
+    group: "dmp-eck-images"
+
+  dmp-elasticsearch-exporter:
+    repo: "{{ base_repo }}{{ namespace_override | default('prometheuscommunity') }}/elasticsearch-exporter"
+    tag: "v1.3.0"
+    sha256: ""
+    group: "dmp-eck-images"
+
+  dmp-opensearch-operator:
+    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch-operator"
+    tag: "2.0.5"
+    sha256: ""
+    group: "dmp-opensearch-images"
+
+  dmp-opensearch:
+    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch"
+    tag: "2.2.1"
+    sha256: ""
+    group: "dmp-opensearch-images"
+
+  dmp-opensearch-dashboards:
+    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch-dashboards"
+    tag: "2.2.1"
+    sha256: ""
+    group: "dmp-opensearch-images"
+
+  dmp-kafka:
+    repo: "{{ quay_image_repo }}{{ namespace_override | default('strimzi') }}/operator"
+    tag: "0.30.0"
+    sha256: ""
+    group: "dmp-kafka-images"
+
 
 image_default:
   repo: ""
