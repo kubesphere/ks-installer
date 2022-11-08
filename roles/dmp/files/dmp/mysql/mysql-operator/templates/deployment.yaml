@@ -34,11 +34,22 @@ spec:
       containers:
       {{- if .Values.rbacProxy.create }}
       - name: kube-rbac-proxy
-      {{- if not .Values.imagePrefix }}
-        image: "{{ .Values.rbacProxy.image }}"
+      {{- $imagerepo:=(split "/" .Values.rbacProxy.image)._0 }}
+      {{- $imagetag:= (split "/" .Values.rbacProxy.image)._1 }}
+      {{- if .Values.imageNamespaceOverride}}
+      {{- if .Values.imagePrefix}}
+        image: {{ printf "%s/%s/%s" .Values.imagePrefix .Values.imageNamespaceOverride $imagetag|quote }}
+      {{- else  }}
+        image: {{ printf "%s/%s" .Values.imageNamespaceOverride $imagetag|quote }}
+      {{- end}}
       {{- else }}
-        image: "{{ .Values.imagePrefix }}/{{ .Values.rbacProxy.image }}"
+      {{- if .Values.imagePrefix}}
+        image: {{ printf "%s/%s/%s" .Values.imagePrefix $imagerepo $imagetag|quote }}
+      {{- else }}
+        image: {{ .Values.rbacProxy.image|quote }}
       {{- end }}
+      {{- end }}
+        imagePullPolicy: {{ .Values.rbacProxy.imagePullPolicy }}
         args:
         - "--secure-listen-address=0.0.0.0:8443"
         - "--upstream=http://127.0.0.1:8080/"
@@ -70,13 +81,25 @@ spec:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
-      {{- if not .Values.imagePrefix }}
-        image: "{{ .Values.manager.image }}:{{ .Values.manager.tag }}"
-      {{- else }}
-        image: "{{ .Values.imagePrefix }}/{{ .Values.manager.image }}:{{ .Values.manager.tag }}"
-      {{- end }}
+        {{- $imagerepo:=(split "/" .Values.manager.image)._0 }}
+        {{- $imagetag:= printf "%s:%s" (split "/" .Values.manager.image)._1 .Values.manager.tag }}
+        {{- if .Values.imageNamespaceOverride}}
+        {{- if .Values.imagePrefix}}
+        image: {{ printf "%s/%s/%s" .Values.imagePrefix .Values.imageNamespaceOverride $imagetag|quote }}
+        {{- else  }}
+        image: {{ printf "%s/%s" .Values.imageNamespaceOverride $imagetag|quote }}
+        {{- end}}
+        {{- else }}
+        {{- if .Values.imagePrefix}}
+        image: {{ printf "%s/%s/%s" .Values.imagePrefix $imagerepo $imagetag|quote }}
+        {{- else }}
+        image: {{ printf "%s/%s" $imagerepo $imagetag|quote }}
+        {{- end }}
+        {{- end }}
         imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
         env:
+        - name: IMAGE_NAMESPACE_OVERRIDE
+          value: {{ .Values.imageNamespaceOverride | quote }}
         - name: IMAGE_PREFIX
           value: {{ .Values.imagePrefix }}
         - name: ENABLE_WEBHOOKS

@@ -16,21 +16,19 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/pg_create_zh.jpg,/assets/screenshots/pg_detail_zh.jpg,/assets/screenshots/pg_monitor_zh.jpg
   changeLog: |
-    -  Support PostgreSQL kernel version 12.7 and 13.3
-    -  All kernel versions support PostGis plugin
+    -  Support PostgreSQL kernel version 12.12, 13.8, 14.5, 15.0
+    -  All kernel versions support PostGis, citus plugin
     -  Support Scale Out and Scale Up
-    -  High-availability based on distributed consensus protocol
-    -  Support synchronous/asynchronous streaming replication
+    -  Support semi-synchronous streaming replication
     -  Rich display of monitoring indicators
   changeLog_zh: |
-    - 支持12.7及13.3内核版本
-    - 所有内核版本均支持PostGis插件
+    - 支持 12.12、13.8、14.5、15.0 内核版本
+    - 所有内核版本均支持 PostGis、citus 插件
     - 支持水平及垂直扩缩容
-    - 基于分布式一致性协议的高可用方案
-    - 支持同步/异步的流复制
+    - 支持半同步流复制
     - 丰富的监控指标展示
-  operatorVersion: "2.1.1"
-  appVersion: "13.3"
+  operatorVersion: "v1.1.1"
+  appVersion: "v1.0.1"
   owner: "RadonDB"
 status:
   state: active

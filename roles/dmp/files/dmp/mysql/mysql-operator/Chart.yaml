@@ -1,6 +1,10 @@
 apiVersion: v2
-appVersion: v2.2.1
+appVersion: v2.3.0
+dependencies:
+- name: mysqlcluster
+  repository: ""
+  version: v2.3.0
 description: Open Source，High Availability Cluster，based on MySQL
 name: mysql-operator
 type: application
-version: 2.2.1
+version: 2.3.0

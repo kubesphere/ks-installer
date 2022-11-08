@@ -18,7 +18,7 @@ spec:
   changeLog: |
     - WIP
   changeLog_zh: |
-    - 基于 ECK Operator 2.2.0版本构建（支持版本 Easticsearch/Kibana 7.10+ 8.0+）
+    - 支持版本 Easticsearch/Kibana 7.10+ 8.0+
     - 支持Elasticsearch、Kibana 等节点的部署和管理
     - 管理和监控多个集群
     - 通过滚动升级执行安全的配置更改

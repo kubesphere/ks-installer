@@ -1,0 +1,43 @@
+install: true
+
+replicas: 3
+
+name: "sample"
+namespace: "default"
+
+mysqlVersion: "8.0"
+version: v2.3.0
+
+tls: 
+  enable: false
+  secretName: ""
+
+sidecar:
+  metrics: false
+  slowLogTail: false
+  auditLogTail: false
+
+schedule:
+  podAntiaffinity: true
+  nodeSelector: {}
+  tolerations: []
+
+persistence:
+  storageClass: ""
+  size: 20Gi
+
+mysqlResources:
+  limits:
+    cpu: 256m
+    memory: 500Mi
+  requests:
+    cpu: 256m
+    memory: 500Mi
+
+mycnf: {}
+
+superUser:
+  create: true
+  name: "super_usr"
+  password: "RadonDB@123"
+  tlsType: NONE 

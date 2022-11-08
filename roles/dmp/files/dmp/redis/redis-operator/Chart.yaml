@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 1.2.3
+appVersion: 1.2.4
 description: Provides easy redis setup definitions for Kubernetes services, and deployment.
 home: https://github.com/QingCloudAppcenter/Redis-operator
 icon: https://github.com/QingCloudAppcenter/Redis-operator/raw/main/static/redis-operator-logo.png
@@ -15,4 +15,4 @@ maintainers:
 name: redis-operator
 sources:
 - https://github.com/QingCloudAppcenter/Redis-operator
-version: 1.2.3
+version: 1.2.4

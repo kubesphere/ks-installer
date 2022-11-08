@@ -2,6 +2,7 @@
 localRegistry: "docker.io"
 namespaceOverride: ""
 watchAllNamespaces: true
+enablePrometheusMonitor: false
 
 operator:
   image: radondb/chronus-operator:2.1.3

@@ -1,0 +1,11 @@
+Welcome to RadonDB MySQL Kubernetes!
+
+Connect to the database:
+
+kubectl exec -it svc/{{ .Values.name }}-leader -c mysql -- mysql -u{{ .Values.superUser.name }} -p{{ .Values.superUser.password }}
+
+Change password:
+
+kubectl patch secret {{ .Values.name }}-user-password --patch="{\"data\": { \"{{ .Values.superUser.name }}\": \"$(echo -n <yourpass> |base64 -w0)\" }}" -oyaml
+
+Github: https://github.com/radondb/radondb-mysql-kubernetes

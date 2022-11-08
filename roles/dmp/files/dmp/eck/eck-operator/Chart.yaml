@@ -24,4 +24,4 @@ maintainers:
   name: Elastic
 name: eck-operator
 type: application
-version: 2.2.0
+version: 2.2.2

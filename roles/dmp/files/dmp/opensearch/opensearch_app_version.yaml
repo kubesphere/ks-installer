@@ -18,7 +18,14 @@ spec:
   changeLog: |
     - Add MySQL Cluster service monitoring
   changeLog_zh: |
-    - 增加 MySQL 集群服务监控
+    - 支持 opensearch、dashboard、logstash 等节点的部署和管理
+    - 支持 opensearch 版本：2.3.0
+    - 支持动态扩展集群计算规格和存储容量
+    - 支持动态调整集群节点数量
+    - 通过滚动方式执行配置更改
+    - 支持 keystore 功能
+    - 支持对接 Prometheus，提供基于 Exporter 的资源状态监控功能
+    - 支持 TLS
 
   operatorVersion: "1.0.0"
   appVersion: "1.0.0"

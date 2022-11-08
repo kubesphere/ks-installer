@@ -23,7 +23,7 @@ image:
   # pullPolicy is the container image pull policy.
   pullPolicy: IfNotPresent
   # tag is the container image tag. If not defined, defaults to chart appVersion.
-  tag: 2.2.0-beta.7
+  tag: 2.2.0-v1.0.0
 
 # imagePullSecrets defines the secrets to use when pulling the operator container image.
 imagePullSecrets: []
@@ -142,8 +142,8 @@ config:
   # namespace of containerRegistry(refer to harbor's terminology, equal to the 'username' of docker.com)
   # all config is commented out and given its default value. Change the value if you don't use the default
   # nsApm: "apm"
-  nsElasticsearch: "library"
-  nsKibana: "library"
+  nsElasticsearch: "radondb"
+  nsKibana: "radondb"
   # nsEnterpiseSearch: "enterprise-search"
   # nsBeats: "beats"
   # nsMaps: "elastic-maps-service"
@@ -230,7 +230,7 @@ global:
 exporter:
   # elasticsearch-exporter container image
   exporterImageRegistry: "docker.io"
-  exporterImageNamespace: "prometheuscommunity"
+  exporterImageNamespace: "radondb"
   exporterImageName: "elasticsearch-exporter"
   exporterImageTag: "v1.3.0"
   # elasticsearch-exporter config, controlling which type of metrics are exported

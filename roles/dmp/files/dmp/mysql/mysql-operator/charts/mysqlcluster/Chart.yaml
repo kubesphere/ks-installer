@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: v2.3.0
+description: A Helm chart for installing radondb mysql cluster.
+name: mysqlcluster
+type: application
+version: 2.3.0

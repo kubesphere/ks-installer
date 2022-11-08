@@ -2,7 +2,7 @@
 redisOperator:
   name: redis-operator
   imageName: "{{ namespace_override | default('radondb') }}/redis-operator"
-  imageTag: "v1.2.3"
+  imageTag: v1.2.4
   imagePullPolicy: Always
   imagePrefix: {{ base_repo }}
 

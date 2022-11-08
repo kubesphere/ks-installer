@@ -5,7 +5,7 @@ nameOverride: "elastic-operator"
 fullnameOverride: "elastic-operator"
 
 # managedNamespaces is the set of namespaces that the operator manages. Leave empty to manage all namespaces.
-managedNamespaces: [ ]
+managedNamespaces: []
 
 # installCRDs determines whether Custom Resource Definitions (CRD) are installed by the chart.
 # Note that CRDs are global resources and require cluster admin privileges to install.
@@ -24,10 +24,10 @@ image:
   # pullPolicy is the container image pull policy.
   pullPolicy: IfNotPresent
   # tag is the container image tag. If not defined, defaults to chart appVersion.
-  tag: "2.2.0-beta.7"
+  tag: 2.2.0-v1.0.0
 
 # imagePullSecrets defines the secrets to use when pulling the operator container image.
-imagePullSecrets: [ ]
+imagePullSecrets: []
 
 # resources define the container resource limits for the operator.
 resources:
@@ -39,35 +39,35 @@ resources:
     memory: 150Mi
 
 # podAnnotations define the annotations that should be added to the operator pod.
-podAnnotations: { }
+podAnnotations: {}
 
 ## podLabels define additional labels that should be added to the operator pod.
-podLabels: { }
+podLabels: {}
 
 # podSecurityContext defines the pod security context for the operator pod.
 podSecurityContext:
   runAsNonRoot: true
 
 # securityContext defines the security context of the operator container.
-securityContext: { }
+securityContext: {}
 
 # nodeSelector defines the node selector for the operator pod.
-nodeSelector: { }
+nodeSelector: {}
 
 # tolerations defines the node tolerations for the operator pod.
-tolerations: [ ]
+tolerations: []
 
 # affinity defines the node affinity rules for the operator pod.
-affinity: { }
+affinity: {}
 
 # additional environment variables for the operator container.
-env: [ ]
+env: []
 
 # additional volume mounts for the operator container.
-volumeMounts: [ ]
+volumeMounts: []
 
 # additional volumes to add to the operator pod.
-volumes: [ ]
+volumes: []
 
 # createClusterScopedResources determines whether cluster-scoped resources (ClusterRoles, ClusterRoleBindings) should be created.
 createClusterScopedResources: true
@@ -76,7 +76,7 @@ serviceAccount:
   # create specifies whether a service account should be created for the operator.
   create: true
   # annotations to add to the service account
-  annotations: { }
+  annotations: {}
   # name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   name: ""
 
@@ -107,10 +107,10 @@ webhook:
   manageCerts: true
   # namespaceSelector corresponds to the namespaceSelector property of the webhook.
   # Setting this restricts the webhook to act only on objects submitted to namespaces that match the selector.
-  namespaceSelector: { }
+  namespaceSelector: {}
   # objectSelector corresponds to the objectSelector property of the webhook.
   # Setting this restricts the webhook to act only on objects that match the selector.
-  objectSelector: { }
+  objectSelector: {}
 
 softMultiTenancy:
   # enabled determines whether the operator is installed with soft multi-tenancy extensions.
@@ -143,8 +143,8 @@ config:
   # namespace of containerRegistry(refer to harbor's terminology, equal to the 'username' of docker.com)
   # all config is commented out and given its default value. Change the value if you don't use the default
   # nsApm: "apm"
-  nsElasticsearch: {{ namespace_override | default('library') }}
-  nsKibana: {{ namespace_override | default('library') }}
+  nsElasticsearch: {{ namespace_override | default('radondb') }}
+  nsKibana: {{ namespace_override | default('radondb') }}
   # nsEnterpiseSearch: "enterprise-search"
   # nsBeats: "beats"
   # nsMaps: "elastic-maps-service"
@@ -194,10 +194,10 @@ podMonitor:
   enabled: false
 
   # labels adds additional labels to the podMonitor
-  labels: { }
+  labels: {}
 
   # annotations adds additional annotations to the podMonitor
-  annotations: { }
+  annotations: {}
 
   # namespace determines in which namespace the podMonitor will be deployed.
   # If not set the podMonitor will be created in the namespace where the Helm release is installed into
@@ -210,10 +210,10 @@ podMonitor:
   scrapeTimeout: 30s
 
   # podTargetLabels transfers labels on the Kubernetes Pod onto the target.
-  podTargetLabels: [ ]
+  podTargetLabels: []
 
   # podMetricsEndpointConfig allows to add an extended configuration to the podMonitor
-  podMetricsEndpointConfig: { }
+  podMetricsEndpointConfig: {}
   # honorTimestamps: true
 
 # Globals meant for internal use only
@@ -231,7 +231,7 @@ global:
 exporter:
   # elasticsearch-exporter container image
   exporterImageRegistry: {{ base_repo }}
-  exporterImageNamespace: "{{ namespace_override | default('prometheuscommunity') }}"
+  exporterImageNamespace: "{{ namespace_override | default('radondb') }}"
   exporterImageName: "elasticsearch-exporter"
   exporterImageTag: "v1.3.0"
   # elasticsearch-exporter config, controlling which type of metrics are exported

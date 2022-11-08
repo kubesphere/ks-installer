@@ -5,6 +5,9 @@
 replicaCount: 1
 installCRDS: true
 
+mysqlcluster:
+  install: false
+  version: v2.3.0
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
 ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
@@ -13,6 +16,7 @@ imagePullPolicy: IfNotPresent
 nameOverride: ""
 fullnameOverride: ""
 imagePrefix: {{ base_repo }}
+imageNamespaceOverride: {{ namespace_override | default('') }}
 
 ## node.kubernetes.io/not-ready:NoExecute
 ## node.kubernetes.io/unreachable:NoExecute
@@ -21,9 +25,9 @@ tolerationSeconds: 30
 
 manager:
   image: "{{ namespace_override | default('radondb') }}/mysql-operator"
-  tag: "v2.2.1"
+  tag: v2.3.0
   enableWebhooks: true
-  resources: { }
+  resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -31,9 +35,12 @@ manager:
     # limits:
     #   cpu: 100m
     #   memory: 30Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 20Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 20Mi
+
+mysqlConfTemplate:
+  namespace: ""
 
 serviceAccount:
   # Specifies whether a service account should be created

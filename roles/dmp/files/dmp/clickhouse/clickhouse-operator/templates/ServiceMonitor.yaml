@@ -1,0 +1,18 @@
+{{ if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" -}}{{ if eq .Values.enablePrometheusMonitor true -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: clickhouse-clusters-monitor
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      clickhouse.radondb.com/app: chop
+      clickhouse.radondb.com/clickhouse: clickhouse
+  namespaceSelector:
+    any: true
+  endpoints:
+    - port: clickhouse-metrics
+      path: /metrics
+      interval: 10s
+{{ end -}}{{ end -}}
