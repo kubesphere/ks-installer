@@ -7,6 +7,11 @@
   loop:
     - "kubefed"
 
+- name: notification | Getting notifiaction federated crds update files
+  copy:
+    src: "notification"
+    dest: "{{ kubesphere_dir }}/"
+
 - debug:
     msg: Current Kubernetes version is {{ kubernetes_version }}
 
@@ -77,6 +82,9 @@
   with_fileglob:
     - "{{ kubesphere_dir }}/kubefed/federatedcrds/*"
 
+
+- name: notification-manager | Update notification federated crds
+  shell: "bash {{ kubesphere_dir }}/notification/update_federated_crds.sh"
 
 - name: Kubefed | Importing multicluster status
   shell: >
