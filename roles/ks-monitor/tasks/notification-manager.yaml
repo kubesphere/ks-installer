@@ -63,11 +63,6 @@
     - multicluster is defined and multicluster.clusterRole == 'host'
     - crd_installed.rc != 0 or crd_installed.stdout.find("federatednamespaces.types.kubefed.io") == -1
 
-- name: notification-manager | Update federated crds
-  shell: "bash {{ kubesphere_dir }}/federated/update_federated_crds.sh"
-  when:
-    - multicluster is defined and multicluster.clusterRole == 'host'
-
 - name: notification-manager | Checking federated namespace deployed
   shell: >
     {{ bin_dir }}/kubectl get federatednamespaces.types.kubefed.io -n kubesphere-monitoring-federated kubesphere-monitoring-federated -o jsonpath='{.metadata.name}'
