@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: dcgm-exporter
+    app.kubernetes.io/instance: gpu-dcgm-exporter
+    app.kubernetes.io/name: dcgm-exporter
+    app.kubernetes.io/version: 2.4.0-rc.3
+    prometheus: k8s
+    role: alert-rules
+  name: gpu-dcgm-prometheus-rules
+  namespace: kubesphere-monitoring-system
+spec:
+  groups:
+  - name: gpu-dcgm.rules
+    rules:
+    - expr: |
+        sum (label_replace(label_join(sum(label_replace(label_replace(DCGM_FI_PROF_GR_ENGINE_ACTIVE{exported_namespace!=""},"namespace","$1","exported_namespace","(.+)"),"pod","$1","exported_pod","(.+)")) by (namespace, pod, cluster) * on (pod, namespace, cluster) group_left(owner_kind,owner_name) label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics",},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind, cluster)/100 or sum (label_replace(label_join(sum(label_replace(label_replace(DCGM_FI_DEV_GPU_UTIL{exported_namespace!=""},"namespace","$1","exported_namespace","(.+)"),"pod","$1","exported_pod","(.+)")) by (namespace, pod, cluster) * on (pod, namespace, cluster) group_left(owner_kind,owner_name) label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics",},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind, cluster)/100
+      record: namespace:workload_gpu_usage:sum
+    - expr: |
+        sum (label_replace(label_join(sum(label_replace(label_replace(DCGM_FI_DEV_FB_USED{exported_namespace!=""},"namespace","$1","exported_namespace","(.+)"),"pod","$1","exported_pod","(.+)")) by (namespace, pod, cluster) * on (pod, namespace, cluster) group_left(owner_kind,owner_name) label_replace(label_join(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics"},"owner_kind", "Deployment", "owner_kind", "ReplicaSet"), "owner_kind", "Pod", "owner_kind", "<none>"),"tmp",":","owner_name","pod"),"owner_name","$1","tmp","<none>:(.*)"), "workload",":","owner_kind","owner_name"), "workload","$1","workload","(Deployment:.+)-(.+)")) by (namespace, workload, owner_kind, cluster) *1024 *1024
+      record: namespace:workload_gpu_memory_usage:sum

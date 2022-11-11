@@ -46,6 +46,14 @@
   retries: 5
   delay: 5
 
+- name: Monitoring | Installing gpu rules
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/gpu-monitoring/gpu-rules/  --force
+  when:
+    - monitoring.gpu is defined
+    - monitoring.gpu.nvidia_dcgm_exporter is defined
+    - monitoring.gpu.nvidia_dcgm_exporter.enabled == true
+
 - name: Monitoring | Installing custom gpu dashboards
   shell: >
     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/gpu-monitoring/gpu-dashboards/  --force
