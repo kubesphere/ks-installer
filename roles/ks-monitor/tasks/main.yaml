@@ -33,3 +33,7 @@
     - alerting.enabled == true
     - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
 
+- import_tasks: alert-migrate.yaml
+  when:
+    - alerting is defined and alerting.enabled is defined and alerting.enabled == true
+    - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
