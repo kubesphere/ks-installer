@@ -70,6 +70,15 @@ spec:
                 description: Represents the name of the secret that contains credentials
                   to connect to the storage provider to store backups.
                 type: string
+              bothS3NFS:
+                description: Specify that crontab job backup both on NFS and S3 storage.
+                properties:
+                  nfsSchedule:
+                    description: NFS schedule.
+                    type: string
+                  s3Schedule:
+                    type: string
+                type: object
               metricsOpts:
                 default:
                   enabled: false
@@ -152,6 +161,10 @@ spec:
                     default: radondb
                     description: Name for new database to create.
                     type: string
+                  image:
+                    default: percona/percona-server:5.7.34
+                    description: Specifies mysql image to use.
+                    type: string
                   initTokuDB:
                     default: false
                     description: InitTokuDB represents if install tokudb engine.
@@ -160,8 +173,15 @@ spec:
                     additionalProperties:
                       type: string
                     description: A map[string]string that will be passed to my.cnf
-                      file.
+                      file. The key/value pairs is persisted in the configmap. Delete
+                      key is not valid, it is recommended to edit the configmap directly.
                     type: object
+                  mysqlConfTemplate:
+                    description: MysqlConfTemplate is the configmap name of the template
+                      for mysql config. The configmap should contain the keys `mysql.cnf`
+                      and `plugin.cnf` at least, key `init.sql` is optional. If empty,
+                      operator will generate a default template named <spec.metadata.name>-mysql.
+                    type: string
                   password:
                     default: RadonDB@123
                     description: 'Password for the new user, must be 8~32 characters
@@ -170,6 +190,13 @@ spec:
                       supported: @#$%^&*_+-=.'
                     pattern: ^[A-Za-z0-9@#$%^&*_+\-=]{8,32}$
                     type: string
+                  pluginConf:
+                    additionalProperties:
+                      type: string
+                    description: A map[string]string that will be passed to plugin.cnf
+                      file. The key/value pairs is persisted in the configmap. Delete
+                      key is not valid, it is recommended to edit the configmap directly.
+                    type: object
                   resources:
                     default:
                       limits:
@@ -275,7 +302,7 @@ spec:
                       cpu: 10m
                       memory: 32Mi
                   imagePullPolicy: IfNotPresent
-                  sidecarImage: radondb/mysql57-sidecar:v2.2.1
+                  sidecarImage: radondb/mysql57-sidecar:v2.3.0
                 description: PodPolicy defines the policy to extra specification.
                 properties:
                   affinity:
@@ -581,7 +608,7 @@ spec:
                                         field. null selector and null or empty namespaces
                                         list means "this pod's namespace". An empty
                                         selector ({}) matches all namespaces. This
-                                        field is alpha-level and is only honored when
+                                        field is beta-level and is only honored when
                                         PodAffinityNamespaceSelector feature is enabled.
                                       properties:
                                         matchExpressions:
@@ -743,7 +770,7 @@ spec:
                                     field and the ones listed in the namespaces field.
                                     null selector and null or empty namespaces list
                                     means "this pod's namespace". An empty selector
-                                    ({}) matches all namespaces. This field is alpha-level
+                                    ({}) matches all namespaces. This field is beta-level
                                     and is only honored when PodAffinityNamespaceSelector
                                     feature is enabled.
                                   properties:
@@ -905,7 +932,7 @@ spec:
                                         field. null selector and null or empty namespaces
                                         list means "this pod's namespace". An empty
                                         selector ({}) matches all namespaces. This
-                                        field is alpha-level and is only honored when
+                                        field is beta-level and is only honored when
                                         PodAffinityNamespaceSelector feature is enabled.
                                       properties:
                                         matchExpressions:
@@ -1067,7 +1094,7 @@ spec:
                                     field and the ones listed in the namespaces field.
                                     null selector and null or empty namespaces list
                                     means "this pod's namespace". An empty selector
-                                    ({}) matches all namespaces. This field is alpha-level
+                                    ({}) matches all namespaces. This field is beta-level
                                     and is only honored when PodAffinityNamespaceSelector
                                     feature is enabled.
                                   properties:
@@ -1205,7 +1232,7 @@ spec:
                   schedulerName:
                     type: string
                   sidecarImage:
-                    default: radondb/mysql57-sidecar:v2.2.1
+                    default: radondb/mysql57-sidecar:v2.3.0
                     description: To specify the image that will be used for sidecar
                       container.
                     type: string
@@ -1259,6 +1286,7 @@ spec:
                 description: Replicas is the number of pods.
                 enum:
                 - 0
+                - 1
                 - 2
                 - 3
                 - 5
@@ -1276,7 +1304,7 @@ spec:
                 default:
                   admitDefeatHearbeatCount: 5
                   electionTimeout: 10000
-                  image: radondb/xenon:v2.2.1
+                  image: radondb/xenon:v2.3.0
                   resources:
                     limits:
                       cpu: 100m
@@ -1303,7 +1331,7 @@ spec:
                       automatically rebuild the invalid node.
                     type: boolean
                   image:
-                    default: radondb/xenon:v2.2.1
+                    default: radondb/xenon:v2.3.0
                     description: To specify the image that will be used for xenon
                       container.
                     type: string

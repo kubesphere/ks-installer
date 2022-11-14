@@ -18,7 +18,7 @@ spec:
   changeLog: |
     - WIP
   changeLog_zh: |
-    - 基于 MongoDB Operator v0.7.4版本构建，支持 MongoDB 4.2.19版本
+    - 基于 MongoDB 4.2.19 版本构建，支持 MongoDB 4.2.19版本
     - 支持 MongoDB 副本集模式部署
     - 支持 MongoDB 故障转移和恢复
     - 使用 TLS 保护客户端到服务器和服务器到服务器的连接

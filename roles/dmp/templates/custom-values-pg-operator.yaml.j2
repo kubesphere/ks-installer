@@ -1,4 +1,8 @@
+enablePrometheusMonitor: true
+localRegistry: {{ base_repo }}
+namespaceOverride: {{ namespace_override | default('') }}
+
 operator:
   name: radondb-postgres-operator
-  image: "{{ namespace_override | default('radondb') }}/radondb-postgres-operator:v0.9.0"
+  image: "{{ namespace_override | default('radondb') }}/radondb-postgres-operator:v1.1.1"
 

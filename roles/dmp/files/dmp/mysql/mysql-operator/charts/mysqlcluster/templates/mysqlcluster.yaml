@@ -1,0 +1,74 @@
+{{- if .Values.install }}
+{{- $scheduleDisable := include "schedule.disable" . }}
+apiVersion: mysql.radondb.com/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: {{ template "cluster.name" . }}
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  replicas: {{ .Values.replicas }}
+  mysqlVersion: {{ ternary "8.0" "5.7" (eq .Values.mysqlVersion "8.0") | quote }}
+  tlsSecretName: {{ include "cluster.tls.secret.name" . }}
+
+  mysqlOpts:
+    {{- with .Values.mycnf }}
+    mysqlConf:
+    {{ toYaml . | indent 6 }}
+    {{- end }}
+
+    resources:
+      limits:
+        cpu: {{ .Values.mysqlResources.limits.cpu }}
+        memory: {{ .Values.mysqlResources.limits.memory }}
+      requests:
+        cpu: {{ .Values.mysqlResources.requests.cpu }}
+        memory: {{ .Values.mysqlResources.requests.memory }}
+
+  metricsOpts:
+    enabled: {{ .Values.sidecar.metrics }}
+
+  podPolicy:
+    sidecarImage: {{ template "images.sidecar" . }}
+
+    slowLogTail: {{ .Values.sidecar.slowLogTail }}
+    auditLogTail: {{ .Values.sidecar.auditLogTail }}
+
+    labels: {}
+    annotations: {}
+    {{- if $scheduleDisable }}
+    affinity: {}
+    {{- else }}
+    affinity:
+    {{- if .Values.schedule.podAntiaffinity }}
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: mysql.radondb.com/cluster
+              operator: In
+              values:
+              - {{ .Values.mysqlCluster.name }}
+          topologyKey: "kubernetes.io/hostname"
+    {{- if .Values.schedule.nodeSelector }}
+      nodeSelector:
+        {{- range $k, $v := .Values.schedule.nodeSelector }}
+          {{ $k }}: {{ $v }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
+
+    priorityClassName: ""
+    tolerations: {{ .Values.schedule.tolerations }}
+    schedulerName: ""
+
+  persistence:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    {{- if .Values.persistence.storageClass }}
+    storageClass: {{ .Values.persistence.storageClass }}
+    {{- end }}
+    size: {{ .Values.persistence.size }}
+{{- end }}

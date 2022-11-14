@@ -18,15 +18,14 @@ spec:
   changeLog: |
     - WIP
   changeLog_zh: |
-    - 基于 Redis Operator 0.10.0版本构建，支持 Redis 6.2.5及以上版本
-    - 基于 Redis Cluster 最佳实现部署，引进 Predixy 作为集群代理层
+    - 基于 Redis 6.2.5/7.0 版本构建，支持 Redis 6.2.5及以上版本
+    - 基于 Redis Cluster 最佳实现部署，引进 Proxy 作为集群代理层
     - Redis Cluster 集群故障转移和恢复
     - 支持对接prometheus，提供基于 Exporter 的资源状态监控功能
     - 使用 PVC 模板的动态存储置备
     - 支持k8s 请求和限制的资源限制
     - 支持对群集的密码/无密码设置
     - Redis 管理配置参数热更新
-    - 支持 x86 和 arm 架构部署
   operatorVersion: "1.0.0"
   appVersion: "6.2.5"
   owner: "RadonDB"

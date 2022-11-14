@@ -1,10 +1,31 @@
-You can create a new mysqlcluster by issuing:
+Welcome to RadonDB MySQL Kubernetes!
 
-cat <<EOF | kubectl apply -f-
-apiVersion: mysql.radondb.com/v1alpha1
-kind: MysqlCluster
-metadata:
-  name: sample
-spec:
-  replicas: 3
-EOF
+{{- if .Values.mysqlcluster.install }}
+
+Create MySQLCluster:
+{{- else }}
+
+> Create MySQLCluster:
+{{- end }}
+
+kubectl apply -f https://github.com/radondb/radondb-mysql-kubernetes/releases/latest/download/mysql_v1alpha1_mysqlcluster.yaml
+
+Create Users:
+
+kubectl apply -f https://github.com/radondb/radondb-mysql-kubernetes/releases/latest/download/mysql_v1alpha1_mysqluser.yaml
+
+{{- if .Values.mysqlcluster.install }}
+
+> Connect to the database:
+{{- else }}
+
+Connect to the database:
+{{- end }}
+
+kubectl exec -it svc/sample-leader -c mysql -- mysql -usuper_usr -pRadonDB@123
+
+Change password:
+
+kubectl patch secret sample-user-password --patch="{\"data\": { \"super_usr\": \"$(echo -n <yourpass> |base64 -w0)\" }}" -oyaml
+
+Github: https://github.com/radondb/radondb-mysql-kubernetes

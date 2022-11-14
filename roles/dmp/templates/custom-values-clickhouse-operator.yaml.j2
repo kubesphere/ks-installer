@@ -2,6 +2,7 @@
 localRegistry: {{ base_repo }}
 namespaceOverride: {{ namespace_override | default('') }}
 watchAllNamespaces: true
+enablePrometheusMonitor: true
 
 operator:
   image: "{{ namespace_override | default('radondb') }}/chronus-operator:2.1.3"

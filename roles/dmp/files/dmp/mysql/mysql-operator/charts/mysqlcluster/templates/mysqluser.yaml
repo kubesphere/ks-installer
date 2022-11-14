@@ -1,0 +1,34 @@
+{{- if .Values.install }}
+{{- if .Values.superUser.create }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "user.secret.name" . }}
+data:
+  {{ .Values.superUser.name }}: {{ .Values.superUser.password | b64enc }}
+---
+apiVersion: mysql.radondb.com/v1alpha1
+kind: MysqlUser
+metadata:
+  name: {{ template "user.cr.name" . }}
+spec:
+  user: {{ .Values.superUser.name }}
+  withGrantOption: true
+  tlsOptions: 
+    type: {{ .Values.superUser.tlsType }}
+  hosts: 
+    - "%"
+  permissions:
+    - database: "*"
+      tables:
+        - "*"
+      privileges:
+        - ALL
+  userOwner:
+    clusterName: {{ template "cluster.name" . }}
+    nameSpace: {{ .Values.namespace }}
+  secretSelector:
+    secretName: {{ template "user.secret.name" . }}
+    secretKey: {{ .Values.superUser.name }}
+{{- end }}
+{{- end }}

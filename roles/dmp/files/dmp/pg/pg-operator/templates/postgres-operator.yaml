@@ -463,6 +463,15 @@ spec:
       - name: radondb-postgres-operator
         image: {{ .Values.operator.image }}
         imagePullPolicy: IfNotPresent
+        livenessProbe:
+          timeoutSeconds: 10
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          failureThreshold: 15
+          successThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 8080
         env:
         - name: RADONDB_POSTGRES_OPERATOR_BOOTSTRAP_TIMEOUT
           value: "3600"
@@ -476,3 +485,7 @@ spec:
           value: "0"
         - name: RADONDB_POSTGRES_OPERATOR_DATA_PATH
           value: /data
+        - name: RADONDB_POSTGRES_OPERATOR_IMAGE_REGISTRY
+          value: {{ .Values.localRegistry | default "" }}
+        - name: RADONDB_POSTGRES_OPERATOR_NAMESPACE_OVERRIDE
+          value: {{ .Values.namespaceOverride | default "" }}

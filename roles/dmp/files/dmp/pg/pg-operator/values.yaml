@@ -1,3 +1,8 @@
+enablePrometheusMonitor: false
+localRegistry: 
+namespaceOverride: 
+
 operator:
   name: radondb-postgres-operator
-  image: radondb/radondb-postgres-operator:v0.9.0
+  image: radondb/radondb-postgres-operator:v1.1.1
+

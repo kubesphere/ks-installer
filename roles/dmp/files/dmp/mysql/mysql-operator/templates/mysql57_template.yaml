@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: radondb-mysql57-template
+  namespace: {{ default .Release.Namespace .Values.mysqlConfTemplate.namespace }}
+  annotations:
+    "helm.sh/resource-policy": keep
+    "mysql-version": "5.7"
+data:
+  my.cnf: |
+    [mysqld]
+    expire-logs-days                = 7
+    master_info_repository          = TABLE
+    query-cache-size                = 0
+    query-cache-type                = 0
+    relay_log_info_repository       = TABLE
+    slave_rows_search_algorithms    = INDEX_SCAN,HASH_SCAN
+    sql-mode                        = STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY
+    binlog_format                   = row
+    default-time-zone               = +08:00
+    enforce-gtid-consistency        = ON
+    gtid-mode                       = ON
+    innodb_open_files               = 655360
+    log-bin                         = /var/lib/mysql/mysql-bin
+    log-timestamps                  = SYSTEM
+    open_files_limit                = 655360
+    read_only                       = ON
+    relay_log                       = /var/lib/mysql/mysql-relay-bin
+    relay_log_index                 = /var/lib/mysql/mysql-relay-bin.index
+    slave_parallel_type             = LOGICAL_CLOCK
+    slow_query_log                  = 1
+    slow_query_log_file             = /var/log/mysql/mysql-slow.log
+    tmp_table_size                  = 32M
+    tmpdir                          = /var/lib/mysql
+    autocommit                      = 1
+    binlog_cache_size               = 32768
+    binlog_stmt_cache_size          = 32768
+    character_set_server            = utf8mb4
+    event_scheduler                 = OFF
+    explicit_defaults_for_timestamp = 0
+    group_concat_max_len            = 1024
+    innodb_adaptive_hash_index      = 0
+    innodb_print_all_deadlocks      = 0
+    interactive_timeout             = 3600
+    key_buffer_size                 = 33554432
+    log_bin_trust_function_creators = 1
+    long_query_time                 = 3
+    max_allowed_packet              = 1073741824
+    max_connect_errors              = 655360
+    max_connections                 = 1024
+    sync_master_info                = 1000
+    sync_relay_log                  = 1000
+    sync_relay_log_info             = 1000
+    table_open_cache                = 2000
+    thread_cache_size               = 128
+    transaction-isolation           = READ-COMMITTED
+    wait_timeout                    = 3600
+    back_log                        = 2048
+    default-storage-engine          = InnoDB
+    ft_min_word_len                 = 4
+    innodb_autoinc_lock_mode        = 2
+    innodb_flush_method             = O_DIRECT
+    innodb_ft_max_token_size        = 84
+    innodb_ft_min_token_size        = 3
+    innodb_log_buffer_size          = 16777216
+    innodb_log_files_in_group       = 2
+    lower_case_table_names          = 0
+    performance_schema              = 1
+    slave_parallel_workers          = 8
+    slave_pending_jobs_size_max     = 1073741824
+    sql_mode                        = STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+    federated
+    skip-host-cache
+    skip-name-resolve
+    core-file
+    skip-slave-start
+    log-slave-updates
+    !includedir /etc/mysql/conf.d 
+  plugin.cnf: |
+    [mysqld]
+    audit_log_buffer_size                           = 16M
+    audit_log_exclude_accounts                      = "root@localhost,root@127.0.0.1,radondb_repl@%,radondb_metrics@%"
+    audit_log_file                                  = /var/log/mysql/mysql-audit.log
+    audit_log_format                                = OLD
+    audit_log_policy                                = NONE
+    audit_log_rotate_on_size                        = 104857600
+    audit_log_rotations                             = 6
+    connection_control_failed_connections_threshold = 3
+    connection_control_max_connection_delay         = 2147483647
+    connection_control_min_connection_delay         = 1000
+    plugin-load                                     = "semisync_master.so;semisync_slave.so;audit_log.so;connection_control.so"
+    rpl_semi_sync_master_enabled                    = OFF
+    rpl_semi_sync_master_timeout                    = 1000000000000000000
+    rpl_semi_sync_master_wait_no_slave              = ON
+    rpl_semi_sync_slave_enabled                     = ON
+  init.sql: |

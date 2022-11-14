@@ -18,7 +18,9 @@ spec:
     - 支持在线水平扩展
     - 支持故障自动转移 ，提供 HA 功能
     - 提供 PostgreSQL 常用参数接口，方便调整参数
+    - 提供 pg_dirtyread 插件，支持误删除数据找回.
     - 提供 PostGIS 插件，具备存储、查询和修改空间关系的能力
+    - 提供 Citus 插件，提供分布式数据库能力
     - 提供实时监控、健康检查、日志自动清理等功能
   abstraction: |
     - It is  widely used in geospatial and mobile fileds.
@@ -26,7 +28,9 @@ spec:
     - Support online horizontal scaling.
     - Support auto-failover and HA.
     - Provide PostgreSQL common APIs to facilitate parameter adjustment.
+    - Provide pg_dirtyread plugin-in to support accidental deletion of data retrieval.
     - Provide PostGIS plug-in to store, query and modify spatial relationships.
+    - Provides Citus plugin-in to provide distributed database capabilities.
     - Provide functions such as real-time monitoring, health check and automatic log clearing.
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/pg_create.jpg,/assets/screenshots/pg_detail.jpg,/assets/screenshots/pg_monitor.jpg
@@ -35,5 +39,5 @@ spec:
   icon: "/assets/radondb_logo.svg"
   owner: "RadonDB"
 status:
-  latestVersion: "2.1.1"
+  latestVersion: "v1.1.1"
   state: active
