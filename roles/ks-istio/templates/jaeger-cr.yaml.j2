@@ -28,23 +28,23 @@ spec:
       image: {{ jaeger_es_cleaner_repo }}:{{ jaeger_es_cleaner_tag }}
     options:
       es:
-{% if common.es is defined and common.es.enabled is defined and common.es.enabled  %}
-        index-prefix: {{ common.es.elkPrefix }}
-{% else %}
+{% if common.opensearch is defined and common.opensearch.enabled is defined and common.opensearch.enabled %}
         index-prefix: {{ common.opensearch.opensearchPrefix }}
         tls:
           enabled: true
           skip-host-verify: true
         version: 7
+{% elif common.es is defined and common.es.enabled is defined and common.es.enabled  %}
+        index-prefix: {{ common.es.elkPrefix }}
 {% endif %}
-{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
-        server-urls: http://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
-{% elif common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchHost != "" and common.opensearch.externalOpensearchPort != ""%}
+{% if common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchHost != "" and common.opensearch.externalOpensearchPort != ""%}
         server-urls: https://{{ common.opensearch.externalOpensearchHost }}:{{ common.opensearch.externalOpensearchPort }}
+{% elif common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchPort is defined and common.es.externalElasticsearchHost != "" and common.es.externalElasticsearchPort != "" %}
+        server-urls: http://{{ common.es.externalElasticsearchHost }}:{{ common.es.externalElasticsearchPort }}
+{% elif common.opensearch is defined and common.opensearch.enabled is defined and common.opensearch.enabled %}
+        server-urls: https://opensearch-cluster-data.kubesphere-logging-system.svc:9200
 {% elif common.es is defined and common.es.enabled is defined and common.es.enabled %}
         server-urls: http://elasticsearch-logging-data.kubesphere-logging-system.svc:9200
-{% else %}
-        server-urls: https://opensearch-cluster-data.kubesphere-logging-system.svc:9200
 {% endif %}
 {% if common.es.basicAuth is defined and common.es.basicAuth.enabled is defined and common.es.basicAuth.enabled is true and common.es.basicAuth.username is defined and common.es.basicAuth.password is defined and common.es.basicAuth.username != "" and common.es.basicAuth.password != "" %}
     secretName: jaeger-secret
