@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-apps","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePodCrashLooping","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: \"CrashLoopBackOff\").","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepodcrashlooping","summary":"Pod is crash looping."},"expr":"max_over_time(kube_pod_container_status_waiting_reason{reason=\"CrashLoopBackOff\", job=\"kube-state-metrics\"}[5m]) >= 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubePodNotReady","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepodnotready","summary":"Pod has been in a non-ready state for more than 15 minutes."},"expr":"sum by (namespace, pod, cluster) (\n  max by(namespace, pod, cluster) (\n    kube_pod_status_phase{job=\"kube-state-metrics\", phase=~\"Pending|Unknown\"}\n  ) * on(namespace, pod, cluster) group_left(owner_kind) topk by(namespace, pod, cluster) (\n    1, max by(namespace, pod, owner_kind, cluster) (kube_pod_owner{owner_kind!=\"Job\"})\n  )\n) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDeploymentGenerationMismatch","annotations":{"description":"Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment }} does not match, this indicates that the Deployment has failed but has not been rolled back.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentgenerationmismatch","summary":"Deployment generation mismatch due to possible roll-back"},"expr":"kube_deployment_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_deployment_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDeploymentReplicasMismatch","annotations":{"description":"Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_deployment_spec_replicas{job=\"kube-state-metrics\"}\n    >\n  kube_deployment_status_replicas_available{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_deployment_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetReplicasMismatch","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_statefulset_status_replicas_ready{job=\"kube-state-metrics\"}\n    !=\n  kube_statefulset_status_replicas{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetGenerationMismatch","annotations":{"description":"StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset }} does not match, this indicates that the StatefulSet has failed but has not been rolled back.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetgenerationmismatch","summary":"StatefulSet generation mismatch due to possible roll-back"},"expr":"kube_statefulset_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_statefulset_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetUpdateNotRolledOut","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update has not been rolled out.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetupdatenotrolledout","summary":"StatefulSet update has not been rolled out."},"expr":"(\n  max without (revision) (\n    kube_statefulset_status_current_revision{job=\"kube-state-metrics\"}\n      unless\n    kube_statefulset_status_update_revision{job=\"kube-state-metrics\"}\n  )\n    *\n  (\n    kube_statefulset_replicas{job=\"kube-state-metrics\"}\n      !=\n    kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}\n  )\n)  and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetRolloutStuck","annotations":{"description":"DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} has not finished or progressed for at least 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetrolloutstuck","summary":"DaemonSet rollout is stuck."},"expr":"(\n  (\n    kube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"}\n     !=\n    0\n  ) or (\n    kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_available{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  )\n) and (\n  changes(kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeContainerWaiting","annotations":{"description":"pod/{{ $labels.pod }} in namespace {{ $labels.namespace }} on container {{ $labels.container}} has been in waiting state for longer than 1 hour.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontainerwaiting","summary":"Pod container waiting longer than 1 hour"},"expr":"sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job=\"kube-state-metrics\"}) > 0\n","for":"1h","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetNotScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are not scheduled.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetnotscheduled","summary":"DaemonSet pods are not scheduled."},"expr":"kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  -\nkube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"} > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetMisScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are running where they are not supposed to run.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetmisscheduled","summary":"DaemonSet pods are misscheduled."},"expr":"kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"} > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeJobCompletion","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubejobcompletion","summary":"Job did not complete in time"},"expr":"kube_job_spec_completions{job=\"kube-state-metrics\"} - kube_job_status_succeeded{job=\"kube-state-metrics\"}  > 0\n","for":"12h","labels":{},"severity":"warning"},{"alert":"KubeJobFailed","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete. Removing failed job after investigation should clear this alert.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubejobfailed","summary":"Job failed to complete."},"expr":"kube_job_failed{job=\"kube-state-metrics\"}  > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeHpaReplicasMismatch","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has not matched the desired number of replicas for longer than 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpareplicasmismatch","summary":"HPA has not matched descired number of replicas."},"expr":"(kube_horizontalpodautoscaler_status_desired_replicas{job=\"kube-state-metrics\"}\n  !=\nkube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  >\nkube_horizontalpodautoscaler_spec_min_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  <\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"})\n  and\nchanges(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}[15m]) == 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeHpaMaxedOut","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has been running at max replicas for longer than 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpamaxedout","summary":"HPA is running at max replicas"},"expr":"kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  ==\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-apps","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePodCrashLooping","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: \"CrashLoopBackOff\").","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodcrashlooping","summary":"Pod is crash looping."},"expr":"max_over_time(kube_pod_container_status_waiting_reason{reason=\"CrashLoopBackOff\", job=\"kube-state-metrics\"}[5m]) >= 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubePodNotReady","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodnotready","summary":"Pod has been in a non-ready state for more than 15 minutes."},"expr":"sum by (namespace, pod, cluster) (\n  max by(namespace, pod, cluster) (\n    kube_pod_status_phase{job=\"kube-state-metrics\", phase=~\"Pending|Unknown\"}\n  ) * on(namespace, pod, cluster) group_left(owner_kind) topk by(namespace, pod, cluster) (\n    1, max by(namespace, pod, owner_kind, cluster) (kube_pod_owner{owner_kind!=\"Job\"})\n  )\n) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDeploymentGenerationMismatch","annotations":{"description":"Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment }} does not match, this indicates that the Deployment has failed but has not been rolled back.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentgenerationmismatch","summary":"Deployment generation mismatch due to possible roll-back"},"expr":"kube_deployment_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_deployment_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDeploymentReplicasMismatch","annotations":{"description":"Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_deployment_spec_replicas{job=\"kube-state-metrics\"}\n    >\n  kube_deployment_status_replicas_available{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_deployment_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetReplicasMismatch","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_statefulset_status_replicas_ready{job=\"kube-state-metrics\"}\n    !=\n  kube_statefulset_status_replicas{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetGenerationMismatch","annotations":{"description":"StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset }} does not match, this indicates that the StatefulSet has failed but has not been rolled back.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetgenerationmismatch","summary":"StatefulSet generation mismatch due to possible roll-back"},"expr":"kube_statefulset_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_statefulset_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetUpdateNotRolledOut","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update has not been rolled out.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetupdatenotrolledout","summary":"StatefulSet update has not been rolled out."},"expr":"(\n  max without (revision) (\n    kube_statefulset_status_current_revision{job=\"kube-state-metrics\"}\n      unless\n    kube_statefulset_status_update_revision{job=\"kube-state-metrics\"}\n  )\n    *\n  (\n    kube_statefulset_replicas{job=\"kube-state-metrics\"}\n      !=\n    kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}\n  )\n)  and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetRolloutStuck","annotations":{"description":"DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} has not finished or progressed for at least 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetrolloutstuck","summary":"DaemonSet rollout is stuck."},"expr":"(\n  (\n    kube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"}\n     !=\n    0\n  ) or (\n    kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_available{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  )\n) and (\n  changes(kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeContainerWaiting","annotations":{"description":"pod/{{ $labels.pod }} in namespace {{ $labels.namespace }} on container {{ $labels.container}} has been in waiting state for longer than 1 hour.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontainerwaiting","summary":"Pod container waiting longer than 1 hour"},"expr":"sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job=\"kube-state-metrics\"}) > 0\n","for":"1h","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetNotScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are not scheduled.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetnotscheduled","summary":"DaemonSet pods are not scheduled."},"expr":"kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  -\nkube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"} > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetMisScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are running where they are not supposed to run.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetmisscheduled","summary":"DaemonSet pods are misscheduled."},"expr":"kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"} > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeJobCompletion","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobcompletion","summary":"Job did not complete in time"},"expr":"kube_job_spec_completions{job=\"kube-state-metrics\"} - kube_job_status_succeeded{job=\"kube-state-metrics\"}  > 0\n","for":"12h","labels":{},"severity":"warning"},{"alert":"KubeJobFailed","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete. Removing failed job after investigation should clear this alert.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobfailed","summary":"Job failed to complete."},"expr":"kube_job_failed{job=\"kube-state-metrics\"}  > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeHpaReplicasMismatch","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has not matched the desired number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpareplicasmismatch","summary":"HPA has not matched descired number of replicas."},"expr":"(kube_horizontalpodautoscaler_status_desired_replicas{job=\"kube-state-metrics\"}\n  !=\nkube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  >\nkube_horizontalpodautoscaler_spec_min_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  <\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"})\n  and\nchanges(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}[15m]) == 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeHpaMaxedOut","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has been running at max replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpamaxedout","summary":"HPA is running at max replicas"},"expr":"kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  ==\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -15,7 +15,7 @@ items:
     - alert: KubePodCrashLooping
       annotations:
         description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: "CrashLoopBackOff").'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepodcrashlooping
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodcrashlooping
         summary: Pod is crash looping.
       expr: |
         max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics"}[5m]) >= 1
@@ -25,7 +25,7 @@ items:
     - alert: KubePodNotReady
       annotations:
         description: Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than 15 minutes.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepodnotready
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodnotready
         summary: Pod has been in a non-ready state for more than 15 minutes.
       expr: |
         sum by (namespace, pod, cluster) (
@@ -41,7 +41,7 @@ items:
     - alert: KubeDeploymentGenerationMismatch
       annotations:
         description: Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment }} does not match, this indicates that the Deployment has failed but has not been rolled back.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentgenerationmismatch
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentgenerationmismatch
         summary: Deployment generation mismatch due to possible roll-back
       expr: |
         kube_deployment_status_observed_generation{job="kube-state-metrics"}
@@ -53,7 +53,7 @@ items:
     - alert: KubeDeploymentReplicasMismatch
       annotations:
         description: Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not matched the expected number of replicas for longer than 15 minutes.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentreplicasmismatch
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentreplicasmismatch
         summary: Deployment has not matched the expected number of replicas.
       expr: |
         (
@@ -71,7 +71,7 @@ items:
     - alert: KubeStatefulSetReplicasMismatch
       annotations:
         description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetreplicasmismatch
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetreplicasmismatch
         summary: Deployment has not matched the expected number of replicas.
       expr: |
         (
@@ -89,7 +89,7 @@ items:
     - alert: KubeStatefulSetGenerationMismatch
       annotations:
         description: StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset }} does not match, this indicates that the StatefulSet has failed but has not been rolled back.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetgenerationmismatch
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetgenerationmismatch
         summary: StatefulSet generation mismatch due to possible roll-back
       expr: |
         kube_statefulset_status_observed_generation{job="kube-state-metrics"}
@@ -101,7 +101,7 @@ items:
     - alert: KubeStatefulSetUpdateNotRolledOut
       annotations:
         description: StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update has not been rolled out.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetupdatenotrolledout
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetupdatenotrolledout
         summary: StatefulSet update has not been rolled out.
       expr: |
         (
@@ -127,7 +127,7 @@ items:
     - alert: KubeDaemonSetRolloutStuck
       annotations:
         description: DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} has not finished or progressed for at least 15 minutes.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetrolloutstuck
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetrolloutstuck
         summary: DaemonSet rollout is stuck.
       expr: |
         (
@@ -159,7 +159,7 @@ items:
     - alert: KubeContainerWaiting
       annotations:
         description: pod/{{ $labels.pod }} in namespace {{ $labels.namespace }} on container {{ $labels.container}} has been in waiting state for longer than 1 hour.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontainerwaiting
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontainerwaiting
         summary: Pod container waiting longer than 1 hour
       expr: |
         sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job="kube-state-metrics"}) > 0
@@ -169,7 +169,7 @@ items:
     - alert: KubeDaemonSetNotScheduled
       annotations:
         description: '{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are not scheduled.'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetnotscheduled
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetnotscheduled
         summary: DaemonSet pods are not scheduled.
       expr: |
         kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics"}
@@ -181,7 +181,7 @@ items:
     - alert: KubeDaemonSetMisScheduled
       annotations:
         description: '{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are running where they are not supposed to run.'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetmisscheduled
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetmisscheduled
         summary: DaemonSet pods are misscheduled.
       expr: |
         kube_daemonset_status_number_misscheduled{job="kube-state-metrics"} > 0
@@ -191,7 +191,7 @@ items:
     - alert: KubeJobCompletion
       annotations:
         description: Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubejobcompletion
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobcompletion
         summary: Job did not complete in time
       expr: |
         kube_job_spec_completions{job="kube-state-metrics"} - kube_job_status_succeeded{job="kube-state-metrics"}  > 0
@@ -201,7 +201,7 @@ items:
     - alert: KubeJobFailed
       annotations:
         description: Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete. Removing failed job after investigation should clear this alert.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubejobfailed
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobfailed
         summary: Job failed to complete.
       expr: |
         kube_job_failed{job="kube-state-metrics"}  > 0
@@ -211,7 +211,7 @@ items:
     - alert: KubeHpaReplicasMismatch
       annotations:
         description: HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has not matched the desired number of replicas for longer than 15 minutes.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpareplicasmismatch
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpareplicasmismatch
         summary: HPA has not matched descired number of replicas.
       expr: |
         (kube_horizontalpodautoscaler_status_desired_replicas{job="kube-state-metrics"}
@@ -233,7 +233,7 @@ items:
     - alert: KubeHpaMaxedOut
       annotations:
         description: HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has been running at max replicas for longer than 15 minutes.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpamaxedout
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpamaxedout
         summary: HPA is running at max replicas
       expr: |
         kube_horizontalpodautoscaler_status_current_replicas{job="kube-state-metrics"}
@@ -246,7 +246,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-resources","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeCPUOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Pods by {{ $value }} CPU shares and cannot tolerate node failure.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeMemoryOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Pods by {{ $value | humanize }} bytes and cannot tolerate node failure.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeCPUQuotaOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Namespaces.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuquotaovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(cpu|requests.cpu)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"cpu\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeMemoryQuotaOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Namespaces.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryquotaovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(memory|requests.memory)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"memory\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeQuotaAlmostFull","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaalmostfull","summary":"Namespace quota is going to be full."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 0.9 < 1\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeQuotaFullyUsed","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotafullyused","summary":"Namespace quota is fully used."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  == 1\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeQuotaExceeded","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaexceeded","summary":"Namespace quota has exceeded the limits."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"CPUThrottlingHigh","annotations":{"description":"{{ $value | humanizePercentage }} throttling of CPU in namespace {{ $labels.namespace }} for container {{ $labels.container }} in pod {{ $labels.pod }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh","summary":"Processes experience elevated CPU throttling."},"expr":"sum(increase(container_cpu_cfs_throttled_periods_total{container!=\"\", }[5m])) by (container, pod, namespace, cluster)\n  /\nsum(increase(container_cpu_cfs_periods_total{}[5m])) by (container, pod, namespace, cluster)\n  > ( 25 / 100 )\n","for":"15m","labels":{},"severity":"info"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-resources","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeCPUOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Pods by {{ $value }} CPU shares and cannot tolerate node failure.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeMemoryOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Pods by {{ $value | humanize }} bytes and cannot tolerate node failure.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeCPUQuotaOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Namespaces.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuquotaovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(cpu|requests.cpu)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"cpu\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeMemoryQuotaOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Namespaces.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryquotaovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(memory|requests.memory)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"memory\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeQuotaAlmostFull","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaalmostfull","summary":"Namespace quota is going to be full."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 0.9 < 1\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeQuotaFullyUsed","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotafullyused","summary":"Namespace quota is fully used."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  == 1\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeQuotaExceeded","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaexceeded","summary":"Namespace quota has exceeded the limits."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"CPUThrottlingHigh","annotations":{"description":"{{ $value | humanizePercentage }} throttling of CPU in namespace {{ $labels.namespace }} for container {{ $labels.container }} in pod {{ $labels.pod }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/cputhrottlinghigh","summary":"Processes experience elevated CPU throttling."},"expr":"sum(increase(container_cpu_cfs_throttled_periods_total{container!=\"\", }[5m])) by (container, pod, namespace, cluster)\n  /\nsum(increase(container_cpu_cfs_periods_total{}[5m])) by (container, pod, namespace, cluster)\n  > ( 25 / 100 )\n","for":"15m","labels":{},"severity":"info"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -257,7 +257,7 @@ items:
     - alert: KubeCPUOvercommit
       annotations:
         description: Cluster has overcommitted CPU resource requests for Pods by {{ $value }} CPU shares and cannot tolerate node failure.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuovercommit
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuovercommit
         summary: Cluster has overcommitted CPU resource requests.
       expr: |
         sum by(cluster) (namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource="cpu"}) - max by(cluster) (kube_node_status_allocatable{resource="cpu"})) > 0
@@ -269,7 +269,7 @@ items:
     - alert: KubeMemoryOvercommit
       annotations:
         description: Cluster has overcommitted memory resource requests for Pods by {{ $value | humanize }} bytes and cannot tolerate node failure.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryovercommit
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryovercommit
         summary: Cluster has overcommitted memory resource requests.
       expr: |
         sum by(cluster) (namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource="memory"}) - max by(cluster) (kube_node_status_allocatable{resource="memory"})) > 0
@@ -281,7 +281,7 @@ items:
     - alert: KubeCPUQuotaOvercommit
       annotations:
         description: Cluster has overcommitted CPU resource requests for Namespaces.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuquotaovercommit
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuquotaovercommit
         summary: Cluster has overcommitted CPU resource requests.
       expr: |
         sum by(cluster) (min without(resource) (kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"(cpu|requests.cpu)"}))
@@ -294,7 +294,7 @@ items:
     - alert: KubeMemoryQuotaOvercommit
       annotations:
         description: Cluster has overcommitted memory resource requests for Namespaces.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryquotaovercommit
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryquotaovercommit
         summary: Cluster has overcommitted memory resource requests.
       expr: |
         sum by(cluster) (min without(resource) (kube_resourcequota{job="kube-state-metrics", type="hard", resource=~"(memory|requests.memory)"}))
@@ -307,7 +307,7 @@ items:
     - alert: KubeQuotaAlmostFull
       annotations:
         description: Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaalmostfull
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaalmostfull
         summary: Namespace quota is going to be full.
       expr: |
         kube_resourcequota{job="kube-state-metrics", type="used"}
@@ -320,7 +320,7 @@ items:
     - alert: KubeQuotaFullyUsed
       annotations:
         description: Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotafullyused
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotafullyused
         summary: Namespace quota is fully used.
       expr: |
         kube_resourcequota{job="kube-state-metrics", type="used"}
@@ -333,7 +333,7 @@ items:
     - alert: KubeQuotaExceeded
       annotations:
         description: Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaexceeded
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaexceeded
         summary: Namespace quota has exceeded the limits.
       expr: |
         kube_resourcequota{job="kube-state-metrics", type="used"}
@@ -346,7 +346,7 @@ items:
     - alert: CPUThrottlingHigh
       annotations:
         description: '{{ $value | humanizePercentage }} throttling of CPU in namespace {{ $labels.namespace }} for container {{ $labels.container }} in pod {{ $labels.pod }}.'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/cputhrottlinghigh
         summary: Processes experience elevated CPU throttling.
       expr: |
         sum(increase(container_cpu_cfs_throttled_periods_total{container!="", }[5m])) by (container, pod, namespace, cluster)
@@ -360,7 +360,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-storage","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage }} free.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.03\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1m","labels":{},"severity":"critical"},{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.15\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nand\npredict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\"}[6h], 4 * 24 * 3600) < 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1h","labels":{},"severity":"warning"},{"alert":"KubePersistentVolumeErrors","annotations":{"description":"The persistent volume {{ $labels.persistentvolume }} has status {{ $labels.phase }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumeerrors","summary":"PersistentVolume is having issues with provisioning."},"expr":"kube_persistentvolume_status_phase{phase=~\"Failed|Pending\",job=\"kube-state-metrics\"} > 0\n","for":"5m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-storage","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage }} free.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.03\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1m","labels":{},"severity":"critical"},{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.15\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nand\npredict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\"}[6h], 4 * 24 * 3600) < 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1h","labels":{},"severity":"warning"},{"alert":"KubePersistentVolumeErrors","annotations":{"description":"The persistent volume {{ $labels.persistentvolume }} has status {{ $labels.phase }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumeerrors","summary":"PersistentVolume is having issues with provisioning."},"expr":"kube_persistentvolume_status_phase{phase=~\"Failed|Pending\",job=\"kube-state-metrics\"} > 0\n","for":"5m","labels":{},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -371,7 +371,7 @@ items:
     - alert: KubePersistentVolumeFillingUp
       annotations:
         description: The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage }} free.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup
         summary: PersistentVolume is filling up.
       expr: |
         (
@@ -391,7 +391,7 @@ items:
     - alert: KubePersistentVolumeFillingUp
       annotations:
         description: Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup
         summary: PersistentVolume is filling up.
       expr: |
         (
@@ -413,7 +413,7 @@ items:
     - alert: KubePersistentVolumeErrors
       annotations:
         description: The persistent volume {{ $labels.persistentvolume }} has status {{ $labels.phase }}.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumeerrors
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumeerrors
         summary: PersistentVolume is having issues with provisioning.
       expr: |
         kube_persistentvolume_status_phase{phase=~"Failed|Pending",job="kube-state-metrics"} > 0
@@ -424,7 +424,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeVersionMismatch","annotations":{"description":"There are {{ $value }} different semantic versions of Kubernetes components running.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeversionmismatch","summary":"Different semantic versions of Kubernetes components running."},"expr":"count by(cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~\"kube-dns|coredns\"},\"git_version\",\"$1\",\"git_version\",\"(v[0-9]*.[0-9]*).*\"))) > 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeClientErrors","annotations":{"description":"Kubernetes API server client ''{{ $labels.job }}/{{ $labels.instance }}'' is experiencing {{ $value | humanizePercentage }} errors.''","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclienterrors","summary":"Kubernetes API server client is experiencing errors."},"expr":"(sum(rate(rest_client_requests_total{code=~\"5..\"}[5m])) by (instance, job, namespace, cluster)\n  /\nsum(rate(rest_client_requests_total[5m])) by (instance, job, namespace, cluster))\n> 0.01\n","for":"15m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeVersionMismatch","annotations":{"description":"There are {{ $value }} different semantic versions of Kubernetes components running.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeversionmismatch","summary":"Different semantic versions of Kubernetes components running."},"expr":"count by(cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~\"kube-dns|coredns\"},\"git_version\",\"$1\",\"git_version\",\"(v[0-9]*.[0-9]*).*\"))) > 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeClientErrors","annotations":{"description":"Kubernetes API server client ''{{ $labels.job }}/{{ $labels.instance }}'' is experiencing {{ $value | humanizePercentage }} errors.''","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclienterrors","summary":"Kubernetes API server client is experiencing errors."},"expr":"(sum(rate(rest_client_requests_total{code=~\"5..\"}[5m])) by (instance, job, namespace, cluster)\n  /\nsum(rate(rest_client_requests_total[5m])) by (instance, job, namespace, cluster))\n> 0.01\n","for":"15m","labels":{},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -435,7 +435,7 @@ items:
     - alert: KubeVersionMismatch
       annotations:
         description: There are {{ $value }} different semantic versions of Kubernetes components running.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeversionmismatch
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeversionmismatch
         summary: Different semantic versions of Kubernetes components running.
       expr: |
         count by(cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~"kube-dns|coredns"},"git_version","$1","git_version","(v[0-9]*.[0-9]*).*"))) > 1
@@ -445,7 +445,7 @@ items:
     - alert: KubeClientErrors
       annotations:
         description: Kubernetes API server client '{{ $labels.job }}/{{ $labels.instance }}' is experiencing {{ $value | humanizePercentage }} errors.'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclienterrors
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclienterrors
         summary: Kubernetes API server client is experiencing errors.
       expr: |
         (sum(rate(rest_client_requests_total{code=~"5.."}[5m])) by (instance, job, namespace, cluster)
@@ -459,7 +459,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kube-apiserver-slos","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1h) > (14.40 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate5m) > (14.40 * 0.01000)\n","for":"2m","labels":{"long":"1h","short":"5m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate6h) > (6.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate30m) > (6.00 * 0.01000)\n","for":"15m","labels":{"long":"6h","short":"30m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1d) > (3.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate2h) > (3.00 * 0.01000)\n","for":"1h","labels":{"long":"1d","short":"2h"},"severity":"warning"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate3d) > (1.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate6h) > (1.00 * 0.01000)\n","for":"3h","labels":{"long":"3d","short":"6h"},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kube-apiserver-slos","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1h) > (14.40 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate5m) > (14.40 * 0.01000)\n","for":"2m","labels":{"long":"1h","short":"5m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate6h) > (6.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate30m) > (6.00 * 0.01000)\n","for":"15m","labels":{"long":"6h","short":"30m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1d) > (3.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate2h) > (3.00 * 0.01000)\n","for":"1h","labels":{"long":"1d","short":"2h"},"severity":"warning"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate3d) > (1.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate6h) > (1.00 * 0.01000)\n","for":"3h","labels":{"long":"3d","short":"6h"},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -470,7 +470,7 @@ items:
     - alert: KubeAPIErrorBudgetBurn
       annotations:
         description: The API server is burning too much error budget.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |
         sum by(cluster) (apiserver_request:burnrate1h) > (14.40 * 0.01000)
@@ -484,7 +484,7 @@ items:
     - alert: KubeAPIErrorBudgetBurn
       annotations:
         description: The API server is burning too much error budget.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |
         sum by(cluster) (apiserver_request:burnrate6h) > (6.00 * 0.01000)
@@ -498,7 +498,7 @@ items:
     - alert: KubeAPIErrorBudgetBurn
       annotations:
         description: The API server is burning too much error budget.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |
         sum by(cluster) (apiserver_request:burnrate1d) > (3.00 * 0.01000)
@@ -512,7 +512,7 @@ items:
     - alert: KubeAPIErrorBudgetBurn
       annotations:
         description: The API server is burning too much error budget.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn
         summary: The API server is burning too much error budget.
       expr: |
         sum by(cluster) (apiserver_request:burnrate3d) > (1.00 * 0.01000)
@@ -527,7 +527,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeAggregatedAPIErrors","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has reported errors. It has appeared unavailable {{ $value | humanize }} times averaged over the past 10m.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapierrors","summary":"Kubernetes aggregated API has reported errors."},"expr":"sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total[10m])) > 4\n","labels":{},"severity":"warning"},{"alert":"KubeAggregatedAPIDown","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has been only {{ $value | humanize }}% available over the last 10m.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapidown","summary":"Kubernetes aggregated API is down."},"expr":"(1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeAPIDown","annotations":{"description":"KubeAPI has disappeared from Prometheus target discovery.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapidown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"apiserver\"} == 1)\n","for":"15m","labels":{},"severity":"critical"},{"alert":"KubeAPITerminatedRequests","annotations":{"description":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapiterminatedrequests","summary":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests."},"expr":"sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m]))  / (  sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m])) ) > 0.20\n","for":"5m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeAggregatedAPIErrors","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has reported errors. It has appeared unavailable {{ $value | humanize }} times averaged over the past 10m.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapierrors","summary":"Kubernetes aggregated API has reported errors."},"expr":"sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total[10m])) > 4\n","labels":{},"severity":"warning"},{"alert":"KubeAggregatedAPIDown","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has been only {{ $value | humanize }}% available over the last 10m.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapidown","summary":"Kubernetes aggregated API is down."},"expr":"(1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeAPIDown","annotations":{"description":"KubeAPI has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapidown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"apiserver\"} == 1)\n","for":"15m","labels":{},"severity":"critical"},{"alert":"KubeAPITerminatedRequests","annotations":{"description":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapiterminatedrequests","summary":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests."},"expr":"sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m]))  / (  sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m])) ) > 0.20\n","for":"5m","labels":{},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -538,7 +538,7 @@ items:
     - alert: KubeClientCertificateExpiration
       annotations:
         description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration
         summary: Client certificate is about to expire.
       expr: |
         apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 604800
@@ -547,7 +547,7 @@ items:
     - alert: KubeClientCertificateExpiration
       annotations:
         description: A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration
         summary: Client certificate is about to expire.
       expr: |
         apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 86400
@@ -556,7 +556,7 @@ items:
     - alert: KubeAggregatedAPIErrors
       annotations:
         description: Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has reported errors. It has appeared unavailable {{ $value | humanize }} times averaged over the past 10m.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapierrors
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapierrors
         summary: Kubernetes aggregated API has reported errors.
       expr: |
         sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total[10m])) > 4
@@ -565,7 +565,7 @@ items:
     - alert: KubeAggregatedAPIDown
       annotations:
         description: Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has been only {{ $value | humanize }}% available over the last 10m.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapidown
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapidown
         summary: Kubernetes aggregated API is down.
       expr: |
         (1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85
@@ -575,7 +575,7 @@ items:
     - alert: KubeAPIDown
       annotations:
         description: KubeAPI has disappeared from Prometheus target discovery.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapidown
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapidown
         summary: Target disappeared from Prometheus target discovery.
       expr: |
         absent(up{job="apiserver"} == 1)
@@ -585,7 +585,7 @@ items:
     - alert: KubeAPITerminatedRequests
       annotations:
         description: The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapiterminatedrequests
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapiterminatedrequests
         summary: The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests.
       expr: |
         sum by(cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m]))  / (  sum by(cluster) (rate(apiserver_request_total{job="apiserver"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m])) ) > 0.20
@@ -596,7 +596,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-kubelet","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeNodeNotReady","annotations":{"description":"{{ $labels.node }} has been unready for more than 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodenotready","summary":"Node is not ready."},"expr":"kube_node_status_condition{job=\"kube-state-metrics\",condition=\"Ready\",status=\"true\"} == 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeNodeUnreachable","annotations":{"description":"{{ $labels.node }} is unreachable and some workloads may be rescheduled.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodeunreachable","summary":"Node is unreachable."},"expr":"(kube_node_spec_taint{job=\"kube-state-metrics\",key=\"node.kubernetes.io/unreachable\",effect=\"NoSchedule\"} unless ignoring(key,value) kube_node_spec_taint{job=\"kube-state-metrics\",key=~\"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn\"}) == 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletTooManyPods","annotations":{"description":"Kubelet ''{{ $labels.node }}'' is running at {{ $value | humanizePercentage }} of its Pod capacity.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubelettoomanypods","summary":"Kubelet is running at capacity."},"expr":"count by(node, cluster) (\n  (kube_pod_status_phase{job=\"kube-state-metrics\",phase=\"Running\"} == 1) * on(instance,pod,namespace,cluster) group_left(node) topk by(instance,pod,namespace,cluster) (1, kube_pod_info{job=\"kube-state-metrics\"})\n)\n/\nmax by(node, cluster) (\n  kube_node_status_capacity{job=\"kube-state-metrics\",resource=\"pods\"} != 1\n) > 0.95\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeNodeReadinessFlapping","annotations":{"description":"The readiness status of node {{ $labels.node }} has changed {{ $value }} times in the last 15 minutes.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodereadinessflapping","summary":"Node readiness status is flapping."},"expr":"sum(changes(kube_node_status_condition{status=\"true\",condition=\"Ready\"}[15m])) by (node, cluster) > 2\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletPlegDurationHigh","annotations":{"description":"The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletplegdurationhigh","summary":"Kubelet Pod Lifecycle Event Generator is taking too long to relist."},"expr":"node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile=\"0.99\"} >= 10\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeletPodStartUpLatencyHigh","annotations":{"description":"Kubelet Pod startup 99th percentile latency is {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletpodstartuplatencyhigh","summary":"Kubelet Pod startup latency is too high."},"expr":"histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job=\"kubelet\"}[5m])) by (instance, le, cluster)) * on(instance, cluster) group_left(node) kubelet_node_name{job=\"kubelet\"} > 60\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeletClientCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its client certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificaterenewalerrors","summary":"Kubelet has failed to renew its client certificate."},"expr":"increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletServerCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its server certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificaterenewalerrors","summary":"Kubelet has failed to renew its server certificate."},"expr":"increase(kubelet_server_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletDown","annotations":{"description":"Kubelet has disappeared from Prometheus target discovery.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kubelet\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-kubelet","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeNodeNotReady","annotations":{"description":"{{ $labels.node }} has been unready for more than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodenotready","summary":"Node is not ready."},"expr":"kube_node_status_condition{job=\"kube-state-metrics\",condition=\"Ready\",status=\"true\"} == 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeNodeUnreachable","annotations":{"description":"{{ $labels.node }} is unreachable and some workloads may be rescheduled.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodeunreachable","summary":"Node is unreachable."},"expr":"(kube_node_spec_taint{job=\"kube-state-metrics\",key=\"node.kubernetes.io/unreachable\",effect=\"NoSchedule\"} unless ignoring(key,value) kube_node_spec_taint{job=\"kube-state-metrics\",key=~\"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn\"}) == 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletTooManyPods","annotations":{"description":"Kubelet ''{{ $labels.node }}'' is running at {{ $value | humanizePercentage }} of its Pod capacity.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubelettoomanypods","summary":"Kubelet is running at capacity."},"expr":"count by(node, cluster) (\n  (kube_pod_status_phase{job=\"kube-state-metrics\",phase=\"Running\"} == 1) * on(instance,pod,namespace,cluster) group_left(node) topk by(instance,pod,namespace,cluster) (1, kube_pod_info{job=\"kube-state-metrics\"})\n)\n/\nmax by(node, cluster) (\n  kube_node_status_capacity{job=\"kube-state-metrics\",resource=\"pods\"} != 1\n) > 0.95\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeNodeReadinessFlapping","annotations":{"description":"The readiness status of node {{ $labels.node }} has changed {{ $value }} times in the last 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodereadinessflapping","summary":"Node readiness status is flapping."},"expr":"sum(changes(kube_node_status_condition{status=\"true\",condition=\"Ready\"}[15m])) by (node, cluster) > 2\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletPlegDurationHigh","annotations":{"description":"The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletplegdurationhigh","summary":"Kubelet Pod Lifecycle Event Generator is taking too long to relist."},"expr":"node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile=\"0.99\"} >= 10\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeletPodStartUpLatencyHigh","annotations":{"description":"Kubelet Pod startup 99th percentile latency is {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletpodstartuplatencyhigh","summary":"Kubelet Pod startup latency is too high."},"expr":"histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job=\"kubelet\"}[5m])) by (instance, le, cluster)) * on(instance, cluster) group_left(node) kubelet_node_name{job=\"kubelet\"} > 60\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeletClientCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its client certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificaterenewalerrors","summary":"Kubelet has failed to renew its client certificate."},"expr":"increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletServerCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its server certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificaterenewalerrors","summary":"Kubelet has failed to renew its server certificate."},"expr":"increase(kubelet_server_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletDown","annotations":{"description":"Kubelet has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kubelet\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -607,7 +607,7 @@ items:
     - alert: KubeNodeNotReady
       annotations:
         description: '{{ $labels.node }} has been unready for more than 15 minutes.'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodenotready
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodenotready
         summary: Node is not ready.
       expr: |
         kube_node_status_condition{job="kube-state-metrics",condition="Ready",status="true"} == 0
@@ -617,7 +617,7 @@ items:
     - alert: KubeNodeUnreachable
       annotations:
         description: '{{ $labels.node }} is unreachable and some workloads may be rescheduled.'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodeunreachable
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodeunreachable
         summary: Node is unreachable.
       expr: |
         (kube_node_spec_taint{job="kube-state-metrics",key="node.kubernetes.io/unreachable",effect="NoSchedule"} unless ignoring(key,value) kube_node_spec_taint{job="kube-state-metrics",key=~"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn"}) == 1
@@ -627,7 +627,7 @@ items:
     - alert: KubeletTooManyPods
       annotations:
         description: Kubelet '{{ $labels.node }}' is running at {{ $value | humanizePercentage }} of its Pod capacity.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubelettoomanypods
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubelettoomanypods
         summary: Kubelet is running at capacity.
       expr: |
         count by(node, cluster) (
@@ -643,7 +643,7 @@ items:
     - alert: KubeNodeReadinessFlapping
       annotations:
         description: The readiness status of node {{ $labels.node }} has changed {{ $value }} times in the last 15 minutes.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodereadinessflapping
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodereadinessflapping
         summary: Node readiness status is flapping.
       expr: |
         sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node, cluster) > 2
@@ -653,7 +653,7 @@ items:
     - alert: KubeletPlegDurationHigh
       annotations:
         description: The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{ $value }} seconds on node {{ $labels.node }}.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletplegdurationhigh
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletplegdurationhigh
         summary: Kubelet Pod Lifecycle Event Generator is taking too long to relist.
       expr: |
         node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile="0.99"} >= 10
@@ -663,7 +663,7 @@ items:
     - alert: KubeletPodStartUpLatencyHigh
       annotations:
         description: Kubelet Pod startup 99th percentile latency is {{ $value }} seconds on node {{ $labels.node }}.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletpodstartuplatencyhigh
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletpodstartuplatencyhigh
         summary: Kubelet Pod startup latency is too high.
       expr: |
         histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job="kubelet"}[5m])) by (instance, le, cluster)) * on(instance, cluster) group_left(node) kubelet_node_name{job="kubelet"} > 60
@@ -673,7 +673,7 @@ items:
     - alert: KubeletClientCertificateExpiration
       annotations:
         description: Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration
         summary: Kubelet client certificate is about to expire.
       expr: |
         kubelet_certificate_manager_client_ttl_seconds < 604800
@@ -682,7 +682,7 @@ items:
     - alert: KubeletClientCertificateExpiration
       annotations:
         description: Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration
         summary: Kubelet client certificate is about to expire.
       expr: |
         kubelet_certificate_manager_client_ttl_seconds < 86400
@@ -691,7 +691,7 @@ items:
     - alert: KubeletServerCertificateExpiration
       annotations:
         description: Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration
         summary: Kubelet server certificate is about to expire.
       expr: |
         kubelet_certificate_manager_server_ttl_seconds < 604800
@@ -700,7 +700,7 @@ items:
     - alert: KubeletServerCertificateExpiration
       annotations:
         description: Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration
         summary: Kubelet server certificate is about to expire.
       expr: |
         kubelet_certificate_manager_server_ttl_seconds < 86400
@@ -709,7 +709,7 @@ items:
     - alert: KubeletClientCertificateRenewalErrors
       annotations:
         description: Kubelet on node {{ $labels.node }} has failed to renew its client certificate ({{ $value | humanize }} errors in the last 5 minutes).
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificaterenewalerrors
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificaterenewalerrors
         summary: Kubelet has failed to renew its client certificate.
       expr: |
         increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0
@@ -719,7 +719,7 @@ items:
     - alert: KubeletServerCertificateRenewalErrors
       annotations:
         description: Kubelet on node {{ $labels.node }} has failed to renew its server certificate ({{ $value | humanize }} errors in the last 5 minutes).
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificaterenewalerrors
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificaterenewalerrors
         summary: Kubelet has failed to renew its server certificate.
       expr: |
         increase(kubelet_server_expiration_renew_errors[5m]) > 0
@@ -729,7 +729,7 @@ items:
     - alert: KubeletDown
       annotations:
         description: Kubelet has disappeared from Prometheus target discovery.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletdown
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletdown
         summary: Target disappeared from Prometheus target discovery.
       expr: |
         absent(up{job="kubelet"} == 1)
@@ -740,7 +740,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-scheduler","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeSchedulerDown","annotations":{"description":"KubeScheduler has disappeared from Prometheus target discovery.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeschedulerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-scheduler\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-scheduler","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeSchedulerDown","annotations":{"description":"KubeScheduler has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeschedulerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-scheduler\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -751,7 +751,7 @@ items:
     - alert: KubeSchedulerDown
       annotations:
         description: KubeScheduler has disappeared from Prometheus target discovery.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeschedulerdown
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeschedulerdown
         summary: Target disappeared from Prometheus target discovery.
       expr: |
         absent(up{job="kube-scheduler"} == 1)
@@ -762,7 +762,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-controller-manager","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeControllerManagerDown","annotations":{"description":"KubeControllerManager has disappeared from Prometheus target discovery.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontrollermanagerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-controller-manager\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-controller-manager","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeControllerManagerDown","annotations":{"description":"KubeControllerManager has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontrollermanagerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-controller-manager\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -773,7 +773,7 @@ items:
     - alert: KubeControllerManagerDown
       annotations:
         description: KubeControllerManager has disappeared from Prometheus target discovery.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontrollermanagerdown
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontrollermanagerdown
         summary: Target disappeared from Prometheus target discovery.
       expr: |
         absent(up{job="kube-controller-manager"} == 1)
