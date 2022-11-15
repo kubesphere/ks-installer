@@ -11,8 +11,24 @@
   with_items:
     - { path: notification-history, file: custom-input-notification-history.yaml }
     - { path: notification-history, file: custom-filter-notification-history.yaml }
-    - { path: notification-history, file: custom-output-notification-history.yaml }
     - { path: notification-history, file: adapter.yaml }
+
+- name: notification-history | Creating opensearch output configuration
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: notification-history, file: custom-output-opensearch-notification-history.yaml }
+  when: "common.opensearch is defined and common.opensearch.enabled is defined and common.opensearch.enabled"
+
+- name: notification-history | Creating es output configuration
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ kubesphere_dir }}/{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: notification-history, file: custom-output-notification-history.yaml }
+  when:
+    - "common.es is defined and common.es.enabled is defined and common.es.enabled"
 
 - name: notification-history | Install notification-history
   shell: >
