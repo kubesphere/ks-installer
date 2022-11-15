@@ -1,0 +1,10 @@
+- name: Alerting | Getting alert migrate files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ kubesphere_dir }}/"
+  loop:
+    - "alert-migrate"
+
+- name: Alerting | Migrating alert rules
+  shell: >
+    /bin/bash {{ kubesphere_dir }}/alert-migrate/migrate-alertrules.sh
