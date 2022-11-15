@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"general-rules","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"TargetDown","annotations":{"description":"{{ printf \"%.4g\" $value }}% of the {{ $labels.job }}/{{ $labels.service }} targets in {{ $labels.namespace }} namespace are down.","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/general/targetdown","summary":"One or more targets are unreachable."},"expr":"100 * (count(up == 0) BY (job, namespace, service, cluster) / count(up) BY (job, namespace, service, cluster)) > 10\n","for":"10m","labels":{},"severity":"warning"},{"alert":"Watchdog","annotations":{"description":"This is an alert meant to ensure that the entire alerting pipeline is functional.\nThis alert is always firing, therefore it should always be firing in Alertmanager\nand always fire against a receiver. There are integrations with various notification\nmechanisms that send a notification when this alert is not firing. For example the\n\"DeadMansSnitch\" integration in PagerDuty.\n","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/general/watchdog","summary":"An alert that should always be firing to certify that Alertmanager is working properly."},"expr":"vector(1)","labels":{},"severity":"none"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"general-rules","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"TargetDown","annotations":{"description":"{{ printf \"%.4g\" $value }}% of the {{ $labels.job }}/{{ $labels.service }} targets in {{ $labels.namespace }} namespace are down.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/general/targetdown","summary":"One or more targets are unreachable."},"expr":"100 * (count(up == 0) BY (job, namespace, service, cluster) / count(up) BY (job, namespace, service, cluster)) > 10\n","for":"10m","labels":{},"severity":"warning"},{"alert":"Watchdog","annotations":{"description":"This is an alert meant to ensure that the entire alerting pipeline is functional.\nThis alert is always firing, therefore it should always be firing in Alertmanager\nand always fire against a receiver. There are integrations with various notification\nmechanisms that send a notification when this alert is not firing. For example the\n\"DeadMansSnitch\" integration in PagerDuty.\n","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/general/watchdog","summary":"An alert that should always be firing to certify that Alertmanager is working properly."},"expr":"vector(1)","labels":{},"severity":"none"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -15,7 +15,7 @@ items:
     - alert: TargetDown
       annotations:
         description: '{{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.service }} targets in {{ $labels.namespace }} namespace are down.'
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/general/targetdown
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/general/targetdown
         summary: One or more targets are unreachable.
       expr: |
         100 * (count(up == 0) BY (job, namespace, service, cluster) / count(up) BY (job, namespace, service, cluster)) > 10
@@ -30,7 +30,7 @@ items:
           and always fire against a receiver. There are integrations with various notification
           mechanisms that send a notification when this alert is not firing. For example the
           "DeadMansSnitch" integration in PagerDuty.
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/general/watchdog
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/general/watchdog
         summary: An alert that should always be firing to certify that Alertmanager is working properly.
       expr: vector(1)
       labels: {}
@@ -39,7 +39,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"node-network","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"NodeNetworkInterfaceFlapping","annotations":{"description":"Network interface \"{{ $labels.device }}\" changing its up status often on node-exporter {{ $labels.namespace }}/{{ $labels.pod }}","runbook_url":"https://runbooks.prometheus-operator.dev/runbooks/general/nodenetworkinterfaceflapping","summary":"Network interface is often changing its status"},"expr":"changes(node_network_up{job=\"node-exporter\",device!~\"veth.+\"}[2m]) > 2\n","for":"2m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"node-network","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"NodeNetworkInterfaceFlapping","annotations":{"description":"Network interface \"{{ $labels.device }}\" changing its up status often on node-exporter {{ $labels.namespace }}/{{ $labels.pod }}","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/general/nodenetworkinterfaceflapping","summary":"Network interface is often changing its status"},"expr":"changes(node_network_up{job=\"node-exporter\",device!~\"veth.+\"}[2m]) > 2\n","for":"2m","labels":{},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -50,7 +50,7 @@ items:
     - alert: NodeNetworkInterfaceFlapping
       annotations:
         description: Network interface "{{ $labels.device }}" changing its up status often on node-exporter {{ $labels.namespace }}/{{ $labels.pod }}
-        runbook_url: https://runbooks.prometheus-operator.dev/runbooks/general/nodenetworkinterfaceflapping
+        runbook_url: https://alert-runbooks.kubesphere.io/runbooks/general/nodenetworkinterfaceflapping
         summary: Network interface is often changing its status
       expr: |
         changes(node_network_up{job="node-exporter",device!~"veth.+"}[2m]) > 2
