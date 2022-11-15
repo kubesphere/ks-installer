@@ -34,3 +34,7 @@
     - multicluster is not defined or (multicluster.clusterRole != 'host' and multicluster.clusterRole != 'member')
     - monitoring is not defined or monitoring.whizard is not defined or monitoring.whizard.enabled != true
 
+- import_tasks: alert-migrate.yaml
+  when:
+    - (alerting is defined and alerting.enabled is defined and alerting.enabled == true) or (multicluster is defined and (multicluster.clusterRole == 'host' or multicluster.clusterRole == 'member') and monitoring is defined and monitoring.whizard is defined and monitoring.whizard.enabled == true)
+    - "status.alerting is not defined or status.alerting.status is not defined or status.alerting.status != 'enabled'"
