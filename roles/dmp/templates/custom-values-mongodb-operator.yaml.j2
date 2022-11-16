@@ -9,7 +9,13 @@ operator:
   watchNamespace: "*"
   replicaCount: 1
   extraEnvs: [ ]
-  resources: { }
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 200m
+      memory: 300Mi
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -44,18 +50,18 @@ image:
   pullPolicy: IfNotPresent
   agent:
     name: mongodb-agent
-    version: "11.12.0.7388-1"
+    version: 11.12.0.7388-1
   versionUpgradeHook:
     name: version-hook
-    version: "1.0.4"
+    version: 1.0.4
   readinessProbe:
     name: readiness-probe
-    version: "1.0.9"
+    version: 1.0.9
   mongodb:
     name: mongodb
   operator:
     name: mongodb-kubernetes-operator
-    version: "v1.0.4"
+    version: v1.0.4
 
 serviceAccount:
   # Specifies whether a service account should be created

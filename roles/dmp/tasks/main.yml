@@ -36,6 +36,14 @@
     - { path: kafka, file: custom-values-kafka-operator.yaml }
     - { path: opensearch, file: custom-values-opensearch-operator.yaml }
 
+- name: DMP | Creating dmp-system ns
+  shell: >
+    {{ bin_dir }}/kubectl create ns dmp-system
+  ignore_errors: yes
+
+- name: DMP | Setting dmp-system ns LimitRange
+  shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/dmp/namespace/limitrange.yaml;
 
 - name: DMP | Installing pg operator
   shell: >
