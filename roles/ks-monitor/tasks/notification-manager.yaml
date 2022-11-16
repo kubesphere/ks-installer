@@ -24,16 +24,9 @@
   register: notification_check
   failed_when: notification_check.rc != 0
 
-- name: notification-manager | Update notification-manager crds
-  shell: >
-     {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification-manager/crds/
-  register: update_crds
-  when:
-    - notification_check.rc == 0
-  failed_when: update_crds is not succeeded
-
 - name: notification-manager | Deploying notification-manager
   shell: >
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification-manager/crds/ &&
     {{ bin_dir }}/helm upgrade --install notification-manager
     {{ kubesphere_dir }}/notification-manager
     -f {{ kubesphere_dir }}/notification-manager/custom-values-notification.yaml
