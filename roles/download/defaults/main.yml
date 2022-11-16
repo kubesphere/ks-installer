@@ -199,7 +199,7 @@ node_exporter_tag: v1.3.1
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
 alertmanager_tag: v0.23.0
 thanos_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/thanos"
-thanos_tag: v0.28.5
+thanos_tag: v0.29.5
 grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
 grafana_tag: 8.3.3
 

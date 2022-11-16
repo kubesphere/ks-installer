@@ -11,8 +11,8 @@ global:
 
   whizard:
     image:
-      repository: thanosio/thanos
-      tag: v0.28.0
+      repository: kubesphere/thanos
+      tag: v0.29.5
     log: 
       level: info # Possible options: error, warn, info, debug.
       format: logfmt # Possible options: logfmt or json.
@@ -124,6 +124,9 @@ controllerManager:
 
       replicas: 2
 
+      additionalFlags:
+      - --query.max-concurrent=200
+
       envoy:
         image: 
           repository: envoyproxy/envoy
@@ -159,6 +162,7 @@ controllerManager:
   
       additionalFlags: 
       - --max-time=-24h     #The last 24h data is queried on ingester instead of store.
+      - --web.disable      #Disable Block Viewer UI.
 
     compactor: 
       ## If null or unset, the global.whizardImage is used.
@@ -169,7 +173,10 @@ controllerManager:
       # retentionRaw:
       # retention5m:
       # retention1h:
-      additionalFlags: []
+      additionalFlags:
+      - --block-files-concurrency=20
+      - --compact.blocks-fetch-concurrency=5
+      - --web.disable      #Disable Block Viewer UI.
 
       dataVolume: {}
 
