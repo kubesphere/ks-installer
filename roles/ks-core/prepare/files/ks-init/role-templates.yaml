@@ -33,13 +33,7 @@ metadata:
       "role-template-view-storageclasses",
       "role-template-view-volume-snapshots",
       "role-template-view-volume-snapshot-classes",
-      "role-template-view-volumes",
-      "role-template-view-configmaps",
-      "role-template-manage-configmaps",
-      "role-template-view-secrets",
-      "role-template-manage-secrets",
-      "role-template-view-service-accounts",
-      "role-template-manage-service-accounts"]'
+      "role-template-view-volumes"]'
   name: cluster-admin
 rules:
   - apiGroups:
@@ -74,10 +68,7 @@ metadata:
       "role-template-view-storageclasses",
       "role-template-view-volume-snapshots",
       "role-template-view-volume-snapshot-classes",
-      "role-template-view-volumes",
-      "role-template-view-configmaps",
-      "role-template-view-secrets",
-      "role-template-view-service-accounts"]'
+      "role-template-view-volumes"]'
   name: cluster-viewer
 rules:
   - apiGroups:
