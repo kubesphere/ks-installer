@@ -129,6 +129,10 @@ rules:
     verbs:
       - get
       - create
+  - nonResourceURLs:
+    - /statics/images/*
+    verbs:
+    - GET
 
 
 ---
@@ -343,7 +347,11 @@ rules:
       - workspacetemplates
     verbs:
       - patch
-
+  - nonResourceURLs:
+    - /statics/images/*
+    verbs:
+    - GET
+    
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
 kind: GlobalRole
