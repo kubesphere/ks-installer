@@ -48,6 +48,8 @@ spec:
       namespace: kubesphere-monitoring-system
       port: web
   evaluationInterval: 1m
+  enableFeatures:
+    - remote-write-receiver
 {% endif %}
   image: {{ prometheus_repo }}:{{ prometheus_tag }}
   podMetadata:
