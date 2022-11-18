@@ -26,6 +26,7 @@ spec:
         weight: 100
   alertmanagersUrl:
   - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
+  evaluationInterval: 1m
   image: kubesphere/thanos:v0.28.5
   podMetadata:
     labels:

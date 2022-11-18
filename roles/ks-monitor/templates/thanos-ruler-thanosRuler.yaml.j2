@@ -51,8 +51,6 @@ spec:
 {% else %}
   tolerations: []
 {% endif %}
-  alertmanagersUrl:
-  - dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093
   image: {{ thanos_repo }}:{{ thanos_tag }}
   podMetadata:
     labels:
@@ -67,6 +65,24 @@ spec:
 {% else %}
   - prometheus-operated.kubesphere-monitoring-system.svc:9090
 {% endif %}
+  containers:
+    - args:
+        - rule
+        - '--data-dir=/thanos/data'
+        - '--eval-interval=1m'
+        - '--label=ruler_replica="$(POD_NAME)"'
+        - '--alert.label-drop=ruler_replica'
+{% if common.monitoring is defined and common.monitoring.endpoint is defined %}
+        - '--query={{ common.monitoring.endpoint }}'
+{% else %}
+        - '--query=http://prometheus-operated.kubesphere-monitoring-system.svc:9090'
+{% endif %}
+        - '--rule-file=/etc/thanos/rules/*/*.yaml'
+        - '--alertmanagers.url=dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093'
+        - |
+          --remote-write.config=remote_write:
+              - url: http://prometheus-operated.kubesphere-monitoring-system.svc:9090/api/v1/write
+      name: thanos-ruler
 {% if nodeNum is defined and nodeNum < 3 %}
   replicas: {{ alerting.thanosruler.replicas | default(1) }}
 {% else %}
