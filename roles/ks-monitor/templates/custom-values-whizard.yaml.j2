@@ -65,9 +65,6 @@ controllerManager:
         tag: {{ bash_tag }}
 
     compactor: 
-      additionalFlags:
-      - --block-files-concurrency=20
-      - --compact.blocks-fetch-concurrency=5
 
       dataVolume:
         persistentVolumeClaim: 
