@@ -79,9 +79,17 @@ spec:
 {% endif %}
         - '--rule-file=/etc/thanos/rules/*/*.yaml'
         - '--alertmanagers.url=dnssrv+http://alertmanager-operated.kubesphere-monitoring-system.svc:9093'
+# should be synced with prometheus replicas
+{% if nodeNum is defined and nodeNum < 3 %}
         - |
           --remote-write.config=remote_write:
               - url: http://prometheus-operated.kubesphere-monitoring-system.svc:9090/api/v1/write
+{% else %}
+        - |
+          --remote-write.config=remote_write:
+              - url: http://prometheus-k8s-0.prometheus-operated.kubesphere-monitoring-system.svc:9090/api/v1/write
+              - url: http://prometheus-k8s-1.prometheus-operated.kubesphere-monitoring-system.svc:9090/api/v1/write
+{% endif %}
       name: thanos-ruler
 {% if nodeNum is defined and nodeNum < 3 %}
   replicas: {{ alerting.thanosruler.replicas | default(1) }}
