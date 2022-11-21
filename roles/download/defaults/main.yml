@@ -107,9 +107,9 @@ openpitrix_job_tag: "v3.3.1-rc.0"
 openpitrix_job_repo: "{{ base_repo }}{{ namespace_override | default('kubespheredev') }}/openpitrix-jobs"
 
 minio_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/minio"
-minio_tag: RELEASE.2019-08-07T01-59-21Z
+minio_tag: "{% if ansible_machine=='x86_64' %}RELEASE.2019-08-07T01-59-21Z{% elif ansible_machine=='aarch64' %}latest{% endif %}"
 mc_repo: "{{ base_repo }}{{ namespace_override | default('minio') }}/mc"
-mc_tag: RELEASE.2019-08-07T23-14-43Z
+mc_tag: "{% if ansible_machine=='x86_64' %}RELEASE.2019-08-07T23-14-43Z{% elif ansible_machine=='aarch64' %}latest{% endif %}"
 
 snapshot_controller_repo: "{{ base_repo }}{{ namespace_override | default('csiplugin') }}/snapshot-controller"
 snapshot_controller_tag: "v4.0.0"
@@ -234,12 +234,12 @@ auditing_webhook_tag: v0.2.0
 #ingress:
 nginx_ingress_controller_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/nginx-ingress-controller"
 nginx_ingress_controller_tag: v1.1.0
-defaultbackend_repo: "{{ base_repo }}{{ namespace_override | default('mirrorgooglecontainers') }}/defaultbackend-amd64"
+defaultbackend_repo: "{% if ansible_machine=='x86_64' %}{{ base_repo }}{{ namespace_override | default('mirrorgooglecontainers') }}/defaultbackend-amd64{% elif ansible_machine=='aarch64'%}{{ base_repo }}{{ namespace_override | default('mirrorgooglecontainers') }}/defaultbackend-arm64{%endif%}"
 defaultbackend_tag: 1.4
 
 #metrics:
 metrics_server_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/metrics-server"
-metrics_server_tag: v0.4.2
+metrics_server_tag: "{% if ansible_machine=='x86_64' %}v0.4.2{% elif ansible_machine=='aarch64'%}v0.4.2-arm64{%endif%}"
 
 #istio
 istio_hub: "{{ base_repo }}{{ namespace_override | default('istio') }}"
