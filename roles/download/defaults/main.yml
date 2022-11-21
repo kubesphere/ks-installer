@@ -53,7 +53,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  v3.3.1-beta.1
+  v3.3.1-beta.2
   {%- endif %}
 
 # quay image repo define

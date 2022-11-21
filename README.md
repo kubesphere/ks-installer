@@ -45,8 +45,8 @@ If your Kubernetes cluster environment meets all requirements mentioned above, t
 ### Minimal Installation
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/kse-installer/v3.3.1-beta.1/deploy/kubesphere-installer.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/kse-installer/v3.3.1-beta.1/deploy/cluster-configuration.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/kse-installer/v3.3.1-beta.2/deploy/kubesphere-installer.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/kse-installer/v3.3.1-beta.2/deploy/cluster-configuration.yaml
 ```
 
 Then inspect the logs of installation.
@@ -113,7 +113,7 @@ Deploy the new version of ks-installer:
 ```bash
 # Notice: ks-installer will automatically migrate the configuration. Do not modify the cluster configuration by yourself.
 
-kubectl apply -f https://raw.githubusercontent.com/kubesphere/kse-installer/v3.3.1-beta.1/deploy/kubesphere-installer.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubesphere/kse-installer/v3.3.1-beta.2/deploy/kubesphere-installer.yaml
 ```
 
 > Note: If your KubeSphere version is v3.1.x or eariler, please upgrade to v3.2.x first.
