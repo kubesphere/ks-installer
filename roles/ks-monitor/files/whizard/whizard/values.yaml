@@ -161,7 +161,7 @@ controllerManager:
       indexCacheConfig: {}
   
       additionalFlags: 
-      - --max-time=-24h     #The last 24h data is queried on ingester instead of store.
+      - --max-time=-36h     #The last 36h data is queried on ingester instead of store.
       - --web.disable      #Disable Block Viewer UI.
 
     compactor: 
