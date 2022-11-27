@@ -47,7 +47,7 @@ data:
       maxOpenConnections: 100
       maxConnectionLifeTime: 10s
 {% endif %}
-{% if devops.enabled %}
+
     s3:
       endpoint: {{ common.s3.endpoint | default('http://minio.kubesphere-system.svc:9000') }}
       region: {{ common.s3.region | default('us-east-1') }}
@@ -56,7 +56,7 @@ data:
       accessKeyID: {{ common.s3.accessKeyID | default('openpitrixminioaccesskey') }}
       secretAccessKey: {{ common.s3.secretAccessKey | default('openpitrixminiosecretkey') }}
       bucket: s2i-binaries
-{% endif %}
+
 {% if network is defined or networkpolicy is defined %}
     network:
 {% if ((networkpolicy is defined and networkpolicy.enabled is defined and networkpolicy.enabled) or

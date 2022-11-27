@@ -16,7 +16,7 @@
 
 - import_tasks: minio-install.yaml
   when:
-    - (devops.enabled or (openpitrix.store is defined and openpitrix.store.enabled is defined and openpitrix.store.enabled)) and common.s3 is not defined
+    - common.s3 is not defined
     - "status.minio is not defined or status.minio.status is not defined or status.minio.status != 'enabled'"
 
 - import_tasks: es-install.yaml
