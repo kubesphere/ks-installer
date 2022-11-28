@@ -148,10 +148,13 @@ data:
 {% else %}
       enableGPUMonitoring: false
 {% endif %}
-{% if whizardEnabled and multicluster.clusterRole == "host" %}
+{% if whizardEnabled %}
     observability:
+      enabled: true
+{% if multicluster.clusterRole == "host" %}
       monitoring:
         endpoint: http://query-frontend-whizard-operated.kubesphere-monitoring-system.svc:10902
+{% endif %}
 {% endif %}
 {% if common.gpu is defined and common.gpu.kinds is defined %}
     gpu:
