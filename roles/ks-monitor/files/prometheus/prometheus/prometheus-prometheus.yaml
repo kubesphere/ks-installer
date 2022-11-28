@@ -37,7 +37,8 @@ spec:
       name: alertmanager-main
       namespace: kubesphere-monitoring-system
       port: web
-  enableFeatures: []
+  enableFeatures:
+  - remote-write-receiver
   evaluationInterval: 1m
   externalLabels: {}
   image: prom/prometheus:v2.39.1

@@ -58,7 +58,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubesphere-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeConfigCertificateExpiration","annotations":{"description":"{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  604800\n","labels":{},"severity":"warning"},{"alert":"KubeConfigCertificateExpiration","annotations":{"description":"{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"},{"alert":"KubeSphereLicenseExpiration","annotations":{"description":"KubeSphere license is expiring in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  604800\n","labels":{},"severity":"warning"},{"alert":"KubeSphereLicenseExpiration","annotations":{"description":"KubeSphere license is expiring in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubesphere-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeConfigCertificateExpiration","annotations":{"message":"{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  604800\n","labels":{},"severity":"warning"},{"alert":"KubeConfigCertificateExpiration","annotations":{"message":"{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"},{"alert":"KubeSphereLicenseExpiration","annotations":{"message":"KubeSphere license will be expired in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  2592000\n","labels":{},"severity":"warning"},{"alert":"KubeSphereLicenseExpiration","annotations":{"message":"KubeSphere license will be expired in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -68,7 +68,7 @@ items:
     rules:
     - alert: KubeConfigCertificateExpiration
       annotations:
-        description: '{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 7.0 days.'
+        message: '{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 7.0 days.'
         runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration
         summary: kubeconfig certificate is about to expire.
       expr: |
@@ -77,7 +77,7 @@ items:
       severity: warning
     - alert: KubeConfigCertificateExpiration
       annotations:
-        description: '{{ $labels.cluster }} cluster kubeconfig certificate is expiring in less than 24.0 hours.'
+        message: '{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 24.0 hours.'
         runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration
         summary: kubeconfig certificate is about to expire.
       expr: |
@@ -86,16 +86,16 @@ items:
       severity: critical
     - alert: KubeSphereLicenseExpiration
       annotations:
-        description: KubeSphere license is expiring in less than 7.0 days.
+        message: KubeSphere license will be expired in {{ $value | humanizeDuration }}.
         runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration
         summary: KubeSphere license is about to expire.
       expr: |
-        kubesphere_enterprise_license_validity_seconds{job="ks-controller-manager"} <  604800
+        kubesphere_enterprise_license_validity_seconds{job="ks-controller-manager"} <  2592000
       labels: {}
       severity: warning
     - alert: KubeSphereLicenseExpiration
       annotations:
-        description: KubeSphere license is expiring in less than 24.0 hours.
+        message: KubeSphere license will be expired in {{ $value | humanizeDuration }}.
         runbook_url: https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration
         summary: KubeSphere license is about to expire.
       expr: |
