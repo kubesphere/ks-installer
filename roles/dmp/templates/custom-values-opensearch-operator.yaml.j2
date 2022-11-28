@@ -1,19 +1,19 @@
-nodeSelector: { }
-tolerations: [ ]
+nodeSelector: {}
+tolerations: []
 kubeProxy:
   image: kube-rbac-proxy
   version: "v0.8.0"
 manager:
   resources:
     limits:
-      cpu: 2
-      memory: 1Gi
+      cpu: 200m
+      memory: 500Mi
     requests:
-      cpu: 2
-      memory: 1Gi
+      cpu: 100m
+      memory: 350Mi
   image: opensearch-operator
   ## tag default uses appVersion from Chart.yaml, to override specify tag tag: "v1.1"
-  tag: ""
+  tag: "2.0.13"
   # If a watchNamespace is specified, the manager's cache will be restricted to
   # watch objects in the desired namespace. Defaults is to watch all namespaces.
   watchNamespace:

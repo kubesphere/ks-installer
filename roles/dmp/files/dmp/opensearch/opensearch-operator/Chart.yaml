@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 2.0.10
+appVersion: 2.0.13
 description: The OpenSearch Operator Helm chart for Kubernetes
 name: opensearch-operator
 type: application
-version: 2.0.11
+version: 2.0.15
