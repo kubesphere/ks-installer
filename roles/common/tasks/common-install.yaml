@@ -24,12 +24,14 @@
     - logging.enabled or events.enabled or auditing.enabled or servicemesh.enabled or (notification.history is defined and notification.history.enabled)
     - common.es is defined and common.es.enabled is defined and common.es.enabled
     - "status.es is not defined or status.es.status is not defined or status.es.status != 'enabled'"
+    - "status.opensearch is not defined or status.opensearch.status is not defined or status.opensearch.status != 'enabled'"
 
 - import_tasks: opensearch-install.yaml
   when:
-    - logging.enabled or events.enabled or auditing.enabled or servicemesh.enabled
+    - logging.enabled or events.enabled or auditing.enabled or servicemesh.enabled or (notification.history is defined and notification.history.enabled)
     - common.opensearch is defined and common.opensearch.enabled is defined and common.opensearch.enabled
     - "status.opensearch is not defined or status.opensearch.status is not defined or status.opensearch.status != 'enabled'"
+    - "status.es is not defined or status.es.status is not defined or status.es.status != 'enabled'"
 
 - import_tasks: fluentbit-install.yaml
   when:
