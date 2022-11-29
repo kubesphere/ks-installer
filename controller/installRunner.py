@@ -548,6 +548,16 @@ def generate_new_cluster_configuration(api):
                 cluster_configuration_spec["common"]["opensearch"]["data"] = {
                     "volumeSize": "20Gi"
                 }
+            if "opensearchPrefix" not in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["opensearchPrefix"] = "whizard"
+            if "logMaxAge" not in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["logMaxAge"] = "7"
+            if "basicAuth" not in cluster_configuration_spec["common"]["opensearch"]:
+                cluster_configuration_spec["common"]["opensearch"]["basicAuth"] = {
+                    "enabled": True,
+                    "username": "admin",
+                    "password": "admin"
+                }
             if "opensearchMasterReplicas" in cluster_configuration_spec["common"]["opensearch"]:
                 cluster_configuration_spec["common"]["opensearch"]["master"]["replicas"] = cluster_configuration_spec["common"]["opensearch"]["elasticsearchMasterReplicas"]
                 del cluster_configuration_spec["common"]["opensearch"]["opensearchMasterReplicas"]
