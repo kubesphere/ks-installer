@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: "1.0"
-description: A Helm chart for Kubernetes
+appVersion: "v0.1.0"
+description: A Helm chart for springcloud-controller, which is a Kubernetes Operator for Spring Cloud applications.
 name: springcloud-controller
-version: 0.0.1
+version: 0.1.0
 maintainers:
   - name: kubesphere
 dependencies:

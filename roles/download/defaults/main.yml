@@ -299,7 +299,7 @@ kiali_tag: v1.38
 
 #springcloud
 ks_springcloud_hub: "{{ kse_images_repo }}/{{ namespace_override | default('kse') }}/spring-cloud-controller"
-ks_springcloud_tag: master
+ks_springcloud_tag: v0.1.0
 nacos_repo: "{{ namespace_override | default('nacos') }}/nacos-server"
 nacos_tag: latest
 nacos_plugin_repo: "{{ namespace_override | default('nacos') }}/nacos-peer-finder-plugin"
