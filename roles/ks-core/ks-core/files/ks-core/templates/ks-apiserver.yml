@@ -118,11 +118,11 @@ metadata:
   name: ks-apiserver
 spec:
   ports:
-  - port: 80
+  - port: 30941
     protocol: TCP
     targetPort: 9090
   selector:
     app: ks-apiserver
     tier: backend
     # version: {{ .Chart.AppVersion }}
-  type: ClusterIP
+  type: NodePort
