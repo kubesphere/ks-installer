@@ -18,8 +18,8 @@ def migrateRule($namespace; $ruleLevel):
 	  "node:load15:ratio": {type: "cpu", name: "load15m", factor: 1},
 	  "node:node_memory_utilisation:": {type: "memory", name: "utilization", factor: 0.01},
 	  "node:node_memory_bytes_available:sum": {type: "memory", name: "available", factor: (1024*1024*1024)},
-	  "node:node_net_bytes_transmitted:sum_irate": {type: "netowrk", name: "transmittedRate", factor: 1000*1000},
-	  "node:node_net_bytes_received:sum_irate": {type: "network", name: "receivedRate", factor: 1000*1000},
+	  "node:node_net_bytes_transmitted:sum_irate": {type: "netowrk", name: "transmittedRate", factor: (1000*1000)},
+	  "node:node_net_bytes_received:sum_irate": {type: "network", name: "receivedRate", factor: (1000*1000)},
 	  "node:disk_space_utilization:ratio": {type: "disk", name: "spaceUtilization", factor: 0.01},
 	  "node:disk_space_available:": {type: "disk", name: "spaceAvailable", factor: (1000*1000*1000)},
 	  "node:disk_inode_utilization:ratio": {type: "disk", name: "inodeUtilization", factor: 0.01},
@@ -32,15 +32,17 @@ def migrateRule($namespace; $ruleLevel):
   } +
   {
     "namespace:workload_cpu_usage:sum": {type: "cpu", name: "usage", factor: 1},
-	  "namespace:workload_memory_usage:sum": {type: "memory", name: "usage", factor: 1024*1024},
-	  "namespace:workload_memory_usage_wo_cache:sum": {type: "memory", name: "usageWoCache", factor: 1024*1024},
-	  "namespace:workload_net_bytes_transmitted:sum_irate": {type: "network", name: "transmittedRate", factor: 1000*1000},
-	  "namespace:workload_net_bytes_received:sum_irate": {type: "network", name: "receivedRate", factor: 1000*1000},
+	  "namespace:workload_memory_usage:sum": {type: "memory", name: "usage", factor: (1024*1024)},
+	  "namespace:workload_memory_usage_wo_cache:sum": {type: "memory", name: "usageWoCache", factor: (1024*1024)},
+	  "namespace:workload_net_bytes_transmitted:sum_irate": {type: "network", name: "transmittedRate", factor: (1000*1000)},
+	  "namespace:workload_net_bytes_received:sum_irate": {type: "network", name: "receivedRate", factor: (1000*1000)},
 	  "namespace:$2_unavailable_replicas:ratio": {type: "replica", name: "unavailableRatio", factor: 0.01}
   }) as $metricsInfo
   | (. | getpath(["labels", "severity"])) as $severity
   | (. | getpath(["annotations", "kind"])) as $kind
   | (. | getpath(["annotations", "resources"])) as $resources
+  | (. | getpath(["annotations", "aliasName"])) as $aliasName
+  | (. | getpath(["annotations", "description"])) as $description
   | (if $resources != null then ($resources | fromjson) else null end) as $resourceNames
   | (. | getpath(["annotations", "rules"])) as $rules
   | (if $rules != null then ($rules | fromjson)[0] else null end) as $ruleInfo
@@ -70,7 +72,9 @@ def migrateRule($namespace; $ruleLevel):
               ["annotations", "kind"], 
               ["annotations", "resources"], 
               ["annotations", "rules"],
-              ["annotations", "rule_update_time"]]) 
+              ["annotations", "rule_update_time"],
+              ["annotations", "aliasName"],
+              ["annotations", "description"]]) 
   | {
     kind: (if $ruleLevel == "cluster" then "ClusterRuleGroup" else "RuleGroup" end),
     apiVersion: "alerting.kubesphere.io/v2beta1",
@@ -78,6 +82,10 @@ def migrateRule($namespace; $ruleLevel):
       name: .alert,
       labels: {
         "alerting.kubesphere.io/enable": "true"
+      },
+      annotations: {
+        "kubesphere.io/alias-name": ($aliasName + ""),
+        "kubesphere.io/description": ($description + "")
       }
     }) + (if $ruleLevel == "namespace" then {namespace: $namespace} else {} end)),
     spec: {
@@ -115,9 +123,10 @@ kubectl -n kubesphere-monitoring-system get prometheusrules -l custom-alerting-r
 len=$(cat $CLUSTER_RULES_FILE | jq '.items | length')
 if [ "$len" -gt 0 ] 
 then 
-  kubectl apply -f $CLUSTER_RULES_FILE
+  kubectl apply -f $CLUSTER_RULES_FILE && \
+  kubectl -n kubesphere-monitoring-system label prometheusrules -l custom-alerting-rule-level=cluster,$LABEL_MIGRATED!=true $LABEL_MIGRATED=true --overwrite=true
 fi
-kubectl -n kubesphere-monitoring-system label prometheusrules -l custom-alerting-rule-level=cluster $LABEL_MIGRATED=true
+
 
 # migrate rules in namespace level
 NAMESPACE_RULES_FILE=$TMP_DIR/namespace.json
@@ -126,7 +135,7 @@ for ns in $(kubectl get ns -o jsonpath="{.items[*].metadata.name}"); do
   len=$(cat $NAMESPACE_RULES_FILE | jq '.items | length')
   if [ "$len" -gt 0 ] 
   then 
-    kubectl apply -f $NAMESPACE_RULES_FILE
+    kubectl apply -f $NAMESPACE_RULES_FILE && \
+    kubectl -n $ns label prometheusrules -l custom-alerting-rule-level=namespace,$LABEL_MIGRATED!=true $LABEL_MIGRATED=true --overwrite=true
   fi
-  kubectl -n $ns label prometheusrules -l custom-alerting-rule-level=namespace $LABEL_MIGRATED=true
 done
