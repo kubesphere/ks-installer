@@ -709,6 +709,20 @@ def generate_new_cluster_configuration(api):
 
         del cluster_configuration_spec["kubeedge"]
 
+    # add monitoring configuration migration
+    if "monitoring" in cluster_configuration_spec and "whizard" not in cluster_configuration_spec["monitoring"]:
+        upgrade_flag = True
+        cluster_configuration_spec["monitoring"]["whizard"] = {
+            "enabled": False,
+            "server": {
+                "nodePort": 30990,
+            },
+            "client": {
+                "gatewayUrl": "",
+                "clusterName": "",
+            },
+        }
+
     if isinstance(cluster_configuration_status,
                   dict) and "core" in cluster_configuration_status:
         if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=
