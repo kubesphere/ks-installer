@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kube-state-metrics","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeStateMetricsListErrors","annotations":{"description":"kube-state-metrics is experiencing errors at an elevated rate in list operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricslisterrors","summary":"kube-state-metrics is experiencing errors in list operations."},"expr":"(sum by(cluster,namespace,service) (rate(kube_state_metrics_list_total{job=\"kube-state-metrics\",result=\"error\"}[5m]))\n  /\nsum by(cluster,namespace,service) (rate(kube_state_metrics_list_total{job=\"kube-state-metrics\"}[5m])))\n> 0.01\n","for":"15m","labels":{},"severity":"critical"},{"alert":"KubeStateMetricsWatchErrors","annotations":{"description":"kube-state-metrics is experiencing errors at an elevated rate in watch operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricswatcherrors","summary":"kube-state-metrics is experiencing errors in watch operations."},"expr":"(sum by(cluster,namespace,service) (rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\",result=\"error\"}[5m]))\n  /\nsum by(cluster,namespace,service) (rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\"}[5m])))\n> 0.01\n","for":"15m","labels":{},"severity":"critical"},{"alert":"KubeStateMetricsShardingMismatch","annotations":{"description":"kube-state-metrics pods are running with different --total-shards configuration, some Kubernetes objects may be exposed multiple times or not exposed at all.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricsshardingmismatch","summary":"kube-state-metrics sharding is misconfigured."},"expr":"stdvar by(cluster,namespace,service) (kube_state_metrics_total_shards{job=\"kube-state-metrics\"}) != 0\n","for":"15m","labels":{},"severity":"critical"},{"alert":"KubeStateMetricsShardsMissing","annotations":{"description":"kube-state-metrics shards are missing, some Kubernetes objects are not being exposed.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricsshardsmissing","summary":"kube-state-metrics shards are missing."},"expr":"2^max by(cluster,namespace,service) (kube_state_metrics_total_shards{job=\"kube-state-metrics\"}) - 1\n  -\nsum by(cluster,namespace,service) ( 2 ^ max by (shard_ordinal,cluster,namespace,service) (kube_state_metrics_shard_ordinal{job=\"kube-state-metrics\"}) )\n!= 0\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kube-state-metrics","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeStateMetricsListErrors","annotations":{"description":"kube-state-metrics is experiencing errors at an elevated rate in list operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricslisterrors","summary":"kube-state-metrics is experiencing errors in list operations."},"expr":"(sum by(cluster,namespace,service) (rate(kube_state_metrics_list_total{job=\"kube-state-metrics\",result=\"error\"}[5m]))\n  /\nsum by(cluster,namespace,service) (rate(kube_state_metrics_list_total{job=\"kube-state-metrics\"}[5m])))\n> 0.01\n","for":"15m","labels":{"rule_id":"0e7897c5cfbca8933deedd7475be2e6f"},"severity":"critical"},{"alert":"KubeStateMetricsWatchErrors","annotations":{"description":"kube-state-metrics is experiencing errors at an elevated rate in watch operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricswatcherrors","summary":"kube-state-metrics is experiencing errors in watch operations."},"expr":"(sum by(cluster,namespace,service) (rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\",result=\"error\"}[5m]))\n  /\nsum by(cluster,namespace,service) (rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\"}[5m])))\n> 0.01\n","for":"15m","labels":{"rule_id":"152ccb43660a19968a830ae2050f1855"},"severity":"critical"},{"alert":"KubeStateMetricsShardingMismatch","annotations":{"description":"kube-state-metrics pods are running with different --total-shards configuration, some Kubernetes objects may be exposed multiple times or not exposed at all.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricsshardingmismatch","summary":"kube-state-metrics sharding is misconfigured."},"expr":"stdvar by(cluster,namespace,service) (kube_state_metrics_total_shards{job=\"kube-state-metrics\"}) != 0\n","for":"15m","labels":{"rule_id":"1e8f579922412497e9b3d29c412b31fe"},"severity":"critical"},{"alert":"KubeStateMetricsShardsMissing","annotations":{"description":"kube-state-metrics shards are missing, some Kubernetes objects are not being exposed.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kube-state-metrics/kubestatemetricsshardsmissing","summary":"kube-state-metrics shards are missing."},"expr":"2^max by(cluster,namespace,service) (kube_state_metrics_total_shards{job=\"kube-state-metrics\"}) - 1\n  -\nsum by(cluster,namespace,service) ( 2 ^ max by (shard_ordinal,cluster,namespace,service) (kube_state_metrics_shard_ordinal{job=\"kube-state-metrics\"}) )\n!= 0\n","for":"15m","labels":{"rule_id":"d859094c0a5ac6357cab4c776ccd5093"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -23,7 +23,8 @@ items:
         sum by(cluster,namespace,service) (rate(kube_state_metrics_list_total{job="kube-state-metrics"}[5m])))
         > 0.01
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 0e7897c5cfbca8933deedd7475be2e6f
       severity: critical
     - alert: KubeStateMetricsWatchErrors
       annotations:
@@ -36,7 +37,8 @@ items:
         sum by(cluster,namespace,service) (rate(kube_state_metrics_watch_total{job="kube-state-metrics"}[5m])))
         > 0.01
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 152ccb43660a19968a830ae2050f1855
       severity: critical
     - alert: KubeStateMetricsShardingMismatch
       annotations:
@@ -46,7 +48,8 @@ items:
       expr: |
         stdvar by(cluster,namespace,service) (kube_state_metrics_total_shards{job="kube-state-metrics"}) != 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 1e8f579922412497e9b3d29c412b31fe
       severity: critical
     - alert: KubeStateMetricsShardsMissing
       annotations:
@@ -59,6 +62,7 @@ items:
         sum by(cluster,namespace,service) ( 2 ^ max by (shard_ordinal,cluster,namespace,service) (kube_state_metrics_shard_ordinal{job="kube-state-metrics"}) )
         != 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: d859094c0a5ac6357cab4c776ccd5093
       severity: critical
 kind: List

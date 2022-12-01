@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksApiSlow","annotations":{"message":"99th percentile of requests is {{ $value }}s on ks-apiserver instance {{ $labels.instance }} for {{ $labels.verb }} {{ $labels.resource }}.{{ $labels.group }}/{{ $labels.version }}","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/ksapislow","summary":"ks-apiserver requests are slow."},"expr":"histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le,cluster) (rate(ks_server_request_duration_seconds_bucket{group!=\"terminal.kubesphere.io\", job=\"ks-apiserver\"}[5m]))) > 5\n","for":"10m","labels":{},"severity":"critical"},{"alert":"ksApiserverDown","annotations":{"description":"ksApiserver has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/ksapiserverdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-apiserver\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksApiSlow","annotations":{"message":"99th percentile of requests is {{ $value }}s on ks-apiserver instance {{ $labels.instance }} for {{ $labels.verb }} {{ $labels.resource }}.{{ $labels.group }}/{{ $labels.version }}","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/ksapislow","summary":"ks-apiserver requests are slow."},"expr":"histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le,cluster) (rate(ks_server_request_duration_seconds_bucket{group!=\"terminal.kubesphere.io\", job=\"ks-apiserver\"}[5m]))) > 5\n","for":"10m","labels":{"rule_id":"3f5d58fdbd68199d4ff515bfd09a2f87"},"severity":"critical"},{"alert":"ksApiserverDown","annotations":{"description":"ksApiserver has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/ksapiserverdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-apiserver\"} == 1)\n","for":"15m","labels":{"rule_id":"766f549cf2737e1adc0c62e4f5fd0ba6"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -20,7 +20,8 @@ items:
       expr: |
         histogram_quantile(0.99, sum by(instance,group,resource,verb,version,le,cluster) (rate(ks_server_request_duration_seconds_bucket{group!="terminal.kubesphere.io", job="ks-apiserver"}[5m]))) > 5
       for: 10m
-      labels: {}
+      labels:
+        rule_id: 3f5d58fdbd68199d4ff515bfd09a2f87
       severity: critical
     - alert: ksApiserverDown
       annotations:
@@ -30,13 +31,14 @@ items:
       expr: |
         absent(up{job="ks-apiserver"} == 1)
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 766f549cf2737e1adc0c62e4f5fd0ba6
       severity: critical
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-controller-manager","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksControllerManagerDown","annotations":{"description":"ksControllerManager has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kscontrollermanagerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-controller-manager\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"ks-controller-manager","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ksControllerManagerDown","annotations":{"description":"ksControllerManager has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kscontrollermanagerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"ks-controller-manager\"} == 1)\n","for":"15m","labels":{"rule_id":"6367d0bcc67cf87eab8fb4e72e2285be"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -52,13 +54,14 @@ items:
       expr: |
         absent(up{job="ks-controller-manager"} == 1)
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 6367d0bcc67cf87eab8fb4e72e2285be
       severity: critical
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubesphere-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeConfigCertificateExpiration","annotations":{"message":"{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  604800\n","labels":{},"severity":"warning"},{"alert":"KubeConfigCertificateExpiration","annotations":{"message":"{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"},{"alert":"KubeSphereLicenseExpiration","annotations":{"message":"KubeSphere license will be expired in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  2592000\n","labels":{},"severity":"warning"},{"alert":"KubeSphereLicenseExpiration","annotations":{"message":"KubeSphere license will be expired in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubesphere-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeConfigCertificateExpiration","annotations":{"message":"{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  604800\n","labels":{"rule_id":"1006265643e276bb2359a136b8f899e7"},"severity":"warning"},{"alert":"KubeConfigCertificateExpiration","annotations":{"message":"{{ $labels.cluster }} cluster kubeconfig certificate will be expired in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubeconfigcertificateexpiration","summary":"kubeconfig certificate is about to expire."},"expr":"kubesphere_enterprise_cluster_certificate_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{"rule_id":"74dceb0d64ae72c38755f0fd241d25c7"},"severity":"critical"},{"alert":"KubeSphereLicenseExpiration","annotations":{"message":"KubeSphere license will be expired in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  2592000\n","labels":{"rule_id":"c20aad7cf1cc7a9af9f02a3118a97f0c"},"severity":"warning"},{"alert":"KubeSphereLicenseExpiration","annotations":{"message":"KubeSphere license will be expired in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubesphere/kubespherelicenseexpiration","summary":"KubeSphere license is about to expire."},"expr":"kubesphere_enterprise_license_validity_seconds{job=\"ks-controller-manager\"} <  86400\n","labels":{"rule_id":"983e29af8ea57fc6ef6b1214a6aabdc7"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -73,7 +76,8 @@ items:
         summary: kubeconfig certificate is about to expire.
       expr: |
         kubesphere_enterprise_cluster_certificate_validity_seconds{job="ks-controller-manager"} <  604800
-      labels: {}
+      labels:
+        rule_id: 1006265643e276bb2359a136b8f899e7
       severity: warning
     - alert: KubeConfigCertificateExpiration
       annotations:
@@ -82,7 +86,8 @@ items:
         summary: kubeconfig certificate is about to expire.
       expr: |
         kubesphere_enterprise_cluster_certificate_validity_seconds{job="ks-controller-manager"} <  86400
-      labels: {}
+      labels:
+        rule_id: 74dceb0d64ae72c38755f0fd241d25c7
       severity: critical
     - alert: KubeSphereLicenseExpiration
       annotations:
@@ -91,7 +96,8 @@ items:
         summary: KubeSphere license is about to expire.
       expr: |
         kubesphere_enterprise_license_validity_seconds{job="ks-controller-manager"} <  2592000
-      labels: {}
+      labels:
+        rule_id: c20aad7cf1cc7a9af9f02a3118a97f0c
       severity: warning
     - alert: KubeSphereLicenseExpiration
       annotations:
@@ -100,6 +106,7 @@ items:
         summary: KubeSphere license is about to expire.
       expr: |
         kubesphere_enterprise_license_validity_seconds{job="ks-controller-manager"} <  86400
-      labels: {}
+      labels:
+        rule_id: 983e29af8ea57fc6ef6b1214a6aabdc7
       severity: critical
 kind: List
