@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-apps","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePodCrashLooping","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: \"CrashLoopBackOff\").","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodcrashlooping","summary":"Pod is crash looping."},"expr":"max_over_time(kube_pod_container_status_waiting_reason{reason=\"CrashLoopBackOff\", job=\"kube-state-metrics\"}[5m]) >= 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubePodNotReady","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodnotready","summary":"Pod has been in a non-ready state for more than 15 minutes."},"expr":"sum by (namespace, pod, cluster) (\n  max by(namespace, pod, cluster) (\n    kube_pod_status_phase{job=\"kube-state-metrics\", phase=~\"Pending|Unknown\"}\n  ) * on(namespace, pod, cluster) group_left(owner_kind) topk by(namespace, pod, cluster) (\n    1, max by(namespace, pod, owner_kind, cluster) (kube_pod_owner{owner_kind!=\"Job\"})\n  )\n) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDeploymentGenerationMismatch","annotations":{"description":"Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment }} does not match, this indicates that the Deployment has failed but has not been rolled back.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentgenerationmismatch","summary":"Deployment generation mismatch due to possible roll-back"},"expr":"kube_deployment_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_deployment_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDeploymentReplicasMismatch","annotations":{"description":"Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_deployment_spec_replicas{job=\"kube-state-metrics\"}\n    >\n  kube_deployment_status_replicas_available{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_deployment_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetReplicasMismatch","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_statefulset_status_replicas_ready{job=\"kube-state-metrics\"}\n    !=\n  kube_statefulset_status_replicas{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetGenerationMismatch","annotations":{"description":"StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset }} does not match, this indicates that the StatefulSet has failed but has not been rolled back.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetgenerationmismatch","summary":"StatefulSet generation mismatch due to possible roll-back"},"expr":"kube_statefulset_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_statefulset_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeStatefulSetUpdateNotRolledOut","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update has not been rolled out.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetupdatenotrolledout","summary":"StatefulSet update has not been rolled out."},"expr":"(\n  max without (revision) (\n    kube_statefulset_status_current_revision{job=\"kube-state-metrics\"}\n      unless\n    kube_statefulset_status_update_revision{job=\"kube-state-metrics\"}\n  )\n    *\n  (\n    kube_statefulset_replicas{job=\"kube-state-metrics\"}\n      !=\n    kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}\n  )\n)  and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetRolloutStuck","annotations":{"description":"DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} has not finished or progressed for at least 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetrolloutstuck","summary":"DaemonSet rollout is stuck."},"expr":"(\n  (\n    kube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"}\n     !=\n    0\n  ) or (\n    kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_available{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  )\n) and (\n  changes(kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeContainerWaiting","annotations":{"description":"pod/{{ $labels.pod }} in namespace {{ $labels.namespace }} on container {{ $labels.container}} has been in waiting state for longer than 1 hour.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontainerwaiting","summary":"Pod container waiting longer than 1 hour"},"expr":"sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job=\"kube-state-metrics\"}) > 0\n","for":"1h","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetNotScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are not scheduled.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetnotscheduled","summary":"DaemonSet pods are not scheduled."},"expr":"kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  -\nkube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"} > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeDaemonSetMisScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are running where they are not supposed to run.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetmisscheduled","summary":"DaemonSet pods are misscheduled."},"expr":"kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"} > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeJobCompletion","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobcompletion","summary":"Job did not complete in time"},"expr":"kube_job_spec_completions{job=\"kube-state-metrics\"} - kube_job_status_succeeded{job=\"kube-state-metrics\"}  > 0\n","for":"12h","labels":{},"severity":"warning"},{"alert":"KubeJobFailed","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete. Removing failed job after investigation should clear this alert.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobfailed","summary":"Job failed to complete."},"expr":"kube_job_failed{job=\"kube-state-metrics\"}  > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeHpaReplicasMismatch","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has not matched the desired number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpareplicasmismatch","summary":"HPA has not matched descired number of replicas."},"expr":"(kube_horizontalpodautoscaler_status_desired_replicas{job=\"kube-state-metrics\"}\n  !=\nkube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  >\nkube_horizontalpodautoscaler_spec_min_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  <\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"})\n  and\nchanges(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}[15m]) == 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeHpaMaxedOut","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has been running at max replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpamaxedout","summary":"HPA is running at max replicas"},"expr":"kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  ==\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"}\n","for":"15m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-apps","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePodCrashLooping","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: \"CrashLoopBackOff\").","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodcrashlooping","summary":"Pod is crash looping."},"expr":"max_over_time(kube_pod_container_status_waiting_reason{reason=\"CrashLoopBackOff\", job=\"kube-state-metrics\"}[5m]) >= 1\n","for":"15m","labels":{"rule_id":"543ffcdc373563bca2c24096ee0d1c49"},"severity":"warning"},{"alert":"KubePodNotReady","annotations":{"description":"Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepodnotready","summary":"Pod has been in a non-ready state for more than 15 minutes."},"expr":"sum by (namespace, pod, cluster) (\n  max by(namespace, pod, cluster) (\n    kube_pod_status_phase{job=\"kube-state-metrics\", phase=~\"Pending|Unknown\"}\n  ) * on(namespace, pod, cluster) group_left(owner_kind) topk by(namespace, pod, cluster) (\n    1, max by(namespace, pod, owner_kind, cluster) (kube_pod_owner{owner_kind!=\"Job\"})\n  )\n) > 0\n","for":"15m","labels":{"rule_id":"aacdce877d5cc082474b61ef16f9c0de"},"severity":"warning"},{"alert":"KubeDeploymentGenerationMismatch","annotations":{"description":"Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment }} does not match, this indicates that the Deployment has failed but has not been rolled back.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentgenerationmismatch","summary":"Deployment generation mismatch due to possible roll-back"},"expr":"kube_deployment_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_deployment_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{"rule_id":"501fdb906a41f1e20422c466944d56c8"},"severity":"warning"},{"alert":"KubeDeploymentReplicasMismatch","annotations":{"description":"Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedeploymentreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_deployment_spec_replicas{job=\"kube-state-metrics\"}\n    >\n  kube_deployment_status_replicas_available{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_deployment_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{"rule_id":"a13278b0c277d54a7d1a37431874edc9"},"severity":"warning"},{"alert":"KubeStatefulSetReplicasMismatch","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetreplicasmismatch","summary":"Deployment has not matched the expected number of replicas."},"expr":"(\n  kube_statefulset_status_replicas_ready{job=\"kube-state-metrics\"}\n    !=\n  kube_statefulset_status_replicas{job=\"kube-state-metrics\"}\n) and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[10m])\n    ==\n  0\n)\n","for":"15m","labels":{"rule_id":"fa2619c5995ed34956b97e142d638119"},"severity":"warning"},{"alert":"KubeStatefulSetGenerationMismatch","annotations":{"description":"StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset }} does not match, this indicates that the StatefulSet has failed but has not been rolled back.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetgenerationmismatch","summary":"StatefulSet generation mismatch due to possible roll-back"},"expr":"kube_statefulset_status_observed_generation{job=\"kube-state-metrics\"}\n  !=\nkube_statefulset_metadata_generation{job=\"kube-state-metrics\"}\n","for":"15m","labels":{"rule_id":"5c129ee8ac6f56b846d7e075a9c37a9f"},"severity":"warning"},{"alert":"KubeStatefulSetUpdateNotRolledOut","annotations":{"description":"StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update has not been rolled out.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubestatefulsetupdatenotrolledout","summary":"StatefulSet update has not been rolled out."},"expr":"(\n  max without (revision) (\n    kube_statefulset_status_current_revision{job=\"kube-state-metrics\"}\n      unless\n    kube_statefulset_status_update_revision{job=\"kube-state-metrics\"}\n  )\n    *\n  (\n    kube_statefulset_replicas{job=\"kube-state-metrics\"}\n      !=\n    kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}\n  )\n)  and (\n  changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{"rule_id":"f022b4df5f3bf17c76c2b5d4b312fd76"},"severity":"warning"},{"alert":"KubeDaemonSetRolloutStuck","annotations":{"description":"DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} has not finished or progressed for at least 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetrolloutstuck","summary":"DaemonSet rollout is stuck."},"expr":"(\n  (\n    kube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"}\n     !=\n    0\n  ) or (\n    kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  ) or (\n    kube_daemonset_status_number_available{job=\"kube-state-metrics\"}\n     !=\n    kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  )\n) and (\n  changes(kube_daemonset_status_updated_number_scheduled{job=\"kube-state-metrics\"}[5m])\n    ==\n  0\n)\n","for":"15m","labels":{"rule_id":"32ff60c86df79f0a167299c46ed123eb"},"severity":"warning"},{"alert":"KubeContainerWaiting","annotations":{"description":"pod/{{ $labels.pod }} in namespace {{ $labels.namespace }} on container {{ $labels.container}} has been in waiting state for longer than 1 hour.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontainerwaiting","summary":"Pod container waiting longer than 1 hour"},"expr":"sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job=\"kube-state-metrics\"}) > 0\n","for":"1h","labels":{"rule_id":"b614db45c1e2c8ae67a899cce3e1d54c"},"severity":"warning"},{"alert":"KubeDaemonSetNotScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are not scheduled.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetnotscheduled","summary":"DaemonSet pods are not scheduled."},"expr":"kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}\n  -\nkube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"} > 0\n","for":"10m","labels":{"rule_id":"82f48068fb7f9809e52d09e2100275cc"},"severity":"warning"},{"alert":"KubeDaemonSetMisScheduled","annotations":{"description":"{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are running where they are not supposed to run.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubedaemonsetmisscheduled","summary":"DaemonSet pods are misscheduled."},"expr":"kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"} > 0\n","for":"15m","labels":{"rule_id":"9800bd48dbfe64a3d5cd7b3d57ccdc05"},"severity":"warning"},{"alert":"KubeJobCompletion","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobcompletion","summary":"Job did not complete in time"},"expr":"kube_job_spec_completions{job=\"kube-state-metrics\"} - kube_job_status_succeeded{job=\"kube-state-metrics\"}  > 0\n","for":"12h","labels":{"rule_id":"0714251ec2bafcc7f79c5e8622e35df6"},"severity":"warning"},{"alert":"KubeJobFailed","annotations":{"description":"Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete. Removing failed job after investigation should clear this alert.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubejobfailed","summary":"Job failed to complete."},"expr":"kube_job_failed{job=\"kube-state-metrics\"}  > 0\n","for":"15m","labels":{"rule_id":"846cc9dbb403019632d41736b828659c"},"severity":"warning"},{"alert":"KubeHpaReplicasMismatch","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has not matched the desired number of replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpareplicasmismatch","summary":"HPA has not matched descired number of replicas."},"expr":"(kube_horizontalpodautoscaler_status_desired_replicas{job=\"kube-state-metrics\"}\n  !=\nkube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  >\nkube_horizontalpodautoscaler_spec_min_replicas{job=\"kube-state-metrics\"})\n  and\n(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  <\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"})\n  and\nchanges(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}[15m]) == 0\n","for":"15m","labels":{"rule_id":"27db79265cf0035fc0d163517b3356d8"},"severity":"warning"},{"alert":"KubeHpaMaxedOut","annotations":{"description":"HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has been running at max replicas for longer than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubehpamaxedout","summary":"HPA is running at max replicas"},"expr":"kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}\n  ==\nkube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"}\n","for":"15m","labels":{"rule_id":"2019ad93816ce4c10d92028e41af4b7f"},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -20,7 +20,8 @@ items:
       expr: |
         max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics"}[5m]) >= 1
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 543ffcdc373563bca2c24096ee0d1c49
       severity: warning
     - alert: KubePodNotReady
       annotations:
@@ -36,7 +37,8 @@ items:
           )
         ) > 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: aacdce877d5cc082474b61ef16f9c0de
       severity: warning
     - alert: KubeDeploymentGenerationMismatch
       annotations:
@@ -48,7 +50,8 @@ items:
           !=
         kube_deployment_metadata_generation{job="kube-state-metrics"}
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 501fdb906a41f1e20422c466944d56c8
       severity: warning
     - alert: KubeDeploymentReplicasMismatch
       annotations:
@@ -66,7 +69,8 @@ items:
           0
         )
       for: 15m
-      labels: {}
+      labels:
+        rule_id: a13278b0c277d54a7d1a37431874edc9
       severity: warning
     - alert: KubeStatefulSetReplicasMismatch
       annotations:
@@ -84,7 +88,8 @@ items:
           0
         )
       for: 15m
-      labels: {}
+      labels:
+        rule_id: fa2619c5995ed34956b97e142d638119
       severity: warning
     - alert: KubeStatefulSetGenerationMismatch
       annotations:
@@ -96,7 +101,8 @@ items:
           !=
         kube_statefulset_metadata_generation{job="kube-state-metrics"}
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 5c129ee8ac6f56b846d7e075a9c37a9f
       severity: warning
     - alert: KubeStatefulSetUpdateNotRolledOut
       annotations:
@@ -122,7 +128,8 @@ items:
           0
         )
       for: 15m
-      labels: {}
+      labels:
+        rule_id: f022b4df5f3bf17c76c2b5d4b312fd76
       severity: warning
     - alert: KubeDaemonSetRolloutStuck
       annotations:
@@ -154,7 +161,8 @@ items:
           0
         )
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 32ff60c86df79f0a167299c46ed123eb
       severity: warning
     - alert: KubeContainerWaiting
       annotations:
@@ -164,7 +172,8 @@ items:
       expr: |
         sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job="kube-state-metrics"}) > 0
       for: 1h
-      labels: {}
+      labels:
+        rule_id: b614db45c1e2c8ae67a899cce3e1d54c
       severity: warning
     - alert: KubeDaemonSetNotScheduled
       annotations:
@@ -176,7 +185,8 @@ items:
           -
         kube_daemonset_status_current_number_scheduled{job="kube-state-metrics"} > 0
       for: 10m
-      labels: {}
+      labels:
+        rule_id: 82f48068fb7f9809e52d09e2100275cc
       severity: warning
     - alert: KubeDaemonSetMisScheduled
       annotations:
@@ -186,7 +196,8 @@ items:
       expr: |
         kube_daemonset_status_number_misscheduled{job="kube-state-metrics"} > 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 9800bd48dbfe64a3d5cd7b3d57ccdc05
       severity: warning
     - alert: KubeJobCompletion
       annotations:
@@ -196,7 +207,8 @@ items:
       expr: |
         kube_job_spec_completions{job="kube-state-metrics"} - kube_job_status_succeeded{job="kube-state-metrics"}  > 0
       for: 12h
-      labels: {}
+      labels:
+        rule_id: 0714251ec2bafcc7f79c5e8622e35df6
       severity: warning
     - alert: KubeJobFailed
       annotations:
@@ -206,7 +218,8 @@ items:
       expr: |
         kube_job_failed{job="kube-state-metrics"}  > 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 846cc9dbb403019632d41736b828659c
       severity: warning
     - alert: KubeHpaReplicasMismatch
       annotations:
@@ -228,7 +241,8 @@ items:
           and
         changes(kube_horizontalpodautoscaler_status_current_replicas{job="kube-state-metrics"}[15m]) == 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 27db79265cf0035fc0d163517b3356d8
       severity: warning
     - alert: KubeHpaMaxedOut
       annotations:
@@ -240,13 +254,14 @@ items:
           ==
         kube_horizontalpodautoscaler_spec_max_replicas{job="kube-state-metrics"}
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 2019ad93816ce4c10d92028e41af4b7f
       severity: warning
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-resources","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeCPUOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Pods by {{ $value }} CPU shares and cannot tolerate node failure.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeMemoryOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Pods by {{ $value | humanize }} bytes and cannot tolerate node failure.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"KubeCPUQuotaOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Namespaces.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuquotaovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(cpu|requests.cpu)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"cpu\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeMemoryQuotaOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Namespaces.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryquotaovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(memory|requests.memory)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"memory\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeQuotaAlmostFull","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaalmostfull","summary":"Namespace quota is going to be full."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 0.9 < 1\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeQuotaFullyUsed","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotafullyused","summary":"Namespace quota is fully used."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  == 1\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeQuotaExceeded","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaexceeded","summary":"Namespace quota has exceeded the limits."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"CPUThrottlingHigh","annotations":{"description":"{{ $value | humanizePercentage }} throttling of CPU in namespace {{ $labels.namespace }} for container {{ $labels.container }} in pod {{ $labels.pod }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/cputhrottlinghigh","summary":"Processes experience elevated CPU throttling."},"expr":"sum(increase(container_cpu_cfs_throttled_periods_total{container!=\"\", }[5m])) by (container, pod, namespace, cluster)\n  /\nsum(increase(container_cpu_cfs_periods_total{}[5m])) by (container, pod, namespace, cluster)\n  > ( 25 / 100 )\n","for":"15m","labels":{},"severity":"info"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-resources","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeCPUOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Pods by {{ $value }} CPU shares and cannot tolerate node failure.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (namespace_cpu:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"cpu\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"cpu\"})) > 0\n","for":"10m","labels":{"rule_id":"b64aed32564452d2ce55cab27c3e6fd7"},"severity":"warning"},{"alert":"KubeMemoryOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Pods by {{ $value | humanize }} bytes and cannot tolerate node failure.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (namespace_memory:kube_pod_container_resource_requests:sum{}) - (sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\nand\n(sum by(cluster) (kube_node_status_allocatable{resource=\"memory\"}) - max by(cluster) (kube_node_status_allocatable{resource=\"memory\"})) > 0\n","for":"10m","labels":{"rule_id":"47f3ab42838b2beb3bd3f6f48bc3511b"},"severity":"warning"},{"alert":"KubeCPUQuotaOvercommit","annotations":{"description":"Cluster has overcommitted CPU resource requests for Namespaces.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecpuquotaovercommit","summary":"Cluster has overcommitted CPU resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(cpu|requests.cpu)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"cpu\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{"rule_id":"980edb0ab5e444f21b963a919127ff29"},"severity":"warning"},{"alert":"KubeMemoryQuotaOvercommit","annotations":{"description":"Cluster has overcommitted memory resource requests for Namespaces.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubememoryquotaovercommit","summary":"Cluster has overcommitted memory resource requests."},"expr":"sum by(cluster) (min without(resource) (kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\", resource=~\"(memory|requests.memory)\"}))\n  /\nsum by(cluster) (kube_node_status_allocatable{resource=\"memory\", job=\"kube-state-metrics\"})\n  > 1.5\n","for":"5m","labels":{"rule_id":"ad587cd6161b8c409783dbb5472c3c44"},"severity":"warning"},{"alert":"KubeQuotaAlmostFull","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaalmostfull","summary":"Namespace quota is going to be full."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 0.9 < 1\n","for":"15m","labels":{"rule_id":"8652aecc8236a9ebd0c511b9150754e4"},"severity":"info"},{"alert":"KubeQuotaFullyUsed","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotafullyused","summary":"Namespace quota is fully used."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  == 1\n","for":"15m","labels":{"rule_id":"55ca94b73491ca9495206fcfc2880a9b"},"severity":"info"},{"alert":"KubeQuotaExceeded","annotations":{"description":"Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubequotaexceeded","summary":"Namespace quota has exceeded the limits."},"expr":"kube_resourcequota{job=\"kube-state-metrics\", type=\"used\"}\n  / ignoring(instance, job, type)\n(kube_resourcequota{job=\"kube-state-metrics\", type=\"hard\"} > 0)\n  > 1\n","for":"15m","labels":{"rule_id":"f85a8c5993f29d1c958a472d11a0c4ca"},"severity":"warning"},{"alert":"CPUThrottlingHigh","annotations":{"description":"{{ $value | humanizePercentage }} throttling of CPU in namespace {{ $labels.namespace }} for container {{ $labels.container }} in pod {{ $labels.pod }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/cputhrottlinghigh","summary":"Processes experience elevated CPU throttling."},"expr":"sum(increase(container_cpu_cfs_throttled_periods_total{container!=\"\", }[5m])) by (container, pod, namespace, cluster)\n  /\nsum(increase(container_cpu_cfs_periods_total{}[5m])) by (container, pod, namespace, cluster)\n  > ( 25 / 100 )\n","for":"15m","labels":{"rule_id":"fd50dcebe1f425e797e30b8b4114695d"},"severity":"info"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -264,7 +279,8 @@ items:
         and
         (sum by(cluster) (kube_node_status_allocatable{resource="cpu"}) - max by(cluster) (kube_node_status_allocatable{resource="cpu"})) > 0
       for: 10m
-      labels: {}
+      labels:
+        rule_id: b64aed32564452d2ce55cab27c3e6fd7
       severity: warning
     - alert: KubeMemoryOvercommit
       annotations:
@@ -276,7 +292,8 @@ items:
         and
         (sum by(cluster) (kube_node_status_allocatable{resource="memory"}) - max by(cluster) (kube_node_status_allocatable{resource="memory"})) > 0
       for: 10m
-      labels: {}
+      labels:
+        rule_id: 47f3ab42838b2beb3bd3f6f48bc3511b
       severity: warning
     - alert: KubeCPUQuotaOvercommit
       annotations:
@@ -289,7 +306,8 @@ items:
         sum by(cluster) (kube_node_status_allocatable{resource="cpu", job="kube-state-metrics"})
           > 1.5
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 980edb0ab5e444f21b963a919127ff29
       severity: warning
     - alert: KubeMemoryQuotaOvercommit
       annotations:
@@ -302,7 +320,8 @@ items:
         sum by(cluster) (kube_node_status_allocatable{resource="memory", job="kube-state-metrics"})
           > 1.5
       for: 5m
-      labels: {}
+      labels:
+        rule_id: ad587cd6161b8c409783dbb5472c3c44
       severity: warning
     - alert: KubeQuotaAlmostFull
       annotations:
@@ -315,7 +334,8 @@ items:
         (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
           > 0.9 < 1
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 8652aecc8236a9ebd0c511b9150754e4
       severity: info
     - alert: KubeQuotaFullyUsed
       annotations:
@@ -328,7 +348,8 @@ items:
         (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
           == 1
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 55ca94b73491ca9495206fcfc2880a9b
       severity: info
     - alert: KubeQuotaExceeded
       annotations:
@@ -341,7 +362,8 @@ items:
         (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
           > 1
       for: 15m
-      labels: {}
+      labels:
+        rule_id: f85a8c5993f29d1c958a472d11a0c4ca
       severity: warning
     - alert: CPUThrottlingHigh
       annotations:
@@ -354,13 +376,14 @@ items:
         sum(increase(container_cpu_cfs_periods_total{}[5m])) by (container, pod, namespace, cluster)
           > ( 25 / 100 )
       for: 15m
-      labels: {}
+      labels:
+        rule_id: fd50dcebe1f425e797e30b8b4114695d
       severity: info
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-storage","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage }} free.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.03\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1m","labels":{},"severity":"critical"},{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.15\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nand\npredict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\"}[6h], 4 * 24 * 3600) < 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1h","labels":{},"severity":"warning"},{"alert":"KubePersistentVolumeErrors","annotations":{"description":"The persistent volume {{ $labels.persistentvolume }} has status {{ $labels.phase }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumeerrors","summary":"PersistentVolume is having issues with provisioning."},"expr":"kube_persistentvolume_status_phase{phase=~\"Failed|Pending\",job=\"kube-state-metrics\"} > 0\n","for":"5m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-storage","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage }} free.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.03\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1m","labels":{"rule_id":"1401c9e1b119e95ccde46056e869caf9"},"severity":"critical"},{"alert":"KubePersistentVolumeFillingUp","annotations":{"description":"Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumefillingup","summary":"PersistentVolume is filling up."},"expr":"(\n  kubelet_volume_stats_available_bytes{job=\"kubelet\"}\n    /\n  kubelet_volume_stats_capacity_bytes{job=\"kubelet\"}\n) < 0.15\nand\nkubelet_volume_stats_used_bytes{job=\"kubelet\"} > 0\nand\npredict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\"}[6h], 4 * 24 * 3600) < 0\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_access_mode{ access_mode=\"ReadOnlyMany\"} == 1\nunless on(namespace, persistentvolumeclaim, cluster)\nkube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1\n","for":"1h","labels":{"rule_id":"f4df94231db4ba454be67e3c7056314c"},"severity":"warning"},{"alert":"KubePersistentVolumeErrors","annotations":{"description":"The persistent volume {{ $labels.persistentvolume }} has status {{ $labels.phase }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubepersistentvolumeerrors","summary":"PersistentVolume is having issues with provisioning."},"expr":"kube_persistentvolume_status_phase{phase=~\"Failed|Pending\",job=\"kube-state-metrics\"} > 0\n","for":"5m","labels":{"rule_id":"10d15b499fb505b2913d458c9f59617a"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -386,7 +409,8 @@ items:
         unless on(namespace, persistentvolumeclaim, cluster)
         kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1
       for: 1m
-      labels: {}
+      labels:
+        rule_id: 1401c9e1b119e95ccde46056e869caf9
       severity: critical
     - alert: KubePersistentVolumeFillingUp
       annotations:
@@ -408,7 +432,8 @@ items:
         unless on(namespace, persistentvolumeclaim, cluster)
         kube_persistentvolumeclaim_labels{label_excluded_from_alerts="true"} == 1
       for: 1h
-      labels: {}
+      labels:
+        rule_id: f4df94231db4ba454be67e3c7056314c
       severity: warning
     - alert: KubePersistentVolumeErrors
       annotations:
@@ -418,13 +443,14 @@ items:
       expr: |
         kube_persistentvolume_status_phase{phase=~"Failed|Pending",job="kube-state-metrics"} > 0
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 10d15b499fb505b2913d458c9f59617a
       severity: critical
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeVersionMismatch","annotations":{"description":"There are {{ $value }} different semantic versions of Kubernetes components running.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeversionmismatch","summary":"Different semantic versions of Kubernetes components running."},"expr":"count by(cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~\"kube-dns|coredns\"},\"git_version\",\"$1\",\"git_version\",\"(v[0-9]*.[0-9]*).*\"))) > 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeClientErrors","annotations":{"description":"Kubernetes API server client ''{{ $labels.job }}/{{ $labels.instance }}'' is experiencing {{ $value | humanizePercentage }} errors.''","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclienterrors","summary":"Kubernetes API server client is experiencing errors."},"expr":"(sum(rate(rest_client_requests_total{code=~\"5..\"}[5m])) by (instance, job, namespace, cluster)\n  /\nsum(rate(rest_client_requests_total[5m])) by (instance, job, namespace, cluster))\n> 0.01\n","for":"15m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeVersionMismatch","annotations":{"description":"There are {{ $value }} different semantic versions of Kubernetes components running.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeversionmismatch","summary":"Different semantic versions of Kubernetes components running."},"expr":"count by(cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~\"kube-dns|coredns\"},\"git_version\",\"$1\",\"git_version\",\"(v[0-9]*.[0-9]*).*\"))) > 1\n","for":"15m","labels":{"rule_id":"c72c8ce8f9cb198349d17001489b37d9"},"severity":"warning"},{"alert":"KubeClientErrors","annotations":{"description":"Kubernetes API server client ''{{ $labels.job }}/{{ $labels.instance }}'' is experiencing {{ $value | humanizePercentage }} errors.''","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclienterrors","summary":"Kubernetes API server client is experiencing errors."},"expr":"(sum(rate(rest_client_requests_total{code=~\"5..\"}[5m])) by (instance, job, namespace, cluster)\n  /\nsum(rate(rest_client_requests_total[5m])) by (instance, job, namespace, cluster))\n> 0.01\n","for":"15m","labels":{"rule_id":"0d831b24d7375c8df8841adf0fb355ab"},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -440,7 +466,8 @@ items:
       expr: |
         count by(cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~"kube-dns|coredns"},"git_version","$1","git_version","(v[0-9]*.[0-9]*).*"))) > 1
       for: 15m
-      labels: {}
+      labels:
+        rule_id: c72c8ce8f9cb198349d17001489b37d9
       severity: warning
     - alert: KubeClientErrors
       annotations:
@@ -453,13 +480,14 @@ items:
         sum(rate(rest_client_requests_total[5m])) by (instance, job, namespace, cluster))
         > 0.01
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 0d831b24d7375c8df8841adf0fb355ab
       severity: warning
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kube-apiserver-slos","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1h) > (14.40 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate5m) > (14.40 * 0.01000)\n","for":"2m","labels":{"long":"1h","short":"5m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate6h) > (6.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate30m) > (6.00 * 0.01000)\n","for":"15m","labels":{"long":"6h","short":"30m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1d) > (3.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate2h) > (3.00 * 0.01000)\n","for":"1h","labels":{"long":"1d","short":"2h"},"severity":"warning"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate3d) > (1.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate6h) > (1.00 * 0.01000)\n","for":"3h","labels":{"long":"3d","short":"6h"},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kube-apiserver-slos","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1h) > (14.40 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate5m) > (14.40 * 0.01000)\n","for":"2m","labels":{"long":"1h","rule_id":"496dc38f79520016b294241cc24bad59","short":"5m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate6h) > (6.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate30m) > (6.00 * 0.01000)\n","for":"15m","labels":{"long":"6h","rule_id":"496dc38f79520016b294241cc24bad59","short":"30m"},"severity":"critical"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate1d) > (3.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate2h) > (3.00 * 0.01000)\n","for":"1h","labels":{"long":"1d","rule_id":"d91e8041b76c5861056ae6a61dabd8d7","short":"2h"},"severity":"warning"},{"alert":"KubeAPIErrorBudgetBurn","annotations":{"description":"The API server is burning too much error budget.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapierrorbudgetburn","summary":"The API server is burning too much error budget."},"expr":"sum by(cluster) (apiserver_request:burnrate3d) > (1.00 * 0.01000)\nand\nsum by(cluster) (apiserver_request:burnrate6h) > (1.00 * 0.01000)\n","for":"3h","labels":{"long":"3d","rule_id":"d91e8041b76c5861056ae6a61dabd8d7","short":"6h"},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -479,6 +507,7 @@ items:
       for: 2m
       labels:
         long: 1h
+        rule_id: 496dc38f79520016b294241cc24bad59
         short: 5m
       severity: critical
     - alert: KubeAPIErrorBudgetBurn
@@ -493,6 +522,7 @@ items:
       for: 15m
       labels:
         long: 6h
+        rule_id: 496dc38f79520016b294241cc24bad59
         short: 30m
       severity: critical
     - alert: KubeAPIErrorBudgetBurn
@@ -507,6 +537,7 @@ items:
       for: 1h
       labels:
         long: 1d
+        rule_id: d91e8041b76c5861056ae6a61dabd8d7
         short: 2h
       severity: warning
     - alert: KubeAPIErrorBudgetBurn
@@ -521,13 +552,14 @@ items:
       for: 3h
       labels:
         long: 3d
+        rule_id: d91e8041b76c5861056ae6a61dabd8d7
         short: 6h
       severity: warning
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeAggregatedAPIErrors","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has reported errors. It has appeared unavailable {{ $value | humanize }} times averaged over the past 10m.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapierrors","summary":"Kubernetes aggregated API has reported errors."},"expr":"sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total[10m])) > 4\n","labels":{},"severity":"warning"},{"alert":"KubeAggregatedAPIDown","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has been only {{ $value | humanize }}% available over the last 10m.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapidown","summary":"Kubernetes aggregated API is down."},"expr":"(1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeAPIDown","annotations":{"description":"KubeAPI has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapidown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"apiserver\"} == 1)\n","for":"15m","labels":{},"severity":"critical"},{"alert":"KubeAPITerminatedRequests","annotations":{"description":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapiterminatedrequests","summary":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests."},"expr":"sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m]))  / (  sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m])) ) > 0.20\n","for":"5m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-apiserver","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 604800\n","labels":{"rule_id":"b7059bc6d7945d82d32793d9b6467b9c"},"severity":"warning"},{"alert":"KubeClientCertificateExpiration","annotations":{"description":"A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeclientcertificateexpiration","summary":"Client certificate is about to expire."},"expr":"apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 86400\n","labels":{"rule_id":"34feba1ca44cd76ab80901f4ccfd842e"},"severity":"critical"},{"alert":"KubeAggregatedAPIErrors","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has reported errors. It has appeared unavailable {{ $value | humanize }} times averaged over the past 10m.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapierrors","summary":"Kubernetes aggregated API has reported errors."},"expr":"sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total[10m])) > 4\n","labels":{"rule_id":"eb24c1c858d39e40b0c3312441726ad2"},"severity":"warning"},{"alert":"KubeAggregatedAPIDown","annotations":{"description":"Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has been only {{ $value | humanize }}% available over the last 10m.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeaggregatedapidown","summary":"Kubernetes aggregated API is down."},"expr":"(1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85\n","for":"5m","labels":{"rule_id":"b5f953a7e412a96c15b54bee94cca57f"},"severity":"warning"},{"alert":"KubeAPIDown","annotations":{"description":"KubeAPI has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapidown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"apiserver\"} == 1)\n","for":"15m","labels":{"rule_id":"2e09d689aa5d601c52f61ed4e7d877d1"},"severity":"critical"},{"alert":"KubeAPITerminatedRequests","annotations":{"description":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeapiterminatedrequests","summary":"The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests."},"expr":"sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m]))  / (  sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m])) ) > 0.20\n","for":"5m","labels":{"rule_id":"ce44dac277794fb8727ea6f6d0696226"},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -542,7 +574,8 @@ items:
         summary: Client certificate is about to expire.
       expr: |
         apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 604800
-      labels: {}
+      labels:
+        rule_id: b7059bc6d7945d82d32793d9b6467b9c
       severity: warning
     - alert: KubeClientCertificateExpiration
       annotations:
@@ -551,7 +584,8 @@ items:
         summary: Client certificate is about to expire.
       expr: |
         apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0 and on(job, cluster) histogram_quantile(0.01, sum by (job, le, cluster) (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m]))) < 86400
-      labels: {}
+      labels:
+        rule_id: 34feba1ca44cd76ab80901f4ccfd842e
       severity: critical
     - alert: KubeAggregatedAPIErrors
       annotations:
@@ -560,7 +594,8 @@ items:
         summary: Kubernetes aggregated API has reported errors.
       expr: |
         sum by(name, namespace, cluster)(increase(aggregator_unavailable_apiservice_total[10m])) > 4
-      labels: {}
+      labels:
+        rule_id: eb24c1c858d39e40b0c3312441726ad2
       severity: warning
     - alert: KubeAggregatedAPIDown
       annotations:
@@ -570,7 +605,8 @@ items:
       expr: |
         (1 - max by(name, namespace, cluster)(avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85
       for: 5m
-      labels: {}
+      labels:
+        rule_id: b5f953a7e412a96c15b54bee94cca57f
       severity: warning
     - alert: KubeAPIDown
       annotations:
@@ -580,7 +616,8 @@ items:
       expr: |
         absent(up{job="apiserver"} == 1)
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 2e09d689aa5d601c52f61ed4e7d877d1
       severity: critical
     - alert: KubeAPITerminatedRequests
       annotations:
@@ -590,13 +627,14 @@ items:
       expr: |
         sum by(cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m]))  / (  sum by(cluster) (rate(apiserver_request_total{job="apiserver"}[10m])) + sum by(cluster) (rate(apiserver_request_terminations_total{job="apiserver"}[10m])) ) > 0.20
       for: 5m
-      labels: {}
+      labels:
+        rule_id: ce44dac277794fb8727ea6f6d0696226
       severity: warning
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-kubelet","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeNodeNotReady","annotations":{"description":"{{ $labels.node }} has been unready for more than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodenotready","summary":"Node is not ready."},"expr":"kube_node_status_condition{job=\"kube-state-metrics\",condition=\"Ready\",status=\"true\"} == 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeNodeUnreachable","annotations":{"description":"{{ $labels.node }} is unreachable and some workloads may be rescheduled.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodeunreachable","summary":"Node is unreachable."},"expr":"(kube_node_spec_taint{job=\"kube-state-metrics\",key=\"node.kubernetes.io/unreachable\",effect=\"NoSchedule\"} unless ignoring(key,value) kube_node_spec_taint{job=\"kube-state-metrics\",key=~\"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn\"}) == 1\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletTooManyPods","annotations":{"description":"Kubelet ''{{ $labels.node }}'' is running at {{ $value | humanizePercentage }} of its Pod capacity.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubelettoomanypods","summary":"Kubelet is running at capacity."},"expr":"count by(node, cluster) (\n  (kube_pod_status_phase{job=\"kube-state-metrics\",phase=\"Running\"} == 1) * on(instance,pod,namespace,cluster) group_left(node) topk by(instance,pod,namespace,cluster) (1, kube_pod_info{job=\"kube-state-metrics\"})\n)\n/\nmax by(node, cluster) (\n  kube_node_status_capacity{job=\"kube-state-metrics\",resource=\"pods\"} != 1\n) > 0.95\n","for":"15m","labels":{},"severity":"info"},{"alert":"KubeNodeReadinessFlapping","annotations":{"description":"The readiness status of node {{ $labels.node }} has changed {{ $value }} times in the last 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodereadinessflapping","summary":"Node readiness status is flapping."},"expr":"sum(changes(kube_node_status_condition{status=\"true\",condition=\"Ready\"}[15m])) by (node, cluster) > 2\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletPlegDurationHigh","annotations":{"description":"The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletplegdurationhigh","summary":"Kubelet Pod Lifecycle Event Generator is taking too long to relist."},"expr":"node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile=\"0.99\"} >= 10\n","for":"5m","labels":{},"severity":"warning"},{"alert":"KubeletPodStartUpLatencyHigh","annotations":{"description":"Kubelet Pod startup 99th percentile latency is {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletpodstartuplatencyhigh","summary":"Kubelet Pod startup latency is too high."},"expr":"histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job=\"kubelet\"}[5m])) by (instance, le, cluster)) * on(instance, cluster) group_left(node) kubelet_node_name{job=\"kubelet\"} > 60\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 604800\n","labels":{},"severity":"warning"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 86400\n","labels":{},"severity":"critical"},{"alert":"KubeletClientCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its client certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificaterenewalerrors","summary":"Kubelet has failed to renew its client certificate."},"expr":"increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletServerCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its server certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificaterenewalerrors","summary":"Kubelet has failed to renew its server certificate."},"expr":"increase(kubelet_server_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{},"severity":"warning"},{"alert":"KubeletDown","annotations":{"description":"Kubelet has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kubelet\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-kubelet","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeNodeNotReady","annotations":{"description":"{{ $labels.node }} has been unready for more than 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodenotready","summary":"Node is not ready."},"expr":"kube_node_status_condition{job=\"kube-state-metrics\",condition=\"Ready\",status=\"true\"} == 0\n","for":"15m","labels":{"rule_id":"3f0ce7b052e4d0badbba3f2b425829e5"},"severity":"warning"},{"alert":"KubeNodeUnreachable","annotations":{"description":"{{ $labels.node }} is unreachable and some workloads may be rescheduled.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodeunreachable","summary":"Node is unreachable."},"expr":"(kube_node_spec_taint{job=\"kube-state-metrics\",key=\"node.kubernetes.io/unreachable\",effect=\"NoSchedule\"} unless ignoring(key,value) kube_node_spec_taint{job=\"kube-state-metrics\",key=~\"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn\"}) == 1\n","for":"15m","labels":{"rule_id":"065ecdb97eafa89aefe3b67dbb3c260a"},"severity":"warning"},{"alert":"KubeletTooManyPods","annotations":{"description":"Kubelet ''{{ $labels.node }}'' is running at {{ $value | humanizePercentage }} of its Pod capacity.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubelettoomanypods","summary":"Kubelet is running at capacity."},"expr":"count by(node, cluster) (\n  (kube_pod_status_phase{job=\"kube-state-metrics\",phase=\"Running\"} == 1) * on(instance,pod,namespace,cluster) group_left(node) topk by(instance,pod,namespace,cluster) (1, kube_pod_info{job=\"kube-state-metrics\"})\n)\n/\nmax by(node, cluster) (\n  kube_node_status_capacity{job=\"kube-state-metrics\",resource=\"pods\"} != 1\n) > 0.95\n","for":"15m","labels":{"rule_id":"638892a2ea1cc7edb408f5b17e5ba448"},"severity":"info"},{"alert":"KubeNodeReadinessFlapping","annotations":{"description":"The readiness status of node {{ $labels.node }} has changed {{ $value }} times in the last 15 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubenodereadinessflapping","summary":"Node readiness status is flapping."},"expr":"sum(changes(kube_node_status_condition{status=\"true\",condition=\"Ready\"}[15m])) by (node, cluster) > 2\n","for":"15m","labels":{"rule_id":"58758efc62806bf92e1db4073d9d8ab1"},"severity":"warning"},{"alert":"KubeletPlegDurationHigh","annotations":{"description":"The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletplegdurationhigh","summary":"Kubelet Pod Lifecycle Event Generator is taking too long to relist."},"expr":"node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile=\"0.99\"} >= 10\n","for":"5m","labels":{"rule_id":"7cff1995f51770daab46159cf915b273"},"severity":"warning"},{"alert":"KubeletPodStartUpLatencyHigh","annotations":{"description":"Kubelet Pod startup 99th percentile latency is {{ $value }} seconds on node {{ $labels.node }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletpodstartuplatencyhigh","summary":"Kubelet Pod startup latency is too high."},"expr":"histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job=\"kubelet\"}[5m])) by (instance, le, cluster)) * on(instance, cluster) group_left(node) kubelet_node_name{job=\"kubelet\"} > 60\n","for":"15m","labels":{"rule_id":"09a4a2750246f41618b39120d40db7fd"},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 604800\n","labels":{"rule_id":"a53c8aca6a1d12ce044ccf9dded58be8"},"severity":"warning"},{"alert":"KubeletClientCertificateExpiration","annotations":{"description":"Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificateexpiration","summary":"Kubelet client certificate is about to expire."},"expr":"kubelet_certificate_manager_client_ttl_seconds < 86400\n","labels":{"rule_id":"7368753ddd4bba718dd45aebddd60ff7"},"severity":"critical"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 604800\n","labels":{"rule_id":"b38ab98563ca8cdae3017b38a6db923c"},"severity":"warning"},{"alert":"KubeletServerCertificateExpiration","annotations":{"description":"Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificateexpiration","summary":"Kubelet server certificate is about to expire."},"expr":"kubelet_certificate_manager_server_ttl_seconds < 86400\n","labels":{"rule_id":"3ebb385fe27a27ac35c7b0a8baea9d33"},"severity":"critical"},{"alert":"KubeletClientCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its client certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletclientcertificaterenewalerrors","summary":"Kubelet has failed to renew its client certificate."},"expr":"increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{"rule_id":"38d17ac4b585ec992ac16f65ff2a36f7"},"severity":"warning"},{"alert":"KubeletServerCertificateRenewalErrors","annotations":{"description":"Kubelet on node {{ $labels.node }} has failed to renew its server certificate ({{ $value | humanize }} errors in the last 5 minutes).","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletservercertificaterenewalerrors","summary":"Kubelet has failed to renew its server certificate."},"expr":"increase(kubelet_server_expiration_renew_errors[5m]) > 0\n","for":"15m","labels":{"rule_id":"f38d371051332f545895768d556d0c53"},"severity":"warning"},{"alert":"KubeletDown","annotations":{"description":"Kubelet has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeletdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kubelet\"} == 1)\n","for":"15m","labels":{"rule_id":"33a2afc614b1735fed4085980457aed5"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -612,7 +650,8 @@ items:
       expr: |
         kube_node_status_condition{job="kube-state-metrics",condition="Ready",status="true"} == 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 3f0ce7b052e4d0badbba3f2b425829e5
       severity: warning
     - alert: KubeNodeUnreachable
       annotations:
@@ -622,7 +661,8 @@ items:
       expr: |
         (kube_node_spec_taint{job="kube-state-metrics",key="node.kubernetes.io/unreachable",effect="NoSchedule"} unless ignoring(key,value) kube_node_spec_taint{job="kube-state-metrics",key=~"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn"}) == 1
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 065ecdb97eafa89aefe3b67dbb3c260a
       severity: warning
     - alert: KubeletTooManyPods
       annotations:
@@ -638,7 +678,8 @@ items:
           kube_node_status_capacity{job="kube-state-metrics",resource="pods"} != 1
         ) > 0.95
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 638892a2ea1cc7edb408f5b17e5ba448
       severity: info
     - alert: KubeNodeReadinessFlapping
       annotations:
@@ -648,7 +689,8 @@ items:
       expr: |
         sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node, cluster) > 2
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 58758efc62806bf92e1db4073d9d8ab1
       severity: warning
     - alert: KubeletPlegDurationHigh
       annotations:
@@ -658,7 +700,8 @@ items:
       expr: |
         node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile="0.99"} >= 10
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 7cff1995f51770daab46159cf915b273
       severity: warning
     - alert: KubeletPodStartUpLatencyHigh
       annotations:
@@ -668,7 +711,8 @@ items:
       expr: |
         histogram_quantile(0.99, sum(rate(kubelet_pod_worker_duration_seconds_bucket{job="kubelet"}[5m])) by (instance, le, cluster)) * on(instance, cluster) group_left(node) kubelet_node_name{job="kubelet"} > 60
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 09a4a2750246f41618b39120d40db7fd
       severity: warning
     - alert: KubeletClientCertificateExpiration
       annotations:
@@ -677,7 +721,8 @@ items:
         summary: Kubelet client certificate is about to expire.
       expr: |
         kubelet_certificate_manager_client_ttl_seconds < 604800
-      labels: {}
+      labels:
+        rule_id: a53c8aca6a1d12ce044ccf9dded58be8
       severity: warning
     - alert: KubeletClientCertificateExpiration
       annotations:
@@ -686,7 +731,8 @@ items:
         summary: Kubelet client certificate is about to expire.
       expr: |
         kubelet_certificate_manager_client_ttl_seconds < 86400
-      labels: {}
+      labels:
+        rule_id: 7368753ddd4bba718dd45aebddd60ff7
       severity: critical
     - alert: KubeletServerCertificateExpiration
       annotations:
@@ -695,7 +741,8 @@ items:
         summary: Kubelet server certificate is about to expire.
       expr: |
         kubelet_certificate_manager_server_ttl_seconds < 604800
-      labels: {}
+      labels:
+        rule_id: b38ab98563ca8cdae3017b38a6db923c
       severity: warning
     - alert: KubeletServerCertificateExpiration
       annotations:
@@ -704,7 +751,8 @@ items:
         summary: Kubelet server certificate is about to expire.
       expr: |
         kubelet_certificate_manager_server_ttl_seconds < 86400
-      labels: {}
+      labels:
+        rule_id: 3ebb385fe27a27ac35c7b0a8baea9d33
       severity: critical
     - alert: KubeletClientCertificateRenewalErrors
       annotations:
@@ -714,7 +762,8 @@ items:
       expr: |
         increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 38d17ac4b585ec992ac16f65ff2a36f7
       severity: warning
     - alert: KubeletServerCertificateRenewalErrors
       annotations:
@@ -724,7 +773,8 @@ items:
       expr: |
         increase(kubelet_server_expiration_renew_errors[5m]) > 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: f38d371051332f545895768d556d0c53
       severity: warning
     - alert: KubeletDown
       annotations:
@@ -734,13 +784,14 @@ items:
       expr: |
         absent(up{job="kubelet"} == 1)
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 33a2afc614b1735fed4085980457aed5
       severity: critical
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-scheduler","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeSchedulerDown","annotations":{"description":"KubeScheduler has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeschedulerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-scheduler\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-scheduler","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeSchedulerDown","annotations":{"description":"KubeScheduler has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubeschedulerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-scheduler\"} == 1)\n","for":"15m","labels":{"rule_id":"f2c13f81fb2d40c8d34305bf4d60162f"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -756,13 +807,14 @@ items:
       expr: |
         absent(up{job="kube-scheduler"} == 1)
       for: 15m
-      labels: {}
+      labels:
+        rule_id: f2c13f81fb2d40c8d34305bf4d60162f
       severity: critical
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-controller-manager","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeControllerManagerDown","annotations":{"description":"KubeControllerManager has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontrollermanagerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-controller-manager\"} == 1)\n","for":"15m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"kubernetes-system-controller-manager","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"KubeControllerManagerDown","annotations":{"description":"KubeControllerManager has disappeared from Prometheus target discovery.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/kubernetes/kubecontrollermanagerdown","summary":"Target disappeared from Prometheus target discovery."},"expr":"absent(up{job=\"kube-controller-manager\"} == 1)\n","for":"15m","labels":{"rule_id":"1d578c1a1146b22e3f92f954e3bb27d5"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -778,6 +830,7 @@ items:
       expr: |
         absent(up{job="kube-controller-manager"} == 1)
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 1d578c1a1146b22e3f92f954e3bb27d5
       severity: critical
 kind: List

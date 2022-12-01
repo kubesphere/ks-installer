@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"thanos-rule","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ThanosRuleQueueIsDroppingAlerts","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} is failing to queue alerts.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulequeueisdroppingalerts","summary":"Thanos Rule is failing to queue alerts."},"expr":"sum by (cluster, namespace, job, instance) (rate(thanos_alert_queue_alerts_dropped_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) > 0\n","for":"5m","labels":{},"severity":"critical"},{"alert":"ThanosRuleSenderIsFailingAlerts","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} is failing to send alerts to alertmanager.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulesenderisfailingalerts","summary":"Thanos Rule is failing to send alerts to alertmanager."},"expr":"sum by (cluster, namespace, job, instance) (rate(thanos_alert_sender_alerts_dropped_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) > 0\n","for":"5m","labels":{},"severity":"critical"},{"alert":"ThanosRuleHighRuleEvaluationFailures","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} is failing to evaluate rules.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulehighruleevaluationfailures","summary":"Thanos Rule is failing to evaluate rules."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(prometheus_rule_evaluation_failures_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(prometheus_rule_evaluations_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 5\n)\n","for":"5m","labels":{},"severity":"critical"},{"alert":"ThanosRuleHighRuleEvaluationWarnings","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} has high number of evaluation warnings.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulehighruleevaluationwarnings","summary":"Thanos Rule has high number of evaluation warnings."},"expr":"sum by (cluster, namespace, job, instance) (rate(thanos_rule_evaluation_with_warnings_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) > 0\n","for":"15m","labels":{},"severity":"info"},{"alert":"ThanosRuleRuleEvaluationLatencyHigh","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} has higher evaluation latency than interval for {{$labels.rule_group}}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosruleruleevaluationlatencyhigh","summary":"Thanos Rule has high rule evaluation latency."},"expr":"(\n  sum by (cluster, namespace, job, instance, rule_group) (prometheus_rule_group_last_duration_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n>\n  sum by (cluster, namespace, job, instance, rule_group) (prometheus_rule_group_interval_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n)\n","for":"5m","labels":{},"severity":"warning"},{"alert":"ThanosRuleGrpcErrorRate","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} is failing to handle {{$value | humanize}}% of requests.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulegrpcerrorrate","summary":"Thanos Rule is failing to handle grpc requests."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(grpc_server_handled_total{grpc_code=~\"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded\", job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(grpc_server_started_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 5\n)\n","for":"5m","labels":{},"severity":"warning"},{"alert":"ThanosRuleConfigReloadFailure","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} has not been able to reload its configuration.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosruleconfigreloadfailure","summary":"Thanos Rule has not been able to reload configuration."},"expr":"avg by (cluster, namespace, job, instance) (thanos_rule_config_last_reload_successful{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}) != 1","for":"5m","labels":{},"severity":"info"},{"alert":"ThanosRuleQueryHighDNSFailures","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} has {{$value | humanize}}% of failing DNS queries for query endpoints.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulequeryhighdnsfailures","summary":"Thanos Rule is having high number of DNS failures."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_query_apis_dns_failures_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_query_apis_dns_lookups_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 1\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"ThanosRuleAlertmanagerHighDNSFailures","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} has {{$value | humanize}}% of failing DNS queries for Alertmanager endpoints.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulealertmanagerhighdnsfailures","summary":"Thanos Rule is having high number of DNS failures."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_alertmanagers_dns_failures_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_alertmanagers_dns_lookups_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 1\n)\n","for":"15m","labels":{},"severity":"warning"},{"alert":"ThanosRuleNoEvaluationFor10Intervals","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} has {{$value | humanize}}% rule groups that did not evaluate for at least 10x of their expected interval.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulenoevaluationfor10intervals","summary":"Thanos Rule has rule groups that did not evaluate for 10 intervals."},"expr":"time() -  max by (cluster, namespace, job, instance, group) (prometheus_rule_group_last_evaluation_timestamp_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n>\n10 * max by (cluster, namespace, job, instance, group) (prometheus_rule_group_interval_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n","for":"5m","labels":{},"severity":"info"},{"alert":"ThanosNoRuleEvaluations","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} did not perform any rule evaluations in the past 10 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosnoruleevaluations","summary":"Thanos Rule did not perform any rule evaluations."},"expr":"sum by (cluster, namespace, job, instance) (rate(prometheus_rule_evaluations_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) <= 0\n  and\nsum by (cluster, namespace, job, instance) (thanos_rule_loaded_rules{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}) > 0\n","for":"5m","labels":{},"severity":"critical"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"thanos-rule","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ThanosRuleQueueIsDroppingAlerts","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} is failing to queue alerts.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulequeueisdroppingalerts","summary":"Thanos Rule is failing to queue alerts."},"expr":"sum by (cluster, namespace, job, instance) (rate(thanos_alert_queue_alerts_dropped_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) > 0\n","for":"5m","labels":{"rule_id":"8a663511d4642025f5a0580fd618d89b"},"severity":"critical"},{"alert":"ThanosRuleSenderIsFailingAlerts","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} is failing to send alerts to alertmanager.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulesenderisfailingalerts","summary":"Thanos Rule is failing to send alerts to alertmanager."},"expr":"sum by (cluster, namespace, job, instance) (rate(thanos_alert_sender_alerts_dropped_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) > 0\n","for":"5m","labels":{"rule_id":"7e994d7a9912689118fe68327d516d74"},"severity":"critical"},{"alert":"ThanosRuleHighRuleEvaluationFailures","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} is failing to evaluate rules.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulehighruleevaluationfailures","summary":"Thanos Rule is failing to evaluate rules."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(prometheus_rule_evaluation_failures_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(prometheus_rule_evaluations_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 5\n)\n","for":"5m","labels":{"rule_id":"1369506100b9d16e1ee4c5369b07eb4d"},"severity":"critical"},{"alert":"ThanosRuleHighRuleEvaluationWarnings","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} has high number of evaluation warnings.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulehighruleevaluationwarnings","summary":"Thanos Rule has high number of evaluation warnings."},"expr":"sum by (cluster, namespace, job, instance) (rate(thanos_rule_evaluation_with_warnings_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) > 0\n","for":"15m","labels":{"rule_id":"e86609a38691ffe545d2a8da6743dfab"},"severity":"info"},{"alert":"ThanosRuleRuleEvaluationLatencyHigh","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} has higher evaluation latency than interval for {{$labels.rule_group}}.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosruleruleevaluationlatencyhigh","summary":"Thanos Rule has high rule evaluation latency."},"expr":"(\n  sum by (cluster, namespace, job, instance, rule_group) (prometheus_rule_group_last_duration_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n>\n  sum by (cluster, namespace, job, instance, rule_group) (prometheus_rule_group_interval_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n)\n","for":"5m","labels":{"rule_id":"386d20888c0984a7a5640e1627c3fb99"},"severity":"warning"},{"alert":"ThanosRuleGrpcErrorRate","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} is failing to handle {{$value | humanize}}% of requests.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulegrpcerrorrate","summary":"Thanos Rule is failing to handle grpc requests."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(grpc_server_handled_total{grpc_code=~\"Unknown|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded\", job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(grpc_server_started_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 5\n)\n","for":"5m","labels":{"rule_id":"6cefe8c838cd7b1b9fc8ac3a67e7fed6"},"severity":"warning"},{"alert":"ThanosRuleConfigReloadFailure","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} has not been able to reload its configuration.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosruleconfigreloadfailure","summary":"Thanos Rule has not been able to reload configuration."},"expr":"avg by (cluster, namespace, job, instance) (thanos_rule_config_last_reload_successful{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}) != 1","for":"5m","labels":{"rule_id":"71de0adaceee2af75a09beb08a0062a2"},"severity":"info"},{"alert":"ThanosRuleQueryHighDNSFailures","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} has {{$value | humanize}}% of failing DNS queries for query endpoints.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulequeryhighdnsfailures","summary":"Thanos Rule is having high number of DNS failures."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_query_apis_dns_failures_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_query_apis_dns_lookups_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 1\n)\n","for":"15m","labels":{"rule_id":"70d976940a6ee03ab86a658abf3a0c08"},"severity":"warning"},{"alert":"ThanosRuleAlertmanagerHighDNSFailures","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} has {{$value | humanize}}% of failing DNS queries for Alertmanager endpoints.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulealertmanagerhighdnsfailures","summary":"Thanos Rule is having high number of DNS failures."},"expr":"(\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_alertmanagers_dns_failures_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n/\n  sum by (cluster, namespace, job, instance) (rate(thanos_rule_alertmanagers_dns_lookups_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m]))\n* 100 > 1\n)\n","for":"15m","labels":{"rule_id":"8cbe90cf6e5abac46fa60f29b9b3dc12"},"severity":"warning"},{"alert":"ThanosRuleNoEvaluationFor10Intervals","annotations":{"description":"Thanos Rule {{$labels.job}} in {{$labels.namespace}} has {{$value | humanize}}% rule groups that did not evaluate for at least 10x of their expected interval.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosrulenoevaluationfor10intervals","summary":"Thanos Rule has rule groups that did not evaluate for 10 intervals."},"expr":"time() -  max by (cluster, namespace, job, instance, group) (prometheus_rule_group_last_evaluation_timestamp_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n>\n10 * max by (cluster, namespace, job, instance, group) (prometheus_rule_group_interval_seconds{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"})\n","for":"5m","labels":{"rule_id":"96e6fa0bcbecd8b9c2720a168bb9ae68"},"severity":"info"},{"alert":"ThanosNoRuleEvaluations","annotations":{"description":"Thanos Rule {{$labels.instance}} in {{$labels.namespace}} did not perform any rule evaluations in the past 10 minutes.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/thanos/thanosnoruleevaluations","summary":"Thanos Rule did not perform any rule evaluations."},"expr":"sum by (cluster, namespace, job, instance) (rate(prometheus_rule_evaluations_total{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}[5m])) <= 0\n  and\nsum by (cluster, namespace, job, instance) (thanos_rule_loaded_rules{job=\"thanos-ruler-kubesphere\",namespace=\"kubesphere-monitoring-system\"}) > 0\n","for":"5m","labels":{"rule_id":"8aa44c144c2a9504e9905d445136dcdb"},"severity":"critical"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -20,7 +20,8 @@ items:
       expr: |
         sum by (cluster, namespace, job, instance) (rate(thanos_alert_queue_alerts_dropped_total{job="thanos-ruler-kubesphere",namespace="kubesphere-monitoring-system"}[5m])) > 0
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 8a663511d4642025f5a0580fd618d89b
       severity: critical
     - alert: ThanosRuleSenderIsFailingAlerts
       annotations:
@@ -30,7 +31,8 @@ items:
       expr: |
         sum by (cluster, namespace, job, instance) (rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler-kubesphere",namespace="kubesphere-monitoring-system"}[5m])) > 0
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 7e994d7a9912689118fe68327d516d74
       severity: critical
     - alert: ThanosRuleHighRuleEvaluationFailures
       annotations:
@@ -45,7 +47,8 @@ items:
         * 100 > 5
         )
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 1369506100b9d16e1ee4c5369b07eb4d
       severity: critical
     - alert: ThanosRuleHighRuleEvaluationWarnings
       annotations:
@@ -55,7 +58,8 @@ items:
       expr: |
         sum by (cluster, namespace, job, instance) (rate(thanos_rule_evaluation_with_warnings_total{job="thanos-ruler-kubesphere",namespace="kubesphere-monitoring-system"}[5m])) > 0
       for: 15m
-      labels: {}
+      labels:
+        rule_id: e86609a38691ffe545d2a8da6743dfab
       severity: info
     - alert: ThanosRuleRuleEvaluationLatencyHigh
       annotations:
@@ -69,7 +73,8 @@ items:
           sum by (cluster, namespace, job, instance, rule_group) (prometheus_rule_group_interval_seconds{job="thanos-ruler-kubesphere",namespace="kubesphere-monitoring-system"})
         )
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 386d20888c0984a7a5640e1627c3fb99
       severity: warning
     - alert: ThanosRuleGrpcErrorRate
       annotations:
@@ -84,7 +89,8 @@ items:
         * 100 > 5
         )
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 6cefe8c838cd7b1b9fc8ac3a67e7fed6
       severity: warning
     - alert: ThanosRuleConfigReloadFailure
       annotations:
@@ -93,7 +99,8 @@ items:
         summary: Thanos Rule has not been able to reload configuration.
       expr: avg by (cluster, namespace, job, instance) (thanos_rule_config_last_reload_successful{job="thanos-ruler-kubesphere",namespace="kubesphere-monitoring-system"}) != 1
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 71de0adaceee2af75a09beb08a0062a2
       severity: info
     - alert: ThanosRuleQueryHighDNSFailures
       annotations:
@@ -108,7 +115,8 @@ items:
         * 100 > 1
         )
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 70d976940a6ee03ab86a658abf3a0c08
       severity: warning
     - alert: ThanosRuleAlertmanagerHighDNSFailures
       annotations:
@@ -123,7 +131,8 @@ items:
         * 100 > 1
         )
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 8cbe90cf6e5abac46fa60f29b9b3dc12
       severity: warning
     - alert: ThanosRuleNoEvaluationFor10Intervals
       annotations:
@@ -135,7 +144,8 @@ items:
         >
         10 * max by (cluster, namespace, job, instance, group) (prometheus_rule_group_interval_seconds{job="thanos-ruler-kubesphere",namespace="kubesphere-monitoring-system"})
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 96e6fa0bcbecd8b9c2720a168bb9ae68
       severity: info
     - alert: ThanosNoRuleEvaluations
       annotations:
@@ -147,6 +157,7 @@ items:
           and
         sum by (cluster, namespace, job, instance) (thanos_rule_loaded_rules{job="thanos-ruler-kubesphere",namespace="kubesphere-monitoring-system"}) > 0
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 8aa44c144c2a9504e9905d445136dcdb
       severity: critical
 kind: List

@@ -4,7 +4,7 @@ items:
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"prometheus-operator","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"PrometheusOperatorListErrors","annotations":{"description":"Errors while performing List operations in controller {{$labels.controller}} in {{$labels.namespace}} namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorlisterrors","summary":"Errors while performing list operations in controller."},"expr":"(sum by (controller,namespace,cluster) (rate(prometheus_operator_list_operations_failed_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m])) / sum by (controller,namespace,cluster) (rate(prometheus_operator_list_operations_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m]))) > 0.4\n","for":"15m","labels":{},"severity":"warning"},{"alert":"PrometheusOperatorWatchErrors","annotations":{"description":"Errors while performing watch operations in controller {{$labels.controller}} in {{$labels.namespace}} namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorwatcherrors","summary":"Errors while performing watch operations in controller."},"expr":"(sum by (controller,namespace,cluster) (rate(prometheus_operator_watch_operations_failed_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m])) / sum by (controller,namespace,cluster) (rate(prometheus_operator_watch_operations_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m]))) > 0.4\n","for":"15m","labels":{},"severity":"warning"},{"alert":"PrometheusOperatorSyncFailed","annotations":{"description":"Controller {{ $labels.controller }} in {{ $labels.namespace }} namespace fails to reconcile {{ $value }} objects.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorsyncfailed","summary":"Last controller reconciliation failed"},"expr":"min_over_time(prometheus_operator_syncs{status=\"failed\",job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) > 0\n","for":"10m","labels":{},"severity":"warning"},{"alert":"PrometheusOperatorReconcileErrors","annotations":{"description":"{{ $value | humanizePercentage }} of reconciling operations failed for {{ $labels.controller }} controller in {{ $labels.namespace }} namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorreconcileerrors","summary":"Errors while reconciling controller."},"expr":"(sum by (controller,namespace,cluster) (rate(prometheus_operator_reconcile_errors_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]))) / (sum by (controller,namespace,cluster) (rate(prometheus_operator_reconcile_operations_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]))) > 0.1\n","for":"10m","labels":{},"severity":"warning"},{"alert":"PrometheusOperatorNodeLookupErrors","annotations":{"description":"Errors while reconciling Prometheus in {{ $labels.namespace }} Namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatornodelookuperrors","summary":"Errors while reconciling Prometheus."},"expr":"rate(prometheus_operator_node_address_lookup_errors_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) > 0.1\n","for":"10m","labels":{},"severity":"warning"},{"alert":"PrometheusOperatorNotReady","annotations":{"description":"Prometheus operator in {{ $labels.namespace }} namespace isn''t ready to reconcile {{ $labels.controller }} resources.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatornotready","summary":"Prometheus operator not ready"},"expr":"min by(controller,namespace,cluster) (max_over_time(prometheus_operator_ready{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) == 0)\n","for":"5m","labels":{},"severity":"warning"},{"alert":"PrometheusOperatorRejectedResources","annotations":{"description":"Prometheus operator in {{ $labels.namespace }} namespace rejected {{ printf \"%0.0f\" $value }} {{ $labels.controller }}/{{ $labels.resource }} resources.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorrejectedresources","summary":"Resources rejected by Prometheus operator"},"expr":"min_over_time(prometheus_operator_managed_resources{state=\"rejected\",job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) > 0\n","for":"5m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"prometheus-operator","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"PrometheusOperatorListErrors","annotations":{"description":"Errors while performing List operations in controller {{$labels.controller}} in {{$labels.namespace}} namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorlisterrors","summary":"Errors while performing list operations in controller."},"expr":"(sum by (controller,namespace,cluster) (rate(prometheus_operator_list_operations_failed_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m])) / sum by (controller,namespace,cluster) (rate(prometheus_operator_list_operations_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m]))) > 0.4\n","for":"15m","labels":{"rule_id":"6434951db224a2bf20dca8e27951a6c6"},"severity":"warning"},{"alert":"PrometheusOperatorWatchErrors","annotations":{"description":"Errors while performing watch operations in controller {{$labels.controller}} in {{$labels.namespace}} namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorwatcherrors","summary":"Errors while performing watch operations in controller."},"expr":"(sum by (controller,namespace,cluster) (rate(prometheus_operator_watch_operations_failed_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m])) / sum by (controller,namespace,cluster) (rate(prometheus_operator_watch_operations_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[10m]))) > 0.4\n","for":"15m","labels":{"rule_id":"5bf4e154b275e355b444342e9134505d"},"severity":"warning"},{"alert":"PrometheusOperatorSyncFailed","annotations":{"description":"Controller {{ $labels.controller }} in {{ $labels.namespace }} namespace fails to reconcile {{ $value }} objects.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorsyncfailed","summary":"Last controller reconciliation failed"},"expr":"min_over_time(prometheus_operator_syncs{status=\"failed\",job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) > 0\n","for":"10m","labels":{"rule_id":"fc63b335443718bbf66ce8610762d29f"},"severity":"warning"},{"alert":"PrometheusOperatorReconcileErrors","annotations":{"description":"{{ $value | humanizePercentage }} of reconciling operations failed for {{ $labels.controller }} controller in {{ $labels.namespace }} namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorreconcileerrors","summary":"Errors while reconciling controller."},"expr":"(sum by (controller,namespace,cluster) (rate(prometheus_operator_reconcile_errors_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]))) / (sum by (controller,namespace,cluster) (rate(prometheus_operator_reconcile_operations_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]))) > 0.1\n","for":"10m","labels":{"rule_id":"c588b3706841edc0a495aafbce7574c4"},"severity":"warning"},{"alert":"PrometheusOperatorNodeLookupErrors","annotations":{"description":"Errors while reconciling Prometheus in {{ $labels.namespace }} Namespace.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatornodelookuperrors","summary":"Errors while reconciling Prometheus."},"expr":"rate(prometheus_operator_node_address_lookup_errors_total{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) > 0.1\n","for":"10m","labels":{"rule_id":"ae4a4a44956fda827f43df1f76990fe1"},"severity":"warning"},{"alert":"PrometheusOperatorNotReady","annotations":{"description":"Prometheus operator in {{ $labels.namespace }} namespace isn''t ready to reconcile {{ $labels.controller }} resources.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatornotready","summary":"Prometheus operator not ready"},"expr":"min by(controller,namespace,cluster) (max_over_time(prometheus_operator_ready{job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) == 0)\n","for":"5m","labels":{"rule_id":"3539a37778aeda49796c61bc8a62e791"},"severity":"warning"},{"alert":"PrometheusOperatorRejectedResources","annotations":{"description":"Prometheus operator in {{ $labels.namespace }} namespace rejected {{ printf \"%0.0f\" $value }} {{ $labels.controller }}/{{ $labels.resource }} resources.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/prometheusoperatorrejectedresources","summary":"Resources rejected by Prometheus operator"},"expr":"min_over_time(prometheus_operator_managed_resources{state=\"rejected\",job=\"prometheus-operator\",namespace=\"kubesphere-monitoring-system\"}[5m]) > 0\n","for":"5m","labels":{"rule_id":"3357d98377c72df2ffcda6d58cce1d00"},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -20,7 +20,8 @@ items:
       expr: |
         (sum by (controller,namespace,cluster) (rate(prometheus_operator_list_operations_failed_total{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[10m])) / sum by (controller,namespace,cluster) (rate(prometheus_operator_list_operations_total{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[10m]))) > 0.4
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 6434951db224a2bf20dca8e27951a6c6
       severity: warning
     - alert: PrometheusOperatorWatchErrors
       annotations:
@@ -30,7 +31,8 @@ items:
       expr: |
         (sum by (controller,namespace,cluster) (rate(prometheus_operator_watch_operations_failed_total{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[10m])) / sum by (controller,namespace,cluster) (rate(prometheus_operator_watch_operations_total{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[10m]))) > 0.4
       for: 15m
-      labels: {}
+      labels:
+        rule_id: 5bf4e154b275e355b444342e9134505d
       severity: warning
     - alert: PrometheusOperatorSyncFailed
       annotations:
@@ -40,7 +42,8 @@ items:
       expr: |
         min_over_time(prometheus_operator_syncs{status="failed",job="prometheus-operator",namespace="kubesphere-monitoring-system"}[5m]) > 0
       for: 10m
-      labels: {}
+      labels:
+        rule_id: fc63b335443718bbf66ce8610762d29f
       severity: warning
     - alert: PrometheusOperatorReconcileErrors
       annotations:
@@ -50,7 +53,8 @@ items:
       expr: |
         (sum by (controller,namespace,cluster) (rate(prometheus_operator_reconcile_errors_total{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[5m]))) / (sum by (controller,namespace,cluster) (rate(prometheus_operator_reconcile_operations_total{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[5m]))) > 0.1
       for: 10m
-      labels: {}
+      labels:
+        rule_id: c588b3706841edc0a495aafbce7574c4
       severity: warning
     - alert: PrometheusOperatorNodeLookupErrors
       annotations:
@@ -60,7 +64,8 @@ items:
       expr: |
         rate(prometheus_operator_node_address_lookup_errors_total{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[5m]) > 0.1
       for: 10m
-      labels: {}
+      labels:
+        rule_id: ae4a4a44956fda827f43df1f76990fe1
       severity: warning
     - alert: PrometheusOperatorNotReady
       annotations:
@@ -70,7 +75,8 @@ items:
       expr: |
         min by(controller,namespace,cluster) (max_over_time(prometheus_operator_ready{job="prometheus-operator",namespace="kubesphere-monitoring-system"}[5m]) == 0)
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 3539a37778aeda49796c61bc8a62e791
       severity: warning
     - alert: PrometheusOperatorRejectedResources
       annotations:
@@ -80,13 +86,14 @@ items:
       expr: |
         min_over_time(prometheus_operator_managed_resources{state="rejected",job="prometheus-operator",namespace="kubesphere-monitoring-system"}[5m]) > 0
       for: 5m
-      labels: {}
+      labels:
+        rule_id: 3357d98377c72df2ffcda6d58cce1d00
       severity: warning
 - apiVersion: alerting.kubesphere.io/v2beta1
   kind: GlobalRuleGroup
   metadata:
     annotations:
-      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"config-reloaders","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ConfigReloaderSidecarErrors","annotations":{"description":"Errors encountered while the {{$labels.pod}} config-reloader sidecar attempts to sync config in {{$labels.namespace}} namespace.\nAs a result, configuration for service running in {{$labels.pod}} may be stale and cannot be updated anymore.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/configreloadersidecarerrors","summary":"config-reloader sidecar has not had a successful reload for 10m"},"expr":"max_over_time(reloader_last_reload_successful{namespace=~\".+\"}[5m]) == 0\n","for":"10m","labels":{},"severity":"warning"}]}}'
+      alerting.kubesphere.io/initial-configuration: '{"apiVersion":"alerting.kubesphere.io/v2beta1","kind":"GlobalRuleGroup","metadata":{"annotations":{},"labels":{"alerting.kubesphere.io/builtin":"true","alerting.kubesphere.io/enable":"true"},"name":"config-reloaders","namespace":"kubesphere-monitoring-system"},"spec":{"rules":[{"alert":"ConfigReloaderSidecarErrors","annotations":{"description":"Errors encountered while the {{$labels.pod}} config-reloader sidecar attempts to sync config in {{$labels.namespace}} namespace.\nAs a result, configuration for service running in {{$labels.pod}} may be stale and cannot be updated anymore.","runbook_url":"https://alert-runbooks.kubesphere.io/runbooks/prometheus-operator/configreloadersidecarerrors","summary":"config-reloader sidecar has not had a successful reload for 10m"},"expr":"max_over_time(reloader_last_reload_successful{namespace=~\".+\"}[5m]) == 0\n","for":"10m","labels":{"rule_id":"39693c93edd5a4ce8b4f23d7de5024b3"},"severity":"warning"}]}}'
     labels:
       alerting.kubesphere.io/builtin: "true"
       alerting.kubesphere.io/enable: "true"
@@ -104,6 +111,7 @@ items:
       expr: |
         max_over_time(reloader_last_reload_successful{namespace=~".+"}[5m]) == 0
       for: 10m
-      labels: {}
+      labels:
+        rule_id: 39693c93edd5a4ce8b4f23d7de5024b3
       severity: warning
 kind: List
