@@ -16,18 +16,15 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/eck_create_zh.jpg,/assets/screenshots/eck_detail_zh.jpg,/assets/screenshots/eck_monitor_zh.jpg
   changeLog: |
-    - WIP
+    - Hot-Warm-Cold deploy structure
+    - Kibana for data exploration and visualization, and stack management
+    - Integrated with Prometheus by elasticsearch-exporter
   changeLog_zh: |
-    - 支持版本 Easticsearch/Kibana 7.10+ 8.0+
-    - 支持Elasticsearch、Kibana 等节点的部署和管理
-    - 管理和监控多个集群
-    - 通过滚动升级执行安全的配置更改
-    - 支持对接prometheus，提供基于 Exporter 的资源状态监控功能
-    - 使用 TLS 证书保护集群
-    - 扩展集群容量和存储
-    - 设置具有可用性区域感知的热-温-冷体系结构
+    - 热-温-冷部署架构
+    - 部署 Kibana 浏览数据、可视化数据、管理集群
+    - 使用 elasticsearch-exporter 与 Prometheus 集成
   operatorVersion: "2.2.0"
-  appVersion: "7.17.5|8.2.3"
+  appVersion: "7.17.5"
   owner: "RadonDB"
 status:
   state: active

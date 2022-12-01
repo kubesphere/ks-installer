@@ -2,7 +2,7 @@
 redisOperator:
   name: redis-operator
   imageName: radondb/redis-operator-arm
-  imageTag: v1.2.4
+  imageTag: v1.2.5
   imagePullPolicy: Always
   imagePrefix: docker.io
 

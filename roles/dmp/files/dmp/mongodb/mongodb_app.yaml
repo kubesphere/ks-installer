@@ -11,13 +11,21 @@ spec:
   # app name
   name: "RadonDB MongoDB"
   # app description
-  description_zh: "一款基于 MongoDB 提供的企业级文档数据库。"
-  description: "WIP"
+  description_zh: "一款基于 MongoDB 提供的企业级数据库。"
+  description: "A cloud-native, enterprise-class database system based on MongoDB."
   # app description
   abstraction_zh: |
-    - RadonDB MongoDB 是一款基于 MongoDB 副本集技术构建的分布式文档数据库，支持在 Kubernetes 对 MongoDB 进行应用部署及全生命周期管理等
+    - 提供一主多从高可用架构
+    - 金融级 MongoDB 集群
+    - 提供 Semi-Sync 插件，确保节点间的数据一致性
+    - 提供一主多从架构，基于 Raft 协议管理集群节点，具备主从秒级切换性能，保障业务连续性
+    - 提供监控告警等功能
   abstraction: |
-    - WIP
+    - Provide a high availability architecture with one master and multiple slave nodes.
+    - Provide financial high reliable MongoDB cluster.
+    - Provide Semi-Sync plug-in to ensure data consistency between nodes.
+    - Support master/slave switchover in seconds to ensure service continuity that based on Raft protocol.
+    - Provide functions such as alarm monitoring.
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/mongo_create.jpg,/assets/screenshots/mongo_detail.jpg,/assets/screenshots/mongo_monitor.jpg
   screenshots_zh: |
@@ -25,5 +33,5 @@ spec:
   icon: "/assets/radondb_logo.svg"
   owner: "RadonDB"
 status:
-  latestVersion: "1.0.0"
+  latestVersion: "2.1.2"
   state: active

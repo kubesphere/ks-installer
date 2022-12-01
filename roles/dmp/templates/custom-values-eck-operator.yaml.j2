@@ -139,7 +139,7 @@ config:
   metricsPort: "0"
 
   # containerRegistry to use for pulling Elasticsearch and other application container images.
-  containerRegistry: {{ base_repo }}
+  containerRegistry: {{ base_repo| default('docker.io') }}
   # namespace of containerRegistry(refer to harbor's terminology, equal to the 'username' of docker.com)
   # all config is commented out and given its default value. Change the value if you don't use the default
   # nsApm: "apm"
@@ -230,7 +230,7 @@ global:
 # elasticsearch-exporter config
 exporter:
   # elasticsearch-exporter container image
-  exporterImageRegistry: {{ base_repo }}
+  exporterImageRegistry: {{ base_repo| default('docker.io') }}
   exporterImageNamespace: "{{ namespace_override | default('radondb') }}"
   exporterImageName: "elasticsearch-exporter"
   exporterImageTag: "v1.3.0"
