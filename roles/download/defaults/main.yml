@@ -200,6 +200,7 @@ alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/al
 alertmanager_tag: v0.23.0
 thanos_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/thanos"
 thanos_tag: v0.29.5
+thanos_28_tag: v0.28.5
 grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
 grafana_tag: 8.3.3
 
@@ -775,6 +776,12 @@ images:
   thanos:
     repo: "{{ thanos_repo }}"
     tag: "{{ thanos_tag }}"
+    sha256: "{{ thanos_checksum|default(None) }}"
+    group: "kubesphere-monitoring-images"
+
+  thanos_28:
+    repo: "{{ thanos_repo }}"
+    tag: "{{ thanos_28_tag }}"
     sha256: "{{ thanos_checksum|default(None) }}"
     group: "kubesphere-monitoring-images"
 
