@@ -16,13 +16,18 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/redis_sentinel_create_zh.jpg,/assets/screenshots/redis_sentinel_detail_zh.jpg,/assets/screenshots/redis_sentinel_monitor_zh.jpg
   changeLog: |
-    - WIP
+    - Build based on Redis 6.x and 7.x
+    - Support deployment of Redis Sentinel
+    - Support Redis Sentinel failover and auto-recovery
+    - Suport resource status monitoring based on the Prometheus Exporter
+    - Support password and password-free settings for clusters
+    - Support hot update of Redis's management configuration parameters
   changeLog_zh: |
     - 基于社区 Redis 6.x、7.x 版本构建
     - 支持 Redis 哨兵模式部署
     - 支持 Redis Sentinel 故障转移和自动恢复
     - 支持基于 Prometheus Exporter 的资源状态监控功能
-    - 支持对群集的密码/无密码设置
+    - 支持对集群的密码/无密码设置
     - Redis 管理配置参数热更新
   operatorVersion: "1.0.0"
   appVersion: "6.2.5及7.0"

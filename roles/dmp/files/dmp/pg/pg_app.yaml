@@ -11,7 +11,7 @@ spec:
   # Add fields here
   name: "RadonDB PostgreSQL"
   description_zh: "一款基于 PostgreSQL 的容器化、开源关系型数据库。"
-  description: "A cloud-native, powerful, open source object-relational database system based on PostgreSQL."
+  description: "RadonDB PostgreSQL is a containerized, open-source, and relational database system based on PostgreSQL."
   abstraction_zh: |
     - 被广泛应用于地理空间和移动领域
     - 具备高可用、稳定性、数据完整性等性能
@@ -23,15 +23,15 @@ spec:
     - 提供 Citus 插件，提供分布式数据库能力
     - 提供实时监控、健康检查、日志自动清理等功能
   abstraction: |
-    - It is  widely used in geospatial and mobile fileds.
-    - Provide  features such as high availability, data stability and integrity .
-    - Support online horizontal scaling.
-    - Support auto-failover and HA.
-    - Provide PostgreSQL common APIs to facilitate parameter adjustment.
-    - Provide pg_dirtyread plugin-in to support accidental deletion of data retrieval.
-    - Provide PostGIS plug-in to store, query and modify spatial relationships.
-    - Provides Citus plugin-in to provide distributed database capabilities.
-    - Provide functions such as real-time monitoring, health check and automatic log clearing.
+    - Widely used in geospatial and mobile industries
+    - Features high availability and stability and data integrity
+    - Supports online horizontal scaling
+    - Support automatic failover and HA
+    - Provide common PostgreSQL APIs to facilitate parameter settings
+    - Provide the pg_dirtyread plug-in to support retrieval of mistakenly deleted data
+    - Provide the PostGIS plug-in to store, query, and modify spatial relationships
+    - Provide the Citus plug-in to provide distributed database capabilities
+    - Provide real-time monitoring, health check, automatic log cleaning, and other features
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/pg_create.jpg,/assets/screenshots/pg_detail.jpg,/assets/screenshots/pg_monitor.jpg
   screenshots_zh: |

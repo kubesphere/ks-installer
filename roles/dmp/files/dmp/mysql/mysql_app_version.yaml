@@ -16,11 +16,11 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mysql_create_zh.jpg,/assets/screenshots/mysql_detail_zh.jpg,/assets/screenshots/mysql_monitor_zh.jpg
   changeLog: |
-    - Add MySQL Cluster service monitoring
-    - Database account management
-    - Support dynamic disk expansion
-    - Optimized start stop logic
-    - Rich cluster state granularity
+    - Add support for service monitoring of MySQL clusters
+    - Improve database account management
+    - Support dynamic disk capacity expansion
+    - Optimize the elegant start/stop logic
+    - Display more cluster states
   changeLog_zh: |
     - 增加 MySQL 集群服务监控
     - 完善数据库账户管理

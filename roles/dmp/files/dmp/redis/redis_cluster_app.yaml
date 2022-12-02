@@ -11,13 +11,13 @@ spec:
   # app name
   name: "RadonDB Redis Cluster"
   # app description
-  description_zh: "一款基于 Redis 提供的企业级缓存数据库。"
-  description: "WIP"
+  description_zh: "RadonDB Redis Cluster 一款基于 Redis 提供的企业级缓存数据库。"
+  description: "RadonDB Redis Cluster is a Redis-based enterprise-grade caching database."
   # app description
   abstraction_zh: |
     - RadonDB Redis Cluster 完全基于云原生技术的缓存数据库服务，将在 Kubernetes 之上进行 Redis Cluster 模式设置，为您提供即开即用、安全可靠、弹性扩容、便捷易用的在线分布式缓存能力
   abstraction: |
-    - WIP
+    - RadonDB Redis Cluster is a 100% cloud-native caching database service. It supports setup of Redis Cluster modes on top of Kubernetes and provides online distributed caching capabilities that are scalable, convenient, secure and reliable, and ready to use.
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/redis_cluster_create.jpg,/assets/screenshots/redis_cluster_detail.jpg,/assets/screenshots/redis_cluster_monitor.jpg
   screenshots_zh: |

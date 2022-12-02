@@ -16,13 +16,13 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/eck_create_zh.jpg,/assets/screenshots/eck_detail_zh.jpg,/assets/screenshots/eck_monitor_zh.jpg
   changeLog: |
-    - Hot-Warm-Cold deploy structure
-    - Kibana for data exploration and visualization, and stack management
-    - Integrated with Prometheus by elasticsearch-exporter
+    - Implement a Hot-Warm-Cold deployment architecture
+    - Deploy Kibana to manage clusters in a visualized manner
+    - Integrated Elasticsearch Exporter with Prometheus
   changeLog_zh: |
-    - 热-温-冷部署架构
+    - 采用热-温-冷部署架构
     - 部署 Kibana 浏览数据、可视化数据、管理集群
-    - 使用 elasticsearch-exporter 与 Prometheus 集成
+    - 使用 Elasticsearch Exporter 与 Prometheus 集成
   operatorVersion: "2.2.0"
   appVersion: "7.17.5"
   owner: "RadonDB"
