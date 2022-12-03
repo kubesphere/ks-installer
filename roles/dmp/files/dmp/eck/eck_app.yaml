@@ -12,16 +12,16 @@ spec:
   name: "RadonDB ECK"
   # app description
   description_zh: "分布式搜索和分析引擎"
-  description: "Elasticsearch is the distributed search and analytics engine"
+  description: "RadonDB ECK is a distributed search and analytics engine."
   # app description
   abstraction_zh: |
-    - 数据以json文档的形式存储并建立索引，支持高速全文检索
+    - 以 JSON 文格式存储数据并建立索引，支持高速全文检索
     - 提供近乎实时的数据搜索和分析能力
-    - 具备高可用和可扩展的内部特性
+    - 具备高可用和可扩展的特性
   abstraction: |
-   - Data is serialized as json documents and indexed for very fast full-text searches.
-    - Provides near real-time search and analytics for all types of data.
-    - Inner feature of high availability and scalability.
+    - Store data in the JSON format, create an index, and support high-speed full-text search
+    - Provide quasi-real-time data search and analytics capabilities
+    - Feature high availability and scalability
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/eck_create.jpg,/assets/screenshots/eck_detail.jpg,/assets/screenshots/eck_monitor.jpg
   screenshots_zh: |

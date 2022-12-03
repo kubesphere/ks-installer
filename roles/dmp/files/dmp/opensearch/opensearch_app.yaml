@@ -12,13 +12,13 @@ spec:
   name: "RadonDB OpenSearch"
   # app description
   description_zh: "一款全面开源搜索和分析引擎。"
-  description: ""
+  description: "RadonDB OpenSearch is a 100% open-source search and analytics engine."
   # app description
   abstraction_zh: |
     - OpenSearch 是一个全面开源搜索和分析引擎，为用户提供实时日志处理、全文搜索和数据分析等基础能力。
 
   abstraction: |
-    - Provide a high availability architecture with one master and multiple slave nodes.
+    - OpenSearch is a 100% open-source search and analytics engine used for real-time log processing, full-text search, and data analysis.
 
   screenshots: |
     /assets/screenshots/radondb_list.jpg,/assets/screenshots/opensearch_create.jpg,/assets/screenshots/opensearch_detail.jpg,/assets/screenshots/opensearch_monitor.jpg

@@ -16,14 +16,20 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/redis_cluster_create_zh.jpg,/assets/screenshots/redis_cluster_detail_zh.jpg,/assets/screenshots/redis_cluster_monitor_zh.jpg
   changeLog: |
-    - WIP
+    - Build based on Redis 6.x and 7.x
+    - Introduce Proxy for clusters
+    - Support Redis Cluster failover and auto-recovery
+    - Suport resource status monitoring based on the Prometheus Exporter
+    - Support Kubernetes requests and limits
+    - Support password and password-free settings for clusters
+    - Support hot updates of Redis's management configuration parameters
   changeLog_zh: |
-    - 基于社区 Redis 6.x、7.x 版本构建    
+    - 基于社区 Redis 6.x、7.x 版本构建
     - 支持 Proxy 作为集群代理
     - Redis Cluster 集群故障转移和自动恢复
     - 支持基于 Prometheus Exporter 的资源状态监控功能
-    - 支持 k8s 请求和限制的资源限制
-    - 支持对群集的密码/无密码设置
+    - 支持 Kubernetes 请求和限制的资源限制
+    - 支持对集群的密码/无密码设置
     - Redis 管理配置参数热更新
   operatorVersion: "1.0.0"
   appVersion: "6.2.5及7.0"

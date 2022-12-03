@@ -16,10 +16,17 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/opensearch_create_zh.jpg,/assets/screenshots/opensearch_detail_zh.jpg,/assets/screenshots/opensearch_monitor_zh.jpg
   changeLog: |
-    - Add MySQL Cluster service monitoring
+    - Support installation and management of OpenSearch, Dashboard, and Logstash
+    - Support OpenSearch 2.3.0
+    - Dynamically increase the compute specifications and storage capacity of clusters
+    - Dynamically adjust the number of cluster nodes
+    - Perform a rolling update upon configurations change
+    - Support the keystore feature
+    - Integrate with Prometheus to support the Exporter-based resource status monitoring feature
+    - Support TLS
   changeLog_zh: |
-    - 支持 opensearch、dashboard、logstash 等节点的部署和管理
-    - 支持 opensearch 版本：2.3.0
+    - 支持 OpenSearch、Dashboard、Logstash 等节点的部署和管理
+    - 支持 OpenSearch 2.3.0
     - 支持动态扩展集群计算规格和存储容量
     - 支持动态调整集群节点数量
     - 通过滚动方式执行配置更改

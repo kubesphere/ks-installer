@@ -16,11 +16,11 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mongo_create_zh.jpg,/assets/screenshots/mongo_detail_zh.jpg,/assets/screenshots/mongo_monitor_zh.jpg
   changeLog: |
-    - Add MongoDB Cluster service monitoring
-    - Database account management
+    - Add the service monitoring feature of MongoDB clusters
+    - Improve database account management
     - Support dynamic disk expansion
-    - Optimized start stop logic
-    - Rich cluster state granularity
+    - Optimize the elegant start and stop logic
+    - Display more cluster states
   changeLog_zh: |
     - 增加 MongoDB 集群服务监控
     - 完善数据库账户管理
