@@ -16,15 +16,19 @@ spec:
   screenshots_zh: |
     /assets/screenshots/radondb_list_zh.jpg,/assets/screenshots/mongo_create_zh.jpg,/assets/screenshots/mongo_detail_zh.jpg,/assets/screenshots/mongo_monitor_zh.jpg
   changeLog: |
-    - WIP
+    - Add MongoDB Cluster service monitoring
+    - Database account management
+    - Support dynamic disk expansion
+    - Optimized start stop logic
+    - Rich cluster state granularity
   changeLog_zh: |
-    - 基于 MongoDB 4.2.19 版本构建，支持 MongoDB 4.2.19版本
-    - 支持 MongoDB 副本集模式部署
-    - 支持 MongoDB 故障转移和恢复
-    - 使用 TLS 保护客户端到服务器和服务器到服务器的连接
-    - 支持对接prometheus，提供基于 Exporter 的资源状态监控功能
-  operatorVersion: "1.0.0"
-  appVersion: "4.2.19"
+    - 增加 MongoDB 集群服务监控
+    - 完善数据库账户管理
+    - 支持磁盘动态扩容
+    - 优化优雅启停逻辑
+    - 丰富集群状态粒度
+  operatorVersion: "2.1.2"
+  appVersion: "5.7.34"
   owner: "RadonDB"
 status:
   state: active

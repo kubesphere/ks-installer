@@ -1222,7 +1222,7 @@ images:
 
   redis-operator:
     repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/redis-operator"
-    tag: "v1.2.4"
+    tag: "v1.2.5"
     sha256: ""
     group: "dmp-reids-images"
   redis-exporter:
@@ -1288,7 +1288,7 @@ images:
     group: "dmp-eck-images"
 
   dmp-elasticsearch:
-    repo: "{{ base_repo }}{{ namespace_override | default('library') }}/elasticsearch"
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/elasticsearch"
     tag: "7.17.5"
     sha256: ""
     group: "dmp-eck-images"
@@ -1300,37 +1300,37 @@ images:
     group: "dmp-eck-images"
 
   dmp-elasticsearch-exporter:
-    repo: "{{ base_repo }}{{ namespace_override | default('prometheuscommunity') }}/elasticsearch-exporter"
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/elasticsearch-exporter"
     tag: "v1.3.0"
     sha256: ""
     group: "dmp-eck-images"
 
   dmp-opensearch-operator:
-    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch-operator"
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/opensearch-operator"
     tag: "2.0.13"
     sha256: ""
     group: "dmp-opensearch-images"
 
   dmp-opensearch:
-    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch"
-    tag: "2.2.1"
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/opensearch"
+    tag: "2.3.0"
     sha256: ""
     group: "dmp-opensearch-images"
 
   dmp-opensearch-dashboards:
-    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/opensearch-dashboards"
-    tag: "2.2.1"
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/opensearch-dashboards"
+    tag: "2.3.0"
     sha256: ""
     group: "dmp-opensearch-images"
 
   dmp-busybox:
-    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/busybox"
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/busybox"
     tag: "1.27.2-buildx"
     sha256: ""
     group: "dmp-opensearch-images"
 
   dmp-logstash:
-    repo: "{{ base_repo }}{{ namespace_override | default('nosqlpass') }}/logstash-oss-with-opensearch-output-plugin"
+    repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/logstash-oss-with-opensearch-output-plugin"
     tag: "8.4.0"
     sha256: ""
     group: "dmp-opensearch-images"
