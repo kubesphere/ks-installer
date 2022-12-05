@@ -1253,7 +1253,7 @@ images:
 
   dmp-mongo:
     repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/mongodb-kubernetes-operator"
-    tag: "v1.0.4"
+    tag: "v1.0.5"
     sha256: ""
     group: "dmp-mongo-images"
 
@@ -1307,7 +1307,7 @@ images:
 
   dmp-opensearch-operator:
     repo: "{{ base_repo }}{{ namespace_override | default('radondb') }}/opensearch-operator"
-    tag: "2.0.13"
+    tag: "2.0.14"
     sha256: ""
     group: "dmp-opensearch-images"
 
