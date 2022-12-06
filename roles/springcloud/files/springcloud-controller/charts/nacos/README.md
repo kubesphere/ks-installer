@@ -98,21 +98,18 @@ The following table lists the configurable parameters of the Skywalking chart an
 | `persistence.data.accessModes`					| Nacos data pvc access mode										| `ReadWriteOnce`		|
 | `persistence.data.storageClassName`				| Nacos data pvc storage class name									| `manual`			|
 | `persistence.data.resources.requests.storage`		| Nacos data pvc requests storage									| `5G`					|
-| `service.type`									| http service type													| `NodePort`			|
+| `service.type`									| http service type													| `ClusterIP`			|
 | `service.port`									| http service port													| `8848`				|
-| `service.nodePort`								| http service nodeport												| `30000`				|
 | `ingress.enabled`									| Enable ingress or not												| `false`				|
 | `ingress.annotations`								| The annotations used in ingress									| `{}`					|
 | `ingress.hosts`									| The host of nacos service in ingress rule							| `nacos.example.com`	|
 
 
 ## Example
-![img](../images/nacos.png)
 #### standalone mode(with embedded)
 ```console
 $ helm install `release name` ./ --set global.mode=standalone
 ```
-![img](../images/quickstart.png)
 
 #### standalone mode(with mysql)
 ```console
@@ -120,7 +117,6 @@ $ helm install `release name` ./ --set global.mode=standalone --set nacos.storag
 db.name=dbName --set nacos.storage.db.port=port --set nacos.storage.db.username=username  --set nacos.storage.db.
 password=password
 ```
-![img](../images/standalone.png)
 
 
 > **Tip**: if the logs of nacos pod throws exception, you may need to delete the pod. Because mysql pod is not ready, nacos pod has been started.
@@ -129,13 +125,10 @@ password=password
 ```console
 $ helm install `release name` ./ --set global.mode=cluster
 ```
-![img](../images/cluster1.png)
 
 ```console
 $ kubectl scale sts `release name`-nacos --replicas=3
 ```
-![img](../images/cluster2.png)
 
  * Use kubectl exec to get the cluster config of the Pods in the nacos StatefulSet after scale StatefulSets
 
-![img](../images/cluster3.png)

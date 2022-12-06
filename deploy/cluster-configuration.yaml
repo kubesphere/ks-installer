@@ -264,6 +264,7 @@ spec:
 #            requests:
 #              storage: 5Gi
 #      service:
+#        # The default NodePort 30000 port conflicts with KubeEdge port, adjust it to the default ClusterIP.
 #        type: ClusterIP
 #        port: 8848
 #      ingress:
