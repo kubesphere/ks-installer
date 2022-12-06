@@ -351,6 +351,12 @@ rules:
     - /statics/images/*
     verbs:
     - GET
+  - apiGroups:
+    - cluster.kubesphere.io
+    resources:
+    - labels
+    verbs:
+    - list
     
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
