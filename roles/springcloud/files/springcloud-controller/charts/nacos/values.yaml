@@ -51,10 +51,11 @@ persistence:
 
 
 service:
-  #type: ClusterIP
-  type: NodePort
+  # The default NodePort 30000 port conflicts with KubeEdge port, adjust it to the default ClusterIP.
+  type: ClusterIP
+#  type: NodePort
   port: 8848
-  nodePort: 30000
+#  nodePort: 30000
 
 
 ingress:

@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: registry.cn-beijing.aliyuncs.com/kse/spring-cloud-controller
-  tag: master
+  tag: latest
   pullPolicy: IfNotPresent
 
 resources:
@@ -67,10 +67,11 @@ nacos:
         requests:
           storage: 5Gi
   service:
-    #type: ClusterIP
-    type: NodePort
+    # The default NodePort 30000 port conflicts with KubeEdge port, adjust it to the default ClusterIP.
+    type: ClusterIP
+#    type: NodePort
     port: 8848
-    nodePort: 30000
+#    nodePort: 30000
   ingress:
     enabled: false
     annotations: {}

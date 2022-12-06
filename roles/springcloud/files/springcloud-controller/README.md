@@ -98,9 +98,8 @@ The following table lists the configurable parameters of the springcloud-control
 | `nacos.persistence.data.accessModes`	| Nacos data pvc access mode										| `ReadWriteOnce`		|
 | `nacos.persistence.data.storageClassName`	| Nacos data pvc storage class name									| `manual`			|
 | `nacos.persistence.data.resources.requests.storage`	| Nacos data pvc requests storage									| `5G`					|
-| `nacos.service.type`			| http service type													| `NodePort`			|
+| `nacos.service.type`			| http service type													| `ClusterIP`			|
 | `nacos.service.port`			| http service port													| `8848`				|
-| `nacos.service.nodePort`		| http service nodeport												| `30000`				|
 | `nacos.ingress.enabled`			| Enable ingress or not												| `false`				|
 | `nacos.ingress.annotations`		| The annotations used in ingress									| `{}`					|
 | `nacos.ingress.hosts`			| The host of nacos service in ingress rule							| `nacos.example.com`	|
