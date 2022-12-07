@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: registry.cn-beijing.aliyuncs.com/kse/spring-cloud-controller
-  tag: latest
+  tag: v0.1.0
   pullPolicy: IfNotPresent
 
 resources:
@@ -29,7 +29,7 @@ nacos:
   nacos:
     image:
       repository: nacos/nacos-server
-      tag: latest
+      tag: v2.1.2
       pullPolicy: IfNotPresent
     plugin:
       enable: true

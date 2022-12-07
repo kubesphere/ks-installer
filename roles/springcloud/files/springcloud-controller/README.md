@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the springcloud-control
 |---------------------------------------|--------------------------------------------------------------------|-------------------------------------|
 | `replicaCount`             | Number of desired springcloud-controller pods, the number should be 1 as run standalone mode | `1`            |
 | `image.repository`          | springcloud-contrller container image name                   | `registry.cn-beijing.aliyuncs.com/kse/spring-cloud-controller` |
-| `image.tag`                 | springcloud-controller container image tag                   | `latest`                                                     |
+| `image.tag`                 | springcloud-controller container image tag                   | `v0.1.0`                                                     |
 | `image.pullPolicy`          | springcloud-controller container image pull policy           | `IfNotPresent`                                               |
 | `resources.limits.cpu`      | springcloud-controller limits cpu resource                   | `1`                                                          |
 | `resources.limits.memory`   | springcloud-controller limits memory resource                | `1Gi`                                                        |
@@ -75,7 +75,7 @@ The following table lists the configurable parameters of the springcloud-control
 | `nacos.resources.requests.memory` |nacos requests memory resource|`2G`|
 | `nacos.nacos.replicaCount`                  | Number of desired nacos pods, the number should be 1 as run standalone mode| `1`           |
 | `nacos.nacos.image.repository`              | Nacos container image name                                      | `nacos/nacos-server`                   |
-| `nacos.nacos.image.tag`                     | Nacos container image tag                                       | `latest`                                |
+| `nacos.nacos.image.tag`                     | Nacos container image tag                                       | `v2.1.2`                                |
 | `nacos.nacos.image.pullPolicy`              | Nacos container image pull policy                                | `IfNotPresent`                        |
 | `nacos.nacos.plugin.enable`              | Nacos cluster plugin that is auto scale                                       | `true`                   |
 | `nacos.nacos.plugin.image.repository`              | Nacos cluster plugin image name                                      | `nacos/nacos-peer-finder-plugin`                   |
