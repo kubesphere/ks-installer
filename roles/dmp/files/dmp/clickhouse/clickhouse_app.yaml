@@ -8,6 +8,7 @@ metadata:
     application.kubesphere.io/app-category-id: radondb
     kubesphere.io/workspace: system-workspace
 spec:
+  appHome: kubesphere.com.cn/radondb
   name: "RadonDB ClickHouse"
   description_zh: "一款基于 ClickHouse 分布式实时分析型列式存储数据库。"
   description: "RadonDB ClickHouse is a ClickHouse-based, distributed, and column-oriented database service that provides real-time analysis."

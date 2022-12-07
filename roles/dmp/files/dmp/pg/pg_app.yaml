@@ -8,6 +8,7 @@ metadata:
     application.kubesphere.io/app-category-id: radondb
     kubesphere.io/workspace: system-workspace
 spec:
+  appHome: kubesphere.com.cn/radondb
   # Add fields here
   name: "RadonDB PostgreSQL"
   description_zh: "一款基于 PostgreSQL 的容器化、开源关系型数据库。"

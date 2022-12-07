@@ -8,6 +8,7 @@ metadata:
     application.kubesphere.io/app-category-id: radondb
     kubesphere.io/workspace: system-workspace
 spec:
+  appHome: kubesphere.com.cn/radondb
   # app name
   name: "RadonDB OpenSearch"
   # app description
