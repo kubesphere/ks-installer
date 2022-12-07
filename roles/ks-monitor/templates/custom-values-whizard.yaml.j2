@@ -44,6 +44,10 @@ controllerManager:
       replicas: 2
 
     query:
+      image: 
+        repository: {{ thanos_repo }}
+        tag: {{ thanos_28_tag }}
+
       replicas: 2
 
       envoy:
@@ -132,6 +136,10 @@ gateway:
 
 query: 
   enabled: true
+
+  image: 
+    repository: {{ thanos_repo }}
+    tag: {{ thanos_28_tag }}
 
   replicas: 2
 

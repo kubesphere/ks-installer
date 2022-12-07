@@ -17,7 +17,11 @@ metadata:
     {{- end }}
     {{- include "whizard.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.ingester.image }}
+  image: "{{ .Values.ingester.image.repository }}:{{ .Values.ingester.image.tag }}"
+  {{- else }}
   image: "{{ .Values.global.whizard.image.repository }}:{{ .Values.global.whizard.image.tag }}"
+  {{- end }}
   replicas: {{ .Values.ingester.replicas }}
 
   {{- with .Values.ingester.nodeSelector }}

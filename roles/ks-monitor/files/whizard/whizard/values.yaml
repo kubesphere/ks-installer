@@ -281,9 +281,9 @@ query:
     # name: 
 
   ## If null or unset, the global.whizardImage is used.
-  image: 
-    repository: kubesphere/thanos
-    tag: v0.28.5
+  image: null
+    # repository: thanosio/thanos
+    # tag: v0.28.0
   
   replicas: 1
 

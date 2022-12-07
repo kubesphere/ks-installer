@@ -12,7 +12,11 @@ metadata:
     {{- end }}
     {{- include "whizard.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.ruler.image }}
+  image: "{{ .Values.ruler.image.repository }}:{{ .Values.ruler.image.tag }}"
+  {{- else }}
   image: "{{ .Values.global.whizard.image.repository }}:{{ .Values.global.whizard.image.tag }}"
+  {{- end }}
   replicas: {{ .Values.ruler.replicas }}
 
   {{- with .Values.ruler.nodeSelector }}
