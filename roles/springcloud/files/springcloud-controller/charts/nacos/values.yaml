@@ -10,7 +10,7 @@ global:
 nacos:
   image:
     repository: nacos/nacos-server
-    tag: latest
+    tag: v2.1.2
     pullPolicy: IfNotPresent
   plugin:
     enable: true
