@@ -18,7 +18,7 @@ def migrateRule($namespace; $ruleLevel):
 	  "node:load15:ratio": {type: "cpu", name: "load15m", factor: 1},
 	  "node:node_memory_utilisation:": {type: "memory", name: "utilization", factor: 0.01},
 	  "node:node_memory_bytes_available:sum": {type: "memory", name: "available", factor: (1024*1024*1024)},
-	  "node:node_net_bytes_transmitted:sum_irate": {type: "netowrk", name: "transmittedRate", factor: (1000*1000)},
+	  "node:node_net_bytes_transmitted:sum_irate": {type: "network", name: "transmittedRate", factor: (1000*1000)},
 	  "node:node_net_bytes_received:sum_irate": {type: "network", name: "receivedRate", factor: (1000*1000)},
 	  "node:disk_space_utilization:ratio": {type: "disk", name: "spaceUtilization", factor: 0.01},
 	  "node:disk_space_available:": {type: "disk", name: "spaceAvailable", factor: (1000*1000*1000)},
