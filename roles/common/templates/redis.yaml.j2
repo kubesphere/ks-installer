@@ -41,7 +41,7 @@ spec:
       initContainers:
       - name: init
         image: {{ redis_repo }}:{{ redis_tag }}
-        command: ['sh', '-c', 'cat /tmp/redis/redis.conf | sed "s/REDIS_PASSWORD/$KUBESPHERE_REDIS_PASSWORD/" > /data/redis.conf']
+        command: ['sh', '-c', 'cat /tmp/redis/redis.conf | sed "s/REDIS_PASSWORD/$KUBESPHERE_CACHE_OPTIONS_PASSWORD/" > /data/redis.conf']
         volumeMounts:
         - mountPath: /data
           name: redis-pvc
@@ -50,7 +50,7 @@ spec:
           mountPath: "/tmp/redis"
           readOnly: true
         env:
-        - name: KUBESPHERE_REDIS_PASSWORD
+        - name: KUBESPHERE_CACHE_OPTIONS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: redis-secret
