@@ -30,11 +30,13 @@ data:
       groupSearchBase: ou=Groups,dc=kubesphere,dc=io
 {% endif %}
 {% if (common.redis is defined and common.redis.enabled is defined and common.redis.enabled) or (enableHA is defined and enableHA) %}
-    redis:
-      host: redis.kubesphere-system.svc
-      port: 6379
-      password: KUBESPHERE_REDIS_PASSWORD
-      db: 0
+    cache:
+      type: redis
+      options:
+        host: redis.kubesphere-system.svc
+        port: 6379
+        password: KUBESPHERE_CACHE_OPTIONS_PASSWORD
+        db: 0
 {% endif %}
 {% if OPMigrate is defined and OPMigrate %}
     mysql:
