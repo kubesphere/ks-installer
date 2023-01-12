@@ -1736,20 +1736,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   annotations:
-    iam.kubesphere.io/dependencies: '[role-template-view-alerting-messages"]'
-    iam.kubesphere.io/module: Monitoring & Alerting
-    kubesphere.io/alias-name: Alerting Messages Management
-    iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
-  labels:
-    iam.kubesphere.io/role-template: "true"
-  name: role-template-manage-alerting-messages
-rules: []
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
     iam.kubesphere.io/dependencies: '["role-template-view-alerting-policies", "role-template-view-alerting-messages"]'
     iam.kubesphere.io/module: Monitoring & Alerting
     kubesphere.io/alias-name: Alerting Policies Management
@@ -2276,7 +2262,7 @@ role:
         "role-template-view-serviceaccount","role-template-manage-serviceaccount",
         "role-template-view-configmaps","role-template-manage-configmaps",
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
-        "role-template-view-alerting-messages","role-template-manage-alerting-messages",
+        "role-template-view-alerting-messages",
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-pipelineruns","role-template-manage-pipelineruns",
@@ -2315,7 +2301,7 @@ role:
         "role-template-view-serviceaccount","role-template-manage-serviceaccount",
         "role-template-view-configmaps","role-template-manage-configmaps",
         "role-template-view-alerting-policies","role-template-manage-alerting-policies",
-        "role-template-view-alerting-messages","role-template-manage-alerting-messages",
+        "role-template-view-alerting-messages",
         "role-template-view-custom-monitoring","role-template-manage-custom-monitoring",
         "role-template-view-pipelines","role-template-manage-pipelines",
         "role-template-view-pipelineruns","role-template-manage-pipelineruns",
@@ -2423,33 +2409,6 @@ role:
         - get
         - list
         - watch
-
----
-apiVersion: iam.kubesphere.io/v1alpha2
-kind: RoleBase
-metadata:
-  name: role-template-manage-alerting-messages
-  labels:
-    scope.kubesphere.io/namespace: ""
-role:
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    annotations:
-      iam.kubesphere.io/dependencies: '["role-template-view-alerting-messages"]'
-      iam.kubesphere.io/module: Monitoring & Alerting
-      iam.kubesphere.io/role-template-rules: '{"alerts": "manage"}'
-      kubesphere.io/alias-name: Alerting Messages Management
-    labels:
-      iam.kubesphere.io/role-template: "true"
-    name: role-template-manage-alerting-messages
-  rules:
-    - apiGroups:
-        - 'alerting.kubesphere.io'
-      resources:
-        - '*'
-      verbs:
-        - '*'
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
