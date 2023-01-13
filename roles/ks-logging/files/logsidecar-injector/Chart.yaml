@@ -4,7 +4,7 @@ description: A Helm chart for logsidecar-injector
 icon:
 type: application
 version: 0.1.0
-appVersion: 0.1.0
+appVersion: 1.2.0
 source:
   - https://github.com/kubesphere/logsidecar-injector
 keywords:
