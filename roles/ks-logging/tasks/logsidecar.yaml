@@ -18,10 +18,10 @@
 - block:
   - name: logsidecar-injector | Deleting old version logsidecar injector
     shell: >
-      kubectl -n kubesphere-logging-system delete deploy logsidecar-injector ;
-      kubectl -n kubesphere-logging-system delete service logsidecar-injector ;
-      kubectl -n kubesphere-logging-system delete secret logsidecar-injector-service-certs ;
-      kubectl delete mutatingwebhookconfiguration logsidecar-injector
+      kubectl -n kubesphere-logging-system delete deploy logsidecar-injector-deploy ;
+      kubectl -n kubesphere-logging-system delete service logsidecar-injector-admission ;
+      kubectl -n kubesphere-logging-system delete secret logsidecar-injector-admission-certs ;
+      kubectl delete mutatingwebhookconfiguration logsidecar-injector-admission-mutate
     failed_when: false
 
   - name: logsidecar-injector | Deploying logsidecar-injector
