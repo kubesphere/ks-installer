@@ -175,3 +175,15 @@
   until: cc_result is succeeded
   retries: 5
   delay: 3
+
+- name: KubeSphere | Checking RoleTemplate Alerting Management
+  shell: >
+    {{ bin_dir }}/kubectl get rolebase role-template-manage-alerting-messages --no-headers | wc -l
+  register: rolebase_result
+
+- name: KubeSphere | Deleteing RoleTemplate Alerting Management
+  shell: >
+    {{ bin_dir}}/kubectl delete rolebase role-template-manage-alerting-messages
+    {{ bin_dir}}/kubectl get role -A | awk '$2=="role-template-manage-alerting-messages" {print $1}' | xargs -I {} {{ bin_dir}}/kubectl delete role role-template-manage-alerting-messages -n {}
+  when:
+    - rolebase_result.stdout != "0"
