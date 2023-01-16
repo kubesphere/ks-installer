@@ -207,7 +207,7 @@ docker_tag: 19.03
 ks_fluent_bit_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/fluent-bit"
 ks_fluent_bit_tag: "v1.8.11"
 ks_log_sidecar_injector_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/log-sidecar-injector"
-ks_log_sidecar_injector_tag: 1.1
+ks_log_sidecar_injector_tag: v1.2.0
 filebeat_repo: "{{ base_repo }}{{ namespace_override | default('elastic') }}/filebeat"
 filebeat_tag: 6.7.0
 
