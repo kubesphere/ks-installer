@@ -30,7 +30,7 @@ DOCKER_VERSION=${DOCKER_VERSION:-"20.10.8"}
 func() {
     echo "Usage:"
     echo
-    echo "  $0 [-l IMAGES-LIST] [-d IMAGES-DIR] [-r PRIVATE-REGISTRY] [-v KUBERNETES-VERSION ]"
+    echo "  $0 [-l IMAGES-LIST] [-d IMAGES-DIR] [-r PRIVATE-REGISTRY] [-v KUBERNETES_VERSION ]"
     echo
     echo "Description:"
     echo "  -b                     : save kubernetes' binaries."
@@ -38,6 +38,7 @@ func() {
     echo "  -l IMAGES-LIST         : text file with list of images."
     echo "  -r PRIVATE-REGISTRY    : target private registry:port."
     echo "  -s                     : save model will be applied. Pull the images in the IMAGES-LIST and save images as a tar.gz file."
+    echo "  -v KUBERNETES_VERSION  : download kubernetes' binaries. default: v1.21.5"
     echo "  -h                     : usage message"
     echo
     echo "Examples:"
@@ -58,6 +59,7 @@ while getopts 'bsl:r:d:v:h' OPT; do
         l) ImagesList="$OPTARG";;
         r) Registry="$OPTARG";;
         s) save="true";;
+        v) KUBERNETES_VERSION="$OPTARG";;
         h) func;;
         ?) func;;
         *) func;;
