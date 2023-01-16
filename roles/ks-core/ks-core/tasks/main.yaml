@@ -72,6 +72,7 @@
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "users.iam.kubesphere.io", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "resourcesquotas.quota.kubesphere.io", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "network.kubesphere.io", release: "ks-core"}
+    - {ns: "kubesphere-system", kind: "validatingwebhookconfigurations", resource: "cluster.kubesphere.io", release: "ks-core"}
     - {ns: "kubesphere-system", kind: "users.iam.kubesphere.io", resource: "admin", release: "ks-core"}
   when:
     - helm_release.stdout == "0" and ks_crds.stdout != "0"
