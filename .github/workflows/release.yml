@@ -11,14 +11,11 @@ env:
   IMAGE_REPO: kubesphere
 
 jobs:
-  release-linux-amd64:
+  CreateRelease:
     runs-on: ubuntu-latest
-    if: github.repository	== 'kubesphere/ks-installer'
+    if: github.repository == 'kubesphere/ks-installer'
     steps:
       - uses: actions/checkout@v2
-      - name: Get Version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Create Release
         id: create_release
@@ -71,18 +68,36 @@ jobs:
           asset_content_type: application/txt
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-        with:
-          platforms: all
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Log into registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Push image
-        run: |
-          IMAGE=$IMAGE_REPO/$IMAGE_NAME:${{ steps.get_version.outputs.VERSION }}
-          docker buildx build --platform linux/amd64,linux/arm64 --push -f Dockerfile.complete -t $IMAGE .
-          echo "Push $IMAGE success!"
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v4
+        with:
+          file: Dockerfile.complete
+          tags: kubesphere/ks-installer:${{ github.ref_name }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          provenance: false
+          sbom: false
+
+  SyncReleaseImages:
+    needs:
+      - CreateRelease
+    runs-on: ubuntu-latest
+    if: github.repository == 'kubesphere/ks-installer'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Sync published images to mirror registry
+        run: >
+          docker run --rm
+          -v "$PWD":/usr/src/myapp -w /usr/src/myapp kubespheredev/release-tools:v0.0.1 sh -c
+          "skopeo login -u ${{ secrets.DOCKER_USERNAME }} -p \"${{ secrets.DOCKER_PASSWORD }}\" docker.io &&
+          skopeo login -u ${{ secrets.REGISTRY_ALIYUN_USERNAME }} -p \"${{ secrets.REGISTRY_ALIYUN_PASSWORD }}\" registry.cn-beijing.aliyuncs.com &&
+          ansible-playbook release.yml --skip-tags=images_list"
