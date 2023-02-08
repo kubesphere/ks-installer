@@ -85,7 +85,7 @@ kubefed_image: kubefed
 kubefed_image_tag: v0.8.1
 tower_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 tower_image: tower
-tower_image_tag: "v0.2.0"
+tower_image_tag: "v0.2.1"
 post_install_job_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}"
 post_install_job_image: kubectl
 # post_install_job_tag: "v1.19.1"
