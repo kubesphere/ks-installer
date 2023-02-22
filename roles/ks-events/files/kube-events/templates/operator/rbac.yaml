@@ -107,6 +107,12 @@ rules:
   - apiGroups:
       - events.kubesphere.io
     resources:
+      - exporters/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - events.kubesphere.io
+    resources:
       - exporters/status
     verbs:
       - get
@@ -124,6 +130,12 @@ rules:
       - patch
       - update
       - watch
+  - apiGroups:
+      - events.kubesphere.io
+    resources:
+      - rulers/finalizers
+    verbs:
+      - update
   - apiGroups:
       - events.kubesphere.io
     resources:

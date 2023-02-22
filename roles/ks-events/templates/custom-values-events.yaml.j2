@@ -40,6 +40,14 @@ operator:
     requests:
       cpu: {{ events.operator.resources.requests.cpu | default("20m") }}
       memory: {{ events.operator.resources.requests.cpu | default("20Mi") }}
+  volumes:
+  - hostPath:
+      path: /etc/localtime
+    name: host-time
+  volumeMounts: 
+  - mountPath: /etc/localtime
+    name: host-time
+    readOnly: true
   serviceAccount:
     create: true
     name: ""
@@ -87,6 +95,14 @@ exporter:
     requests:
       cpu: {{ events.exporter.resources.requests.cpu | default("20m") }}
       memory: {{ events.exporter.resources.requests.memory | default("50Mi") }}
+  volumes:
+  - hostPath:
+      path: /etc/localtime
+    name: host-time
+  volumeMounts: 
+  - mountPath: /etc/localtime
+    name: host-time
+    readOnly: true
   sinks:
     stdout:
       enabled: true
@@ -99,7 +115,11 @@ exporter:
     #     path:
 
 ruler:
-  enabled: {{ events.ruler.enabled | default(true) }}
+{% if events.ruler is defined and events.ruler.enabled == true %}
+  enabled: true
+{% else %}
+  enabled: false
+{% endif %}
   replicas: {{ events.ruler.replicas | default(2) }}
   image:
     repository: {{ kube_events_ruler_repo }}
@@ -139,12 +159,20 @@ ruler:
     requests:
       cpu: {{ events.ruler.resources.requests.cpu | default("50m") }}
       memory: {{ events.ruler.resources.requests.memory | default("50Mi") }}
+  volumes:
+  - hostPath:
+      path: /etc/localtime
+    name: host-time
+  volumeMounts: 
+  - mountPath: /etc/localtime
+    name: host-time
+    readOnly: true
   ruleNamespaceSelector: {}
   ruleSelector: {}
   sinks:
-    alertmanager:
-      namespace: kubesphere-monitoring-system
-      name: alertmanager-main
+    alertmanagers:
+    - namespace: kubesphere-monitoring-system
+      name: alertmanager-operated
     webhooks: []
     # - type:
     #   url:

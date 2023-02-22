@@ -574,6 +574,13 @@ def generate_new_cluster_configuration(api):
                     }
                 }
 
+    if "events" in cluster_configuration_spec and "ruler" not in cluster_configuration_spec["events"]:
+        upgrade_flag = True
+        cluster_configuration_spec["events"]["ruler"] = {
+            "enabled": True,
+            "replicas": 2
+        }
+
     if "notification" in cluster_configuration_spec:
         upgrade_flag = True
         del cluster_configuration_spec['notification']

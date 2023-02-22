@@ -2,10 +2,10 @@ operator:
   enabled: true
   image:
     repository: kubesphere/kube-events-operator
-    tag: latest
+    tag: "" # If unset use v+ .Chart.appVersion
     pullPolicy: IfNotPresent
   configReloader:
-    image: jimmidyson/configmap-reload:v0.3.0
+    image: jimmidyson/configmap-reload:v0.7.1
   affinity: {}
   nodeSelector: {}
   tolerations: {}
@@ -16,6 +16,10 @@ operator:
 #    requests:
 #      cpu: 20m
 #      memory: 20Mi
+  # Additional volumes on the Deployment definition.
+  volumes: []
+  # Additional volumeMounts on the Deployment definition.
+  volumeMounts: []
   serviceAccount:
     create: true
     name: ""
@@ -27,7 +31,7 @@ exporter:
   enabled: true
   image:
     repository: kubesphere/kube-events-exporter
-    tag: latest
+    tag: "" # If unset use v+ .Chart.appVersion
     pullPolicy: IfNotPresent
   affinity: {}
   nodeSelector: {}
@@ -39,6 +43,10 @@ exporter:
 #    requests:
 #      cpu: 20m
 #      memory: 50Mi
+  # Additional volumes on the output Deployment definition.
+  volumes: []
+  # Additional volumeMounts on the output Deployment definition.
+  volumeMounts: []
   sinks:
     stdout:
       enabled: true
@@ -55,7 +63,7 @@ ruler:
   replicas: 2
   image:
     repository: kubesphere/kube-events-ruler
-    tag: latest
+    tag: "" # If unset use v+ .Chart.appVersion
     pullPolicy: IfNotPresent
   affinity: {}
   nodeSelector: {}
@@ -67,15 +75,16 @@ ruler:
 #    requests:
 #      cpu: 50m
 #      memory: 50Mi
+  # Additional volumes on the output Deployment definition.
+  volumes: []
+  # Additional volumeMounts on the output Deployment definition.
+  volumeMounts: []
   ruleNamespaceSelector: {}
   ruleSelector: {}
   sinks:
-    alertmanager:
-      namespace: kubesphere-monitoring-system
+    alertmanagers:
+    - namespace: kubesphere-monitoring-system
       name: alertmanager-operated
-    # alertmanagers:
-    # - namespace: kubesphere-monitoring-system
-    #   name: alertmanager-operated
     # webhooks:
     # - type:
     #   url:
@@ -90,3 +99,6 @@ ruler:
 rule:
   createDefaults: true
   overrideDefaults: false
+
+# Set timezone env variable to be set in containers
+# timezone: "America/Toronto"
