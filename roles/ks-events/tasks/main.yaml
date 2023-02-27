@@ -28,34 +28,20 @@
   with_items:
     - { path: ks-events, file: custom-values-events.yaml }
 
-- name: ks-events | Checking ks-events
+- name: ks-events | Deploying ks-events
   shell: >
-    {{ bin_dir }}/helm list -f ks-events -n kubesphere-logging-system
-  register: events_check
-  failed_when: false
-
-- name: ks-events | Checking ks-events
-  shell: >
-    {{ bin_dir }}/helm get values ks-events -n kubesphere-logging-system -o json | jq '.ruler.enabled'
-  register: events_ruler_check
+    {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-events/kube-events/crds --force &&
+    {{ bin_dir }}/helm upgrade --install ks-events
+    {{ kubesphere_dir }}/ks-events/kube-events
+    -f {{ kubesphere_dir }}/ks-events/custom-values-events.yaml
+    -n kubesphere-logging-system --force
+  register: events_result
   failed_when: false
 
 - block:
   - name: ks-events | Deploying ks-events
     shell: >
-      {{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/ks-events/kube-events/crds --force &&
-      {{ bin_dir }}/helm upgrade --install ks-events
-      {{ kubesphere_dir }}/ks-events/kube-events
-      -f {{ kubesphere_dir }}/ks-events/custom-values-events.yaml
-      -n kubesphere-logging-system --force
-    register: events_result
-    failed_when: false
-
-  - name: ks-events | Deploying ks-events
-    shell: >
       {{ bin_dir }}/helm del ks-events -n kubesphere-logging-system
-    when:
-      - "events_result.stderr and 'field is immutable' in events_result.stderr"
 
   - name: ks-events | Deploying ks-events
     shell: >
@@ -68,12 +54,9 @@
     until: events_re_result is succeeded
     retries: 3
     delay: 10
-    when:
-      - "events_result.stderr and 'field is immutable' in events_result.stderr"
 
   when:
-    - (events_check.stdout.find("deployed") == -1) or (events_check.stdout.find("0.4.0") == -1) or (events_ruler_check.stdout != 'true' and events.ruler is defined and events.ruler.enabled is defined and events.ruler.enabled == True)
-
+     - "events_result.stderr and 'field is immutable' in events_result.stderr"
 
 - import_tasks: fluentbit-operator.yaml
 

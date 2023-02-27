@@ -8,7 +8,7 @@ metadata:
 {{ include "kube-events.labels" . | indent 4 }}
 spec:
   {{- if .Values.exporter.image }}
-  image: {{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}
+  image: {{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag | default (print "v" .Chart.AppVersion) }}
   imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
   {{- end }}
   {{- if .Values.exporter.affinity }}
@@ -27,6 +27,19 @@ spec:
   resources:
 {{ toYaml .Values.exporter.resources | indent 4 }}
   {{- end }}
+{{- if .Values.exporter.volumes }}
+  volumes:
+{{ toYaml .Values.exporter.volumes | indent 2 }}
+{{- end }}
+{{- if .Values.exporter.volumeMounts }}
+  volumeMounts:
+{{ toYaml .Values.exporter.volumeMounts | indent 2 }}
+{{- end }}
+{{- if .Values.timezone }}
+  env:
+  - name: TZ
+    value: {{ .Values.timezone }}
+{{- end }}
   sinks:
     {{- if .Values.exporter.sinks.stdout.enabled }}
     stdout: {}
