@@ -3,7 +3,7 @@ fullnameOverride: "kiali-operator"
 
 image:
   repo: kubesphere/kiali-operator
-  tag: v1.38.1
+  tag: v1.50.1
   pullPolicy: IfNotPresent
   pullSecrets: []
 
