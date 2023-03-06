@@ -1,0 +1,34 @@
+- name: ks-devops | Getting devops config, enabled
+  shell: >
+    {{ bin_dir }}/kubectl get ClusterConfiguration -n kubesphere-system ks-installer -o jsonpath='{.spec.devops.enabled}'
+  register: devops_enabled
+
+- name: ks-devops | Getting devops config, ci enabled
+  shell: >
+    {{ bin_dir }}/kubectl get ClusterConfiguration -n kubesphere-system ks-installer -o jsonpath='{.spec.devops.ci.enabled}'
+  register: devops_ci_enabled
+
+- name: ks-devops | Getting devops config, cd enabled
+  shell: >
+    {{ bin_dir }}/kubectl get ClusterConfiguration -n kubesphere-system ks-installer -o jsonpath='{.spec.devops.cd.enabled}'
+  register: devops_cd_enabled
+
+- name: ks-devops | Getting devops config, cd type
+  shell: >
+    {{ bin_dir }}/kubectl get ClusterConfiguration -n kubesphere-system ks-installer -o jsonpath='{.spec.devops.cd.type}'
+  register: devops_cd_type
+
+- name: ks-devops | Getting devops core status
+  shell: >
+    {{ bin_dir }}/kubectl get ClusterConfiguration -n kubesphere-system ks-installer -o jsonpath='{.status.devops.status}'
+  register: status_core
+
+- name: ks-devops | Getting devops ci status
+  shell: >
+    {{ bin_dir }}/kubectl get ClusterConfiguration -n kubesphere-system ks-installer -o jsonpath='{.status.devops.ci}'
+  register: status_ci
+
+- name: ks-devops | Getting devops cd status
+  shell: >
+    {{ bin_dir }}/kubectl get ClusterConfiguration -n kubesphere-system ks-installer -o jsonpath='{.status.devops.cd}'
+  register: status_cd
