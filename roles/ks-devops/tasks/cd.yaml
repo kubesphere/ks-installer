@@ -1,0 +1,31 @@
+- name: ks-devops | Get Argo CD installation
+  shell: >
+    {{ bin_dir }}/kubectl get cc -n kubesphere-system ks-installer -o=jsonpath='{.spec.devops.argocd.installation}'
+  register: argocd_installation
+  ignore_errors: true
+
+- name: ks-devops | Upgrading or installing Argo CD
+  args:
+    executable: /bin/bash
+  shell: |
+    {{ bin_dir }}/helm upgrade --install devops {{ kubesphere_dir }}/ks-devops/charts/argo-cd-4.4.0.tgz \
+    -n argocd --create-namespace --reuse-values \
+    -f {{ kubesphere_dir }}/ks-devops/argo-cd-values.yaml
+
+  register: argocd_upgrade_result
+  until: argocd_upgrade_result is succeeded
+  when:  argocd_installation.stdout != "custom"
+  retries: 3
+  delay: 10
+
+- name: ks-devops | Importing ks-devops cd status
+  shell: >
+    {{ bin_dir }}/kubectl patch cc ks-installer
+    --type merge
+    -p '{"status": {"devops": {"cd": "enabled", "enabledTime": "{{ lookup('pipe','date  +%Y-%m-%dT%H:%M:%S%Z') }}"}}}'
+    -n kubesphere-system
+  register: cc_result
+  failed_when: "cc_result.stderr and 'Warning' not in cc_result.stderr"
+  until: cc_result is succeeded
+  retries: 5
+  delay: 3
