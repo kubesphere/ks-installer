@@ -176,7 +176,7 @@
     # Delete Job migrate because 'helm upgrade' will try to update immutable fields of Job, which is not allowed. 
     {{ bin_dir }}/kubectl delete job -n kubesphere-devops-system migrate --ignore-not-found
     
-    ks_devops_chart_version=0.1.19
+    ks_devops_chart_version=0.1.20
     charts_folder={{ kubesphere_dir }}/ks-devops/charts
     ks_devops_chart=$charts_folder/ks-devops-$ks_devops_chart_version.tgz
     
