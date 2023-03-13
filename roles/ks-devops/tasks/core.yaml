@@ -210,13 +210,6 @@
   retries: 3
   delay: 10
 
-- name: ks-devops | Labelling devops namespaces as system workspace
-  shell: |
-    {{ bin_dir }}/kubectl label --overwrite namespaces {{ item }} kubesphere.io/workspace=system-workspace
-  loop:
-    - kubesphere-devops-worker
-  when: devops_ci_enabled.stdout == "true"
-
 - name: ks-devops | Importing ks-devops status
   shell: >
     {{ bin_dir }}/kubectl patch cc ks-installer
