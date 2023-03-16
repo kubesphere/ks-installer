@@ -101,9 +101,9 @@ spec:
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
     enabled: false             # Enable or disable the KubeSphere DevOps System.
     ci:
-      enabled: false      # Enable ci
+      enabled: true      # Enable ci
     cd:
-      enabled: false      # Enable cd
+      enabled: true      # Enable cd
       type: argocd        # Choose cd core, although only argocd is supported.
     # resources: {}
     jenkinsMemoryLim: 4Gi      # Jenkins memory limit.
