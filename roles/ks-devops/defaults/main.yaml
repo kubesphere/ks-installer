@@ -1,8 +1,10 @@
 ---
 devops:
   jenkinsVolumeSize: "8Gi"
-  jenkinsMemoryLim: "{{ jenkins_memory_lim |default('4Gi') }}"
-  jenkinsMemoryReq: "{{ jenkins_memory_req |default('2Gi') }}"
+  jenkinsMemoryLim: "{{ jenkins_memory_lim |default('8Gi') }}"
+  jenkinsMemoryReq: "{{ jenkins_memory_req |default('4Gi') }}"
+  jenkinsCpuReq: "{{ jenkins_cpu_req |default('1') }}"
+  jenkinsCpuLim: "{{ jenkins_cpu_lim |default('4') }}"
 
 JavaOpts: >
   -XX:MaxRAMPercentage=80 -XX:MinRAMPercentage=60
