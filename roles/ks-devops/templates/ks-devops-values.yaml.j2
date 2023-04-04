@@ -75,10 +75,10 @@ jenkins:
     ImagePullPolicy: {{ ks_image_pull_policy }}
     resources:
       requests:
-        cpu: "2"
+        cpu: "{{ devops.jenkinsCpuReq }}"
         memory: "{{ devops.jenkinsMemoryReq }}"
       limits:
-        cpu: "4"
+        cpu: "{{ devops.jenkinsCpuLim }}"
         memory: "{{ devops.jenkinsMemoryLim }}"
     JavaOpts: "{{ JavaOpts }}"
   Agent:
