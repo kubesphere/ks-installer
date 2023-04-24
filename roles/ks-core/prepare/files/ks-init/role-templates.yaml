@@ -292,6 +292,19 @@ rules:
     verbs:
       - create
   - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - clustersteptemplates
+    verbs:
+      - list
+      - get
+  - apiGroups:
+      - devops.kubesphere.io
+    resources:
+      - clustersteptemplates/render
+    verbs:
+      - create
+  - apiGroups:
       - gitops.kubesphere.io
     resources:
       - clusters
@@ -3194,6 +3207,8 @@ role:
         - 'pipelines/sonarstatus'
         - 'clustertemplates'
         - 'clustertemplates/render'
+        - 'clustersteptemplates'
+        - 'clustersteptemplates/render'
       verbs:
         - '*'
 
