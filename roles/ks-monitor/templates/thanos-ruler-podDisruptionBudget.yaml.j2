@@ -1,0 +1,23 @@
+{% if kubernetes_version is version('v1.25.0', '>=')  %}
+apiVersion: policy/v1
+{% else %}
+apiVersion: policy/v1beta1
+{% endif %}
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/component: thanos-ruler
+    app.kubernetes.io/instance: kubesphere
+    app.kubernetes.io/name: thanos-ruler
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: {{ thanos_tag | replace("v", "") }}
+  name: thanos-ruler-kubesphere
+  namespace: kubesphere-monitoring-system
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: thanos-ruler
+      app.kubernetes.io/instance: kubesphere
+      app.kubernetes.io/name: thanos-ruler
+      app.kubernetes.io/part-of: kube-prometheus
