@@ -1,0 +1,23 @@
+{% if kubernetes_version is version('v1.25.0', '>=')  %}
+apiVersion: policy/v1
+{% else %}
+apiVersion: policy/v1beta1
+{% endif %}
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/component: alert-router
+    app.kubernetes.io/instance: main
+    app.kubernetes.io/name: alertmanager
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: {{ alertmanager_tag | replace("v", "") }}
+  name: alertmanager-main
+  namespace: kubesphere-monitoring-system
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: alert-router
+      app.kubernetes.io/instance: main
+      app.kubernetes.io/name: alertmanager
+      app.kubernetes.io/part-of: kube-prometheus
