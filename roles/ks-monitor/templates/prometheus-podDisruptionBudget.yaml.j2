@@ -1,0 +1,23 @@
+{% if kubernetes_version is version('v1.25.0', '>=')  %}
+apiVersion: policy/v1
+{% else %}
+apiVersion: policy/v1beta1
+{% endif %}
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: k8s
+    app.kubernetes.io/name: prometheus
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: {{ prometheus_tag | replace("v", "") }}
+  name: prometheus-k8s
+  namespace: kubesphere-monitoring-system
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: prometheus
+      app.kubernetes.io/instance: k8s
+      app.kubernetes.io/name: prometheus
+      app.kubernetes.io/part-of: kube-prometheus
