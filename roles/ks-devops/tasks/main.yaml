@@ -234,6 +234,7 @@
     {{ bin_dir }}/kubectl label --overwrite namespaces {{ item }} kubesphere.io/workspace=system-workspace
   loop:
     - kubesphere-devops-worker
+    - argocd
 
 - name: ks-devops | Importing ks-devops status
   shell: >
