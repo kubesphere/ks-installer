@@ -167,7 +167,7 @@ argocd_redis_tag: 6.2.6-alpine
 configmap_reload_repo: "{{ base_repo }}{{ namespace_override | default('jimmidyson') }}/configmap-reload"
 configmap_reload_tag: v0.7.1
 prometheus_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/prometheus"
-prometheus_tag: v2.34.0
+prometheus_tag: v2.39.1
 prometheus_config_reloader_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-config-reloader"
 prometheus_config_reloader_tag: v0.55.1
 prometheus_operator_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/prometheus-operator"
@@ -175,13 +175,13 @@ prometheus_operator_tag: v0.55.1
 kube_rbac_proxy_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-rbac-proxy"
 kube_rbac_proxy_tag: v0.11.0
 kube_state_metrics_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/kube-state-metrics"
-kube_state_metrics_tag: v2.5.0
+kube_state_metrics_tag: v2.6.0
 node_exporter_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/node-exporter"
 node_exporter_tag: v1.3.1
 alertmanager_repo: "{{ base_repo }}{{ namespace_override | default('prom') }}/alertmanager"
 alertmanager_tag: v0.23.0
 thanos_repo: "{{ base_repo }}{{ namespace_override | default('thanosio') }}/thanos"
-thanos_tag: v0.25.2
+thanos_tag: v0.31.0
 grafana_repo: "{{ base_repo }}{{ namespace_override | default('grafana') }}/grafana"
 grafana_tag: 8.3.3
 
