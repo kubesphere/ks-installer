@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 2.5.0
+    app.kubernetes.io/version: 2.6.0
   name: kube-state-metrics
   namespace: kubesphere-monitoring-system
 spec:
@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/component: exporter
         app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/part-of: kube-prometheus
-        app.kubernetes.io/version: 2.5.0
+        app.kubernetes.io/version: 2.6.0
     spec:
       containers:
       - args:
@@ -49,9 +49,29 @@ spec:
           kube_poddisruptionbudget_status_.+,
           kube_replicationcontroller_.+,
           kube_node_info,
-          kube_(hpa|replicaset|replicationcontroller)_.+_generation
+          kube_(hpa|replicaset|replicationcontroller)_.+_generation,
+          kube_clusterrole_info,
+          kube_clusterrolebinding_info
+        - |
+          --custom-resource-state-config=spec:
+            resources:
+              - groupVersionKind:
+                  group: iam.kubesphere.io
+                  kind: "User"
+                  version: "v1alpha2"
+                metricNamePrefix: ""
+                labelsFromPath:
+                  user: [metadata, name]
+                metrics:
+                  - name: "kubesphere_user_info"
+                    help: "information about iam.kubesphere.io/user."
+                    each:
+                      type: Info
+                      info: {}
+        - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments,clusterroles,clusterrolebindings,users
+        - --metric-annotations-allowlist=clusterroles=[kubesphere.io/creator]
         - --metric-labels-allowlist=namespaces=[kubesphere.io/workspace]
-        image: kubesphere/kube-state-metrics:v2.5.0
+        image: kubesphere/kube-state-metrics:v2.6.0
         name: kube-state-metrics
         resources:
           limits:
