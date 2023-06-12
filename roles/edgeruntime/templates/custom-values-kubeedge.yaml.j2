@@ -1,7 +1,7 @@
 # Default values for kubeedge.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-appVersion: "0.1.0"
+appVersion: "1.13.0"
 
 cloudCore:
   replicaCount: 1
@@ -64,6 +64,7 @@ cloudCore:
     router:
       enable: "false"
   service:
+    enable: "true"
     type: "NodePort"
     cloudhubNodePort: "{{ edgeruntime.kubeedge.cloudCore.service.cloudhubNodePort | default("30000") }}"
     cloudhubQuicNodePort: "{{ edgeruntime.kubeedge.cloudCore.service.cloudhubQuicNodePort | default("30001") }}"
