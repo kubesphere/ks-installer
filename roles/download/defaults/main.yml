@@ -92,11 +92,11 @@ post_install_job_image: kubectl
 
 # kubeedge
 cloudcore_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/cloudcore"
-cloudcore_tag: "v1.9.2"
-iptables_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubeedge') }}/iptables-manager"
-iptables_manager_tag: "v1.9.2"
+cloudcore_tag: "v1.13.0"
+iptables_manager_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/iptables-manager"
+iptables_manager_tag: "v1.13.0"
 edge_service_repo: "{{ base_repo }}{{ namespace_override | default('kubesphere') }}/edgeservice"
-edge_service_tag: "v0.2.0"
+edge_service_tag: "v0.3.0"
 
 # gatekeeper
 gatekeeper_repo: "{{ base_repo }}{{ namespace_override | default('openpolicyagent') }}/gatekeeper"

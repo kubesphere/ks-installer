@@ -1,17 +1,17 @@
 # Default values for kubeedge.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-appVersion: "1.9.2"
+appVersion: "1.13.0"
 
 cloudCore:
   replicaCount: 1
   hostNetWork: "true"
   image:
     repository: "kubeedge/cloudcore"
-    tag: "v1.9.2"
+    tag: "v1.13.0"
     pullPolicy: "IfNotPresent"
     pullSecrets: []
-  securityContext: 
+  securityContext:
     privileged: true
   labels:
     k8s-app: kubeedge
@@ -24,7 +24,7 @@ cloudCore:
         - matchExpressions:
           - key: node-role.kubernetes.io/edge
             operator: DoesNotExist
-  tolerations: {}
+  tolerations: []
   nodeSelector: {}
   resources:
     limits:
@@ -35,8 +35,12 @@ cloudCore:
       memory: 512Mi
   modules:
     cloudHub:
-      advertiseAddress:   # Causion!: Leave this entry to empty will cause CloudCore to exit abnormally once KubeEdge is enabled. 
-        - ""              # At least a public IP Address or an IP which can be accessed by edge nodes must be provided!           
+      # Causion!: Leave this entry to empty will cause CloudCore to exit abnormally once KubeEdge is enabled.
+      # At least a public IP Address or an IP which can be accessed by edge nodes must be provided!
+      advertiseAddress:
+        - ""
+      dnsNames:
+        - ""
       nodeLimit: "1000"
       websocket:
         enable: "true"
@@ -59,6 +63,7 @@ cloudCore:
     cloudhubHttpsNodePort: "30002"
     cloudstreamNodePort: "30003"
     tunnelNodePort: "30004"
+    annotations: {}
 
 iptablesManager:
   enable: "true"
@@ -66,10 +71,10 @@ iptablesManager:
   hostNetWork: true
   image:
     repository: "kubeedge/iptables-manager"
-    tag: "v1.9.2"
+    tag: "v1.13.0"
     pullPolicy: "IfNotPresent"
     pullSecrets: []
-  securityContext: 
+  securityContext:
     capabilities:
       add:
         - NET_ADMIN
@@ -85,7 +90,7 @@ iptablesManager:
         - matchExpressions:
           - key: node-role.kubernetes.io/edge
             operator: DoesNotExist
-  tolerations: {}
+  tolerations: []
   nodeSelector: {}
   resources:
     limits:
@@ -95,25 +100,31 @@ iptablesManager:
       cpu: 100m
       memory: 25Mi
 
-edgeService:
-  replicaCount: 1
+controllerManager:
+  enable: false
   image:
-    repository: "kubesphere/edgeservice"
-    tag: "v0.2.0"
+    repository: "kubeedge/controller-manager"
+    tag: "v1.13.0"
     pullPolicy: "IfNotPresent"
-    imagePullSecrets: []
-  securityContext: {}
+    pullSecrets: []
   labels:
-    k8s-app: edgeservice
+    k8s-app: controller-manager
+    kubeedge: controller-manager
   annotations: {}
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
-        - matchExpressions:
-          - key: node-role.kubernetes.io/edge
-            operator: DoesNotExist
-  tolerations: {}
+          - matchExpressions:
+              - key: node-role.kubernetes.io/edge
+                operator: DoesNotExist
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
   nodeSelector: {}
   resources:
     limits:

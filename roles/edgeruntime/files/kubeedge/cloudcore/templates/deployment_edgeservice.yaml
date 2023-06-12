@@ -36,7 +36,7 @@ spec:
           - name: REGION
             value: "zh"
           - name: VERSION 
-            value: "v1.9.2"
+            value: "v1.13.0"
         imagePullPolicy: {{ .Values.edgeService.image.pullPolicy }}
         {{- with .Values.edgeService.resources }}
         resources: {{ toYaml . | nindent 10 }}
