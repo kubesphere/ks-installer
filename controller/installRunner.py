@@ -693,6 +693,14 @@ def generate_new_cluster_configuration(api):
         
         del cluster_configuration_spec["kubeedge"]
 
+    if "devops" in cluster_configuration_spec and "enabled" in cluster_configuration_spec["devops"] and cluster_configuration_spec["devops"]["enabled"]:
+        if "jenkinsCpuReq" not in  cluster_configuration_spec["devops"]:
+            upgrade_flag = True
+            cluster_configuration_spec["devops"]["jenkinsCpuReq"] = 0.5
+        if "jenkinsCpuLim" not in  cluster_configuration_spec["devops"]:
+            upgrade_flag = True
+            cluster_configuration_spec["devops"]["jenkinsCpuLim"] = 4
+
     if isinstance(cluster_configuration_status,
                   dict) and "core" in cluster_configuration_status:
         if ("version" in cluster_configuration_status["core"] and cluster_configuration_status["core"]["version"] !=

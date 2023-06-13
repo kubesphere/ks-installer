@@ -81,7 +81,8 @@ jenkins:
         cpu: "{{ devops.jenkinsCpuLim }}"
         memory: "{{ devops.jenkinsMemoryLim }}"
     JavaOpts: >
-      -XX:InitialRAMPercentage=70 -XX:MaxRAMPercentage=70 -XX:MaxRAM={{ devops.jenkinsMemoryLim }}
+      -XX:InitialRAMPercentage=70 -XX:MaxRAMPercentage=70
+      -XX:MaxRAM={{ devops.jenkinsMemoryLim|replace("Mi", "M")|replace("Gi", "G") }}
       -Dhudson.slaves.NodeProvisioner.initialDelay=20
       -Dhudson.slaves.NodeProvisioner.MARGIN=50
       -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
