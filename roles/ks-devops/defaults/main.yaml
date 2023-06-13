@@ -1,10 +1,10 @@
 ---
 devops:
-  jenkinsVolumeSize: "8Gi"
-  jenkinsMemoryLim: "{{ jenkins_memory_lim |default('8Gi') }}"
+  jenkinsVolumeSize: "16Gi"
+  jenkinsMemoryLim: "{{ jenkins_memory_lim |default('4Gi') }}"
   jenkinsMemoryReq: "{{ jenkins_memory_req |default('4Gi') }}"
-  jenkinsCpuReq: "{{ jenkins_cpu_req |default('1') }}"
-  jenkinsCpuLim: "{{ jenkins_cpu_lim |default('4') }}"
+  jenkinsCpuReq: "{{ jenkins_cpu_req |default('0.5') }}"
+  jenkinsCpuLim: "{{ jenkins_cpu_lim |default('1') }}"
 
 
 EMAIL_SMTP_HOST: mail.example.com
