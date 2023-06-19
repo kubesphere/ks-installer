@@ -494,6 +494,24 @@ def generate_new_cluster_configuration(api):
                 cluster_configuration_spec["common"]["minio"]["volumeSize"] = cluster_configuration_spec["common"]["minioVolumeSize"]
                 del cluster_configuration_spec["common"]["minioVolumeSize"]
 
+        if cluster_configuration_status is not None and "es" in cluster_configuration_status and "status" in cluster_configuration_status[
+                "es"] and cluster_configuration_status["es"]["status"] == "enabled":
+            cluster_configuration_spec["common"]["es"]["enabled"] = True
+            if "opensearch" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["opensearch"]["enabled"] = False
+            else:
+                cluster_configuration_spec["common"]["opensearch"] = {
+                     "enabled": False
+                }
+        else:
+            cluster_configuration_spec["common"]["es"]["enabled"] = False
+            if "opensearch" in cluster_configuration_spec["common"]:
+                cluster_configuration_spec["common"]["opensearch"]["enabled"] = True
+            else:
+                cluster_configuration_spec["common"]["opensearch"] = {
+                     "enabled": True
+                }
+
         # Migrate the configuration of es elasticsearch
         if "es" in cluster_configuration_spec["common"]:
             if "master" not in cluster_configuration_spec["common"]["es"]:
