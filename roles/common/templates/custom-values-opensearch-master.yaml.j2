@@ -1,6 +1,11 @@
 clusterName: "opensearch-cluster"
 nodeGroup: "master"
 
+# If discovery.type in the opensearch configuration is set to "single-node",
+# this should be set to "true"
+# If "true", replicas will be forced to 1
+singleNode: false
+
 # The service that non master groups will try to connect to when joining the cluster
 # This should be set to clusterName + "-" + nodeGroup for your master group
 masterService: "opensearch-cluster-master"
@@ -105,7 +110,7 @@ opensearchJavaOpts: "-Xmx512M -Xms512M"
 
 resources:
   requests:
-    cpu: {{ common.opensearch.master.resources.requests.cpu | default("25m") }}
+    cpu: {{ common.opensearch.master.resources.requests.cpu | default("1000m") }}
     memory: {{ common.opensearch.master.resources.requests.memory | default("512Mi") }}
 
 initResources: {}

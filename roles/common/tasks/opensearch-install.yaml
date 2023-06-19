@@ -65,9 +65,9 @@
 - block:
   - name: KubeSphere | Deploying opensearch-logging
     shell: >
-      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/elasticsearch/opensearch-2.1.0.tgz -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
       &&
-      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/elasticsearch/opensearch-2.1.0.tgz  -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz  -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
     register: opensearch_result
 
   - name: KubeSphere | Getting PersistentVolume Name
@@ -104,9 +104,9 @@
 
   - name: KubeSphere | Deploying opensearch-logging
     shell: >
-      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/elasticsearch/opensearch-2.1.0.tgz -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
       &&
-      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/elasticsearch/opensearch-2.1.0.tgz  -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz  -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
     register: opensearch_result
     when:
       - "opensearch_result.stderr and 'no matches for kind' in opensearch_result.stderr"
@@ -159,7 +159,7 @@
   - name: KubeSphere | Deploying opensearch-dashboard
     shell: >
       {{ bin_dir }}/helm upgrade --install opensearch-dashboard
-      {{ kubesphere_dir }}/elasticsearch/opensearch-dashboards-2.1.0.tgz
+      {{ kubesphere_dir }}/elasticsearch/opensearch-dashboards-2.6.0.tgz
       -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-dashboard.yaml
       --namespace kubesphere-logging-system
     when:
