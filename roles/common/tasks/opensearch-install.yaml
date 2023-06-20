@@ -1,13 +1,13 @@
 - name: KubeSphere | Getting opensearch and curator installation files
   copy:
-    src: "elasticsearch"
+    src: "opensearch"
     dest: "{{ kubesphere_dir }}/"
 
 
 - name: KubeSphere | Creating custom manifests
   template:
     src: "{{ item.file }}.j2"
-    dest: "{{ kubesphere_dir }}/elasticsearch/{{ item.file }}"
+    dest: "{{ kubesphere_dir }}/opensearch/{{ item.file }}"
   with_items:
     - { name: custom-values-opensearch-master, file: custom-values-opensearch-master.yaml }
     - { name: custom-values-opensearch-data, file: custom-values-opensearch-data.yaml }
@@ -29,9 +29,9 @@
 
   - name: KubeSphere | Commenting opensearch storageclass parameter
     shell: >
-      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-master.yaml
+      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/opensearch/custom-values-opensearch-master.yaml
       &&
-      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-data.yaml
+      sed -i 's/\(^.*storageClass:.*$\)/#\1/' {{ kubesphere_dir }}/opensearch/custom-values-opensearch-data.yaml
     when:
       - sts_number.stdout != "0"
       - sc_number.stdout == "0"
@@ -65,9 +65,9 @@
 - block:
   - name: KubeSphere | Deploying opensearch-logging
     shell: >
-      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/opensearch/opensearch-2.6.0.tgz -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
       &&
-      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz  -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/opensearch/opensearch-2.6.0.tgz  -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
     register: opensearch_result
 
   - name: KubeSphere | Getting PersistentVolume Name
@@ -104,9 +104,9 @@
 
   - name: KubeSphere | Deploying opensearch-logging
     shell: >
-      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-master {{ kubesphere_dir }}/opensearch/opensearch-2.6.0.tgz -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-master.yaml --namespace kubesphere-logging-system
       &&
-      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/elasticsearch/opensearch-2.6.0.tgz  -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
+      {{ bin_dir }}/helm upgrade --install opensearch-data  {{ kubesphere_dir }}/opensearch/opensearch-2.6.0.tgz  -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-data.yaml --namespace kubesphere-logging-system
     register: opensearch_result
     when:
       - "opensearch_result.stderr and 'no matches for kind' in opensearch_result.stderr"
@@ -138,11 +138,11 @@
 
 
 
-# Deploy elasticsearch curator
+# Deploy opensearch curator
 - block:
-  # - name: KubeSphere | Checking elasticsearch-logging-curator
+  # - name: KubeSphere | Checking opensearch-logging-curator
   #   shell: >
-  #     {{ bin_dir }}/helm list elasticsearch-logging-curator
+  #     {{ bin_dir }}/helm list opensearch-logging-curator
   #   register: curator_check
   #   ignore_errors: True
 
@@ -150,8 +150,8 @@
   - name: KubeSphere | Deploying opensearch-logging-curator
     shell: >
       {{ bin_dir }}/helm upgrade --install opensearch-logging-curator
-      {{ kubesphere_dir }}/elasticsearch/elasticsearch-curator-1.3.3.tgz
-      -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-curator.yaml
+      {{ kubesphere_dir }}/opensearch/opensearch-curator-1.3.3.tgz
+      -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-curator.yaml
       --namespace kubesphere-logging-system
     # when:
     #   - (curator_check.stdout.find("DEPLOYED") == -1) or (curator_check.stdout.find("5.5.4-0217") == -1)
@@ -159,8 +159,8 @@
   - name: KubeSphere | Deploying opensearch-dashboard
     shell: >
       {{ bin_dir }}/helm upgrade --install opensearch-dashboard
-      {{ kubesphere_dir }}/elasticsearch/opensearch-dashboards-2.6.0.tgz
-      -f {{ kubesphere_dir }}/elasticsearch/custom-values-opensearch-dashboard.yaml
+      {{ kubesphere_dir }}/opensearch/opensearch-dashboards-2.6.0.tgz
+      -f {{ kubesphere_dir }}/opensearch/custom-values-opensearch-dashboard.yaml
       --namespace kubesphere-logging-system
     when:
       - common.opensearch.dashboard is defined and common.opensearch.dashboard.enabled is defined and common.opensearch.dashboard.enabled
