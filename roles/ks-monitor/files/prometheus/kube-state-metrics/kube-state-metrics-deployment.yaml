@@ -70,7 +70,7 @@ spec:
                       info: {}
         - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,leases,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments,clusterroles,clusterrolebindings,users
         - --metric-annotations-allowlist=clusterroles=[kubesphere.io/creator]
-        - --metric-labels-allowlist=namespaces=[kubesphere.io/workspace]
+        - --metric-labels-allowlist=namespaces=[kubesphere.io/workspace],storageclasses=[storage.kubesphere.io/storagetype]
         image: kubesphere/kube-state-metrics:v2.6.0
         name: kube-state-metrics
         resources:

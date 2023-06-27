@@ -14,7 +14,7 @@ spec:
     interval: 1m
     metricRelabelings:
     - action: keep
-      regex: kubelet_node_name|kubelet_running_container_count|kubelet_running_pod_count|kubelet_volume_stats.*|kubelet_pleg_relist_duration_seconds_.+
+      regex: kubelet_node_name|kubelet_running_container_count|kubelet_running_pod_count|kubelet_volume_stats.*|kubelet_pleg_relist_duration_seconds_.+|kubelet_certificate_manager_.+|kubelet_server_expiration_.+|kubelet_pod_worker_.+
       sourceLabels:
       - __name__
     port: https-metrics
