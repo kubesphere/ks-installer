@@ -100,7 +100,7 @@ spec:
       prometheus: k8s
       role: alert-rules
   scrapeInterval: 1m
-{% if etcd.monitoring is defined and etcd.monitoring == true %}
+{% if etcd.monitoring is defined and etcd.monitoring == true and etcd.tlsEnable == true %}
   secrets:
   - kube-etcd-client-certs
 {% endif %}
