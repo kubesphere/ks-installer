@@ -46,7 +46,7 @@ ks_version: >-
   {%- if dev_tag is defined and dev_tag != "" -%}
   {{ dev_tag }}
   {%- else -%}
-  master
+  v3.4.0-rc.1
   {%- endif %}
 
 #KubeSphere:
@@ -350,11 +350,11 @@ images:
     sha256: "{{ tower_checksum|default(None) }}"
     group: "kubesphere-images"
 
-  post_install_job:
-    repo: "{{ post_install_job_repo }}/{{ post_install_job_image }}"
-    tag: "{{ post_install_job_tag }}"
-    sha256: "{{ post_install_job_checksum|default(None) }}"
-    group: "kubesphere-images"
+#  post_install_job:
+#    repo: "{{ post_install_job_repo }}/{{ post_install_job_image }}"
+#    tag: "{{ post_install_job_tag }}"
+#    sha256: "{{ post_install_job_checksum|default(None) }}"
+#    group: "kubesphere-images"
 
   cloudcore:
     repo: "{{ cloudcore_repo }}"
@@ -652,7 +652,7 @@ images:
 
   argocd_repo:
     repo: "{{ argocd_repo }}"
-    tag: "{{ argocd_repo_tag }}"
+    tag: "{{ argocd_tag }}"
     sha256: "{{ argocd_checksum|default(None) }}"
     group: "kubesphere-devops-images"
 
@@ -986,11 +986,11 @@ images:
     sha256: "{{ hpa_example_checksum|default(None) }}"
     group: "example-images"
 
-  java:
-    repo: "{{ java_repo }}"
-    tag: "{{ java_tag }}"
-    sha256: "{{ java_checksum|default(None) }}"
-    group: "example-images"
+#  java:
+#    repo: "{{ java_repo }}"
+#    tag: "{{ java_tag }}"
+#    sha256: "{{ java_checksum|default(None) }}"
+#    group: "example-images"
 
   fluentd:
     repo: "{{ fluentd_repo }}"
