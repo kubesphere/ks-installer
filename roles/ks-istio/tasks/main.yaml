@@ -12,7 +12,7 @@
   shell: >
     ARCH=amd64 &&
     if [[ $(arch) == "aarch64*" ]]; then ARCH=arm64; fi &&
-    tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2-linux-${ARCH}.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
+    tar -zxf {{ kubesphere_dir }}/servicemesh/istio/istio-1.14.6-linux-${ARCH}.tar.gz -C {{ kubesphere_dir }}/servicemesh/istio/
 
 - name: servicemesh | Grant privileges to ks-installer
   shell: >
@@ -43,7 +43,7 @@
     - { path: kiali, file: kiali-cr.yaml }
 
 - name: servicemesh | Checking istio old version
-  shell: kubectl -n istio-system get pods -lapp=istiod,istio.io/rev=1-6-10
+  shell: kubectl -n istio-system get pods -lapp=istiod,istio.io/rev=1-11-2
   register: istio_old_version_check
   failed_when: false
 
@@ -57,9 +57,9 @@
     {{ kubesphere_dir }}/servicemesh/istio/istio-custom-profile.yaml
     >  {{ kubesphere_dir }}/servicemesh/istio/profile.yaml
 
-- name: servicemesh | Installing istiod-1.11.2
+- name: servicemesh | Installing istiod-1.14.6
   shell: >
-    {{ kubesphere_dir }}/servicemesh/istio/istio-1.11.2/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/profile.yaml --set revision=1-11-2 -y
+    {{ kubesphere_dir }}/servicemesh/istio/istio-1.14.6/bin/istioctl install -f {{ kubesphere_dir }}/servicemesh/istio/profile.yaml --set revision=1-14-6 -y
   register: istio_result
   failed_when: false
   retries: 3
@@ -69,11 +69,11 @@
   debug:
     var: istio_result
 
-# when install istiod-1.11.2 successful 
-- name: servicemesh | Change istiod-1.11.2 injector to default
+# when install istiod-1.14.6 successful
+- name: servicemesh | Change istiod-1.14.6 injector to default
   ignore_errors: true
   shell: >
-    {{ bin_dir }}/kubectl patch mutatingwebhookconfigurations istio-sidecar-injector-1-11-2 --type='json' -p='[{ "op": "remove", "path": "/webhooks/1/objectSelector/matchExpressions/1" }]'
+    {{ bin_dir }}/kubectl patch mutatingwebhookconfigurations istio-sidecar-injector-1-14-6 --type='json' -p='[{ "op": "remove", "path": "/webhooks/1/objectSelector/matchExpressions/1" }]'
   when: "'errors occurred during operation' not in istio_result.stderr"
 
 - import_tasks: jaeger-install.yaml

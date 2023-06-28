@@ -8,16 +8,16 @@
   shell: >
     {{ bin_dir }}/kubectl -n istio-system delete deployment jaeger-operator
   when:
-    - (jaeger_check.stdout.find("deployed") != -1) and (jaeger_check.stdout.find("1.27.0") == -1)
+    - (jaeger_check.stdout.find("deployed") != -1) and (jaeger_check.stdout.find("1.29.1") == -1)
   ignore_errors: True
 
 - name: servicemesh | Deploying jaeger-operator
   shell: >
-    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-operator-2.26.0.tgz
+    {{ bin_dir }}/helm upgrade --install jaeger-operator {{ kubesphere_dir }}/servicemesh/jaeger/jaeger-operator-2.29.0.tgz
     -f {{ kubesphere_dir }}/servicemesh/jaeger/custom-values-jaeger.yaml
     --namespace istio-system
   when:
-    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.27.0") == -1)
+    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.29.1") == -1)
 
 - name: servicemesh | Deploying es jaeger-secret
   shell: >
@@ -62,4 +62,4 @@
   retries: 5
   delay: 10
   when:
-    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.27.0") == -1)
+    - (jaeger_check.stdout.find("deployed") == -1) or (jaeger_check.stdout.find("1.29.1") == -1)

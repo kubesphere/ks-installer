@@ -1,11 +1,11 @@
 
 
-- name: servicemesh | upgrade-pre | disable old sidecar injection 
+- name: servicemesh | upgrade-pre | delete old sidecar injection
   shell: >
-    {{ bin_dir }}/kubectl patch mutatingwebhookconfigurations istio-sidecar-injector-1-6-10 --type='json' -p='[{ "op": "replace", "path": "/webhooks/0/namespaceSelector/matchExpressions/3","value":{"key": "istio.io/rev", "operator": "In","values": ["1-6-10"]} }]'
+    {{ bin_dir }}/kubectl delete mutatingwebhookconfigurations istio-sidecar-injector-1-11-2
   ignore_errors: true
 
 - name: servicemesh | delete old validating webhook
   shell: >
-    {{ bin_dir }}/kubectl delete validatingwebhookconfigurations istiod-istio-system
+    {{ bin_dir }}/kubectl delete validatingwebhookconfigurations istio-validator-1-11-2-istio-system
   ignore_errors: true
