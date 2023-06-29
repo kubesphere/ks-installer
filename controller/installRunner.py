@@ -46,7 +46,7 @@ cluster_configuration = {
         "name": "ks-installer",
         "namespace": "kubesphere-system",
         "labels": {
-            "version": "v3.4.0-rc.1"
+            "version": "v3.4.0-rc.0"
         },
     },
 }
