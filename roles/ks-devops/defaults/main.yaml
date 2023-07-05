@@ -1,30 +1,11 @@
 ---
 devops:
-  jenkinsVolumeSize: "8Gi"
+  jenkinsVolumeSize: "16Gi"
   jenkinsMemoryLim: "{{ jenkins_memory_lim |default('4Gi') }}"
-  jenkinsMemoryReq: "{{ jenkins_memory_req |default('2Gi') }}"
+  jenkinsMemoryReq: "{{ jenkins_memory_req |default('4Gi') }}"
+  jenkinsCpuReq: "{{ jenkins_cpu_req |default('0.5') }}"
+  jenkinsCpuLim: "{{ jenkins_cpu_lim |default('1') }}"
 
-JavaOpts: >
-  -XX:MaxRAMPercentage=80 -XX:MinRAMPercentage=60
-  -Dhudson.slaves.NodeProvisioner.initialDelay=20
-  -Dhudson.slaves.NodeProvisioner.MARGIN=50
-  -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
-  -Dhudson.model.LoadStatistics.clock=5000
-  -Dhudson.model.LoadStatistics.decay=0.2
-  -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000
-  -Dhudson.security.csrf.DefaultCrumbIssuer.EXCLUDE_SESSION_ID=true
-  -Dio.jenkins.plugins.casc.ConfigurationAsCode.initialDelay=10000
-  -Djenkins.install.runSetupWizard=false
-  -XX:+AlwaysPreTouch
-  -XX:+HeapDumpOnOutOfMemoryError
-  -XX:+UseG1GC
-  -XX:+UseStringDeduplication
-  -XX:+ParallelRefProcEnabled
-  -XX:+DisableExplicitGC
-  -XX:+UnlockDiagnosticVMOptions
-  -XX:+UnlockExperimentalVMOptions
-
-JenkinsLocationUrl: jenkins.devops.kubesphere.local
 
 EMAIL_SMTP_HOST: mail.example.com
 EMAIL_FROM_ADDR: admin@example.com
