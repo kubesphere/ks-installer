@@ -75,12 +75,31 @@ jenkins:
     ImagePullPolicy: {{ ks_image_pull_policy }}
     resources:
       requests:
-        cpu: "2"
+        cpu: "{{ devops.jenkinsCpuReq }}"
         memory: "{{ devops.jenkinsMemoryReq }}"
       limits:
-        cpu: "4"
+        cpu: "{{ devops.jenkinsCpuLim }}"
         memory: "{{ devops.jenkinsMemoryLim }}"
-    JavaOpts: "{{ JavaOpts }}"
+    JavaOpts: >
+      -XX:InitialRAMPercentage=70 -XX:MaxRAMPercentage=70
+      -XX:MaxRAM={{ devops.jenkinsMemoryLim|replace("Mi", "M")|replace("Gi", "G") }}
+      -Dhudson.slaves.NodeProvisioner.initialDelay=20
+      -Dhudson.slaves.NodeProvisioner.MARGIN=50
+      -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
+      -Dhudson.model.LoadStatistics.clock=5000
+      -Dhudson.model.LoadStatistics.decay=0.2
+      -Dhudson.slaves.NodeProvisioner.recurrencePeriod=5000
+      -Dhudson.security.csrf.DefaultCrumbIssuer.EXCLUDE_SESSION_ID=true
+      -Dio.jenkins.plugins.casc.ConfigurationAsCode.initialDelay=10000
+      -Djenkins.install.runSetupWizard=false
+      -XX:+AlwaysPreTouch
+      -XX:+HeapDumpOnOutOfMemoryError
+      -XX:+UseG1GC
+      -XX:+UseStringDeduplication
+      -XX:+ParallelRefProcEnabled
+      -XX:+DisableExplicitGC
+      -XX:+UnlockDiagnosticVMOptions
+      -XX:+UnlockExperimentalVMOptions
   Agent:
     Image: "{{ jnlp_slave_repo }}"
     Builder:

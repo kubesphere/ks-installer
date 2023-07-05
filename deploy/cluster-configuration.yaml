@@ -99,16 +99,12 @@ spec:
     # webhook:
     #   resources: {}
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Provide an out-of-the-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
-    enabled: false             # Enable or disable the KubeSphere DevOps System.
-    ci:
-      enabled: false      # Enable ci
-    cd:
-      enabled: false      # Enable cd
-      type: argocd        # Choose cd core, although only argocd is supported.
-    # resources: {}
-    jenkinsMemoryLim: 4Gi      # Jenkins memory limit.
-    jenkinsMemoryReq: 2Gi   # Jenkins memory request.
-    jenkinsVolumeSize: 8Gi     # Jenkins volume size.
+    enabled: false         # Enable or disable the KubeSphere DevOps System.
+    jenkinsCpuReq: 0.5
+    jenkinsCpuLim: 1
+    jenkinsMemoryReq: 4Gi
+    jenkinsMemoryLim: 4Gi  # Recommend keep same as requests.memory.
+    jenkinsVolumeSize: 16Gi
   events:                  # Provide a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
     enabled: false         # Enable or disable the KubeSphere Events System.
     # operator:
