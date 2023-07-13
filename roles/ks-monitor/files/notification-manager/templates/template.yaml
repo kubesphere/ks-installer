@@ -1,10 +1,10 @@
 apiVersion: v1
 data:
   template: |
-    {{ "{{ define \"nm.default.message\" }}{{ if ne (len .Status) 0 }}[{{ .Status | translate }}] {{ end }}{{ .Message }}{{ end }}" }}
+    {{ "{{ define \"nm.default.message\" }}{{ if ne (len .Status) 0 }}[{{ .Status | translate }}] {{ end }}{{ . | message }}{{ end }}" }}
     {{ "{{ define \"nm.default.message.cn\" }}{{ if ne (len .Status) 0 }}[{{ .Status | translate }}] {{ end }}{{ .MessageCN }}{{ end }}" }}
 
-    {{ "{{ define \"nm.default.subject\" }}{{ if eq (len .Alerts) 1 }}{{ range .Alerts }}{{ template \"nm.default.message\" . }}{{ end }}{{ else }}{{ .Alerts | len }} {{ .Status }} alerts{{ if gt (len .GroupLabels.SortedPairs) 1 }} for {{ range .GroupLabels.SortedPairs }}{{ .Name | translate }}={{ .Value }} {{ end }}{{ end }}{{ end }}{{ end }}" }}
+    {{ "{{ define \"nm.default.subject\" }}{{ if eq (len .Alerts) 1 }}{{ range .Alerts }}{{ template \"nm.default.message\" . }}{{ end }}{{ else }}{{ .Alerts | len }} {{ if ne (len .Status) 0 }}{{ .Status }} {{ end }}alerts{{ if gt (len .GroupLabels.SortedPairs) 1 }} for {{ range .GroupLabels.SortedPairs }}{{ .Name | translate }}={{ .Value }} {{ end }}{{ end }}{{ end }}{{ end }}" }}
 
     {{ "{{ define \"nm.default.text\" }}{{ range .Alerts }}{{ template \"nm.default.message\" . }}" }}
     {{ "{{ range .Labels.SortedPairs }}  {{ .Name | translate }}: {{ .Value }}" }}
@@ -21,7 +21,7 @@ data:
     {{ "  content:" }}
     {{ "    {{ range .Alerts }}" }}
     {{ "    - - tag: text" }}
-    {{ "        text: '{{ template \"nm.default.message\" . }}'{{ range .Labels.SortedPairs }}" }}
+    {{ "        text: \"{{ template \"nm.default.message\" . }}\"{{ range .Labels.SortedPairs }}" }}
     {{ "    - - tag: text" }}
     {{ "        text: '  {{ .Name | translate }}: {{ .Value }}'" }}
     {{ "    {{- end }}" }}
