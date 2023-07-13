@@ -33,7 +33,7 @@ spec:
   {{- if eq .Values.kubesphere true }}
   sidecars:
     tenant:
-      image: kubesphere/notification-tenant-sidecar:v3.2.0
+      image: {{ .Values.notificationmanager.sidecars.tenant.image.repo }}:{{ .Values.notificationmanager.sidecars.tenant.image.tag }}
       name: tenant
       type: kubesphere
   {{- end}}

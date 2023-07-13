@@ -3,10 +3,14 @@ kubesphere: true
 
 hook:
   postInstall:
+    image:
+      repo: {{ ks_kubectl_repo }}
+      tag: {{ ks_kubectl_tag }}
+      pullPolicy: IfNotPresent
     backoffLimit: 3
 
 # notification-manager-operator
-operator: 
+operator:
   containers:
     proxy:
       image:
@@ -24,7 +28,7 @@ operator:
       image:
         repo: {{ notification_manager_operator_repo }}
         tag: {{ notification_manager_operator_tag }}
-        pullPolicy: IfNotPresent 
+        pullPolicy: IfNotPresent
       resources:
         limits:
           cpu: {{ monitoring.notification_manager.operator.resources.limits.cpu | default("50m") }}
@@ -119,9 +123,6 @@ notificationmanager:
       matchLabels:
         type: tenant
     options:
-      global:
-        templateFile:
-        - /etc/notification-manager/template
       email:
         notificationTimeout: 5
         deliveryType: bulk
@@ -129,10 +130,21 @@ notificationmanager:
         notificationTimeout: 5
       wechat:
         notificationTimeout: 5
+  volumeMounts:
+    - mountPath: /etc/localtime
+      name: host-time
+      readOnly: true
+  volumes:
+    - hostPath:
+        path: /etc/localtime
+        type: ""
+      name: host-time
+  volumeMounts: []
+  volumes: []
   defaultSecretNamespace: kubesphere-monitoring-federated
   groupLabels:
-    - alertname
-    - namespace
+      - alertname
+      - namespace
   template:
     language: English
     languagePack:
@@ -141,14 +153,11 @@ notificationmanager:
     text:
       name: notification-manager-template
       namespace: kubesphere-monitoring-system
-  volumes:
-    - hostPath:
-        path: /etc/localtime
-        type: ""
-      name: host-time
-  volumeMounts:
-    - mountPath: /etc/localtime
-      name: host-time
-      readOnly: true
-
-
+  env:
+    - name: TZ
+      value: Asia/Shanghai
+  sidecars:
+     tenant:
+       image:
+         repo: {{ notification_tenant_sidecar_repo }}
+         tag: {{ notification_tenant_sidecar_tag }}

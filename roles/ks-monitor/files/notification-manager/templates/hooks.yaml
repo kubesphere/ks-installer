@@ -5,7 +5,7 @@ metadata:
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "1"
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed,before-hook-creation
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -15,7 +15,7 @@ metadata:
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "2"
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed,before-hook-creation
 rules:
   - apiGroups:
       - apiextensions.k8s.io
@@ -38,7 +38,7 @@ metadata:
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "3"
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed,before-hook-creation
 subjects:
   - kind: ServiceAccount
     name: {{ .Release.Name }}-post-install
@@ -56,7 +56,7 @@ metadata:
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-weight": "4"
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed,before-hook-creation
 spec:
   backoffLimit: {{ .Values.hook.postInstall.backoffLimit }}
   template:
@@ -67,7 +67,8 @@ spec:
       serviceAccountName: {{ .Release.Name }}-post-install
       containers:
         - name: post-install-job
-          image: "bitnami/kubectl:1.23.6"
+          image: {{ .Values.hook.postInstall.image.repo }}:{{ .Values.hook.postInstall.image.tag }}
+          imagePullPolicy: {{ .Values.hook.postInstall.image.pullPolicy }}
           command:
             - /bin/sh
             - -c
