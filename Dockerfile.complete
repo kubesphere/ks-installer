@@ -19,7 +19,7 @@ ENV ARCH=amd64
 RUN apk --no-cache add jq yq bash curl unzip openssl && \
     apk --no-cache add gcc libffi-dev openssl-dev musl-dev && \
     export CRYPTOGRAPHY_DONT_BUILD_RUST=1 && \
-    pip install --no-cache-dir ansible_runner==2.2.0 ansible==2.9.27 kubernetes && \
+    pip install --no-cache-dir ansible_runner==2.2.0 ansible==2.9.27 kubernetes --use-deprecated=legacy-resolver && \
     apk del gcc libffi-dev openssl-dev musl-dev && \
     if [[ $(arch) == aarch64* ]]; then ARCH=arm64; fi && \
     wget https://get.helm.sh/helm-v3.9.0-linux-${ARCH}.tar.gz && \
