@@ -29,7 +29,6 @@ spec:
             - --ca-cert=/ca.crt
             - --ca-key=/ca.key
             - --v=4
-            - --leader-elect=true
           image: {{ tower_repo }}/{{ tower_image }}:{{ tower_image_tag }}
           imagePullPolicy: IfNotPresent
           name: tower
