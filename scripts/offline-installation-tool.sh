@@ -85,6 +85,9 @@ if [ -z "${ARCH}" ]; then
   aarch64*)
     ARCH=arm64
     ;;
+  arm64*)
+    ARCH=arm64
+    ;;
   armv*)
     ARCH=armv7
     ;;
