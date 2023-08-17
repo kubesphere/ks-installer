@@ -9,7 +9,9 @@ metadata:
 spec:
   match: kube_auditing
   es:
+    bufferSize: 20MB
     logstashFormat: true
+    traceError: true
     generateID: true
     host: "{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchHost != "" %}{{ common.es.externalElasticsearchHost }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-auditing"

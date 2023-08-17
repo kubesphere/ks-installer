@@ -9,6 +9,8 @@ metadata:
 spec:
   match: kube_events
   opensearch:
+    bufferSize: 20MB
+    traceError: true
     logstashFormat: true
     generateID: true
     host: "{% if common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchHost != "" %}{{ common.opensearch.externalOpensearchHost }}{% else %}opensearch-cluster-data.kubesphere-logging-system.svc{% endif %}"

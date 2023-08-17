@@ -28,6 +28,8 @@ spec:
           name: "elasticsearch-credentials"
 {% endif %}
 {% endif %}
+    bufferSize: 20MB
+    traceError: true
     generateID: true
     logstashPrefix: "ks-{{ common.es.elkPrefix }}-log"
     logstashFormat: true

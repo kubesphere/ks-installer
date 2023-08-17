@@ -16,7 +16,7 @@ spec:
     parser: docker
 {% endif %}
     refreshIntervalSeconds: 10
-    memBufLimit: 5MB
+    memBufLimit: 100MB
     skipLongLines: true
     db: /fluent-bit/tail/pos-events.db
     dbSync: Normal

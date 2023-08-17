@@ -9,6 +9,8 @@ metadata:
 spec:
   match: kube_events
   es:
+    bufferSize: 20MB
+    traceError: true
     logstashFormat: true
     generateID: true
     host: "{% if common.es.externalElasticsearchHost is defined and common.es.externalElasticsearchHost != "" %}{{ common.es.externalElasticsearchHost }}{% else %}elasticsearch-logging-data.kubesphere-logging-system.svc{% endif %}"

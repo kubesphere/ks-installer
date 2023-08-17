@@ -10,7 +10,7 @@ spec:
   tail:
     db: /fluent-bit/tail/pos-auditing.db
     dbSync: Normal
-    memBufLimit: 5MB
+    memBufLimit: 100MB
 {% if (logging_container_runtime== 'containerd') or (logging_container_runtime== 'crio') %}
     parser: cri
 {% else %}
