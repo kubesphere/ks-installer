@@ -10,6 +10,8 @@ spec:
   match: kube_auditing
   opensearch:
     logstashFormat: true
+    bufferSize: 20MB
+    traceError: true
     host: "{% if common.opensearch.externalOpensearchHost is defined and common.opensearch.externalOpensearchHost != "" %}{{ common.opensearch.externalOpensearchHost }}{% else %}opensearch-cluster-data.kubesphere-logging-system.svc{% endif %}"
     logstashPrefix: "ks-{{ common.opensearch.opensearchPrefix }}-auditing"
     port: {% if common.opensearch.externalOpensearchPort is defined and common.opensearch.externalOpensearchPort != "" %}{{ common.opensearch.externalOpensearchPort }}{% else %}9200{% endif %}

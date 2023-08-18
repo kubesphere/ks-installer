@@ -28,6 +28,8 @@ spec:
           name: "opensearch-credentials"
 {% endif %}
 {% endif %}
+    bufferSize: 20MB
+    traceError: true
     logstashPrefix: "ks-{{ common.opensearch.opensearchPrefix }}-logging"
     logstashFormat: true
     timeKey: "@timestamp"
