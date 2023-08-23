@@ -67,6 +67,8 @@ spec:
         password: ""
       externalElasticsearchHost: ""
       externalElasticsearchPort: ""
+      curator:
+        enabled: false
     opensearch:   # Storage backend for logging, events and auditing.
       # master:
       #   volumeSize: 4Gi  # The volume size of Opensearch master nodes.
@@ -85,6 +87,8 @@ spec:
         password: "admin"
       externalOpensearchHost: ""
       externalOpensearchPort: ""
+      curator:
+        enabled: true
       dashboard:
         enabled: false
   alerting:                # (CPU: 0.1 Core, Memory: 100 MiB) It enables users to customize alerting policies to send messages to receivers in time with different time intervals and alerting levels to choose from.
