@@ -15,7 +15,7 @@
 # Creating elasticsearch-credentials secret used to connect external es with basic auth enabled.
 - name: KubeSphere | Creating elasticsearch credentials secret
   shell: >
-    {{ bin_dir }}/kubectl create secret generic elasticsearch-credentials --from-literal="username={{ common.es.basicAuth.username }}" --from-literal="password={{ common.es.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system
+    {{ bin_dir }}/kubectl create secret generic elasticsearch-credentials --save-config --dry-run=client --from-literal="username={{ common.es.basicAuth.username }}" --from-literal="password={{ common.es.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system -o yaml | kubectl apply -f -
   register: secret
   failed_when: "secret.stderr and 'already exists' not in secret.stderr"
   until: secret is succeeded
