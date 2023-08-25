@@ -39,7 +39,7 @@
 # Creating opensearch-credentials secret used to connect external es with basic auth enabled.
 - name: KubeSphere | Creating opensearch credentials secret
   shell: >
-    {{ bin_dir }}/kubectl create secret generic opensearch-credentials --from-literal="username={{ common.opensearch.basicAuth.username }}" --from-literal="password={{ common.opensearch.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system
+    {{ bin_dir }}/kubectl create secret generic opensearch-credentials --save-config --dry-run=client --from-literal="username={{ common.opensearch.basicAuth.username }}" --from-literal="password={{ common.opensearch.basicAuth.password }}" --type=kubernetes.io/basic-auth -n kubesphere-logging-system -o yaml | kubectl apply -f -
   register: secret
   failed_when: "secret.stderr and 'already exists' not in secret.stderr"
   until: secret is succeeded
