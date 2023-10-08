@@ -5,6 +5,18 @@ global:
 dex:
   image:
     repository: "{{ argocd_dex_repo }}"
+  readinessProbe:
+    enabled: true
+    timeoutSeconds: 10
+  livenessProbe:
+    enabled: true
+    timeoutSeconds: 10
+
+controller:
+  readinessProbe:
+    timeoutSeconds: 10
+  livenessProbe:
+    timeoutSeconds: 10
 
 applicationSet:
   image:
@@ -13,3 +25,15 @@ applicationSet:
 redis:
   image:
     repository: "{{ argocd_redis_repo }}"
+
+repoServer:
+  readinessProbe:
+    timeoutSeconds: 10
+  livenessProbe:
+    timeoutSeconds: 10
+
+server:
+  readinessProbe:
+    timeoutSeconds: 10
+  livenessProbe:
+    timeoutSeconds: 10
