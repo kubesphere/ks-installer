@@ -1364,6 +1364,7 @@ rules:
     verbs:
       - create
       - watch
+      - get
 
 ---
 apiVersion: iam.kubesphere.io/v1alpha2
@@ -2227,6 +2228,12 @@ role:
       verbs:
         - create
         - watch
+    - apiGroups:
+        - '*'
+      resources:
+        - devops
+      verbs:
+        - get
     - apiGroups:
         - monitoring.kubesphere.io
         - metering.kubesphere.io
