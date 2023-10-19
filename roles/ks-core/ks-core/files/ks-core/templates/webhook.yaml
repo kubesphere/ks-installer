@@ -179,13 +179,11 @@ webhooks:
     objectSelector: {}
     rules:
       - apiGroups:
-          - '*'
+          - ""
         apiVersions:
-          - '*'
+          - v1
         operations:
           - CREATE
-          - UPDATE
-          - DELETE
         resources:
           - persistentvolumeclaims
         scope: '*'
