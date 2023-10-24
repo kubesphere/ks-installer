@@ -204,6 +204,9 @@
     {{ bin_dir }}/kubectl apply -f $charts_folder/ks-devops/crds
     {{ bin_dir }}/kubectl apply -f $charts_folder/ks-devops/charts/s2i/crds
 
+    # Waiting for CRD to complete the upgrade
+    sleep 10
+
     # Import the templates seperately due the potential webhook issues
     rm -rf s2i-templates
     helm template  $charts_folder/ks-devops/charts/s2i/ \
