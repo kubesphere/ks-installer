@@ -1,0 +1,24 @@
+---
+- name: notification-manager | Getting federated files
+  copy:
+    src: "notification"
+    dest: "{{ kubesphere_dir }}/"
+
+- name: notification-manager | Checking federated namespace deployed
+  shell: >
+    {{ bin_dir }}/kubectl get federatednamespaces.types.kubefed.io -n kubesphere-monitoring-federated kubesphere-monitoring-federated -o jsonpath='{.metadata.name}'
+  register: namespace_deployed
+  failed_when: false
+
+- name: notification-manager | Deploying federated namespace
+  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/notification/kubesphere-monitoring-federated.yaml"
+  register: fed_result
+  failed_when: "fed_result.stderr and 'Warning' not in fed_result.stderr and 'spec.clusterIP' not in fed_result.stderr"
+  until: fed_result is succeeded
+  retries: 5
+  delay: 3
+  when:
+    - namespace_deployed.rc != 0 or namespace_deployed.stdout.find("kubesphere-monitoring-federated") == -1
+
+- name: notification-manager | Update federated crds
+  shell: "bash {{ kubesphere_dir }}/notification/update_federated_crds.sh"
