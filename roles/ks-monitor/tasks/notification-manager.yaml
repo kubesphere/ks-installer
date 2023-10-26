@@ -5,11 +5,6 @@
     src: "notification-manager"
     dest: "{{ kubesphere_dir }}/"
 
-- name: notification-manager | Getting federated files
-  copy:
-    src: "federated"
-    dest: "{{ kubesphere_dir }}/"
-
 - name: notification-manager | Getting notification-manager installation files
   template:
     src: "{{ item.file }}.j2"
@@ -47,42 +42,4 @@
     - notification_check.rc == 0
     - notification_check.stdout.find("2.3.0") == -1
 
-- name: notification-manager | Checking federatednamespace crd installed
-  shell: >
-    {{ bin_dir }}/kubectl get crd federatednamespaces.types.kubefed.io -o jsonpath='{.metadata.name}'
-  register: crd_installed
-  failed_when: false
-
-- name: notification-manager | Deploying federatednamespace crd
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/federated/federatednamespaces.yaml"
-  register: fed_result
-  failed_when: "fed_result.stderr and 'Warning' not in fed_result.stderr and 'spec.clusterIP' not in fed_result.stderr"
-  until: fed_result is succeeded
-  retries: 5
-  delay: 3
-  when:
-    - multicluster is defined and multicluster.clusterRole == 'host'
-    - crd_installed.rc != 0 or crd_installed.stdout.find("federatednamespaces.types.kubefed.io") == -1
-
-- name: notification-manager | Checking federated namespace deployed
-  shell: >
-    {{ bin_dir }}/kubectl get federatednamespaces.types.kubefed.io -n kubesphere-monitoring-federated kubesphere-monitoring-federated -o jsonpath='{.metadata.name}'
-  register: namespace_deployed
-  failed_when: false
-
-- name: notification-manager | Deploying federated namespace
-  shell: "{{ bin_dir }}/kubectl apply -f {{ kubesphere_dir }}/federated/kubesphere-monitoring-federated.yaml"
-  register: fed_result
-  failed_when: "fed_result.stderr and 'Warning' not in fed_result.stderr and 'spec.clusterIP' not in fed_result.stderr"
-  until: fed_result is succeeded
-  retries: 5
-  delay: 3
-  when:
-    - multicluster is defined and multicluster.clusterRole == 'host'
-    - namespace_deployed.rc != 0 or namespace_deployed.stdout.find("kubesphere-monitoring-federated") == -1
-
-- name: notification-manager | Update federated crds
-  shell: "bash {{ kubesphere_dir }}/federated/update_federated_crds.sh"
-  when:
-    - multicluster is defined and multicluster.clusterRole == 'host'
 
