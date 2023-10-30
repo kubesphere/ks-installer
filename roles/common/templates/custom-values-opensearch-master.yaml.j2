@@ -192,9 +192,9 @@ antiAffinityTopologyKey: "kubernetes.io/hostname"
 antiAffinity: "soft"
 
 
-{% if common.es.nodeAffinity is defined and common.es.nodeAffinity is not none %}
+{% if common.opensearch.nodeAffinity is defined and common.opensearch.nodeAffinity is not none %}
 nodeAffinity:
-  {{ common.opensearch.nodeAffinity | to_nice_yaml(indent=2) | indent(4) }}
+  {{ common.opensearch.nodeAffinity | to_nice_yaml(indent=2) | indent(2) }}
 {% else %}
 nodeAffinity: {}
 {% endif %}
@@ -282,20 +282,20 @@ schedulerName: ""
 imagePullSecrets: []
 {% if common.opensearch.nodeSelector is defined and common.opensearch.nodeSelector is not none %}
 nodeSelector:
-  {{ common.opensearch.nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+  {{ common.opensearch.nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
 {% elif nodeSelector is defined and nodeSelector is not none %}
 nodeSelector:
-  {{ nodeSelector | to_nice_yaml(indent=2) | indent(4) }}
+  {{ nodeSelector | to_nice_yaml(indent=2) | indent(2) }}
 {% else %}
 nodeSelector: {}
 {% endif %}
 
 {% if common.opensearch.tolerations is defined and common.opensearch.tolerations is not none %}
 tolerations:
-  {{ common.opensearch.tolerations | to_nice_yaml(indent=2) | indent(4) }}
+  {{ common.opensearch.tolerations | to_nice_yaml(indent=2) | indent(2) }}
 {% elif tolerations is defined and tolerations is not none %}
 tolerations:
-  {{ tolerations | to_nice_yaml(indent=2) | indent(4) }}
+  {{ tolerations | to_nice_yaml(indent=2) | indent(2) }}
 {% else %}
 tolerations: []
 {% endif %}
