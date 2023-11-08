@@ -6,10 +6,8 @@ dex:
   image:
     repository: "{{ argocd_dex_repo }}"
   readinessProbe:
-    enabled: true
     timeoutSeconds: 10
   livenessProbe:
-    enabled: true
     timeoutSeconds: 10
 
 controller:
