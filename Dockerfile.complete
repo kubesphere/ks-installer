@@ -35,12 +35,12 @@ RUN apk --no-cache add jq yq bash curl unzip openssl && \
     adduser -D -g kubesphere -u 1002 kubesphere
 
 COPY --from=0 /go/src/github.com/flant/shell-operator/shell-operator /
-ADD controller/* /hooks/kubesphere/
+COPY controller/ /hooks/kubesphere/
 
 RUN chown -R kubesphere:kubesphere /shell-operator && \
     chown -R kubesphere:kubesphere /hooks && \
     chown -R kubesphere:kubesphere /kubesphere && \
-    chmod +x -R /hooks/kubesphere
+    chmod +x  /hooks/kubesphere/installRunner.py
 
 USER kubesphere
 
