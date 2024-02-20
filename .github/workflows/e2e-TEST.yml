@@ -35,7 +35,7 @@ jobs:
       run: |
         echo ${{ github.base_ref }}
         tag=${{ github.base_ref }} && sed -i "2idev_tag\: $tag" roles/download/defaults/main.yml && sed -i "/    \"version\"/s/\:.*/\: \"$tag\"/g" controller/installRunner.py
-        docker build . --file Dockerfile --tag ks-installer
+        docker build . --file Dockerfile.complete --tag ks-installer
       
     - name: Build image (push)
       if: ${{ github.event_name == 'push' }}
