@@ -18,7 +18,7 @@ env:
 
 jobs:
   Test-on-k8s-v-1-19-7:
-    runs-on: self-hosted
+    runs-on: [self-hosted, large.0]
     timeout-minutes: 150
     outputs:
       is_MY_SECRET_set: ${{ steps.checksecret_job.outputs.is_MY_SECRET_set }}
