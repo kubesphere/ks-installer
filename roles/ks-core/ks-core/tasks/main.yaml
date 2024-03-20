@@ -93,12 +93,6 @@
   loop:
     - "ks-core"
 
-
-- name: KubeSphere | Checking KubeSphere Admin User
-  shell: >
-    {{ bin_dir }}/kubectl get user.iam.kubesphere.io admin --no-headers | wc -l
-  register: kubesphere_admin_user
-
 - name: KubeSphere | Generate init admin password
   block:
     - set_fact:
@@ -114,8 +108,6 @@
         {{ bin_dir }}/kubectl -n kubesphere-system patch secret kubesphere-secret -p '{"data": {"initAdminPassword": "{{ adminPassword | b64encode }}"}}'
       when:
         - adminPassword != ""
-  when:
-    - kubesphere_admin_user.stdout != "1"
 
 - name: KubeSphere | Creating manifests
   template:
