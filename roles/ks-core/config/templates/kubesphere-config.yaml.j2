@@ -69,6 +69,9 @@ data:
 {% if network.topology is defined and network.topology.type is defined and network.topology.type == "weave-scope"  %}
       weaveScopeHost: weave-scope-app.weave
 {% endif %}
+{% if kubeovn is defined %}
+    kubeovn:
+      enabled: true
 {% endif %}
 {% if devops.enabled is defined and devops.enabled == true %}
     devops:

@@ -5,6 +5,12 @@
       {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "host" | awk '{print $2}'
     register: sonarqube_host
 
+  - name: KubeSphere | Geting networking plugin
+    shell: >
+      {{ bin_dir }}/kubectl get daemonset -n kube-system | grep 'kube-ovn-cni'
+    register: kubeovn
+    ignore_errors: true
+
   - name: KubeSphere | Getting sonarqube token
     shell: >
       {{ bin_dir }}/kubectl get cm -n kubesphere-system kubesphere-config -o jsonpath='{.data.kubesphere\.yaml}' | grep "sonarQube:" -A 2 | grep "token" | awk '{print $2}'
@@ -26,6 +32,11 @@
     - devops.sonarqube is defined
     - devops.sonarqube.externalSonarUrl is defined
     - devops.sonarqube.externalSonarToken is defined
+
+- set_fact:
+    kubeovn: "true"
+  when:
+    - kubeovn is defined and kubeovn.stdout is defined and kubeovn.stdout != ""
 
 - block:
   - name: KubeSphere | Getting es index prefix
